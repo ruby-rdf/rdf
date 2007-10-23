@@ -1,0 +1,28 @@
+= RDF.rb - RDF API for Ruby
+
+== Dependencies
+
+* Ruby 1.8+
+
+
+== Download
+
+The latest version of RDF.rb can be found at:
+
+* http://rubyforge.org/frs/?group_id=4700
+
+API documentation can be found at:
+
+* http://rdfrb.rubyforge.org/
+
+
+== Installation
+
+The recommended installation method is via RubyGems:
+
+  % [sudo] gem install rdfrb
+
+
+== License
+
+RDF.rb is released under the MIT license.
