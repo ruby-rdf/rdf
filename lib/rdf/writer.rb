@@ -73,11 +73,5 @@ module RDF
 
   end
 
-  module Writers
-    class NTriples < Writer; end
-    class Turtle < NTriples; end
-    class N3 < Turtle; end
-    class XML < Writer; end
-    class TriX < Writer; end
-  end
+  module Writers; end
 end

@@ -1,0 +1,5 @@
+require 'rdf/writers/ntriples'
+require 'rdf/writers/turtle'
+require 'rdf/writers/notation3'
+require 'rdf/writers/rdfxml'
+require 'rdf/writers/trix'
