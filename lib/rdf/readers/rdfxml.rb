@@ -1,5 +1,5 @@
 module RDF::Readers
-  class RDFXML < Reader
+  class RDFXML < RDF::Reader
     # TODO
   end
 end

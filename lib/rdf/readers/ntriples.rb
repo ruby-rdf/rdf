@@ -1,5 +1,5 @@
 module RDF::Readers
-  class NTriples < Reader
+  class NTriples < RDF::Reader
     # TODO
   end
 end

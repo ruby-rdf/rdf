@@ -1,5 +1,5 @@
 module RDF::Writers
-  class TriX < Writer
+  class TriX < RDF::Writer
     # TODO
   end
 end

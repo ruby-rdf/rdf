@@ -1,5 +1,5 @@
 module RDF::Writers
-  class RDFXML < Writer
+  class RDFXML < RDF::Writer
     # TODO
   end
 end
