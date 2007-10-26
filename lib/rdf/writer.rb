@@ -1,36 +1,33 @@
 module RDF
   class Writer
 
-    @@writers = []
+    @@subclasses = []
     @@file_extensions = {}
     @@content_types = {}
+    @@content_encoding = {}
 
     def self.format(format)
       require "rdf/writers/#{format}"
 
       case format.to_sym
-        when :ntriples then RDF::Writers::NTriples
-        when :turtle then RDF::Writers::Turtle
+        when :ntriples  then RDF::Writers::NTriples
+        when :turtle    then RDF::Writers::Turtle
         when :notation3 then RDF::Writers::Notation3
-        when :rdfxml then RDF::Writers::RDFXML
-        when :trix then RDF::Writers::TriX
+        when :rdfxml    then RDF::Writers::RDFXML
+        when :trix      then RDF::Writers::TriX
       end
     end
 
     def self.each(&block)
-      if block_given?
-        @@writers.each { |writer| yield writer }
-      else
-        @@writers
-      end
+      !block_given? ? @@subclasses : @@subclasses.each { |writer| yield writer }
     end
 
     def self.content_types
-      # TODO
+      @@content_types
     end
 
     def self.file_extensions
-      # TODO
+      @@file_extensions
     end
 
     def initialize(stream = $stdout, &block)
@@ -47,7 +44,7 @@ module RDF
     protected
 
       def self.inherited(child) #:nodoc:
-        @@writers << child
+        @@subclasses << child
         super
       end
 
@@ -59,6 +56,10 @@ module RDF
           extensions = [options[:extension]].flatten.map { |ext| ext.to_sym }
           extensions.each { |ext| @@file_extensions[ext] = type }
         end
+      end
+
+      def self.content_encoding(encoding)
+        @@content_encoding[self] = encoding.to_sym
       end
 
       def puts(*args)

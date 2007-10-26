@@ -1,6 +1,9 @@
 module RDF::Writers
   class NTriples < RDF::Writer
 
+    content_type 'text/plain', :extension => :nt
+    content_encoding 'ascii'
+
     def write_node(resource)
       nodes = []
 
