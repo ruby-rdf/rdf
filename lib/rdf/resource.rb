@@ -13,7 +13,7 @@ module RDF
     end
 
     def initialize(uri = nil, ns = :dc, options = {}, &block)
-      @uri = uri
+      @uri = (uri.respond_to?(:to_uri) ? uri.to_uri : uri).to_s
       @data = {}
       @ns = Namespace[ns.to_sym] rescue Namespace.new(ns.to_s)
       self.rdf_type = options[:type] if options[:type]
@@ -24,8 +24,8 @@ module RDF
       anonymous? ? self.equal?(other) : uri == other.uri
     end
 
-    def each
-      data.each { |k, v| yield [k, v] }
+    def each(&block)
+      data.each(&block)
     end
 
     def anonymous?
@@ -52,7 +52,7 @@ module RDF
 
       if args.length == 1  # r[:suffix]
         name = args.shift
-        uri = @ns[name.to_s.gsub('_', '-')].uri
+        uri = name.respond_to?(:to_uri) ? name.to_uri : @ns[name.to_s.gsub('_', '-')].uri
       else                 # r[:ns, :suffix]
         ns, name = args
         uri = Namespace[ns][name.to_s.gsub('_', '-')].uri
@@ -65,7 +65,7 @@ module RDF
 
       if args.length == 2  # r[:suffix] = value
         name, value = args
-        uri = @ns[name.to_s.gsub('_', '-')].uri
+        uri = name.respond_to?(:to_uri) ? name.to_uri : @ns[name.to_s.gsub('_', '-')].uri
       else                 # r[:ns, :suffix] = value
         ns, name, value = args
         uri = Namespace[ns][name.to_s.gsub('_', '-')].uri

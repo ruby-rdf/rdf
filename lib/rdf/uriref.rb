@@ -25,6 +25,10 @@ module RDF
       @uri = uri
     end
 
+    def anonymous?
+      false
+    end
+
     def ==(other)
       other.respond_to?(:to_uri) && uri == other.to_uri
     end
