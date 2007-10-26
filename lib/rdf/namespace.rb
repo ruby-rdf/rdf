@@ -50,6 +50,10 @@ module RDF
       self.class.prefix_for(uri)
     end
 
+    def to_uri
+      uri
+    end
+
     def to_s
       "{#{uri}}"
     end

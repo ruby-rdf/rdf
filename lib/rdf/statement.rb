@@ -8,6 +8,10 @@ module RDF
       @subject, @predicate, @object = s, p, o
     end
 
+    def to_a
+      [subject, predicate, object]
+    end
+
     def to_s
       # TODO
       super

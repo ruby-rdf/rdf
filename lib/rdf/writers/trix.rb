@@ -1,6 +1,7 @@
 require 'rexml/document'
 
 module RDF::Writers
+
   # See <http://swdev.nokia.com/trix/trix.html>
   class TriX < RDF::Writer
     include REXML

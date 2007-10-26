@@ -50,12 +50,16 @@ module RDF
       end
     end
 
-    def write_prologue; end
+    def write_prologue() end
 
-    def write_epilogue; end
+    def write_epilogue() end
+
+    def write_comment(text) end
 
     def <<(data)
       case data
+        when Graph
+          write_graph(data)
         when Resource
           #register!(resource) && write_node(resource)
           write_resource(data)
@@ -68,6 +72,10 @@ module RDF
             raise ArgumentError.new("expected RDF::Statement or RDF::Resource, got #{data.inspect}")
           end
       end
+    end
+
+    def write_graph(graph)
+      write_triples(graph.triples)
     end
 
     def write_resource(subject)
@@ -86,7 +94,7 @@ module RDF
     end
 
     def write_statement(statement)
-      write_triple statement.subject, statement.predicate, statement.object
+      write_triple(*statement.to_a)
     end
 
     def write_triples(*triples)
@@ -123,8 +131,10 @@ module RDF
       end
 
       def uri_for(uriref)
-        if uriref.respond_to?(:to_uri)
-          uriref.anonymous? ? @nodes[uriref] : uriref.to_uri.to_s
+        if uriref.respond_to?(:anonymous?) && uriref.anonymous?
+          @nodes[uriref]
+        elsif uriref.respond_to?(:to_uri)
+          uriref.to_uri.to_s
         else
           uriref.to_s
         end

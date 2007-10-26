@@ -1,4 +1,5 @@
 module RDF::Writers
+
   # See <http://www.w3.org/TR/rdf-testcases/#ntriples>
   class NTriples < RDF::Writer
 
@@ -10,21 +11,27 @@ module RDF::Writers
     end
 
     def write_triple(subject, predicate, object)
-      s = "<#{uri_for(subject)}>"
-      p = "<#{uri_for(predicate)}>"
-
-      case object
-        when RDF::URIRef
-          o = "<#{uri_for(object)}>"
-        when RDF::Literal
-          o = quoted(escaped(object.value))
-          o << "@#{object.language}" if object.language
-          o << "^^<#{uri_for(object.type)}>" if object.type
-        else
-          o = quoted(escaped(object.to_s))
-      end
+      s = format_uri(subject)
+      p = format_uri(predicate)
+      o = object.kind_of?(RDF::URIRef) ?
+        format_uri(object) : format_literal(object)
 
       puts "%s %s %s ." % [s, p, o]
+    end
+
+    def format_uri(node)
+      "<#{uri_for(node)}>"
+    end
+
+    def format_literal(literal)
+      if literal.kind_of?(RDF::Literal)
+        text = quoted(escaped(literal.value))
+        text << "@#{literal.language}" if literal.language
+        text << "^^<#{uri_for(literal.type)}>" if literal.type
+        text
+      else
+        quoted(escaped(literal.to_s))
+      end
     end
 
   end
