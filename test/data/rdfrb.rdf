@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <Project rdf:about="http://rubyforge.org/projects/rdfrb/">
+
+    <name>RDF.rb</name>
+    <homepage rdf:resource="http://rdfrb.org/" />
+    <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2007-10-23</created>
+    <programming-language>Ruby</programming-language>
+    <os>Any</os>
+    <shortdesc xml:lang="en">RDF API for Ruby</shortdesc>
+    <description xml:lang="en">
+      Toolkit for parsing/serializing RDF data.
+    </description>
+    <download-page rdf:resource="http://rubyforge.org/frs/?group_id=4700" />
+    <bug-database rdf:resource="http://rubyforge.org/projects/rdfrb/" />
+
+    <license rdf:resource="http://usefulinc.com/doap/licenses/mit" />
+    <maintainer>
+      <foaf:Person>
+        <foaf:name>Arto Bendiken</foaf:name>
+        <foaf:mbox rdf:resource="mailto:arto.bendiken@gmail.com" />
+        <foaf:homepage rdf:resource="http://bendiken.net/" />
+        <rdfs:seeAlso rdf:resource="http://rubyforge.org/users/arto/" />
+      </foaf:Person>
+    </maintainer>
+
+    <repository>
+      <SVNRepository>
+        <location rdf:resource="svn://rubyforge.org/var/svn/rdfrb" />
+        <browse rdf:resource="http://rdfrb.rubyforge.org/svn/" />
+      </SVNRepository>
+    </repository>
+
+    <!-- Development Status -->
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=8" />
+    <!-- Intended Audience -->
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=3" />
+    <!-- License -->
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=188" />
+    <!-- Operating System -->
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=235" />
+    <!-- Programming Language -->
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=306" />
+    <!-- Topic -->
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=66" />
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=90" />
+    <category rdf:resource="http://rubyforge.org/softwaremap/trove_list.php?form_cat=45" />
+
+  </Project>
+</rdf:RDF>
