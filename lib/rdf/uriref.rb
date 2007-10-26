@@ -5,6 +5,16 @@ module RDF
 
     @@uris = {}
 
+    # Yields every interned URI reference.
+    def self.each(&block)
+      !block_given? ? @@uris : @@uris.each(&block)
+    end
+
+    # Returns +true+ if the given URI reference has previously been interned.
+    def self.known?(uri)
+      @@uris.has_key? uri.to_s
+    end
+
     def self.new(uri) #:nodoc:
       # URI references are interned here, meaning that only one URIRef
       # instance is ever created and returned for the same URI reference
