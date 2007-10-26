@@ -96,3 +96,8 @@ desc "Copy package products to archive directory #{ARCHIVE_DIR}."
 task :archive => [:package] do
   cp FileList['pkg/*.tgz', 'pkg/*.zip', 'pkg/*.gem'], ARCHIVE_DIR
 end
+
+desc "Convert test data from RDF/XML into other formats (using Rapper)."
+task :data do
+  `rapper -i rdfxml -o ntriples test/data/rdfrb.rdf > test/data/rdfrb.nt`
+end
