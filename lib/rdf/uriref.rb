@@ -26,7 +26,7 @@ module RDF
     end
 
     def ==(other)
-      uri == other.uri
+      other.respond_to?(:to_uri) && uri == other.to_uri
     end
 
     def qname
