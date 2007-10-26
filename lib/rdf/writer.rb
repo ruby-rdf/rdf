@@ -19,7 +19,7 @@ module RDF
     end
 
     def self.each(&block)
-      !block_given? ? @@subclasses : @@subclasses.each { |writer| yield writer }
+      !block_given? ? @@subclasses : @@subclasses.each { |klass| yield klass }
     end
 
     def self.content_types
