@@ -19,9 +19,10 @@ class TestNamespaces < Test::Unit::TestCase
     eg = Namespace[:eg]
 
     assert_kind_of URIRef, eg['arbitrary']
-    assert_equal eg['name'].uri, 'http://example.org/test#name'
-    assert_equal eg.name.uri, 'http://example.org/test#name'
-    assert_equal eg.compound_name.uri, 'http://example.org/test#compound-name'
+    assert_equal eg['arbitrary'], eg.arbitrary
+    assert_equal eg['name'].to_uri, 'http://example.org/test#name'
+    assert_equal eg.name.to_uri, 'http://example.org/test#name'
+    assert_equal eg.compound_name.to_uri, 'http://example.org/test#compound-name'
   end
 
 end
