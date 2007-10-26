@@ -18,7 +18,7 @@ class TestNamespaces < Test::Unit::TestCase
     Namespace.register! :eg, 'http://example.org/test#'
     eg = Namespace[:eg]
 
-    assert_kind_of Resource, eg['arbitrary']
+    assert_kind_of URIRef, eg['arbitrary']
     assert_equal eg['name'].uri, 'http://example.org/test#name'
     assert_equal eg.name.uri, 'http://example.org/test#name'
     assert_equal eg.compound_name.uri, 'http://example.org/test#compound-name'
