@@ -24,6 +24,7 @@ module RDF
       klass = case format.to_sym
         when :ntriples  then RDF::Writers::NTriples
         when :turtle    then RDF::Writers::Turtle
+        when :trig      then RDF::Writers::TriG
         when :notation3 then RDF::Writers::Notation3
         when :rdfxml    then RDF::Writers::RDFXML
         when :trix      then RDF::Writers::TriX
