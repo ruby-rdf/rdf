@@ -1,5 +1,5 @@
 module RDF
-  class Resource < URIRef
+  class Resource < Node
     include Enumerable
 
     attr_reader :data

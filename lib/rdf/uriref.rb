@@ -1,9 +1,12 @@
 module RDF
   class URIRef < Node
+
     attr_reader :uri
 
-    def initialize(uri)
-      @uri = uri
+    @@uris = {}
+
+    def self.new(uri)
+      @@uris[uri.to_s] ||= super
     end
 
     def ==(other)
@@ -21,6 +24,10 @@ module RDF
       end
     end
 
+    def to_uri
+      @uri
+    end
+
     def to_s
       "<#{qname || uri}>"
     end
@@ -28,5 +35,12 @@ module RDF
     def inspect
       "#<#{self.class} #{qname || uri}>"
     end
+
+    protected
+
+      def initialize(uri)
+        @uri = uri
+      end
+
   end
 end
