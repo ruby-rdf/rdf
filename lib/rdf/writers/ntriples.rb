@@ -5,6 +5,10 @@ module RDF::Writers
     content_type 'text/plain', :extension => :nt
     content_encoding 'ascii'
 
+    def write_comment(text)
+      puts "# #{text}"
+    end
+
     def write_triple(subject, predicate, object)
       s = "<#{uri_for(subject)}>"
       p = "<#{uri_for(predicate)}>"

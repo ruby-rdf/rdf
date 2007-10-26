@@ -48,6 +48,10 @@ module RDF
       value == other.value && language == other.language && type == other.type
     end
 
+    def typed?
+      !type.nil?
+    end
+
     def to_s
       quoted = value # FIXME
       output = "\"#{quoted}\""

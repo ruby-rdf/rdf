@@ -34,18 +34,25 @@ module RDF
       require 'stringio'
 
       StringIO.open do |buffer|
-        writer = self.new(buffer, *args)
-        block.call(writer)
+        self.new(buffer, *args) { |writer| block.call(writer) }
         buffer.string
       end
     end
 
-    def initialize(stream = $stdout, &block)
-      @stream = stream
-      @nodes = {}
-      @node_id = 0
-      block.call(self) if block_given?
+    def initialize(stream = $stdout, options = {}, &block)
+      @stream, @options = stream, options
+      @nodes, @node_id = {}, 0
+
+      if block_given?
+        write_prologue
+        block.call(self)
+        write_epilogue
+      end
     end
+
+    def write_prologue; end
+
+    def write_epilogue; end
 
     def <<(data)
       case data
