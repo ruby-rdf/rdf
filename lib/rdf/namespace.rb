@@ -39,7 +39,7 @@ module RDF
     end
 
     def [](suffix)
-      Resource.new("#{uri}#{suffix}", :rdfs)
+      URIRef.new("#{uri}#{suffix}")
     end
 
     def method_missing(method, *args, &block)

@@ -1,9 +1,16 @@
 module RDF
-  class Resource < Node
+  class Resource < URIRef
     include Enumerable
 
     attr_reader :data
     attr_writer :ns
+
+    def self.new(*args, &block) #:nodoc:
+      # We need this in order to undo the URI interning mechanism in URIRef
+      resource = allocate
+      resource.send(:initialize, *args, &block)
+      resource
+    end
 
     def initialize(uri = nil, ns = :dc, options = {}, &block)
       @uri = uri

@@ -5,8 +5,14 @@ module RDF
 
     @@uris = {}
 
-    def self.new(uri)
+    def self.new(uri) #:nodoc:
+      # URI references are interned here, meaning that only one URIRef
+      # instance is ever created and returned for the same URI reference
       @@uris[uri.to_s] ||= super
+    end
+
+    def initialize(uri)
+      @uri = uri
     end
 
     def ==(other)
@@ -35,12 +41,6 @@ module RDF
     def inspect
       "#<#{self.class} #{qname || uri}>"
     end
-
-    protected
-
-      def initialize(uri)
-        @uri = uri
-      end
 
   end
 end
