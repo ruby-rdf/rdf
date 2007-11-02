@@ -1,4 +1,6 @@
 module RDF
+  class WriterError < IOError; end
+
   class Writer
 
     @@subclasses = []
