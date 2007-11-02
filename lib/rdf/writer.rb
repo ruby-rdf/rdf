@@ -33,7 +33,7 @@ module RDF
       end
     end
 
-    def self.open(*args, &block)
+    def self.buffer(*args, &block)
       require 'stringio'
 
       StringIO.open do |buffer|
@@ -42,8 +42,16 @@ module RDF
       end
     end
 
-    def initialize(stream = $stdout, options = {}, &block)
-      @stream, @options = stream, options
+    def self.open(filename, options = {}, &block)
+      options[:format] ||= :ntriples # FIXME
+
+      File.open(filename, 'wb') do |file|
+        self.for(options[:format]).new(file, options, &block)
+      end
+    end
+
+    def initialize(input = $stdout, options = {}, &block)
+      @output, @options = input, options
       @nodes, @node_id = {}, 0
 
       if block_given?
@@ -105,7 +113,7 @@ module RDF
     end
 
     def write_triple(subject, predicate, object)
-      raise NotImplementedError.new
+      raise NotImplementedError
     end
 
     protected
@@ -130,7 +138,7 @@ module RDF
       end
 
       def puts(*args)
-        @stream.puts(*args)
+        @output.puts(*args)
       end
 
       def uri_for(uriref)

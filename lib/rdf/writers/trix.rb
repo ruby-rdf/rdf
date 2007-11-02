@@ -49,7 +49,7 @@ module RDF::Writers
     end
 
     def write_epilogue
-      @xml.write(@stream, 0)
+      @xml.write(@output, 0)
       puts # add a line break after the last line
     end
 

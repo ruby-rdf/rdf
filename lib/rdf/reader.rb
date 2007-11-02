@@ -22,25 +22,26 @@ module RDF
       @@file_extensions
     end
 
-    def self.open(filename, options = {}, &block)
-      options[:format] ||= :ntriples # FIXME
-
-      File.open(filename, 'rb') do |file|
-        self.for(options[:format]).new(file, &block)
-      end
-    end
-
     def self.for(format)
       require "rdf/readers/#{format}"
 
       klass = case format.to_sym
         when :ntriples  then RDF::Readers::NTriples
         when :rdfxml    then RDF::Readers::RDFXML
+        when :trix      then RDF::Readers::TriX
       end
     end
 
-    def initialize(stream = $stdin, &block)
-      @stream = stream
+    def self.open(filename, options = {}, &block)
+      options[:format] ||= :ntriples # FIXME
+
+      File.open(filename, 'rb') do |file|
+        self.for(options[:format]).new(file, options, &block)
+      end
+    end
+
+    def initialize(input = $stdin, options = {}, &block)
+      @input, @options = input, options
       @nodes = {}
       block.call(self) if block_given?
     end
@@ -52,18 +53,22 @@ module RDF
       end
     end
 
+    def read_triple
+      raise NotImplementedError
+    end
+
     protected
 
       def fail_subject
-        raise RDF::ReaderError, "expected subject in #{@stream.inspect} line #{lineno}"
+        raise RDF::ReaderError, "expected subject in #{@input.inspect} line #{lineno}"
       end
 
       def fail_predicate
-        raise RDF::ReaderError, "expected predicate in #{@stream.inspect} line #{lineno}"
+        raise RDF::ReaderError, "expected predicate in #{@input.inspect} line #{lineno}"
       end
 
       def fail_object
-        raise RDF::ReaderError, "expected object in #{@stream.inspect} line #{lineno}"
+        raise RDF::ReaderError, "expected object in #{@input.inspect} line #{lineno}"
       end
 
     private
@@ -88,11 +93,11 @@ module RDF
       end
 
       def lineno
-        @stream.lineno
+        @input.lineno
       end
 
       def readline
-        @line = @stream.readline.chomp
+        @line = @input.readline.chomp
       end
 
       def strip!
