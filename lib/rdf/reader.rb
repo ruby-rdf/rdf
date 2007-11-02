@@ -46,6 +46,10 @@ module RDF
       block.call(self) if block_given?
     end
 
+    def each_statement(&block)
+      each_triple { |triple| block.call(Statement.new(*triple)) }
+    end
+
     def each_triple(&block)
       begin
         loop { block.call(*read_triple) }
@@ -53,11 +57,11 @@ module RDF
       end
     end
 
-    def read_triple
-      raise NotImplementedError
-    end
-
     protected
+
+      def read_triple
+        raise NotImplementedError
+      end
 
       def fail_subject
         raise RDF::ReaderError, "expected subject in #{@input.inspect} line #{lineno}"
