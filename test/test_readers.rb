@@ -4,7 +4,7 @@ require 'rdf/readers'
 class TestReaders < Test::Unit::TestCase
   include RDF
 
-  FILE_NTRIPLES = 'test.nt'
+  FILE_NTRIPLES = 'ntriples/test.nt'
   FILE_TRIX     = 'trix/examples.xml'
 
   # N-Triples
