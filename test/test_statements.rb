@@ -11,6 +11,12 @@ class TestStatements < Test::Unit::TestCase
   QUAD      = TRIPLE + [{ :context => CONTEXT }]
   HASH      = { SUBJECT => { PREDICATE => OBJECT } }
 
+  def test_statement_accessors
+    assert_equal SUBJECT, Statement.new(*TRIPLE).subject
+    assert_equal PREDICATE, Statement.new(*TRIPLE).predicate
+    assert_equal OBJECT, Statement.new(*TRIPLE).object
+  end
+
   def test_statement_equality
     assert Statement.new(*TRIPLE) == Statement.new(*TRIPLE)
   end
@@ -32,6 +38,9 @@ class TestStatements < Test::Unit::TestCase
   def test_array_equivalence
     assert_equal TRIPLE, Statement.new(*TRIPLE).to_a
     assert Statement.new(*TRIPLE) == TRIPLE
+    (0..TRIPLE.length).each do |i|
+      assert_equal TRIPLE[i], Statement.new(*TRIPLE)[i]
+    end
   end
 
   def test_hash_equivalence
