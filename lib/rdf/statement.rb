@@ -10,20 +10,24 @@ module RDF
       @context = options[:context] if options[:context]
     end
 
-    def context?
-      !!context
+    def context?() !!context end
+    def asserted?() !quoted? end
+    def quoted?() false end
+
+    def ==(other)
+      to_a == other.to_a
     end
 
-    def asserted?
-      !quoted?
-    end
-
-    def quoted?
-      false
+    def [](index)
+      to_a[index]
     end
 
     def to_a
       [subject, predicate, object]
+    end
+
+    def to_hash
+      { subject => { predicate => object } }
     end
 
     def to_s
