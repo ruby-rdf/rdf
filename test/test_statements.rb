@@ -4,9 +4,9 @@ class TestStatements < Test::Unit::TestCase
   include RDF
 
   CONTEXT   = URIRef.new("file://#{File.expand_path(__FILE__)}")
-  SUBJECT   = URIRef.new("")
+  SUBJECT   = URIRef.new('http://rubyforge.org/projects/rdfrb/')
   PREDICATE = RDF::Namespaces::DOAP.name
-  OBJECT    = ""
+  OBJECT    = 'RDF.rb'
   TRIPLE    = [SUBJECT, PREDICATE, OBJECT]
   QUAD      = TRIPLE + [{ :context => CONTEXT }]
   HASH      = { SUBJECT => { PREDICATE => OBJECT } }
