@@ -18,6 +18,12 @@ class TestWriters < Test::Unit::TestCase
     <http://rubyforge.org/projects/rdfrb/> <http://usefulinc.com/ns/doap#homepage> <http://rdfrb.org/> .
   EOF
 
+  TURTLE = <<-EOF.map { |s| s.lstrip }.join
+    <http://rubyforge.org/projects/rdfrb/> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
+    <http://rubyforge.org/projects/rdfrb/> <http://usefulinc.com/ns/doap#shortdesc> "RDF API for Ruby"@en .
+    <http://rubyforge.org/projects/rdfrb/> <http://usefulinc.com/ns/doap#homepage> <http://rdfrb.org/> .
+  EOF
+
   RDFXML = '' # TODO
 
   TRIX = <<-EOF.map { |s| s[4..-1] }.join
@@ -45,7 +51,7 @@ class TestWriters < Test::Unit::TestCase
 
   def test_known_writer_instantiation
     assert_nothing_raised do
-      [:ntriples, :turtle, :notation3, :rdfxml, :trix].each do |format|
+      [:ntriples, :turtle, :trig, :notation3, :rdfxml, :trix].each do |format|
         klass = RDF::Writer.for(format)
 
         assert_kind_of Class, klass
@@ -67,22 +73,25 @@ class TestWriters < Test::Unit::TestCase
     end
   end
 
+  # N-Triples output
+
   def test_triples_to_ntriples
-    buffer = RDF::Writer.for(:ntriples).open do |out|
+    buffer = RDF::Writer.for(:ntriples).buffer do |out|
       TRIPLES.each { |triple| out << triple }
     end
     assert_equal NTRIPLES, buffer
   end
 
   def test_statements_to_ntriples
-    buffer = RDF::Writer.for(:ntriples).open do |out|
-      TRIPLES.each { |triple| out << Statement.new(*triple) }
+    buffer = RDF::Writer.for(:ntriples).buffer do |out|
+      out.write_statements(TRIPLES.map { |triple| Statement.new(*triple) })
+      #TRIPLES.each { |triple| out << Statement.new(*triple) }
     end
     assert_equal NTRIPLES, buffer
   end
 
   def test_resources_to_ntriples
-    buffer = RDF::Writer.for(:ntriples).open do |out|
+    buffer = RDF::Writer.for(:ntriples).buffer do |out|
       out << Resource.new(RDFRB, :doap) do |node|
         TRIPLES.each { |s, p, o| node[p] = o }
       end
@@ -92,15 +101,35 @@ class TestWriters < Test::Unit::TestCase
     assert_equal NTRIPLES.split("\n").sort, buffer.split("\n").sort
   end
 
+  # Turtle output
+
+  def test_statements_to_turtle
+    buffer = RDF::Writer.for(:turtle).buffer do |out|
+      out.write_statements(TRIPLES.map { |triple| Statement.new(*triple) })
+    end
+    #assert_equal TURTLE, buffer
+  end
+
+  def test_statements_to_turtle_with_prefixes
+    buffer = RDF::Writer.for(:turtle).buffer(:prefix => :doap) do |out|
+      out.write_statements(TRIPLES.map { |triple| Statement.new(*triple) })
+    end
+    #assert_equal TURTLE, buffer
+  end
+
+  # TriX
+
   def test_statements_to_trix
-    buffer = RDF::Writer.for(:trix).open do |out|
+    buffer = RDF::Writer.for(:trix).buffer do |out|
       out.write_statements(TRIPLES.map { |triple| Statement.new(*triple) })
     end
     assert_equal TRIX, buffer
   end
 
+  # RDF/XML
+
   def test_statements_to_rdfxml
-    buffer = RDF::Writer.for(:rdfxml).open do |out|
+    buffer = RDF::Writer.for(:rdfxml).buffer do |out|
       #out.write_statements(TRIPLES.map { |triple| Statement.new(*triple) })
     end
     #assert_equal RDFXML, buffer # TODO
