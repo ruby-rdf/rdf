@@ -15,7 +15,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.email              = 'arto.bendiken@gmail.com'
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS README README.md Rakefile UNLICENSE VERSION bin/rdf lib/rdf.rb)
+  gem.files              = %w(AUTHORS README README.md Rakefile UNLICENSE VERSION bin/rdf lib/rdf.rb lib/rdf/version.rb)
   gem.files             -= %w(README.md) # only for GitHub
   gem.bindir             = %q(bin)
   gem.executables        = %w(rdf)
