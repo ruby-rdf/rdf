@@ -3,7 +3,7 @@
 
 GEMSPEC = Gem::Specification.new do |gem|
   gem.name               = 'rdf'
-  gem.version            = '0.0.1'
+  gem.version            = '0.0.1.1'
   gem.date               = '2009-12-20'
   gem.homepage           = 'http://rdfrb.rubyforge.org/'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
@@ -25,8 +25,9 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.test_files         = %w()
   gem.has_rdoc           = false
 
-  gem.required_ruby_version  = '>= 1.8.2'
-  gem.requirements           = []
-  gem.add_runtime_dependency 'addressable', '>= 2.1.1'
-  gem.post_install_message   = nil
+  gem.required_ruby_version      = '>= 1.8.2'
+  gem.requirements               = []
+  gem.add_development_dependency 'rspec', '>= 1.2.9'
+  gem.add_runtime_dependency     'addressable', '>= 2.1.1'
+  gem.post_install_message       = nil
 end
