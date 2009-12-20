@@ -1,5 +1,5 @@
 require 'rdf/version'
 
 module RDF
-  # TODO
+  autoload :URI, 'rdf/uri'
 end
