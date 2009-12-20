@@ -10,9 +10,12 @@ module RDF
       @context = options[:context] if options[:context]
     end
 
-    def context?() !!context end
-    def asserted?() !quoted? end
-    def quoted?() false end
+    def subject?()   !!subject end
+    def predicate?() !!predicate end
+    def object?()    !!object end
+    def context?()   !!context end
+    def asserted?()  !quoted? end
+    def quoted?()    false end
 
     def ==(other)
       to_a == other.to_a
@@ -31,7 +34,13 @@ module RDF
     end
 
     def to_s
-      super # TODO
+      require 'stringio' unless defined?(StringIO)
+      StringIO.open do |buffer|
+        buffer << "<#{subject}> "
+        buffer << "<#{predicate}> "
+        buffer << "<#{object}> ."
+        buffer.string
+      end
     end
 
     def inspect

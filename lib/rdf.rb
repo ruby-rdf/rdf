@@ -1,5 +1,6 @@
 require 'rdf/version'
 
 module RDF
-  autoload :URI, 'rdf/uri'
+  autoload :Statement, 'rdf/statement'
+  autoload :URI,       'rdf/uri'
 end
