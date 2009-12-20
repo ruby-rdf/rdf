@@ -25,4 +25,5 @@ The recommended installation method is via RubyGems:
 
 == License
 
-RDF.rb is released under the MIT license.
+RDF.rb is free and unencumbered public domain software. For more
+information, see <http://unlicense.org/> or the accompanying UNLICENSE file.
