@@ -1,12 +1,26 @@
 RDF.rb: RDF API for Ruby
 ========================
 
-This is an RDF API for Ruby.
+This is a pure-Ruby library for working with Resource Description Framework
+(RDF) data.
 
 ### About the Resource Description Framework (RDF)
 
 * <http://www.w3.org/RDF/>
 * <http://en.wikipedia.org/wiki/Resource_Description_Framework>
+
+Examples
+--------
+
+    require 'rdf'
+
+### Creating an RDF statement
+
+    s = RDF::URI.parse("http://gemcutter.org/gems/rdf")
+    p = RDF::URI.parse("http://purl.org/dc/elements/1.1/creator")
+    o = RDF::URI.parse("http://ar.to/#self")
+
+    stmt = RDF::Statement.new(s, p, o)
 
 Documentation
 -------------
