@@ -1,0 +1,8 @@
+--title "RDF.rb: RDF API for Ruby"
+--output-dir doc/yard
+--markup markdown
+--readme README.md
+-
+AUTHORS
+UNLICENSE
+VERSION
