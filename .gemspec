@@ -3,8 +3,8 @@
 
 GEMSPEC = Gem::Specification.new do |gem|
   gem.name               = 'rdf'
-  gem.version            = '0.0.1.1'
-  gem.date               = '2009-12-20'
+  gem.version            = '0.0.2'
+  gem.date               = '2009-12-21'
   gem.homepage           = 'http://rdfrb.rubyforge.org/'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
