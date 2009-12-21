@@ -4,7 +4,11 @@ module RDF
   class Vocabulary
 
     def self.inspect
-      sprintf("#<%s(%s)>", (self == Vocabulary ? self : superclass).name, to_s)
+      if self == Vocabulary
+        self.to_s
+      else
+        sprintf("%s(%s)", superclass.to_s, to_s)
+      end
     end
 
     def self.to_uri() RDF::URI.parse(to_s) end
