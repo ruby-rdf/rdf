@@ -5,6 +5,25 @@ module RDF
   autoload :URI,        'rdf/uri'
   autoload :Vocabulary, 'rdf/vocabulary'
 
+  autoload :CC,         'rdf/vocabulary/cc'
+  autoload :DC,         'rdf/vocabulary/dc'
+  autoload :DOAP,       'rdf/vocabulary/doap'
+  autoload :EXIF,       'rdf/vocabulary/exif'
+  autoload :FOAF,       'rdf/vocabulary/foaf'
+  autoload :HTTP,       'rdf/vocabulary/http'
+  autoload :OWL,        'rdf/vocabulary/owl'
+  autoload :RDFS,       'rdf/vocabulary/rdfs'
+  autoload :RSS,        'rdf/vocabulary/rss'
+  autoload :SIOC,       'rdf/vocabulary/sioc'
+  autoload :SKOS,       'rdf/vocabulary/skos'
+  autoload :WOT,        'rdf/vocabulary/wot'
+  autoload :XHTML,      'rdf/vocabulary/xhtml'
+  autoload :XSD,        'rdf/vocabulary/xsd'
+
+  def self.Vocabulary(uri)
+    Vocabulary.create(uri)
+  end
+
   def self.[](property)
     RDF::URI.parse([to_s, property.to_s].join)
   end
