@@ -17,10 +17,21 @@ Examples
 ### Creating an RDF statement
 
     s = RDF::URI.parse("http://gemcutter.org/gems/rdf")
-    p = RDF::URI.parse("http://purl.org/dc/elements/1.1/creator")
+    p = RDF::DC.creator
     o = RDF::URI.parse("http://ar.to/#self")
-
+    
     stmt = RDF::Statement.new(s, p, o)
+
+### Using pre-defined RDF vocabularies
+
+    include RDF
+    
+    DC.title     # => RDF::URI("http://purl.org/dc/elements/1.1/title")
+    FOAF.knows   # => RDF::URI("http://xmlns.com/foaf/0.1/knows")
+    RDFS.seeAlso # => RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
+    RSS.title    # => RDF::URI("http://purl.org/rss/1.0/title")
+    OWL.sameAs   # => RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
+    XSD.dateTime # => RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
 
 Documentation
 -------------
