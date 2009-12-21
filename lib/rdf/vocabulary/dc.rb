@@ -1,7 +1,7 @@
 module RDF
   ##
   # Dublin Core (DC)
-  class DC < Vocabulary("http://purl.org/dc/elements/1.1/")
+  class DC < Vocabulary("http://purl.org/dc/terms/")
     # TODO
   end
 end

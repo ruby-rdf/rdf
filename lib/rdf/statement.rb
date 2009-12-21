@@ -1,4 +1,6 @@
 module RDF
+  ##
+  # An RDF statement.
   class Statement
     attr_accessor :context
     attr_accessor :subject

@@ -26,7 +26,7 @@ Examples
 
     include RDF
     
-    DC.title      #=> RDF::URI("http://purl.org/dc/elements/1.1/title")
+    DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
     FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
     RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
     RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
