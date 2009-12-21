@@ -37,6 +37,8 @@ Examples
 
     foaf = RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")
     foaf.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+    foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
+    foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
 Documentation
 -------------
