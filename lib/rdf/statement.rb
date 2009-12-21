@@ -46,7 +46,7 @@ module RDF
     end
 
     def inspect
-      super # TODO
+      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
     end
   end
 end
