@@ -10,26 +10,23 @@ describe RDF::Statement do
   end
 
   context "when created" do
-    it "should require three arguments" do
-      lambda { RDF::Statement.new }.should raise_error(ArgumentError)
-      lambda { RDF::Statement.new(@s) }.should raise_error(ArgumentError)
-      lambda { RDF::Statement.new(@s, @p) }.should raise_error(ArgumentError)
-      lambda { RDF::Statement.new(@s, @p, @o) }.should_not raise_error
+    it "should not require arguments" do
+      lambda { RDF::Statement.new }.should_not raise_error(ArgumentError)
     end
 
     it "should have a subject" do
+      @stmt.has_subject?.should be_true
       @stmt.subject.should_not be_nil
-      @stmt.subject?.should be_true
     end
 
     it "should have a predicate" do
+      @stmt.has_predicate?.should be_true
       @stmt.predicate.should_not be_nil
-      @stmt.predicate?.should be_true
     end
 
     it "should have an object" do
+      @stmt.has_object?.should be_true
       @stmt.object.should_not be_nil
-      @stmt.object?.should be_true
     end
 
     it "should be asserted" do
@@ -45,15 +42,15 @@ describe RDF::Statement do
     it "should not have a context" do
       @stmt = RDF::Statement.new(@s, @p, @o, :context => nil)
       @stmt.context.should be_nil
-      @stmt.context?.should be_false
+      @stmt.has_context?.should be_false
     end
   end
 
   context "when created with a context" do
     it "should have a context" do
       @stmt = RDF::Statement.new(@s, @p, @o, :context => @s)
+      @stmt.has_context?.should be_true
       @stmt.context.should_not be_nil
-      @stmt.context?.should be_true
     end
   end
 
