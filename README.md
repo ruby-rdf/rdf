@@ -40,6 +40,14 @@ Examples
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
+### Reading N-Triples data
+
+    RDF::Reader::NTriples.open("spec/data/test.nt") do |reader|
+      reader.each_statement do |statement|
+        puts statement.inspect
+      end
+    end
+
 Documentation
 -------------
 
