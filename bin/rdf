@@ -7,7 +7,15 @@ abort "Usage: #{File.basename($0)} command [args...]" if ARGV.empty?
 module RDF
   class CLI
     def count(*files)
-      # TODO
+      count = 0
+      files.each do |file|
+        RDF::Reader::NTriples.open(file) do |reader|
+          reader.each do |statement|
+            count += 1
+          end
+        end
+      end
+      puts count
     end
 
     def query(*args)
