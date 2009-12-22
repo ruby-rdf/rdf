@@ -1,6 +1,7 @@
 require 'rdf/version'
 
 module RDF
+  autoload :Reader,     'rdf/reader'
   autoload :Statement,  'rdf/statement'
   autoload :URI,        'rdf/uri'
   autoload :Vocabulary, 'rdf/vocabulary'
