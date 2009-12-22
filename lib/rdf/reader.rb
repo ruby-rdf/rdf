@@ -38,9 +38,17 @@ module RDF
     end
 
     def initialize(input = $stdin, options = {}, &block)
-      @input, @options = input, options
-      @nodes = {}
+      @options = options
+      @nodes   = {}
+      @input   = case input
+        when String then StringIO.new(input)
+        else input
+      end
       block.call(self) if block_given?
+    end
+
+    def each(&block)
+      each_statement(&block)
     end
 
     def each_statement(&block)
