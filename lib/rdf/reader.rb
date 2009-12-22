@@ -6,9 +6,9 @@ module RDF
 
     include Enumerable
 
-    @@subclasses = []
-    @@file_extensions = {}
-    @@content_types = {}
+    @@subclasses       = []
+    @@file_extensions  = {}
+    @@content_types    = {}
     @@content_encoding = {}
 
     def self.each(&block)

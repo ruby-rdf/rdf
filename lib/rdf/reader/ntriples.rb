@@ -1,7 +1,6 @@
 module RDF class Reader
   # See <http://www.w3.org/TR/rdf-testcases/#ntriples>
   class NTriples < Reader
-
     content_type 'text/plain', :extension => :nt
     content_encoding 'ascii'
 

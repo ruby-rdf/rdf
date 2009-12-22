@@ -6,6 +6,7 @@ module RDF
   autoload :Statement,  'rdf/statement'
   autoload :URI,        'rdf/uri'
   autoload :Vocabulary, 'rdf/vocabulary'
+  autoload :Writer,     'rdf/writer'
 
   autoload :CC,         'rdf/vocabulary/cc'
   autoload :DC,         'rdf/vocabulary/dc'

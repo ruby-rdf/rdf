@@ -19,7 +19,7 @@ describe RDF::Reader::NTriples do
     end
   end
 
-  context "when parsing" do
+  context "when reading" do
     it "should parse empty lines" do
       ["\n", "\r\n", "\r"].each do |input|
         lambda { @reader.new(input).to_a.should be_empty }.should_not raise_error
@@ -39,7 +39,17 @@ describe RDF::Reader::NTriples do
     end
 
     it "should parse W3C's test data" do
-      lambda { @reader.new(File.open("spec/data/test.nt")).to_a.size.should == 30 }.should_not raise_error
+      lambda { @reader.new(File.open("spec/data/test.nt")).to_a.size.should == 30 }.should_not raise_error # FIXME
     end
+  end
+end
+
+describe RDF::Writer::NTriples do
+  before :each do
+    @writer = RDF::Writer::NTriples
+  end
+
+  context "when writing" do
+    # TODO
   end
 end
