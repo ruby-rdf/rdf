@@ -51,7 +51,7 @@ Examples
 Documentation
 -------------
 
-* <http://rdfrb.rubyforge.org/>
+* <http://rdf.rubyforge.org/>
 
 Download
 --------
@@ -81,10 +81,10 @@ official release from Gemcutter, do:
 Resources
 ---------
 
-* <http://rdfrb.rubyforge.org/>
+* <http://rdf.rubyforge.org/>
 * <http://github.com/bendiken/rdf>
 * <http://gemcutter.org/gems/rdf>
-* <http://rubyforge.org/projects/rdfrb/>
+* <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf>
 
 Author

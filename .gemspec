@@ -5,11 +5,11 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.name               = 'rdf'
   gem.version            = '0.0.2'
   gem.date               = '2009-12-21'
-  gem.homepage           = 'http://rdfrb.rubyforge.org/'
+  gem.homepage           = 'http://rdf.rubyforge.org/'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
-  gem.rubyforge_project  = 'rdfrb'
+  gem.rubyforge_project  = 'rdf'
 
   gem.authors            = ['Arto Bendiken']
   gem.email              = 'arto.bendiken@gmail.com'
