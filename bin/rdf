@@ -1,13 +1,22 @@
-#!/usr/bin/env ruby -rubygems
+#!/usr/bin/env ruby
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
-require 'rdf'
+require 'rdf/cli'
 
-abort "Usage: #{File.basename($0)} command [args...]" if ARGV.empty?
+options = RDF::CLI.options do
+  self.banner = "Usage: #{RDF::CLI.basename} [options] command [args...]"
+  self.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
+    $DEBUG = true
+  end
+  self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
+    $VERBOSE = true
+  end
+  self.on('-V', '--version', 'Display the RDF.rb version and exit.') do
+    puts RDF::VERSION; exit
+  end
+end
 
-binary = File.join(File.dirname(__FILE__), 'rdf-' + (command = ARGV.shift))
+abort options.banner if ARGV.empty?
 
-if File.exists?(binary)
-  exec binary, *ARGV
-else
+unless RDF::CLI.exec_command(command = ARGV.shift, *ARGV)
   abort "#{File.basename($0)}: unknown command `#{command}'"
 end

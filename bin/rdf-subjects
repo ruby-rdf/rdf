@@ -4,8 +4,6 @@ require 'rdf/cli'
 
 abort "Usage: #{RDF::CLI.basename} [files...]" if ARGV.empty?
 
-count = 0
 RDF::CLI.each_statement(*ARGV) do |statement|
-  count += 1
+  puts statement.subject
 end
-puts count
