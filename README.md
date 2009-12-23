@@ -68,6 +68,23 @@ Documentation
 * [RDF::Reader](http://rdf.rubyforge.org/RDF/Reader.html)
 * [RDF::Writer](http://rdf.rubyforge.org/RDF/Writer.html)
 
+### RDF Vocabularies
+
+* [RDF::CC](http://rdf.rubyforge.org/RDF/CC.html) - Creative Commons (CC)
+* [RDF::DC](http://rdf.rubyforge.org/RDF/DC.html) - Dublin Core (DC)
+* [RDF::DOAP](http://rdf.rubyforge.org/RDF/DOAP.html) - Description of a Project (DOAP)
+* [RDF::EXIF](http://rdf.rubyforge.org/RDF/EXIF.html) - Exchangeable Image File Format (EXIF)
+* [RDF::FOAF](http://rdf.rubyforge.org/RDF/FOAF.html) - Friend of a Friend (FOAF)
+* [RDF::HTTP](http://rdf.rubyforge.org/RDF/HTTP.html) - Hypertext Transfer Protocol (HTTP)
+* [RDF::OWL](http://rdf.rubyforge.org/RDF/OWL.html) - Web Ontology Language (OWL)
+* [RDF::RDFS](http://rdf.rubyforge.org/RDF/RDFS.html) - RDF Schema (RDFS)
+* [RDF::RSS](http://rdf.rubyforge.org/RDF/RSS.html) - RDF Site Summary (RSS)
+* [RDF::SIOC](http://rdf.rubyforge.org/RDF/SIOC.html) - Semantically-Interlinked Online Communities (SIOC)
+* [RDF::SKOS](http://rdf.rubyforge.org/RDF/SKOS.html) - Simple Knowledge Organization System (SKOS)
+* [RDF::WOT](http://rdf.rubyforge.org/RDF/WOT.html) - Web of Trust (WOT)
+* [RDF::XHTML](http://rdf.rubyforge.org/RDF/XHTML.html) - Extensible HyperText Markup Language (XHTML)
+* [RDF::XSD](http://rdf.rubyforge.org/RDF/XSD.html) - XML Schema (XSD)
+
 Download
 --------
 
