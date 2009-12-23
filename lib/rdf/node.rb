@@ -10,7 +10,8 @@ module RDF
 
     def anonymous?() true end
 
-    alias :unlabeled? :anonymous?
+    def labeled?()   !unlabeled? end
+    def unlabeled?() anonymous? end
 
     def to_s
       "_:%s" % id
