@@ -1,13 +1,21 @@
 require 'rdf/version'
 
 module RDF
-  autoload :Reader,     'rdf/reader'
+  # RDF objects
+  autoload :Graph,      'rdf/graph'
+  autoload :Literal,    'rdf/literal'
   autoload :Node,       'rdf/node'
+  autoload :Resource,   'rdf/resource'
   autoload :Statement,  'rdf/statement'
   autoload :URI,        'rdf/uri'
-  autoload :Vocabulary, 'rdf/vocabulary'
+  autoload :Value,      'rdf/value'
+
+  # RDF serialization
+  autoload :Reader,     'rdf/reader'
   autoload :Writer,     'rdf/writer'
 
+  # RDF vocabularies
+  autoload :Vocabulary, 'rdf/vocabulary'
   autoload :CC,         'rdf/vocabulary/cc'
   autoload :DC,         'rdf/vocabulary/dc'
   autoload :DOAP,       'rdf/vocabulary/doap'

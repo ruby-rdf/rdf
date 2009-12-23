@@ -1,7 +1,8 @@
 module RDF
   ##
   # An RDF statement.
-  class Statement
+  class Statement < Value
+    attr_accessor :id
     attr_accessor :context
     attr_accessor :subject
     attr_accessor :predicate
@@ -63,10 +64,6 @@ module RDF
         buffer << "<#{object}> ."
         buffer.string
       end
-    end
-
-    def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
     end
   end
 end

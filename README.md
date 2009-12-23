@@ -53,6 +53,21 @@ Documentation
 
 * <http://rdf.rubyforge.org/>
 
+### RDF Objects
+
+* [RDF::Graph](http://rdf.rubyforge.org/RDF/Graph.html)
+* [RDF::Literal](http://rdf.rubyforge.org/RDF/Literal.html)
+* [RDF::Node](http://rdf.rubyforge.org/RDF/Node.html)
+* [RDF::Resource](http://rdf.rubyforge.org/RDF/Resource.html)
+* [RDF::Statement](http://rdf.rubyforge.org/RDF/Statement.html)
+* [RDF::URI](http://rdf.rubyforge.org/RDF/URI.html)
+* [RDF::Value](http://rdf.rubyforge.org/RDF/Value.html)
+
+### RDF Serialization
+
+* [RDF::Reader](http://rdf.rubyforge.org/RDF/Reader.html)
+* [RDF::Writer](http://rdf.rubyforge.org/RDF/Writer.html)
+
 Download
 --------
 
