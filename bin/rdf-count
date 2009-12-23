@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby -rubygems
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+require 'rdf'
+
+abort "Usage: #{File.basename($0)} [files...]" if ARGV.empty?
+
+module RDF
+  class CLI
+    def count(*files)
+      count = 0
+      files.each do |file|
+        RDF::Reader::NTriples.open(file) do |reader|
+          reader.each do |statement|
+            count += 1
+          end
+        end
+      end
+      puts count
+    end
+  end
+end
+
+RDF::CLI.new.count(*ARGV)

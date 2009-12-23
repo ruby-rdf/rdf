@@ -4,28 +4,10 @@ require 'rdf'
 
 abort "Usage: #{File.basename($0)} command [args...]" if ARGV.empty?
 
-module RDF
-  class CLI
-    def count(*files)
-      count = 0
-      files.each do |file|
-        RDF::Reader::NTriples.open(file) do |reader|
-          reader.each do |statement|
-            count += 1
-          end
-        end
-      end
-      puts count
-    end
+binary = File.join(File.dirname(__FILE__), 'rdf-' + (command = ARGV.shift))
 
-    def query(*args)
-      # TODO
-    end
-
-    def method_missing(command, *args, &block)
-      abort "#{File.basename($0)}: unknown command `#{command}'"
-    end
-  end
+if File.exists?(binary)
+  exec binary, *ARGV
+else
+  abort "#{File.basename($0)}: unknown command `#{command}'"
 end
-
-RDF::CLI.new.send(ARGV.shift, *ARGV)
