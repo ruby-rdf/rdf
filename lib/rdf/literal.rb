@@ -58,9 +58,17 @@ module RDF
     ##
     # @return [Boolean]
     def ==(other)
-      value.eql?(other.value) &&
-        language.eql?(other.language) &&
-        datatype.eql?(other.datatype)
+      case other
+        when Literal
+          value.eql?(other.value) &&
+          language.eql?(other.language) &&
+          datatype.eql?(other.datatype)
+        when String
+          value.eql?(other) &&
+            language.nil? &&
+            datatype.nil?
+        else false
+      end
     end
 
     ##
@@ -78,7 +86,11 @@ module RDF
     ##
     # @return [String]
     def to_s
-      value # TODO
+      quoted = value # FIXME
+      output = "\"#{quoted}\""
+      output << "@#{language}" if language
+      output << "^^<#{datatype}>" if datatype
+      output
     end
   end
 end
