@@ -1,6 +1,8 @@
 module RDF
   ##
   # An RDF value.
+  #
+  # @abstract
   class Value
     # Prevent instantiation of this class.
     private_class_method :new
