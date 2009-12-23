@@ -46,11 +46,16 @@ module RDF
       end
     end
 
-    def to_a() to_ary end
-
-    def to_ary
+    def to_triple
       [subject, predicate, object]
     end
+
+    def to_quad
+      [subject, predicate, object, context]
+    end
+
+    def to_a()   to_triple end
+    def to_ary() to_triple end
 
     def to_hash
       { subject => { predicate => object } }
