@@ -1,14 +1,18 @@
 module RDF class Reader
-  # See <http://www.w3.org/TR/rdf-testcases/#ntriples>
+  ##
+  # An N-Triples parser.
+  #
+  # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class NTriples < Reader
     content_type 'text/plain', :extension => :nt
     content_encoding 'ascii'
 
     protected
 
+      ##
+      # @return [Array, nil]
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
       def read_triple
-        # <http://www.w3.org/TR/rdf-testcases/#ntrip_grammar>
-
         loop do
           readline.strip! # EOFError thrown on end of input
 
@@ -21,31 +25,35 @@ module RDF class Reader
         end
       end
 
+      ##
+      # @return [Boolean]
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (comment)
       def read_comment
-        # <http://www.w3.org/TR/rdf-testcases/#ntrip_grammar> (comment)
-
         match(/^#\s*(.*)$/)
       end
 
+      ##
+      # @return [URI, nil]
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
       def read_uriref
-        # <http://www.w3.org/TR/rdf-testcases/#ntrip_grammar> (uriref)
-
         if uri = match(/^<([^>]+)>/)
           RDF::URI.parse(uri)
         end
       end
 
+      ##
+      # @return [Node, nil]
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (nodeID)
       def read_bnode
-        # <http://www.w3.org/TR/rdf-testcases/#ntrip_grammar> (nodeID)
-
         if node_id = match(/^_:([A-Za-z][A-Za-z0-9]*)/)
           @nodes[node_id] ||= Object.new # TODO: RDF::Node.new
         end
       end
 
+      ##
+      # @return [String, Literal, nil]
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
       def read_literal
-        # <http://www.w3.org/TR/rdf-testcases/#ntrip_grammar> (literal)
-
         if literal = match(/^"((?:\\"|[^"])*)"/)
           literal = unescaped(literal)
 
@@ -61,15 +69,16 @@ module RDF class Reader
         end
       end
 
+      ##
+      # @param  [String] string
+      # @return [String]
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       def unescaped(string)
-        # <http://www.w3.org/TR/rdf-testcases/#ntrip_strings>
-
         ["\t", "\n", "\r", "\"", "\\"].each do |escape|
           string.gsub!(escape.inspect[1...-1], escape)
         end
         string.gsub!(/\\u([0-9A-Fa-f]{4,4})/u) { [$1.hex].pack('U*') }
         string.gsub!(/\\U([0-9A-Fa-f]{8,8})/u) { [$1.hex].pack('U*') }
-
         string
       end
 

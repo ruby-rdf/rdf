@@ -3,8 +3,14 @@ require 'optparse'
 
 module RDF
   class CLI
+    ##
+    # @return [String]
     def self.basename() File.basename($0) end
 
+    ##
+    # @yield  [options]
+    # @yieldparam [OptionParser]
+    # @return [OptionParser]
     def self.options(&block)
       options = OptionParser.new
 
@@ -24,6 +30,10 @@ module RDF
       options
     end
 
+    ##
+    # @param  [String] command
+    # @param  [Array<String>] args
+    # @return [Boolean]
     def self.exec_command(command, *args)
       if binary = RDF::CLI.find_binary(command)
         exec(binary, *args)
@@ -32,11 +42,19 @@ module RDF
       end
     end
 
+    ##
+    # @param  [String] command
+    # @return [String, nil]
     def self.find_binary(command)
       binary = File.join(File.dirname(__FILE__), '..', '..', 'bin', 'rdf-' + command)
       File.exists?(binary) ? binary : nil
     end
 
+    ##
+    # @param  [Array<String>] files
+    # @yield  [statement]
+    # @yieldparam [Statement]
+    # @return [nil]
     def self.each_statement(*files, &block)
       files.each do |file|
         RDF::Reader::NTriples.open(file) do |reader|
@@ -45,6 +63,9 @@ module RDF
       end
     end
 
+    ##
+    # @param  [String] msg
+    # @return [void]
     def self.abort(msg)
       Kernel.abort "#{basename}: #{msg}"
     end

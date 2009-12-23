@@ -7,6 +7,8 @@ module RDF
     # Prevent instantiation of this class.
     private_class_method :new
 
+    ##
+    # @return [String]
     def inspect
       sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
     end

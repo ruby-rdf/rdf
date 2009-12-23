@@ -1,6 +1,6 @@
 module RDF
   ##
-  # Dublin Core (DC)
+  # Dublin Core (DC) vocabulary.
   class DC < Vocabulary("http://purl.org/dc/terms/")
     # TODO
   end

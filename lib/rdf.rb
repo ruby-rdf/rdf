@@ -31,14 +31,24 @@ module RDF
   autoload :XHTML,      'rdf/vocabulary/xhtml'
   autoload :XSD,        'rdf/vocabulary/xsd'
 
+  ##
+  # @return [String] uri
+  # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
   end
 
+  ##
+  # @return [#to_s] property
+  # @return [URI]
   def self.[](property)
     RDF::URI.parse([to_s, property.to_s].join)
   end
 
+  ##
+  # @param  [Symbol] property
+  # @return [URI]
+  # @raise  [NoMethodError]
   def self.method_missing(property, *args, &block)
     if args.empty?
       self[property]
@@ -47,6 +57,15 @@ module RDF
     end
   end
 
-  def self.to_uri() RDF::URI.parse(to_s) end
-  def self.to_s()   "http://www.w3.org/1999/02/22-rdf-syntax-ns#" end
+  ##
+  # @return [URI]
+  def self.to_uri
+    RDF::URI.parse(to_s)
+  end
+
+  ##
+  # @return [String]
+  def self.to_s # FIXME
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  end
 end

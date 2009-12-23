@@ -2,7 +2,8 @@ module RDF
   ##
   # An RDF vocabulary.
   class Vocabulary
-
+    ##
+    # @return [String]
     def self.inspect
       if self == Vocabulary
         self.to_s
@@ -11,15 +12,32 @@ module RDF
       end
     end
 
-    def self.to_uri() RDF::URI.parse(to_s) end
-    def self.to_s()   @@uris.has_key?(self) ? @@uris[self].to_s : super end
+    ##
+    # @return [URI]
+    def self.to_uri
+      RDF::URI.parse(to_s)
+    end
 
+    ##
+    # @return [String]
+    def self.to_s
+      @@uris.has_key?(self) ? @@uris[self].to_s : super
+    end
+
+    ##
+    # @param  [#to_s] property
+    # @return [URI]
     def self.[](property)
       RDF::URI.parse([to_s, property.to_s].join(''))
     end
 
+    ##
+    # @param  [Symbol]
+    # @return [void]
     def self.property(symbol) end # TODO
 
+    ##
+    # @param  [URI, String]
     def initialize(uri)
       case uri
         when RDF::URI then @uri = uri.to_s
@@ -27,13 +45,25 @@ module RDF
       end
     end
 
+    ##
+    # @return [String]
     def inspect
       sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
     end
 
-    def to_uri() RDF::URI.parse(to_s) end
-    def to_s()   @uri.to_s end
+    ##
+    # @return [URI]
+    def to_uri
+      RDF::URI.parse(to_s)
+    end
 
+    ##
+    # @return [String]
+    def to_s() @uri.to_s end
+
+    ##
+    # @param  [#to_s] property
+    # @return [URI]
     def [](property)
       RDF::URI.parse([to_s, property.to_s].join(''))
     end
@@ -42,14 +72,16 @@ module RDF
       @@uris = {}
       @@uri  = nil
 
+      ##
       # @private
-      def self.create(uri)
+      def self.create(uri) #:nodoc:
         @@uri = uri
         self
       end
 
+      ##
       # @private
-      def self.inherited(subclass)
+      def self.inherited(subclass) #:nodoc:
         unless @@uri.nil?
           subclass.send(:private_class_method, :new)
           @@uris[subclass] = @@uri
@@ -75,6 +107,9 @@ module RDF
 
   end
 
+  ##
+  # @param  [String] uri
+  # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
   end

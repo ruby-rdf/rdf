@@ -4,10 +4,15 @@ module RDF
   ##
   # A Uniform Resource Identifier (URI).
   class URI < Node
+    ##
+    # @param  [String] uri
+    # @return [URI]
     def self.parse(uri)
       self.new(uri)
     end
 
+    ##
+    # @param  [URI, String, #to_s] uri
     def initialize(uri)
       @uri = case uri
         when Addressable::URI then uri
@@ -15,22 +20,34 @@ module RDF
       end
     end
 
+    ##
+    # @return [Boolean]
     def anonymous?
       false
     end
 
+    ##
+    # @param  [URI] other
+    # @return [Boolean]
     def eql?(other)
       other.is_a?(URI) && self == other
     end
 
+    ##
+    # @param  [Object] other
+    # @return [Boolean]
     def ==(other)
       other.respond_to?(:to_uri) && @uri == other.to_uri
     end
 
+    ##
+    # @return [URI]
     def to_uri
       @uri
     end
 
+    ##
+    # @return [String]
     def to_s
       @uri.to_s
     end

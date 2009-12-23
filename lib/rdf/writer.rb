@@ -1,8 +1,12 @@
 module RDF
-  class WriterError < IOError; end
-
+  ##
+  # An RDF serializer.
+  #
+  # @abstract
   class Writer
     autoload :NTriples, 'rdf/writer/ntriples'
+
+    include Enumerable
 
     @@subclasses       = []
     @@file_extensions  = {}
@@ -11,6 +15,9 @@ module RDF
 
     ##
     # Enumerates known RDF writer classes.
+    #
+    # @yield  [klass]
+    # @yieldparam [Class]
     def self.each(&block)
       !block_given? ? @@subclasses : @@subclasses.each { |klass| yield klass }
     end
@@ -63,12 +70,20 @@ module RDF
       end
     end
 
+    ##
+    # @abstract
     def write_prologue() end
 
+    ##
+    # @abstract
     def write_epilogue() end
 
+    ##
+    # @abstract
     def write_comment(text) end
 
+    ##
+    # @raise [ArgumentError]
     def <<(data)
       case data # TODO
         #when Graph
@@ -87,11 +102,13 @@ module RDF
       end
     end
 
+    ##
+    # @param  [Graph] graph
     def write_graph(graph)
       write_triples(*graph.triples)
     end
 
-    def write_resource(subject)
+    def write_resource(subject) # FIXME
       edge_nodes = []
       subject.each do |predicate, objects|
         [objects].flatten.each do |object|
@@ -102,18 +119,30 @@ module RDF
       edge_nodes.each { |node| write_resource node }
     end
 
+    ##
+    # @param  [Array<Statement>] statements
     def write_statements(*statements)
       statements.flatten.each { |stmt| write_statement(stmt) }
     end
 
+    ##
+    # @param  [Statement] statement
     def write_statement(statement)
       write_triple(*statement.to_a)
     end
 
+    ##
+    # @param  [Array<Array>] triples
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
     end
 
+    ##
+    # @param  [Resource] subject
+    # @param  [URI]      predicate
+    # @param  [Value]    object
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
     def write_triple(subject, predicate, object)
       raise NotImplementedError # override in subclasses
     end
@@ -143,6 +172,9 @@ module RDF
         @output.puts(*args)
       end
 
+      ##
+      # @param  [Resource] uriref
+      # @return [String]
       def uri_for(uriref)
         if uriref.respond_to?(:anonymous?) && uriref.anonymous?
           @nodes[uriref]
@@ -153,6 +185,8 @@ module RDF
         end
       end
 
+      ##
+      # @return [String]
       def node_id
         "_:n#{@node_id += 1}"
       end
@@ -165,14 +199,22 @@ module RDF
         end
       end
 
+      ##
+      # @param  [String] string
+      # @return [String]
       def escaped(string)
         string.gsub("\\", "\\\\").gsub("\t", "\\\t").
           gsub("\n", "\\\n").gsub("\r", "\\\r").gsub("\"", "\\\"")
       end
 
+      ##
+      # @param  [String] string
+      # @return [String]
       def quoted(string)
         "\"#{string}\""
       end
 
   end
+
+  class WriterError < IOError; end
 end
