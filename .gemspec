@@ -2,9 +2,10 @@
 # -*- encoding: utf-8 -*-
 
 GEMSPEC = Gem::Specification.new do |gem|
+  gem.version            = File.read('VERSION').chomp
+  gem.date               = File.mtime('VERSION').strftime('%Y-%m-%d')
+
   gem.name               = 'rdf'
-  gem.version            = '0.0.4'
-  gem.date               = '2009-12-23'
   gem.homepage           = 'http://rdf.rubyforge.org/'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
