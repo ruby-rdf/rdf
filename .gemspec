@@ -15,10 +15,9 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.email              = 'arto.bendiken@gmail.com'
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS README README.md Rakefile UNLICENSE VERSION) + Dir.glob('bin/rdf*') + Dir.glob('lib/**/*.rb')
-  gem.files             -= %w(README.md) # only for GitHub
+  gem.files              = %w(AUTHORS README UNLICENSE VERSION) + Dir.glob('bin/rdf*') + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
-  gem.executables        = %w(rdf rdf-count)
+  gem.executables        = %w(rdf rdf-count rdf-lengths rdf-objects rdf-predicates rdf-subjects)
   gem.default_executable = gem.executables.first
   gem.require_paths      = %w(lib)
   gem.extensions         = %w()
