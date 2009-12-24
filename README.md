@@ -97,7 +97,7 @@ as follows:
 
     % wget http://github.com/bendiken/rdf/tarball/master
 
-Requirements
+Dependencies
 ------------
 
 * [Addressable](http://addressable.rubyforge.org/) (>= 2.1.1)
