@@ -117,7 +117,14 @@ Resources
 * <http://github.com/bendiken/rdf>
 * <http://gemcutter.org/gems/rdf>
 * <http://rubyforge.org/projects/rdf/>
-* <http://raa.ruby-lang.org/project/rdf>
+* <http://raa.ruby-lang.org/project/rdf/>
+
+See also
+--------
+
+* [RDFize](http://rdfize.rubyforge.org/)
+* [RDFbus](http://rdfbus.rubyforge.org/)
+* [RDFcache](http://rdfcache.rubyforge.org/)
 
 Author
 ------
