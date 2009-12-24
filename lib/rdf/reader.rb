@@ -23,13 +23,13 @@ module RDF
     end
 
     ##
-    # @return [{String => Symbol}]
+    # @return [Hash{String => Symbol}]
     def self.content_types
       @@content_types
     end
 
     ##
-    # @return [{Symbol => String}]
+    # @return [Hash{Symbol => String}]
     def self.file_extensions
       @@file_extensions
     end
@@ -89,7 +89,7 @@ module RDF
 
     ##
     # @yield  [triple]
-    # @yieldparam [Array]
+    # @yieldparam [Array(Value)]
     # @return [Reader]
     def each_triple(&block)
       begin

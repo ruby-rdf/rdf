@@ -132,7 +132,7 @@ module RDF
     end
 
     ##
-    # @param  [Array<Array>] triples
+    # @param  [Array<Array(Value)>] triples
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
     end

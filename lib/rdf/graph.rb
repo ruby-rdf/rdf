@@ -56,7 +56,7 @@ module RDF
 
     ##
     # @yield  [triple]
-    # @yieldparam [Array<Value>]
+    # @yieldparam [Array(Value)]
     # @return [Graph]
     def each_triple(&block)
       @data.each do |statement|
@@ -67,7 +67,7 @@ module RDF
 
     ##
     # @yield  [quad]
-    # @yieldparam [Array<Value>]
+    # @yieldparam [Array(Value)]
     # @return [Graph]
     def each_quad(&block)
       @data.each do |statement|
@@ -125,13 +125,13 @@ module RDF
     end
 
     ##
-    # @return [Array<Array>]
+    # @return [Array<Array(Value)>]
     def triples(&block)
       block_given? ? each_triple(&block) : map { |statement| statement.to_triple }
     end
 
     ##
-    # @return [Array<Array>]
+    # @return [Array<Array(Value)>]
     def quads(&block)
       block_given? ? each_quad(&block) : map { |statement| statement.to_quad }
     end
@@ -165,7 +165,7 @@ module RDF
     end
 
     ##
-    # @param  [Statement, Array]
+    # @param  [Statement, Array(Value)]
     # @return [Graph]
     def <<(statement)
       @data << case statement

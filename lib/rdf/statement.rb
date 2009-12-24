@@ -100,23 +100,23 @@ module RDF
     end
 
     ##
-    # @return [Array]
+    # @return [Array(Value)]
     def to_triple
       [subject, predicate, object]
     end
 
     ##
-    # @return [Array]
+    # @return [Array(Value)]
     def to_quad
       [subject, predicate, object, context]
     end
 
     ##
-    # @return [Array]
+    # @return [Array(Value)]
     def to_a()   to_triple end
 
     ##
-    # @return [Array]
+    # @return [Array(Value)]
     def to_ary() to_triple end
 
     ##
