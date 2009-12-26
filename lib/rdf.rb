@@ -14,6 +14,9 @@ module RDF
   autoload :Reader,     'rdf/reader'
   autoload :Writer,     'rdf/writer'
 
+  # RDF storage
+  autoload :Repository, 'rdf/repository'
+
   # RDF vocabularies
   autoload :Vocabulary, 'rdf/vocabulary'
   autoload :CC,         'rdf/vocabulary/cc'
