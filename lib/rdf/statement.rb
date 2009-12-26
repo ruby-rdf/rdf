@@ -23,37 +23,58 @@ module RDF
     # @param  [Value]    o
     # @option options [Resource] :context (nil)
     def initialize(s = nil, p = nil, o = nil, options = {})
+      @id = options[:id] if options.has_key?(:id)
       @context = options[:context] || options[:graph]
       @subject, @predicate, @object = s, p, o
     end
 
     ##
     # @return [Boolean]
-    def asserted?()  !quoted? end
+    def asserted?
+      !quoted?
+    end
 
     ##
     # @return [Boolean]
-    def quoted?()    false end
+    def quoted?
+      false
+    end
 
     ##
     # @return [Boolean]
-    def has_graph?()     has_context? end
+    def inferred?
+      false
+    end
 
     ##
     # @return [Boolean]
-    def has_context?()   !!context end
+    def has_graph?
+      has_context?
+    end
 
     ##
     # @return [Boolean]
-    def has_subject?()   !!subject end
+    def has_context?
+      !!context
+    end
 
     ##
     # @return [Boolean]
-    def has_predicate?() !!predicate end
+    def has_subject?
+      !!subject
+    end
 
     ##
     # @return [Boolean]
-    def has_object?()    !!object end
+    def has_predicate?
+      !!predicate
+    end
+
+    ##
+    # @return [Boolean]
+    def has_object?
+      !!object
+    end
 
     ##
     # @param  [Statement] other
@@ -101,23 +122,18 @@ module RDF
 
     ##
     # @return [Array(Value)]
-    def to_triple
-      [subject, predicate, object]
-    end
-
-    ##
-    # @return [Array(Value)]
     def to_quad
       [subject, predicate, object, context]
     end
 
     ##
     # @return [Array(Value)]
-    def to_a()   to_triple end
+    def to_triple
+      [subject, predicate, object]
+    end
 
-    ##
-    # @return [Array(Value)]
-    def to_ary() to_triple end
+    alias_method :to_a,   :to_triple
+    alias_method :to_ary, :to_triple
 
     ##
     # @return [Hash]
