@@ -42,6 +42,12 @@ module RDF
   end
 
   ##
+  # @return [URI]
+  def self.type
+    self[:type]
+  end
+
+  ##
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
