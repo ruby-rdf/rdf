@@ -122,6 +122,7 @@ Resources
 See also
 --------
 
+* [RDFS.rb](http://rdfs.rubyforge.org/)
 * [RDFize](http://rdfize.rubyforge.org/)
 * [RDFbus](http://rdfbus.rubyforge.org/)
 * [RDFcache](http://rdfcache.rubyforge.org/)
