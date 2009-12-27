@@ -10,6 +10,9 @@ module RDF
   autoload :URI,        'rdf/uri'
   autoload :Value,      'rdf/value'
 
+  # RDF querying
+  autoload :Query,      'rdf/query'
+
   # RDF serialization
   autoload :Format,     'rdf/format'
   autoload :Reader,     'rdf/reader'
