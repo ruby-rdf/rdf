@@ -11,6 +11,7 @@ module RDF
   autoload :Value,      'rdf/value'
 
   # RDF serialization
+  autoload :Format,     'rdf/format'
   autoload :Reader,     'rdf/reader'
   autoload :Writer,     'rdf/writer'
 
