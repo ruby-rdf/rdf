@@ -4,6 +4,8 @@ module RDF module NTriples
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Reader < RDF::Reader
+    format RDF::NTriples::Format
+
     ##
     # @return [Array, nil]
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
