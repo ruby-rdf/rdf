@@ -150,13 +150,15 @@ module RDF
     ##
     # Queries the repository for RDF statements matching the given pattern.
     #
-    # @param  [Statement, Array(Value)] pattern
+    # @param  [Query, Statement, Array(Value)] pattern
     # @yield  [statement]
     # @yieldparam [Statement]
     # @return [Array<Statement>, nil]
     def query(pattern, &block)
       raise TypeError.new("repository is not readable") unless readable?
       case pattern
+        when Query
+          pattern.execute(self, &block)
         when Array
           query(Statement.new(*pattern), &block)
         when Statement
