@@ -55,47 +55,48 @@ Documentation
 
 ### RDF Objects
 
-* [RDF::Graph](http://rdf.rubyforge.org/RDF/Graph.html)
-* [RDF::Literal](http://rdf.rubyforge.org/RDF/Literal.html)
-* [RDF::Node](http://rdf.rubyforge.org/RDF/Node.html)
-* [RDF::Resource](http://rdf.rubyforge.org/RDF/Resource.html)
-* [RDF::Statement](http://rdf.rubyforge.org/RDF/Statement.html)
-* [RDF::URI](http://rdf.rubyforge.org/RDF/URI.html)
-* [RDF::Value](http://rdf.rubyforge.org/RDF/Value.html)
+* {RDF::Graph}
+* {RDF::Literal}
+* {RDF::Node}
+* {RDF::Resource}
+* {RDF::Statement}
+* {RDF::URI}
+* {RDF::Value}
 
 ### RDF Serialization
 
-* [RDF::Reader](http://rdf.rubyforge.org/RDF/Reader.html)
-* [RDF::Writer](http://rdf.rubyforge.org/RDF/Writer.html)
+* {RDF::Format}
+* {RDF::Reader}
+* {RDF::Writer}
+
+### RDF Serialization Formats
+
+* {RDF::NTriples}
+
+### RDF Storage
+
+* {RDF::Repository}
+
+### RDF Querying
+
+* {RDF::Query}
 
 ### RDF Vocabularies
 
-* [RDF::CC](http://rdf.rubyforge.org/RDF/CC.html) - Creative Commons (CC)
-* [RDF::DC](http://rdf.rubyforge.org/RDF/DC.html) - Dublin Core (DC)
-* [RDF::DOAP](http://rdf.rubyforge.org/RDF/DOAP.html) - Description of a Project (DOAP)
-* [RDF::EXIF](http://rdf.rubyforge.org/RDF/EXIF.html) - Exchangeable Image File Format (EXIF)
-* [RDF::FOAF](http://rdf.rubyforge.org/RDF/FOAF.html) - Friend of a Friend (FOAF)
-* [RDF::HTTP](http://rdf.rubyforge.org/RDF/HTTP.html) - Hypertext Transfer Protocol (HTTP)
-* [RDF::OWL](http://rdf.rubyforge.org/RDF/OWL.html) - Web Ontology Language (OWL)
-* [RDF::RDFS](http://rdf.rubyforge.org/RDF/RDFS.html) - RDF Schema (RDFS)
-* [RDF::RSS](http://rdf.rubyforge.org/RDF/RSS.html) - RDF Site Summary (RSS)
-* [RDF::SIOC](http://rdf.rubyforge.org/RDF/SIOC.html) - Semantically-Interlinked Online Communities (SIOC)
-* [RDF::SKOS](http://rdf.rubyforge.org/RDF/SKOS.html) - Simple Knowledge Organization System (SKOS)
-* [RDF::WOT](http://rdf.rubyforge.org/RDF/WOT.html) - Web of Trust (WOT)
-* [RDF::XHTML](http://rdf.rubyforge.org/RDF/XHTML.html) - Extensible HyperText Markup Language (XHTML)
-* [RDF::XSD](http://rdf.rubyforge.org/RDF/XSD.html) - XML Schema (XSD)
-
-Download
---------
-
-To get a local working copy of the development repository, do:
-
-    % git clone git://github.com/bendiken/rdf.git
-
-Alternatively, you can download the latest development version as a tarball
-as follows:
-
-    % wget http://github.com/bendiken/rdf/tarball/master
+* {RDF::CC}    - Creative Commons (CC)
+* {RDF::DC}    - Dublin Core (DC)
+* {RDF::DOAP}  - Description of a Project (DOAP)
+* {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
+* {RDF::FOAF}  - Friend of a Friend (FOAF)
+* {RDF::HTTP}  - Hypertext Transfer Protocol (HTTP)
+* {RDF::OWL}   - Web Ontology Language (OWL)
+* {RDF::RDFS}  - RDF Schema (RDFS)
+* {RDF::RSS}   - RDF Site Summary (RSS)
+* {RDF::SIOC}  - Semantically-Interlinked Online Communities (SIOC)
+* {RDF::SKOS}  - Simple Knowledge Organization System (SKOS)
+* {RDF::WOT}   - Web of Trust (WOT)
+* {RDF::XHTML} - Extensible HyperText Markup Language (XHTML)
+* {RDF::XSD}   - XML Schema (XSD)
 
 Dependencies
 ------------
@@ -109,6 +110,18 @@ The recommended installation method is via RubyGems. To install the latest
 official release from Gemcutter, do:
 
     % [sudo] gem install rdf
+
+Download
+--------
+
+To get a local working copy of the development repository, do:
+
+    % git clone git://github.com/bendiken/rdf.git
+
+Alternatively, you can download the latest development version as a tarball
+as follows:
+
+    % wget http://github.com/bendiken/rdf/tarball/master
 
 Resources
 ---------
