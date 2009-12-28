@@ -23,6 +23,7 @@ module RDF
 
   # RDF querying
   autoload :Query,      'rdf/query'
+  autoload :Variable,   'rdf/variable'
 
   # RDF vocabularies
   autoload :Vocabulary, 'rdf/vocabulary'
