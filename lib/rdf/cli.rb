@@ -57,7 +57,7 @@ module RDF
     # @return [nil]
     def self.each_statement(*files, &block)
       files.each do |file|
-        RDF::Reader::NTriples.open(file) do |reader|
+        RDF::NTriples::Reader.open(file) do |reader|
           reader.each_statement(&block)
         end
       end

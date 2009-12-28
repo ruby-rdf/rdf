@@ -4,14 +4,9 @@ module RDF
   #
   # @abstract
   class Reader
-    autoload :NTriples, 'rdf/reader/ntriples'
+    autoload :NTriples, 'rdf/reader/ntriples' # @deprecated
 
     include Enumerable
-
-    @@subclasses       = []
-    @@file_extensions  = {}
-    @@content_types    = {}
-    @@content_encoding = {}
 
     ##
     # Enumerates known RDF reader classes.
@@ -23,23 +18,12 @@ module RDF
     end
 
     ##
-    # @return [Hash{String => Symbol}]
-    def self.content_types
-      @@content_types
-    end
-
-    ##
-    # @return [Hash{Symbol => String}]
-    def self.file_extensions
-      @@file_extensions
-    end
-
-    ##
     # @param  [Symbol] format
     # @return [Class]
     def self.for(format)
       klass = case format.to_s.downcase.to_sym
-        when :ntriples then RDF::Reader::NTriples
+        when :ntriples then RDF::NTriples::Reader
+        else nil # FIXME
       end
     end
 
@@ -127,23 +111,15 @@ module RDF
 
     private
 
+      @@subclasses = [] # @private
+
       def self.inherited(child) #:nodoc:
         @@subclasses << child
         super
       end
 
-      def self.content_type(type, options = {})
-        @@content_types[type] ||= []
-        @@content_types[type] << self
-
-        if options[:extension]
-          extensions = [options[:extension]].flatten.map { |ext| ext.to_sym }
-          extensions.each { |ext| @@file_extensions[ext] = type }
-        end
-      end
-
-      def self.content_encoding(encoding)
-        @@content_encoding[self] = encoding.to_sym
+      def self.format(klass)
+        # TODO
       end
 
       def lineno

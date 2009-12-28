@@ -4,14 +4,9 @@ module RDF
   #
   # @abstract
   class Writer
-    autoload :NTriples, 'rdf/writer/ntriples'
+    autoload :NTriples, 'rdf/writer/ntriples' # @deprecated
 
     include Enumerable
-
-    @@subclasses       = []
-    @@file_extensions  = {}
-    @@content_types    = {}
-    @@content_encoding = {}
 
     ##
     # Enumerates known RDF writer classes.
@@ -23,22 +18,11 @@ module RDF
     end
 
     ##
-    # Returns the list of known MIME content types.
-    def self.content_types
-      @@content_types
-    end
-
-    ##
-    # Returns the list of known file extensions.
-    def self.file_extensions
-      @@file_extensions
-    end
-
-    ##
     # Returns the RDF writer class for the given format.
     def self.for(format)
       klass = case format.to_s.downcase.to_sym
-        when :ntriples then RDF::Writer::NTriples
+        when :ntriples then RDF::NTriples::Writer
+        else nil # FIXME
       end
     end
 
@@ -149,25 +133,6 @@ module RDF
 
     protected
 
-      def self.inherited(child) #:nodoc:
-        @@subclasses << child
-        super
-      end
-
-      def self.content_type(type, options = {})
-        @@content_types[type] ||= []
-        @@content_types[type] << self
-
-        if options[:extension]
-          extensions = [options[:extension]].flatten.map { |ext| ext.to_sym }
-          extensions.each { |ext| @@file_extensions[ext] = type }
-        end
-      end
-
-      def self.content_encoding(encoding)
-        @@content_encoding[self] = encoding.to_sym
-      end
-
       def puts(*args)
         @output.puts(*args)
       end
@@ -212,6 +177,19 @@ module RDF
       # @return [String]
       def quoted(string)
         "\"#{string}\""
+      end
+
+    private
+
+      @@subclasses = [] # @private
+
+      def self.inherited(child) # @private
+        @@subclasses << child
+        super
+      end
+
+      def self.format(klass)
+        # TODO
       end
 
   end

@@ -1,8 +1,9 @@
 require 'rdf'
 
-describe RDF::Reader::NTriples do
+describe RDF::NTriples do
   before :each do
-    @reader = RDF::Reader::NTriples
+    @reader = RDF::NTriples::Reader
+    @writer = RDF::NTriples::Writer
   end
 
   context "when created" do
@@ -41,12 +42,6 @@ describe RDF::Reader::NTriples do
     it "should parse W3C's test data" do
       lambda { @reader.new(File.open("spec/data/test.nt")).to_a.size.should == 30 }.should_not raise_error # FIXME
     end
-  end
-end
-
-describe RDF::Writer::NTriples do
-  before :each do
-    @writer = RDF::Writer::NTriples
   end
 
   context "when writing" do

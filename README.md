@@ -42,7 +42,7 @@ Examples
 
 ### Reading N-Triples data
 
-    RDF::Reader::NTriples.open("spec/data/test.nt") do |reader|
+    RDF::NTriples::Reader.open("spec/data/test.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
