@@ -136,9 +136,11 @@ module RDF
     alias_method :to_ary, :to_triple
 
     ##
-    # @return [Hash]
+    # Returns the components of this statement as a `Hash`.
+    #
+    # @return [Hash{Symbol => Value}]
     def to_hash
-      { subject => { predicate => object } }
+      { :subject => subject, :predicate => predicate, :object => object }
     end
 
     ##
