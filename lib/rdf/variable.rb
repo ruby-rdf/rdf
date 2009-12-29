@@ -85,6 +85,19 @@ module RDF
     end
 
     ##
+    # Compares this variable with the given value.
+    #
+    # @param  [Value] other
+    # @return [Boolean]
+    def ===(other)
+      if unbound?
+        true # match anything when unbound
+      else
+        value === other
+      end
+    end
+
+    ##
     # Returns a string representation of this variable.
     #
     # @return [String]
