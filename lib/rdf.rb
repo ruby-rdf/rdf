@@ -22,6 +22,7 @@ module RDF
   autoload :Repository, 'rdf/repository'
 
   # RDF querying
+  autoload :Pattern,    'rdf/pattern'
   autoload :Query,      'rdf/query'
   autoload :Variable,   'rdf/variable'
 
