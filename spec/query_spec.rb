@@ -31,5 +31,15 @@ describe RDF::Query do
         vars.keys.should_not include(:p, :o)
       end
     end
+
+    it "should support offsets" do
+      @query.offset(10)
+      @query.solutions.size == (@graph.size - 10)
+    end
+
+    it "should support limits" do
+      @query.limit(10)
+      @query.solutions.size == 10
+    end
   end
 end
