@@ -76,7 +76,11 @@ describe RDF::Statement do
   context "when used like a Hash" do
     it "should support #to_hash" do
       @stmt.should respond_to(:to_hash)
-      @stmt.to_hash.should eql({@stmt.subject => {@stmt.predicate => @stmt.object}})
+      @stmt.to_hash.should eql({
+        :subject   => @stmt.subject,
+        :predicate => @stmt.predicate,
+        :object    => @stmt.object,
+      })
     end
   end
 

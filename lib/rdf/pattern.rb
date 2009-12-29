@@ -6,16 +6,33 @@ module RDF
     attr_reader :options
 
     ##
-    # @param  [Variable, Resource]     subject
-    # @param  [Variable, URI]          predicate
-    # @param  [Variable, Value]        object
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [Boolean] :optional (`false`)
+    # @overload initialize(options = {})
+    #   @param  [Hash{Symbol => Object}]     options
+    #   @option options [Variable, Resource] :subject   (nil)
+    #   @option options [Variable, URI]      :predicate (nil)
+    #   @option options [Variable, Value]    :object    (nil)
+    #   @option options [Boolean]            :optional  (false)
+    #
+    # @overload initialize(subject, predicate, object, options = {})
+    #   @param  [Variable, Resource]         subject
+    #   @param  [Variable, URI]              predicate
+    #   @param  [Variable, Value]            object
+    #   @param  [Hash{Symbol => Object}]     options
+    #   @option options [Boolean]            :optional  (false)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
-      @options   = options || {}
-      @subject   = subject.is_a?(Symbol)   ? Variable.new(subject)   : subject
-      @predicate = predicate.is_a?(Symbol) ? Variable.new(predicate) : predicate
-      @object    = object.is_a?(Symbol)    ? Variable.new(object)    : object
+      case subject
+        when Hash
+          options    = subject
+          subject    = options.delete(:subject)
+          predicate  = options.delete(:predicate)
+          object     = options.delete(:object)
+          initialize(subject, predicate, object, options)
+        else
+          @options   = options || {}
+          @subject   = subject.is_a?(Symbol)   ? Variable.new(subject)   : subject
+          @predicate = predicate.is_a?(Symbol) ? Variable.new(predicate) : predicate
+          @object    = object.is_a?(Symbol)    ? Variable.new(object)    : object
+      end
     end
 
     ##

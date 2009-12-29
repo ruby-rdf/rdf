@@ -18,14 +18,35 @@ module RDF
     attr_accessor :object
 
     ##
-    # @param  [Resource] s
-    # @param  [URI]      p
-    # @param  [Value]    o
-    # @option options [Resource] :context (nil)
-    def initialize(s = nil, p = nil, o = nil, options = {})
-      @id = options[:id] if options.has_key?(:id)
-      @context = options[:context] || options[:graph]
-      @subject, @predicate, @object = s, p, o
+    # @overload initialize(options = {})
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [Resource]       :subject   (nil)
+    #   @option options [URI]            :predicate (nil)
+    #   @option options [Value]          :object    (nil)
+    #   @option options [Resource]       :context   (nil)
+    #
+    # @overload initialize(subject, predicate, object, options = {})
+    #   @param  [Resource]               subject
+    #   @param  [URI]                    predicate
+    #   @param  [Value]                  object
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [Resource]       :context   (nil)
+    def initialize(subject = nil, predicate = nil, object = nil, options = {})
+      case subject
+        when Hash
+          options    = subject
+          subject    = options.delete(:subject)
+          predicate  = options.delete(:predicate)
+          object     = options.delete(:object)
+          initialize(subject, predicate, object, options)
+        else
+          @id        = options.delete(:id) if options.has_key?(:id)
+          @context   = options.delete(:context) || options.delete(:graph)
+          @options   = options
+          @subject   = subject
+          @predicate = predicate
+          @object    = object
+      end
     end
 
     ##
