@@ -159,9 +159,12 @@ module RDF
     ##
     # Returns the components of this statement as a `Hash`.
     #
+    # @param  [Symbol] subject_key
+    # @param  [Symbol] predicate_key
+    # @param  [Symbol] object_key
     # @return [Hash{Symbol => Value}]
-    def to_hash
-      { :subject => subject, :predicate => predicate, :object => object }
+    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object)
+      {subject_key => subject, predicate_key => predicate, object_key => object}
     end
 
     ##
