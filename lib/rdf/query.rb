@@ -48,7 +48,7 @@ module RDF
     #
     # @param  [Enumerable<Symbol>] variables
     # @return [Query]
-    def select(*variables)
+    def project(*variables)
       unless variables.empty?
         variables.map! { |variable| variable.to_sym }
         solutions.each do |bindings|
@@ -58,7 +58,18 @@ module RDF
       self
     end
 
-    alias_method :project, :select
+    alias_method :select, :project
+
+    ##
+    # Ensures solutions in the solution sequence are unique.
+    #
+    # @return [Query]
+    def distinct
+      solutions.uniq!
+      self
+    end
+
+    alias_method :reduced, :distinct
 
     ##
     # Limits the solution sequence to bindings starting from the `start`

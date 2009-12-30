@@ -14,21 +14,30 @@ describe RDF::Query do
     end
 
     it "should support projection" do
-      @query.select(:s, :p, :o)
+      @query.project(:s, :p, :o)
       @query.solutions.each do |vars, vals|
         vars.keys.should include(:s, :p, :o)
       end
 
-      @query.select(:s, :p)
+      @query.project(:s, :p)
       @query.solutions.each do |vars, vals|
         vars.keys.should include(:s, :p)
         vars.keys.should_not include(:o)
       end
 
-      @query.select(:s)
+      @query.project(:s)
       @query.solutions.each do |vars, vals|
         vars.keys.should include(:s)
         vars.keys.should_not include(:p, :o)
+      end
+    end
+
+    it "should support duplicate elimination" do
+      [:distinct, :reduced].each do |op|
+        @query.solutions *= 2
+        @query.solutions.size == @graph.size * 2
+        @query.send(op)
+        @query.solutions.size == @graph.size
       end
     end
 
