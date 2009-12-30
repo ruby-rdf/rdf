@@ -1,6 +1,30 @@
 module RDF
   ##
   # An RDF serialization format.
+  #
+  # @example Iterating over known RDF serialization formats
+  #   RDF::Format.each { |klass| puts klass.name }
+  #
+  # @example Getting a serialization format class and instance
+  #   RDF::Format.for(:ntriples)     #=> RDF::NTriples::Format
+  #   RDF::Format.for(:ntriples).new #=> #<RDF::NTriples::Format:0x101792820>
+  #
+  # @example Obtaining serialization format MIME types
+  #   RDF::Format.content_types      #=> {"text/plain" => [RDF::NTriples::Format]}
+  #
+  # @example Obtaining serialization format file extension mappings
+  #   RDF::Format.file_extensions    #=> {:nt => "text/plain"}
+  #
+  # @example Defining a new RDF serialization format class
+  #   class RDF::NTriples::Format < RDF::Format
+  #     content_type     'text/plain', :extension => :nt
+  #     content_encoding 'ascii'
+  #     
+  #     reader RDF::NTriples::Reader
+  #     writer RDF::NTriples::Format
+  #   end
+  #
+  # @see http://en.wikipedia.org/wiki/Resource_Description_Framework#Serialization_formats
   class Format
     include Enumerable
 
