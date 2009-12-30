@@ -1,6 +1,23 @@
 module RDF
   ##
   # An RDF vocabulary.
+  #
+  # @example Using pre-defined RDF vocabularies
+  #   include RDF
+  #   DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
+  #   FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+  #   RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
+  #   RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
+  #   OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
+  #   XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
+  #
+  # @example Using ad-hoc RDF vocabularies
+  #   foaf = RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")
+  #   foaf.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+  #   foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
+  #   foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
+  #
+  # @see http://www.w3.org/TR/curie/
   class Vocabulary
     ##
     # @return [String]
