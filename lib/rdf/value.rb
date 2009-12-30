@@ -13,6 +13,13 @@ module RDF
       sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
     end
 
+    ##
+    # @param  [Object]  other
+    # @return [Integer] -1, 0, 1
+    def <=>(other)
+      self.to_s <=> other.to_s
+    end
+
     private
 
       def self.inherited(child) #:nodoc:

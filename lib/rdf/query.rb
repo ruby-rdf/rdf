@@ -54,6 +54,28 @@ module RDF
     alias_method :count, :size
 
     ##
+    # Reorders the solution sequence based on `variables`.
+    #
+    # @param  [Enumerable<Symbol>] variables
+    # @return [Query]
+    def order(*variables)
+      if variables.empty?
+        raise ArgumentError.new("wrong number of arguments (0 for 1)")
+      else
+        # TODO: support for descending sort, e.g. order(:s => :asc, :p => :desc)
+        variables.map! { |variable| variable.to_sym }
+        solutions.sort! do |a, b|
+          a = variables.map { |variable| a[variable].to_s }
+          b = variables.map { |variable| b[variable].to_s }
+          a <=> b
+        end
+      end
+      self
+    end
+
+    alias_method :order_by, :order
+
+    ##
     # Restricts the the solution sequence to the given `variables` only.
     #
     # @param  [Enumerable<Symbol>] variables
