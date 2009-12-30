@@ -1,6 +1,43 @@
 module RDF class Query
   ##
   # An RDF query variable.
+  #
+  # @example Creating an unbound variable
+  #   var = RDF::Query::Variable.new(:x)
+  #   var.unbound?   #=> true
+  #   var.value      #=> nil
+  #
+  # @example Unbound variables match any value
+  #   var === 42     #=> true
+  #
+  # @example Creating a bound variable
+  #   var = RDF::Query::Variable.new(:y, 123)
+  #   var.bound?     #=> true
+  #   var.value      #=> 123
+  #
+  # @example Bound variables match only their actual value
+  #   var === 42     #=> false
+  #   var === 123    #=> true
+  #
+  # @example Getting the variable name
+  #   var.named?     #=> true
+  #   var.name       #=> :y
+  #   var.to_sym     #=> :y
+  #
+  # @example Rebinding a variable returns the previous value
+  #   var.bind!(456) #=> 123
+  #   var.value      #=> 456
+  #
+  # @example Unbinding a previously bound variable
+  #   var.unbind!
+  #   var.unbound?   #=> true
+  #
+  # @example Getting the string representation of a variable
+  #   var = RDF::Query::Variable.new(:x)
+  #   var.to_s       #=> "?x"
+  #   var = RDF::Query::Variable.new(:y, 123)
+  #   var.to_s       #=> "?y=123"
+  #
   class Variable < Value
     # @return [Symbol] The variable's name.
     attr_accessor :name
