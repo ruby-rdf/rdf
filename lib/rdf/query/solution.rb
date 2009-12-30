@@ -59,6 +59,24 @@ module RDF class Query
     end
 
     ##
+    # Returns `true` if the variable `name` is bound in this solution.
+    #
+    # @param  [Symbol] name
+    # @return [Boolean]
+    def bound?(name)
+      !unbound?(name)
+    end
+
+    ##
+    # Returns `true` if the variable `name` is unbound in this solution.
+    #
+    # @param  [Symbol] name
+    # @return [Boolean]
+    def unbound?(name)
+      @bindings[name.to_sym].nil?
+    end
+
+    ##
     # Returns the value of the variable `name`.
     #
     # @param  [Symbol] name
