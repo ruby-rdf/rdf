@@ -1,4 +1,4 @@
-module RDF
+module RDF class Query
   ##
   # An RDF query pattern.
   class Pattern < Statement
@@ -149,4 +149,4 @@ module RDF
       end
     end
   end
-end
+end end

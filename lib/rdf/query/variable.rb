@@ -1,4 +1,4 @@
-module RDF
+module RDF class Query
   ##
   # An RDF query variable.
   class Variable < Value
@@ -105,4 +105,4 @@ module RDF
       unbound? ? "?#{name}" : "?#{name}=#{value}"
     end
   end
-end
+end end

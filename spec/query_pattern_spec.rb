@@ -1,9 +1,9 @@
 require 'rdf'
 
-describe RDF::Pattern do
+describe RDF::Query::Pattern do
   context "without any variables" do
     before :each do
-      @pattern = RDF::Pattern.new
+      @pattern = RDF::Query::Pattern.new
     end
 
     it "should not have variables" do
@@ -34,8 +34,8 @@ describe RDF::Pattern do
 
   context "with one bound variable" do
     before :each do
-      @s = RDF::Variable.new(:s, true)
-      @pattern = RDF::Pattern.new(@s)
+      @s = RDF::Query::Variable.new(:s, true)
+      @pattern = RDF::Query::Pattern.new(@s)
     end
 
     it "should have one variable" do
@@ -68,10 +68,10 @@ describe RDF::Pattern do
 
   context "with three bound variables" do
     before :each do
-      @s = RDF::Variable.new(:s, true)
-      @p = RDF::Variable.new(:p, true)
-      @o = RDF::Variable.new(:o, true)
-      @pattern = RDF::Pattern.new(@s, @p, @o)
+      @s = RDF::Query::Variable.new(:s, true)
+      @p = RDF::Query::Variable.new(:p, true)
+      @o = RDF::Query::Variable.new(:o, true)
+      @pattern = RDF::Query::Pattern.new(@s, @p, @o)
     end
 
     it "should have three variables" do

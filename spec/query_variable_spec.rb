@@ -1,13 +1,13 @@
 require 'rdf'
 
-describe RDF::Variable do
+describe RDF::Query::Variable do
   context "when created" do
     before :each do
-      @var = RDF::Variable.new(:x)
+      @var = RDF::Query::Variable.new(:x)
     end
 
     it "should require a name" do
-      lambda { var = RDF::Variable.new }.should raise_error(ArgumentError)
+      lambda { var = RDF::Query::Variable.new }.should raise_error(ArgumentError)
     end
 
     it "should have a name" do
@@ -30,7 +30,7 @@ describe RDF::Variable do
 
   context "when not bound" do
     before :each do
-      @var = RDF::Variable.new(:x)
+      @var = RDF::Query::Variable.new(:x)
     end
 
     it "should not have a value" do
@@ -57,7 +57,7 @@ describe RDF::Variable do
 
   context "when bound" do
     before :each do
-      @var = RDF::Variable.new(:x, 123)
+      @var = RDF::Query::Variable.new(:x, 123)
     end
 
     it "should have a value" do
@@ -85,7 +85,7 @@ describe RDF::Variable do
 
   context "when rebound" do
     before :each do
-      @var = RDF::Variable.new(:x, 123)
+      @var = RDF::Query::Variable.new(:x, 123)
     end
 
     it "should return the previous value" do
@@ -102,7 +102,7 @@ describe RDF::Variable do
 
   context "when unbound" do
     before :each do
-      @var = RDF::Variable.new(:x, 123)
+      @var = RDF::Query::Variable.new(:x, 123)
     end
 
     it "should return the previous value" do

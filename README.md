@@ -79,9 +79,10 @@ Documentation
 
 ### RDF Querying
 
-* {RDF::Pattern}
 * {RDF::Query}
-* {RDF::Variable}
+* {RDF::Query::Pattern}
+* {RDF::Query::Solution}
+* {RDF::Query::Variable}
 
 ### RDF Vocabularies
 

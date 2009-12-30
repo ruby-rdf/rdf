@@ -2,9 +2,11 @@ module RDF
   ##
   # An RDF basic graph pattern query.
   class Query
-    include Enumerable
-
+    autoload :Pattern,  'rdf/query/pattern'
     autoload :Solution, 'rdf/query/solution'
+    autoload :Variable, 'rdf/query/variable'
+
+    include Enumerable
 
     # @return [Hash{Symbol => Variable}]
     attr_reader :variables
