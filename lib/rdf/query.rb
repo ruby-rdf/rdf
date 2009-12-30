@@ -9,6 +9,7 @@ module RDF
   #   query.filter(:updated => RDF::Literal.new(Date.today))
   #
   # @example Filtering solutions using a block
+  #   query.filter { |solution| solution.author.literal? }
   #   query.filter { |solution| solution.title =~ /^SPARQL/ }
   #   query.filter { |solution| solution.price < 30.5 }
   #   query.filter { |solution| solution.bound?(:date) }
@@ -17,9 +18,11 @@ module RDF
   #
   # @example Reordering solutions based on a variable
   #   query.order_by(:updated)
+  #   query.order_by(:updated, :created)
   #
   # @example Selecting particular variables only
   #   query.select(:title)
+  #   query.select(:title, :description)
   #
   # @example Eliminating duplicate solutions
   #   query.distinct!
