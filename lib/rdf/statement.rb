@@ -1,6 +1,23 @@
 module RDF
   ##
   # An RDF statement.
+  #
+  # @example Creating an RDF statement
+  #   s = RDF::URI.new("http://gemcutter.org/gems/rdf")
+  #   p = RDF::DC.creator
+  #   o = RDF::URI.new("http://ar.to/#self")
+  #   RDF::Statement.new(s, p, o)
+  #
+  # @example Creating an RDF statement with a context
+  #   RDF::Statement.new(s, p, o, :context => uri)
+  #
+  # @example Creating an RDF statement from a `Hash`
+  #   RDF::Statement.new({
+  #     :subject   => RDF::URI.new("http://gemcutter.org/gems/rdf"),
+  #     :predicate => RDF::DC.creator,
+  #     :object    => RDF::URI.new("http://ar.to/#self"),
+  #   })
+  #
   class Statement < Value
     # @return [Object]
     attr_accessor :id
