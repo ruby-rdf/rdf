@@ -60,6 +60,32 @@ module RDF
     alias_method :count, :size
 
     ##
+    # Filters the solution sequence by the given criteria.
+    #
+    # @param  [Hash{Symbol => Object}] criteria
+    # @yield  [solution]
+    # @yieldparam  [Solution] solution
+    # @yieldreturn [Boolean]
+    # @return [Query]
+    def filter(criteria = {}, &block)
+      if block_given?
+        solutions.reject! do |bindings|
+          !block.call(Solution.new(bindings))
+        end
+      else
+        solutions.reject! do |bindings|
+          results = criteria.map do |name, value|
+            bindings[name] == value
+          end
+          !results.all?
+        end
+      end
+      self
+    end
+
+    alias_method :filter!, :filter
+
+    ##
     # Reorders the solution sequence based on `variables`.
     #
     # @param  [Enumerable<Symbol>] variables
