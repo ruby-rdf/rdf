@@ -8,6 +8,6 @@ module RDF module NTriples
     content_encoding 'ascii'
 
     reader RDF::NTriples::Reader
-    writer RDF::NTriples::Format
+    writer RDF::NTriples::Writer
   end
 end end

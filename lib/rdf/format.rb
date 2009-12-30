@@ -5,9 +5,12 @@ module RDF
   # @example Iterating over known RDF serialization formats
   #   RDF::Format.each { |klass| puts klass.name }
   #
-  # @example Getting a serialization format class and instance
+  # @example Getting a serialization format class
   #   RDF::Format.for(:ntriples)     #=> RDF::NTriples::Format
-  #   RDF::Format.for(:ntriples).new #=> #<RDF::NTriples::Format:0x101792820>
+  #   RDF::Format.for("spec/data/test.nt")
+  #   RDF::Format.for(:file_name => "spec/data/test.nt")
+  #   RDF::Format.for(:file_extension => "nt")
+  #   RDF::Format.for(:content_type => "text/plain")
   #
   # @example Obtaining serialization format MIME types
   #   RDF::Format.content_types      #=> {"text/plain" => [RDF::NTriples::Format]}
@@ -21,24 +24,97 @@ module RDF
   #     content_encoding 'ascii'
   #     
   #     reader RDF::NTriples::Reader
-  #     writer RDF::NTriples::Format
+  #     writer RDF::NTriples::Writer
   #   end
   #
+  # @example Instantiating a reader or writer class
+  #   RDF::Format.for(:ntriples).reader.new
+  #   RDF::Format.for(:ntriples).writer.new
+  #
+  # @see RDF::Reader
+  # @see RDF::Writer
   # @see http://en.wikipedia.org/wiki/Resource_Description_Framework#Serialization_formats
   class Format
-    include Enumerable
+    extend Enumerable
 
     ##
-    # Enumerates known RDF format classes.
+    # Enumerates known RDF serialization format classes.
     #
     # @yield  [klass]
     # @yieldparam [Class]
+    # @return [Enumerator]
     def self.each(&block)
-      !block_given? ? @@subclasses : @@subclasses.each { |klass| yield klass } # FIXME: Enumerator
+      @@subclasses.each(&block)
     end
 
     ##
-    # Returns the list of known MIME content types.
+    # Finds an RDF serialization format class based on the given criteria.
+    #
+    # @overload for(format)
+    #   Finds an RDF serialization format class based on a symbolic name.
+    #
+    #   @param  [Symbol] format
+    #   @return [Class]
+    #
+    # @overload for(filename)
+    #   Finds an RDF serialization format class based on a file name.
+    #
+    #   @param  [String] filename
+    #   @return [Class]
+    #
+    # @overload for(options = {})
+    #   Finds an RDF serialization format class based on various options.
+    #
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [String, #to_s]   :file_name      (nil)
+    #   @option options [Symbol, #to_sym] :file_extension (nil)
+    #   @option options [String, #to_s]   :content_type   (nil)
+    #   @return [Class]
+    #
+    # @return [Class]
+    def self.for(options = {})
+      case options
+        when String
+          # Find a format based on the file name
+          self.for(:file_name => options)
+
+        when Hash
+          case
+            # Find a format based on the file name
+            when file_name = options[:file_name]
+              self.for(:file_extension => File.extname(file_name.to_s)[1..-1])
+            # Find a format based on the file extension
+            when file_ext  = options[:file_extension]
+              if file_extensions.has_key?(file_ext = file_ext.to_sym)
+                self.for(:content_type => file_extensions[file_ext])
+              end
+            # Find a format based on the MIME content type
+            when mime_type = options[:content_type]
+              if content_types.has_key?(mime_type = mime_type.to_s)
+                content_types[mime_type].first
+              end
+          end
+
+        when Symbol
+          case format = options
+            # Special case, since we want this to work despite autoloading
+            when :ntriples
+              RDF::NTriples::Format
+            # For anything else, find a match based on the full class name
+            else
+              format = format.to_s.downcase
+              @@subclasses.each do |klass|
+                if klass.name.to_s.split('::').map(&:downcase).include?(format)
+                  return klass
+                end
+              end
+              nil # not found
+          end
+      end
+    end
+
+    ##
+    # Returns MIME content types for known RDF serialization formats.
     #
     # @return [Hash{String => Array<Class>}]
     def self.content_types
@@ -46,7 +122,7 @@ module RDF
     end
 
     ##
-    # Returns the list of known file extensions.
+    # Returns file extensions for known RDF serialization formats.
     #
     # @return [Hash{Symbol => String}]
     def self.file_extensions
@@ -54,65 +130,124 @@ module RDF
     end
 
     ##
-    # @param  [Symbol] format
-    # @return [Class]
-    def self.for(format)
-      klass = case format.to_s.downcase.to_sym
-        when :ntriples then RDF::NTriples::Format
-        else nil # FIXME
+    # Retrieves or defines the reader class for this RDF serialization
+    # format.
+    #
+    # @overload reader(klass)
+    #   Defines the reader class for this RDF serialization format.
+    #   
+    #   The class should be a subclass of {RDF::Reader}, or implement the
+    #   same interface.
+    #   
+    #   @param  [Class] klass
+    #   @return [void]
+    #
+    # @overload reader
+    #   Retrieves the reader class for this RDF serialization format.
+    #   
+    #   @return [Class]
+    #
+    # @return [void]
+    def self.reader(klass = nil)
+      if klass.nil?
+        @@readers[self]
+      else
+        @@readers[self] = klass
       end
     end
 
     ##
-    # @yield  [format]
-    # @yieldparam [Format]
-    def initialize(options = {}, &block)
-      @options = options
-
-      if block_given?
-        case block.arity
-          when 1 then block.call(self)
-          else instance_eval(&block)
-        end
+    # Retrieves or defines the writer class for this RDF serialization
+    # format.
+    #
+    # @overload writer(klass)
+    #   Defines the writer class for this RDF serialization format.
+    #   
+    #   The class should be a subclass of {RDF::Writer}, or implement the
+    #   same interface.
+    #   
+    #   @param  [Class] klass
+    #   @return [void]
+    #
+    # @overload writer
+    #   Retrieves the writer class for this RDF serialization format.
+    #   
+    #   @return [Class]
+    #
+    # @return [void]
+    def self.writer(klass = nil)
+      if klass.nil?
+        @@writers[self]
+      else
+        @@writers[self] = klass
       end
+    end
+
+    class << self
+      alias_method :reader_class, :reader
+      alias_method :writer_class, :writer
     end
 
     protected
 
-      @@subclasses       = [] # @private
-      @@file_extensions  = {} # @private
-      @@content_types    = {} # @private
-      @@content_encoding = {} # @private
-
-      def self.inherited(child) # @private
-        @@subclasses << child
-        super
-      end
-
+      ##
+      # Defines a required Ruby library for this RDF serialization format.
+      #
+      # The given library will be required lazily, i.e. only when it is
+      # actually first needed, such as when instantiating a reader or parser
+      # instance for this format.
+      #
+      # @param  [String, #to_s] library
+      # @return [void]
       def self.require(library)
-        # TODO
+        (@@requires[self] ||= []) << library.to_s
       end
 
+      ##
+      # Defines MIME content types for this RDF serialization format.
+      #
+      # Optionally also defines a file extension, or a list of file
+      # extensions, that should be mapped to the given MIME type and handled
+      # by this class.
+      #
+      # @param  [String]                 type
+      # @param  [Hash{Symbol => Object}] options
+      # @option options [Symbol]         :extension  (nil)
+      # @option options [Array<Symbol>]  :extensions (nil)
+      # @return [void]
       def self.content_type(type, options = {})
-        @@content_types[type] ||= []
-        @@content_types[type] << self
+        (@@content_types[type] ||= []) << self
 
-        if options[:extension]
-          extensions = [options[:extension]].flatten.map { |ext| ext.to_sym }
+        if extensions = (options[:extension] || options[:extensions])
+          extensions = [extensions].flatten.map { |ext| ext.to_sym }
           extensions.each { |ext| @@file_extensions[ext] = type }
         end
       end
 
+      ##
+      # Defines the content encoding for this RDF serialization format.
+      #
+      # @param  [#to_sym] encoding
+      # @return [void]
       def self.content_encoding(encoding)
         @@content_encoding[self] = encoding.to_sym
       end
 
-      def self.reader(klass)
-        # TODO
-      end
+    private
 
-      def self.writer(klass)
-        # TODO
+      private_class_method :new
+
+      @@subclasses       = [] # @private
+      @@requires         = {} # @private
+      @@file_extensions  = {} # @private
+      @@content_types    = {} # @private
+      @@content_encoding = {} # @private
+      @@readers          = {} # @private
+      @@writers          = {} # @private
+
+      def self.inherited(child) # @private
+        @@subclasses << child
+        super
       end
 
   end
