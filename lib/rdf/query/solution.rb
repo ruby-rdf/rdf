@@ -1,6 +1,25 @@
 module RDF class Query
   ##
   # An RDF query solution.
+  #
+  # @example Iterating over every binding in the solution
+  #   solution.each_binding  { |name, value| puts value.inspect }
+  #   solution.each_variable { |variable| puts variable.value.inspect }
+  #
+  # @example Iterating over every value in the solution
+  #   solution.each_value    { |value| puts value.inspect }
+  #
+  # @example Checking whether a variable is bound or unbound
+  #   solution.bound?(:title)
+  #   solution.unbound?(:mbox)
+  #
+  # @example Retrieving the value of a bound variable
+  #   solution[:mbox]
+  #   solution.mbox
+  #
+  # @example Retrieving all bindings in the solution as a `Hash`
+  #   solution.to_hash       #=> {:mbox => "jrhacker@example.org", ...}
+  #
   class Solution
     undef_method *(instance_methods - %w(__id__ __send__ __class__ __eval__ instance_eval inspect class object_id))
 
