@@ -4,6 +4,8 @@ module RDF
   class Query
     include Enumerable
 
+    autoload :Solution, 'rdf/query/solution'
+
     # @return [Hash{Symbol => Variable}]
     attr_reader :variables
 
@@ -35,10 +37,12 @@ module RDF
     # Enumerates over each query solution.
     #
     # @yield  [solution]
-    # @yieldparam [Hash{Symbol => Value}]
+    # @yieldparam [Solution]
     # @return [Enumerable]
     def each_solution(&block)
-      solutions.each(&block)
+      solutions.each do |bindings|
+        block.call(Solution.new(bindings))
+      end
     end
 
     alias_method :each, :each_solution
