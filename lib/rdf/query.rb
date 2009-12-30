@@ -1,6 +1,38 @@
 module RDF
   ##
   # An RDF basic graph pattern query.
+  #
+  # @example Filtering solutions using a hash
+  #   query.filter(:author  => RDF::URI.new("http://ar.to/#self"))
+  #   query.filter(:author  => "Arto Bendiken")
+  #   query.filter(:author  => [RDF::URI.new("http://ar.to/#self"), "Arto Bendiken"])
+  #   query.filter(:updated => RDF::Literal.new(Date.today))
+  #
+  # @example Filtering solutions using a block
+  #   query.filter { |solution| solution.title =~ /^SPARQL/ }
+  #   query.filter { |solution| solution.price < 30.5 }
+  #   query.filter { |solution| solution.bound?(:date) }
+  #   query.filter { |solution| solution.age.datatype == RDF::XSD.integer }
+  #   query.filter { |solution| solution.name.language == :es }
+  #
+  # @example Reordering solutions based on a variable
+  #   query.order_by(:updated)
+  #
+  # @example Selecting particular variables only
+  #   query.select(:title)
+  #
+  # @example Eliminating duplicate solutions
+  #   query.distinct!
+  #
+  # @example Limiting the number of solutions
+  #   query.offset(25).limit(10)
+  #
+  # @example Counting the number of solutions
+  #   query.count
+  #
+  # @example Iterating over all found solutions
+  #   query.each_solution { |solution| puts solution.inspect }
+  #
   class Query
     autoload :Pattern,  'rdf/query/pattern'
     autoload :Solution, 'rdf/query/solution'
@@ -133,7 +165,9 @@ module RDF
       self
     end
 
-    alias_method :reduced, :distinct
+    alias_method :distinct!, :distinct
+    alias_method :reduced,   :distinct
+    alias_method :reduced!,  :distinct
 
     ##
     # Limits the solution sequence to bindings starting from the `start`
@@ -169,5 +203,7 @@ module RDF
       end
       self
     end
+
+    alias_method :slice!, :slice
   end
 end
