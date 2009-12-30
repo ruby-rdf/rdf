@@ -2,6 +2,13 @@ module RDF module NTriples
   ##
   # N-Triples parser.
   #
+  # @example Reading N-Triples data
+  #   RDF::NTriples::Reader.open("spec/data/test.nt") do |reader|
+  #     reader.each_statement do |statement|
+  #       puts statement.inspect
+  #     end
+  #   end
+  #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Reader < RDF::Reader
     format RDF::NTriples::Format
