@@ -35,20 +35,20 @@ describe RDF::Query do
     it "should support duplicate elimination" do
       [:distinct, :reduced].each do |op|
         @query.solutions *= 2
-        @query.solutions.size == @graph.size * 2
+        @query.count == @graph.size * 2
         @query.send(op)
-        @query.solutions.size == @graph.size
+        @query.count == @graph.size
       end
     end
 
     it "should support offsets" do
       @query.offset(10)
-      @query.solutions.size == (@graph.size - 10)
+      @query.count == (@graph.size - 10)
     end
 
     it "should support limits" do
       @query.limit(10)
-      @query.solutions.size == 10
+      @query.count == 10
     end
   end
 end

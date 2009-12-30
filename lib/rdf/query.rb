@@ -44,6 +44,16 @@ module RDF
     alias_method :each, :each_solution
 
     ##
+    # Returns the number of query solutions.
+    #
+    # @return [Integer]
+    def size
+      solutions.size
+    end
+
+    alias_method :count, :size
+
+    ##
     # Restricts the the solution sequence to the given `variables` only.
     #
     # @param  [Enumerable<Symbol>] variables
