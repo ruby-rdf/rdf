@@ -3,6 +3,15 @@ require 'addressable/uri'
 module RDF
   ##
   # A Uniform Resource Identifier (URI).
+  #
+  # @example Creating a URI reference
+  #   uri = RDF::URI.new("http://rdf.rubyforge.org/")
+  #
+  # @example Getting the string representation of a URI
+  #   uri.to_s #=> "http://rdf.rubyforge.org/"
+  #
+  # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+  # @see http://addressable.rubyforge.org/
   class URI < Node
     ##
     # @param  [String] uri
