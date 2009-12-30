@@ -1,6 +1,43 @@
 module RDF
   ##
   # An RDF literal.
+  #
+  # @example Creating a plain literal
+  #   value = RDF::Literal.new("Hello, world!")
+  #   value.plain?                                   #=> true
+  #
+  # @example Creating a language-tagged literal (1)
+  #   value = RDF::Literal.new("Hello!", :language => :en)
+  #   value.language?                                #=> true
+  #   value.language                                 #=> :en
+  #
+  # @example Creating a language-tagged literal (2)
+  #   RDF::Literal.new("Wazup?", :language => :"en-US")
+  #   RDF::Literal.new("Hej!",   :language => :sv)
+  #   RDF::Literal.new("¡Hola!", :language => :es)
+  #
+  # @example Creating an explicitly datatyped literal
+  #   value = RDF::Literal.new("2009-12-31", :datatype => RDF::XSD.date)
+  #   value.datatype?                                #=> true
+  #   value.datatype                                 #=> RDF::XSD.date
+  #
+  # @example Creating an implicitly datatyped literal
+  #   value = RDF::Literal.new(Date.today)
+  #   value.datatype?                                #=> true
+  #   value.datatype                                 #=> RDF::XSD.date
+  #
+  # @example Creating implicitly datatyped literals
+  #   RDF::Literal.new(false).datatype               #=> XSD.boolean
+  #   RDF::Literal.new(true).datatype                #=> XSD.boolean
+  #   RDF::Literal.new(123).datatype                 #=> XSD.int
+  #   RDF::Literal.new(9223372036854775807).datatype #=> XSD.long
+  #   RDF::Literal.new(3.1415).datatype              #=> XSD.double
+  #   RDF::Literal.new(Time.now).datatype            #=> XSD.dateTime
+  #   RDF::Literal.new(Date.new(2010)).datatype      #=> XSD.date
+  #   RDF::Literal.new(DateTime.new(2010)).datatype  #=> XSD.dateTime
+  #
+  # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
+  # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal < Value
     # @return [String] The normalized string representation of the value.
     attr_accessor :value
@@ -80,18 +117,38 @@ module RDF
     end
 
     ##
+    # Returns `true` if this is a plain literal.
+    #
     # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def plain?
       language.nil? && datatype.nil?
     end
 
     ##
+    # Returns `true` if this is a language-tagged literal.
+    #
     # @return [Boolean]
-    def typed?
-      !datatype.nil?
+    # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
+    def language?
+      !language.nil?
     end
 
     ##
+    # Returns `true` if this is a datatyped literal.
+    #
+    # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
+    def datatype?
+      !datatype.nil?
+    end
+
+    alias_method :typed?,     :datatype?
+    alias_method :datatyped?, :datatype?
+
+    ##
+    # Returns a string representation of this literal.
+    #
     # @return [String]
     def to_s
       quoted = value # FIXME
