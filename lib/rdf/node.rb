@@ -12,16 +12,26 @@ module RDF
     end
 
     ##
+    # Returns `true`.
+    #
     # @return [Boolean]
-    def anonymous?() true end
+    def node?
+      true
+    end
 
     ##
     # @return [Boolean]
-    def labeled?()   !unlabeled? end
+    def anonymous?
+      true
+    end
+
+    alias_method :unlabeled?, :anonymous?
 
     ##
     # @return [Boolean]
-    def unlabeled?() anonymous? end
+    def labeled?
+      !unlabeled?
+    end
 
     ##
     # @return [String]

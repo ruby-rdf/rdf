@@ -26,6 +26,14 @@ module RDF
     end
 
     ##
+    # Returns `true`.
+    #
+    # @return [Boolean]
+    def graph?
+      true
+    end
+
+    ##
     # @return [Boolean]
     def named?()   !unnamed? end
 

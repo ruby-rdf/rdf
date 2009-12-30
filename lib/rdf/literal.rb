@@ -50,6 +50,14 @@ module RDF
     end
 
     ##
+    # Returns `true`.
+    #
+    # @return [Boolean]
+    def literal?
+      true
+    end
+
+    ##
     # @return [Boolean]
     def eql?(other)
       other.is_a?(Literal) && self == other

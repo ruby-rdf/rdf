@@ -21,6 +21,16 @@ module RDF
     end
 
     ##
+    # Returns `true`.
+    #
+    # @return [Boolean]
+    def uri?
+      true
+    end
+
+    ##
+    # Returns `false`.
+    #
     # @return [Boolean]
     def anonymous?
       false
