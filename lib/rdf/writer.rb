@@ -2,10 +2,40 @@ module RDF
   ##
   # An RDF serializer.
   #
+  # @example Iterating over known RDF writer classes
+  #   RDF::Writer.each { |klass| puts klass.name }
+  #
+  # @example Obtaining an RDF writer class
+  #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer
+  #   RDF::Writer.for("spec/data/output.nt")
+  #   RDF::Writer.for(:file_name => "spec/data/output.nt")
+  #   RDF::Writer.for(:file_extension => "nt")
+  #   RDF::Writer.for(:content_type => "text/plain")
+  #
+  # @example Instantiating an RDF writer class
+  #   RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }
+  #
+  # @example Serializing RDF statements to a file
+  #   RDF::Writer.open("spec/data/output.nt") do |writer|
+  #     graph.each_statement do |statement|
+  #       writer << statement
+  #     end
+  #   end
+  #
+  # @example Serializing RDF statements to a string
+  #   RDF::Writer.buffer do |writer|
+  #     graph.each_statement do |statement|
+  #       writer << statement
+  #     end
+  #   end
+  #
   # @abstract
+  # @see RDF::Format
+  # @see RDF::Reader
   class Writer
     autoload :NTriples, 'rdf/writer/ntriples' # @deprecated
 
+    extend  Enumerable
     include Enumerable
 
     ##
@@ -13,17 +43,59 @@ module RDF
     #
     # @yield  [klass]
     # @yieldparam [Class]
+    # @return [Enumerator]
     def self.each(&block)
-      !block_given? ? @@subclasses : @@subclasses.each { |klass| yield klass }
+      @@subclasses.each(&block)
     end
 
     ##
-    # Returns the RDF writer class for the given format.
-    def self.for(format)
-      klass = case format.to_s.downcase.to_sym
-        when :ntriples then RDF::NTriples::Writer
-        else nil # FIXME
+    # Finds an RDF writer class based on the given criteria.
+    #
+    # @overload for(format)
+    #   Finds an RDF writer class based on a symbolic name.
+    #
+    #   @param  [Symbol] format
+    #   @return [Class]
+    #
+    # @overload for(filename)
+    #   Finds an RDF writer class based on a file name.
+    #
+    #   @param  [String] filename
+    #   @return [Class]
+    #
+    # @overload for(options = {})
+    #   Finds an RDF writer class based on various options.
+    #
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [String, #to_s]   :file_name      (nil)
+    #   @option options [Symbol, #to_sym] :file_extension (nil)
+    #   @option options [String, #to_s]   :content_type   (nil)
+    #   @return [Class]
+    #
+    # @return [Class]
+    def self.for(options = {})
+      if format = Format.for(options)
+        format.writer
       end
+    end
+
+    ##
+    # Retrieves the RDF serialization format class for this writer class.
+    #
+    # @return [Class]
+    def self.format(klass = nil)
+      if klass.nil?
+        Format.each do |format|
+          if format.reader == self
+            return format
+          end
+        end
+        nil # not found
+      end
+    end
+
+    class << self
+      alias_method :format_class, :format
     end
 
     def self.buffer(*args, &block)
@@ -36,10 +108,8 @@ module RDF
     end
 
     def self.open(filename, options = {}, &block)
-      options[:format] ||= :ntriples # FIXME
-
       File.open(filename, 'wb') do |file|
-        self.for(options[:format]).new(file, options, &block)
+        self.for(options[:format] || filename).new(file, options, &block)
       end
     end
 
@@ -186,10 +256,6 @@ module RDF
       def self.inherited(child) # @private
         @@subclasses << child
         super
-      end
-
-      def self.format(klass)
-        # TODO
       end
 
   end

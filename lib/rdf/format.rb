@@ -27,10 +27,15 @@ module RDF
   #     writer RDF::NTriples::Writer
   #   end
   #
-  # @example Instantiating a reader or writer class
-  #   RDF::Format.for(:ntriples).reader.new
-  #   RDF::Format.for(:ntriples).writer.new
+  # @example Instantiating an RDF reader or writer class (1)
+  #   RDF::Format.for(:ntriples).reader.new($stdin)  { |reader| ... }
+  #   RDF::Format.for(:ntriples).writer.new($stdout) { |writer| ... }
   #
+  # @example Instantiating an RDF reader or writer class (2)
+  #   RDF::Reader.for(:ntriples).new($stdin)  { |reader| ... }
+  #   RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }
+  #
+  # @abstract
   # @see RDF::Reader
   # @see RDF::Writer
   # @see http://en.wikipedia.org/wiki/Resource_Description_Framework#Serialization_formats
