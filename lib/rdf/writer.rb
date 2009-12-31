@@ -23,7 +23,7 @@ module RDF
   #   end
   #
   # @example Serializing RDF statements to a string
-  #   RDF::Writer.buffer do |writer|
+  #   RDF::Writer.for(:ntriples).buffer do |writer|
   #     graph.each_statement do |statement|
   #       writer << statement
   #     end
@@ -33,10 +33,10 @@ module RDF
   # @see RDF::Format
   # @see RDF::Reader
   class Writer
-    autoload :NTriples, 'rdf/writer/ntriples' # @deprecated
-
     extend  Enumerable
     include Enumerable
+
+    autoload :NTriples, 'rdf/writer/ntriples' # @deprecated
 
     ##
     # Enumerates known RDF writer classes.

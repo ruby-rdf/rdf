@@ -23,7 +23,8 @@ module RDF
   #   end
   #
   # @example Parsing RDF statements from a string
-  #   RDF::Reader.new(StringIO.new(str)) do |reader|
+  #   data = StringIO.new(File.read("spec/data/test.nt"))
+  #   RDF::Reader.for(:ntriples).new(data) do |reader|
   #     reader.each_statement do |statement|
   #       puts statement.inspect
   #     end
@@ -33,10 +34,10 @@ module RDF
   # @see RDF::Format
   # @see RDF::Writer
   class Reader
-    autoload :NTriples, 'rdf/reader/ntriples' # @deprecated
-
     extend  Enumerable
     include Enumerable
+
+    autoload :NTriples, 'rdf/reader/ntriples' # @deprecated
 
     ##
     # Enumerates known RDF reader classes.
