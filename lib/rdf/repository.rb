@@ -1,6 +1,45 @@
 module RDF
   ##
   # An RDF repository.
+  #
+  # @example Creating a transient in-memory repository
+  #   repository = RDF::Repository.new
+  #
+  # @example Checking whether a repository is readable/writable
+  #   repository.readable?
+  #   repository.writable?
+  #
+  # @example Checking whether a repository is persistent or transient
+  #   repository.persistent?
+  #   repository.transient?
+  #
+  # @example Checking whether a repository is empty
+  #   repository.empty?
+  #
+  # @example Checking how many statements a repository contains
+  #   repository.count
+  #
+  # @example Checking whether a repository contains a specific statement
+  #   repository.has_statement?(statement)
+  #
+  # @example Enumerating statements in a repository
+  #   repository.each_statement { |statement| puts statement.inspect }
+  #
+  # @example Inserting statements into a repository
+  #   repository.insert(*statements)
+  #   repository.insert(statement)
+  #   repository.insert([subject, predicate, object])
+  #   repository << statement
+  #   repository << [subject, predicate, object]
+  #
+  # @example Deleting statements from a repository
+  #   repository.delete(*statements)
+  #   repository.delete(statement)
+  #   repository.delete([subject, predicate, object])
+  #
+  # @example Deleting all statements from a repository
+  #   repository.clear!
+  #
   class Repository
     include Enumerable
 
@@ -116,7 +155,7 @@ module RDF
     ##
     # Returns the number of RDF statements in the repository.
     #
-    # @return [Integer] 
+    # @return [Integer]
     def size
       @data.size
     end
