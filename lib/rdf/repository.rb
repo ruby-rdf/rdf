@@ -124,7 +124,7 @@ module RDF
     alias_method :count, :size
 
     ##
-    # Returns `true` if the repository contains the given RDF statement.
+    # Returns `true` if this repository contains the given RDF `statement`.
     #
     # @param  [Statement] statement
     # @return [Boolean]
@@ -189,7 +189,7 @@ module RDF
     end
 
     ##
-    # Inserts an RDF statement to the repository.
+    # Inserts an RDF statement into the repository.
     #
     # @param  [Statement, Array(Value), #to_a] statement
     # @return [Repository]
@@ -229,6 +229,17 @@ module RDF
       end
       self
     end
+
+    ##
+    # Deletes all RDF statements from this repository.
+    #
+    # @return [Repository]
+    def clear
+      @data.clear
+      self
+    end
+
+    alias_method :clear!, :clear
 
     protected
 
