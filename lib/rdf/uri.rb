@@ -21,11 +21,19 @@ module RDF
     end
 
     ##
-    # @param  [URI, String, #to_s] uri
-    def initialize(uri)
-      @uri = case uri
-        when Addressable::URI then uri
-        else Addressable::URI.parse(uri.to_s)
+    # @overload uri(uri)
+    #   @param  [URI, String, #to_s]    uri
+    #
+    # @overload uri(options = {})
+    #   @param  [Hash{Symbol => Object} options
+    def initialize(uri_or_options)
+      case uri_or_options
+        when Hash
+          @uri = Addressable::URI.new(uri_or_options)
+        when Addressable::URI
+          @uri = uri_or_options
+        else
+          @uri = Addressable::URI.parse(uri_or_options.to_s)
       end
     end
 
