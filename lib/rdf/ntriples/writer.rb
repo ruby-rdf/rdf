@@ -19,31 +19,38 @@ module RDF module NTriples
     # @param  [Value]    object
     # @return [void]
     def write_triple(subject, predicate, object)
-      s = format_uri(subject)
-      p = format_uri(predicate)
-      o = object.kind_of?(RDF::URI) ? format_uri(object) : format_literal(object)
-      puts "%s %s %s ." % [s, p, o]
+      puts "%s %s %s ." % [subject, predicate, object].map { |value| format_value(value) }
     end
 
     ##
-    # @param  [node] Resource
-    # @return [void]
-    def format_uri(node)
-      "<%s>" % uri_for(node)
+    # @param  [URI]                    value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    def format_uri(value, options = {})
+      "<%s>" % uri_for(value)
     end
 
     ##
-    # @param  [String, Literal] literal
-    # @return [void]
-    def format_literal(literal)
-      case literal
+    # @param  [Node]                   value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    def format_node(value, options = {})
+      "_:%s" % node.id
+    end
+
+    ##
+    # @param  [Literal, String, #to_s] value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    def format_literal(value, options = {})
+      case value
         when RDF::Literal
-          text = quoted(escaped(literal.value))
-          text << "@#{literal.language}" if literal.language
-          text << "^^<#{uri_for(literal.datatype)}>" if literal.datatype
+          text = quoted(escaped(value.value))
+          text << "@#{value.language}" if value.language
+          text << "^^<#{uri_for(value.datatype)}>" if value.datatype
           text
         else
-          quoted(escaped(literal.to_s))
+          quoted(escaped(value.to_s))
       end
     end
   end

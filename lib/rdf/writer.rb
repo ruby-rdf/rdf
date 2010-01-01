@@ -201,6 +201,49 @@ module RDF
       raise NotImplementedError # override in subclasses
     end
 
+    ##
+    # @param  [Value] value
+    # @return [String]
+    def format_value(value, options = {})
+      case value
+        when String       then format_literal(value, options)
+        when RDF::Literal then format_literal(value, options)
+        when RDF::URI     then format_uri(value, options)
+        when RDF::Node    then format_node(value, options)
+        else nil
+      end
+    end
+
+    ##
+    # @param  [URI]                    value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def format_uri(value, options = {})
+      raise NotImplementedError # override in subclasses
+    end
+
+    ##
+    # @param  [Node]                   value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def format_node(value, options = {})
+      raise NotImplementedError # override in subclasses
+    end
+
+    ##
+    # @param  [Literal, String, #to_s] value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def format_literal(value, options = {})
+      raise NotImplementedError # override in subclasses
+    end
+
     protected
 
       def puts(*args)
