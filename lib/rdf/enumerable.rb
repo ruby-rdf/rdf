@@ -81,6 +81,44 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_triple)
     end
 
+    ##
+    # Iterates the given block for each RDF quad.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_quad
+    #   @yield  [subject, predicate, object, context]
+    #   @yieldparam [Resource] subject
+    #   @yieldparam [URI]      predicate
+    #   @yieldparam [Value]    object
+    #   @yieldparam [Resource] context
+    #   @return [void]
+    #
+    # @overload each_quad
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see #enum_quad
+    def each_quad(&block)
+      if block_given?
+        each_statement do |statement|
+          block.call(*statement.to_quad)
+        end
+      else
+        enum_quad
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_quad}.
+    #
+    # @return [Enumerator]
+    # @see #each_quad
+    def enum_quad
+      require_enumerator!
+      ::Enumerable::Enumerator.new(self, :each_quad)
+    end
+
     private
 
       def require_enumerator! # @private
