@@ -2,13 +2,13 @@ require 'rdf/version'
 
 module RDF
   # RDF objects
-  autoload :Graph,      'rdf/graph'
-  autoload :Literal,    'rdf/literal'
-  autoload :Node,       'rdf/node'
-  autoload :Resource,   'rdf/resource'
-  autoload :Statement,  'rdf/statement'
-  autoload :URI,        'rdf/uri'
-  autoload :Value,      'rdf/value'
+  autoload :Graph,      'rdf/model/graph'
+  autoload :Literal,    'rdf/model/literal'
+  autoload :Node,       'rdf/model/node'
+  autoload :Resource,   'rdf/model/resource'
+  autoload :Statement,  'rdf/model/statement'
+  autoload :URI,        'rdf/model/uri'
+  autoload :Value,      'rdf/model/value'
 
   # RDF serialization
   autoload :Format,     'rdf/format'
