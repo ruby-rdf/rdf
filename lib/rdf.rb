@@ -1,6 +1,9 @@
 require 'rdf/version'
 
 module RDF
+  # RDF traits
+  autoload :Enumerable, 'rdf/enumerable'
+
   # RDF objects
   autoload :Graph,      'rdf/model/graph'
   autoload :Literal,    'rdf/model/literal'
