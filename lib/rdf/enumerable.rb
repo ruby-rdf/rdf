@@ -44,6 +44,43 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_statement)
     end
 
+    ##
+    # Iterates the given block for each RDF triple.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_triple
+    #   @yield  [subject, predicate, object]
+    #   @yieldparam [Resource] subject
+    #   @yieldparam [URI]      predicate
+    #   @yieldparam [Value]    object
+    #   @return [void]
+    #
+    # @overload each_triple
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see #enum_triple
+    def each_triple(&block)
+      if block_given?
+        each_statement do |statement|
+          block.call(*statement.to_triple)
+        end
+      else
+        enum_triple
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_triple}.
+    #
+    # @return [Enumerator]
+    # @see #each_triple
+    def enum_triple
+      require_enumerator!
+      ::Enumerable::Enumerator.new(self, :each_triple)
+    end
+
     private
 
       def require_enumerator! # @private
