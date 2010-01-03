@@ -449,6 +449,25 @@ module RDF
 
     alias_method :enum_contexts, :enum_context
 
+    ##
+    # Returns all RDF objects indexed by their subjects and predicates.
+    #
+    # The return value is a `Hash` instance that has the structure:
+    # `{subject => {predicate => [*objects]}}`.
+    #
+    # @return [Hash{Resource => Hash{URI => Array<Value>}}]
+    def to_hash
+      result = {}
+      each_statement do |statement|
+        next if statement.invalid? # skip any incomplete statements
+
+        result[statement.subject] ||= {}
+        values = (result[statement.subject][statement.predicate] ||= [])
+        values << statement.object unless values.include?(statement.object)
+      end
+      result
+    end
+
     private
 
       def require_enumerator! # @private
