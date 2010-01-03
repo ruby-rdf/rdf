@@ -40,7 +40,7 @@ module RDF
   # @see RDF::Writer
   # @see http://en.wikipedia.org/wiki/Resource_Description_Framework#Serialization_formats
   class Format
-    extend Enumerable
+    extend ::Enumerable
 
     ##
     # Enumerates known RDF serialization format classes.

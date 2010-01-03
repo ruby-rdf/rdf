@@ -41,7 +41,7 @@ module RDF
   #   repository.clear!
   #
   class Repository
-    include Enumerable
+    include RDF::Enumerable
 
     # @return [URI]
     attr_reader :uri

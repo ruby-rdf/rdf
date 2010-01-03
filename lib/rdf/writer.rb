@@ -33,8 +33,8 @@ module RDF
   # @see RDF::Format
   # @see RDF::Reader
   class Writer
-    extend  Enumerable
-    include Enumerable
+    extend  ::Enumerable
+    include ::Enumerable
 
     ##
     # Enumerates known RDF writer classes.

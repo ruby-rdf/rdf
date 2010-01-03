@@ -41,7 +41,7 @@ module RDF
     autoload :Solution, 'rdf/query/solution'
     autoload :Variable, 'rdf/query/variable'
 
-    include Enumerable
+    include ::Enumerable
 
     # @return [Hash{Symbol => Variable}]
     attr_reader :variables
@@ -75,7 +75,7 @@ module RDF
     #
     # @yield  [solution]
     # @yieldparam [Solution]
-    # @return [Enumerable]
+    # @return [Enumerator]
     def each_solution(&block)
       solutions.each do |bindings|
         block.call(Solution.new(bindings))
@@ -123,7 +123,7 @@ module RDF
     ##
     # Reorders the solution sequence based on `variables`.
     #
-    # @param  [Enumerable<Symbol>] variables
+    # @param  [Array<Symbol>] variables
     # @return [Query]
     def order(*variables)
       if variables.empty?
@@ -145,7 +145,7 @@ module RDF
     ##
     # Restricts the the solution sequence to the given `variables` only.
     #
-    # @param  [Enumerable<Symbol>] variables
+    # @param  [Array<Symbol>] variables
     # @return [Query]
     def project(*variables)
       unless variables.empty?

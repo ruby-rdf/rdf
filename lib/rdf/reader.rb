@@ -34,8 +34,8 @@ module RDF
   # @see RDF::Format
   # @see RDF::Writer
   class Reader
-    extend  Enumerable
-    include Enumerable
+    extend  ::Enumerable
+    include ::Enumerable
 
     ##
     # Enumerates known RDF reader classes.
