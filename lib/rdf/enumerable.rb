@@ -199,6 +199,46 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_predicate)
     end
 
+    ##
+    # Iterates the given block for each unique RDF object.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_object
+    #   @yield  [object]
+    #   @yieldparam [Value] object
+    #   @return [void]
+    #
+    # @overload each_object
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see #enum_object
+    def each_object(&block)
+      if block_given?
+        values = {}
+        each_statement do |statement|
+          value = statement.object
+          unless value.nil? || values.include?(value)
+            values[value] = true
+            block.call(value)
+          end
+        end
+      else
+        enum_object
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_object}.
+    #
+    # @return [Enumerator]
+    # @see #each_object
+    def enum_object
+      require_enumerator!
+      ::Enumerable::Enumerator.new(self, :each_object)
+    end
+
     private
 
       def require_enumerator! # @private
