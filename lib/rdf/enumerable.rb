@@ -140,8 +140,8 @@ module RDF
         each_statement do |statement|
           value = statement.subject
           unless value.nil? || values.include?(value)
-            block.call(value)
             values[value] = true
+            block.call(value)
           end
         end
       else
@@ -157,6 +157,46 @@ module RDF
     def enum_subject
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_subject)
+    end
+
+    ##
+    # Iterates the given block for each unique RDF predicate.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_predicate
+    #   @yield  [predicate]
+    #   @yieldparam [URI] predicate
+    #   @return [void]
+    #
+    # @overload each_predicate
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see #enum_predicate
+    def each_predicate(&block)
+      if block_given?
+        values = {}
+        each_statement do |statement|
+          value = statement.predicate
+          unless value.nil? || values.include?(value)
+            values[value] = true
+            block.call(value)
+          end
+        end
+      else
+        enum_predicate
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_predicate}.
+    #
+    # @return [Enumerator]
+    # @see #each_predicate
+    def enum_predicate
+      require_enumerator!
+      ::Enumerable::Enumerator.new(self, :each_predicate)
     end
 
     private
