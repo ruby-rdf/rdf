@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF graph.
   class Graph < Resource
-    include Enumerable
+    include RDF::Enumerable
 
     # @return [URI]
     attr_accessor :uri
@@ -50,127 +50,12 @@ module RDF
     # @yieldparam [Array<Statement>]
     # @return [Graph]
     def each(&block)
-      each_statement(&block)
-    end
-
-    ##
-    # @yield  [statement]
-    # @yieldparam [Array<Statement>]
-    # @return [Graph]
-    def each_statement(&block)
       @data.each(&block)
-      self
-    end
-
-    ##
-    # @yield  [triple]
-    # @yieldparam [Array(Value)]
-    # @return [Graph]
-    def each_triple(&block)
-      @data.each do |statement|
-        block.call(*statement.to_triple)
-      end
-      self
-    end
-
-    ##
-    # @yield  [quad]
-    # @yieldparam [Array(Value)]
-    # @return [Graph]
-    def each_quad(&block)
-      @data.each do |statement|
-        block.call(*statement.to_quad) # FIXME?
-      end
-      self
-    end
-
-    ##
-    # @yield  [context]
-    # @yieldparam [Resource]
-    # @return [Graph]
-    def each_context(&block)
-      block.call(uri) unless unnamed?
-      self
-    end
-
-    ##
-    # @yield  [subject]
-    # @yieldparam [Resource]
-    # @return [Graph]
-    def each_subject(&block)
-      @data.each do |statement|
-        block.call(statement.subject)
-      end
-      self
-    end
-
-    ##
-    # @yield  [predicate]
-    # @yieldparam [URI]
-    # @return [Graph]
-    def each_predicate(&block)
-      @data.each do |statement|
-        block.call(statement.predicate)
-      end
-      self
-    end
-
-    ##
-    # @yield  [object]
-    # @yieldparam [Value]
-    # @return [Graph]
-    def each_object(&block)
-      @data.each do |statement|
-        block.call(statement.object)
-      end
-      self
-    end
-
-    ##
-    # @return [Array<Statement>]
-    def statements(&block)
-      block_given? ? each_statement(&block) : @data
-    end
-
-    ##
-    # @return [Array<Array(Value)>]
-    def triples(&block)
-      block_given? ? each_triple(&block) : map { |statement| statement.to_triple }
-    end
-
-    ##
-    # @return [Array<Array(Value)>]
-    def quads(&block)
-      block_given? ? each_quad(&block) : map { |statement| statement.to_quad }
     end
 
     ##
     # @return [Resource]
     def context() uri end
-
-    ##
-    # @return [Array<Resource>]
-    def contexts
-      block_given? ? each_context(&block) : (named? ? [uri] : [])
-    end
-
-    ##
-    # @return [Array<Resource>]
-    def subjects
-      block_given? ? each_subject(&block) : map(&:subject)
-    end
-
-    ##
-    # @return [Array<URI>]
-    def predicates
-      block_given? ? each_predicate(&block) : map(&:predicate)
-    end
-
-    ##
-    # @return [Array<Value>]
-    def objects
-      block_given? ? each_object(&block) : map(&:object)
-    end
 
     ##
     # @param  [Statement, Array(Value)]
