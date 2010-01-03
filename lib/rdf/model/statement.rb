@@ -68,6 +68,18 @@ module RDF
 
     ##
     # @return [Boolean]
+    def invalid?
+      !valid?
+    end
+
+    ##
+    # @return [Boolean]
+    def valid?
+      has_subject? && has_predicate? && has_object?
+    end
+
+    ##
+    # @return [Boolean]
     def asserted?
       !quoted?
     end
