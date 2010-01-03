@@ -37,8 +37,6 @@ module RDF
     extend  Enumerable
     include Enumerable
 
-    autoload :NTriples, 'rdf/reader/ntriples' # @deprecated
-
     ##
     # Enumerates known RDF reader classes.
     #
