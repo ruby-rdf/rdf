@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF statement enumeration interface.
   #
-  # Classes that include this module must implement an {#each} method that
+  # Classes that include this module must implement an `#each` method that
   # yields {RDF::Statement statements}.
   #
   # @see RDF::Graph
@@ -14,8 +14,8 @@ module RDF
     # Returns all RDF statements.
     #
     # @return [Array<Statement>]
-    # @see each_statement
-    # @see enum_statement
+    # @see #each_statement
+    # @see #enum_statement
     def statements
       enum_statement.to_a
     end
@@ -58,8 +58,8 @@ module RDF
     # Returns all RDF triples.
     #
     # @return [Array<Array(Resource, URI, Value)>]
-    # @see each_triple
-    # @see enum_triple
+    # @see #each_triple
+    # @see #enum_triple
     def triples
       enum_statement.map(&:to_triple)
     end
@@ -105,8 +105,8 @@ module RDF
     # Returns all RDF quads.
     #
     # @return [Array<Array(Resource, URI, Value, Resource)>]
-    # @see each_quad
-    # @see enum_quad
+    # @see #each_quad
+    # @see #enum_quad
     def quads
       enum_statement.map(&:to_quad)
     end
@@ -153,8 +153,8 @@ module RDF
     # Returns all unique RDF subjects.
     #
     # @return [Array<Resource>]
-    # @see each_subject
-    # @see enum_subject
+    # @see #each_subject
+    # @see #enum_subject
     def subjects
       enum_subject.to_a
     end
@@ -203,8 +203,8 @@ module RDF
     # Returns all unique RDF predicates.
     #
     # @return [Array<URI>]
-    # @see each_predicate
-    # @see enum_predicate
+    # @see #each_predicate
+    # @see #enum_predicate
     def predicates
       enum_predicate.to_a
     end
@@ -253,8 +253,8 @@ module RDF
     # Returns all unique RDF objects.
     #
     # @return [Array<Value>]
-    # @see each_object
-    # @see enum_object
+    # @see #each_object
+    # @see #enum_object
     def objects
       enum_object.to_a
     end
@@ -303,8 +303,8 @@ module RDF
     # Returns all unique RDF contexts.
     #
     # @return [Array<Resource>]
-    # @see each_context
-    # @see enum_context
+    # @see #each_context
+    # @see #enum_context
     def contexts
       enum_context.to_a
     end

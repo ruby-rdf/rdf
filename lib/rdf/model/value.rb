@@ -87,7 +87,7 @@ module RDF
     #
     # Subclasses should override this to provide a more meaningful
     # implementation than the default which simply performs a string
-    # comparison based on {#to_s}.
+    # comparison based on `#to_s`.
     #
     # @abstract
     # @param  [Object]  other
@@ -100,7 +100,7 @@ module RDF
     # Returns a developer-friendly representation of this value.
     #
     # The result will be of the format `#<RDF::Value::0x12345678(...)>`,
-    # where `...` is the string returned by {#to_s}.
+    # where `...` is the string returned by `#to_s`.
     #
     # @return [String]
     def inspect
