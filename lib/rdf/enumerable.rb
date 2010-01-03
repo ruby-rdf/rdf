@@ -85,10 +85,11 @@ module RDF
     ##
     # Returns all RDF statements.
     #
+    # @param  [Hash{Symbol => Boolean}] options
     # @return [Array<Statement>]
     # @see #each_statement
     # @see #enum_statement
-    def statements
+    def statements(options = {})
       enum_statement.to_a
     end
 
@@ -140,10 +141,11 @@ module RDF
     ##
     # Returns all RDF triples.
     #
+    # @param  [Hash{Symbol => Boolean}] options
     # @return [Array<Array(Resource, URI, Value)>]
     # @see #each_triple
     # @see #enum_triple
-    def triples
+    def triples(options = {})
       enum_statement.map(&:to_triple)
     end
 
@@ -198,10 +200,11 @@ module RDF
     ##
     # Returns all RDF quads.
     #
+    # @param  [Hash{Symbol => Boolean}] options
     # @return [Array<Array(Resource, URI, Value, Resource)>]
     # @see #each_quad
     # @see #enum_quad
-    def quads
+    def quads(options = {})
       enum_statement.map(&:to_quad)
     end
 
@@ -257,11 +260,17 @@ module RDF
     ##
     # Returns all unique RDF subjects.
     #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
     # @return [Array<Resource>]
     # @see #each_subject
     # @see #enum_subject
-    def subjects
-      enum_subject.to_a
+    def subjects(options = {})
+      if options[:unique] == false
+        enum_statement.map(&:subject)
+      else
+        enum_subject.to_a
+      end
     end
 
     ##
@@ -318,11 +327,17 @@ module RDF
     ##
     # Returns all unique RDF predicates.
     #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
     # @return [Array<URI>]
     # @see #each_predicate
     # @see #enum_predicate
-    def predicates
-      enum_predicate.to_a
+    def predicates(options = {})
+      if options[:unique] == false
+        enum_statement.map(&:predicate)
+      else
+        enum_predicate.to_a
+      end
     end
 
     ##
@@ -379,11 +394,17 @@ module RDF
     ##
     # Returns all unique RDF objects.
     #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
     # @return [Array<Value>]
     # @see #each_object
     # @see #enum_object
-    def objects
-      enum_object.to_a
+    def objects(options = {})
+      if options[:unique] == false
+        enum_statement.map(&:object)
+      else
+        enum_object.to_a
+      end
     end
 
     ##
@@ -440,11 +461,17 @@ module RDF
     ##
     # Returns all unique RDF contexts.
     #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
     # @return [Array<Resource>]
     # @see #each_context
     # @see #enum_context
-    def contexts
-      enum_context.to_a
+    def contexts(options = {})
+      if options[:unique] == false
+        enum_statement.map(&:context)
+      else
+        enum_context.to_a
+      end
     end
 
     ##
