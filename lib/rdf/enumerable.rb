@@ -119,6 +119,46 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_quad)
     end
 
+    ##
+    # Iterates the given block for each unique RDF subject.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_subject
+    #   @yield  [subject]
+    #   @yieldparam [Resource] subject
+    #   @return [void]
+    #
+    # @overload each_subject
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see #enum_subject
+    def each_subject(&block)
+      if block_given?
+        values = {}
+        each_statement do |statement|
+          value = statement.subject
+          unless value.nil? || values.include?(value)
+            block.call(value)
+            values[value] = true
+          end
+        end
+      else
+        enum_subject
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_subject}.
+    #
+    # @return [Enumerator]
+    # @see #each_subject
+    def enum_subject
+      require_enumerator!
+      ::Enumerable::Enumerator.new(self, :each_subject)
+    end
+
     private
 
       def require_enumerator! # @private
