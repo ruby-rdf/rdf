@@ -11,6 +11,16 @@ module RDF
     extend ::Enumerable
 
     ##
+    # Returns all RDF statements.
+    #
+    # @return [Array<Statement>]
+    # @see each_statement
+    # @see enum_statement
+    def statements
+      enum_statement.to_a
+    end
+
+    ##
     # Iterates the given block for each RDF statement.
     #
     # If no block was given, returns an enumerator.
@@ -42,6 +52,16 @@ module RDF
     def enum_statement
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_statement)
+    end
+
+    ##
+    # Returns all RDF triples.
+    #
+    # @return [Array<Array(Resource, URI, Value)>]
+    # @see each_triple
+    # @see enum_triple
+    def triples
+      enum_statement.map(&:to_triple)
     end
 
     ##
@@ -79,6 +99,16 @@ module RDF
     def enum_triple
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_triple)
+    end
+
+    ##
+    # Returns all RDF quads.
+    #
+    # @return [Array<Array(Resource, URI, Value, Resource)>]
+    # @see each_quad
+    # @see enum_quad
+    def quads
+      enum_statement.map(&:to_quad)
     end
 
     ##
