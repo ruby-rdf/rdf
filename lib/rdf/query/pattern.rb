@@ -1,7 +1,7 @@
-module RDF class Query
+class RDF::Query
   ##
   # An RDF query pattern.
-  class Pattern < Statement
+  class Pattern < RDF::Statement
     # @return [Hash{Symbol => Object}]
     attr_reader :options
 
@@ -149,4 +149,4 @@ module RDF class Query
       end
     end
   end
-end end
+end

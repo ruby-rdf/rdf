@@ -1,4 +1,4 @@
-module RDF class Query
+class RDF::Query
   ##
   # An RDF query variable.
   #
@@ -38,7 +38,7 @@ module RDF class Query
   #   var = RDF::Query::Variable.new(:y, 123)
   #   var.to_s       #=> "?y=123"
   #
-  class Variable < Value
+  class Variable < RDF::Value
     # @return [Symbol] The variable's name.
     attr_accessor :name
 
@@ -142,4 +142,4 @@ module RDF class Query
       unbound? ? "?#{name}" : "?#{name}=#{value}"
     end
   end
-end end
+end

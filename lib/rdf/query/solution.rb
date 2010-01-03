@@ -1,4 +1,4 @@
-module RDF class Query
+class RDF::Query
   ##
   # An RDF query solution.
   #
@@ -136,4 +136,4 @@ module RDF class Query
       end
 
   end
-end end
+end
