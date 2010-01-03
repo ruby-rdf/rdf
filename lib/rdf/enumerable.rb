@@ -44,9 +44,9 @@ module RDF
   #   enumerable.each_context   { |value| puts value.inspect }
   #
   # @example Obtaining all statements
-  #   enumerable.statements  #=> [RDF::Statement(subject, predicate, object), ...]
-  #   enumerable.triples     #=> [[subject, predicate, object], ...]
-  #   enumerable.quads       #=> [[subject, predicate, object, context], ...]
+  #   enumerable.statements  #=> [RDF::Statement(subject1, predicate1, object1), ...]
+  #   enumerable.triples     #=> [[subject1, predicate1, object1], ...]
+  #   enumerable.quads       #=> [[subject1, predicate1, object1, context1], ...]
   #
   # @example Obtaining all unique values
   #   enumerable.subjects    #=> [subject1, subject2, subject3, ...]
@@ -293,8 +293,8 @@ module RDF
         values = {}
         each_statement do |statement|
           value = statement.subject
-          unless value.nil? || values.include?(value)
-            values[value] = true
+          unless value.nil? || values.include?(value.to_s)
+            values[value.to_s] = true
             block.call(value)
           end
         end
@@ -354,8 +354,8 @@ module RDF
         values = {}
         each_statement do |statement|
           value = statement.predicate
-          unless value.nil? || values.include?(value)
-            values[value] = true
+          unless value.nil? || values.include?(value.to_s)
+            values[value.to_s] = true
             block.call(value)
           end
         end
@@ -410,7 +410,7 @@ module RDF
     #
     # @return [void]
     # @see #enum_object
-    def each_object(&block)
+    def each_object(&block) # FIXME: deduplication
       if block_given?
         values = {}
         each_statement do |statement|
