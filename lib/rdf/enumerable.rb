@@ -77,6 +77,8 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_statement)
     end
 
+    alias_method :enum_statements, :enum_statement
+
     ##
     # Returns all RDF triples.
     #
@@ -123,6 +125,8 @@ module RDF
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_triple)
     end
+
+    alias_method :enum_triples, :enum_triple
 
     ##
     # Returns all RDF quads.
@@ -171,6 +175,8 @@ module RDF
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_quad)
     end
+
+    alias_method :enum_quads, :enum_quad
 
     ##
     # Returns all unique RDF subjects.
@@ -222,6 +228,8 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_subject)
     end
 
+    alias_method :enum_subjects, :enum_subject
+
     ##
     # Returns all unique RDF predicates.
     #
@@ -271,6 +279,8 @@ module RDF
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_predicate)
     end
+
+    alias_method :enum_predicates, :enum_predicate
 
     ##
     # Returns all unique RDF objects.
@@ -322,6 +332,8 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_object)
     end
 
+    alias_method :enum_objects, :enum_object
+
     ##
     # Returns all unique RDF contexts.
     #
@@ -371,6 +383,8 @@ module RDF
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_context)
     end
+
+    alias_method :enum_contexts, :enum_context
 
     private
 
