@@ -44,6 +44,15 @@ module RDF
     end
 
     ##
+    # Returns `true` if `self` contains the given RDF statement.
+    #
+    # @param  [Statement] statement
+    # @return [Boolean]
+    def has_statement?(statement)
+      enum_statement.include?(statement)
+    end
+
+    ##
     # Iterates the given block for each RDF statement.
     #
     # If no block was given, returns an enumerator.
@@ -87,6 +96,15 @@ module RDF
     # @see #enum_triple
     def triples
       enum_statement.map(&:to_triple)
+    end
+
+    ##
+    # Returns `true` if `self` contains the given RDF triple.
+    #
+    # @param  [Array(Resource, URI, Value)] triple
+    # @return [Boolean]
+    def has_triple?(triple)
+      enum_triple.include?(triple)
     end
 
     ##
@@ -136,6 +154,15 @@ module RDF
     # @see #enum_quad
     def quads
       enum_statement.map(&:to_quad)
+    end
+
+    ##
+    # Returns `true` if `self` contains the given RDF quad.
+    #
+    # @param  [Array(Resource, URI, Value, Resource)] quad
+    # @return [Boolean]
+    def has_quad?(quad)
+      enum_quad.include?(quad)
     end
 
     ##
