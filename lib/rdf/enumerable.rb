@@ -216,6 +216,15 @@ module RDF
     end
 
     ##
+    # Returns `true` if `self` contains the given RDF subject.
+    #
+    # @param  [Resource] value
+    # @return [Boolean]
+    def has_subject?(value)
+      enum_subject.include?(value)
+    end
+
+    ##
     # Iterates the given block for each unique RDF subject.
     #
     # If no block was given, returns an enumerator.
@@ -265,6 +274,15 @@ module RDF
     # @see #enum_predicate
     def predicates
       enum_predicate.to_a
+    end
+
+    ##
+    # Returns `true` if `self` contains the given RDF predicate.
+    #
+    # @param  [URI] value
+    # @return [Boolean]
+    def has_predicate?(value)
+      enum_predicate.include?(value)
     end
 
     ##
@@ -320,6 +338,15 @@ module RDF
     end
 
     ##
+    # Returns `true` if `self` contains the given RDF object.
+    #
+    # @param  [Value] value
+    # @return [Boolean]
+    def has_object?(value)
+      enum_object.include?(value)
+    end
+
+    ##
     # Iterates the given block for each unique RDF object.
     #
     # If no block was given, returns an enumerator.
@@ -369,6 +396,15 @@ module RDF
     # @see #enum_context
     def contexts
       enum_context.to_a
+    end
+
+    ##
+    # Returns `true` if `self` contains the given RDF context.
+    #
+    # @param  [Resource] value
+    # @return [Boolean]
+    def has_context?(value)
+      enum_context.include?(value)
     end
 
     ##
