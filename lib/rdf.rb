@@ -1,7 +1,7 @@
 require 'rdf/version'
 
 module RDF
-  # RDF traits
+  # RDF mixins
   autoload :Enumerable, 'rdf/enumerable'
 
   # RDF objects

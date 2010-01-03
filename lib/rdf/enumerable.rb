@@ -1,9 +1,58 @@
 module RDF
   ##
-  # An RDF statement enumeration interface.
+  # An RDF statement enumeration mixin.
   #
   # Classes that include this module must implement an `#each` method that
-  # yields {RDF::Statement statements}.
+  # yields {RDF::Statement RDF statements}.
+  #
+  # @example Checking whether any statements exist
+  #   enumerable.empty?
+  #
+  # @example Checking how many statements exist
+  #   enumerable.count
+  #
+  # @example Checking whether a specific statement exists
+  #   enumerable.has_statement?(RDF::Statement.new(subject, predicate, object))
+  #   enumerable.has_triple?([subject, predicate, object])
+  #   enumerable.has_quad?([subject, predicate, object, context])
+  #
+  # @example Checking whether a specific value exists
+  #   enumerable.has_subject?(RDF::URI.new("http://rdf.rubyforge.org/"))
+  #   enumerable.has_predicate?(RDF::DC.creator)
+  #   enumerable.has_object?(RDF::Literal.new("Hello!", :language => :en))
+  #   enumerable.has_context?(RDF::URI.new("http://rubyforge.org/"))
+  #
+  # @example Enumerating all statements
+  #   enumerable.each_statement do |statement|
+  #     puts statement.inspect
+  #   end
+  #
+  # @example Enumerating all statements in the form of triples
+  #   enumerable.each_triple do |subject, predicate, object|
+  #     puts [subject, predicate, object].inspect
+  #   end
+  #
+  # @example Enumerating all statements in the form of quads
+  #   enumerable.each_quad do |subject, predicate, object, context|
+  #     puts [subject, predicate, object, context].inspect
+  #   end
+  #
+  # @example Enumerating all values
+  #   enumerable.each_subject   { |value| puts value.inspect }
+  #   enumerable.each_predicate { |value| puts value.inspect }
+  #   enumerable.each_object    { |value| puts value.inspect }
+  #   enumerable.each_context   { |value| puts value.inspect }
+  #
+  # @example Obtaining all statements
+  #   enumerable.statements  #=> [RDF::Statement(subject, predicate, object), ...]
+  #   enumerable.triples     #=> [[subject, predicate, object], ...]
+  #   enumerable.quads       #=> [[subject, predicate, object, context], ...]
+  #
+  # @example Obtaining all unique values
+  #   enumerable.subjects    #=> [subject1, subject2, subject3, ...]
+  #   enumerable.predicates  #=> [predicate1, predicate2, predicate3, ...]
+  #   enumerable.objects     #=> [object1, object2, object3, ...]
+  #   enumerable.contexts    #=> [context1, context2, context3, ...]
   #
   # @see RDF::Graph
   # @see RDF::Repository
