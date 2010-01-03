@@ -11,6 +11,29 @@ module RDF
     extend ::Enumerable
 
     ##
+    # Returns `true` if `self` contains no RDF statements.
+    #
+    # @return [Boolean]
+    def empty?
+      empty = true
+      each_statement { empty = false; break }
+      empty
+    end
+
+    ##
+    # Returns the number of RDF statements in `self`.
+    #
+    # @return [Integer]
+    def count
+      count = 0
+      each_statement { count += 1 }
+      count
+    end
+
+    alias_method :size,   :count
+    alias_method :length, :count
+
+    ##
     # Returns all RDF statements.
     #
     # @return [Array<Statement>]
