@@ -150,6 +150,16 @@ module RDF
     end
 
     ##
+    # Returns all unique RDF subjects.
+    #
+    # @return [Array<Resource>]
+    # @see each_subject
+    # @see enum_subject
+    def subjects
+      enum_subject.to_a
+    end
+
+    ##
     # Iterates the given block for each unique RDF subject.
     #
     # If no block was given, returns an enumerator.
@@ -187,6 +197,16 @@ module RDF
     def enum_subject
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_subject)
+    end
+
+    ##
+    # Returns all unique RDF predicates.
+    #
+    # @return [Array<URI>]
+    # @see each_predicate
+    # @see enum_predicate
+    def predicates
+      enum_predicate.to_a
     end
 
     ##
@@ -230,6 +250,16 @@ module RDF
     end
 
     ##
+    # Returns all unique RDF objects.
+    #
+    # @return [Array<Value>]
+    # @see each_object
+    # @see enum_object
+    def objects
+      enum_object.to_a
+    end
+
+    ##
     # Iterates the given block for each unique RDF object.
     #
     # If no block was given, returns an enumerator.
@@ -267,6 +297,16 @@ module RDF
     def enum_object
       require_enumerator!
       ::Enumerable::Enumerator.new(self, :each_object)
+    end
+
+    ##
+    # Returns all unique RDF contexts.
+    #
+    # @return [Array<Resource>]
+    # @see each_context
+    # @see enum_context
+    def contexts
+      enum_context.to_a
     end
 
     ##
