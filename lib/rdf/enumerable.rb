@@ -239,6 +239,46 @@ module RDF
       ::Enumerable::Enumerator.new(self, :each_object)
     end
 
+    ##
+    # Iterates the given block for each unique RDF context.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_context
+    #   @yield  [context]
+    #   @yieldparam [Resource] context
+    #   @return [void]
+    #
+    # @overload each_context
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see #enum_context
+    def each_context(&block)
+      if block_given?
+        values = {}
+        each_statement do |statement|
+          value = statement.context
+          unless value.nil? || values.include?(value)
+            values[value] = true
+            block.call(value)
+          end
+        end
+      else
+        enum_context
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_context}.
+    #
+    # @return [Enumerator]
+    # @see #each_context
+    def enum_context
+      require_enumerator!
+      ::Enumerable::Enumerator.new(self, :each_context)
+    end
+
     private
 
       def require_enumerator! # @private
