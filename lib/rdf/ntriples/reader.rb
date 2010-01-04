@@ -1,4 +1,4 @@
-module RDF module NTriples
+module RDF::NTriples
   ##
   # N-Triples parser.
   #
@@ -84,4 +84,4 @@ module RDF module NTriples
       string
     end
   end
-end end
+end

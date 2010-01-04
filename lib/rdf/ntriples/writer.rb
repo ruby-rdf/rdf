@@ -1,4 +1,4 @@
-module RDF module NTriples
+module RDF::NTriples
   ##
   # N-Triples serializer.
   #
@@ -54,4 +54,4 @@ module RDF module NTriples
       end
     end
   end
-end end
+end

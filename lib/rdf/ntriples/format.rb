@@ -1,4 +1,4 @@
-module RDF module NTriples
+module RDF::NTriples
   ##
   # N-Triples format specification.
   #
@@ -10,4 +10,4 @@ module RDF module NTriples
     reader RDF::NTriples::Reader
     writer RDF::NTriples::Writer
   end
-end end
+end
