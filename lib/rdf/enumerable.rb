@@ -57,7 +57,7 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Enumerable
-    extend ::Enumerable
+    include ::Enumerable
 
     ##
     # Returns `true` if `self` contains no RDF statements.

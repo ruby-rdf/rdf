@@ -176,15 +176,12 @@ module RDF
     ##
     # Enumerates each RDF statement in the repository.
     #
-    # @yield [statement]
+    # @yield  [statement]
     # @yieldparam [Statement]
-    # @return [Repository]
-    def each_statement(&block)
+    # @return [Enumerator]
+    def each(&block)
       @data.each(&block)
-      self
     end
-
-    alias_method :each, :each_statement
 
     ##
     # Queries the repository for RDF statements matching the given pattern.
