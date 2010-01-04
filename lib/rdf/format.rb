@@ -256,4 +256,6 @@ module RDF
       end
 
   end
+
+  class FormatError < IOError; end
 end
