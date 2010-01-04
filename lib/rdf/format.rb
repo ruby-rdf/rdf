@@ -148,16 +148,32 @@ module RDF
     #   @return [void]
     #
     # @overload reader
+    #   Defines the reader class for this RDF serialization format.
+    #   
+    #   The block should return a subclass of {RDF::Reader}, or a class that
+    #   implements the same interface. The block won't be invoked until the
+    #   reader class is first needed.
+    #   
+    #   @yield
+    #   @yieldreturn [Class] klass
+    #   @return [void]
+    #
+    # @overload reader
     #   Retrieves the reader class for this RDF serialization format.
     #   
     #   @return [Class]
     #
     # @return [void]
-    def self.reader(klass = nil)
-      if klass.nil?
-        @@readers[self]
-      else
-        @@readers[self] = klass
+    def self.reader(klass = nil, &block)
+      case
+        when klass
+          @@readers[self] = klass
+        when block_given?
+          @@readers[self] = block
+        else
+          klass = @@readers[self]
+          klass = @@readers[self] = klass.call if klass.is_a?(Proc)
+          klass
       end
     end
 
@@ -175,16 +191,32 @@ module RDF
     #   @return [void]
     #
     # @overload writer
+    #   Defines the writer class for this RDF serialization format.
+    #   
+    #   The block should return a subclass of {RDF::Writer}, or a class that
+    #   implements the same interface. The block won't be invoked until the
+    #   writer class is first needed.
+    #   
+    #   @yield
+    #   @yieldreturn [Class] klass
+    #   @return [void]
+    #
+    # @overload writer
     #   Retrieves the writer class for this RDF serialization format.
     #   
     #   @return [Class]
     #
     # @return [void]
-    def self.writer(klass = nil)
-      if klass.nil?
-        @@writers[self]
-      else
-        @@writers[self] = klass
+    def self.writer(klass = nil, &block)
+      case
+        when klass
+          @@writers[self] = klass
+        when block_given?
+          @@writers[self] = block
+        else
+          klass = @@writers[self]
+          klass = @@writers[self] = klass.call if klass.is_a?(Proc)
+          klass
       end
     end
 
