@@ -2,7 +2,7 @@ module RDF::NTriples
   ##
   # N-Triples serializer.
   #
-  # @see <http://www.w3.org/TR/rdf-testcases/#ntriples>
+  # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Writer < RDF::Writer
     format RDF::NTriples::Format
 
