@@ -38,7 +38,7 @@ module RDF
   #
   # @author [Arto Bendiken](http://ar.to/)
   module NTriples
-    autoload :Format, 'rdf/ntriples/format'
+    require 'rdf/ntriples/format'
     autoload :Reader, 'rdf/ntriples/reader'
     autoload :Writer, 'rdf/ntriples/writer'
   end
