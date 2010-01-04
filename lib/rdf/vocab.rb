@@ -1,6 +1,25 @@
 module RDF
   ##
-  # An RDF vocabulary.
+  # A {Vocabulary} represents an RDFS or OWL vocabulary.
+  #
+  # ### Vocabularies:
+  #
+  # The following vocabularies are pre-defined for your convenience:
+  #
+  # * {RDF::CC}    - Creative Commons (CC)
+  # * {RDF::DC}    - Dublin Core (DC)
+  # * {RDF::DOAP}  - Description of a Project (DOAP)
+  # * {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
+  # * {RDF::FOAF}  - Friend of a Friend (FOAF)
+  # * {RDF::HTTP}  - Hypertext Transfer Protocol (HTTP)
+  # * {RDF::OWL}   - Web Ontology Language (OWL)
+  # * {RDF::RDFS}  - RDF Schema (RDFS)
+  # * {RDF::RSS}   - RDF Site Summary (RSS)
+  # * {RDF::SIOC}  - Semantically-Interlinked Online Communities (SIOC)
+  # * {RDF::SKOS}  - Simple Knowledge Organization System (SKOS)
+  # * {RDF::WOT}   - Web of Trust (WOT)
+  # * {RDF::XHTML} - Extensible HyperText Markup Language (XHTML)
+  # * {RDF::XSD}   - XML Schema (XSD)
   #
   # @example Using pre-defined RDF vocabularies
   #   include RDF
@@ -18,8 +37,46 @@ module RDF
   #   foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
   #
   # @see http://www.w3.org/TR/curie/
+  # @see http://en.wikipedia.org/wiki/QName
   class Vocabulary
     ##
+    # Defines a vocabulary term called `property`.
+    #
+    # @param  [Symbol]
+    # @return [void]
+    def self.property(property)
+      metaclass = class << self; self; end
+      metaclass.send(:define_method, property) { self[property] } # class method
+    end
+
+    ##
+    # Returns the URI for the term `property` in this vocabulary.
+    #
+    # @param  [#to_s] property
+    # @return [URI]
+    def self.[](property)
+      RDF::URI.new([to_s, property.to_s].join(''))
+    end
+
+    ##
+    # Returns the base URI for this vocabulary class.
+    #
+    # @return [URI]
+    def self.to_uri
+      RDF::URI.new(to_s)
+    end
+
+    ##
+    # Returns a string representation of this vocabulary class.
+    #
+    # @return [String]
+    def self.to_s
+      @@uris.has_key?(self) ? @@uris[self].to_s : super
+    end
+
+    ##
+    # Returns a developer-friendly representation of this vocabulary class.
+    #
     # @return [String]
     def self.inspect
       if self == Vocabulary
@@ -29,76 +86,59 @@ module RDF
       end
     end
 
-    ##
-    # @return [URI]
-    def self.to_uri
-      RDF::URI.parse(to_s)
-    end
+    # Undefine all superfluous instance methods:
+    undef_method *(instance_methods - %w(__id__ __send__ __class__ __eval__ instance_eval inspect class))
 
     ##
-    # @return [String]
-    def self.to_s
-      @@uris.has_key?(self) ? @@uris[self].to_s : super
-    end
-
-    ##
-    # @param  [#to_s] property
-    # @return [URI]
-    def self.[](property)
-      RDF::URI.parse([to_s, property.to_s].join(''))
-    end
-
-    ##
-    # @param  [Symbol]
-    # @return [void]
-    def self.property(symbol) end # TODO
-
-    ##
-    # @param  [URI, String]
+    # @param  [URI, String, #to_s]
     def initialize(uri)
-      case uri
-        when RDF::URI then @uri = uri.to_s
-        else @uri = RDF::URI.parse(uri.to_s) ? uri.to_s : nil
+      @uri = case uri
+        when RDF::URI then uri.to_s
+        else RDF::URI.parse(uri.to_s) ? uri.to_s : nil
       end
     end
 
     ##
-    # @return [String]
-    def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
-    end
-
-    ##
-    # @return [URI]
-    def to_uri
-      RDF::URI.parse(to_s)
-    end
-
-    ##
-    # @return [String]
-    def to_s() @uri.to_s end
-
-    ##
+    # Returns the URI for the term `property` in this vocabulary.
+    #
     # @param  [#to_s] property
     # @return [URI]
     def [](property)
-      RDF::URI.parse([to_s, property.to_s].join(''))
+      RDF::URI.new([to_s, property.to_s].join(''))
+    end
+
+    ##
+    # Returns the base URI for this vocabulary.
+    #
+    # @return [URI]
+    def to_uri
+      RDF::URI.new(to_s)
+    end
+
+    ##
+    # Returns a string representation of this vocabulary.
+    #
+    # @return [String]
+    def to_s
+      @uri.to_s
+    end
+
+    ##
+    # Returns a developer-friendly representation of this vocabulary.
+    #
+    # @return [String]
+    def inspect
+      sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, to_s)
     end
 
     protected
-      @@uris = {}
-      @@uri  = nil
 
-      ##
-      # @private
-      def self.create(uri) #:nodoc:
+      def self.create(uri) # @private
         @@uri = uri
         self
       end
 
-      ##
-      # @private
-      def self.inherited(subclass) #:nodoc:
+      def self.inherited(subclass) # @private
         unless @@uri.nil?
           subclass.send(:private_class_method, :new)
           @@uris[subclass] = @@uri
@@ -122,12 +162,10 @@ module RDF
         end
       end
 
-  end
+    private
 
-  ##
-  # @param  [String] uri
-  # @return [Class]
-  def self.Vocabulary(uri)
-    Vocabulary.create(uri)
+      @@uris = {}  # @private
+      @@uri  = nil # @private
+
   end
 end
