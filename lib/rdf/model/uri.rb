@@ -64,13 +64,18 @@ module RDF
     # @param  [Object] other
     # @return [Boolean]
     def ==(other)
-      other.respond_to?(:to_uri) && @uri == other.to_uri
+      case other
+        when Addressable::URI
+          to_s == other.to_s
+        else
+          other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
+      end
     end
 
     ##
     # @return [URI]
     def to_uri
-      @uri
+      self
     end
 
     ##
