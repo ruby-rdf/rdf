@@ -239,6 +239,22 @@ module RDF
     end
 
     ##
+    # Updates RDF statements in the repository.
+    #
+    # @param  [Array<Statement>] statements
+    # @raise  [TypeError] if the repository is immutable
+    # @return [Repository]
+    def update(*statements)
+      raise TypeError.new("repository is immutable") if immutable?
+      statements.each do |statement|
+        if (statement = create_statement(statement))
+          delete([statement.subject, statement.predicate, nil])
+          insert(statement) if statement.has_object?
+        end
+      end
+    end
+
+    ##
     # Inserts RDF statements into the repository.
     #
     # @param  [Array<Statement>] statements
