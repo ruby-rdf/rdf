@@ -1,4 +1,5 @@
 require 'rdf'
+require 'rdf/ntriples'
 
 describe RDF::NTriples do
   before :each do

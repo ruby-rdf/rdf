@@ -1,4 +1,5 @@
 require 'rdf'
+require 'rdf/ntriples'
 
 describe RDF::Query do
   context "when created" do
