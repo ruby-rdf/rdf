@@ -97,6 +97,14 @@ module RDF
     end
 
     ##
+    # Returns an RDF::Value representation of this object.
+    #
+    # @return [Value]
+    def to_rdf
+      self
+    end
+
+    ##
     # Returns a developer-friendly representation of this value.
     #
     # The result will be of the format `#<RDF::Value::0x12345678(...)>`,
