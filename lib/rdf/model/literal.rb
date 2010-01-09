@@ -29,8 +29,8 @@ module RDF
   # @example Creating implicitly datatyped literals
   #   RDF::Literal.new(false).datatype               #=> XSD.boolean
   #   RDF::Literal.new(true).datatype                #=> XSD.boolean
-  #   RDF::Literal.new(123).datatype                 #=> XSD.int
-  #   RDF::Literal.new(9223372036854775807).datatype #=> XSD.long
+  #   RDF::Literal.new(123).datatype                 #=> XSD.integer
+  #   RDF::Literal.new(9223372036854775807).datatype #=> XSD.integer
   #   RDF::Literal.new(3.1415).datatype              #=> XSD.double
   #   RDF::Literal.new(Time.now).datatype            #=> XSD.dateTime
   #   RDF::Literal.new(Date.new(2010)).datatype      #=> XSD.date
@@ -63,8 +63,8 @@ module RDF
           when String     then nil # implicit XSD.string
           when TrueClass  then XSD.boolean
           when FalseClass then XSD.boolean
-          when Fixnum     then XSD.int
-          when Integer    then XSD.long # FIXME
+          when Fixnum     then XSD.integer
+          when Integer    then XSD.integer
           when Float
             @value = case
               when value.nan? then 'NaN'
@@ -80,10 +80,53 @@ module RDF
               when Date     then XSD.date
               when Time     then XSD.dateTime
             end
+          else
+            require 'bigdecimal' unless defined?(BigDecimal)
+            case value
+              when BigDecimal
+                case
+                  when value.nan?      then 'NaN'
+                  when value.infinite? then value.to_s[0...-'inity'.length].upcase
+                  when value.finite?   then value.to_s('F')
+              end
+            end
         end
       end
 
       @value = @value.to_s
+    end
+
+    ##
+    # @return [Object]
+    def object
+      case datatype
+        when XSD.string, nil
+          value
+        when XSD.boolean
+          %w(true 1).include?(value)
+        when XSD.double, XSD.float
+          value.to_f
+        when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
+          value.to_i
+        when XSD.decimal
+          require 'bigdecimal' unless defined?(BigDecimal)
+          BigDecimal.new(value)
+        when XSD.date
+          require 'date' unless defined?(Date)
+          Date.parse(value)
+        when XSD.dateTime
+          require 'date' unless defined?(DateTime)
+          DateTime.parse(value)
+        when XSD.time
+          require 'time'
+          Time.parse(value)
+        when XSD.nonPositiveInteger, XSD.negativeInteger
+          value.to_i
+        when XSD.nonNegativeInteger, XSD.positiveInteger
+          value.to_i
+        when XSD.unsignedLong, XSD.unsignedInt, XSD.unsignedShort, XSD.unsignedByte
+          value.to_i
+      end
     end
 
     ##

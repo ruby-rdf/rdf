@@ -124,8 +124,8 @@ describe RDF::Literal do
       @string.datatype.should == nil
       @false.datatype.should == XSD.boolean
       @true.datatype.should == XSD.boolean
-      @int.datatype.should == XSD.int
-      @long.datatype.should == XSD.long
+      @int.datatype.should == XSD.integer
+      @long.datatype.should == XSD.integer
       @double.datatype.should == XSD.double
       @time.datatype.should == XSD.dateTime
       @date.datatype.should == XSD.date
@@ -143,8 +143,8 @@ describe RDF::Literal do
     it "should have a string representation" do
       @false.to_s.should eql('"false"^^<http://www.w3.org/2001/XMLSchema#boolean>')
       @true.to_s.should eql('"true"^^<http://www.w3.org/2001/XMLSchema#boolean>')
-      @int.to_s.should eql('"123"^^<http://www.w3.org/2001/XMLSchema#int>')
-      @long.to_s.should eql('"9223372036854775807"^^<http://www.w3.org/2001/XMLSchema#long>')
+      @int.to_s.should eql('"123"^^<http://www.w3.org/2001/XMLSchema#integer>')
+      @long.to_s.should eql('"9223372036854775807"^^<http://www.w3.org/2001/XMLSchema#integer>')
       @double.to_s.should eql('"3.1415"^^<http://www.w3.org/2001/XMLSchema#double>')
       @date.to_s.should eql('"2010-01-01"^^<http://www.w3.org/2001/XMLSchema#date>')
       @datetime.to_s.should eql('"2010-01-01T00:00:00+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime>') # FIXME
