@@ -247,7 +247,11 @@ module RDF
     def insert(*statements)
       raise TypeError.new("repository is immutable") if immutable?
       statements.each do |statement|
-        insert_statement(statement)
+        if (statement = create_statement(statement)).valid?
+          insert_statement(statement)
+        else
+          raise ArgumentError.new # FIXME
+        end
       end
       self
     end
@@ -261,7 +265,13 @@ module RDF
     def delete(*statements)
       raise TypeError.new("repository is immutable") if immutable?
       statements.each do |statement|
-        delete_statement(statement)
+        if (statement = create_statement(statement)).valid?
+          delete_statement(statement)
+        else
+          query(statement).each do |statement|
+            delete_statement(statement)
+          end
+        end
       end
       self
     end
@@ -285,6 +295,15 @@ module RDF
 
       def delete_statement(statement)
         @data.delete(statement)
+      end
+
+      def create_statement(statement)
+        case statement
+          when Statement then statement
+          when Hash      then Statement.new(statement)
+          when Array     then Statement.new(*statement)
+          else raise ArgumentError.new # FIXME
+        end
       end
 
   end
