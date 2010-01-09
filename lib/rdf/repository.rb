@@ -23,7 +23,7 @@ module RDF
   #   repository.has_statement?(statement)
   #
   # @example Enumerating statements in a repository
-  #   repository.each_statement { |statement| puts statement.inspect }
+  #   repository.each_statement { |statement| statement.inspect! }
   #
   # @example Inserting statements into a repository
   #   repository.insert(*statements)
@@ -302,6 +302,16 @@ module RDF
     end
 
     alias_method :clear!, :clear
+
+    ##
+    # Outputs a developer-friendly representation of this repository to
+    # `stderr`.
+    #
+    # @return [void]
+    def inspect!
+      each_statement { |statement| statement.inspect! }
+      nil
+    end
 
     protected
 
