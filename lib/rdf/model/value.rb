@@ -107,6 +107,14 @@ module RDF
       sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
     end
 
+    ##
+    # Outputs a developer-friendly representation of this value to `stderr`.
+    #
+    # @return [void]
+    def inspect!
+      warn(inspect)
+    end
+
     private
 
       def self.inherited(child) #:nodoc:
