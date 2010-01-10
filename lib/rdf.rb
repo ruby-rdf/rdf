@@ -3,6 +3,7 @@ require 'rdf/version'
 module RDF
   # RDF mixins
   autoload :Enumerable, 'rdf/enumerable'
+  autoload :Queryable,  'rdf/queryable'
 
   # RDF objects
   autoload :Graph,      'rdf/model/graph'

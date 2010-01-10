@@ -42,6 +42,7 @@ module RDF
   #
   class Repository
     include RDF::Enumerable
+    include RDF::Queryable
 
     # @return [URI]
     attr_reader :uri
@@ -181,30 +182,6 @@ module RDF
     # @return [Enumerator]
     def each(&block)
       @data.each(&block)
-    end
-
-    ##
-    # Queries the repository for RDF statements matching the given pattern.
-    #
-    # @param  [Query, Statement, Array(Value)] pattern
-    # @yield  [statement]
-    # @yieldparam [Statement]
-    # @return [Array<Statement>, nil]
-    def query(pattern, &block)
-      raise TypeError.new("repository is not readable") unless readable?
-      case pattern
-        when Query
-          pattern.execute(self, &block)
-        when Array
-          query(Statement.new(*pattern), &block)
-        when Statement
-          if block_given?
-            # TODO: yield any found statements
-            nil
-          else
-            find_all { |statement| pattern === statement }
-          end
-      end
     end
 
     ##

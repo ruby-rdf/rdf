@@ -3,6 +3,7 @@ module RDF
   # An RDF graph.
   class Graph < Resource
     include RDF::Enumerable
+    include RDF::Queryable
 
     # @return [URI]
     attr_accessor :uri
