@@ -134,10 +134,12 @@ Resources
 * <http://gemcutter.org/gems/rdf>
 * <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
+* <http://www.ohloh.net/p/rdf>
 
-See also
+See Also
 --------
 
+* [DataMapper RDF.rb Adapter](http://dm-rdf.rubyforge.org/)
 * [RDFS.rb](http://rdfs.rubyforge.org/)
 * [RDFize](http://rdfize.rubyforge.org/)
 * [RDFbus](http://rdfbus.rubyforge.org/)
