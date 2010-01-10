@@ -10,6 +10,10 @@
   foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
   foaf:made          <> .
 
+<http://bhuga.net/#ben> a foaf:Person ;
+  foaf:name          "Ben Lavender" ;
+  foaf:mbox          <mailto:blavender@gmail.com> .
+
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
   doap:homepage      <http://rdf.rubyforge.org/> ;
@@ -21,7 +25,7 @@
   doap:download-page <http://rubyforge.org/projects/rdf/> ;
   doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
   doap:blog          <http://ar.to/> ;
-  doap:developer     <http://ar.to/#self> ;
+  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben> ;
   doap:maintainer    <http://ar.to/#self> ;
   doap:documenter    <http://ar.to/#self> ;
   foaf:maker         <http://ar.to/#self> ;
