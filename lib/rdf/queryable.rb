@@ -25,7 +25,7 @@ module RDF
           pattern.execute(self, &block)
         when Array
           query(Statement.new(*pattern), &block)
-        when Statement, Pattern
+        when Statement
           if block_given?
             find_all { |statement| pattern === statement }.each(&block)
           else
