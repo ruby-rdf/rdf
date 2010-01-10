@@ -109,6 +109,22 @@ module RDF
           true
         end
       end
+
+      define :be_a_repository do |size|
+        size ||= 1
+        match do |repository|
+          repository.should be_a_kind_of(RDF::Repository)
+          repository.size == size
+        end
+      end
+
+      define :have_predicate do |predicate, count|
+        size ||= 1
+        match do |repository|
+          repository.query([nil,predicate,nil]).size == count
+        end
+      end
+
     end # module Matchers
   end # module Spec
 end # module RDF
