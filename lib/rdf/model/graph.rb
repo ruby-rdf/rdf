@@ -17,6 +17,7 @@ module RDF
     # @yieldparam [Graph]
     def initialize(uri = nil, options = {}, &block)
       @uri, @options = uri, options
+      @data = []
 
       if block_given?
         case block.arity
@@ -56,7 +57,15 @@ module RDF
 
     ##
     # @return [Resource]
-    def context() uri end
+    def context
+      uri
+    end
+
+    ##
+    # @return [Array<Resource>]
+    def contexts
+      named? ? [uri] : []
+    end
 
     ##
     # @param  [Statement, Array(Value)]
