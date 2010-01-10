@@ -167,16 +167,6 @@ module RDF
       end
 
       ##
-      # Deletes all RDF statements from this repository.
-      #
-      # @return [Repository]
-      # @see    RDF::Mutable#clear
-      def clear
-        @data.clear
-        self
-      end
-
-      ##
       # Inserts an RDF statement into the underlying storage.
       #
       # @param  [RDF::Statement] statement
@@ -194,7 +184,18 @@ module RDF
         @data.delete(statement)
       end
 
-      protected :insert_statement, :delete_statement
+      ##
+      # Deletes all RDF statements from this repository.
+      #
+      # @return [Repository]
+      # @see    RDF::Mutable#clear
+      def clear_statements
+        @data.clear
+      end
+
+      protected :insert_statement
+      protected :delete_statement
+      protected :clear_statements
     end # module Implementation
   end # class Repository
 end # module RDF

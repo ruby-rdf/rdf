@@ -132,8 +132,14 @@ module RDF
     #
     # @return [Mutable]
     def clear
-      each_statement do |statement|
-        delete_statement(statement)
+      raise TypeError.new("#{self} is immutable") if immutable?
+
+      if respond_to?(:clear_statements)
+        clear_statements
+      else
+        each_statement do |statement|
+          delete_statement(statement)
+        end
       end
       self
     end
@@ -153,8 +159,6 @@ module RDF
         else raise ArgumentError.new # FIXME
       end
     end
-
-    protected :create_statement
 
     ##
     # Inserts an RDF statement into the underlying storage.
@@ -182,6 +186,8 @@ module RDF
       raise NotImplementedError
     end
 
-    protected :insert_statement, :delete_statement
+    protected :create_statement
+    protected :insert_statement
+    protected :delete_statement
   end
 end
