@@ -2,8 +2,12 @@ require 'rdf/version'
 
 module RDF
   # RDF mixins
-  autoload :Enumerable, 'rdf/enumerable'
-  autoload :Queryable,  'rdf/queryable'
+  autoload :Durable,    'rdf/mixin/durable'
+  autoload :Enumerable, 'rdf/mixin/enumerable'
+  autoload :Mutable,    'rdf/mixin/mutable'
+  autoload :Queryable,  'rdf/mixin/queryable'
+  autoload :Readable,   'rdf/mixin/readable'
+  autoload :Writable,   'rdf/mixin/writable'
 
   # RDF objects
   autoload :Graph,      'rdf/model/graph'

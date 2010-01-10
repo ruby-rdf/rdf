@@ -42,16 +42,24 @@ module RDF
   #
   class Repository
     include RDF::Enumerable
+    include RDF::Durable
+    include RDF::Mutable
     include RDF::Queryable
 
+    ##
+    # Returns the {URI} of this repository.
+    #
     # @return [URI]
     attr_reader :uri
 
+    ##
+    # Returns the title of this repository.
+    #
     # @return [String]
     attr_reader :title
 
     ##
-    # Loads an N-Triples file as a transient in-memory repository.
+    # Loads an RDF file as a transient in-memory repository.
     #
     # @param  [String] filename
     # @yield  [repository]
@@ -71,12 +79,23 @@ module RDF
     end
 
     ##
+    # Initializes this repository instance.
+    #
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [URI, #to_s]    :uri (nil)
+    # @option options [String, #to_s] :title (nil)
     # @yield  [repository]
-    # @yieldparam [Repository]
+    # @yieldparam [Repository] repository
     def initialize(options = {}, &block)
-      @uri   = options.delete(:uri)
-      @title = options.delete(:title)
-      @data, @options = [], options
+      @uri     = options.delete(:uri)
+      @title   = options.delete(:title)
+      @options = options
+
+      # Provide a default in-memory implementation:
+      if self.class.equal?(RDF::Repository)
+        @data = []
+        send(:extend, Implementation)
+      end
 
       if block_given?
         case block.arity
@@ -85,200 +104,6 @@ module RDF
         end
       end
     end
-
-    ##
-    # Returns `true` if the repository is transient.
-    #
-    # @return [Boolean]
-    # @see    #persistent?
-    def transient?
-      !persistent?
-    end
-
-    ##
-    # Returns `true` if the repository is persistent.
-    #
-    # @return [Boolean]
-    # @see    #transient?
-    # @abstract
-    def persistent?
-      false # NOTE: override this in any persistent subclasses
-    end
-
-    ##
-    # Returns `true` if the repository is readable.
-    #
-    # @return [Boolean]
-    def readable?
-      true
-    end
-
-    ##
-    # Returns `true` if the repository is mutable.
-    #
-    # @return [Boolean]
-    # @see    #immutable?
-    # @see    #immutable!
-    def mutable?
-      !immutable?
-    end
-
-    alias_method :writable?, :mutable?
-
-    ##
-    # Returns `true` if the repository is immutable.
-    #
-    # @return [Boolean]
-    # @see    #mutable?
-    # @see    #immutable!
-    def immutable?
-      @options[:mutable] == false
-    end
-
-    ##
-    # Makes the repository contents immutable.
-    #
-    # @return [void]
-    # @see    #mutable?
-    # @see    #immutable?
-    def immutable!
-      @options[:mutable] = true
-    end
-
-    ##
-    # Returns `true` if the repository contains no RDF statements.
-    #
-    # @return [Boolean]
-    def empty?
-      @data.empty?
-    end
-
-    ##
-    # Returns the number of RDF statements in the repository.
-    #
-    # @return [Integer]
-    def size
-      @data.size
-    end
-
-    alias_method :count, :size
-
-    ##
-    # Returns `true` if this repository contains the given RDF `statement`.
-    #
-    # @param  [Statement] statement
-    # @return [Boolean]
-    def has_statement?(statement)
-      @data.include?(statement)
-    end
-
-    alias_method :include?, :has_statement?
-
-    ##
-    # Enumerates each RDF statement in the repository.
-    #
-    # @yield  [statement]
-    # @yieldparam [Statement]
-    # @return [Enumerator]
-    def each(&block)
-      @data.each(&block)
-    end
-
-    ##
-    # Loads RDF statements from the given N-Triples file into the repository.
-    #
-    # @param  [String]  filename
-    # @return [Integer] the number of inserted RDF statements
-    def load(filename, options = {})
-      raise TypeError.new("repository is immutable") if immutable?
-      count = 0
-      Reader.open(filename, options) do |reader|
-        reader.each_statement do |statement|
-          insert_statement(statement)
-          count += 1
-        end
-      end
-      count
-    end
-
-    ##
-    # Inserts an RDF statement into the repository.
-    #
-    # @param  [Statement, Array(Value), #to_a] statement
-    # @return [Repository]
-    def <<(statement)
-      raise TypeError.new("repository is immutable") if immutable?
-      case statement
-        when Statement then insert_statement(statement)
-        else insert_statement(Statement.new(*statement.to_a))
-      end
-      self
-    end
-
-    ##
-    # Updates RDF statements in the repository.
-    #
-    # @param  [Array<Statement>] statements
-    # @raise  [TypeError] if the repository is immutable
-    # @return [Repository]
-    def update(*statements)
-      raise TypeError.new("repository is immutable") if immutable?
-      statements.each do |statement|
-        if (statement = create_statement(statement))
-          delete([statement.subject, statement.predicate, nil])
-          insert(statement) if statement.has_object?
-        end
-      end
-    end
-
-    ##
-    # Inserts RDF statements into the repository.
-    #
-    # @param  [Array<Statement>] statements
-    # @raise  [TypeError] if the repository is immutable
-    # @return [Repository]
-    def insert(*statements)
-      raise TypeError.new("repository is immutable") if immutable?
-      statements.each do |statement|
-        if (statement = create_statement(statement)).valid?
-          insert_statement(statement)
-        else
-          raise ArgumentError.new # FIXME
-        end
-      end
-      self
-    end
-
-    ##
-    # Deletes RDF statements from the repository.
-    #
-    # @param  [Array<Statement>] statements
-    # @raise  [TypeError] if the repository is immutable
-    # @return [Repository]
-    def delete(*statements)
-      raise TypeError.new("repository is immutable") if immutable?
-      statements.each do |statement|
-        if (statement = create_statement(statement)).valid?
-          delete_statement(statement)
-        else
-          query(statement).each do |statement|
-            delete_statement(statement)
-          end
-        end
-      end
-      self
-    end
-
-    ##
-    # Deletes all RDF statements from this repository.
-    #
-    # @return [Repository]
-    def clear
-      @data.clear
-      self
-    end
-
-    alias_method :clear!, :clear
 
     ##
     # Outputs a developer-friendly representation of this repository to
@@ -290,24 +115,86 @@ module RDF
       nil
     end
 
-    protected
+    ##
+    # @see RDF::Repository
+    module Implementation
+      ##
+      # Returns `false` to indicate that this repository is nondurable.
+      #
+      # @return [Boolean]
+      # @see    RDF::Durable#durable?
+      def durable?
+        false
+      end
 
+      ##
+      # Enumerates each RDF statement in this repository.
+      #
+      # @yield  [statement]
+      # @yieldparam [Statement]
+      # @return [Enumerator]
+      # @see    RDF::Enumerable#each_statement
+      def each(&block)
+        @data.each(&block)
+      end
+
+      ##
+      # Returns `true` if this repository contains no RDF statements.
+      #
+      # @return [Boolean]
+      # @see    RDF::Enumerable#empty?
+      def empty?
+        @data.empty?
+      end
+
+      ##
+      # Returns the number of RDF statements in this repository.
+      #
+      # @return [Integer]
+      # @see    RDF::Enumerable#count
+      def count
+        @data.size
+      end
+
+      ##
+      # Returns `true` if this repository contains the given RDF statement.
+      #
+      # @param  [Statement] statement
+      # @return [Boolean]
+      # @see    RDF::Enumerable#has_statement?
+      def has_statement?(statement)
+        @data.include?(statement)
+      end
+
+      ##
+      # Deletes all RDF statements from this repository.
+      #
+      # @return [Repository]
+      # @see    RDF::Mutable#clear
+      def clear
+        @data.clear
+        self
+      end
+
+      ##
+      # Inserts an RDF statement into the underlying storage.
+      #
+      # @param  [RDF::Statement] statement
+      # @return [void]
       def insert_statement(statement)
         @data.push(statement) unless @data.include?(statement)
       end
 
+      ##
+      # Deletes an RDF statement from the underlying storage.
+      #
+      # @param  [RDF::Statement] statement
+      # @return [void]
       def delete_statement(statement)
         @data.delete(statement)
       end
 
-      def create_statement(statement)
-        case statement
-          when Statement then statement
-          when Hash      then Statement.new(statement)
-          when Array     then Statement.new(*statement)
-          else raise ArgumentError.new # FIXME
-        end
-      end
-
-  end
-end
+      protected :insert_statement, :delete_statement
+    end # module Implementation
+  end # class Repository
+end # module RDF
