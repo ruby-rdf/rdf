@@ -2,6 +2,10 @@ require 'rdf'
 require 'rdf/ntriples'
 
 describe RDF::NTriples do
+  before :all do
+    @testfile = File.join(File.dirname(__FILE__),"data","test.nt")
+  end
+
   before :each do
     @reader = RDF::NTriples::Reader
     @writer = RDF::NTriples::Writer
@@ -9,7 +13,7 @@ describe RDF::NTriples do
 
   context "when created" do
     it "should accept files" do
-      lambda { @reader.new(File.open("spec/data/test.nt")) }.should_not raise_error
+      lambda { @reader.new(File.open(@testfile)) }.should_not raise_error
     end
 
     it "should accept IO streams" do
@@ -41,11 +45,25 @@ describe RDF::NTriples do
     end
 
     it "should parse W3C's test data" do
-      lambda { @reader.new(File.open("spec/data/test.nt")).to_a.size.should == 30 }.should_not raise_error # FIXME
+      lambda { @reader.new(File.open(@testfile)).to_a.size.should == 30 }.should_not raise_error # FIXME
     end
   end
 
   context "when writing" do
-    # TODO
+    before :all do
+      s = RDF::URI.parse("http://gemcutter.org/gems/rdf")
+      p = RDF::DC.creator
+      o = RDF::URI.parse("http://ar.to/#self")
+      @stmt = RDF::Statement.new(s, p, o)
+      @stmt_string = "<http://gemcutter.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .\n"
+    end
+
+    it "should output a statement to a string buffer" do
+      output = @writer.buffer do |writer|
+        writer << @stmt
+      end
+      output.should == @stmt_string
+    end
+
   end
 end
