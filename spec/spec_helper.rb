@@ -53,3 +53,37 @@ Spec::Matchers.define :be_a_value do
     true
   end
 end
+
+Spec::Matchers.define :be_a_vocabulary do |base_uri|
+  match do |vocabulary|
+    vocabulary.should be_a_kind_of(Module)
+    vocabulary.should respond_to(:to_uri)
+    vocabulary.to_uri.to_s.should == base_uri
+    vocabulary.should respond_to(:[])
+    true
+  end
+end
+
+Spec::Matchers.define :have_properties do |base_uri, properties|
+  match do |vocabulary|
+    properties.map(&:to_sym).each do |property|
+      vocabulary[property].should be_a_uri
+      vocabulary[property].to_s.should == "#{base_uri}#{property}"
+      #vocabulary.should respond_to(property) # FIXME
+      lambda { vocabulary.send(property) }.should_not raise_error
+      vocabulary.send(property).should be_a_uri
+      vocabulary.send(property.to_s).should be_a_uri
+      vocabulary.send(property).to_s.should == "#{base_uri}#{property}"
+    end
+    true
+  end
+end
+
+Spec::Matchers.define :have_subclasses do |base_uri, klasses|
+  match do |vocabulary|
+    klasses.map(&:to_sym).each do |klass|
+      # TODO
+    end
+    true
+  end
+end
