@@ -1,4 +1,4 @@
-require 'rdf'
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Vocabulary do
   VOCABS = %w(cc dc doap exif foaf http owl rdfs rss sioc skos wot xhtml xsd)

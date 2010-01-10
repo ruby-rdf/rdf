@@ -1,4 +1,4 @@
-require 'rdf'
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Node do
   it "should be instantiable" do

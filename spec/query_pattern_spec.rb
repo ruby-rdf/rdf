@@ -1,4 +1,4 @@
-require 'rdf'
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Query::Pattern do
   context "without any variables" do

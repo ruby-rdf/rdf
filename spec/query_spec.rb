@@ -1,4 +1,4 @@
-require 'rdf'
+require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 
 describe RDF::Query do
