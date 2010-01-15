@@ -144,6 +144,7 @@ See Also
 * [RDFize](http://rdfize.rubyforge.org/)
 * [RDFbus](http://rdfbus.rubyforge.org/)
 * [RDFcache](http://rdfcache.rubyforge.org/)
+* [Trinity](http://trinity.datagraph.org/)
 
 Author
 ------
