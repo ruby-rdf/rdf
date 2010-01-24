@@ -29,9 +29,6 @@ module RDF
   class Value
     include Comparable
 
-    # Prevent the instantiation of this class.
-    private_class_method :new
-
     ##
     # Returns `true` if this value is a graph.
     #
@@ -125,8 +122,11 @@ module RDF
 
     private
 
-      def self.inherited(child) #:nodoc:
-        # Enable the instantiation of any subclasses.
+      # Prevent the instantiation of this class:
+      private_class_method :new
+
+      def self.inherited(child) # @private
+        # Enable the instantiation of any subclasses:
         child.send(:public_class_method, :new)
         super
       end
