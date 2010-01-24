@@ -59,15 +59,17 @@ module RDF
     attr_reader :title
 
     ##
-    # Loads an RDF file as a transient in-memory repository.
+    # Loads one or more RDF files into a new transient in-memory repository.
     #
-    # @param  [String] filename
+    # @param  [String, Array<String>] filenames
     # @yield  [repository]
     # @yieldparam [Repository]
     # @return [void]
-    def self.load(filename, options = {}, &block)
+    def self.load(filenames, options = {}, &block)
       self.new(options) do |repository|
-        repository.load(filename, options)
+        [filenames].flatten.each do |filename|
+          repository.load(filename, options)
+        end
 
         if block_given?
           case block.arity
