@@ -29,7 +29,7 @@ module RDF
           if block_given?
             find_all { |statement| pattern === statement }.each(&block)
           else
-            find_all { |statement| pattern === statement }
+            find_all { |statement| pattern === statement }.extend(RDF::Enumerable, RDF::Queryable)
           end
         else
           raise ArgumentError.new("expected RDF::Query or RDF::Pattern, got #{pattern.inspect}")
