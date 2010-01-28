@@ -54,6 +54,14 @@ module RDF
     end
 
     ##
+    # Returns a duplicate copy of `self`.
+    #
+    # @return [RDF::URI]
+    def dup
+      self.class.new(@uri.dup)
+    end
+
+    ##
     # @param  [URI] other
     # @return [Boolean]
     def eql?(other)
