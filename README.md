@@ -4,6 +4,8 @@ RDF.rb: RDF API for Ruby
 This is a pure-Ruby library for working with Resource Description Framework
 (RDF) data.
 
+* <http://github.com/bendiken/rdf>
+
 ### About the Resource Description Framework (RDF)
 
 * <http://www.w3.org/RDF/>
