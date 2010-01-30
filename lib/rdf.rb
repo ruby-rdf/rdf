@@ -22,7 +22,9 @@ module RDF
   # RDF serialization
   autoload :Format,     'rdf/format'
   autoload :Reader,     'rdf/reader'
+  autoload :ReaderError,'rdf/reader'
   autoload :Writer,     'rdf/writer'
+  autoload :WriterError,'rdf/writer'
 
   # RDF serialization formats
   autoload :NTriples,   'rdf/ntriples'
