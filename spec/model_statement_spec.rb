@@ -6,6 +6,7 @@ describe RDF::Statement do
     @s    = RDF::URI.parse("http://gemcutter.org/gems/rdf")
     @p    = RDF::URI.parse("http://purl.org/dc/elements/1.1/creator")
     @o    = RDF::URI.parse("http://ar.to/#self")
+    @b    = RDF::Node.new
     @stmt = RDF::Statement.new(@s, @p, @o)
   end
 
@@ -35,6 +36,26 @@ describe RDF::Statement do
 
     it "should not be quoted" do
       @stmt.quoted?.should be_false
+    end
+  end
+
+  context "when created with a blank node subject" do
+    before :each do
+      @blank_subj_stmt = RDF::Statement.new(@b,@p,@o)
+    end
+
+    it "should have a blank node" do
+      @blank_subj_stmt.has_blank_nodes?.should == true
+    end
+  end
+
+  context "when created with a blank node object" do
+    before :each do
+      @blank_obj_stmt = RDF::Statement.new(@s,@p,@b)
+    end
+
+    it "should have a blank node" do
+      @blank_obj_stmt.has_blank_nodes?.should == true
     end
   end
 

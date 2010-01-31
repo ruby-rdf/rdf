@@ -127,6 +127,13 @@ module RDF
     end
 
     ##
+    # Whether or not this statement contains a blank node subject or object
+    # @return [Boolean]
+    def has_blank_nodes?
+      object.node? || subject.node?
+    end
+
+    ##
     # @param  [Statement] other
     # @return [Boolean]
     def eql?(other)
