@@ -5,6 +5,12 @@ describe RDF::URI do
     lambda { RDF::URI.new("http://rdf.rubyforge.org/") }.should_not raise_error
   end
 
+  it "should return a consistent hash code" do
+    hash1 = RDF::URI.parse("http://rdf.rubyforge.org").hash
+    hash2 = RDF::URI.parse("http://rdf.rubyforge.org").hash
+    hash1.should == hash2
+  end
+
   it "should be duplicable" do
     url  = Addressable::URI.parse("http://rdf.rubyforge.org/")
     uri2 = (uri1 = RDF::URI.new(url)).dup

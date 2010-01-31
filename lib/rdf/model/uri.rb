@@ -94,6 +94,12 @@ module RDF
       @uri.to_s
     end
 
+    ##
+    # @return [Fixnum]
+    def hash
+      @uri.hash
+    end
+
     protected
 
       def respond_to?(symbol) #:nodoc:
