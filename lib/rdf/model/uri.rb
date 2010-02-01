@@ -6,8 +6,11 @@ module RDF
   #
   # `RDF::URI` supports all the instance methods of `Addressable::URI`.
   #
-  # @example Creating a URI reference
+  # @example Creating a URI reference (1)
   #   uri = RDF::URI.new("http://rdf.rubyforge.org/")
+  #
+  # @example Creating a URI reference (2)
+  #   uri = RDF::URI.new(:scheme => 'http', :host => 'rdf.rubyforge.org', :path => '/')
   #
   # @example Getting the string representation of a URI
   #   uri.to_s #=> "http://rdf.rubyforge.org/"
@@ -16,6 +19,11 @@ module RDF
   # @see http://addressable.rubyforge.org/
   class URI < Node
     ##
+    # Creates a new `RDF::URI` instance based on the given `uri` string.
+    #
+    # This is just an alias for {RDF::URI.new} for compatibity with
+    # {Addressable::URI].
+    #
     # @param  [String] uri
     # @return [URI]
     def self.parse(uri)
@@ -23,10 +31,10 @@ module RDF
     end
 
     ##
-    # @overload uri(uri)
+    # @overload URI.new(uri)
     #   @param  [URI, String, #to_s]    uri
     #
-    # @overload uri(options = {})
+    # @overload URI.new(options = {})
     #   @param  [Hash{Symbol => Object} options
     def initialize(uri_or_options)
       case uri_or_options
@@ -64,6 +72,8 @@ module RDF
     end
 
     ##
+    # Checks whether this URI is equal to `other`.
+    #
     # @param  [URI] other
     # @return [Boolean]
     def eql?(other)
@@ -71,6 +81,8 @@ module RDF
     end
 
     ##
+    # Checks whether this URI is equal to `other`.
+    #
     # @param  [Object] other
     # @return [Boolean]
     def ==(other)
@@ -83,12 +95,16 @@ module RDF
     end
 
     ##
+    # Returns `self`.
+    #
     # @return [URI]
     def to_uri
       self
     end
 
     ##
+    # Returns a string representation of this URI.
+    #
     # @return [String]
     def to_s
       @uri.to_s
