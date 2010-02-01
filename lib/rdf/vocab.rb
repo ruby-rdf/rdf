@@ -39,6 +39,28 @@ module RDF
   # @see http://www.w3.org/TR/curie/
   # @see http://en.wikipedia.org/wiki/QName
   class Vocabulary
+    extend ::Enumerable
+
+    ##
+    # Enumerates known RDF vocabulary classes.
+    #
+    # @yield  [klass]
+    # @yieldparam [Class] klass
+    # @return [Enumerator]
+    def self.each(&block)
+      if self.equal?(Vocabulary)
+        # This is needed since all vocabulary classes are defined using
+        # Ruby's autoloading facility, meaning that `@@subclasses` will
+        # be empty until each subclass has been touched or require'd.
+        %w(cc dc doap exif foaf http owl rdfs rss sioc skos wot xhtml xsd).each do |prefix|
+          require "rdf/vocab/#{prefix}"
+        end
+        @@subclasses.each(&block)
+      else
+        # TODO: should enumerate vocabulary-specific defined properties.
+      end
+    end
+
     ##
     # Defines a vocabulary term called `property`.
     #
@@ -139,11 +161,13 @@ module RDF
       end
 
       def self.inherited(subclass) # @private
+        @@subclasses << subclass
         unless @@uri.nil?
           subclass.send(:private_class_method, :new)
           @@uris[subclass] = @@uri
           @@uri = nil
         end
+        super
       end
 
       def self.method_missing(property, *args, &block)
@@ -164,8 +188,9 @@ module RDF
 
     private
 
-      @@uris = {}  # @private
-      @@uri  = nil # @private
+      @@subclasses = [::RDF] # @private
+      @@uris       = {}      # @private
+      @@uri        = nil     # @private
 
   end
 end
