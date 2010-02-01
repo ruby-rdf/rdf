@@ -69,7 +69,7 @@ module RDF
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
-    RDF::URI.parse([to_s, property.to_s].join)
+    RDF::URI.new([to_uri.to_s, property.to_s].join)
   end
 
   ##
@@ -86,13 +86,13 @@ module RDF
 
   ##
   # @return [URI]
-  def self.to_uri
-    RDF::URI.parse(to_s)
+  def self.to_rdf
+    to_uri
   end
 
   ##
-  # @return [String]
-  def self.to_s # FIXME
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  # @return [URI]
+  def self.to_uri
+    RDF::URI.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
   end
 end
