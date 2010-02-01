@@ -119,7 +119,7 @@ module RDF
     def qname
       Vocabulary.each do |vocab|
         if to_s.index(vocab.to_uri.to_s) == 0
-          vocab_name = vocab.name.split('::').last.downcase # FIXME: this is dubious.
+          vocab_name = vocab.__name__.split('::').last.downcase
           local_name = to_s[vocab.to_uri.to_s.size..-1]
           unless vocab_name.empty? || local_name.empty?
             return [vocab_name.to_sym, local_name.to_sym]

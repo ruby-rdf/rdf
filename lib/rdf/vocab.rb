@@ -108,6 +108,12 @@ module RDF
       end
     end
 
+    class << self
+      # Preserve the class name so that it can be obtained even for
+      # vocabularies that define a `name` property:
+      alias_method :__name__, :name
+    end
+
     # Undefine all superfluous instance methods:
     undef_method *(instance_methods - %w(__id__ __send__ __class__ __eval__ instance_eval inspect class))
 

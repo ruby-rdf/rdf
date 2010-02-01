@@ -95,4 +95,9 @@ module RDF
   def self.to_uri
     RDF::URI.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
   end
+
+  class << self
+    # For compatibility with `RDF::Vocabulary.__name__`:
+    alias_method :__name__, :name
+  end
 end
