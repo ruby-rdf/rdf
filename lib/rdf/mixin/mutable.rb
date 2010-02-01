@@ -1,7 +1,7 @@
 module RDF
   ##
   # Classes that include this module must implement the methods
-  # {#insert_statement}, {#delete_statement} and {#each_statement}.
+  # `#insert_statement`, `#delete_statement` and `#each_statement`.
   #
   # @see RDF::Graph
   # @see RDF::Repository

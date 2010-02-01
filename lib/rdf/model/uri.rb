@@ -21,8 +21,8 @@ module RDF
     ##
     # Creates a new `RDF::URI` instance based on the given `uri` string.
     #
-    # This is just an alias for {RDF::URI.new} for compatibity with
-    # {Addressable::URI].
+    # This is just an alias for {#initialize RDF::URI.new} for compatibity
+    # with `Addressable::URI.parse`.
     #
     # @param  [String] uri
     # @return [URI]
