@@ -64,9 +64,58 @@ module RDF
     end
 
     ##
+    # Returns `true` if this URI's path component is equal to `/`.
+    #
+    # @return [Boolean]
+    def root?
+      self.path == '/' || self.path.empty?
+    end
+
+    ##
+    # Returns a copy of this URI with the path component set to `/`.
+    #
+    # @return [URI]
+    def root
+      if root?
+        self
+      else
+        uri = self.dup
+        uri.path = '/'
+        uri
+      end
+    end
+
+    ##
+    # Returns `true` if this URI's path component isn't equal to `/`.
+    #
+    # @return [Boolean]
+    def has_parent?
+      !root?
+    end
+
+    ##
+    # Returns a copy of this URI with the path component ascended to the
+    # parent directory, if any.
+    #
+    # @return [URI]
+    def parent
+      case
+        when root? then nil
+        else
+          require 'pathname' unless defined?(Pathname)
+          if path = Pathname.new(self.path).parent
+            uri = self.dup
+            uri.path = path.to_s
+            uri.path << '/' unless uri.root?
+            uri
+          end
+      end
+    end
+
+    ##
     # Returns a duplicate copy of `self`.
     #
-    # @return [RDF::URI]
+    # @return [URI]
     def dup
       self.class.new(@uri.dup)
     end
@@ -118,18 +167,28 @@ module RDF
       @uri.hash
     end
 
-    protected
+    ##
+    # Returns `true` if this URI instance supports the `symbol` method.
+    #
+    # @param  [Symbol, String, #to_s] symbol
+    # @return [Boolean]
+    def respond_to?(symbol)
+      @uri.respond_to?(symbol) || super
+    end
 
-      def respond_to?(symbol) #:nodoc:
-        @uri.respond_to?(symbol) || super
+    ##
+    # @param  [Symbol, String, #to_s] symbol
+    # @param  [Array<Object>]         args
+    # @yield
+    # @private
+    def method_missing(symbol, *args, &block)
+      if @uri.respond_to?(symbol)
+        @uri.send(symbol, *args, &block)
+      else
+        super
       end
+    end
 
-      def method_missing(symbol, *args, &block) #:nodoc:
-        if @uri.respond_to?(symbol)
-          @uri.send(symbol, *args, &block)
-        else
-          super
-        end
-      end
+    protected :method_missing
   end
 end
