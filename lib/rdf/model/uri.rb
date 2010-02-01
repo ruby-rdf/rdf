@@ -113,6 +113,23 @@ module RDF
     end
 
     ##
+    # Returns a qualified name (QName) for this URI, if possible.
+    #
+    # @return [Array(Symbol, Symbol)]
+    def qname
+      Vocabulary.each do |vocab|
+        if to_s.index(vocab.to_uri.to_s) == 0
+          vocab_name = vocab.name.split('::').last.downcase # FIXME: this is dubious.
+          local_name = to_s[vocab.to_uri.to_s.size..-1]
+          unless vocab_name.empty? || local_name.empty?
+            return [vocab_name.to_sym, local_name.to_sym]
+          end
+        end
+      end
+      nil # no QName found
+    end
+
+    ##
     # Returns a duplicate copy of `self`.
     #
     # @return [URI]
