@@ -127,10 +127,12 @@ module RDF
     end
 
     ##
-    # Whether or not this statement contains a blank node subject or object
+    # Returns `true` if the subject or object of this statement is a blank
+    # node.
+    #
     # @return [Boolean]
     def has_blank_nodes?
-      object.node? || subject.node?
+      (has_object? && object.node?) || (has_subject? && subject.node?)
     end
 
     ##

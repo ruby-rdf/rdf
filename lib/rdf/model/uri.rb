@@ -4,7 +4,7 @@ module RDF
   ##
   # A Uniform Resource Identifier (URI).
   #
-  # RDF::URIs support all methods available for {Addressable::URI}.
+  # `RDF::URI` supports all the instance methods of `Addressable::URI`.
   #
   # @example Creating a URI reference
   #   uri = RDF::URI.new("http://rdf.rubyforge.org/")
@@ -95,6 +95,8 @@ module RDF
     end
 
     ##
+    # Returns a hash code for this URI.
+    #
     # @return [Fixnum]
     def hash
       @uri.hash
