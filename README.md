@@ -82,9 +82,9 @@ Documentation
 ### RDF Querying
 
 * {RDF::Query}
-* {RDF::Query::Pattern}
-* {RDF::Query::Solution}
-* {RDF::Query::Variable}
+  * {RDF::Query::Pattern}
+  * {RDF::Query::Solution}
+  * {RDF::Query::Variable}
 
 ### RDF Vocabularies
 
@@ -137,6 +137,12 @@ Resources
 * <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
 * <http://www.ohloh.net/p/rdf>
+
+Plugins
+-------
+
+* [RDF::JSON](http://rdf.rubyforge.org/json/)
+* [RDF::Sesame](http://rdf.rubyforge.org/sesame/)
 
 See Also
 --------
