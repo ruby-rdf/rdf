@@ -55,7 +55,7 @@ Documentation
 
 * <http://rdf.rubyforge.org/>
 
-### RDF Objects
+### RDF Object Model
 
 * {RDF::Graph}
 * {RDF::Literal}
