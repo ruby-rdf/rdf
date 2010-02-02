@@ -130,17 +130,6 @@ module RDF
       end
 
       ##
-      # Enumerates each RDF statement in this repository.
-      #
-      # @yield  [statement]
-      # @yieldparam [Statement]
-      # @return [Enumerator]
-      # @see    RDF::Enumerable#each_statement
-      def each(&block)
-        @data.each(&block)
-      end
-
-      ##
       # Returns `true` if this repository contains no RDF statements.
       #
       # @return [Boolean]
@@ -169,7 +158,18 @@ module RDF
       end
 
       ##
-      # Inserts an RDF statement into the underlying storage.
+      # Enumerates each RDF statement in this repository.
+      #
+      # @yield  [statement]
+      # @yieldparam [Statement] statement
+      # @return [Enumerator]
+      # @see    RDF::Enumerable#each_statement
+      def each(&block)
+        @data.each(&block)
+      end
+
+      ##
+      # Inserts the given RDF statement into the underlying storage.
       #
       # @param  [RDF::Statement] statement
       # @return [void]
@@ -178,7 +178,7 @@ module RDF
       end
 
       ##
-      # Deletes an RDF statement from the underlying storage.
+      # Deletes the given RDF statement from the underlying storage.
       #
       # @param  [RDF::Statement] statement
       # @return [void]
@@ -189,7 +189,7 @@ module RDF
       ##
       # Deletes all RDF statements from this repository.
       #
-      # @return [Repository]
+      # @return [void]
       # @see    RDF::Mutable#clear
       def clear_statements
         @data.clear
