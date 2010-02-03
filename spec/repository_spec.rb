@@ -6,5 +6,6 @@ describe RDF::Repository do
     @repository = RDF::Repository.new
   end
 
+  # @see lib/rdf/spec/repository.rb
   it_should_behave_like RDF_Repository
 end
