@@ -74,10 +74,13 @@ Documentation
 ### RDF Serialization Formats
 
 * {RDF::NTriples}
+* [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
+* [RDF::Trix](http://rdf.rubyforge.org/trix/) (plugin)
 
 ### RDF Storage
 
 * {RDF::Repository}
+* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
 
 ### RDF Querying
 
@@ -137,12 +140,6 @@ Resources
 * <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
 * <http://www.ohloh.net/p/rdf>
-
-Plugins
--------
-
-* [RDF::JSON](http://rdf.rubyforge.org/json/)
-* [RDF::Sesame](http://rdf.rubyforge.org/sesame/)
 
 See Also
 --------
