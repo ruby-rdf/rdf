@@ -174,7 +174,7 @@ module RDF
       # @param  [RDF::Statement] statement
       # @return [void]
       def insert_statement(statement)
-        @data.push(statement) unless @data.include?(statement)
+        @data.push(statement.dup) unless @data.include?(statement)
       end
 
       ##
