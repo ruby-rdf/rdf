@@ -8,21 +8,21 @@ module RDF
   # @example Obtaining an RDF writer class
   #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer
   #   RDF::Writer.for("spec/data/output.nt")
-  #   RDF::Writer.for(:file_name => "spec/data/output.nt")
+  #   RDF::Writer.for(:file_name      => "spec/data/output.nt")
   #   RDF::Writer.for(:file_extension => "nt")
-  #   RDF::Writer.for(:content_type => "text/plain")
+  #   RDF::Writer.for(:content_type   => "text/plain")
   #
   # @example Instantiating an RDF writer class
   #   RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }
   #
-  # @example Serializing RDF statements to a file
+  # @example Serializing RDF statements into a file
   #   RDF::Writer.open("spec/data/output.nt") do |writer|
   #     graph.each_statement do |statement|
   #       writer << statement
   #     end
   #   end
   #
-  # @example Serializing RDF statements to a string
+  # @example Serializing RDF statements into a string
   #   RDF::Writer.for(:ntriples).buffer do |writer|
   #     graph.each_statement do |statement|
   #       writer << statement
@@ -204,7 +204,7 @@ module RDF
     # @return [String]
     def format_value(value, options = {})
       case value
-        when String       then format_literal(value, options)
+        when String       then format_literal(value, options) # FIXME
         when RDF::Literal then format_literal(value, options)
         when RDF::URI     then format_uri(value, options)
         when RDF::Node    then format_node(value, options)
@@ -279,8 +279,8 @@ module RDF
       # @param  [String] string
       # @return [String]
       def escaped(string)
-        string.gsub("\\", "\\\\").gsub("\t", "\\\t").
-          gsub("\n", "\\\n").gsub("\r", "\\\r").gsub("\"", "\\\"")
+        string.gsub('\\', '\\\\').gsub("\t", '\\t').
+          gsub("\n", '\\n').gsub("\r", '\\r').gsub('"', '\\"')
       end
 
       ##
