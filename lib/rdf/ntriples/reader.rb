@@ -14,8 +14,8 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     ##
-    # @return [Array, nil]
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
+    # @return [Array]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     def read_triple
       loop do
         readline.strip! # EOFError thrown on end of input
@@ -66,7 +66,7 @@ module RDF::NTriples
         elsif datatype = match(/^(\^\^)/)
           RDF::Literal.new(literal, :datatype => read_uriref || fail_object)
         else
-          literal # plain string literal
+          RDF::Literal.new(literal) # plain string literal
         end
       end
     end
