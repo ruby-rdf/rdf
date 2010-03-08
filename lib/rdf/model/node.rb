@@ -1,20 +1,16 @@
 module RDF
   ##
-  # An RDF blank node, also known as an unlabeled node.
+  # An RDF blank node, also known as an anonymous or unlabeled node.
   #
   # @example Creating a blank node with an implicit identifier
   #   bnode = RDF::Node.new
   #
-  # @example Creating a blank node with an UUID identifier (1)
-  #   require 'uuid'
-  #   bnode = RDF::Node.new(UUID.generate)
+  # @example Creating a blank node with an UUID identifier
+  #   bnode = RDF::Node.uuid
+  #   bnode.to_s #=> "_:504c0a30-0d11-012d-3f50-001b63cac539"
   #
-  # @example Creating a blank node with an UUID identifier (2)
-  #   require 'uuidtools'
-  #   bnode = RDF::Node.new(UUIDTools::UUID.random_create)
-  #
-  # @see http://github.com/assaf/uuid
-  # @see http://uuidtools.rubyforge.org/
+  # @see http://rubygems.org/gems/uuid
+  # @see http://rubygems.org/gems/uuidtools
   class Node < Resource
     ##
     # Returns a blank node with a random UUID-based identifier.
