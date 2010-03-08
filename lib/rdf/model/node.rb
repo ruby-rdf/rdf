@@ -16,6 +16,24 @@ module RDF
   # @see http://github.com/assaf/uuid
   # @see http://uuidtools.rubyforge.org/
   class Node < Resource
+    ##
+    # Returns a blank node with a random UUID-based identifier.
+    #
+    # @return [RDF::Node]
+    def self.uuid
+      begin
+        require 'uuid'
+        self.new(UUID.generate)
+      rescue LoadError => e
+        begin
+          require 'uuidtools'
+          self.new(UUIDTools::UUID.random_create)
+        rescue LoadError => e
+          raise LoadError.new("no such file to load -- uuid or uuidtools")
+        end
+      end
+    end
+
     # @return [String]
     attr_accessor :id
 
