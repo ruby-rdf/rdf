@@ -17,7 +17,7 @@ module RDF
   #
   # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
   # @see http://addressable.rubyforge.org/
-  class URI < Node
+  class URI < Resource
     ##
     # Creates a new `RDF::URI` instance based on the given `uri` string.
     #
