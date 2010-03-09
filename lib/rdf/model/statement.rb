@@ -62,7 +62,10 @@ module RDF
           @options   = options
           @subject   = subject
           @predicate = predicate
-          @object    = object
+          @object    = case object
+            when RDF::Value then object
+            else RDF::Literal.new(object)
+          end
       end
     end
 
@@ -206,13 +209,25 @@ module RDF
     end
 
     ##
+    # Returns a string representation of this statement.
+    #
     # @return [String]
     def to_s
       require 'stringio' unless defined?(StringIO)
       StringIO.open do |buffer|
-        buffer << "<#{subject}> "
-        buffer << "<#{predicate}> "
-        buffer << "<#{object}> ."
+        buffer << case subject
+          when RDF::Node    then subject.to_s
+          when RDF::URI     then "<#{subject}>"
+          else subject.inspect
+        end
+        buffer << " <#{predicate}> "
+        buffer << case object
+          when RDF::Literal then object.to_s
+          when RDF::Node    then object.to_s
+          when RDF::URI     then "<#{object}>"
+          else object.inspect
+        end
+        buffer << " ."
         buffer.string
       end
     end
