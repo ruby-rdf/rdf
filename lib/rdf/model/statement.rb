@@ -63,6 +63,7 @@ module RDF
           @subject   = subject
           @predicate = predicate
           @object    = case object
+            when nil        then nil
             when RDF::Value then object
             else RDF::Literal.new(object)
           end
