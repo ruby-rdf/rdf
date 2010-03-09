@@ -8,6 +8,7 @@ module RDF
   #
   # * {RDF::CC}    - Creative Commons (CC)
   # * {RDF::DC}    - Dublin Core (DC)
+  # * {RDF::DC11}  - Dublin Core 1.1 (DC11) _deprecated_
   # * {RDF::DOAP}  - Description of a Project (DOAP)
   # * {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
   # * {RDF::FOAF}  - Friend of a Friend (FOAF)
@@ -23,6 +24,7 @@ module RDF
   #
   # @example Using pre-defined RDF vocabularies
   #   include RDF
+  #
   #   DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
   #   FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
   #   RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
