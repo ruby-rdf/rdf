@@ -64,6 +64,20 @@ module RDF
     end
 
     ##
+    # Joins several URIs together.
+    #
+    # @param  [Array<String, URI, #to_str>] uris
+    # @return [URI]
+    def join(*uris)
+      result = @uri
+      uris.each do |uri|
+        result.path += '/' unless result.path[-1] == ?/
+        result = result.join(uri)
+      end
+      self.class.new(result)
+    end
+
+    ##
     # Returns `true` if this URI's path component is equal to `/`.
     #
     # @return [Boolean]
