@@ -71,7 +71,7 @@ module RDF
     def join(*uris)
       result = @uri
       uris.each do |uri|
-        result.path += '/' unless result.path[-1] == ?/
+        result.path += '/' unless result.path[-1] == ?/ # '/'
         result = result.join(uri)
       end
       self.class.new(result)
@@ -214,7 +214,11 @@ module RDF
     # @private
     def method_missing(symbol, *args, &block)
       if @uri.respond_to?(symbol)
-        @uri.send(symbol, *args, &block)
+        case result = @uri.send(symbol, *args, &block)
+          when Addressable::URI
+            self.class.new(result)
+          else result
+        end
       else
         super
       end
