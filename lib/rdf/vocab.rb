@@ -52,7 +52,7 @@ module RDF
         # This is needed since all vocabulary classes are defined using
         # Ruby's autoloading facility, meaning that `@@subclasses` will
         # be empty until each subclass has been touched or require'd.
-        %w(cc dc doap exif foaf http owl rdfs rss sioc skos wot xhtml xsd).each do |prefix|
+        %w(cc dc dc11 doap exif foaf http owl rdfs rss sioc skos wot xhtml xsd).each do |prefix|
           require "rdf/vocab/#{prefix}"
         end
         @@subclasses.each(&block)
