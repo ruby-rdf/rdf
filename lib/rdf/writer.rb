@@ -96,6 +96,22 @@ module RDF
       alias_method :format_class, :format
     end
 
+    def self.dump(data, io = nil, options = {})
+      if io
+        new(io) do |writer|
+          data.each_statement do |statement|
+            writer << statement
+          end
+        end
+      else
+        buffer do |writer|
+          data.each_statement do |statement|
+            writer << statement
+          end
+        end
+      end
+    end
+
     def self.buffer(*args, &block)
       require 'stringio' unless defined?(StringIO)
 
