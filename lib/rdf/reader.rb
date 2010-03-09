@@ -8,9 +8,9 @@ module RDF
   # @example Obtaining an RDF reader class
   #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
   #   RDF::Reader.for("spec/data/test.nt")
-  #   RDF::Reader.for(:file_name => "spec/data/test.nt")
+  #   RDF::Reader.for(:file_name      => "spec/data/test.nt")
   #   RDF::Reader.for(:file_extension => "nt")
-  #   RDF::Reader.for(:content_type => "text/plain")
+  #   RDF::Reader.for(:content_type   => "text/plain")
   #
   # @example Instantiating an RDF reader class
   #   RDF::Reader.for(:ntriples).new($stdin) { |reader| ... }
@@ -114,9 +114,9 @@ module RDF
     end
 
     ##
-    # @param  [IO, String] input
+    # @param  [IO, File, String] input
     # @yield  [reader]
-    # @yieldparam [Reader]
+    # @yieldparam [Reader] reader
     def initialize(input = $stdin, options = {}, &block)
       @options = options
       @nodes   = {}

@@ -7,6 +7,8 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     ##
+    # Outputs an N-Triples comment line.
+    #
     # @param  [String] text
     # @return [void]
     def write_comment(text)
@@ -14,24 +16,20 @@ module RDF::NTriples
     end
 
     ##
-    # @param  [Resource] subject
-    # @param  [URI]      predicate
-    # @param  [Value]    object
+    # Outputs the N-Triples representation of a triple.
+    #
+    # @param  [RDF::Resource] subject
+    # @param  [RDF::URI]      predicate
+    # @param  [RDF::Value]    object
     # @return [void]
     def write_triple(subject, predicate, object)
       puts "%s %s %s ." % [subject, predicate, object].map { |value| format_value(value) }
     end
 
     ##
-    # @param  [URI]                    value
-    # @param  [Hash{Symbol => Object}] options
-    # @return [String]
-    def format_uri(value, options = {})
-      "<%s>" % uri_for(value)
-    end
-
-    ##
-    # @param  [Node]                   value
+    # Returns the N-Triples representation of a blank node.
+    #
+    # @param  [RDF::Node] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_node(value, options = {})
@@ -39,7 +37,19 @@ module RDF::NTriples
     end
 
     ##
-    # @param  [Literal, String, #to_s] value
+    # Returns the N-Triples representation of a URI reference.
+    #
+    # @param  [RDF::URI] value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    def format_uri(value, options = {})
+      "<%s>" % uri_for(value)
+    end
+
+    ##
+    # Returns the N-Triples representation of a literal.
+    #
+    # @param  [RDF::Literal, String, #to_s] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_literal(value, options = {})
