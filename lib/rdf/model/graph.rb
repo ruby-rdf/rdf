@@ -16,8 +16,12 @@ module RDF
     # @yield  [graph]
     # @yieldparam [Graph]
     def initialize(uri = nil, options = {}, &block)
-      @uri, @options = uri, options
-      @data = []
+      @uri = case uri
+        when RDF::Resource then uri
+        else RDF::URI.new(uri)
+      end
+
+      @options, @data = options, []
 
       if block_given?
         case block.arity
