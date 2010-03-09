@@ -8,7 +8,7 @@ module RDF
   #
   # @example Creating a language-tagged literal (1)
   #   value = RDF::Literal.new("Hello!", :language => :en)
-  #   value.language?                                #=> true
+  #   value.has_language?                            #=> true
   #   value.language                                 #=> :en
   #
   # @example Creating a language-tagged literal (2)
@@ -18,12 +18,12 @@ module RDF
   #
   # @example Creating an explicitly datatyped literal
   #   value = RDF::Literal.new("2009-12-31", :datatype => RDF::XSD.date)
-  #   value.datatype?                                #=> true
+  #   value.has_datatype?                            #=> true
   #   value.datatype                                 #=> RDF::XSD.date
   #
   # @example Creating an implicitly datatyped literal
   #   value = RDF::Literal.new(Date.today)
-  #   value.datatype?                                #=> true
+  #   value.has_datatype?                            #=> true
   #   value.datatype                                 #=> RDF::XSD.date
   #
   # @example Creating implicitly datatyped literals
@@ -173,21 +173,24 @@ module RDF
     #
     # @return [Boolean]
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
-    def language?
+    def has_language?
       !language.nil?
     end
+
+    alias_method :language?, :has_language?
 
     ##
     # Returns `true` if this is a datatyped literal.
     #
     # @return [Boolean]
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
-    def datatype?
+    def has_datatype?
       !datatype.nil?
     end
 
-    alias_method :typed?,     :datatype?
-    alias_method :datatyped?, :datatype?
+    alias_method :datatype?,  :has_datatype?
+    alias_method :typed?,     :has_datatype?
+    alias_method :datatyped?, :has_datatype?
 
     ##
     # Returns a string representation of this literal.
