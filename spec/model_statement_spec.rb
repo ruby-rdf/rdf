@@ -2,8 +2,8 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Statement do
   before :each do
-    @n3   = "<http://gemcutter.org/gems/rdf> <http://purl.org/dc/elements/1.1/creator> <http://ar.to/#self> ."
-    @s    = RDF::URI.parse("http://gemcutter.org/gems/rdf")
+    @n3   = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/elements/1.1/creator> <http://ar.to/#self> ."
+    @s    = RDF::URI.parse("http://rubygems.org/gems/rdf")
     @p    = RDF::URI.parse("http://purl.org/dc/elements/1.1/creator")
     @o    = RDF::URI.parse("http://ar.to/#self")
     @stmt = RDF::Statement.new(@s, @p, @o)

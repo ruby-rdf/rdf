@@ -4,7 +4,7 @@ describe RDF::Queryable do
   before :each do
     @statements = RDF::NTriples::Reader.new(File.open("etc/doap.nt")).to_a
     @queryable  = @statements.extend(RDF::Queryable)
-    @subject    = RDF::URI.new("http://gemcutter.org/gems/rdf")
+    @subject    = RDF::URI.new("http://rubygems.org/gems/rdf")
   end
 
   it "should support #query" do
@@ -41,7 +41,7 @@ describe RDF::Queryable do
 
     it "should return the correct number of results" do
       @queryable.query([nil, nil, nil]).size.should == File.readlines("etc/doap.nt").size
-      @queryable.query([@subject, nil, nil]).size.should == File.readlines("etc/doap.nt").grep(/^<http:\/\/gemcutter\.org\/gems\/rdf>/).size
+      @queryable.query([@subject, nil, nil]).size.should == File.readlines("etc/doap.nt").grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
       @queryable.query([@subject, RDF::DOAP.name, nil]).size.should == 1
       @queryable.query([@subject, RDF::DOAP.developer, nil]).size.should == @queryable.query([nil, nil, RDF::FOAF.Person]).size
       @queryable.query([nil, nil, RDF::DOAP.Project]).size.should == 1

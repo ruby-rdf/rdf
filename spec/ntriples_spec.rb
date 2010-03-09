@@ -51,11 +51,11 @@ describe RDF::NTriples do
 
   context "when writing" do
     before :all do
-      s = RDF::URI.parse("http://gemcutter.org/gems/rdf")
+      s = RDF::URI.parse("http://rubygems.org/gems/rdf")
       p = RDF::DC.creator
       o = RDF::URI.parse("http://ar.to/#self")
       @stmt = RDF::Statement.new(s, p, o)
-      @stmt_string = "<http://gemcutter.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .\n"
+      @stmt_string = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .\n"
     end
 
     it "should output a statement to a string buffer" do

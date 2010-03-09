@@ -1,24 +1,24 @@
 <http://ar.to/#self> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-<http://ar.to/#self> <http://xmlns.com/foaf/0.1/made> <http://gemcutter.org/gems/rdf> .
+<http://ar.to/#self> <http://xmlns.com/foaf/0.1/made> <http://rubygems.org/gems/rdf> .
 <http://ar.to/#self> <http://xmlns.com/foaf/0.1/mbox> <mailto:arto.bendiken@gmail.com> .
 <http://ar.to/#self> <http://xmlns.com/foaf/0.1/name> "Arto Bendiken" .
 <http://bhuga.net/#ben> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
 <http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox> <mailto:blavender@gmail.com> .
 <http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/name> "Ben Lavender" .
-<http://gemcutter.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://ar.to/> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#bug-database> <http://github.com/bendiken/rdf/issues> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#created> "2007-10-23" .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://ar.to/#self> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://bhuga.net/#ben> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://ar.to/#self> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#download-page> <http://rubyforge.org/projects/rdf/> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rdf.rubyforge.org/> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://ar.to/#self> .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#platform> "Ruby" .
-<http://gemcutter.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
-<http://gemcutter.org/gems/rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
-<http://gemcutter.org/gems/rdf> <http://xmlns.com/foaf/0.1/maker> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://ar.to/> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#bug-database> <http://github.com/bendiken/rdf/issues> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#created> "2007-10-23" .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://bhuga.net/#ben> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#download-page> <http://rubyforge.org/projects/rdf/> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rdf.rubyforge.org/> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#platform> "Ruby" .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
+<http://rubygems.org/gems/rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
+<http://rubygems.org/gems/rdf> <http://xmlns.com/foaf/0.1/maker> <http://ar.to/#self> .

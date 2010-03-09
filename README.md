@@ -18,7 +18,7 @@ Examples
 
 ### Creating an RDF statement
 
-    s = RDF::URI.parse("http://gemcutter.org/gems/rdf")
+    s = RDF::URI.parse("http://rubygems.org/gems/rdf")
     p = RDF::DC.creator
     o = RDF::URI.parse("http://ar.to/#self")
     
@@ -115,7 +115,7 @@ Installation
 ------------
 
 The recommended installation method is via RubyGems. To install the latest
-official release from Gemcutter, do:
+official release from [RubyGems](http://rubygems.org/), do:
 
     % [sudo] gem install rdf
 
@@ -136,7 +136,7 @@ Resources
 
 * <http://rdf.rubyforge.org/>
 * <http://github.com/bendiken/rdf>
-* <http://gemcutter.org/gems/rdf>
+* <http://rubygems.org/gems/rdf>
 * <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
 * <http://www.ohloh.net/p/rdf>
