@@ -3,25 +3,31 @@ module RDF
   # An RDF graph.
   class Graph < Resource
     include RDF::Enumerable
+    include RDF::Mutable
     include RDF::Queryable
 
-    # @return [URI]
-    attr_accessor :uri
+    ##
+    # @return [Resource]
+    attr_accessor :context
 
+    ##
     # @return [Array<Statement>]
     attr_accessor :data
 
     ##
-    # @param  [URI] uri
+    # @param  [Resource]               context
+    # @param  [Hash{Symbol => Object}] options
     # @yield  [graph]
     # @yieldparam [Graph]
-    def initialize(uri = nil, options = {}, &block)
-      @uri = case uri
-        when RDF::Resource then uri
-        else RDF::URI.new(uri)
+    def initialize(context = nil, options = {}, &block)
+      @context = case context
+        when nil then nil
+        when RDF::Resource then context
+        else RDF::URI.new(context)
       end
 
-      @options, @data = options, []
+      @data    = options.delete(:data) || []
+      @options = options
 
       if block_given?
         case block.arity
@@ -32,7 +38,7 @@ module RDF
     end
 
     ##
-    # Returns `true`.
+    # Returns `true` to indicate that this is a graph.
     #
     # @return [Boolean]
     def graph?
@@ -40,57 +46,121 @@ module RDF
     end
 
     ##
+    # Returns `true` if this is a named graph.
+    #
     # @return [Boolean]
-    def named?()   !unnamed? end
+    def named?
+      !unnamed?
+    end
 
     ##
+    # Returns `true` if this is a unnamed graph.
+    #
     # @return [Boolean]
-    def unnamed?() uri.nil? end
+    def unnamed?
+      context.nil?
+    end
 
     ##
+    # Returns all unique RDF contexts for this graph.
+    #
+    # @return [Array<Resource>]
+    def contexts
+      named? ? [context] : []
+    end
+
+    ##
+    # Returns the URI representation of this graph.
+    #
+    # @return [URI]
+    def to_uri
+      context
+    end
+
+    ##
+    # Returns a string representation of this graph.
+    #
+    # @return [String]
+    def to_s
+      named? ? context.to_s : "<>"
+    end
+
+    ##
+    # Returns `true` if this graph contains no RDF statements.
+    #
+    # @return [Boolean]
+    # @see    RDF::Enumerable#empty?
+    def empty?
+      @data.empty?
+    end
+
+    ##
+    # Returns the number of RDF statements in this graph.
+    #
     # @return [Integer]
-    def size() @data.size end
+    # @see    RDF::Enumerable#count
+    def count
+      @data.size
+    end
 
     ##
-    # @yield [statement]
-    # @yieldparam [Array<Statement>]
-    # @return [Graph]
+    # Returns `true` if this graph contains the given RDF statement.
+    #
+    # @param  [Statement] statement
+    # @return [Boolean]
+    # @see    RDF::Enumerable#has_statement?
+    def has_statement?(statement)
+      statement = statement.dup
+      statement.context = context
+      @data.include?(statement)
+    end
+
+    ##
+    # Enumerates each RDF statement in this graph.
+    #
+    # @yield  [statement]
+    # @yieldparam [Statement] statement
+    # @return [Enumerator]
+    # @see    RDF::Enumerable#each_statement
     def each(&block)
       @data.each(&block)
     end
 
     ##
-    # @return [Resource]
-    def context
-      uri
+    # Inserts the given RDF statement into the graph.
+    #
+    # @param  [RDF::Statement] statement
+    # @return [void]
+    # @see    RDF::Mutable#insert
+    def insert_statement(statement)
+      statement = statement.dup
+      statement.context = context
+      @data.push(statement.dup) unless @data.include?(statement)
     end
 
     ##
-    # @return [Array<Resource>]
-    def contexts
-      named? ? [uri] : []
+    # Deletes the given RDF statement from the graph.
+    #
+    # @param  [RDF::Statement] statement
+    # @return [void]
+    # @see    RDF::Mutable#delete
+    def delete_statement(statement)
+      statement = statement.dup
+      statement.context = context
+      @data.delete(statement)
     end
 
     ##
-    # @param  [Statement, Array(Value)]
-    # @return [Graph]
-    def <<(statement)
-      @data << case statement
-        when Array     then Statement.new(*statement)
-        when Statement then statement
-        else statement
-      end
-      self
+    # Deletes all RDF statements from this graph.
+    #
+    # @return [void]
+    # @see    RDF::Mutable#clear
+    def clear_statements
+      @data.clear
     end
 
-    ##
-    # @return [URI]
-    def to_uri() uri end
-
-    ##
-    # @return [String]
-    def to_s
-      named? ? uri.to_s : "<>"
-    end
+    protected :insert_statement
+    protected :delete_statement
+    protected :clear_statements
   end
 end
