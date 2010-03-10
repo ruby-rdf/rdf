@@ -1,15 +1,11 @@
 RDF.rb: RDF API for Ruby
 ========================
 
-This is a pure-Ruby library for working with Resource Description Framework
-(RDF) data.
+This is a pure-Ruby library for working with [Resource Description Framework
+(RDF)][RDF] data.
 
 * <http://github.com/bendiken/rdf>
-
-### About the Resource Description Framework (RDF)
-
-* <http://www.w3.org/RDF/>
-* <http://en.wikipedia.org/wiki/Resource_Description_Framework>
+* <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 
 Examples
 --------
@@ -162,3 +158,5 @@ License
 
 RDF.rb is free and unencumbered public domain software. For more
 information, see <http://unlicense.org/> or the accompanying UNLICENSE file.
+
+[RDF]: http://www.w3.org/RDF/
