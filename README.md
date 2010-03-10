@@ -1,5 +1,5 @@
-RDF.rb: RDF API for Ruby
-========================
+RDF.rb: RDF for Ruby
+====================
 
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
