@@ -1,4 +1,4 @@
---title "RDF.rb: RDF API for Ruby"
+--title "RDF.rb: RDF for Ruby"
 --output-dir doc/yard
 --protected
 --no-private
