@@ -5,17 +5,6 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix doap: <http://usefulinc.com/ns/doap#> .
 
-<http://ar.to/#self> a foaf:Person ;
-  foaf:name          "Arto Bendiken" ;
-  foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
-  foaf:made          <> ;
-  rdfs:seeAlso       <http://datagraph.org/bendiken/foaf> .
-
-<http://bhuga.net/#ben> a foaf:Person ;
-  foaf:name          "Ben Lavender" ;
-  foaf:mbox          <mailto:blavender@gmail.com> ;
-  rdfs:seeAlso       <http://datagraph.org/bhuga/foaf> .
-
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
   doap:homepage      <http://rdf.rubyforge.org/> ;
@@ -32,3 +21,14 @@
   doap:documenter    <http://ar.to/#self> ;
   foaf:maker         <http://ar.to/#self> ;
   dc:creator         <http://ar.to/#self> .
+
+<http://ar.to/#self> a foaf:Person ;
+  foaf:name          "Arto Bendiken" ;
+  foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
+  foaf:made          <> ;
+  rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
+
+<http://bhuga.net/#ben> a foaf:Person ;
+  foaf:name          "Ben Lavender" ;
+  foaf:mbox          <mailto:blavender@gmail.com> ;
+  rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
