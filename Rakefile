@@ -6,3 +6,8 @@ begin
 rescue LoadError => e
 end
 require 'rdf'
+
+desc "Generate etc/doap.nt from etc/doap.ttl."
+task :doap do
+  sh "rapper -i turtle -o ntriples etc/doap.ttl | sort > etc/doap.nt"
+end
