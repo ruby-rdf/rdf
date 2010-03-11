@@ -9,6 +9,7 @@
 <http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/name> "Ben Lavender" .
 <http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://ar.to/> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://blog.datagraph.org/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#bug-database> <http://github.com/bendiken/rdf/issues> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#created> "2007-10-23" .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .

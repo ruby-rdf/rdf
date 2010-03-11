@@ -15,7 +15,7 @@
   doap:platform      "Ruby" ;
   doap:download-page <http://rubyforge.org/projects/rdf/> ;
   doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
-  doap:blog          <http://ar.to/> ;
+  doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben> ;
   doap:maintainer    <http://ar.to/#self> ;
   doap:documenter    <http://ar.to/#self> ;
