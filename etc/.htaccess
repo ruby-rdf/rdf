@@ -1,0 +1,26 @@
+# Turtle
+AddType    text/turtle .ttl
+AddCharset UTF-8 .ttl
+
+# Notation3
+AddType    text/n3 .n3
+AddCharset UTF-8 .n3
+
+# N-Triples
+AddType    text/plain .nt
+AddCharset US-ASCII .nt
+
+# RDF/XML
+AddType    application/rdf+xml .rdf
+AddCharset UTF-8 .rdf
+
+# RDF/JSON
+AddType    application/json .json
+AddCharset UTF-8 .json
+
+# TriX
+AddType    application/trix .xml
+AddCharset UTF-8 .xml
+
+# HTTP content negotiation
+Options +MultiViews +FollowSymlinks
