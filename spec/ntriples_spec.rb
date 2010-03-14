@@ -3,7 +3,7 @@ require 'rdf/ntriples'
 
 describe RDF::NTriples do
   before :all do
-    @testfile = File.join(File.dirname(__FILE__),"data","test.nt")
+    @testfile = File.join(File.dirname(__FILE__), 'data', 'test.nt')
   end
 
   before :each do
@@ -17,11 +17,11 @@ describe RDF::NTriples do
     end
 
     it "should accept IO streams" do
-      lambda { @reader.new(StringIO.new("")) }.should_not raise_error
+      lambda { @reader.new(StringIO.new('')) }.should_not raise_error
     end
 
     it "should accept strings" do
-      lambda { @reader.new("") }.should_not raise_error
+      lambda { @reader.new('') }.should_not raise_error
     end
   end
 
@@ -55,15 +55,36 @@ describe RDF::NTriples do
       p = RDF::DC.creator
       o = RDF::URI.parse("http://ar.to/#self")
       @stmt = RDF::Statement.new(s, p, o)
-      @stmt_string = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .\n"
+      @stmt_string = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
     end
 
-    it "should output a statement to a string buffer" do
-      output = @writer.buffer do |writer|
-        writer << @stmt
-      end
-      output.should == @stmt_string
+    it "should correctly format statements" do
+      @writer.new.format_statement(@stmt).should == @stmt_string
     end
 
+    it "should correctly format blank nodes" do
+      @writer.new.format_node(RDF::Node.new('foobar')).should == '_:foobar'
+    end
+
+    it "should correctly format URI references" do
+      @writer.new.format_uri(RDF::URI.new('http://rdf.rubyforge.org/')).should == '<http://rdf.rubyforge.org/>'
+    end
+
+    it "should correctly format plain literals" do
+      @writer.new.format_literal(RDF::Literal.new('Hello, world!')).should == '"Hello, world!"'
+    end
+
+    it "should correctly format language-tagged literals" do
+      @writer.new.format_literal(RDF::Literal.new('Hello, world!', :language => :en)).should == '"Hello, world!"@en'
+    end
+
+    it "should correctly format datatyped literals" do
+      @writer.new.format_literal(RDF::Literal.new(3.1415)).should == '"3.1415"^^<http://www.w3.org/2001/XMLSchema#double>'
+    end
+
+    it "should correctly output statements to a string buffer" do
+      output = @writer.buffer { |writer| writer << @stmt }
+      output.should == "#{@stmt_string}\n"
+    end
   end
 end
