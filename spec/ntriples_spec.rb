@@ -56,6 +56,8 @@ describe RDF::NTriples do
       o = RDF::URI.parse("http://ar.to/#self")
       @stmt = RDF::Statement.new(s, p, o)
       @stmt_string = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
+      @graph = RDF::Graph.new
+      @graph << @stmt
     end
 
     it "should correctly format statements" do
@@ -85,6 +87,20 @@ describe RDF::NTriples do
     it "should correctly output statements to a string buffer" do
       output = @writer.buffer { |writer| writer << @stmt }
       output.should == "#{@stmt_string}\n"
+    end
+
+    it "should dump statements to a string buffer" do
+      output = StringIO.new
+      @writer.dump(@graph,output)
+      output.string.should == "#{@stmt_string}\n"
+    end
+
+    it "should dump statements to a file" do
+      file = File.join(Dir.tmpdir, "test.nt")
+      puts "tested #{file}"
+      @writer.dump(@graph,file)
+      IO.readlines(file).to_s.should == "#{@stmt_string}\n"
+      File.unlink file
     end
   end
 end

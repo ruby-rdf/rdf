@@ -97,11 +97,13 @@ module RDF
     end
 
     def self.dump(data, io = nil, options = {})
+      io = File.open(io,'w') if io.is_a? String
       if io
         new(io) do |writer|
           data.each_statement do |statement|
             writer << statement
           end
+          writer.flush
         end
       else
         buffer do |writer|
@@ -257,6 +259,21 @@ module RDF
     def format_literal(value, options = {})
       raise NotImplementedError # override in subclasses
     end
+
+    ##
+    # Flush the output buffer
+    # @example
+    #     writer = RDF::Writer.for(:ntriples).new(File.new('./file.nt','w'))
+    #     s = RDF::URI.new("http://rubygems.org/gems/rdf")
+    #     o = RDF::URI.new("http://ar.to/#self")
+    #     statement = RDF::Statement.new(s, RDF::DC.author, o)
+    #     writer.write_statement statement
+    #     writer.flush
+    #     => #<File:./file.nt>
+    def flush
+      @output.flush
+    end
+    alias_method :flush!, :flush
 
     protected
 
