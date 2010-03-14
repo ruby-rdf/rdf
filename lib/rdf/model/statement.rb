@@ -228,7 +228,10 @@ module RDF
           when RDF::URI     then "<#{object}>"
           else object.inspect
         end
-        buffer << " ."
+        buffer << case context
+          when nil then " ."
+          else " <#{context}> ."
+        end
         buffer.string
       end
     end
