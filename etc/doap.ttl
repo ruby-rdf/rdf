@@ -13,9 +13,11 @@
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:created       "2007-10-23" ;
   doap:platform      "Ruby" ;
+  doap:category      <http://dbpedia.org/resource/Resource_Description_Framework> ;
   doap:download-page <http://rubyforge.org/projects/rdf/> ;
   doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
+  doap:vendor        <http://datagraph.org/> ;
   doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben> ;
   doap:maintainer    <http://ar.to/#self> ;
   doap:documenter    <http://ar.to/#self> ;
@@ -25,10 +27,12 @@
 <http://ar.to/#self> a foaf:Person ;
   foaf:name          "Arto Bendiken" ;
   foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
+  foaf:homepage      <http://ar.to/> ;
   foaf:made          <> ;
   rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
 
 <http://bhuga.net/#ben> a foaf:Person ;
   foaf:name          "Ben Lavender" ;
   foaf:mbox          <mailto:blavender@gmail.com> ;
+  foaf:homepage      <http://bhuga.net/> ;
   rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
