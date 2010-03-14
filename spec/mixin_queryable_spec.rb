@@ -20,6 +20,10 @@ describe RDF::Queryable do
       lambda { @queryable.query([nil, nil, nil]) }.should_not raise_error(ArgumentError)
     end
 
+    it "should accept a hash argument" do
+      lambda { @queryable.query({}) }.should_not raise_error(ArgumentError)
+    end
+
     it "should accept a statement argument" do
       lambda { @queryable.query(RDF::Statement.new(nil, nil, nil)) }.should_not raise_error(ArgumentError)
     end
@@ -39,12 +43,20 @@ describe RDF::Queryable do
       end
     end
 
-    it "should return the correct number of results" do
+    it "should return the correct number of results for array queries" do
       @queryable.query([nil, nil, nil]).size.should == File.readlines("etc/doap.nt").size
       @queryable.query([@subject, nil, nil]).size.should == File.readlines("etc/doap.nt").grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
       @queryable.query([@subject, RDF::DOAP.name, nil]).size.should == 1
       @queryable.query([@subject, RDF::DOAP.developer, nil]).size.should == @queryable.query([nil, nil, RDF::FOAF.Person]).size
       @queryable.query([nil, nil, RDF::DOAP.Project]).size.should == 1
+    end
+
+    it "should return the correct number of results for hash queries" do
+      @queryable.query({}).size.should == File.readlines("etc/doap.nt").size
+      @queryable.query(:subject => @subject) .size.should == File.readlines("etc/doap.nt").grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
+      @queryable.query(:subject => @subject, :predicate => RDF::DOAP.name).size.should == 1
+      @queryable.query(:subject => @subject, :predicate => RDF::DOAP.developer).size.should == @queryable.query(:object => RDF::FOAF.Person).size
+      @queryable.query(:object => RDF::DOAP.Project).size.should == 1
     end
   end
 end
