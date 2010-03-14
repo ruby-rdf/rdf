@@ -2,6 +2,27 @@ module RDF::NTriples
   ##
   # N-Triples serializer.
   #
+  # @example Obtaining an NTriples writer class
+  #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer
+  #   RDF::Writer.for("etc/test.nt")
+  #   RDF::Writer.for(:file_name      => "etc/test.nt")
+  #   RDF::Writer.for(:file_extension => "nt")
+  #   RDF::Writer.for(:content_type   => "text/plain")
+  #
+  # @example Serializing RDF statements into an NTriples file
+  #   RDF::NTriples::Writer.open("etc/test.nt") do |writer|
+  #     graph.each_statement do |statement|
+  #       writer << statement
+  #     end
+  #   end
+  #
+  # @example Serializing RDF statements into an NTriples string
+  #   RDF::NTriples::Writer.buffer do |writer|
+  #     graph.each_statement do |statement|
+  #       writer << statement
+  #     end
+  #   end
+  #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Writer < RDF::Writer
     format RDF::NTriples::Format

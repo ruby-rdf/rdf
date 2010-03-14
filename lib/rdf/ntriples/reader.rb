@@ -2,8 +2,23 @@ module RDF::NTriples
   ##
   # N-Triples parser.
   #
-  # @example Reading N-Triples data
-  #   RDF::NTriples::Reader.open("spec/data/test.nt") do |reader|
+  # @example Obtaining an RDF/NTriples reader class
+  #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
+  #   RDF::Reader.for("etc/doap.nt")
+  #   RDF::Reader.for(:file_name      => "etc/doap.nt")
+  #   RDF::Reader.for(:file_extension => "nt")
+  #   RDF::Reader.for(:content_type   => "text/plain")
+  #
+  # @example Parsing RDF statements from an NTriples file
+  #   RDF::NTriples::Reader.open("etc/doap.nt") do |reader|
+  #     reader.each_statement do |statement|
+  #       puts statement.inspect
+  #     end
+  #   end
+  #
+  # @example Parsing RDF statements from an NTriples string
+  #   data = StringIO.new(File.read("etc/doap.nt"))
+  #   RDF::NTriples::Reader.new(data) do |reader|
   #     reader.each_statement do |statement|
   #       puts statement.inspect
   #     end
