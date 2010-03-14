@@ -2,7 +2,7 @@ module RDF::NTriples
   ##
   # N-Triples parser.
   #
-  # @example Obtaining an RDF/NTriples reader class
+  # @example Obtaining an NTriples reader class
   #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
   #   RDF::Reader.for("etc/doap.nt")
   #   RDF::Reader.for(:file_name      => "etc/doap.nt")
