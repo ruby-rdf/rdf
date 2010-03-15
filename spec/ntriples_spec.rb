@@ -84,23 +84,22 @@ describe RDF::NTriples do
       @writer.new.format_literal(RDF::Literal.new(3.1415)).should == '"3.1415"^^<http://www.w3.org/2001/XMLSchema#double>'
     end
 
-    it "should correctly output statements to a string buffer" do
+    it "should output statements to a string buffer" do
       output = @writer.buffer { |writer| writer << @stmt }
       output.should == "#{@stmt_string}\n"
     end
 
     it "should dump statements to a string buffer" do
       output = StringIO.new
-      @writer.dump(@graph,output)
+      @writer.dump(@graph, output)
       output.string.should == "#{@stmt_string}\n"
     end
 
     it "should dump statements to a file" do
-      file = File.join(Dir.tmpdir, "test.nt")
-      puts "tested #{file}"
-      @writer.dump(@graph,file)
-      IO.readlines(file).to_s.should == "#{@stmt_string}\n"
-      File.unlink file
+      require 'tmpdir' # for Dir.tmpdir
+      @writer.dump(@graph, filename = File.join(Dir.tmpdir, "test.nt"))
+      File.read(filename).should == "#{@stmt_string}\n"
+      File.unlink(filename)
     end
   end
 end

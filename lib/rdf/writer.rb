@@ -97,7 +97,7 @@ module RDF
     end
 
     def self.dump(data, io = nil, options = {})
-      io = File.open(io,'w') if io.is_a? String
+      io = File.open(io, 'w') if io.is_a?(String)
       if io
         new(io) do |writer|
           data.each_statement do |statement|
@@ -261,18 +261,13 @@ module RDF
     end
 
     ##
-    # Flush the output buffer
-    # @example
-    #     writer = RDF::Writer.for(:ntriples).new(File.new('./file.nt','w'))
-    #     s = RDF::URI.new("http://rubygems.org/gems/rdf")
-    #     o = RDF::URI.new("http://ar.to/#self")
-    #     statement = RDF::Statement.new(s, RDF::DC.author, o)
-    #     writer.write_statement statement
-    #     writer.flush
-    #     => #<File:./file.nt>
+    # Flushes the underlying output buffer.
+    #
+    # @return [void]
     def flush
-      @output.flush
+      @output.flush if @output.respond_to?(:flush)
     end
+
     alias_method :flush!, :flush
 
     protected

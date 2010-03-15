@@ -13,14 +13,14 @@ module RDF
     ##
     # Queries `self` for RDF statements matching the given pattern.
     #
-    # @param  [Query, Statement, Hash, Array(Value)] pattern
+    # @example
+    #     queryable.query([nil, RDF::DOAP.developer, nil])
+    #     queryable.query(:predicate => RDF::DOAP.developer)
+    #
+    # @param  [Query, Statement, Array(Value), Hash] pattern
     # @yield  [statement]
     # @yieldparam [Statement]
-    # @return [Array<Statement>, nil]
-    # @example
-    #     queryable.query(RDF::Statement.new(:predicate => RDF::DOAP.developer))
-    #     queryable.query([nil,RDF::DOAP.developer,nil])
-    #     queryable.query( :predicate => RDF::DOAP.developer )
+    # @return [Array<Statement>]
     def query(pattern, &block)
       raise TypeError.new("#{self} is not readable") if respond_to?(:readable) && !readable?
 
@@ -38,7 +38,7 @@ module RDF
             find_all { |statement| pattern === statement }.extend(RDF::Enumerable, RDF::Queryable)
           end
         else
-          raise ArgumentError.new("expected RDF::Query, RDF::Pattern, Hash, or Array; got #{pattern.inspect}")
+          raise ArgumentError.new("expected RDF::Query, RDF::Pattern, Array or Hash, but got #{pattern.inspect}")
       end
     end
   end
