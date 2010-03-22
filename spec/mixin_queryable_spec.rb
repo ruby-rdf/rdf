@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Queryable do
   before :each do
-    @statements = RDF::NTriples::Reader.new(File.open("etc/doap.nt")).to_a
+    @statements = RDF::NTriples::Reader.new(File.open(etc_file("doap.nt"))).to_a
     @queryable  = @statements.extend(RDF::Queryable)
     @subject    = RDF::URI.new("http://rubygems.org/gems/rdf")
   end
@@ -44,16 +44,16 @@ describe RDF::Queryable do
     end
 
     it "should return the correct number of results for array queries" do
-      @queryable.query([nil, nil, nil]).size.should == File.readlines("etc/doap.nt").size
-      @queryable.query([@subject, nil, nil]).size.should == File.readlines("etc/doap.nt").grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
+      @queryable.query([nil, nil, nil]).size.should == File.readlines(etc_file("doap.nt")).size
+      @queryable.query([@subject, nil, nil]).size.should == File.readlines(etc_file("doap.nt")).grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
       @queryable.query([@subject, RDF::DOAP.name, nil]).size.should == 1
       @queryable.query([@subject, RDF::DOAP.developer, nil]).size.should == @queryable.query([nil, nil, RDF::FOAF.Person]).size
       @queryable.query([nil, nil, RDF::DOAP.Project]).size.should == 1
     end
 
     it "should return the correct number of results for hash queries" do
-      @queryable.query({}).size.should == File.readlines("etc/doap.nt").size
-      @queryable.query(:subject => @subject) .size.should == File.readlines("etc/doap.nt").grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
+      @queryable.query({}).size.should == File.readlines(etc_file("doap.nt")).size
+      @queryable.query(:subject => @subject) .size.should == File.readlines(etc_file("doap.nt")).grep(/^<http:\/\/rubygems\.org\/gems\/rdf>/).size
       @queryable.query(:subject => @subject, :predicate => RDF::DOAP.name).size.should == 1
       @queryable.query(:subject => @subject, :predicate => RDF::DOAP.developer).size.should == @queryable.query(:object => RDF::FOAF.Person).size
       @queryable.query(:object => RDF::DOAP.Project).size.should == 1
