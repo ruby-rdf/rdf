@@ -39,6 +39,7 @@ module RDF
       count = 0
       Reader.open(filename, options) do |reader|
         reader.each_statement do |statement|
+          statement.context = options[:context] if options[:context]
           insert_statement(statement)
           count += 1
         end
