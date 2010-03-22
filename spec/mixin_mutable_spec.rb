@@ -3,7 +3,7 @@ require 'rdf/ntriples'
 
 describe RDF::Mutable do
   before :each do
-    @filename   = "etc/doap.nt"
+    @filename   = etc_file("doap.nt")
     # Possible reference implementations are RDF::Repository and RDF::Graph.
     @repo       = RDF::Repository.new
     @subject    = RDF::URI.new("http://rubygems.org/gems/rdf")
