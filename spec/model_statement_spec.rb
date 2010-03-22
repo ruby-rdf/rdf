@@ -113,4 +113,34 @@ describe RDF::Statement do
       @stmt.to_s.should eql(@n3)
     end
   end
+
+  context "when comparing equality" do
+    before :each do
+      @c = RDF::URI.parse("http://example.org/context")
+      @other_stmt = RDF::Statement.new(@s, @p, @o, :context => @c)
+    end
+
+    it "should == regardless of context" do
+      @stmt.should == @other_stmt
+    end
+
+    it "should not be eql? with differing contexts" do
+      @stmt.should_not be_eql @other_stmt
+    end
+
+    it "should match (===) a statement with a missing component to one with that component" do
+      @stmt.should === @other_stmt
+    end
+
+    it "should not match (===) a statement with a component to one which is missing that component" do
+      @other_stmt.should_not === @stmt
+    end
+
+    it "should only equals? with object equality" do
+      @same_stmt = RDF::Statement.new @s, @p, @o
+      @stmt.should_not equal @same_stmt
+      @stmt.should equal @stmt
+    end
+
+  end
 end

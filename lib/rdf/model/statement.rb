@@ -143,7 +143,7 @@ module RDF
     # @param  [Statement] other
     # @return [Boolean]
     def eql?(other)
-      other.is_a?(Statement) && self == other
+      other.is_a?(Statement) && self == other && self.context == other.context
     end
 
     ##
