@@ -157,6 +157,7 @@ module RDF
     # @param  [Statement] other
     # @return [Boolean]
     def ===(other)
+      return false if has_context?   && context   != other.context
       return false if has_subject?   && subject   != other.subject
       return false if has_predicate? && predicate != other.predicate
       return false if has_object?    && object    != other.object
