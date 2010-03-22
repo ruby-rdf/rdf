@@ -10,7 +10,7 @@ describe RDF::Query do
 
   context "solution modifiers" do
     before :each do
-      @graph = RDF::Repository.load("spec/data/test.nt")
+      @graph = RDF::Repository.load(fixture("/test.nt"))
       @query = RDF::Query.new(:solutions => @graph.map { |stmt| stmt.to_hash(:s, :p, :o) })
     end
 

@@ -3,7 +3,7 @@ require 'rdf/spec/enumerable'
 
 describe RDF::Enumerable do
   before :each do
-    @statements = RDF::NTriples::Reader.new(File.open("etc/doap.nt")).to_a
+    @statements = RDF::NTriples::Reader.new(File.open(etc_file("doap.nt"))).to_a
     @enumerable = @statements.dup.extend(RDF::Enumerable)
   end
 

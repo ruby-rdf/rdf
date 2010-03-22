@@ -3,7 +3,7 @@ require 'rdf/ntriples'
 
 describe RDF::NTriples do
   before :all do
-    @testfile = File.join(File.dirname(__FILE__), 'data', 'test.nt')
+    @testfile = fixture 'test.nt'
   end
 
   before :each do
