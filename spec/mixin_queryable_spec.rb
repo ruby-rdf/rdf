@@ -58,5 +58,13 @@ describe RDF::Queryable do
       @queryable.query(:subject => @subject, :predicate => RDF::DOAP.developer).size.should == @queryable.query(:object => RDF::FOAF.Person).size
       @queryable.query(:object => RDF::DOAP.Project).size.should == 1
     end
+
+    it "should not alter a given hash argument" do
+      query = { :subject => @subject, :predicate => RDF::DOAP.name, :object => RDF::FOAF.Person }
+      original_query = query.dup
+      result = @queryable.query(query)
+      query.should == original_query
+    end
+
   end
 end
