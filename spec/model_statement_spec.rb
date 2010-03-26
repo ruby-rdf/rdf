@@ -9,6 +9,29 @@ describe RDF::Statement do
     @stmt = RDF::Statement.new(@s, @p, @o)
   end
 
+  context "when initializing" do
+    it "should be instantiable with a hash argument" do
+      lambda { RDF::Statement.new(:subject => @s,
+                                  :predicate => @p,
+                                  :object => @o) }.should_not raise_error(ArgumentError)
+
+    end
+
+    it "should not alter a hash argument" do
+      hash = { :subject => @s, :predicate => @p, :object => @o }
+      original_hash = hash.dup
+      stmt = RDF::Statement.new(hash)
+      original_hash.should == hash
+    end
+
+    it "should not alter its options argument" do
+      options = { :context => RDF::DOAP.name }
+      original_options = options.dup
+      stmt = RDF::Statement.new(@s, @p, @o, options)
+      options.should == original_options
+    end
+  end
+
   context "when created" do
     it "should not require arguments" do
       lambda { RDF::Statement.new }.should_not raise_error(ArgumentError)

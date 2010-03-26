@@ -49,9 +49,10 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [Resource]       :context   (nil)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
+      options = options.dup unless options.empty?
       case subject
         when Hash
-          options    = subject
+          options    = subject.dup
           subject    = options.delete(:subject)
           predicate  = options.delete(:predicate)
           object     = options.delete(:object)
