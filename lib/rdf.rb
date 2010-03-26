@@ -1,3 +1,4 @@
+require 'open-uri'
 require 'rdf/version'
 
 module RDF
