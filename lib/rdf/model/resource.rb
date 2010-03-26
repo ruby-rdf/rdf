@@ -4,7 +4,20 @@ module RDF
   #
   # @abstract
   class Resource < Value
-    # Prevent instantiation of this class.
-    private_class_method :new
+    ##
+    # Instantiates an {RDF::Node} or an {RDF::URI}, depending on the given
+    # argument.
+    #
+    # @return [RDF::Resource]
+    def self.new(*args, &block)
+      if self == Resource
+        case arg = args.shift
+          when /^_:(.*)$/ then Node.new($1, *args, &block)
+          else URI.new(arg, *args, &block)
+        end
+      else
+        super
+      end
+    end
   end
 end
