@@ -104,7 +104,7 @@ module RDF
     # @yieldparam [Reader]
     # @raise  [FormatError] if no reader available for the specified format
     def self.open(filename, options = {}, &block)
-      File.open(filename, 'rb') do |file|
+      Kernel.open(filename, 'rb') do |file|
         if reader = self.for(options[:format] || filename)
           reader.new(file, options, &block)
         else
