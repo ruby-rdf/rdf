@@ -147,8 +147,8 @@ See Also
 * [RDFcache](http://rdfcache.rubyforge.org/)
 * [Trinity](http://trinity.datagraph.org/)
 
-Author
-------
+Authors
+-------
 
 * [Arto Bendiken](mailto:arto.bendiken@gmail.com) - <http://ar.to/>
 * [Ben Lavender](mailto:blavender@gmail.com) - <http://bhuga.net/>
