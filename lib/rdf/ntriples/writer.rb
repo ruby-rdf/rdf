@@ -28,6 +28,22 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     ##
+    # Returns the serialized N-Triples representation of the given RDF
+    # value.
+    #
+    # @param  [RDF::Value] value
+    # @return [String]
+    def self.serialize(value)
+      writer = self.new
+      case value
+        when RDF::Statement
+          writer.format_statement(value) + "\n"
+        else
+          writer.format_value(value)
+      end
+    end
+
+    ##
     # Outputs an N-Triples comment line.
     #
     # @param  [String] text
