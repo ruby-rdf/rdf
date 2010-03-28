@@ -29,40 +29,66 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     ##
+    # Reconstructs an RDF value from its serialized N-Triples
+    # representation.
+    #
+    # @param  [String] data
+    # @return [RDF::Value]
+    def self.unserialize(data)
+      self.new(data).read_value
+    end
+
+    ##
+    # @return [RDF::Value]
+    def read_value
+      begin
+        read_statement
+      rescue RDF::ReaderError => e
+        read_uriref || read_bnode || read_literal
+      end
+    end
+
+    ##
     # @return [Array]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     def read_triple
       loop do
         readline.strip! # EOFError thrown on end of input
+        line = @line    # for backtracking input in case of parse error
 
-        unless blank? || read_comment
-          subject   = read_uriref || read_bnode || fail_subject
-          predicate = read_uriref || fail_predicate
-          object    = read_uriref || read_bnode || read_literal || fail_object
-          return [subject, predicate, object]
+        begin
+          unless blank? || read_comment
+            subject   = read_uriref || read_bnode || fail_subject
+            predicate = read_uriref || fail_predicate
+            object    = read_uriref || read_bnode || read_literal || fail_object
+            return [subject, predicate, object]
+          end
+        rescue RDF::ReaderError => e
+          @line = line  # this allows #read_value to work
+          raise e
         end
       end
     end
 
     ##
     # @return [Boolean]
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (comment)
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (comment)
     def read_comment
       match(/^#\s*(.*)$/)
     end
 
     ##
-    # @return [URI, nil]
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
+    # @return [URI]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
     def read_uriref
       if uri = match(/^<([^>]+)>/)
-        RDF::URI.parse(uri)
+        RDF::URI.new(uri)
       end
     end
 
     ##
-    # @return [Node, nil]
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (nodeID)
+    # @return [Node]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (nodeID)
     def read_bnode
       if node_id = match(/^_:([A-Za-z][A-Za-z0-9]*)/)
         @nodes[node_id] ||= RDF::Node.new(node_id)
@@ -70,8 +96,8 @@ module RDF::NTriples
     end
 
     ##
-    # @return [String, Literal, nil]
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
+    # @return [Literal]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
     def read_literal
       if literal = match(/^"((?:\\"|[^"])*)"/)
         literal = unescaped(literal)
@@ -89,7 +115,7 @@ module RDF::NTriples
     ##
     # @param  [String] string
     # @return [String]
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     def unescaped(string)
       ["\t", "\n", "\r", "\"", "\\"].each do |escape|
         string.gsub!(escape.inspect[1...-1], escape)

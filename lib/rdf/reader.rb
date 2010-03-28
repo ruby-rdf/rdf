@@ -138,25 +138,32 @@ module RDF
     ##
     # @yield  [statement]
     # @yieldparam [Statement]
-    # @return [Reader]
+    # @return [Enumerator]
     def each_statement(&block)
-      each_triple { |*triple| block.call(Statement.new(*triple)) }
-      self
+      begin
+        loop { block.call(read_statement) }
+      rescue EOFError => e
+      end
     end
 
     ##
     # @yield  [triple]
     # @yieldparam [Array(Value)]
-    # @return [Reader]
+    # @return [Enumerator]
     def each_triple(&block)
       begin
         loop { block.call(*read_triple) }
       rescue EOFError => e
       end
-      self
     end
 
     protected
+
+      ##
+      # @raise [NotImplementedError] unless implemented in subclass
+      def read_statement
+        Statement.new(*read_triple)
+      end
 
       ##
       # @raise [NotImplementedError] unless implemented in subclass
