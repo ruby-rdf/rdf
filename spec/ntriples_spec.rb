@@ -47,6 +47,27 @@ describe RDF::NTriples do
     it "should parse W3C's test data" do
       lambda { @reader.new(File.open(@testfile)).to_a.size.should == 30 }.should_not raise_error # FIXME
     end
+
+    it "should parse components" do
+      bnode = @reader.unserialize('_:foobar')
+      bnode.should_not be_nil
+      bnode.should be_a_node
+      bnode.id.should == 'foobar'
+
+      uri = @reader.unserialize('<http://ar.to/#self>')
+      uri.should_not be_nil
+      uri.should be_a_uri
+      uri.to_s.should == 'http://ar.to/#self'
+
+      hello = @reader.unserialize('"Hello"')
+      hello.should_not be_nil
+      hello.should be_a_literal
+      hello.value.should == 'Hello'
+
+      stmt = @reader.unserialize("<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .")
+      stmt.should_not be_nil
+      stmt.should be_a_statement
+    end
   end
 
   context "when writing" do
