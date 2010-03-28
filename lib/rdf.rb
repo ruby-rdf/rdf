@@ -29,6 +29,7 @@ module RDF
 
   # RDF serialization formats
   autoload :NTriples,   'rdf/ntriples'
+  autoload :NQuads,     'rdf/nquads'
 
   # RDF storage
   autoload :Repository, 'rdf/repository'
