@@ -89,9 +89,9 @@ module RDF
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(options = {}, &block)
-      @uri     = options.delete(:uri)
-      @title   = options.delete(:title)
-      @options = options
+      @options = options.dup
+      @uri     = @options.delete(:uri)
+      @title   = @options.delete(:title)
 
       # Provide a default in-memory implementation:
       if self.class.equal?(RDF::Repository)
