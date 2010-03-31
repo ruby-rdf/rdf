@@ -49,17 +49,17 @@ Examples
 Documentation
 -------------
 
-* <http://rdf.rubyforge.org/>
+<http://rdf.rubyforge.org/>
 
 ### RDF Object Model
 
-* {RDF::Graph}
-* {RDF::Literal}
-* {RDF::Node}
-* {RDF::Resource}
-* {RDF::Statement}
-* {RDF::URI}
 * {RDF::Value}
+  * {RDF::Literal}
+  * {RDF::Resource}
+    * {RDF::Node}
+    * {RDF::URI}
+    * {RDF::Graph}
+  * {RDF::Statement}
 
 ### RDF Serialization
 
@@ -70,13 +70,17 @@ Documentation
 ### RDF Serialization Formats
 
 * {RDF::NTriples}
-* [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
-* [RDF::Trix](http://rdf.rubyforge.org/trix/) (plugin)
+* [`RDF::JSON`](http://rdf.rubyforge.org/json/) (plugin)
+* [`RDF::Trix`](http://rdf.rubyforge.org/trix/) (plugin)
 
 ### RDF Storage
 
 * {RDF::Repository}
-* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
+  * {RDF::Enumerable}
+  * {RDF::Durable}
+  * {RDF::Mutable}
+  * {RDF::Queryable}
+* [`RDF::Sesame`](http://rdf.rubyforge.org/sesame/) (plugin)
 
 ### RDF Querying
 
@@ -140,11 +144,14 @@ Resources
 See Also
 --------
 
-* [DataMapper RDF.rb Adapter](http://dm-rdf.rubyforge.org/)
+* [RDF::BERT](http://rdf.rubyforge.org/bert/)
+* [RDF::Isomorphic](http://rdf.rubyforge.org/isomorphic/)
+* [RDF::Spec](http://rdf.rubyforge.org/spec/)
 * [RDFS.rb](http://rdfs.rubyforge.org/)
 * [RDFize](http://rdfize.rubyforge.org/)
 * [RDFbus](http://rdfbus.rubyforge.org/)
 * [RDFcache](http://rdfcache.rubyforge.org/)
+* [RDFgrid](http://rdfgrid.rubyforge.org/)
 * [Trinity](http://trinity.datagraph.org/)
 
 Authors
