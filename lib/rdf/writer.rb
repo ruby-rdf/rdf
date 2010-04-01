@@ -84,7 +84,7 @@ module RDF
     def self.format(klass = nil)
       if klass.nil?
         Format.each do |format|
-          if format.reader == self
+          if format.writer == self
             return format
           end
         end
