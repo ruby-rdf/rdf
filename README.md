@@ -72,6 +72,8 @@ Documentation
 * {RDF::NTriples}
 * [`RDF::JSON`](http://rdf.rubyforge.org/json/) (plugin)
 * [`RDF::Trix`](http://rdf.rubyforge.org/trix/) (plugin)
+* [`RDF::Raptor::RDFXML`](http://rdf.rubyforge.org/raptor/) (plugin)
+* [`RDF::Raptor::Turtle`](http://rdf.rubyforge.org/raptor/) (plugin)
 
 ### RDF Storage
 
