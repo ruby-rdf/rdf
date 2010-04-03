@@ -95,6 +95,7 @@ Documentation
   * {RDF::Durable}
   * {RDF::Mutable}
   * {RDF::Queryable}
+* [`RDF::DataObjects`](http://rdf.rubyforge.org/do/) (plugin)
 * [`RDF::Sesame`](http://rdf.rubyforge.org/sesame/) (plugin)
 
 ### RDF Querying
