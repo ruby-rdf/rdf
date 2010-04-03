@@ -28,6 +28,13 @@ module RDF::NTriples
   class Reader < RDF::Reader
     format RDF::NTriples::Format
 
+    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
+    COMMENT = /^#\s*(.*)$/
+    URIREF  = /^<([^>]+)>/
+    NODEID  = /^_:([A-Za-z][A-Za-z0-9]*)/
+    LITERAL = /^"((?:\\"|[^"])*)"/
+    LANGSTR = /^@([a-z]+[\-a-z0-9]*)/
+
     ##
     # Reconstructs an RDF value from its serialized N-Triples
     # representation.
@@ -77,14 +84,14 @@ module RDF::NTriples
     # @return [Boolean]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (comment)
     def read_comment
-      match(/^#\s*(.*)$/)
+      match(COMMENT)
     end
 
     ##
     # @return [URI]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
     def read_uriref
-      if uri = match(/^<([^>]+)>/)
+      if uri = match(URIREF)
         RDF::URI.new(uri)
       end
     end
@@ -93,7 +100,7 @@ module RDF::NTriples
     # @return [Node]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (nodeID)
     def read_bnode
-      if node_id = match(/^_:([A-Za-z][A-Za-z0-9]*)/)
+      if node_id = match(NODEID)
         @nodes[node_id] ||= RDF::Node.new(node_id)
       end
     end
@@ -102,10 +109,10 @@ module RDF::NTriples
     # @return [Literal]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
     def read_literal
-      if literal = match(/^"((?:\\"|[^"])*)"/)
+      if literal = match(LITERAL)
         literal = unescaped(literal)
 
-        if language = match(/^@([a-z]+[\-a-z0-9]*)/)
+        if language = match(LANGSTR)
           RDF::Literal.new(literal, :language => language)
         elsif datatype = match(/^(\^\^)/)
           RDF::Literal.new(literal, :datatype => read_uriref || fail_object)
