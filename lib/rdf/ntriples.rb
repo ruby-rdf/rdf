@@ -41,5 +41,25 @@ module RDF
     require 'rdf/ntriples/format'
     autoload :Reader, 'rdf/ntriples/reader'
     autoload :Writer, 'rdf/ntriples/writer'
+
+    ##
+    # Reconstructs an RDF value from its serialized N-Triples
+    # representation.
+    #
+    # @param  [String] data
+    # @return [RDF::Value]
+    def self.unserialize(data)
+      Reader.unserialize(data)
+    end
+
+    ##
+    # Returns the serialized N-Triples representation of the given RDF
+    # value.
+    #
+    # @param  [RDF::Value] value
+    # @return [String]
+    def self.serialize(value)
+      Writer.serialize(value)
+    end
   end
 end
