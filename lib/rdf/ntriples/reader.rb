@@ -35,7 +35,10 @@ module RDF::NTriples
     # @param  [String] data
     # @return [RDF::Value]
     def self.unserialize(data)
-      self.new(data).read_value
+      case data
+        when nil then nil
+        else self.new(data).read_value
+      end
     end
 
     ##

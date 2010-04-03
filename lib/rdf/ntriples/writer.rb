@@ -36,6 +36,7 @@ module RDF::NTriples
     def self.serialize(value)
       writer = self.new
       case value
+        when nil then nil
         when RDF::Statement
           writer.format_statement(value) + "\n"
         else
