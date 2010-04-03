@@ -10,13 +10,15 @@ This is a pure-Ruby library for working with [Resource Description Framework
 Features
 --------
 
-* 100% pure Ruby with minimal dependencies and no bloat whatsoever.
+* 100% pure Ruby with minimal dependencies and no bloat.
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing N-Triples out of the box, with more
   serialization format support available through add-on plugins.
 * Plays nice with others: entirely contained in the `RDF` module, and does
   not modify any of Ruby's core classes or standard library.
+* Based entirely on Ruby's autoloading, meaning that you can generally make
+  use of any one part of the library without needing to load up the rest.
 * Compatible with Ruby 1.8.x, Ruby 1.9.x, and JRuby (tested with JRuby 1.4).
 
 Examples
