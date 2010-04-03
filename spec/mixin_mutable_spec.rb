@@ -11,5 +11,4 @@ describe RDF::Mutable do
   end
 
   it_should_behave_like RDF_Mutable
-
 end
