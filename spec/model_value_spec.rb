@@ -1,21 +1,13 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe RDF::Value do
-  it "should not be instantiable" do
-    lambda { RDF::Value.new }.should raise_error(NoMethodError)
-  end
-end
+require 'rdf/spec/value'
 
 describe RDF::Resource do
-  it "should instantiate blank nodes" do
-    resource = RDF::Resource.new('_:foobar')
-    resource.class.should == RDF::Node
-    resource.id.should == 'foobar'
+
+  before :each do
+    @value    = Proc.new { | *args | RDF::Value.new(*args) }
+    @resource = Proc.new { | *args | RDF::Resource.new(*args) }
   end
 
-  it "should instantiate URIs" do
-    resource = RDF::Resource.new('http://rdf.rubyforge.org/')
-    resource.class.should == RDF::URI
-    resource.to_s.should == 'http://rdf.rubyforge.org/'
-  end
+  it_should_behave_like RDF_Value
 end
