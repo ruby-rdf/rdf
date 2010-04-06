@@ -56,7 +56,63 @@ module RDF
   autoload :XSD,        'rdf/vocab/xsd'
 
   ##
-  # @return [String] uri
+  # Alias for `RDF::Resource.new`.
+  #
+  # @return [RDF::Resource]
+  def self.Resource(*args, &block)
+    Resource.new(*args, &block)
+  end
+
+  ##
+  # Alias for `RDF::Node.new`.
+  #
+  # @return [RDF::Node]
+  def self.Node(*args, &block)
+    Node.new(*args, &block)
+  end
+
+  ##
+  # Alias for `RDF::URI.new`.
+  #
+  # @overload URI(uri)
+  #   @param  [URI, String, #to_s]    uri
+  #
+  # @overload URI(options = {})
+  #   @param  [Hash{Symbol => Object} options
+  #
+  # @return [RDF::URI]
+  def self.URI(*args, &block)
+    URI.new(*args, &block)
+  end
+
+  ##
+  # Alias for `RDF::Literal.new`.
+  #
+  # @return [RDF::Literal]
+  def self.Literal(*args, &block)
+    Literal.new(*args, &block)
+  end
+
+  ##
+  # Alias for `RDF::Graph.new`.
+  #
+  # @return [RDF::Graph]
+  def self.Graph(*args, &block)
+    Graph.new(*args, &block)
+  end
+
+  ##
+  # Alias for `RDF::Statement.new`.
+  #
+  # @return [RDF::Statement]
+  def self.Statement(*args, &block)
+    Statement.new(*args, &block)
+  end
+
+  ##
+  # Alias for `RDF::Vocabulary.create`.
+  #
+  # @param  [String] uri
   # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
