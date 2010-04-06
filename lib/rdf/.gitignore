@@ -1,3 +1,3 @@
-# Ignore any symlinks to a local copy of rdf-spec
+# Ignore any local symlinks to a development copy of RDF::Spec
 spec
 spec.rb

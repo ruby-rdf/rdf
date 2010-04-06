@@ -36,7 +36,7 @@ module RDF
     ##
     # @param  [#to_s] id
     def initialize(id = nil)
-      @id = (id || object_id).to_s
+      @id = (id || "g#{object_id}").to_s
     end
 
     ##

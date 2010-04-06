@@ -104,12 +104,12 @@ module RDF
     # @yieldparam [Reader]
     # @raise  [FormatError] if no reader available for the specified format
     def self.open(filename, options = {}, &block)
-      Kernel.open(filename, 'rb') do |file|
-        if reader = self.for(options[:format] || filename)
+      if reader = self.for(options[:format] || filename)
+        Kernel.open(filename, 'rb') do |file|
           reader.new(file, options, &block)
-        else
-          raise FormatError.new("unknown RDF format: #{options[:format] || filename}")
         end
+      else
+        raise FormatError.new("unknown RDF format: #{options[:format] || filename}")
       end
     end
 

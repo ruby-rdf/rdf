@@ -19,5 +19,13 @@ module RDF
         super
       end
     end
+
+    ##
+    # Returns `true` to indicate that this value is a resource.
+    #
+    # @return [Boolean]
+    def resource?
+      true
+    end
   end
 end

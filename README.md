@@ -7,6 +7,20 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <http://github.com/bendiken/rdf>
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 
+Features
+--------
+
+* 100% pure Ruby with minimal dependencies and no bloat.
+* 100% free and unencumbered [public domain](http://unlicense.org/) software.
+* Provides a clean, well-designed RDF object model and related APIs.
+* Supports parsing and serializing N-Triples out of the box, with more
+  serialization format support available through add-on plugins.
+* Plays nice with others: entirely contained in the `RDF` module, and does
+  not modify any of Ruby's core classes or standard library.
+* Based entirely on Ruby's autoloading, meaning that you can generally make
+  use of any one part of the library without needing to load up the rest.
+* Compatible with Ruby 1.8.x, Ruby 1.9.x, and JRuby (tested with JRuby 1.4).
+
 Examples
 --------
 
@@ -26,6 +40,7 @@ Examples
     
     DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
     FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+    RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
     RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
     RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
     OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
@@ -49,17 +64,17 @@ Examples
 Documentation
 -------------
 
-* <http://rdf.rubyforge.org/>
+<http://rdf.rubyforge.org/>
 
 ### RDF Object Model
 
-* {RDF::Graph}
-* {RDF::Literal}
-* {RDF::Node}
-* {RDF::Resource}
-* {RDF::Statement}
-* {RDF::URI}
 * {RDF::Value}
+  * {RDF::Literal}
+  * {RDF::Resource}
+    * {RDF::Node}
+    * {RDF::URI}
+    * {RDF::Graph}
+  * {RDF::Statement}
 
 ### RDF Serialization
 
@@ -70,13 +85,20 @@ Documentation
 ### RDF Serialization Formats
 
 * {RDF::NTriples}
-* [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
-* [RDF::Trix](http://rdf.rubyforge.org/trix/) (plugin)
+* [`RDF::JSON`](http://rdf.rubyforge.org/json/) (plugin)
+* [`RDF::Trix`](http://rdf.rubyforge.org/trix/) (plugin)
+* [`RDF::Raptor::RDFXML`](http://rdf.rubyforge.org/raptor/) (plugin)
+* [`RDF::Raptor::Turtle`](http://rdf.rubyforge.org/raptor/) (plugin)
 
 ### RDF Storage
 
 * {RDF::Repository}
-* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
+  * {RDF::Enumerable}
+  * {RDF::Durable}
+  * {RDF::Mutable}
+  * {RDF::Queryable}
+* [`RDF::DataObjects`](http://rdf.rubyforge.org/do/) (plugin)
+* [`RDF::Sesame`](http://rdf.rubyforge.org/sesame/) (plugin)
 
 ### RDF Querying
 
@@ -140,11 +162,14 @@ Resources
 See Also
 --------
 
-* [DataMapper RDF.rb Adapter](http://dm-rdf.rubyforge.org/)
+* [RDF::BERT](http://rdf.rubyforge.org/bert/)
+* [RDF::Isomorphic](http://rdf.rubyforge.org/isomorphic/)
+* [RDF::Spec](http://rdf.rubyforge.org/spec/)
 * [RDFS.rb](http://rdfs.rubyforge.org/)
 * [RDFize](http://rdfize.rubyforge.org/)
 * [RDFbus](http://rdfbus.rubyforge.org/)
 * [RDFcache](http://rdfcache.rubyforge.org/)
+* [RDFgrid](http://rdfgrid.rubyforge.org/)
 * [Trinity](http://trinity.datagraph.org/)
 
 Authors

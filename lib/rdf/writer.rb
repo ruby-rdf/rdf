@@ -84,7 +84,7 @@ module RDF
     def self.format(klass = nil)
       if klass.nil?
         Format.each do |format|
-          if format.reader == self
+          if format.writer == self
             return format
           end
         end
@@ -129,6 +129,11 @@ module RDF
       end
     end
 
+    ##
+    # @param  [IO, File]               output
+    # @param  [Hash{Symbol => Object}] options
+    # @yield  [writer]
+    # @yieldparam [RDF::Writer] writer
     def initialize(output = $stdout, options = {}, &block)
       @output, @options = output, options
       @nodes, @node_id = {}, 0
@@ -141,14 +146,17 @@ module RDF
     end
 
     ##
+    # @return [void]
     # @abstract
     def write_prologue() end
 
     ##
+    # @return [void]
     # @abstract
     def write_epilogue() end
 
     ##
+    # @return [void]
     # @abstract
     def write_comment(text) end
 
@@ -174,10 +182,13 @@ module RDF
 
     ##
     # @param  [Graph] graph
+    # @return [void]
     def write_graph(graph)
       write_triples(*graph.triples)
     end
 
+    ##
+    # @return [void]
     def write_resource(subject) # FIXME
       edge_nodes = []
       subject.each do |predicate, objects|
@@ -191,18 +202,21 @@ module RDF
 
     ##
     # @param  [Array<Statement>] statements
+    # @return [void]
     def write_statements(*statements)
       statements.flatten.each { |stmt| write_statement(stmt) }
     end
 
     ##
     # @param  [Statement] statement
+    # @return [void]
     def write_statement(statement)
       write_triple(*statement.to_a)
     end
 
     ##
     # @param  [Array<Array(Value)>] triples
+    # @return [void]
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
     end
@@ -211,6 +225,7 @@ module RDF
     # @param  [Resource] subject
     # @param  [URI]      predicate
     # @param  [Value]    object
+    # @return [void]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def write_triple(subject, predicate, object)
