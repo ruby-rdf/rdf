@@ -6,6 +6,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 
 * <http://github.com/bendiken/rdf>
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
+* <http://blog.datagraph.org/2010/04/rdf-repository-howto>
 
 Features
 --------
@@ -28,11 +29,11 @@ Examples
 
 ### Creating an RDF statement
 
-    s = RDF::URI.parse("http://rubygems.org/gems/rdf")
+    s = RDF::URI("http://rubygems.org/gems/rdf")
     p = RDF::DC.creator
-    o = RDF::URI.parse("http://ar.to/#self")
+    o = RDF::URI("http://ar.to/#self")
     
-    stmt = RDF::Statement.new(s, p, o)
+    stmt = RDF::Statement(s, p, o)
 
 ### Using pre-defined RDF vocabularies
 
@@ -55,7 +56,7 @@ Examples
 
 ### Reading N-Triples data
 
-    RDF::NTriples::Reader.open("spec/data/test.nt") do |reader|
+    RDF::Reader.open("spec/data/test.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
