@@ -36,15 +36,15 @@ module RDF
     def load(filename, options = {})
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      count = 0
+      statements = []
       Reader.open(filename, options) do |reader|
         reader.each_statement do |statement|
           statement.context = options[:context] if options[:context]
-          insert_statement(statement)
-          count += 1
+          statements << statement
         end
       end
-      count
+      insert_statements(*statements)
+      statements.size
     end
 
     alias_method :load!, :load
@@ -70,13 +70,14 @@ module RDF
     def insert(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      statements.each do |statement|
+      created = statements.map do |statement|
         if (statement = create_statement(statement)).valid?
-          insert_statement(statement)
+          statement
         else
           raise ArgumentError.new # FIXME
         end
       end
+      insert_statements(*created)
       self
     end
 
@@ -91,15 +92,14 @@ module RDF
     def delete(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      statements.each do |statement|
+      created = statements.map do |statement|
         if (statement = create_statement(statement)).valid?
-          delete_statement(statement)
+          statement
         else
-          query(statement) do |statement|
-            delete_statement(statement)
-          end
+          query(statement).to_a
         end
       end
+      delete_statements(*created)
       self
     end
 
@@ -175,6 +175,22 @@ module RDF
     end
 
     ##
+    # Inserts a list of RDF statement into the underlying storage.
+    #
+    # Subclasses of {RDF::Repository} may implement this method if they can
+    # more efficiently insert multiple statements at once.  This will otherwise
+    # default to using insert_statement.
+    #
+    # @param  [RDF::Statement] statement
+    # @return [void]
+    def insert_statements(*statements)
+      statements.each do |statement|
+        insert_statement(statement)
+      end
+    end
+
+
+    ##
     # Deletes an RDF statement from the underlying storage.
     #
     # Subclasses of {RDF::Repository} must implement this method (except in
@@ -187,8 +203,25 @@ module RDF
       raise NotImplementedError
     end
 
+    ##
+    # Deletes a list of RDF statement from the underlying storage.
+    #
+    # Subclasses of {RDF::Repository} may implement this method if they can
+    # more efficiently delete multiple statements at once.  This will otherwise
+    # default to using delete_statement.
+    #
+    # @param  [RDF::Statement] statement
+    # @return [void]
+    def delete_statements(*statements)
+      statements.each do |statement|
+        delete_statement(statement)
+      end
+    end
+
     protected :create_statement
     protected :insert_statement
+    protected :insert_statements
     protected :delete_statement
+    protected :delete_statements
   end
 end
