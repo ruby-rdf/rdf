@@ -3,7 +3,7 @@ module RDF
   # An RDF value.
   #
   # This is the base class for the RDF.rb class hierarchy. The class of
-  # every object that can be a component of {RDF::Statement statements} is a
+  # every object that can be a term of {RDF::Statement statements} is a
   # subclass of this class.
   #
   # @example Checking if a value is a resource (blank node or URI reference)

@@ -48,7 +48,7 @@ describe RDF::NTriples do
       lambda { @reader.new(File.open(@testfile)).to_a.size.should == 30 }.should_not raise_error # FIXME
     end
 
-    it "should parse components" do
+    it "should parse terms" do
       bnode = @reader.unserialize('_:foobar')
       bnode.should_not be_nil
       bnode.should be_a_node

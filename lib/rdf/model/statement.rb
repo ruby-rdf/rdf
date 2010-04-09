@@ -201,7 +201,7 @@ module RDF
     alias_method :to_ary, :to_triple
 
     ##
-    # Returns the components of this statement as a `Hash`.
+    # Returns the terms of this statement as a `Hash`.
     #
     # @param  [Symbol] subject_key
     # @param  [Symbol] predicate_key
