@@ -63,7 +63,8 @@ module RDF
       raise TypeError.new("#{self} is immutable") if immutable?
 
       insert_statement(create_statement(statement))
-      self
+
+      return self
     end
 
     ##
@@ -75,15 +76,21 @@ module RDF
     def insert(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      statements.map! do |statement|
-        if (statement = create_statement(statement)).valid?
-          statement
-        else
-          raise ArgumentError.new("not a valid statement: #{statement.inspect}")
+      statements.map! do |value|
+        case
+          when value.respond_to?(:each_statement)
+            insert_statements(value)
+            nil
+          when (statement = create_statement(value)).valid?
+            statement
+          else
+            raise ArgumentError.new("not a valid statement: #{value.inspect}")
         end
       end
-      insert_statements(statements)
-      self
+      statements.compact!
+      insert_statements(statements) unless statements.empty?
+
+      return self
     end
 
     alias_method :insert!, :insert
@@ -97,15 +104,22 @@ module RDF
     def delete(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      statements.map! do |statement|
-        if (statement = create_statement(statement)).valid?
-          statement
-        else
-          query(statement).to_a # TODO: optimize this
+      statements.map! do |value|
+        case
+          when value.respond_to?(:each_statement)
+            delete_statements(value)
+            nil
+          when (statement = create_statement(value)).valid?
+            statement
+          else
+            delete_statements(query(value))
+            nil
         end
       end
-      delete_statements(statements.flatten)
-      self
+      statements.compact!
+      delete_statements(statements) unless statements.empty?
+
+      return self
     end
 
     alias_method :delete!, :delete
