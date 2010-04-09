@@ -28,7 +28,7 @@ class RDF::Query
     ##
     # @param  [Hash{Symbol => Value}] bindings
     def initialize(bindings = {})
-      @bindings = bindings
+      @bindings = bindings.to_hash
     end
 
     ##
