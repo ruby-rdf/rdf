@@ -237,5 +237,21 @@ module RDF
         buffer.string
       end
     end
+
+    ##
+    # Returns a graph containing this statement in reified form.
+    #
+    # @param  [Hash{Symbol => Object}] options
+    # @return [RDF::Graph]
+    # @see    http://www.w3.org/TR/rdf-primer/#reification
+    def reified(options = {})
+      RDF::Graph.new(options[:context]) do |graph|
+        subject = options[:subject] || RDF::Node.new(options[:id])
+        graph << [subject, RDF.type,      RDF[:Statement]]
+        graph << [subject, RDF.subject,   self.subject]
+        graph << [subject, RDF.predicate, self.predicate]
+        graph << [subject, RDF.object,    self.object]
+      end
+    end
   end
 end
