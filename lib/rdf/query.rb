@@ -52,15 +52,18 @@ module RDF
     # @return [Array<Hash{Symbol => Value}>] An unordered sequence of query solutions.
     attr_accessor :solutions
 
+    # @return [Hash]
+    attr_reader :options
+
     ##
     # @param  [Hash{Symbol => Object}] options
     # @yield  [query]
     # @yieldparam [Query]
     def initialize(options = {}, &block)
-      @variables = options.delete(:variables) || {}
-      @patterns  = options.delete(:patterns)  || []
-      @solutions = options.delete(:solutions) || []
-      @options   = options
+      @options   = options.dup
+      @variables = @options.delete(:variables) || {}
+      @patterns  = @options.delete(:patterns)  || []
+      @solutions = @options.delete(:solutions) || []
 
       if block_given?
         case block.arity
@@ -77,8 +80,13 @@ module RDF
     # @yieldparam [Solution]
     # @return [Enumerator]
     def each_solution(&block)
-      solutions.each do |bindings|
-        block.call(Solution.new(bindings))
+      unless block_given?
+        require 'enumerator' unless defined?(::Enumerable::Enumerator)
+        ::Enumerable::Enumerator.new(self, :each_solution)
+      else
+        solutions.each do |solution|
+          block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
+        end
       end
     end
 
@@ -88,11 +96,11 @@ module RDF
     # Returns the number of query solutions.
     #
     # @return [Integer]
-    def size
+    def count
       solutions.size
     end
 
-    alias_method :count, :size
+    alias_method :size, :count
 
     ##
     # Filters the solution sequence by the given criteria.
@@ -104,13 +112,14 @@ module RDF
     # @return [Query]
     def filter(criteria = {}, &block)
       if block_given?
-        solutions.reject! do |bindings|
-          !block.call(Solution.new(bindings))
+        solutions.reject! do |solution|
+          !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
         end
       else
-        solutions.reject! do |bindings|
+        solutions.reject! do |solution|
+          solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
           results = criteria.map do |name, value|
-            bindings[name] == value
+            solution[name] == value
           end
           !results.all?
         end
@@ -151,7 +160,7 @@ module RDF
       unless variables.empty?
         variables.map! { |variable| variable.to_sym }
         solutions.each do |bindings|
-          bindings.delete_if { |k, v| !variables.include?(k) }
+          bindings.delete_if { |k, v| !variables.include?(k) } # FIXME
         end
       end
       self
@@ -176,31 +185,35 @@ module RDF
     # Limits the solution sequence to bindings starting from the `start`
     # offset in the overall solution sequence.
     #
-    # @param  [Integer] start
+    # @param  [Integer, #to_i] start
     # @return [Query]
     def offset(start)
-      slice(start, solutions.size - start)
+      slice(start, solutions.size - start.to_i)
     end
+
+    alias_method :offset!, :offset
 
     ##
     # Limits the number of solutions to `length`.
     #
-    # @param  [Integer] length
+    # @param  [Integer, #to_i] length
     # @return [Query]
     def limit(length)
       slice(0, length)
     end
 
+    alias_method :limit!, :limit
+
     ##
     # Limits the solution sequence to `length` bindings starting from the
     # `start` offset in the overall solution sequence.
     #
-    # @param  [Integer] start
-    # @param  [Integer] length
+    # @param  [Integer, #to_i] start
+    # @param  [Integer, #to_i] length
     # @return [Query]
     def slice(start, length)
-      if start < solutions.size
-        solutions.slice!(start, length)
+      if (start = start.to_i) < solutions.size
+        solutions.slice!(start, length.to_i)
       else
         solutions = []
       end
