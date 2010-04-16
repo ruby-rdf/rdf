@@ -109,7 +109,7 @@ module RDF
             else
               format = format.to_s.downcase
               @@subclasses.each do |klass|
-                if klass.name.to_s.split('::').map(&:downcase).include?(format)
+                if klass.name.to_s.split('::').map { |x| x.downcase }.include?(format)
                   return klass
                 end
               end

@@ -108,7 +108,7 @@ class RDF::Query
     #
     # @return [Boolean]
     def bound?
-      !variables.empty? && variables.values.all?(&:bound?)
+      !variables.empty? && variables.values.all? { |var| var.bound? }
     end
 
     ##
@@ -124,7 +124,7 @@ class RDF::Query
     #
     # @return [Boolean]
     def unbound?
-      !variables.empty? && variables.values.all?(&:unbound?)
+      !variables.empty? && variables.values.all? { |var| var.unbound? }
     end
 
     ##

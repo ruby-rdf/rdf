@@ -77,7 +77,7 @@ describe RDF::Query::Pattern do
     it "should have three variables" do
       @pattern.variables?.should be_true
       @pattern.variable_count.should == 3
-      @pattern.variables.keys.map(&:to_s).sort.should == [:s, :p, :o].map(&:to_s).sort
+      @pattern.variables.keys.map { |key| key.to_s }.sort.should == [:s, :p, :o].map { |key| key.to_s }.sort
       @pattern.variables.should == {:s => @s, :p => @p, :o => @o}
     end
 
