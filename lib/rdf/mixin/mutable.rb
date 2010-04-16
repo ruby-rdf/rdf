@@ -28,7 +28,7 @@ module RDF
     end
 
     ##
-    # Loads RDF statements from the given file into `self`.
+    # Loads RDF statements from the given file or URL into `self`.
     #
     # @param  [String, #to_s]          filename
     # @param  [Hash{Symbol => Object}] options

@@ -15,6 +15,36 @@ module RDF
     attr_accessor :data
 
     ##
+    # Creates a new `Graph` instance populated by the RDF data returned by
+    # dereferencing the given context URL.
+    #
+    # @overload
+    #   @param  [String, #to_s]          url
+    #   @param  [Hash{Symbol => Object}] options
+    #   @yield  [graph]
+    #   @yieldparam [Graph] graph
+    #   @return [void]
+    #
+    # @overload
+    #   @param  [String, #to_s]          url
+    #   @param  [Hash{Symbol => Object}] options
+    #   @return [Graph]
+    #
+    # @return [void]
+    def self.load(url, options = {}, &block)
+      self.new(url, options) do |graph|
+        graph.load! unless graph.unnamed?
+
+        if block_given?
+          case block.arity
+            when 1 then block.call(graph)
+            else graph.instance_eval(&block)
+          end
+        end
+      end
+    end
+
+    ##
     # @param  [Resource]               context
     # @param  [Hash{Symbol => Object}] options
     # @yield  [graph]
@@ -26,14 +56,24 @@ module RDF
         else RDF::URI.new(context)
       end
 
-      @data    = options.delete(:data) || []
-      @options = options
+      @options = options.dup
+      @data    = @options.delete(:data) || []
 
       if block_given?
         case block.arity
           when 1 then block.call(self)
           else instance_eval(&block)
         end
+      end
+    end
+
+    ##
+    # @return [void]
+    def load!(*args)
+      case
+        when args.empty?
+          load(context.to_s, context ? {:base_uri => context}.merge(@options) : @options)
+        else super
       end
     end
 
