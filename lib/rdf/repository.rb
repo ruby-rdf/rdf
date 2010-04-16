@@ -108,7 +108,15 @@ module RDF
     end
 
     ##
-    # Outputs a developer-friendly representation of this repository to
+    # Returns a developer-friendly representation of this object.
+    #
+    # @return [String]
+    def inspect
+      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, uri.to_s)
+    end
+
+    ##
+    # Outputs a developer-friendly representation of this object to
     # `stderr`.
     #
     # @return [void]
