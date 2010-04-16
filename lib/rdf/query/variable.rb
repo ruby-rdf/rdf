@@ -55,6 +55,15 @@ class RDF::Query
     end
 
     ##
+    # Returns `true`.
+    #
+    # @return [Boolean]
+    # @see    RDF::Value#variable?
+    def variable? 
+      true
+    end
+
+    ##
     # Returns `true` if this variable has a name.
     #
     # @return [Boolean]

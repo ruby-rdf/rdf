@@ -80,6 +80,14 @@ module RDF
     alias_method :iri?, :uri?
 
     ##
+    # Returns `true` if this value is a query variable.
+    #
+    # @return [Boolean]
+    def variable?
+      false
+    end
+
+    ##
     # Compares this value to `other` for sorting purposes.
     #
     # Subclasses should override this to provide a more meaningful
