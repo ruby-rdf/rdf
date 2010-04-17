@@ -133,7 +133,7 @@ module RDF
     # @see #each_statement
     def enum_statement
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_statement)
+      @@enumerator_klass.new(self, :each_statement)
     end
 
     alias_method :enum_statements, :enum_statement
@@ -192,7 +192,7 @@ module RDF
     # @see #each_triple
     def enum_triple
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_triple)
+      @@enumerator_klass.new(self, :each_triple)
     end
 
     alias_method :enum_triples, :enum_triple
@@ -252,7 +252,7 @@ module RDF
     # @see #each_quad
     def enum_quad
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_quad)
+      @@enumerator_klass.new(self, :each_quad)
     end
 
     alias_method :enum_quads, :enum_quad
@@ -319,7 +319,7 @@ module RDF
     # @see #each_subject
     def enum_subject
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_subject)
+      @@enumerator_klass.new(self, :each_subject)
     end
 
     alias_method :enum_subjects, :enum_subject
@@ -386,7 +386,7 @@ module RDF
     # @see #each_predicate
     def enum_predicate
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_predicate)
+      @@enumerator_klass.new(self, :each_predicate)
     end
 
     alias_method :enum_predicates, :enum_predicate
@@ -453,7 +453,7 @@ module RDF
     # @see #each_object
     def enum_object
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_object)
+      @@enumerator_klass.new(self, :each_object)
     end
 
     alias_method :enum_objects, :enum_object
@@ -520,7 +520,7 @@ module RDF
     # @see #each_context
     def enum_context
       require_enumerator!
-      ::Enumerable::Enumerator.new(self, :each_context)
+      @@enumerator_klass.new(self, :each_context)
     end
 
     alias_method :enum_contexts, :enum_context
@@ -547,7 +547,8 @@ module RDF
     private
 
       def require_enumerator! # @private
-        require 'enumerator' unless defined?(::Enumerable::Enumerator)
+        require 'enumerator' unless defined?(::Enumerable)
+        @@enumerator_klass = defined?(::Enumerable::Enumerator) ? ::Enumerable::Enumerator : ::Enumerator
       end
 
   end
