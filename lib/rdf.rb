@@ -1,7 +1,11 @@
+require 'enumerator'  # @since Ruby 1.8.1
 require 'open-uri'
 require 'rdf/version'
 
 module RDF
+  # For compatibility with both Ruby 1.8.x and Ruby 1.9.x:
+  Enumerator = defined?(::Enumerator) ? ::Enumerator : ::Enumerable::Enumerator
+
   # RDF mixins
   autoload :Durable,    'rdf/mixin/durable'
   autoload :Enumerable, 'rdf/mixin/enumerable'

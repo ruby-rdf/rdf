@@ -77,13 +77,11 @@ module RDF
     # Enumerates over each query solution.
     #
     # @yield  [solution]
-    # @yieldparam [Solution]
+    # @yieldparam [Solution] solution
     # @return [Enumerator]
     def each_solution(&block)
       unless block_given?
-        require 'enumerator' unless defined?(::Enumerable)
-        @@enumerator_klass = defined?(::Enumerable::Enumerator) ? ::Enumerable::Enumerator : ::Enumerator
-        @@enumerator_klass.new(self, :each_solution)
+        Enumerator.new(self, :each_solution)
       else
         solutions.each do |solution|
           block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
