@@ -151,5 +151,24 @@ module RDF
       end
       return nil
     end
+
+    ##
+    # Queries `self` for RDF statements matching the given `pattern` and
+    # returns the value of the first found object literal.
+    #
+    # Returns `nil` if no statements match `pattern` or if none of the found
+    # statements have a literal as their object term.
+    #
+    # @overload first_value
+    #   @return [Object]
+    #
+    # @overload first_value(pattern)
+    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @return [Object]
+    #
+    # @return [Object]
+    def first_value(pattern = nil)
+      (literal = first_literal(pattern)) ? literal.value : nil
+    end
   end
 end
