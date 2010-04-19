@@ -21,7 +21,8 @@ class RDF::Query
   #   solution.to_hash       #=> {:mbox => "jrhacker@example.org", ...}
   #
   class Solution
-    undef_method *(instance_methods - %w(__id__ __send__ __class__ __eval__ instance_eval inspect class object_id is_a?))
+    # Undefine all superfluous instance methods:
+    undef_method *(instance_methods - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?])
 
     include Enumerable
 
