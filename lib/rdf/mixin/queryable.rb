@@ -82,14 +82,8 @@ module RDF
     #
     # @return [RDF::Resource]
     def first_subject(pattern = nil)
-      if pattern
-        query(pattern) do |statement|
-          return statement.subject
-        end
-      else
-        each do |statement|
-          return statement.subject
-        end
+      __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
+        return statement.subject
       end
       return nil
     end
@@ -109,14 +103,8 @@ module RDF
     #
     # @return [RDF::URI]
     def first_predicate(pattern = nil)
-      if pattern
-        query(pattern) do |statement|
-          return statement.predicate
-        end
-      else
-        each do |statement|
-          return statement.predicate
-        end
+      __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
+        return statement.predicate
       end
       return nil
     end
@@ -136,14 +124,30 @@ module RDF
     #
     # @return [RDF::Value]
     def first_object(pattern = nil)
-      if pattern
-        query(pattern) do |statement|
-          return statement.object
-        end
-      else
-        each do |statement|
-          return statement.object
-        end
+      __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
+        return statement.object
+      end
+      return nil
+    end
+
+    ##
+    # Queries `self` for RDF statements matching the given `pattern` and
+    # returns the first found object literal.
+    #
+    # Returns `nil` if no statements match `pattern` or if none of the found
+    # statements have a literal as their object term.
+    #
+    # @overload first_literal
+    #   @return [RDF::Literal]
+    #
+    # @overload first_literal(pattern)
+    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @return [RDF::Literal]
+    #
+    # @return [RDF::Literal]
+    def first_literal(pattern = nil)
+      __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
+        return statement.object if statement.object.is_a?(RDF::Literal)
       end
       return nil
     end
