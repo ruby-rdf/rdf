@@ -44,6 +44,31 @@ module RDF
 
     ##
     # Queries `self` for an RDF statement matching the given `pattern` and
+    # returns that statement if found.
+    #
+    # Returns `nil` if no statements match `pattern`.
+    #
+    # @overload first
+    #   @return [RDF::Statement]
+    #
+    # @overload first(pattern)
+    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @return [RDF::Statement]
+    #
+    # @return [RDF::Statement]
+    def first(pattern = nil)
+      if pattern
+        query(pattern) do |statement|
+          return statement
+        end
+        return nil
+      else
+        super()
+      end
+    end
+
+    ##
+    # Queries `self` for an RDF statement matching the given `pattern` and
     # returns the statement's subject term.
     #
     # Returns `nil` if no statements match `pattern`.
