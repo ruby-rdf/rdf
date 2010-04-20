@@ -87,8 +87,8 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @return [Array<Statement>]
-    # @see #each_statement
-    # @see #enum_statement
+    # @see    #each_statement
+    # @see    #enum_statement
     def statements(options = {})
       enum_statement.to_a
     end
@@ -116,7 +116,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_statement
+    # @see    #enum_statement
     def each_statement(&block)
       if block_given?
         # Invoke {#each} in the containing class:
@@ -130,7 +130,7 @@ module RDF
     # Returns an enumerator for {#each_statement}.
     #
     # @return [Enumerator]
-    # @see #each_statement
+    # @see    #each_statement
     def enum_statement
       Enumerator.new(self, :each_statement)
     end
@@ -142,8 +142,8 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @return [Array<Array(Resource, URI, Value)>]
-    # @see #each_triple
-    # @see #enum_triple
+    # @see    #each_triple
+    # @see    #enum_triple
     def triples(options = {})
       enum_statement.map { |statement| statement.to_triple }
     end
@@ -173,7 +173,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_triple
+    # @see    #enum_triple
     def each_triple(&block)
       if block_given?
         each_statement do |statement|
@@ -188,7 +188,7 @@ module RDF
     # Returns an enumerator for {#each_triple}.
     #
     # @return [Enumerator]
-    # @see #each_triple
+    # @see    #each_triple
     def enum_triple
       Enumerator.new(self, :each_triple)
     end
@@ -200,8 +200,8 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @return [Array<Array(Resource, URI, Value, Resource)>]
-    # @see #each_quad
-    # @see #enum_quad
+    # @see    #each_quad
+    # @see    #enum_quad
     def quads(options = {})
       enum_statement.map { |statement| statement.to_quad }
     end
@@ -232,7 +232,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_quad
+    # @see    #enum_quad
     def each_quad(&block)
       if block_given?
         each_statement do |statement|
@@ -247,7 +247,7 @@ module RDF
     # Returns an enumerator for {#each_quad}.
     #
     # @return [Enumerator]
-    # @see #each_quad
+    # @see    #each_quad
     def enum_quad
       Enumerator.new(self, :each_quad)
     end
@@ -260,8 +260,8 @@ module RDF
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
     # @return [Array<Resource>]
-    # @see #each_subject
-    # @see #enum_subject
+    # @see    #each_subject
+    # @see    #enum_subject
     def subjects(options = {})
       if options[:unique] == false
         enum_statement.map { |statement| statement.subject }
@@ -293,7 +293,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_subject
+    # @see    #enum_subject
     def each_subject(&block)
       if block_given?
         values = {}
@@ -313,7 +313,7 @@ module RDF
     # Returns an enumerator for {#each_subject}.
     #
     # @return [Enumerator]
-    # @see #each_subject
+    # @see    #each_subject
     def enum_subject
       Enumerator.new(self, :each_subject)
     end
@@ -326,8 +326,8 @@ module RDF
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
     # @return [Array<URI>]
-    # @see #each_predicate
-    # @see #enum_predicate
+    # @see    #each_predicate
+    # @see    #enum_predicate
     def predicates(options = {})
       if options[:unique] == false
         enum_statement.map { |statement| statement.predicate }
@@ -359,7 +359,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_predicate
+    # @see    #enum_predicate
     def each_predicate(&block)
       if block_given?
         values = {}
@@ -379,7 +379,7 @@ module RDF
     # Returns an enumerator for {#each_predicate}.
     #
     # @return [Enumerator]
-    # @see #each_predicate
+    # @see    #each_predicate
     def enum_predicate
       Enumerator.new(self, :each_predicate)
     end
@@ -392,8 +392,8 @@ module RDF
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
     # @return [Array<Value>]
-    # @see #each_object
-    # @see #enum_object
+    # @see    #each_object
+    # @see    #enum_object
     def objects(options = {})
       if options[:unique] == false
         enum_statement.map { |statement| statement.object }
@@ -425,7 +425,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_object
+    # @see    #enum_object
     def each_object(&block) # FIXME: deduplication
       if block_given?
         values = {}
@@ -445,7 +445,7 @@ module RDF
     # Returns an enumerator for {#each_object}.
     #
     # @return [Enumerator]
-    # @see #each_object
+    # @see    #each_object
     def enum_object
       Enumerator.new(self, :each_object)
     end
@@ -458,8 +458,8 @@ module RDF
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
     # @return [Array<Resource>]
-    # @see #each_context
-    # @see #enum_context
+    # @see    #each_context
+    # @see    #enum_context
     def contexts(options = {})
       if options[:unique] == false
         enum_statement.map { |statement| statement.context }
@@ -491,7 +491,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
-    # @see #enum_context
+    # @see    #enum_context
     def each_context(&block)
       if block_given?
         values = {}
@@ -511,12 +511,51 @@ module RDF
     # Returns an enumerator for {#each_context}.
     #
     # @return [Enumerator]
-    # @see #each_context
+    # @see    #each_context
     def enum_context
       Enumerator.new(self, :each_context)
     end
 
     alias_method :enum_contexts, :enum_context
+
+    ##
+    # Iterates the given block for each RDF graph in `self`.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_graph
+    #   @yield  [graph]
+    #   @yieldparam [RDF::Graph] graph
+    #   @return [void]
+    #
+    # @overload each_graph
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see    #enum_graph
+    # @since  0.1.19
+    def each_graph(&block)
+      if block_given?
+        block.call(RDF::Graph.new(nil, :data => self))
+        each_context do |context|
+          block.call(RDF::Graph.new(context, :data => self))
+        end
+      else
+        enum_graph
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_graph}.
+    #
+    # @return [Enumerator]
+    # @see    #each_graph
+    # @since  0.1.19
+    def enum_graph
+      Enumerator.new(self, :each_graph)
+    end
+
+    alias_method :enum_graphs, :enum_graph
 
     ##
     # Returns all RDF objects indexed by their subjects and predicates.

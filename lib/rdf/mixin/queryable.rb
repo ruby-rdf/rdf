@@ -56,6 +56,7 @@ module RDF
     #   @return [RDF::Statement]
     #
     # @return [RDF::Statement]
+    # @since  0.1.19
     def first(pattern = nil)
       if pattern
         query(pattern) do |statement|
@@ -81,6 +82,7 @@ module RDF
     #   @return [RDF::Resource]
     #
     # @return [RDF::Resource]
+    # @since  0.1.19
     def first_subject(pattern = nil)
       __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
         return statement.subject
@@ -102,6 +104,7 @@ module RDF
     #   @return [RDF::URI]
     #
     # @return [RDF::URI]
+    # @since  0.1.19
     def first_predicate(pattern = nil)
       __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
         return statement.predicate
@@ -123,6 +126,7 @@ module RDF
     #   @return [RDF::Value]
     #
     # @return [RDF::Value]
+    # @since  0.1.19
     def first_object(pattern = nil)
       __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
         return statement.object
@@ -145,6 +149,7 @@ module RDF
     #   @return [RDF::Literal]
     #
     # @return [RDF::Literal]
+    # @since  0.1.19
     def first_literal(pattern = nil)
       __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
         return statement.object if statement.object.is_a?(RDF::Literal)
@@ -167,6 +172,7 @@ module RDF
     #   @return [Object]
     #
     # @return [Object]
+    # @since  0.1.19
     def first_value(pattern = nil)
       (literal = first_literal(pattern)) ? literal.value : nil
     end
