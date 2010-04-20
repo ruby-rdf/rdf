@@ -519,6 +519,43 @@ module RDF
     alias_method :enum_contexts, :enum_context
 
     ##
+    # Iterates the given block for each RDF graph in `self`.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # @overload each_graph
+    #   @yield  [graph]
+    #   @yieldparam [RDF::Graph] graph
+    #   @return [void]
+    #
+    # @overload each_graph
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see    #enum_graph
+    def each_graph(&block)
+      if block_given?
+        block.call(RDF::Graph.new(nil, :data => self))
+        each_context do |context|
+          block.call(RDF::Graph.new(context, :data => self))
+        end
+      else
+        enum_graph
+      end
+    end
+
+    ##
+    # Returns an enumerator for {#each_graph}.
+    #
+    # @return [Enumerator]
+    # @see    #each_graph
+    def enum_graph
+      Enumerator.new(self, :each_graph)
+    end
+
+    alias_method :enum_graphs, :enum_graph
+
+    ##
     # Returns all RDF objects indexed by their subjects and predicates.
     #
     # The return value is a `Hash` instance that has the structure:
