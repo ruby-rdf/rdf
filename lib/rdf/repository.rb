@@ -45,6 +45,7 @@ module RDF
     include RDF::Durable
     include RDF::Mutable
     include RDF::Queryable
+    include RDF::Inferable
 
     ##
     # Returns the {URI} of this repository.

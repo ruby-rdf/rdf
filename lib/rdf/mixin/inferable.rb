@@ -2,7 +2,7 @@ require 'rdfs'
 
 module RDF
   module Inferable
-    include ::Queryable
+    include RDF::Queryable
     
     def pairs_of_statements
       Enumerator.new(self, :combination, 2)
@@ -35,7 +35,7 @@ module RDF
       rules = RDFS::Semantics.constants.select {|c| Object.module_eval("RDFS::Semantics::#{c}").is_a? Class}
       rules = rules.collect {|c| Object.module_eval("RDFS::Semantics::#{c}")}
       inferred_statements = []
-      rules.each { |rule| inferred_statements += rule[pair*] }
+      rules.each { |rule| inferred_statements += rule[*pair] }
     end
   end
 end
