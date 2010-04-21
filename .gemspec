@@ -12,7 +12,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
   gem.rubyforge_project  = 'rdf'
 
-  gem.authors            = ['Arto Bendiken', 'Ben Lavender']
+  gem.authors            = ['Arto Bendiken', 'Ben Lavender', 'Pius Uzamere']
   gem.email              = 'arto.bendiken@gmail.com'
 
   gem.platform           = Gem::Platform::RUBY
@@ -27,6 +27,7 @@ GEMSPEC = Gem::Specification.new do |gem|
 
   gem.required_ruby_version      = '>= 1.8.2'
   gem.requirements               = []
+  gem.add_development_dependency 'rdfs',    '>= 0.1.0'
   gem.add_development_dependency 'rdf-spec',    '>= 0.1.8'
   gem.add_development_dependency 'rspec',       '>= 1.3.0'
   gem.add_development_dependency 'yard' ,       '>= 0.5.3'

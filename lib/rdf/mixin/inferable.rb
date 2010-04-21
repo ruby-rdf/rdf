@@ -35,14 +35,16 @@ module RDF
       rules = Semantics.constants.select {|c| Object.module_eval("RDFS::Semantics::#{c}").is_a? Class}
       rules = rules.collect {|c| Object.module_eval("RDFS::Semantics::#{c}")}
       inferred_statements = []
-      rules.each { |rule| inferred_statements += ((o = rule.new.match(statement)).nil? ? [] : o) }
+      arr = rules.each { |rule| inferred_statements += ((o = rule.new.match(statement)).nil? ? [] : o) }
+      arr.collect {|r| r.new.match(statement)}.compact
     end
     
     def pairwise_inferences_from(pair)
       rules = Semantics.constants.select {|c| Object.module_eval("RDFS::Semantics::#{c}").is_a? Class}
       rules = rules.collect {|c| Object.module_eval("RDFS::Semantics::#{c}")}
       inferred_statements = []
-      rules.each { |rule| inferred_statements += (o = rule.new.match(*pair)).nil? ? [] : o }
+      arr = rules.each { |rule| inferred_statements += (o = rule.new.match(*pair)).nil? ? [] : o }
+      arr.collect {|r| r.new.match(*pair)}.compact
     end
   end
 end
