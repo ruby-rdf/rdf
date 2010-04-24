@@ -98,16 +98,17 @@ module RDF
 
     def self.dump(data, io = nil, options = {})
       io = File.open(io, 'w') if io.is_a?(String)
+      method = data.respond_to?(:each_statement) ? :each_statement : :each
       if io
         new(io) do |writer|
-          data.each_statement do |statement|
+          data.send(method) do |statement|
             writer << statement
           end
           writer.flush
         end
       else
         buffer do |writer|
-          data.each_statement do |statement|
+          data.send(method) do |statement|
             writer << statement
           end
         end

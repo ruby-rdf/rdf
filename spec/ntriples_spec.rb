@@ -116,6 +116,12 @@ describe RDF::NTriples do
       output.string.should == "#{@stmt_string}\n"
     end
 
+    it "should dump arrays of statements to a string buffer" do
+      output = StringIO.new
+      @writer.dump(@graph.to_a, output)
+      output.string.should == "#{@stmt_string}\n"
+    end
+
     it "should dump statements to a file" do
       require 'tmpdir' # for Dir.tmpdir
       @writer.dump(@graph, filename = File.join(Dir.tmpdir, "test.nt"))
