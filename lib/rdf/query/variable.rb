@@ -59,7 +59,7 @@ class RDF::Query
     #
     # @return [Boolean]
     # @see    RDF::Value#variable?
-    # @since  0.1.17
+    # @since  0.1.7
     def variable? 
       true
     end

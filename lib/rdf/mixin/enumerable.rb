@@ -549,7 +549,7 @@ module RDF
     #
     # @return [void]
     # @see    #enum_graph
-    # @since  0.1.19
+    # @since  0.1.9
     def each_graph(&block)
       if block_given?
         block.call(RDF::Graph.new(nil, :data => self))
@@ -566,7 +566,7 @@ module RDF
     #
     # @return [Enumerator]
     # @see    #each_graph
-    # @since  0.1.19
+    # @since  0.1.9
     def enum_graph
       Enumerator.new(self, :each_graph)
     end

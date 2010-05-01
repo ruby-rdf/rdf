@@ -83,7 +83,7 @@ module RDF
     # Returns `true` if this value is a query variable.
     #
     # @return [Boolean]
-    # @since  0.1.17
+    # @since  0.1.7
     def variable?
       false
     end

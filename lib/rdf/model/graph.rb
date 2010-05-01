@@ -41,7 +41,7 @@ module RDF
     # @yield  [graph]
     # @yieldparam [Graph] graph
     # @return [Graph]
-    # @since  0.1.17
+    # @since  0.1.7
     def self.load(url, options = {}, &block)
       self.new(url, options) do |graph|
         graph.load! unless graph.unnamed?
