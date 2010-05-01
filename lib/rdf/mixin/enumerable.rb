@@ -107,6 +107,8 @@ module RDF
     #
     # If no block was given, returns an enumerator.
     #
+    # The order in which statements are yielded is undefined.
+    #
     # @overload each_statement
     #   @yield  [statement]
     #   @yieldparam [Statement] statement
@@ -161,6 +163,8 @@ module RDF
     # Iterates the given block for each RDF triple.
     #
     # If no block was given, returns an enumerator.
+    #
+    # The order in which triples are yielded is undefined.
     #
     # @overload each_triple
     #   @yield  [subject, predicate, object]
@@ -219,6 +223,8 @@ module RDF
     # Iterates the given block for each RDF quad.
     #
     # If no block was given, returns an enumerator.
+    #
+    # The order in which quads are yielded is undefined.
     #
     # @overload each_quad
     #   @yield  [subject, predicate, object, context]
@@ -283,6 +289,8 @@ module RDF
     # Iterates the given block for each unique RDF subject.
     #
     # If no block was given, returns an enumerator.
+    #
+    # The order in which values are yielded is undefined.
     #
     # @overload each_subject
     #   @yield  [subject]
@@ -350,6 +358,8 @@ module RDF
     #
     # If no block was given, returns an enumerator.
     #
+    # The order in which values are yielded is undefined.
+    #
     # @overload each_predicate
     #   @yield  [predicate]
     #   @yieldparam [URI] predicate
@@ -415,6 +425,8 @@ module RDF
     # Iterates the given block for each unique RDF object.
     #
     # If no block was given, returns an enumerator.
+    #
+    # The order in which values are yielded is undefined.
     #
     # @overload each_object
     #   @yield  [object]
@@ -482,6 +494,8 @@ module RDF
     #
     # If no block was given, returns an enumerator.
     #
+    # The order in which values are yielded is undefined.
+    #
     # @overload each_context
     #   @yield  [context]
     #   @yieldparam [Resource] context
@@ -522,6 +536,8 @@ module RDF
     # Iterates the given block for each RDF graph in `self`.
     #
     # If no block was given, returns an enumerator.
+    #
+    # The order in which graphs are yielded is undefined.
     #
     # @overload each_graph
     #   @yield  [graph]
