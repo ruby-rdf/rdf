@@ -129,6 +129,20 @@ module RDF
     # @see RDF::Repository
     module Implementation
       ##
+      # Returns `true` if this repository supports `feature`.
+      #
+      # @param  [Symbol, #to_sym] feature
+      # @return [Boolean]
+      # @since  0.1.10
+      def supports?(feature)
+        case feature.to_sym
+          when :context   then true   # statement contexts / named graphs
+          when :inference then false  # forward-chaining inference
+          else false
+        end
+      end
+
+      ##
       # Returns `false` to indicate that this repository is nondurable.
       #
       # @return [Boolean]
