@@ -42,6 +42,15 @@ module RDF::NTriples
     PREDICATE             = Regexp.union(URIREF).freeze
     OBJECT                = Regexp.union(URIREF, NODEID, LITERAL).freeze
 
+    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    ESCAPE_CHARS          = ["\t", "\n", "\r", "\"", "\\"].freeze
+    ESCAPE_CHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
+    ESCAPE_CHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
+    ESCAPE_CHAR           = Regexp.union(ESCAPE_CHAR4, ESCAPE_CHAR8).freeze
+    ESCAPE_SURROGATE      = /\\u([0-9A-Fa-f]{4,4})\\u([0-9A-Fa-f]{4,4})/.freeze
+    ESCAPE_SURROGATE1     = (0xD800..0xDBFF).freeze
+    ESCAPE_SURROGATE2     = (0xDC00..0xDFFF).freeze
+
     ##
     # Reconstructs an RDF value from its serialized N-Triples
     # representation.
@@ -112,12 +121,27 @@ module RDF::NTriples
     # @param  [String] string
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    # @see    http://blog.grayproductions.net/articles/understanding_m17n
     def self.unescape(string)
-      ["\t", "\n", "\r", "\"", "\\"].each do |escape|
-        string.gsub!(escape.inspect[1...-1], escape)
+      string.force_encoding(Encoding::ASCII_8BIT) if string.respond_to?(:force_encoding)
+
+      ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
+      while # \uXXXX\uXXXX surrogate pairs
+        (string.sub!(ESCAPE_SURROGATE) do
+          if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
+            s = [$1, $2].pack('H*H*')
+            s = s.respond_to?(:force_encoding) ?
+              s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8) : # Ruby 1.9+
+              Iconv.conv('UTF-8', 'UTF-16BE', s)                              # Ruby 1.8.x
+          else
+            s = [$1.hex].pack('U*') << '\u' << $2
+          end
+          s.respond_to?(:force_encoding) ? s.force_encoding(Encoding::ASCII_8BIT) : s
+        end)
       end
-      string.gsub!(/\\u([0-9A-Fa-f]{4,4})/u) { [$1.hex].pack('U*') }
-      string.gsub!(/\\U([0-9A-Fa-f]{8,8})/u) { [$1.hex].pack('U*') }
+      string.gsub!(ESCAPE_CHAR) { [($1 || $2).hex].pack('U*') }
+
+      string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
       string
     end
 
