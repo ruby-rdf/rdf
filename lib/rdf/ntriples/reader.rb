@@ -125,21 +125,29 @@ module RDF::NTriples
     def self.unescape(string)
       string.force_encoding(Encoding::ASCII_8BIT) if string.respond_to?(:force_encoding)
 
+      # Decode \t|\n|\r|\"|\\ character escapes:
       ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
-      while # \uXXXX\uXXXX surrogate pairs
+
+      # Decode \uXXXX\uXXXX surrogate pairs:
+      while
         (string.sub!(ESCAPE_SURROGATE) do
           if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
             s = [$1, $2].pack('H*H*')
             s = s.respond_to?(:force_encoding) ?
-              s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8) : # Ruby 1.9+
-              Iconv.conv('UTF-8', 'UTF-16BE', s)                              # Ruby 1.8.x
+              s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8) : # for Ruby 1.9+
+              Iconv.conv('UTF-8', 'UTF-16BE', s)                              # for Ruby 1.8.x
           else
             s = [$1.hex].pack('U*') << '\u' << $2
           end
           s.respond_to?(:force_encoding) ? s.force_encoding(Encoding::ASCII_8BIT) : s
         end)
       end
-      string.gsub!(ESCAPE_CHAR) { [($1 || $2).hex].pack('U*') }
+
+      # Decode \uXXXX and \UXXXXXXXX code points:
+      string.gsub!(ESCAPE_CHAR) do
+        s = [($1 || $2).hex].pack('U*')
+        s.respond_to?(:force_encoding) ? s.force_encoding(Encoding::ASCII_8BIT) : s
+      end
 
       string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
       string

@@ -193,27 +193,48 @@ module RDF
 
       @@subclasses = [] # @private
 
-      def self.inherited(child) #:nodoc:
+      ##
+      # @private
+      def self.inherited(child)
         @@subclasses << child
         super
       end
 
+      ##
+      # @return [Integer]
       def lineno
         @input.lineno
       end
 
+      ##
+      # @return [String]
       def readline
         @line = @input.readline.chomp
+        @line.force_encoding(encoding) if @line.respond_to?(:force_encoding) # for Ruby 1.9+
+        @line
       end
 
+      ##
+      # @return [Encoding]
+      def encoding
+        @encoding ||= ::Encoding::UTF_8
+      end
+
+      ##
+      # @return [void]
       def strip!
         @line.strip!
       end
 
+      ##
+      # @return [Boolean]
       def blank?
         @line.nil? || @line.empty?
       end
 
+      ##
+      # @param  [Regexp] pattern
+      # @return [Object]
       def match(pattern)
         if @line =~ pattern
           result, @line = $1, $'.lstrip
