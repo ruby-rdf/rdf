@@ -122,6 +122,7 @@ module RDF::NTriples
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see    http://blog.grayproductions.net/articles/understanding_m17n
+    # @see    http://yehudakatz.com/2010/05/17/encodings-unabridged/
     def self.unescape(string)
       string.force_encoding(Encoding::ASCII_8BIT) if string.respond_to?(:force_encoding)
 
