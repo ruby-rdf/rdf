@@ -225,6 +225,51 @@ module RDF
       alias_method :writer_class, :writer
     end
 
+    ##
+    # Retrieves or defines MIME content types for this RDF serialization format.
+    #
+    # @overload content_type(type, options)
+    #   Retrieves or defines the MIME content type for this RDF serialization format.
+    #
+    #   Optionally also defines alias MIME content types for this RDF serialization format.
+    #
+    #   Optionally also defines a file extension, or a list of file
+    #   extensions, that should be mapped to the given MIME type and handled
+    #   by this class.
+    #
+    #   @param  [String]                 type
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [String]         :alias   (nil)
+    #   @option options [Array<String>]  :aliases (nil)
+    #   @option options [Symbol]         :extension  (nil)
+    #   @option options [Array<Symbol>]  :extensions (nil)
+    #   @return [void]
+    #
+    # @overload content_type
+    #   Retrieves the MIME content types for this RDF serialization format.
+    #
+    #   The return is an array where the first element is the cannonical
+    #   MIME type for the format and following elements are alias MIME types.
+    #
+    #   @return [Array<String>]
+    def self.content_type(type = nil, options = {})
+      if type.nil?
+        [@@content_type[self], @@content_types.map {
+          |ct, cl| (cl.include?(self) && ct != @@content_type[self]) ?  ct : nil }].flatten.compact
+      else
+        @@content_type[self] = type
+        (@@content_types[type] ||= []) << self
+
+        if extensions = (options[:extension] || options[:extensions])
+          extensions = [extensions].flatten.map { |ext| ext.to_sym }
+          extensions.each { |ext| @@file_extensions[ext] = type }
+        end
+        if aliases = (options[:alias] || options[:aliases])
+          aliases = [aliases].flatten.each { |a| (@@content_types[a] ||= []) << self }
+        end
+      end
+    end
+
     protected
 
       ##
@@ -238,27 +283,6 @@ module RDF
       # @return [void]
       def self.require(library)
         (@@requires[self] ||= []) << library.to_s
-      end
-
-      ##
-      # Defines MIME content types for this RDF serialization format.
-      #
-      # Optionally also defines a file extension, or a list of file
-      # extensions, that should be mapped to the given MIME type and handled
-      # by this class.
-      #
-      # @param  [String]                 type
-      # @param  [Hash{Symbol => Object}] options
-      # @option options [Symbol]         :extension  (nil)
-      # @option options [Array<Symbol>]  :extensions (nil)
-      # @return [void]
-      def self.content_type(type, options = {})
-        (@@content_types[type] ||= []) << self
-
-        if extensions = (options[:extension] || options[:extensions])
-          extensions = [extensions].flatten.map { |ext| ext.to_sym }
-          extensions.each { |ext| @@file_extensions[ext] = type }
-        end
       end
 
       ##
@@ -277,6 +301,7 @@ module RDF
       @@subclasses       = [] # @private
       @@requires         = {} # @private
       @@file_extensions  = {} # @private
+      @@content_type     = {} # @private
       @@content_types    = {} # @private
       @@content_encoding = {} # @private
       @@readers          = {} # @private
