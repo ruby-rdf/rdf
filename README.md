@@ -180,6 +180,12 @@ Authors
 * [Arto Bendiken](mailto:arto.bendiken@gmail.com) - <http://ar.to/>
 * [Ben Lavender](mailto:blavender@gmail.com) - <http://bhuga.net/>
 
+Contributors
+------------
+
+* [John Fieber](mailto:jrf@ursamaris.org) - <http://github.com/jfieber>
+* [Pius Uzamere](mailto:pius@alum.mit.edu) - <http://pius.me/>
+
 License
 -------
 
