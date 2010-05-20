@@ -295,12 +295,13 @@ module RDF
       # @param  [Resource] uriref
       # @return [String]
       def uri_for(uriref)
-        if uriref.respond_to?(:anonymous?) && uriref.anonymous?
-          @nodes[uriref]
-        elsif uriref.respond_to?(:to_uri)
-          uriref.to_uri.to_s
-        else
-          uriref.to_s
+        case
+          when uriref.is_a?(RDF::Node)
+            @nodes[uriref]
+          when uriref.respond_to?(:to_uri)
+            uriref.to_uri.to_s
+          else
+            uriref.to_s
         end
       end
 
