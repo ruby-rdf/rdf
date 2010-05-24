@@ -12,6 +12,9 @@ module RDF
   # @example Creating a URI reference (2)
   #   uri = RDF::URI.new(:scheme => 'http', :host => 'rdf.rubyforge.org', :path => '/')
   #
+  # @example Creating an interned URI reference
+  #   uri = RDF::URI.intern("http://rdf.rubyforge.org/")
+  #
   # @example Getting the string representation of a URI
   #   uri.to_s #=> "http://rdf.rubyforge.org/"
   #
@@ -19,15 +22,71 @@ module RDF
   # @see http://addressable.rubyforge.org/
   class URI < Resource
     ##
+    # Defines the maximum number of interned URI references that can be held
+    # cached in memory at any one time.
+    CACHE_SIZE = -1 # unlimited by default
+
+    ##
+    # Returns an interned `RDF::URI` instance based on the given `uri`
+    # string.
+    #
+    # The maximum number of simultaneous interned URI references is given by
+    # the `CACHE_SIZE` constant. This value is unlimited by default, in
+    # which case an interned URI object will be purged only when the last
+    # strong reference to it is deleted (i.e. when its finalizer runs).
+    #
+    # Excepting special memory-limited circumstances, it should always be
+    # safe and preferred to construct new URI references using
+    # `RDF::URI.intern` instead of `RDF::URI.new`, since if an interned
+    # object can't be returned for some reason, this method will fall back
+    # to returning a freshly-allocated one.
+    #
+    # @param  [String, #to_s] str
+    # @return [RDF::URI]
+    # @see    http://ruby-doc.org/ruby-1.9/classes/WeakRef.html
+    # @see    http://ruby-doc.org/ruby-1.9/classes/ObjectSpace.html
+    # @see    http://eigenclass.org/hiki/weakhash+and+weakref
+    def self.intern(str)
+      require 'weakref' unless defined?(::WeakRef)
+      @cache ||= {}
+      @index ||= {}
+      if (ref = @cache[str = str.to_s]) && ref.weakref_alive?
+        ref.__getobj__
+      else
+        uri = self.new(str)
+        if CACHE_SIZE == -1 || CACHE_SIZE > @cache.size
+          @cache[str] = WeakRef.new(uri)
+          @index[uri.object_id] = str
+          ObjectSpace.define_finalizer(uri, cache_finalizer)
+        end
+        uri
+      end
+    end
+
+    ##
+    # @return [Integer]
+    # @private
+    def self.cache_size
+      @cache.size
+    end
+
+    ##
+    # @return [Proc]
+    # @private
+    def self.cache_finalizer
+      lambda { |uri_id| @cache.delete(@index.delete(uri_id)) }
+    end
+
+    ##
     # Creates a new `RDF::URI` instance based on the given `uri` string.
     #
     # This is just an alias for {#initialize RDF::URI.new} for compatibity
     # with `Addressable::URI.parse`.
     #
-    # @param  [String] uri
-    # @return [URI]
-    def self.parse(uri)
-      self.new(uri)
+    # @param  [String, #to_s] str
+    # @return [RDF::URI]
+    def self.parse(str)
+      self.new(str)
     end
 
     ##
