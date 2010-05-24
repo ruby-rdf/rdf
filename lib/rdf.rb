@@ -132,7 +132,7 @@ module RDF
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
-    RDF::URI.new([to_uri.to_s, property.to_s].join)
+    RDF::URI.intern([to_uri.to_s, property.to_s].join)
   end
 
   ##
@@ -156,7 +156,7 @@ module RDF
   ##
   # @return [URI]
   def self.to_uri
-    RDF::URI.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+    RDF::URI.intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
   end
 
   class << self
