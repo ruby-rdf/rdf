@@ -57,7 +57,7 @@ module RDF
       @language = options[:language] ? options[:language].to_s.to_sym : nil
 
       if datatype = options[:datatype]
-        @datatype = datatype.respond_to?(:to_uri) ? datatype.to_uri : URI.new(datatype.to_s)
+        @datatype = datatype.respond_to?(:to_uri) ? datatype.to_uri : URI.intern(datatype.to_s)
       else
         @datatype = case value
           when String     then nil # implicit XSD.string
