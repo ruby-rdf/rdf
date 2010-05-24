@@ -75,7 +75,7 @@ module RDF::NTriples
     # @param  [String] input
     # @return [RDF::URI]
     def self.parse_predicate(input)
-      parse_uri(input)
+      parse_uri(input, :intern => true)
     end
 
     ##
@@ -97,9 +97,9 @@ module RDF::NTriples
     ##
     # @param  [String] input
     # @return [RDF::URI]
-    def self.parse_uri(input)
+    def self.parse_uri(input, options = {})
       if input =~ URIREF
-        RDF::URI.new($1)
+        RDF::URI.send(options[:intern] ? :intern : :new, $1)
       end
     end
 
@@ -175,7 +175,7 @@ module RDF::NTriples
         begin
           unless blank? || read_comment
             subject   = read_uriref || read_node || fail_subject
-            predicate = read_uriref || fail_predicate
+            predicate = read_uriref(:intern => true) || fail_predicate
             object    = read_uriref || read_node || read_literal || fail_object
             return [subject, predicate, object]
           end
@@ -196,9 +196,9 @@ module RDF::NTriples
     ##
     # @return [RDF::URI]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
-    def read_uriref
+    def read_uriref(options = {})
       if uri = match(URIREF)
-        RDF::URI.new(uri)
+        RDF::URI.send(options[:intern] ? :intern : :new, uri)
       end
     end
 
