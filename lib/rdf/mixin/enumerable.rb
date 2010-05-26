@@ -99,7 +99,7 @@ module RDF
     # @param  [Statement] statement
     # @return [Boolean]
     def has_statement?(statement)
-      enum_statement.include?(statement)
+      !enum_statement.find { |s| s.eql?(statement) }.nil?
     end
 
     ##

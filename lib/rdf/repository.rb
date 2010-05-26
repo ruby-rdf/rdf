@@ -176,7 +176,7 @@ module RDF
       # @return [Boolean]
       # @see    RDF::Enumerable#has_statement?
       def has_statement?(statement)
-        @data.include?(statement)
+        !@data.find { |s| s.eql?(statement) }.nil?
       end
 
       ##
@@ -196,7 +196,7 @@ module RDF
       # @param  [RDF::Statement] statement
       # @return [void]
       def insert_statement(statement)
-        @data.push(statement.dup) unless @data.include?(statement)
+        @data.push(statement.dup) unless has_statement?(statement)
       end
 
       ##
@@ -205,7 +205,7 @@ module RDF
       # @param  [RDF::Statement] statement
       # @return [void]
       def delete_statement(statement)
-        @data.delete(statement)
+        @data.delete_at(@data.index { |s| s.eql?(statement) })
       end
 
       ##
