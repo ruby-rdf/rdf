@@ -169,7 +169,7 @@ module RDF
     # @param  [Integer] index
     # @return [Value]
     def [](index)
-      to_a[index]
+      to_quad[index]
     end
 
     ##
@@ -207,8 +207,8 @@ module RDF
     # @param  [Symbol] predicate_key
     # @param  [Symbol] object_key
     # @return [Hash{Symbol => Value}]
-    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object)
-      {subject_key => subject, predicate_key => predicate, object_key => object}
+    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object, context_key = :context)
+      {subject_key => subject, predicate_key => predicate, object_key => object, context_key => context}
     end
 
     ##
