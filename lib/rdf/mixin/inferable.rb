@@ -6,15 +6,15 @@ module RDF
     include RDF::Enumerable
     include ::Enumerable
     include ::RDFS
-    
+
     def pairs_of_statements
       Enumerator.new(self, :combination)
     end
-    
+
     def combination
       statements.combination(2)
     end
-    
+
     def draw_inferences(rule_set = :rdfs_entailment)
       case rule_set
       when :rdfs_entailment
@@ -30,7 +30,7 @@ module RDF
     end
 
     private
-    
+
     def unitary_inferences_from(statement)
       rules = Semantics.constants.select {|c| Object.module_eval("RDFS::Semantics::#{c}").is_a? Class}
       rules = rules.collect {|c| Object.module_eval("RDFS::Semantics::#{c}")}
@@ -38,7 +38,7 @@ module RDF
       arr = rules.each { |rule| inferred_statements += ((o = rule.new.match(statement)).nil? ? [] : o) }
       arr.collect {|r| r.new.match(statement)}.compact
     end
-    
+
     def pairwise_inferences_from(pair)
       rules = Semantics.constants.select {|c| Object.module_eval("RDFS::Semantics::#{c}").is_a? Class}
       rules = rules.collect {|c| Object.module_eval("RDFS::Semantics::#{c}")}

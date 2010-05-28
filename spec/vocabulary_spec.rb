@@ -22,7 +22,7 @@ describe RDF::Vocabulary do
       RDF::CC.should be_a_vocabulary("http://creativecommons.org/ns#")
       RDF::CC.should have_properties("http://creativecommons.org/ns#", %w(attributionName attributionURL deprecatedOn jurisdiction legalcode license morePermissions permits prohibits requires))
     end
-    
+
     it "should support W3 Authentication Certificate (CERT)" do
       RDF::CERT.should be_a_vocabulary("http://www.w3.org/ns/auth/cert#")
       RDF::CERT.should have_properties("http://www.w3.org/ns/auth/cert#", %w(decimal hex identity public_key))
@@ -69,7 +69,7 @@ describe RDF::Vocabulary do
       RDF::RDFS.should have_properties("http://www.w3.org/2000/01/rdf-schema#", %w(comment domain isDefinedBy label member range seeAlso subClassOf subPropertyOf))
       RDF::RDFS.should have_subclasses("http://www.w3.org/2000/01/rdf-schema#", %w(Class Container ContainerMembershipProperty Datatype Literal Resource))
     end
-    
+
     it "should support W3 RSA Keys (RSA)" do
       RDF::RSA.should be_a_vocabulary("http://www.w3.org/ns/auth/rsa#")
       RDF::RSA.should have_properties("http://www.w3.org/ns/auth/rsa#", %w(modulus private_exponent public_exponent))
