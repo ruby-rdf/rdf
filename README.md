@@ -183,6 +183,7 @@ Authors
 Contributors
 ------------
 
+* [Hellekin O. Wolf](mailto:hellekin@cepheide.org) - <http://hellekin.cepheide.org/>
 * [John Fieber](mailto:jrf@ursamaris.org) - <http://github.com/jfieber>
 * [Pius Uzamere](mailto:pius@alum.mit.edu) - <http://pius.me/>
 
