@@ -44,6 +44,7 @@ module RDF
   # RDF vocabularies
   autoload :Vocabulary, 'rdf/vocab'
   autoload :CC,         'rdf/vocab/cc'
+  autoload :CERT,       'rdf/vocab/cert'
   autoload :DC,         'rdf/vocab/dc'
   autoload :DC11,       'rdf/vocab/dc11'
   autoload :DOAP,       'rdf/vocab/doap'
@@ -52,6 +53,7 @@ module RDF
   autoload :HTTP,       'rdf/vocab/http'
   autoload :OWL,        'rdf/vocab/owl'
   autoload :RDFS,       'rdf/vocab/rdfs'
+  autoload :RSA,        'rdf/vocab/rsa'
   autoload :RSS,        'rdf/vocab/rss'
   autoload :SIOC,       'rdf/vocab/sioc'
   autoload :SKOS,       'rdf/vocab/skos'
