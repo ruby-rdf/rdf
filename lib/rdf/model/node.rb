@@ -66,11 +66,37 @@ module RDF
     end
 
     ##
+    # Returns a hash code for this blank node.
+    #
+    # @return [Fixnum]
+    def hash
+      @id.hash
+    end
+
+    ##
+    # Checks whether this blank node is equal to `other`.
+    #
+    # @param  [Node] other
+    # @return [Boolean]
+    def eql?(other)
+      other.is_a?(Node) && self == other
+    end
+
+    ##
+    # Checks whether this blank node is equal to `other`.
+    #
+    # @param  [Object] other
+    # @return [Boolean]
+    def ==(other)
+      other.respond_to?(:id) && @id == other.id
+    end
+
+    ##
     # Returns a string representation of this blank node.
     #
     # @return [String]
     def to_s
-      "_:%s" % id.to_s
+      "_:%s" % @id.to_s
     end
   end
 end
