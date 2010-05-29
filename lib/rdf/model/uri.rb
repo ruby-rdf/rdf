@@ -27,13 +27,21 @@ module RDF
     CACHE_SIZE = -1 # unlimited by default
 
     ##
+    # @return [RDF::Util::Cache]
+    # @private
+    def self.cache
+      require 'rdf/util/cache' unless defined?(::RDF::Util::Cache)
+      @cache ||= RDF::Util::Cache.new(CACHE_SIZE)
+    end
+
+    ##
     # Returns an interned `RDF::URI` instance based on the given `uri`
     # string.
     #
-    # The maximum number of simultaneous interned URI references is given by
-    # the `CACHE_SIZE` constant. This value is unlimited by default, in
-    # which case an interned URI object will be purged only when the last
-    # strong reference to it is deleted (i.e. when its finalizer runs).
+    # The maximum number of cached interned URI references is given by the
+    # `CACHE_SIZE` constant. This value is unlimited by default, in which
+    # case an interned URI object will be purged only when the last strong
+    # reference to it is garbage collection (i.e., when its finalizer runs).
     #
     # Excepting special memory-limited circumstances, it should always be
     # safe and preferred to construct new URI references using
@@ -43,38 +51,8 @@ module RDF
     #
     # @param  [String, #to_s] str
     # @return [RDF::URI]
-    # @see    http://ruby-doc.org/ruby-1.9/classes/WeakRef.html
-    # @see    http://ruby-doc.org/ruby-1.9/classes/ObjectSpace.html
-    # @see    http://eigenclass.org/hiki/weakhash+and+weakref
     def self.intern(str)
-      require 'weakref' unless defined?(::WeakRef)
-      @cache ||= {}
-      @index ||= {}
-      if (ref = @cache[str = str.to_s]) && ref.weakref_alive?
-        ref.__getobj__
-      else
-        uri = self.new(str)
-        if CACHE_SIZE == -1 || CACHE_SIZE > @cache.size
-          @cache[str] = WeakRef.new(uri)
-          @index[uri.object_id] = str
-          ObjectSpace.define_finalizer(uri, cache_finalizer)
-        end
-        uri
-      end
-    end
-
-    ##
-    # @return [Integer]
-    # @private
-    def self.cache_size
-      @cache.size
-    end
-
-    ##
-    # @return [Proc]
-    # @private
-    def self.cache_finalizer
-      lambda { |uri_id| @cache.delete(@index.delete(uri_id)) }
+      cache[str = str.to_s] ||= self.new(str)
     end
 
     ##
