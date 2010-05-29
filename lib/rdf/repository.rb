@@ -94,10 +94,7 @@ module RDF
       @title   = @options.delete(:title)
 
       # Provide a default in-memory implementation:
-      if self.class.equal?(RDF::Repository)
-        @data = []
-        send(:extend, Implementation)
-      end
+      send(:extend, Implementation) if self.class.equal?(RDF::Repository)
 
       if block_given?
         case block.arity
@@ -128,6 +125,13 @@ module RDF
     ##
     # @see RDF::Repository
     module Implementation
+      ##
+      # @private
+      def self.extend_object(obj)
+        obj.instance_variable_set(:@data, {})
+        super
+      end
+
       ##
       # Returns `true` if this repository supports `feature`.
       #
@@ -166,7 +170,15 @@ module RDF
       # @return [Integer]
       # @see    RDF::Enumerable#count
       def count
-        @data.size
+        count = 0
+        @data.each do |c, ss|
+          ss.each do |s, ps|
+            ps.each do |p, os|
+              count += os.size
+            end
+          end
+        end
+        count
       end
 
       ##
@@ -176,7 +188,11 @@ module RDF
       # @return [Boolean]
       # @see    RDF::Enumerable#has_statement?
       def has_statement?(statement)
-        !@data.find { |s| s.eql?(statement) }.nil?
+        s, p, o, c = statement.to_quad
+        @data.has_key?(c) &&
+          @data[c].has_key?(s) &&
+          @data[c][s].has_key?(p) &&
+          @data[c][s][p].include?(o)
       end
 
       ##
@@ -187,7 +203,19 @@ module RDF
       # @return [Enumerator]
       # @see    RDF::Enumerable#each_statement
       def each(&block)
-        @data.each(&block)
+        if block_given?
+          @data.each do |c, ss|
+            ss.each do |s, ps|
+              ps.each do |p, os|
+                os.each do |o|
+                  block.call(RDF::Statement.new(s, p, o, :context => c))
+                end
+              end
+            end
+          end
+        else
+          enum_statement
+        end
       end
 
       ##
@@ -196,7 +224,13 @@ module RDF
       # @param  [RDF::Statement] statement
       # @return [void]
       def insert_statement(statement)
-        @data.push(statement.dup) unless has_statement?(statement)
+        unless has_statement?(statement)
+          s, p, o, c = statement.to_quad
+          @data[c] ||= {}
+          @data[c][s] ||= {}
+          @data[c][s][p] ||= []
+          @data[c][s][p] << o
+        end
       end
 
       ##
@@ -205,7 +239,13 @@ module RDF
       # @param  [RDF::Statement] statement
       # @return [void]
       def delete_statement(statement)
-        @data.delete_at(@data.index { |s| s.eql?(statement) })
+        if has_statement?(statement)
+          s, p, o, c = statement.to_quad
+          @data[c][s][p].delete(o)
+          @data[c][s].delete(p) if @data[c][s][p].empty?
+          @data[c].delete(s) if @data[c][s].empty?
+          @data.delete(c) if @data[c].empty?
+        end
       end
 
       ##
