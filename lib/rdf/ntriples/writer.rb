@@ -27,6 +27,90 @@ module RDF::NTriples
   class Writer < RDF::Writer
     format RDF::NTriples::Format
 
+    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    ESCAPE_PLAIN = /\A[\x20-\x21\x23-\x5B\x5D-\x7E]*\z/m.freeze
+    ESCAPE_ASCII = /\A[\x00-\x7F]*\z/m.freeze
+
+    ##
+    # @param  [String] string
+    # @return [String]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    def self.escape(string)
+      case
+        when string =~ ESCAPE_PLAIN # a shortcut for the simple case
+          string
+        when string.respond_to?(:ascii_only?) && string.ascii_only?
+          StringIO.open do |buffer|
+            string.each_byte { |u| buffer << escape_ascii(u) }
+            buffer.string
+          end
+        when string.respond_to?(:each_codepoint)
+          StringIO.open do |buffer|
+            string.each_codepoint { |u| buffer << escape_unicode(u) }
+            buffer.string
+          end
+        else # works in Ruby 1.8.x, too
+          StringIO.open do |buffer|
+            string.scan(/./mu) { |c| buffer << escape_unicode(u = c.unpack('U*').first) }
+            buffer.string
+          end
+      end
+    end
+
+    ##
+    # @param  [Integer, #ord] u
+    # @return [String]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    def self.escape_unicode(u)
+      case (u = u.ord)
+        when (0x00..0x7F)        # ASCII 7-bit
+          escape_ascii(u)
+        when (0x80..0xFFFF)      # Unicode BMP
+          escape_utf16(u)
+        when (0x10000..0x10FFFF) # Unicode
+          escape_utf32(u)
+        else
+          raise ArgumentError.new("expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x#{u.to_s(16)}")
+      end
+    end
+
+    ##
+    # @param  [Integer, #ord] u
+    # @return [String]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    def self.escape_ascii(u)
+      case (u = u.ord)
+        when (0x00..0x08) then escape_utf16(u)
+        when (0x09)       then "\\t"
+        when (0x0A)       then "\\n"
+        when (0x0B..0x0C) then escape_utf16(u)
+        when (0x0D)       then "\\r"
+        when (0x0E..0x1F) then escape_utf16(u)
+        when (0x22)       then "\\\""
+        when (0x5C)       then "\\\\"
+        when (0x7F)       then escape_utf16(u)
+        when (0x00..0x7F) then u.chr
+        else
+          raise ArgumentError.new("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}")
+      end
+    end
+
+    ##
+    # @param  [Integer, #ord] u
+    # @return [String]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    def self.escape_utf16(u)
+      sprintf("\\u%04X", u.ord)
+    end
+
+    ##
+    # @param  [Integer, #ord] u
+    # @return [String]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    def self.escape_utf32(u)
+      sprintf("\\U%08X", u.ord)
+    end
+
     ##
     # Returns the serialized N-Triples representation of the given RDF
     # value.
@@ -120,6 +204,12 @@ module RDF::NTriples
         else
           quoted(escaped(literal.to_s))
       end
+    end
+
+    ##
+    # @private
+    def escaped(string)
+      self.class.escape(string)
     end
   end
 end
