@@ -29,7 +29,7 @@ module RDF
     attr_accessor :context
 
     ##
-    # @return [Array<Statement>]
+    # @return [RDF::Queryable]
     attr_accessor :data
 
     ##
@@ -68,7 +68,7 @@ module RDF
       end
 
       @options = options.dup
-      @data    = @options.delete(:data) || []
+      @data    = @options.delete(:data) || RDF::Repository.new
 
       if block_given?
         case block.arity
@@ -151,7 +151,7 @@ module RDF
     # @return [Integer]
     # @see    RDF::Enumerable#count
     def count
-      @data.size
+      @data.query(:context => context).count
     end
 
     ##
@@ -163,7 +163,7 @@ module RDF
     def has_statement?(statement)
       statement = statement.dup
       statement.context = context
-      @data.include?(statement)
+      @data.has_statement?(statement)
     end
 
     ##
@@ -174,7 +174,7 @@ module RDF
     # @return [Enumerator]
     # @see    RDF::Enumerable#each_statement
     def each(&block)
-      @data.each(&block)
+      @data.query(:context => context).each(&block)
     end
 
     ##
@@ -186,7 +186,7 @@ module RDF
     def insert_statement(statement)
       statement = statement.dup
       statement.context = context
-      @data.push(statement.dup) unless @data.include?(statement)
+      @data.insert(statement)
     end
 
     ##
@@ -207,7 +207,7 @@ module RDF
     # @return [void]
     # @see    RDF::Mutable#clear
     def clear_statements
-      @data.clear
+      @data.delete(:context => context)
     end
 
     protected :insert_statement
