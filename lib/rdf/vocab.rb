@@ -54,13 +54,7 @@ module RDF
     # @return [Enumerator]
     def self.each(&block)
       if self.equal?(Vocabulary)
-        # This is needed since all vocabulary classes are defined using
-        # Ruby's autoloading facility, meaning that `@@subclasses` will
-        # be empty until each subclass has been touched or require'd.
-        %w(cc cert dc dc11 doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml xsd).each do |prefix|
-          require "rdf/vocab/#{prefix}"
-        end
-        @@subclasses.each(&block)
+        available_vocabs.each(&block)
       else
         # TODO: should enumerate vocabulary-specific defined properties.
       end
@@ -202,6 +196,14 @@ module RDF
       @@subclasses = [::RDF] # @private
       @@uris       = {}      # @private
       @@uri        = nil     # @private
+
+      # This is needed since all vocabulary classes are defined using
+      # Ruby's autoloading facility, meaning that `@@subclasses` will
+      # be empty until each subclass has been touched or require'd.
+      def self.available_vocabs
+        RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" }
+        @@subclasses
+      end
 
   end
 end
