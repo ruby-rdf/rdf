@@ -13,6 +13,7 @@ module RDF
   # * {RDF::DOAP}  - Description of a Project (DOAP)
   # * {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
   # * {RDF::FOAF}  - Friend of a Friend (FOAF)
+  # * {RDF::GEO}   - WGS84 Geo Positioning (GEO)
   # * {RDF::HTTP}  - Hypertext Transfer Protocol (HTTP)
   # * {RDF::OWL}   - Web Ontology Language (OWL)
   # * {RDF::RDFS}  - RDF Schema (RDFS)
@@ -56,7 +57,7 @@ module RDF
         # This is needed since all vocabulary classes are defined using
         # Ruby's autoloading facility, meaning that `@@subclasses` will
         # be empty until each subclass has been touched or require'd.
-        %w(cc dc dc11 doap exif foaf http owl rdfs rss sioc skos wot xhtml xsd).each do |prefix|
+        %w(cc dc dc11 doap exif foaf geo http owl rdfs rss sioc skos wot xhtml xsd).each do |prefix|
           require "rdf/vocab/#{prefix}"
         end
         @@subclasses.each(&block)

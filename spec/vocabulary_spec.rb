@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Vocabulary do
-  VOCABS = %w(cc cert dc doap exif foaf http owl rdfs rsa rss sioc skos wot xhtml xsd)
+  VOCABS = %w(cc cert dc doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml xsd)
 
   context "when created" do
     it "should require one argument" do
@@ -47,6 +47,12 @@ describe RDF::Vocabulary do
     it "should support Friend of a Friend (FOAF)" do
       RDF::FOAF.should be_a_vocabulary("http://xmlns.com/foaf/0.1/")
       RDF::FOAF.should have_properties("http://xmlns.com/foaf/0.1/", %w(account accountName accountServiceHomepage age aimChatID based_near birthday currentProject depiction depicts dnaChecksum familyName family_name firstName fundedBy geekcode gender givenName givenname holdsAccount homepage icqChatID img interest isPrimaryTopicOf jabberID knows lastName logo made maker mbox mbox_sha1sum member membershipClass msnChatID myersBriggs name nick openid page pastProject phone plan primaryTopic publications schoolHomepage sha1 skypeID status surname theme thumbnail tipjar title topic topic_interest weblog workInfoHomepage workplaceHomepage yahooChatID))
+    end
+
+    it "should support WGS84 Geo Positioning (GEO)" do
+      RDF::GEO.should be_a_vocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
+      RDF::GEO.should have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long alt lat_long))
+      RDF::GEO.should have_subclasses("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
     end
 
     it "should support Hypertext Transfer Protocol (HTTP)" do
