@@ -47,6 +47,12 @@ module RDF
     include RDF::Queryable
 
     ##
+    # Returns the metadata options passed to this repository at construction
+    #
+    # @return [Hash{Object => Object}]
+    attr_reader :options
+
+    ##
     # Returns the {URI} of this repository.
     #
     # @return [URI]

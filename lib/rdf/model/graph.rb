@@ -25,6 +25,12 @@ module RDF
     include RDF::Queryable
 
     ##
+    # Returns the metadata options passed to this graph at construction
+    #
+    # @return [Hash{Object => Object}]
+    attr_reader :options
+
+    ##
     # @return [Resource]
     attr_accessor :context
 
