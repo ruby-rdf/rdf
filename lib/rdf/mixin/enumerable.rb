@@ -591,5 +591,18 @@ module RDF
       end
       result
     end
+
+    ##
+    # Returns a serialized string representation of this enumerable.  You may
+    # need to load a given serialization library before using this method.
+    #
+    # @example
+    #     require 'rdf/ntriples'
+    #     ntriples = enumerable.dump(:ntriples)
+    # @see {RDF::Writer#dump}
+    def dump(args)
+      RDF::Writer.for(*args).dump(self)
+    end
+    
   end
 end
