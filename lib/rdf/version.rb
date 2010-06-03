@@ -5,8 +5,7 @@ module RDF
     TINY  = 10
     EXTRA = nil
 
-    STRING = [MAJOR, MINOR, TINY].join('.')
-    STRING << ".#{EXTRA}" if EXTRA
+    STRING = [MAJOR, MINOR, TINY, EXTRA].compact.join('.')
 
     ##
     # @return [String]
