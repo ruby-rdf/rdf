@@ -593,16 +593,20 @@ module RDF
     end
 
     ##
-    # Returns a serialized string representation of this enumerable.  You may
-    # need to load a given serialization library before using this method.
+    # Returns a serialized string representation of `self`.
     #
-    # @example
-    #     require 'rdf/ntriples'
-    #     ntriples = enumerable.dump(:ntriples)
-    # @see {RDF::Writer#dump}
-    def dump(args)
+    # Before calling this method you may need to explicitly require a
+    # serialization plugin for the specified format.
+    #
+    # @example Serializing into N-Triples format
+    #   require 'rdf/ntriples'
+    #   ntriples = enumerable.dump(:ntriples)
+    #
+    # @param  [Array<Object>] args
+    # @return [String]
+    # @see    RDF::Writer.dump
+    def dump(*args)
       RDF::Writer.for(*args).dump(self)
     end
-    
   end
 end
