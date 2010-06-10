@@ -138,6 +138,14 @@ module RDF
     end
 
     ##
+    # Returns `false`.
+    #
+    # @return [Boolean]
+    def anonymous?
+      false
+    end
+
+    ##
     # @return [Boolean]
     def eql?(other)
       other.is_a?(Literal) && self == other
