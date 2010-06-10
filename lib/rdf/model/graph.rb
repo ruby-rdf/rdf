@@ -152,6 +152,14 @@ module RDF
     end
 
     ##
+    # Returns `true` if this graph has an anonymous context, `false` otherwise.
+    #
+    # @return [Boolean]
+    def anonymous?
+      context.nil? ? false : context.anonymous?
+    end
+
+    ##
     # Returns the number of RDF statements in this graph.
     #
     # @return [Integer]
