@@ -87,19 +87,40 @@ module RDF
     end
 
     ##
-    # Returns `true`.
-    #
-    # @return [Boolean]
-    def uri?
-      true
-    end
-
-    ##
     # Returns `false`.
     #
     # @return [Boolean]
     def anonymous?
       false
+    end
+
+    ##
+    # Returns `true`.
+    #
+    # @return [Boolean]
+    # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+    def uri?
+      true
+    end
+
+    ##
+    # Returns `true` if this URI is a URN.
+    #
+    # @return [Boolean]
+    # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Name
+    # @since  0.2.0
+    def urn?
+      to_s.index('urn:') == 0
+    end
+
+    ##
+    # Returns `true` if this URI is a URL.
+    #
+    # @return [Boolean]
+    # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Locator
+    # @since  0.2.0
+    def url?
+      !urn?
     end
 
     ##
