@@ -118,7 +118,7 @@ module RDF
     end
 
     # Undefine all superfluous instance methods:
-    undef_method *(instance_methods.map { |s| s.to_sym } - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?])
+    undef_method(*(instance_methods.map { |s| s.to_sym } - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?]))
 
     ##
     # @param  [URI, String, #to_s]
