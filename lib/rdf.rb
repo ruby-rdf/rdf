@@ -42,25 +42,15 @@ module RDF
   autoload :Query,      'rdf/query'
 
   # RDF vocabularies
+  VOCABS =  begin
+              path = File.dirname(__FILE__) + '/rdf/vocab/*.rb'
+              Dir[path].map { |v| v.gsub(/^.*\/(.*).rb$/,'\1') }.sort
+            rescue
+	      []
+	    end
+  # RDF vocabulary is available by default
   autoload :Vocabulary, 'rdf/vocab'
-  autoload :CC,         'rdf/vocab/cc'
-  autoload :CERT,       'rdf/vocab/cert'
-  autoload :DC,         'rdf/vocab/dc'
-  autoload :DC11,       'rdf/vocab/dc11'
-  autoload :DOAP,       'rdf/vocab/doap'
-  autoload :EXIF,       'rdf/vocab/exif'
-  autoload :FOAF,       'rdf/vocab/foaf'
-  autoload :GEO,        'rdf/vocab/geo'  
-  autoload :HTTP,       'rdf/vocab/http'
-  autoload :OWL,        'rdf/vocab/owl'
-  autoload :RDFS,       'rdf/vocab/rdfs'
-  autoload :RSA,        'rdf/vocab/rsa'
-  autoload :RSS,        'rdf/vocab/rss'
-  autoload :SIOC,       'rdf/vocab/sioc'
-  autoload :SKOS,       'rdf/vocab/skos'
-  autoload :WOT,        'rdf/vocab/wot'
-  autoload :XHTML,      'rdf/vocab/xhtml'
-  autoload :XSD,        'rdf/vocab/xsd'
+  (VOCABS - ['rdf']).each { |v| autoload v.upcase.intern, "rdf/vocab/#{v}" }
 
   ##
   # Alias for `RDF::Resource.new`.
