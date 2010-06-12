@@ -42,15 +42,9 @@ module RDF
   autoload :Query,      'rdf/query'
 
   # RDF vocabularies
-  VOCABS =  begin
-              path = File.dirname(__FILE__) + '/rdf/vocab/*.rb'
-              Dir[path].map { |v| v.gsub(/^.*\/(.*).rb$/,'\1') }.sort
-            rescue
-	      []
-	    end
-  # RDF vocabulary is available by default
   autoload :Vocabulary, 'rdf/vocab'
-  (VOCABS - ['rdf']).each { |v| autoload v.upcase.intern, "rdf/vocab/#{v}" }
+  VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
+  VOCABS.each { |v| autoload v.to_s.upcase.to_sym, "rdf/vocab/#{v}" unless v == :rdf }
 
   ##
   # Alias for `RDF::Resource.new`.
