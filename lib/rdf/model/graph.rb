@@ -19,7 +19,9 @@ module RDF
   #   
   #   graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
   #
-  class Graph < Resource
+  class Graph
+    include RDF::Resource
+
     include RDF::Enumerable
     include RDF::Mutable
     include RDF::Queryable
@@ -31,7 +33,7 @@ module RDF
     attr_reader :options
 
     ##
-    # @return [Resource]
+    # @return [RDF::Resource]
     attr_accessor :context
 
     ##
@@ -62,7 +64,7 @@ module RDF
     end
 
     ##
-    # @param  [Resource]               context
+    # @param  [RDF::Resource]          context
     # @param  [Hash{Symbol => Object}] options
     # @yield  [graph]
     # @yieldparam [Graph]
@@ -121,7 +123,7 @@ module RDF
     ##
     # Returns all unique RDF contexts for this graph.
     #
-    # @return [Array<Resource>]
+    # @return [Array<RDF::Resource>]
     def contexts
       named? ? [context] : []
     end
@@ -129,7 +131,7 @@ module RDF
     ##
     # Returns the URI representation of this graph.
     #
-    # @return [URI]
+    # @return [RDF::URI]
     def to_uri
       context
     end

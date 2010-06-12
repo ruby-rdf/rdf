@@ -38,7 +38,9 @@ module RDF
   #
   # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
-  class Literal < Value
+  class Literal
+    include RDF::Value
+
     # @return [String] The normalized string representation of the value.
     attr_accessor :value
 

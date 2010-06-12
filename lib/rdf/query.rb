@@ -43,13 +43,13 @@ module RDF
 
     include ::Enumerable
 
-    # @return [Hash{Symbol => Variable}]
+    # @return [Hash{Symbol => RDF::Query::Variable}]
     attr_reader :variables
 
-    # @return [Array<Pattern>]
+    # @return [Array<RDF::Query::Pattern>]
     attr_reader :patterns
 
-    # @return [Array<Hash{Symbol => Value}>] An unordered sequence of query solutions.
+    # @return [Array<Hash{Symbol => RDF::Value}>] An unordered sequence of query solutions.
     attr_accessor :solutions
 
     # @return [Hash]

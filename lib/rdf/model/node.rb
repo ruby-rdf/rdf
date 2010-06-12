@@ -11,7 +11,9 @@ module RDF
   #
   # @see http://rubygems.org/gems/uuid
   # @see http://rubygems.org/gems/uuidtools
-  class Node < Resource
+  class Node
+    include RDF::Resource
+
     ##
     # Returns a blank node with a random UUID-based identifier.
     #

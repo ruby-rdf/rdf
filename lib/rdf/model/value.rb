@@ -2,9 +2,9 @@ module RDF
   ##
   # An RDF value.
   #
-  # This is the base class for the RDF.rb class hierarchy. The class of
-  # every object that can be a term of {RDF::Statement statements} is a
-  # subclass of this class.
+  # This is the basis for the RDF.rb class hierarchy. Anything that can be a
+  # term of {RDF::Statement RDF statements} should directly or indirectly
+  # include this module.
   #
   # @example Checking if a value is a resource (blank node or URI reference)
   #   value.resource?
@@ -19,18 +19,17 @@ module RDF
   # @example Checking if a value is a literal
   #   value.literal?
   #
-  # @abstract
   # @see RDF::Graph
   # @see RDF::Literal
   # @see RDF::Node
   # @see RDF::Resource
   # @see RDF::Statement
   # @see RDF::URI
-  class Value
+  module Value
     include Comparable
 
     ##
-    # Returns `true` if this value is a graph.
+    # Returns `true` if `self` is a graph.
     #
     # @return [Boolean]
     def graph?
@@ -38,7 +37,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this value is a literal.
+    # Returns `true` if `self` is a literal.
     #
     # @return [Boolean]
     def literal?
@@ -46,7 +45,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this value is a blank node.
+    # Returns `true` if `self` is a blank node.
     #
     # @return [Boolean]
     def node?
@@ -54,7 +53,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this value is a resource.
+    # Returns `true` if `self` is a resource.
     #
     # @return [Boolean]
     def resource?
@@ -62,7 +61,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this value is a statement.
+    # Returns `true` if `self` is a statement.
     #
     # @return [Boolean]
     def statement?
@@ -70,17 +69,25 @@ module RDF
     end
 
     ##
-    # Returns `true` if this value is a URI reference.
+    # Returns `true` if `self` is an IRI reference.
+    #
+    # By default this is simply an alias for {#uri?}.
+    #
+    # @return [Boolean]
+    def iri?
+      uri?
+    end
+
+    ##
+    # Returns `true` if `self` is a URI reference.
     #
     # @return [Boolean]
     def uri?
       false
     end
 
-    alias_method :iri?, :uri?
-
     ##
-    # Returns `true` if this value is a query variable.
+    # Returns `true` if `self` is a query variable.
     #
     # @return [Boolean]
     # @since  0.1.7
@@ -89,7 +96,7 @@ module RDF
     end
 
     ##
-    # Compares this value to `other` for sorting purposes.
+    # Compares `self` to `other` for sorting purposes.
     #
     # Subclasses should override this to provide a more meaningful
     # implementation than the default which simply performs a string
@@ -103,15 +110,15 @@ module RDF
     end
 
     ##
-    # Returns an RDF::Value representation of this object.
+    # Returns an `RDF::Value` representation of `self`.
     #
-    # @return [Value]
+    # @return [RDF::Value]
     def to_rdf
       self
     end
 
     ##
-    # Returns a developer-friendly representation of this value.
+    # Returns a developer-friendly representation of `self`.
     #
     # The result will be of the format `#<RDF::Value::0x12345678(...)>`,
     # where `...` is the string returned by `#to_s`.
@@ -122,23 +129,11 @@ module RDF
     end
 
     ##
-    # Outputs a developer-friendly representation of this value to `stderr`.
+    # Outputs a developer-friendly representation of `self` to `stderr`.
     #
     # @return [void]
     def inspect!
       warn(inspect)
     end
-
-    private
-
-      # Prevent the instantiation of this class:
-      private_class_method :new
-
-      def self.inherited(child) # @private
-        # Enable the instantiation of any subclasses:
-        child.send(:public_class_method, :new)
-        super
-      end
-
   end
 end

@@ -216,16 +216,16 @@ module RDF
     end
 
     ##
-    # @param  [Array<Array(Value)>] triples
+    # @param  [Array<Array(RDF::Value)>] triples
     # @return [void]
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
     end
 
     ##
-    # @param  [Resource] subject
-    # @param  [URI]      predicate
-    # @param  [Value]    object
+    # @param  [RDF::Resource] subject
+    # @param  [RDF::URI]      predicate
+    # @param  [RDF::Value]    object
     # @return [void]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
@@ -234,7 +234,7 @@ module RDF
     end
 
     ##
-    # @param  [Value] value
+    # @param  [RDF::Value] value
     # @return [String]
     def format_value(value, options = {})
       case value
@@ -293,7 +293,7 @@ module RDF
       end
 
       ##
-      # @param  [Resource] uriref
+      # @param  [RDF::Resource] uriref
       # @return [String]
       def uri_for(uriref)
         case

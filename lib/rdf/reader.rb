@@ -148,7 +148,7 @@ module RDF
 
     ##
     # @yield  [triple]
-    # @yieldparam [Array(Value)]
+    # @yieldparam [Array(RDF::Value)]
     # @return [Enumerator]
     def each_triple(&block)
       begin

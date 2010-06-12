@@ -18,36 +18,38 @@ module RDF
   #     :object    => RDF::URI.new("http://ar.to/#self"),
   #   })
   #
-  class Statement < Value
+  class Statement
+    include RDF::Value
+
     # @return [Object]
     attr_accessor :id
 
-    # @return [Resource]
+    # @return [RDF::Resource]
     attr_accessor :context
 
-    # @return [Resource]
+    # @return [RDF::Resource]
     attr_accessor :subject
 
-    # @return [URI]
+    # @return [RDF::URI]
     attr_accessor :predicate
 
-    # @return [Value]
+    # @return [RDF::Value]
     attr_accessor :object
 
     ##
     # @overload initialize(options = {})
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [Resource]       :subject   (nil)
-    #   @option options [URI]            :predicate (nil)
-    #   @option options [Value]          :object    (nil)
-    #   @option options [Resource]       :context   (nil)
+    #   @option options [RDF::Resource]  :subject   (nil)
+    #   @option options [RDF::URI]       :predicate (nil)
+    #   @option options [RDF::Value]     :object    (nil)
+    #   @option options [RDF::Resource]  :context   (nil)
     #
     # @overload initialize(subject, predicate, object, options = {})
-    #   @param  [Resource]               subject
-    #   @param  [URI]                    predicate
-    #   @param  [Value]                  object
+    #   @param  [RDF::Resource]          subject
+    #   @param  [RDF::URI]               predicate
+    #   @param  [RDF::Value]             object
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [Resource]       :context   (nil)
+    #   @option options [RDF::Resource]  :context   (nil)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       case subject
         when Hash
@@ -176,15 +178,15 @@ module RDF
 
     ##
     # @param  [Integer] index
-    # @return [Value]
+    # @return [RDF::Value]
     def [](index)
       to_quad[index]
     end
 
     ##
-    # @param  [Integer] index
-    # @param  [Value]   value
-    # @return [Value]
+    # @param  [Integer]    index
+    # @param  [RDF::Value] value
+    # @return [RDF::Value]
     def []=(index, value)
       case index
         when 0 then subject   = value
@@ -195,13 +197,13 @@ module RDF
     end
 
     ##
-    # @return [Array(Value)]
+    # @return [Array(RDF::Value)]
     def to_quad
       [subject, predicate, object, context]
     end
 
     ##
-    # @return [Array(Value)]
+    # @return [Array(RDF::Value)]
     def to_triple
       [subject, predicate, object]
     end
@@ -215,7 +217,7 @@ module RDF
     # @param  [Symbol] subject_key
     # @param  [Symbol] predicate_key
     # @param  [Symbol] object_key
-    # @return [Hash{Symbol => Value}]
+    # @return [Hash{Symbol => RDF::Value}]
     def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object, context_key = :context)
       {subject_key => subject, predicate_key => predicate, object_key => object, context_key => context}
     end

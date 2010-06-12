@@ -20,7 +20,9 @@ module RDF
   #
   # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
   # @see http://addressable.rubyforge.org/
-  class URI < Resource
+  class URI
+    include RDF::Resource
+
     ##
     # Defines the maximum number of interned URI references that can be held
     # cached in memory at any one time.

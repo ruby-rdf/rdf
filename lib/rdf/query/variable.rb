@@ -38,7 +38,9 @@ class RDF::Query
   #   var = RDF::Query::Variable.new(:y, 123)
   #   var.to_s       #=> "?y=123"
   #
-  class Variable < RDF::Value
+  class Variable
+    include RDF::Value
+
     # @return [Symbol] The variable's name.
     attr_accessor :name
 
