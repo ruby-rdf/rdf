@@ -49,25 +49,34 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [Resource]       :context   (nil)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
-      options = options.dup unless options.empty?
       case subject
         when Hash
-          options    = subject.dup
-          subject    = options.delete(:subject)
-          predicate  = options.delete(:predicate)
-          object     = options.delete(:object)
-          initialize(subject, predicate, object, options)
+          @options   = subject.dup
+          @subject   = @options.delete(:subject)
+          @predicate = @options.delete(:predicate)
+          @object    = @options.delete(:object)
         else
-          @id        = options.delete(:id) if options.has_key?(:id)
-          @context   = options.delete(:context) || options.delete(:graph)
-          @options   = options
+          @options   = !options.empty? ? options.dup : {}
           @subject   = subject
           @predicate = predicate
-          @object    = case object
-            when nil        then nil
-            when RDF::Value then object
-            else RDF::Literal.new(object)
-          end
+          @object    = object
+      end
+      @id      = @options.delete(:id) if @options.has_key?(:id)
+      @context = @options.delete(:context) || @options.delete(:graph)
+      initialize!
+    end
+
+    ##
+    # @private
+    def initialize!
+      @context   = Node.new(@context)   if @context.is_a?(Symbol)
+      @subject   = Node.new(@subject)   if @subject.is_a?(Symbol)
+      @predicate = Node.new(@predicate) if @predicate.is_a?(Symbol)
+      @object    = case @object
+        when nil    then nil
+        when Symbol then Node.new(@object)
+        when Value  then @object
+        else Literal.new(@object)
       end
     end
 

@@ -20,19 +20,17 @@ class RDF::Query
     #   @param  [Hash{Symbol => Object}]     options
     #   @option options [Boolean]            :optional  (false)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
-      case subject
-        when Hash
-          options    = subject
-          subject    = options.delete(:subject)
-          predicate  = options.delete(:predicate)
-          object     = options.delete(:object)
-          initialize(subject, predicate, object, options)
-        else
-          @options   = options || {}
-          @subject   = subject.is_a?(Symbol)   ? Variable.new(subject)   : subject
-          @predicate = predicate.is_a?(Symbol) ? Variable.new(predicate) : predicate
-          @object    = object.is_a?(Symbol)    ? Variable.new(object)    : object
-      end
+      super
+    end
+
+    ##
+    # @private
+    def initialize!
+      @context   = Variable.new(@context)   if @context.is_a?(Symbol)
+      @subject   = Variable.new(@subject)   if @subject.is_a?(Symbol)
+      @predicate = Variable.new(@predicate) if @predicate.is_a?(Symbol)
+      @object    = Variable.new(@object)    if @object.is_a?(Symbol)
+      super
     end
 
     ##
