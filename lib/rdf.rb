@@ -50,6 +50,7 @@ module RDF
   autoload :DOAP,       'rdf/vocab/doap'
   autoload :EXIF,       'rdf/vocab/exif'
   autoload :FOAF,       'rdf/vocab/foaf'
+  autoload :GEO,        'rdf/vocab/geo'  
   autoload :HTTP,       'rdf/vocab/http'
   autoload :OWL,        'rdf/vocab/owl'
   autoload :RDFS,       'rdf/vocab/rdfs'
