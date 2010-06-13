@@ -8,6 +8,7 @@ module RDF
   module Mutable
     include RDF::Readable
     include RDF::Writable
+    include RDF::Util::Aliasing
 
     ##
     # Returns `true` if `self` is mutable.

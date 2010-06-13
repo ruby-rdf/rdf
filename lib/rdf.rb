@@ -46,6 +46,9 @@ module RDF
   VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
   VOCABS.each { |v| autoload v.to_s.upcase.to_sym, "rdf/vocab/#{v}" unless v == :rdf }
 
+  # Utilities
+  autoload :Util,       'rdf/util'
+
   ##
   # Alias for `RDF::Resource.new`.
   #
