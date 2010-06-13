@@ -71,12 +71,12 @@ module RDF
     ##
     # @private
     def initialize!
-      @context   = Node.new(@context)   if @context.is_a?(Symbol)
-      @subject   = Node.new(@subject)   if @subject.is_a?(Symbol)
-      @predicate = Node.new(@predicate) if @predicate.is_a?(Symbol)
+      @context   = Node.intern(@context)   if @context.is_a?(Symbol)
+      @subject   = Node.intern(@subject)   if @subject.is_a?(Symbol)
+      @predicate = Node.intern(@predicate) if @predicate.is_a?(Symbol)
       @object    = case @object
         when nil    then nil
-        when Symbol then Node.new(@object)
+        when Symbol then Node.intern(@object)
         when Value  then @object
         else Literal.new(@object)
       end

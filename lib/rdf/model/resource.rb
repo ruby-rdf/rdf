@@ -11,7 +11,7 @@ module RDF
     # @return [RDF::Resource]
     def self.new(*args, &block)
       case arg = args.shift
-        when Symbol     then Node.new(arg, *args, &block)
+        when Symbol     then Node.intern(arg, *args, &block)
         when /^_:(.*)$/ then Node.new($1, *args, &block)
         else URI.new(arg, *args, &block)
       end
