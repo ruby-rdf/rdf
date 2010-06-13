@@ -32,6 +32,16 @@ module RDF
       end
     end
 
+    ##
+    # Alias for `RDF::Node.new`, at the moment.
+    #
+    # @private
+    # @param  [#to_s] id
+    # @return [RDF::Node]
+    def self.intern(id)
+      self.new(id)
+    end
+
     # @return [String]
     attr_accessor :id
 
