@@ -6,12 +6,12 @@ describe RDF::Repository do
     @repository = RDF::Repository.new
   end
 
-  # @see lib/rdf/spec/repository.rb
+  # @see lib/rdf/spec/repository.rb in rdf-spec
   it_should_behave_like RDF_Repository
 
-  it "should maintain metadata options" do
-    @repository = RDF::Repository.new(:test => "Test metadata")
-    @repository.options[:test].should == "Test metadata"
+  it "should maintain arbitrary options" do
+    @repository = RDF::Repository.new(:foo => :bar)
+    @repository.options.should have_key(:foo)
+    @repository.options[:foo].should == :bar
   end
-
 end

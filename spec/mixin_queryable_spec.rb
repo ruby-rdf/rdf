@@ -6,8 +6,9 @@ describe RDF::Queryable do
     @filename   = etc_file("doap.nt")
     @statements = RDF::NTriples::Reader.new(File.open(@filename)).to_a
     @queryable  = @statements.extend(RDF::Queryable)
-    @subject    = RDF::URI.new("http://rubygems.org/gems/rdf")
+    @subject    = RDF::URI("http://rubygems.org/gems/rdf")
   end
 
+  # @see lib/rdf/spec/queryable.rb in rdf-spec
   it_should_behave_like RDF_Queryable
 end

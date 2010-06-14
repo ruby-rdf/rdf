@@ -134,9 +134,9 @@ describe RDF::NTriples do
 
   context "when writing" do
     before :all do
-      s = RDF::URI.parse("http://rubygems.org/gems/rdf")
+      s = RDF::URI("http://rubygems.org/gems/rdf")
       p = RDF::DC.creator
-      o = RDF::URI.parse("http://ar.to/#self")
+      o = RDF::URI("http://ar.to/#self")
       @stmt = RDF::Statement.new(s, p, o)
       @stmt_string = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
       @graph = RDF::Graph.new
@@ -152,7 +152,7 @@ describe RDF::NTriples do
     end
 
     it "should correctly format URI references" do
-      @writer.new.format_uri(RDF::URI.new('http://rdf.rubyforge.org/')).should == '<http://rdf.rubyforge.org/>'
+      @writer.new.format_uri(RDF::URI('http://rdf.rubyforge.org/')).should == '<http://rdf.rubyforge.org/>'
     end
 
     it "should correctly format plain literals" do
