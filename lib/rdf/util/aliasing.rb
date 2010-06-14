@@ -25,7 +25,8 @@ module RDF; module Util
     #     extend RDF::Util::Aliasing::LateBound
     #   end
     #
-    # @see http://en.wikipedia.org/wiki/Name_binding
+    # @see   http://en.wikipedia.org/wiki/Name_binding
+    # @since 0.2.0
     module LateBound
       ##
       # Makes `new_name` a late-bound alias of the method `old_name`.

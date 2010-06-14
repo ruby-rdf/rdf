@@ -38,6 +38,7 @@ module RDF
     # @private
     # @param  [#to_s] id
     # @return [RDF::Node]
+    # @since  0.2.0
     def self.intern(id)
       self.new(id)
     end

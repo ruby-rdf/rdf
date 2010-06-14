@@ -7,7 +7,9 @@ module RDF; module Util
   # evicting most objects if memory pressure increases to the point of
   # scarcity.
   #
-  # @see RDF::URI.intern
+  # @see   RDF::URI.intern
+  # @see   http://en.wikipedia.org/wiki/Weak_reference
+  # @since 0.2.0
   class Cache
     ##
     # @private
