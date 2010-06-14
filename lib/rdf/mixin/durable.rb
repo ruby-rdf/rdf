@@ -1,6 +1,8 @@
 module RDF
   ##
   module Durable
+    include RDF::Util::Aliasing
+
     ##
     # Returns `true` if `self` is durable.
     #
