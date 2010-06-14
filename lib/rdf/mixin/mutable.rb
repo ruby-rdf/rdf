@@ -6,9 +6,9 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Mutable
+    extend  RDF::Util::Aliasing::LateBound
     include RDF::Readable
     include RDF::Writable
-    include RDF::Util::Aliasing
 
     ##
     # Returns `true` if `self` is mutable.

@@ -1,6 +1,4 @@
-module RDF ; module Util
-
-  autoload :Cache,      'rdf/util/cache'
-  autoload :Aliasing,   'rdf/util/aliasing'
-
-end ; end
+module RDF; module Util
+  autoload :Aliasing, 'rdf/util/aliasing'
+  autoload :Cache,    'rdf/util/cache'
+end; end

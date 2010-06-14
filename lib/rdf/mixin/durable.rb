@@ -1,7 +1,7 @@
 module RDF
   ##
   module Durable
-    include RDF::Util::Aliasing
+    extend RDF::Util::Aliasing::LateBound
 
     ##
     # Returns `true` if `self` is durable.

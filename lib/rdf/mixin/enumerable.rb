@@ -57,8 +57,8 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Enumerable
+    extend  RDF::Util::Aliasing::LateBound
     include ::Enumerable
-    include RDF::Util::Aliasing
 
     ##
     # Returns `true` if `self` contains no RDF statements.
