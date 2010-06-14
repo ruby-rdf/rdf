@@ -86,11 +86,11 @@ module RDF
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Array<Statement>]
+    # @return [Enumerator<Statement>]
     # @see    #each_statement
     # @see    #enum_statement
     def statements(options = {})
-      enum_statement.to_a
+      enum_statement
     end
 
     ##
@@ -143,11 +143,11 @@ module RDF
     # Returns all RDF triples.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Array<Array(Resource, URI, Value)>]
+    # @return [Enumerator<Array(Resource, URI, Value)>]
     # @see    #each_triple
     # @see    #enum_triple
     def triples(options = {})
-      enum_statement.map { |statement| statement.to_triple }
+      enum_statement.map { |statement| statement.to_triple }.to_enum # TODO: optimize
     end
 
     ##
@@ -203,11 +203,11 @@ module RDF
     # Returns all RDF quads.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Array<Array(Resource, URI, Value, Resource)>]
+    # @return [Enumerator<Array(Resource, URI, Value, Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
     def quads(options = {})
-      enum_statement.map { |statement| statement.to_quad }
+      enum_statement.map { |statement| statement.to_quad }.to_enum # TODO: optimize
     end
 
     ##
@@ -265,14 +265,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Array<Resource>]
+    # @return [Enumerator<Resource>]
     # @see    #each_subject
     # @see    #enum_subject
     def subjects(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.subject }
+        enum_statement.map { |statement| statement.subject }.to_enum # TODO: optimize
       else
-        enum_subject.to_a
+        enum_subject
       end
     end
 
@@ -333,14 +333,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Array<URI>]
+    # @return [Enumerator<URI>]
     # @see    #each_predicate
     # @see    #enum_predicate
     def predicates(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.predicate }
+        enum_statement.map { |statement| statement.predicate }.to_enum # TODO: optimize
       else
-        enum_predicate.to_a
+        enum_predicate
       end
     end
 
@@ -401,14 +401,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Array<Value>]
+    # @return [Enumerator<Value>]
     # @see    #each_object
     # @see    #enum_object
     def objects(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.object }
+        enum_statement.map { |statement| statement.object }.to_enum # TODO: optimize
       else
-        enum_object.to_a
+        enum_object
       end
     end
 
@@ -469,14 +469,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Array<Resource>]
+    # @return [Enumerator<Resource>]
     # @see    #each_context
     # @see    #enum_context
     def contexts(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.context }
+        enum_statement.map { |statement| statement.context }.to_enum # TODO: optimize
       else
-        enum_context.to_a
+        enum_context
       end
     end
 
