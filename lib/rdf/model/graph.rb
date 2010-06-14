@@ -123,9 +123,9 @@ module RDF
     ##
     # Returns all unique RDF contexts for this graph.
     #
-    # @return [Array<RDF::Resource>]
+    # @return [Enumerator<RDF::Resource>]
     def contexts
-      named? ? [context] : []
+      (named? ? [context] : []).to_enum
     end
 
     ##
@@ -229,5 +229,21 @@ module RDF
     protected :insert_statement
     protected :delete_statement
     protected :clear_statements
+
+    ##
+    # @private
+    # @see    RDF::Enumerable#graphs
+    # @since  0.2.0
+    def graphs
+      [self].to_enum
+    end
+
+    ##
+    # @private
+    # @see    RDF::Enumerable#each_graph
+    # @since  0.2.0
+    def each_graph(&block)
+      block_given? ? block.call(self) : enum_graph
+    end
   end
 end
