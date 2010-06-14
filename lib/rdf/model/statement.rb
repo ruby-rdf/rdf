@@ -180,7 +180,13 @@ module RDF
     # @param  [Integer] index
     # @return [RDF::Value]
     def [](index)
-      to_quad[index]
+      case index
+        when 0 then self.subject
+        when 1 then self.predicate
+        when 2 then self.object
+        when 3 then self.context
+        else nil
+      end
     end
 
     ##
@@ -189,10 +195,11 @@ module RDF
     # @return [RDF::Value]
     def []=(index, value)
       case index
-        when 0 then subject   = value
-        when 1 then predicate = value
-        when 2 then object    = value
-        when 3 then context   = value
+        when 0 then self.subject   = value
+        when 1 then self.predicate = value
+        when 2 then self.object    = value
+        when 3 then self.context   = value
+        else nil
       end
     end
 
