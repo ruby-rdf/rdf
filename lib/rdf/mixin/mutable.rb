@@ -37,7 +37,7 @@ module RDF
     def load(filename, options = {})
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      Reader.open(filename, options) do |reader|
+      Reader.open(filename, {:base_uri => filename}.merge(options)) do |reader|
         if options[:context]
           statements = []
           reader.each_statement do |statement|
