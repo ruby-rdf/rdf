@@ -3,11 +3,10 @@ require 'rdf/spec/mutable'
 
 describe RDF::Mutable do
   before :each do
-    @filename   = etc_file("doap.nt")
-    # Possible reference implementations are RDF::Repository and RDF::Graph.
-    @repository = RDF::Repository.new
-    @subject    = RDF::URI("http://rubygems.org/gems/rdf")
-    @context    = RDF::URI("http://example.org/context")
+    # The available reference implementations are `RDF::Repository` and
+    # `RDF::Graph`, but a plain Ruby array will do fine as well:
+    #@mutable = [].extend(RDF::Mutable) # FIXME
+    @mutable = RDF::Repository.new
   end
 
   # @see lib/rdf/spec/mutable.rb in rdf-spec

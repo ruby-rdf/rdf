@@ -3,10 +3,10 @@ require 'rdf/spec/queryable'
 
 describe RDF::Queryable do
   before :each do
-    @filename   = etc_file("doap.nt")
-    @statements = RDF::NTriples::Reader.new(File.open(@filename)).to_a
-    @queryable  = @statements.extend(RDF::Queryable)
-    @subject    = RDF::URI("http://rubygems.org/gems/rdf")
+    # The available reference implementations are `RDF::Repository` and
+    # `RDF::Graph`, but a plain Ruby array will do fine as well:
+    #@queryable = [].extend(RDF::Queryable) # FIXME
+    @queryable = RDF::Repository.new
   end
 
   # @see lib/rdf/spec/queryable.rb in rdf-spec

@@ -3,8 +3,10 @@ require 'rdf/spec/enumerable'
 
 describe RDF::Enumerable do
   before :each do
-    @statements = RDF::NTriples::Reader.new(File.open(etc_file("doap.nt"))).to_a
-    @enumerable = @statements.dup.extend(RDF::Enumerable)
+    # The available reference implementations are `RDF::Repository` and
+    # `RDF::Graph`, but a plain Ruby array will do fine as well:
+    #@enumerable = [].extend(RDF::Enumerable) # FIXME
+    @enumerable = RDF::Repository.new
   end
 
   # @see lib/rdf/spec/enumerable.rb in rdf-spec
