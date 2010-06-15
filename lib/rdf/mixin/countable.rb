@@ -25,5 +25,17 @@ module RDF
 
     alias_method :size,   :count
     alias_method :length, :count # @deprecated
+
+    ##
+    # @private
+    # @param  [Symbol, #to_sym] method
+    # @return [Enumerator]
+    # @see    Object#enum_for
+    def enum_for(method = :each, *args)
+      # Ensure that enumerators support the `#empty?` and `#count` methods:
+      super.extend(RDF::Countable)
+    end
+
+    alias_method :to_enum, :enum_for
   end
 end

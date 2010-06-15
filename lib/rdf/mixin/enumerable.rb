@@ -113,7 +113,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_statement
     def enum_statement
-      enum_for(:each_statement)
+      enum_for(:each_statement).extend(RDF::Queryable, RDF::Enumerable)
     end
 
     alias_method :enum_statements, :enum_statement
