@@ -43,9 +43,11 @@ module RDF
             query_pattern(pattern, &block)
             return nil
           else
-            enum = RDF::Enumerator.new(self, :query_pattern, pattern)
-            enum.extend(RDF::Enumerable, RDF::Queryable)
-            def enum.to_a() super.extend(RDF::Enumerable, RDF::Queryable) end
+            enum = enum_for(:query_pattern, pattern)
+            enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
+            def enum.to_a
+              super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
+            end
             return enum
           end
       end

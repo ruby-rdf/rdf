@@ -113,7 +113,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_statement
     def enum_statement
-      Enumerator.new(self, :each_statement)
+      enum_for(:each_statement)
     end
 
     alias_method :enum_statements, :enum_statement
@@ -173,7 +173,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_triple
     def enum_triple
-      Enumerator.new(self, :each_triple)
+      enum_for(:each_triple)
     end
 
     alias_method :enum_triples, :enum_triple
@@ -234,7 +234,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_quad
     def enum_quad
-      Enumerator.new(self, :each_quad)
+      enum_for(:each_quad)
     end
 
     alias_method :enum_quads, :enum_quad
@@ -302,7 +302,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_subject
     def enum_subject
-      Enumerator.new(self, :each_subject)
+      enum_for(:each_subject)
     end
 
     alias_method :enum_subjects, :enum_subject
@@ -370,7 +370,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_predicate
     def enum_predicate
-      Enumerator.new(self, :each_predicate)
+      enum_for(:each_predicate)
     end
 
     alias_method :enum_predicates, :enum_predicate
@@ -438,7 +438,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_object
     def enum_object
-      Enumerator.new(self, :each_object)
+      enum_for(:each_object)
     end
 
     alias_method :enum_objects, :enum_object
@@ -506,7 +506,7 @@ module RDF
     # @return [Enumerator]
     # @see    #each_context
     def enum_context
-      Enumerator.new(self, :each_context)
+      enum_for(:each_context)
     end
 
     alias_method :enum_contexts, :enum_context
@@ -547,7 +547,7 @@ module RDF
     # @see    #each_graph
     # @since  0.1.9
     def enum_graph
-      Enumerator.new(self, :each_graph)
+      enum_for(:each_graph)
     end
 
     alias_method :enum_graphs, :enum_graph

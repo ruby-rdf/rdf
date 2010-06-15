@@ -81,7 +81,7 @@ module RDF
     # @return [Enumerator]
     def each_solution(&block)
       unless block_given?
-        Enumerator.new(self, :each_solution)
+        enum_for(:each_solution)
       else
         solutions.each do |solution|
           block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
