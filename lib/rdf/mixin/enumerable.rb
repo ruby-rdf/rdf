@@ -555,6 +555,16 @@ module RDF
     alias_method :enum_graphs, :enum_graph
 
     ##
+    # Returns all RDF statements in `self` as an array.
+    #
+    # Mixes in `RDF::Enumerable` into the returned array.
+    #
+    # @return [Array]
+    def to_a
+      super.extend(RDF::Enumerable)
+    end
+
+    ##
     # Returns all RDF objects indexed by their subjects and predicates.
     #
     # The return value is a `Hash` instance that has the structure:
