@@ -81,6 +81,8 @@ module RDF
       !enum_statement.find { |s| s.eql?(statement) }.nil?
     end
 
+    alias_method :include?, :has_statement?
+
     ##
     # Iterates the given block for each RDF statement.
     #
