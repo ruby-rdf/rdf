@@ -22,9 +22,10 @@ module RDF
   class Graph
     include RDF::Resource
 
+    include RDF::Countable
     include RDF::Enumerable
-    include RDF::Mutable
     include RDF::Queryable
+    include RDF::Mutable
 
     ##
     # Returns the options passed to this graph when it was constructed.

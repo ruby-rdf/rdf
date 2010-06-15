@@ -41,10 +41,11 @@ module RDF
   #   repository.clear!
   #
   class Repository
+    include RDF::Countable
     include RDF::Enumerable
-    include RDF::Durable
-    include RDF::Mutable
     include RDF::Queryable
+    include RDF::Mutable
+    include RDF::Durable
 
     ##
     # Returns the options passed to this repository when it was constructed.

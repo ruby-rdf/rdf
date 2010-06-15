@@ -7,6 +7,7 @@ module RDF
   Enumerator = defined?(::Enumerator) ? ::Enumerator : ::Enumerable::Enumerator
 
   # RDF mixins
+  autoload :Countable,  'rdf/mixin/countable'
   autoload :Durable,    'rdf/mixin/durable'
   autoload :Enumerable, 'rdf/mixin/enumerable'
   autoload :Inferable,  'rdf/mixin/inferable'

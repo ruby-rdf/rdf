@@ -3,7 +3,7 @@ require 'rdf/ntriples'
 
 describe RDF::NTriples do
   before :all do
-    @testfile = fixture 'test.nt'
+    @testfile = fixture_path('test.nt')
   end
 
   before :each do
