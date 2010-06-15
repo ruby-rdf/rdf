@@ -557,10 +557,21 @@ module RDF
     ##
     # Returns all RDF statements in `self` as an array.
     #
-    # Mixes in `RDF::Enumerable` into the returned array.
+    # Mixes in `RDF::Enumerable` into the returned object.
     #
     # @return [Array]
     def to_a
+      super.extend(RDF::Enumerable)
+    end
+
+    ##
+    # Returns all RDF statements in `self` as a set.
+    #
+    # Mixes in `RDF::Enumerable` into the returned object.
+    #
+    # @return [Set]
+    def to_set
+      require 'set' unless defined?(::Set)
       super.extend(RDF::Enumerable)
     end
 
