@@ -126,7 +126,7 @@ module RDF
     #
     # @return [Enumerator<RDF::Resource>]
     def contexts
-      (named? ? [context] : []).to_enum
+      (named? ? [context] : []).to_enum.extend(RDF::Countable)
     end
 
     ##
@@ -236,7 +236,7 @@ module RDF
     # @see    RDF::Enumerable#graphs
     # @since  0.2.0
     def graphs
-      [self].to_enum
+      enum_graph
     end
 
     ##
