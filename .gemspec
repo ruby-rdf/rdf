@@ -25,7 +25,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.test_files         = %w()
   gem.has_rdoc           = false
 
-  gem.required_ruby_version      = '>= 1.8.2'
+  gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = []
   gem.add_development_dependency 'rdf-spec',    '~> 0.2.0'
   gem.add_development_dependency 'rspec',       '>= 1.3.0'

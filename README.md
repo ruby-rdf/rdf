@@ -21,7 +21,8 @@ Features
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby 1.8.x, Ruby 1.9.x, and JRuby (tested with JRuby 1.4).
+* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.
+* Compatible with older Ruby versions with the help of the [Backports][] gem.
 
 Examples
 --------
@@ -129,7 +130,8 @@ Documentation
 Dependencies
 ------------
 
-* [Addressable](http://addressable.rubyforge.org/) (>= 2.1.1)
+* [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
+* [Addressable](http://rubygems.org/gems/addressable) (>= 2.1.2)
 
 Installation
 ------------
@@ -137,7 +139,8 @@ Installation
 The recommended installation method is via RubyGems. To install the latest
 official release from [RubyGems](http://rubygems.org/), do:
 
-    % [sudo] gem install rdf
+    % [sudo] gem install rdf             # Ruby 1.8.7+ or 1.9.x
+    % [sudo] gem install backports rdf   # Ruby 1.8.1+
 
 Download
 --------
@@ -210,7 +213,8 @@ License
 RDF.rb is free and unencumbered public domain software. For more
 information, see <http://unlicense.org/> or the accompanying UNLICENSE file.
 
-[RDF]:     http://www.w3.org/RDF/
-[YARD]:    http://yardoc.org/
-[YARD-GS]: http://yardoc.org/docs/yard/file:docs/GettingStarted.md
-[PDD]:     http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[RDF]:       http://www.w3.org/RDF/
+[YARD]:      http://yardoc.org/
+[YARD-GS]:   http://yardoc.org/docs/yard/file:docs/GettingStarted.md
+[PDD]:       http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[Backports]: http://rubygems.org/gems/backports
