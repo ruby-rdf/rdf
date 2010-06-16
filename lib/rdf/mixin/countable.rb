@@ -1,5 +1,6 @@
 module RDF
   ##
+  # @since 0.2.0
   module Countable
     extend RDF::Util::Aliasing::LateBound
 

@@ -560,6 +560,7 @@ module RDF
     # Mixes in `RDF::Enumerable` into the returned object.
     #
     # @return [Array]
+    # @since  0.2.0
     def to_a
       super.extend(RDF::Enumerable)
     end
@@ -570,6 +571,7 @@ module RDF
     # Mixes in `RDF::Enumerable` into the returned object.
     #
     # @return [Set]
+    # @since  0.2.0
     def to_set
       require 'set' unless defined?(::Set)
       super.extend(RDF::Enumerable)
@@ -607,6 +609,7 @@ module RDF
     # @param  [Array<Object>] args
     # @return [String]
     # @see    RDF::Writer.dump
+    # @since  0.2.0
     def dump(*args)
       RDF::Writer.for(*args).dump(self)
     end
