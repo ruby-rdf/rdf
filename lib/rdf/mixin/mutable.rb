@@ -33,7 +33,7 @@ module RDF
     #
     # @param  [String, #to_s]          filename
     # @param  [Hash{Symbol => Object}] options
-    # @return [Integer] the number of inserted RDF statements
+    # @return [void]
     def load(filename, options = {})
       raise TypeError.new("#{self} is immutable") if immutable?
 
@@ -48,7 +48,7 @@ module RDF
           statements.size
         else
           insert_statements(reader)
-          nil # FIXME
+          nil
         end
       end
     end
@@ -56,50 +56,58 @@ module RDF
     alias_method :load!, :load
 
     ##
-    # Inserts an RDF statement into `self`.
+    # Inserts RDF data into `self`.
     #
-    # @param  [RDF::Statement, Array<RDF::Value>, #to_a] statement
+    # @param  [RDF::Enumerable, RDF::Statement] data
+    # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
-    def <<(statement)
+    # @see    RDF::Writable#<<
+    def <<(data)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      insert_statement(create_statement(statement))
-
-      return self
+      super # RDF::Writable#<<
     end
 
     ##
     # Inserts RDF statements into `self`.
     #
-    # @param  [Enumerable<RDF::Statement>] statements
+    # @param  [Array<RDF::Statement>] statements
     # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
+    # @see    RDF::Writable#insert
     def insert(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      statements.map! do |value|
-        case
-          when value.respond_to?(:each_statement)
-            insert_statements(value)
-            nil
-          when (statement = create_statement(value)).valid?
-            statement
-          else
-            raise ArgumentError.new("not a valid statement: #{value.inspect}")
-        end
-      end
-      statements.compact!
-      insert_statements(statements) unless statements.empty?
-
-      return self
+      super # RDF::Writable#insert
     end
 
-    alias_method :insert!, :insert
+    ##
+    # Updates RDF statements in `self`.
+    #
+    # `#update([subject, predicate, object])` is equivalent to
+    # `#delete([subject, predicate, nil])` followed by
+    # `#insert([subject, predicate, object])` unless `object` is `nil`.
+    #
+    # @param  [Enumerable<RDF::Statement>] statements
+    # @raise  [TypeError] if `self` is immutable
+    # @return [Mutable]
+    def update(*statements)
+      raise TypeError.new("#{self} is immutable") if immutable?
+
+      statements.each do |statement|
+        if (statement = create_statement(statement))
+          delete([statement.subject, statement.predicate, nil])
+          insert(statement) if statement.has_object?
+        end
+      end
+    end
+
+    alias_method :update!, :update
 
     ##
     # Deletes RDF statements from `self`.
     #
-    # @param  [Enumerable<Statement>] statements
+    # @param  [Enumerable<RDF::Statement>] statements
     # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
     def delete(*statements)
@@ -126,31 +134,9 @@ module RDF
     alias_method :delete!, :delete
 
     ##
-    # Updates RDF statements in `self`.
-    #
-    # `#update([subject, predicate, object])` is equivalent to
-    # `#delete([subject, predicate, nil])` followed by
-    # `#insert([subject, predicate, object])` unless `object` is `nil`.
-    #
-    # @param  [Enumerable<RDF::Statement>] statements
-    # @raise  [TypeError] if `self` is immutable
-    # @return [Mutable]
-    def update(*statements)
-      raise TypeError.new("#{self} is immutable") if immutable?
-
-      statements.each do |statement|
-        if (statement = create_statement(statement))
-          delete([statement.subject, statement.predicate, nil])
-          insert(statement) if statement.has_object?
-        end
-      end
-    end
-
-    alias_method :update!, :update
-
-    ##
     # Deletes all RDF statements from `self`.
     #
+    # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
     def clear
       raise TypeError.new("#{self} is immutable") if immutable?
@@ -158,55 +144,30 @@ module RDF
       if respond_to?(:clear_statements)
         clear_statements
       else
-        each_statement do |statement|
-          delete_statement(statement)
-        end
+        delete_statements(self)
       end
-      self
+
+      return self
     end
 
     alias_method :clear!, :clear
 
-    ##
-    # Transforms various input into an `RDF::Statement` instance.
-    #
-    # @param  [RDF::Statement, Hash, Array, #to_a] statement
-    # @return [RDF::Statement]
-    def create_statement(statement)
-      case statement
-        when Statement then statement
-        when Hash      then Statement.new(statement)
-        when Array     then Statement.new(*statement)
-        else raise ArgumentError.new # FIXME
-      end
-    end
+  protected
 
     ##
-    # Inserts an RDF statement into the underlying storage.
+    # Deletes the given RDF statements from the underlying storage.
     #
-    # Subclasses of {RDF::Repository} must implement this method (except in
-    # case they are immutable).
+    # Defaults to invoking {#delete_statement} for each given statement.
     #
-    # @param  [RDF::Statement] statement
+    # Subclasses of {RDF::Repository} may override this method if they are
+    # capable of more efficiently deleting multiple statements at once.
+    #
+    # @param  [RDF::Enumerable] statements
     # @return [void]
-    # @abstract
-    def insert_statement(statement)
-      raise NotImplementedError
-    end
-
-    ##
-    # Inserts a list of RDF statement into the underlying storage.
-    #
-    # Subclasses of {RDF::Repository} may implement this method if they can
-    # efficiently insert multiple statements at once. This will otherwise
-    # default to invoking {#insert_statement} for each given statement.
-    #
-    # @param  [RDF::Enumerable, #each] statements
-    # @return [void]
-    def insert_statements(statements)
+    def delete_statements(statements)
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
-        insert_statement(statement)
+        delete_statement(statement)
       end
     end
 
@@ -220,29 +181,10 @@ module RDF
     # @return [void]
     # @abstract
     def delete_statement(statement)
-      raise NotImplementedError
+      raise NotImplementedError.new("#{self.class}#delete_statement")
     end
 
-    ##
-    # Deletes a list of RDF statement from the underlying storage.
-    #
-    # Subclasses of {RDF::Repository} may implement this method if they can
-    # efficiently delete multiple statements at once. This will otherwise
-    # default to invoking {#delete_statement} for each given statement.
-    #
-    # @param  [RDF::Enumerable, #each] statements
-    # @return [void]
-    def delete_statements(statements)
-      each = statements.respond_to?(:each_statement) ? :each_statement : :each
-      statements.__send__(each) do |statement|
-        delete_statement(statement)
-      end
-    end
-
-    protected :create_statement
-    protected :insert_statement
-    protected :insert_statements
-    protected :delete_statement
     protected :delete_statements
+    protected :delete_statement
   end
 end

@@ -1,6 +1,8 @@
 module RDF
   ##
   module Readable
+    extend RDF::Util::Aliasing::LateBound
+
     ##
     # Returns `true` if `self` is readable.
     #
