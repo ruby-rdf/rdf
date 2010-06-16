@@ -15,10 +15,23 @@ module RDF
     ##
     # Inserts RDF data into `self`.
     #
-    # @param  [RDF::Enumerable, RDF::Statement] statement
+    # @param  [RDF::Enumerable, RDF::Statement, #to_rdf] data
     # @return [Writable]
-    def <<(statement)
-      insert_statement(create_statement(statement)) # FIXME
+    def <<(data)
+      case data
+        when RDF::Graph
+          insert_graph(data)
+        when RDF::Enumerable
+          insert_statements(data)
+        when RDF::Statement
+          insert_statement(data)
+        else case
+          when data.respond_to?(:to_rdf) && !data.equal?(rdf = data.to_rdf)
+            self << rdf
+          else
+            insert_statement(create_statement(data))
+        end
+      end
 
       return self
     end
@@ -51,13 +64,35 @@ module RDF
   protected
 
     ##
+    # Inserts the given RDF graph into the underlying storage or output
+    # stream.
+    #
+    # Defaults to passing the graph to the {#insert_statements} method.
+    #
+    # Subclasses of {RDF::Repository} may wish to override this method in
+    # case their underlying storage architecture is graph-centric rather
+    # than statement-oriented.
+    #
+    # Subclasses of {RDF::Writer} may wish to override this method if the
+    # output format they implement supports named graphs, in which case
+    # implementing this method may help in producing prettier and more
+    # concise output.
+    #
+    # @param  [RDF::Graph] graph
+    # @return [void]
+    def insert_graph(graph)
+      insert_statements(graph)
+    end
+
+    ##
     # Inserts the given RDF statements into the underlying storage or output
     # stream.
     #
     # Defaults to invoking {#insert_statement} for each given statement.
     #
-    # Subclasses of {RDF::Repository} may override this method if they are
-    # capable of more efficiently inserting multiple statements at once.
+    # Subclasses of {RDF::Repository} may wish to override this method if
+    # they are capable of more efficiently inserting multiple statements at
+    # once.
     #
     # Subclasses of {RDF::Writer} don't generally need to implement this
     # method.
@@ -74,8 +109,8 @@ module RDF
     ##
     # Inserts an RDF statement into the underlying storage or output stream.
     #
-    # Subclasses of {RDF::Repository} must implement this method (except in
-    # case they are immutable).
+    # Subclasses of {RDF::Repository} must implement this method, except if
+    # they are immutable.
     #
     # Subclasses of {RDF::Writer} must implement this method.
     #

@@ -58,7 +58,7 @@ module RDF
     ##
     # Inserts RDF data into `self`.
     #
-    # @param  [RDF::Enumerable, RDF::Statement] data
+    # @param  [RDF::Enumerable, RDF::Statement, #to_rdf] data
     # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
     # @see    RDF::Writable#<<
@@ -159,8 +159,9 @@ module RDF
     #
     # Defaults to invoking {#delete_statement} for each given statement.
     #
-    # Subclasses of {RDF::Repository} may override this method if they are
-    # capable of more efficiently deleting multiple statements at once.
+    # Subclasses of {RDF::Repository} may wish to override this method if
+    # they are capable of more efficiently deleting multiple statements at
+    # once.
     #
     # @param  [RDF::Enumerable] statements
     # @return [void]
@@ -174,8 +175,8 @@ module RDF
     ##
     # Deletes an RDF statement from the underlying storage.
     #
-    # Subclasses of {RDF::Repository} must implement this method (except in
-    # case they are immutable).
+    # Subclasses of {RDF::Repository} must implement this method, except if
+    # they are immutable.
     #
     # @param  [RDF::Statement] statement
     # @return [void]
