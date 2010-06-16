@@ -68,7 +68,8 @@ module RDF
     # @see    RDF::Queryable#query
     # @since  0.2.0
     def query_pattern(pattern, &block)
-      find_all { |statement| pattern === statement }.each(&block)
+      # @see http://ruby-doc.org/core/classes/Enumerable.html#M003121
+      grep(pattern, &block)
     end
 
     protected :query_pattern
