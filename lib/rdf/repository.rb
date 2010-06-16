@@ -154,28 +154,22 @@ module RDF
       end
 
       ##
-      # Returns `false` to indicate that this repository is nondurable.
-      #
-      # @return [Boolean]
-      # @see    RDF::Durable#durable?
+      # @private
+      # @see RDF::Durable#durable?
       def durable?
         false
       end
 
       ##
-      # Returns `true` if this repository contains no RDF statements.
-      #
-      # @return [Boolean]
-      # @see    RDF::Enumerable#empty?
+      # @private
+      # @see RDF::Countable#empty?
       def empty?
         @data.empty?
       end
 
       ##
-      # Returns the number of RDF statements in this repository.
-      #
-      # @return [Integer]
-      # @see    RDF::Enumerable#count
+      # @private
+      # @see RDF::Countable#count
       def count
         count = 0
         @data.each do |c, ss|
@@ -189,11 +183,8 @@ module RDF
       end
 
       ##
-      # Returns `true` if this repository contains the given RDF statement.
-      #
-      # @param  [Statement] statement
-      # @return [Boolean]
-      # @see    RDF::Enumerable#has_statement?
+      # @private
+      # @see RDF::Enumerable#has_statement?
       def has_statement?(statement)
         s, p, o, c = statement.to_quad
         @data.has_key?(c) &&
@@ -203,13 +194,9 @@ module RDF
       end
 
       ##
-      # Enumerates each RDF statement in this repository.
-      #
-      # @yield  [statement]
-      # @yieldparam [Statement] statement
-      # @return [Enumerator]
-      # @see    RDF::Enumerable#each_statement
-      def each(&block)
+      # @private
+      # @see RDF::Enumerable#each_statement
+      def each_statement(&block)
         if block_given?
           # Note that to iterate in a more consistent fashion despite
           # possible concurrent mutations to `@data`, we use `#dup` to make
@@ -229,11 +216,27 @@ module RDF
         end
       end
 
+      alias_method :each, :each_statement
+
       ##
-      # Inserts the given RDF statement into the underlying storage.
-      #
-      # @param  [RDF::Statement] statement
-      # @return [void]
+      # @private
+      # @see RDF::Enumerable#has_context?
+      def has_context?(value)
+        @data.keys.compact.include?(value)
+      end
+
+      ##
+      # @private
+      # @see RDF::Enumerable#each_context
+      def each_context(&block)
+        block_given? ? @data.keys.compact.each(&block) : enum_context
+      end
+
+    protected
+
+      ##
+      # @private
+      # @see RDF::Mutable#insert
       def insert_statement(statement)
         unless has_statement?(statement)
           s, p, o, c = statement.to_quad
@@ -245,10 +248,8 @@ module RDF
       end
 
       ##
-      # Deletes the given RDF statement from the underlying storage.
-      #
-      # @param  [RDF::Statement] statement
-      # @return [void]
+      # @private
+      # @see RDF::Mutable#delete
       def delete_statement(statement)
         if has_statement?(statement)
           s, p, o, c = statement.to_quad
@@ -260,10 +261,8 @@ module RDF
       end
 
       ##
-      # Deletes all RDF statements from this repository.
-      #
-      # @return [void]
-      # @see    RDF::Mutable#clear
+      # @private
+      # @see RDF::Mutable#clear
       def clear_statements
         @data.clear
       end
