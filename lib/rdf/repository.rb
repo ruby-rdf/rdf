@@ -211,10 +211,14 @@ module RDF
       # @see    RDF::Enumerable#each_statement
       def each(&block)
         if block_given?
-          @data.each do |c, ss|
-            ss.each do |s, ps|
-              ps.each do |p, os|
-                os.each do |o|
+          # Note that to iterate in a more consistent fashion despite
+          # possible concurrent mutations to `@data`, we use `#dup` to make
+          # shallow copies of the nested hashes before beginning the
+          # iteration over their keys and values.
+          @data.dup.each do |c, ss|
+            ss.dup.each do |s, ps|
+              ps.dup.each do |p, os|
+                os.dup.each do |o|
                   block.call(RDF::Statement.new(s, p, o, :context => c))
                 end
               end
