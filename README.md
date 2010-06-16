@@ -27,15 +27,28 @@ Features
 Examples
 --------
 
+    require 'rubygems'
     require 'rdf'
 
-### Creating an RDF statement
+### Writing RDF data using the N-Triples format
 
-    s = RDF::URI("http://rubygems.org/gems/rdf")
-    p = RDF::DC.creator
-    o = RDF::URI("http://ar.to/#self")
+    require 'rdf/ntriples'
     
-    stmt = RDF::Statement(s, p, o)
+    RDF::Writer.open("hello.nt") do |writer|
+      writer << RDF::Graph.new do |graph|
+        graph << [:hello, RDF::DC.title, "Hello, world!"]
+      end
+    end
+
+### Reading RDF data in the N-Triples format
+
+    require 'rdf/ntriples'
+    
+    RDF::Reader.open("http://rdf.rubyforge.org/doap.nt") do |reader|
+      reader.each_statement do |statement|
+        puts statement.inspect
+      end
+    end
 
 ### Using pre-defined RDF vocabularies
 
@@ -56,20 +69,14 @@ Examples
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
-### Reading N-Triples data
-
-    RDF::Reader.open("spec/data/test.nt") do |reader|
-      reader.each_statement do |statement|
-        puts statement.inspect
-      end
-    end
-
 Documentation
 -------------
 
 <http://rdf.rubyforge.org/>
 
 ### RDF Object Model
+
+<http://blog.datagraph.org/2010/03/rdf-for-ruby>
 
 * {RDF::Value}
   * {RDF::Literal}
@@ -80,6 +87,8 @@ Documentation
   * {RDF::Statement}
 
 ### RDF Serialization
+
+<http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 
 * {RDF::Format}
 * {RDF::Reader}
@@ -95,11 +104,14 @@ Documentation
 
 ### RDF Storage
 
+<http://blog.datagraph.org/2010/04/rdf-repository-howto>
+
 * {RDF::Repository}
+  * {RDF::Countable}
   * {RDF::Enumerable}
-  * {RDF::Durable}
-  * {RDF::Mutable}
   * {RDF::Queryable}
+  * {RDF::Mutable}
+  * {RDF::Durable}
 * [`RDF::DataObjects`](http://rdf.rubyforge.org/do/) (plugin)
 * [`RDF::Sesame`](http://rdf.rubyforge.org/sesame/) (plugin)
 
@@ -113,13 +125,17 @@ Documentation
 ### RDF Vocabularies
 
 * {RDF::CC}    - Creative Commons (CC)
+* {RDF::CERT}  - W3 Authentication Certificate (CERT)
 * {RDF::DC}    - Dublin Core (DC)
+* {RDF::DC11}  - Dublin Core 1.1 (DC11) _deprecated_
 * {RDF::DOAP}  - Description of a Project (DOAP)
 * {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
 * {RDF::FOAF}  - Friend of a Friend (FOAF)
+* {RDF::GEO}   - WGS84 Geo Positioning (GEO)
 * {RDF::HTTP}  - Hypertext Transfer Protocol (HTTP)
 * {RDF::OWL}   - Web Ontology Language (OWL)
 * {RDF::RDFS}  - RDF Schema (RDFS)
+* {RDF::RSA}   - W3 RSA Keys (RSA)
 * {RDF::RSS}   - RDF Site Summary (RSS)
 * {RDF::SIOC}  - Semantically-Interlinked Online Communities (SIOC)
 * {RDF::SKOS}  - Simple Knowledge Organization System (SKOS)
@@ -136,8 +152,8 @@ Dependencies
 Installation
 ------------
 
-The recommended installation method is via RubyGems. To install the latest
-official release from [RubyGems](http://rubygems.org/), do:
+The recommended installation method is via [RubyGems](http://rubygems.org/).
+To install the latest official release of RDF.rb, do:
 
     % [sudo] gem install rdf             # Ruby 1.8.7+ or 1.9.x
     % [sudo] gem install backports rdf   # Ruby 1.8.1+
@@ -163,19 +179,6 @@ Resources
 * <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
 * <http://www.ohloh.net/p/rdf>
-
-See Also
---------
-
-* [RDF::BERT](http://rdf.rubyforge.org/bert/)
-* [RDF::Isomorphic](http://rdf.rubyforge.org/isomorphic/)
-* [RDF::Spec](http://rdf.rubyforge.org/spec/)
-* [RDFS.rb](http://rdfs.rubyforge.org/)
-* [RDFize](http://rdfize.rubyforge.org/)
-* [RDFbus](http://rdfbus.rubyforge.org/)
-* [RDFcache](http://rdfcache.rubyforge.org/)
-* [RDFgrid](http://rdfgrid.rubyforge.org/)
-* [Trinity](http://trinity.datagraph.org/)
 
 Authors
 -------
