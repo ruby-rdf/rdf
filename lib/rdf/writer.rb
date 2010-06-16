@@ -96,6 +96,11 @@ module RDF
       alias_method :format_class, :format
     end
 
+    ##
+    # @param  [Object]                 data
+    # @param  [IO, File]               io
+    # @param  [Hash{Symbol => Object}] options
+    # @return [void]
     def self.dump(data, io = nil, options = {})
       io = File.open(io, 'w') if io.is_a?(String)
       method = data.respond_to?(:each_statement) ? :each_statement : :each
@@ -115,6 +120,10 @@ module RDF
       end
     end
 
+    ##
+    # @yield  [writer]
+    # @yieldparam [Writer] writer
+    # @return [String]
     def self.buffer(*args, &block)
       require 'stringio' unless defined?(StringIO)
 
@@ -124,6 +133,10 @@ module RDF
       end
     end
 
+    ##
+    # @param  [String]                 filename
+    # @param  [Hash{Symbol => Object}] options
+    # @return [Writer]
     def self.open(filename, options = {}, &block)
       File.open(filename, 'wb') do |file|
         self.for(options[:format] || filename).new(file, options, &block)
@@ -136,15 +149,28 @@ module RDF
     # @yield  [writer]
     # @yieldparam [RDF::Writer] writer
     def initialize(output = $stdout, options = {}, &block)
-      @output, @options = output, options
-      @nodes, @node_id = {}, 0
+      @output, @options = output, options.dup
+      @nodes, @node_id  = {}, 0
 
       if block_given?
         write_prologue
-        block.call(self)
+        case block.arity
+          when 1 then block.call(self)
+          else instance_eval(&block)
+        end
         write_epilogue
       end
     end
+
+    ##
+    # Flushes the underlying output buffer.
+    #
+    # @return [void]
+    def flush
+      @output.flush if @output.respond_to?(:flush)
+    end
+
+    alias_method :flush!, :flush
 
     ##
     # @return [void]
@@ -157,66 +183,34 @@ module RDF
     def write_epilogue() end
 
     ##
+    # @param  [String] text
     # @return [void]
     # @abstract
     def write_comment(text) end
 
     ##
-    # @raise [ArgumentError]
-    def <<(data)
-      case data # TODO
-        #when Graph
-        #  write_graph(data)
-        #when Resource
-        #  #register!(resource) && write_node(resource)
-        #  write_resource(data)
-        when Statement
-          write_statement(data)
-        else
-          if data.respond_to?(:to_a)
-            write_triple(*data.to_a)
-          else
-            raise ArgumentError.new("expected RDF::Statement or RDF::Resource, got #{data.inspect}")
-          end
-      end
-    end
-
-    ##
-    # @param  [Graph] graph
+    # @param  [RDF::Graph] graph
     # @return [void]
     def write_graph(graph)
-      write_triples(*graph.triples)
+      graph.each_triple { |*triple| write_triple(*triple) }
     end
 
     ##
-    # @return [void]
-    def write_resource(subject) # FIXME
-      edge_nodes = []
-      subject.each do |predicate, objects|
-        [objects].flatten.each do |object|
-          edge_nodes << object if register!(object)
-          write_triple subject, predicate, object
-        end
-      end
-      edge_nodes.each { |node| write_resource node }
-    end
-
-    ##
-    # @param  [Array<Statement>] statements
+    # @param  [Array<RDF::Statement>] statements
     # @return [void]
     def write_statements(*statements)
-      statements.flatten.each { |stmt| write_statement(stmt) }
+      statements.flatten.each { |statement| write_statement(statement) }
     end
 
     ##
-    # @param  [Statement] statement
+    # @param  [RDF::Statement] statement
     # @return [void]
     def write_statement(statement)
-      write_triple(*statement.to_a)
+      write_triple(*statement.to_triple)
     end
 
     ##
-    # @param  [Array<Array(RDF::Value)>] triples
+    # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Value)>] triples
     # @return [void]
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
@@ -230,8 +224,13 @@ module RDF
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def write_triple(subject, predicate, object)
-      raise NotImplementedError # override in subclasses
+      raise NotImplementedError.new("#{self.class}#write_triple") # override in subclasses
     end
+
+    # Support the RDF::Writable interface:
+    alias_method :insert_graph,      :write_graph
+    alias_method :insert_statements, :write_statements
+    alias_method :insert_statement,  :write_statement
 
     ##
     # @param  [RDF::Value] value
@@ -253,7 +252,7 @@ module RDF
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def format_uri(value, options = {})
-      raise NotImplementedError # override in subclasses
+      raise NotImplementedError.new("#{self.class}#format_uri") # override in subclasses
     end
 
     ##
@@ -263,7 +262,7 @@ module RDF
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def format_node(value, options = {})
-      raise NotImplementedError # override in subclasses
+      raise NotImplementedError.new("#{self.class}#format_node") # override in subclasses
     end
 
     ##
@@ -273,78 +272,71 @@ module RDF
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def format_literal(value, options = {})
-      raise NotImplementedError # override in subclasses
+      raise NotImplementedError.new("#{self.class}#format_literal") # override in subclasses
+    end
+
+  protected
+
+    ##
+    # @return [void]
+    def puts(*args)
+      @output.puts(*args)
     end
 
     ##
-    # Flushes the underlying output buffer.
-    #
-    # @return [void]
-    def flush
-      @output.flush if @output.respond_to?(:flush)
+    # @param  [RDF::Resource] uriref
+    # @return [String]
+    def uri_for(uriref)
+      case
+        when uriref.is_a?(RDF::Node)
+          @nodes[uriref]
+        when uriref.respond_to?(:to_uri)
+          uriref.to_uri.to_s
+        else
+          uriref.to_s
+      end
     end
 
-    alias_method :flush!, :flush
+    ##
+    # @return [String]
+    def node_id
+      "_:n#{@node_id += 1}"
+    end
 
-    protected
-
-      def puts(*args)
-        @output.puts(*args)
-      end
-
-      ##
-      # @param  [RDF::Resource] uriref
-      # @return [String]
-      def uri_for(uriref)
-        case
-          when uriref.is_a?(RDF::Node)
-            @nodes[uriref]
-          when uriref.respond_to?(:to_uri)
-            uriref.to_uri.to_s
-          else
-            uriref.to_s
+    ##
+    # @deprecated
+    def register!(resource)
+      if resource.kind_of?(RDF::Resource)
+        unless @nodes[resource] # have we already seen it?
+          @nodes[resource] = resource.uri || node_id
         end
       end
+    end
 
-      ##
-      # @return [String]
-      def node_id
-        "_:n#{@node_id += 1}"
-      end
+    ##
+    # @param  [String] string
+    # @return [String]
+    def escaped(string)
+      string.gsub('\\', '\\\\').gsub("\t", '\\t').
+        gsub("\n", '\\n').gsub("\r", '\\r').gsub('"', '\\"')
+    end
 
-      def register!(resource)
-        if resource.kind_of?(RDF::Resource)
-          unless @nodes[resource] # have we already seen it?
-            @nodes[resource] = resource.uri || node_id
-          end
-        end
-      end
+    ##
+    # @param  [String] string
+    # @return [String]
+    def quoted(string)
+      "\"#{string}\""
+    end
 
-      ##
-      # @param  [String] string
-      # @return [String]
-      def escaped(string)
-        string.gsub('\\', '\\\\').gsub("\t", '\\t').
-          gsub("\n", '\\n').gsub("\r", '\\r').gsub('"', '\\"')
-      end
+  private
 
-      ##
-      # @param  [String] string
-      # @return [String]
-      def quoted(string)
-        "\"#{string}\""
-      end
+    @@subclasses = [] # @private
 
-    private
-
-      @@subclasses = [] # @private
-
-      def self.inherited(child) # @private
-        @@subclasses << child
-        super
-      end
-
-  end
+    def self.inherited(child) # @private
+      @@subclasses << child
+      super
+    end
+  end # class Writer
 
   class WriterError < IOError; end
 end
