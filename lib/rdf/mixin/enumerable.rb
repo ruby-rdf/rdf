@@ -128,7 +128,7 @@ module RDF
     # @see    #each_triple
     # @see    #enum_triple
     def triples(options = {})
-      enum_statement.map { |statement| statement.to_triple }.to_enum # TODO: optimize
+      enum_statement.map(&:to_triple).to_enum # TODO: optimize
     end
 
     ##
@@ -188,7 +188,7 @@ module RDF
     # @see    #each_quad
     # @see    #enum_quad
     def quads(options = {})
-      enum_statement.map { |statement| statement.to_quad }.to_enum # TODO: optimize
+      enum_statement.map(&:to_quad).to_enum # TODO: optimize
     end
 
     ##
@@ -251,7 +251,7 @@ module RDF
     # @see    #enum_subject
     def subjects(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.subject }.to_enum # TODO: optimize
+        enum_statement.map(&:subject).to_enum # TODO: optimize
       else
         enum_subject
       end
@@ -319,7 +319,7 @@ module RDF
     # @see    #enum_predicate
     def predicates(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.predicate }.to_enum # TODO: optimize
+        enum_statement.map(&:predicate).to_enum # TODO: optimize
       else
         enum_predicate
       end
@@ -387,7 +387,7 @@ module RDF
     # @see    #enum_object
     def objects(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.object }.to_enum # TODO: optimize
+        enum_statement.map(&:object).to_enum # TODO: optimize
       else
         enum_object
       end
@@ -455,7 +455,7 @@ module RDF
     # @see    #enum_context
     def contexts(options = {})
       if options[:unique] == false
-        enum_statement.map { |statement| statement.context }.to_enum # TODO: optimize
+        enum_statement.map(&:context).to_enum # TODO: optimize
       else
         enum_context
       end

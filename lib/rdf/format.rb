@@ -109,7 +109,7 @@ module RDF
             else
               format = format.to_s.downcase
               @@subclasses.each do |klass|
-                if klass.name.to_s.split('::').map { |x| x.downcase }.include?(format)
+                if klass.name.to_s.split('::').map(&:downcase).include?(format)
                   return klass
                 end
               end
@@ -261,7 +261,7 @@ module RDF
         (@@content_types[type] ||= []) << self
 
         if extensions = (options[:extension] || options[:extensions])
-          extensions = [extensions].flatten.map { |ext| ext.to_sym }
+          extensions = [extensions].flatten.map(&:to_sym)
           extensions.each { |ext| @@file_extensions[ext] = type }
         end
         if aliases = (options[:alias] || options[:aliases])

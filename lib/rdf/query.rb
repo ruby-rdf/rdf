@@ -138,7 +138,7 @@ module RDF
         raise ArgumentError.new("wrong number of arguments (0 for 1)")
       else
         # TODO: support for descending sort, e.g. order(:s => :asc, :p => :desc)
-        variables.map! { |variable| variable.to_sym }
+        variables.map!(&:to_sym)
         solutions.sort! do |a, b|
           a = variables.map { |variable| a[variable].to_s }
           b = variables.map { |variable| b[variable].to_s }
@@ -157,7 +157,7 @@ module RDF
     # @return [Query]
     def project(*variables)
       unless variables.empty?
-        variables.map! { |variable| variable.to_sym }
+        variables.map!(&:to_sym)
         solutions.each do |bindings|
           bindings.delete_if { |k, v| !variables.include?(k) } # FIXME
         end
