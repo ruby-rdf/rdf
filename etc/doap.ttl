@@ -13,7 +13,8 @@
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:created       "2007-10-23" ;
   doap:platform      "Ruby" ;
-  doap:category      <http://dbpedia.org/resource/Resource_Description_Framework> ;
+  doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
+                     <http://dbpedia.org/resource/Ruby_(programming_language)> ;
   doap:download-page <http://rubyforge.org/projects/rdf/> ;
   doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
@@ -21,12 +22,23 @@
   doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben> ;
   doap:maintainer    <http://ar.to/#self> ;
   doap:documenter    <http://ar.to/#self> ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Hellekin O. Wolf" ;
+                      foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "John Fieber" ;
+                      foaf:mbox_sha1sum "f7653fc1ac0e82ebb32f092389bd5fc728eaae12"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Pius Uzamere" ;
+                      foaf:mbox_sha1sum "bedbbf2451e5beb38d59687c0460032aff92cd3c"] ;
   foaf:maker         <http://ar.to/#self> ;
   dc:creator         <http://ar.to/#self> .
 
 <http://ar.to/#self> a foaf:Person ;
   foaf:name          "Arto Bendiken" ;
   foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
+  foaf:mbox_sha1sum  "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
+                     "a033f652c84a4d73b8c26d318c2395699dd2bdfb" ;
   foaf:homepage      <http://ar.to/> ;
   foaf:made          <> ;
   rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
@@ -34,5 +46,6 @@
 <http://bhuga.net/#ben> a foaf:Person ;
   foaf:name          "Ben Lavender" ;
   foaf:mbox          <mailto:blavender@gmail.com> ;
+  foaf:mbox_sha1sum  "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" ;
   foaf:homepage      <http://bhuga.net/> ;
   rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
