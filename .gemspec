@@ -13,7 +13,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.rubyforge_project  = 'rdf'
 
   gem.authors            = ['Arto Bendiken', 'Ben Lavender']
-  gem.email              = 'arto.bendiken@gmail.com'
+  gem.email              = 'public-rdf-ruby@w3.org'
 
   gem.platform           = Gem::Platform::RUBY
   gem.files              = %w(AUTHORS CONTRIBUTORS README UNLICENSE VERSION bin/rdf etc/doap.nt) + Dir.glob('lib/**/*.rb')
