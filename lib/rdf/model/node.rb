@@ -112,5 +112,14 @@ module RDF
     def to_s
       "_:%s" % @id.to_s
     end
+
+    ##
+    # Returns a symbol representation of this blank node.
+    #
+    # @return [Symbol]
+    # @since  0.2.0
+    def to_sym
+      @id.to_s.to_sym
+    end
   end
 end
