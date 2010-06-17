@@ -101,7 +101,8 @@ module RDF
     # @param  [Object] other
     # @return [Boolean]
     def ==(other)
-      other.respond_to?(:id) && @id == other.id
+      other.respond_to?(:node?) && other.node? &&
+        other.respond_to?(:id) && @id == other.id
     end
 
     ##
