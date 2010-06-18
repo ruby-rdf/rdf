@@ -71,7 +71,7 @@ describe 'README' do
 
     it "should output inspected statements" do
       $stdout.string.each_line do |line|
-        line.should match /^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/
+        line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
       end
     end
   end
