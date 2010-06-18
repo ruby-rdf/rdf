@@ -3,7 +3,10 @@ require 'rdf/spec/graph'
 
 describe RDF::Graph do
   before :each do
-    @new = Proc.new { |*args, &block| RDF::Graph.new(*args, &block) }
+    def new(*args, &block)
+      RDF::Graph.new(*args, &block)
+    end
+    @new = method(:new)
   end
 
   # @see lib/rdf/spec/graph.rb in rdf-spec
