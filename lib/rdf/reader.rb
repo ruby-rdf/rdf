@@ -169,7 +169,7 @@ module RDF
       ##
       # @raise [NotImplementedError] unless implemented in subclass
       def read_triple
-        raise NotImplementedError
+        raise NotImplementedError.new("#{self.class}#read_triple") # override in subclasses
       end
 
       ##
