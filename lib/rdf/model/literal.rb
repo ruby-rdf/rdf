@@ -39,6 +39,8 @@ module RDF
   # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal
+    autoload :XML, 'rdf/model/literal/xml'
+
     include RDF::Value
 
     # @return [String] The normalized string representation of the value.
