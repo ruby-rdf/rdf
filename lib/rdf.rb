@@ -1,5 +1,8 @@
 require 'enumerator'
 require 'open-uri'
+require 'bigdecimal'
+require 'date'
+require 'time'
 
 if RUBY_VERSION < '1.8.7'
   # @see http://rubygems.org/gems/backports
