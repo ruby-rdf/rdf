@@ -194,9 +194,31 @@ module RDF
     alias_method :datatyped?, :has_datatype?
 
     ##
+    # Returns `true` if the value adheres to the defined grammar of the
+    # datatype.
+    #
+    # @return [Boolean]
+    # @since  0.2.1
+    def valid?
+      grammar = self.class.const_get(:GRAMMAR) rescue nil
+      grammar.nil? || !!(value =~ grammar)
+    end
+
+    ##
+    # Returns `true` if the value does not adhere to the defined grammar of
+    # the datatype.
+    #
+    # @return [Boolean]
+    # @since  0.2.1
+    def invalid?
+      !valid?
+    end
+
+    ##
     # Converts the literal into its canonical lexical representation.
     #
     # @return [Literal]
+    # @since  0.2.1
     def canonicalize
       # subclasses should override this as needed
       self

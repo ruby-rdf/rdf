@@ -6,7 +6,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Decimal < Literal
     DATATYPE = XSD.decimal
-    GRAMMAR  = nil # TODO
+    GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
 
     ##
     # @param  [BigDecimal] value

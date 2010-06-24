@@ -7,8 +7,8 @@ module RDF; class Literal
   class Boolean < Literal
     DATATYPE = XSD.boolean
     GRAMMAR  = /^(true|false|1|0)$/.freeze
-    TRUE     = %w(true  1).freeze
-    FALSE    = %w(false 0).freeze
+    TRUES    = %w(true  1).freeze
+    FALSES   = %w(false 0).freeze
 
     ##
     # @param  [Boolean] value
@@ -17,10 +17,10 @@ module RDF; class Literal
       @datatype = options[:datatype] || DATATYPE
       @string   = options[:lexical] if options.has_key?(:lexical)
       @object   = case
-        when true.equal?(value)         then true
-        when false.equal?(value)        then false
-        when TRUE.include?(value.to_s)  then true
-        when FALSE.include?(value.to_s) then false
+        when true.equal?(value)          then true
+        when false.equal?(value)         then false
+        when TRUES.include?(value.to_s)  then true
+        when FALSES.include?(value.to_s) then false
         else raise ArgumentError.new("expected true or false, but got #{value.inspect}")
       end
     end

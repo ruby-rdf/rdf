@@ -6,7 +6,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Integer < Decimal
     DATATYPE = XSD.integer
-    GRAMMAR  = nil # TODO
+    GRAMMAR  = /^[\+\-]?\d+$/.freeze
 
     ##
     # @param  [Integer, #to_i] value
