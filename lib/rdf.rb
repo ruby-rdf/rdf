@@ -95,7 +95,13 @@ module RDF
   #
   # @return [RDF::URI]
   def self.URI(*args, &block)
-    URI.new(*args, &block)
+    case uri = args.first
+      when RDF::URI then uri
+      else case
+        when uri.respond_to?(:to_uri) then uri.to_uri
+        else URI.new(*args, &block)
+      end
+    end
   end
 
   ##
