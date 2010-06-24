@@ -39,12 +39,34 @@ module RDF
   # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal
-    autoload :XML, 'rdf/model/literal/xml'
+    autoload :Boolean,  'rdf/model/literal/boolean'
+    autoload :Integer,  'rdf/model/literal/integer'
+    autoload :Double,   'rdf/model/literal/double'
+    autoload :Decimal,  'rdf/model/literal/decimal'
+    autoload :Date,     'rdf/model/literal/date'
+    autoload :DateTime, 'rdf/model/literal/datetime'
+    autoload :XML,      'rdf/model/literal/xml'
 
     include RDF::Value
 
-    # @return [String] The normalized string representation of the value.
-    attr_accessor :value
+    ##
+    # @private
+    def self.new(value, options = {})
+      klass = case value
+        when ::TrueClass  then RDF::Literal::Boolean
+        when ::FalseClass then RDF::Literal::Boolean
+        when ::Integer    then RDF::Literal::Integer
+        when ::Float      then RDF::Literal::Double
+        when ::BigDecimal then RDF::Literal::Decimal
+        when ::DateTime   then RDF::Literal::DateTime
+        when ::Date       then RDF::Literal::Date
+        when ::Time       then RDF::Literal::DateTime
+        else RDF::Literal
+      end
+      literal = klass.allocate
+      literal.send(:initialize, value, options)
+      literal
+    end
 
     # @return [Symbol] The language tag (optional).
     attr_accessor :language
@@ -53,57 +75,28 @@ module RDF
     attr_accessor :datatype
 
     ##
-    # @param  [Object]
+    # @param  [Object] value
     # @option options [Symbol] :language (nil)
     # @option options [URI]    :datatype (nil)
     def initialize(value, options = {})
-      @value = value
-      @language = options[:language] ? options[:language].to_s.to_sym : nil
+      @object   = value
+      @string   = options[:lexical] if options.has_key?(:lexical)
+      @language = options[:language].to_s.to_sym if options[:language]
+      @datatype = RDF::URI(options[:datatype]) if options[:datatype]
+    end
 
-      if datatype = options[:datatype]
-        @datatype = datatype.respond_to?(:to_uri) ? datatype.to_uri : URI.intern(datatype.to_s)
-      else
-        @datatype = case value
-          when String     then nil # implicit XSD.string
-          when TrueClass  then XSD.boolean
-          when FalseClass then XSD.boolean
-          when Fixnum     then XSD.integer
-          when Integer    then XSD.integer
-          when Float
-            @value = case
-              when value.nan? then 'NaN'
-              when value.infinite? then value.to_s[0...-'inity'.length].upcase
-              else value.to_f
-            end
-            XSD.double
-          when Time, Date, DateTime
-            require 'time'
-            @value = value.respond_to?(:xmlschema) ? value.xmlschema : value.to_s
-            case value
-              when DateTime then XSD.dateTime
-              when Date     then XSD.date
-              when Time     then XSD.dateTime
-            end
-          else
-            require 'bigdecimal' unless defined?(BigDecimal)
-            case value
-              when BigDecimal
-                case
-                  when value.nan?      then 'NaN'
-                  when value.infinite? then value.to_s[0...-'inity'.length].upcase
-                  when value.finite?   then value.to_s('F')
-              end
-            end
-        end
-      end
-
-      @value = @value.to_s
+    ##
+    # Returns the value as a string.
+    #
+    # @return [String] 
+    def value
+      @string || @object.to_s
     end
 
     ##
     # @return [Object]
     def object
-      case datatype
+      @object || case datatype
         when XSD.string, nil
           value
         when XSD.boolean
@@ -113,17 +106,13 @@ module RDF
         when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
           value.to_i
         when XSD.decimal
-          require 'bigdecimal' unless defined?(BigDecimal)
-          BigDecimal.new(value)
+          ::BigDecimal.new(value)
         when XSD.date
-          require 'date' unless defined?(Date)
-          Date.parse(value)
+          ::Date.parse(value)
         when XSD.dateTime
-          require 'date' unless defined?(DateTime)
-          DateTime.parse(value)
+          ::DateTime.parse(value)
         when XSD.time
-          require 'time'
-          Time.parse(value)
+          ::Time.parse(value)
         when XSD.nonPositiveInteger, XSD.negativeInteger
           value.to_i
         when XSD.nonNegativeInteger, XSD.positiveInteger
@@ -205,15 +194,20 @@ module RDF
     alias_method :datatyped?, :has_datatype?
 
     ##
-    # Returns a string representation of this literal.
+    # Converts the literal into its canonical lexical representation.
+    #
+    # @return [Literal]
+    def canonicalize
+      # subclasses should override this as needed
+      self
+    end
+
+    ##
+    # Returns the value as a string.
     #
     # @return [String]
     def to_s
-      quoted = value # FIXME
-      output = "\"#{quoted}\""
-      output << "@#{language}" if language
-      output << "^^<#{datatype}>" if datatype
-      output
+      value
     end
   end
 end
