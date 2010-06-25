@@ -52,16 +52,20 @@ module RDF
     ##
     # @private
     def self.new(value, options = {})
-      klass = case value
-        when ::TrueClass  then RDF::Literal::Boolean
-        when ::FalseClass then RDF::Literal::Boolean
-        when ::Integer    then RDF::Literal::Integer
-        when ::Float      then RDF::Literal::Double
-        when ::BigDecimal then RDF::Literal::Decimal
-        when ::DateTime   then RDF::Literal::DateTime
-        when ::Date       then RDF::Literal::Date
-        when ::Time       then RDF::Literal::DateTime
-        else RDF::Literal
+      klass = unless self.equal?(RDF::Literal)
+        self # subclasses can be directly constructed without type dispatch
+      else
+        case value
+          when ::TrueClass  then RDF::Literal::Boolean
+          when ::FalseClass then RDF::Literal::Boolean
+          when ::Integer    then RDF::Literal::Integer
+          when ::Float      then RDF::Literal::Double
+          when ::BigDecimal then RDF::Literal::Decimal
+          when ::DateTime   then RDF::Literal::DateTime
+          when ::Date       then RDF::Literal::Date
+          when ::Time       then RDF::Literal::DateTime
+          else RDF::Literal
+        end
       end
       literal = klass.allocate
       literal.send(:initialize, value, options)
