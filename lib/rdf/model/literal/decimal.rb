@@ -65,6 +65,15 @@ module RDF; class Literal
     end
 
     ##
+    # Returns the value as a decimal number.
+    #
+    # @return [BigDecimal]
+    # @see    BigDecimal#to_d
+    def to_d
+      @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
+    end
+
+    ##
     # Returns the value as a rational number.
     #
     # @return [Rational]
