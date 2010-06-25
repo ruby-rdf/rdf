@@ -69,6 +69,7 @@ module RDF
       end
       literal = klass.allocate
       literal.send(:initialize, value, options)
+      literal.validate if options[:validate]
       literal.canonicalize if options[:canonicalize]
       literal
     end
@@ -220,12 +221,25 @@ module RDF
     end
 
     ##
+    # Validates the value using {#valid?}, raising an error if the value is
+    # invalid.
+    #
+    # @raise  [ArgumentError] if the value is invalid
+    # @return [Literal]
+    # @since  0.2.1
+    def validate
+      raise ArgumentError.new("#{to_s.inspect} is not a valid <#{datatype.to_s}> literal") if invalid?
+      self
+    end
+    alias_method :validate!, :validate
+
+    ##
     # Converts the literal into its canonical lexical representation.
     #
     # @return [Literal]
     # @since  0.2.1
     def canonicalize
-      # subclasses should override this as needed
+      # subclasses should override this as needed and appropriate
       self
     end
 
