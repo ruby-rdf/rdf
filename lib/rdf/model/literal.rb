@@ -52,10 +52,34 @@ module RDF
     ##
     # @private
     def self.new(value, options = {})
-      klass = unless self.equal?(RDF::Literal)
-        self # subclasses can be directly constructed without type dispatch
-      else
-        case value
+      klass = case
+        when !self.equal?(RDF::Literal)
+          self # subclasses can be directly constructed without type dispatch
+        when datatype = options[:datatype]
+          case RDF::URI(datatype)
+            when XSD.boolean
+              RDF::Literal::Boolean
+            when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
+              RDF::Literal::Integer
+            when XSD.double, XSD.float
+              RDF::Literal::Double
+            when XSD.decimal
+              RDF::Literal::Decimal
+            when XSD.date
+              RDF::Literal::Date
+            when XSD.dateTime, XSD.time
+              RDF::Literal::DateTime
+            when XSD.nonPositiveInteger, XSD.negativeInteger
+              RDF::Literal::Integer
+            when XSD.nonNegativeInteger, XSD.positiveInteger
+              RDF::Literal::Integer
+            when XSD.unsignedLong, XSD.unsignedInt, XSD.unsignedShort, XSD.unsignedByte
+              RDF::Literal::Integer
+            when RDF.XMLLiteral
+              RDF::Literal::XML
+            else self
+          end
+        else case value
           when ::TrueClass  then RDF::Literal::Boolean
           when ::FalseClass then RDF::Literal::Boolean
           when ::Integer    then RDF::Literal::Integer
@@ -64,7 +88,7 @@ module RDF
           when ::DateTime   then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date
           when ::Time       then RDF::Literal::DateTime
-          else RDF::Literal
+          else self
         end
       end
       literal = klass.allocate
@@ -94,9 +118,9 @@ module RDF
     ##
     # Returns the value as a string.
     #
-    # @return [String] 
+    # @return [String]
     def value
-      @string || @object.to_s
+      @string || to_s
     end
 
     ##
@@ -107,10 +131,10 @@ module RDF
           value
         when XSD.boolean
           %w(true 1).include?(value)
-        when XSD.double, XSD.float
-          value.to_f
         when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
           value.to_i
+        when XSD.double, XSD.float
+          value.to_f
         when XSD.decimal
           ::BigDecimal.new(value)
         when XSD.date
@@ -248,7 +272,7 @@ module RDF
     #
     # @return [String]
     def to_s
-      value
+      @object.to_s
     end
 
     ##
