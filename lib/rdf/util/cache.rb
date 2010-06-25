@@ -83,8 +83,8 @@ module RDF; module Util
       # @return [Object]
       def []=(key, value)
         if has_capacity?
-          @cache[key] = value.object_id
-          @index[value.object_id] = key
+          @cache[key] = value.__id__
+          @index[value.__id__] = key
           define_finalizer!(value)
         end
         value
@@ -121,7 +121,7 @@ module RDF; module Util
       def []=(key, value)
         if has_capacity?
           @cache[key] = WeakRef.new(value)
-          @index[value.object_id] = key
+          @index[value.__id__] = key
           define_finalizer!(value)
         end
         value

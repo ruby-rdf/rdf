@@ -125,7 +125,7 @@ module RDF
     #
     # @return [String]
     def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
+      sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, to_s)
     end
 
     ##

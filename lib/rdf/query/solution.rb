@@ -120,7 +120,7 @@ class RDF::Query
     ##
     # @return [String]
     def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, @bindings.inspect)
+      sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, @bindings.inspect)
     end
 
     protected
