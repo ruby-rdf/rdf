@@ -250,5 +250,13 @@ module RDF
     def to_s
       value
     end
+
+    ##
+    # Returns a developer-friendly representation of `self`.
+    #
+    # @return [String]
+    def inspect
+      sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, RDF::NTriples.serialize(self))
+    end
   end
 end
