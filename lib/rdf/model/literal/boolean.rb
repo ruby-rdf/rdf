@@ -16,12 +16,13 @@ module RDF; class Literal
     def initialize(value, options = {})
       @datatype = options[:datatype] || DATATYPE
       @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
         when true.equal?(value)          then true
         when false.equal?(value)         then false
         when TRUES.include?(value.to_s)  then true
         when FALSES.include?(value.to_s) then false
-        else raise ArgumentError.new("expected true or false, but got #{value.inspect}")
+        else value
       end
     end
 
