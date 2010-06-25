@@ -69,6 +69,7 @@ module RDF
       end
       literal = klass.allocate
       literal.send(:initialize, value, options)
+      literal.canonicalize if options[:canonicalize]
       literal
     end
 
