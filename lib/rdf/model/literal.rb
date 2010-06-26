@@ -45,6 +45,7 @@ module RDF
     autoload :Decimal,  'rdf/model/literal/decimal'
     autoload :Date,     'rdf/model/literal/date'
     autoload :DateTime, 'rdf/model/literal/datetime'
+    autoload :Time,     'rdf/model/literal/time'
     autoload :XML,      'rdf/model/literal/xml'
 
     include RDF::Value
@@ -67,8 +68,10 @@ module RDF
               RDF::Literal::Decimal
             when XSD.date
               RDF::Literal::Date
-            when XSD.dateTime, XSD.time
+            when XSD.dateTime
               RDF::Literal::DateTime
+            when XSD.time
+              RDF::Literal::Time
             when XSD.nonPositiveInteger, XSD.negativeInteger
               RDF::Literal::Integer
             when XSD.nonNegativeInteger, XSD.positiveInteger
@@ -87,7 +90,7 @@ module RDF
           when ::BigDecimal then RDF::Literal::Decimal
           when ::DateTime   then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date
-          when ::Time       then RDF::Literal::DateTime
+          when ::Time       then RDF::Literal::Time
           else self
         end
       end
@@ -159,7 +162,7 @@ module RDF
     def literal?
       true
     end
-
+    
     ##
     # Returns `false`.
     #
