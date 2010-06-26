@@ -1,3 +1,4 @@
+# coding: utf-8
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 
@@ -34,6 +35,25 @@ describe RDF::NTriples do
 
     # @see http://github.com/bendiken/rdf/commit/fa5e42e40b97cf303139325ed247db6c096e5204
     it "should correctly unescape Unicode surrogate pairs"
+
+    context "unescape Unicode strings" do
+      strings = {
+        "_\\u221E_"                 => "_\xE2\x88\x9E_", # U+221E, infinity symbol
+        "_\\u6C34_"                 => "_\xE6\xB0\xB4_", # U+6C34, 'water' in Chinese
+        "\u677E\u672C \u540E\u5B50" => "松本 后子",
+        "D\u00FCrst"                => "Dürst",
+        "\U00015678another"         => "\u{15678}another",
+      }
+      strings.each do |string, unescaped|
+        specify string do
+          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          @reader.unescape(string.dup).should == unescaped
+        end
+      end
+    end
+    it "should correctly unescape Unicode strings" do
+    end
+
   end
 
   context "when encoding text" do
@@ -129,6 +149,114 @@ describe RDF::NTriples do
       stmt = @reader.unserialize("<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .")
       stmt.should_not be_nil
       stmt.should be_a_statement
+    end
+
+    describe "with literal encodings" do
+      {
+        'Dürst' => ':a :b "D\u00FCrst" .',
+        'simple literal' => '<http://subj> <http://pred>  "simple literal" .',
+        'backslash:\\' => '<http://subj> <http://pred> "backslash:\\\\" .',
+        'dquote:"' => '<http://subj> <http://pred> "dquote:\"" .',
+        "newline:\n" => '<http://subj> <http://pred> "newline:\n" .',
+        "return\r" => '<http://subj> <http://pred> "return\r" .',
+        "tab:\t" => '<http://subj> <http://pred> "tab:\t" .',
+        "é" => '<http://subj> <http://pred> "\u00E9" .',
+        "€" => '<http://subj> <http://pred> "\u20AC" .',
+      }.each_pair do |contents, triple|
+        specify "test #{contents}" do
+          stmt = @reader.unserialize(triple)
+          stmt.object.value.should == contents
+        end
+      end
+
+      it "should parse long literal with escape" do
+        nt = %(<http://subj> <http://pred> "\\U00015678another" .)
+        if defined?(::Encoding)
+          statement = @reader.unserialize(nt)
+          statement.object.value.should == "\u{15678}another"
+        else
+          pending("Not supported in Ruby 1.8")
+        end
+      end
+
+      it "should parse multi-line literal" do
+        statement = @reader.unserialize(%(
+  <http://www.example.com/books#book12345> <http://purl.org/dc/terms/title> """
+          Foo
+          <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">bar<rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><a:b xmlns:a="foo:"></a:b>here<a:c xmlns:a="foo:"></a:c></rd
+  f:Thing></html:b>
+          baz
+          <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
+       """ .
+        ))
+
+        statement.object.value.should == %(
+          Foo
+          <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">bar<rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><a:b xmlns:a="foo:"></a:b>here<a:c xmlns:a="foo:"></a:c></rd
+  f:Thing></html:b>
+          baz
+          <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
+       )
+      end
+
+      it "should parse long literal ending in double quote" do
+        statement = @reader.unserialize(%(<http://subj> <http://pred> """ \\"""" .))
+        statement.object.value.should == ' "'
+      end
+
+      {
+        "three uris"  => "<http://example.org/resource1> <http://example.org/property> <http://example.org/resource2> .",
+        "spaces and tabs throughout" => " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
+        "line ending with CR NL" => "<http://example.org/resource4> <http://example.org/property> <http://example.org/resource2> .\r\n",
+        "literal escapes (1)" => '<http://example.org/resource7> <http://example.org/property> "simple literal" .',
+        "literal escapes (2)" => '<http://example.org/resource8> <http://example.org/property> "backslash:\\\\" .',
+        "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
+        "literal escapes (4)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
+        "literal escapes (5)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
+        "literal escapes (6)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
+        "Space is optional before final . (2)" => ['<http://example.org/resource14> <http://example.org/property> "x".', '<http://example.org/resource14> <http://example.org/property> "x" .'],
+
+        "XML Literals as Datatyped Literals (1)" => '<http://example.org/resource21> <http://example.org/property> ""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (2)" => '<http://example.org/resource22> <http://example.org/property> " "^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (3)" => '<http://example.org/resource23> <http://example.org/property> "x"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (4)" => '<http://example.org/resource23> <http://example.org/property> "\""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (5)" => '<http://example.org/resource24> <http://example.org/property> "<a></a>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (6)" => '<http://example.org/resource25> <http://example.org/property> "a <b></b>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (7)" => '<http://example.org/resource26> <http://example.org/property> "a <b></b> c"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (8)" => '<http://example.org/resource26> <http://example.org/property> "a\n<b></b>\nc"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (9)" => '<http://example.org/resource27> <http://example.org/property> "chat"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+
+        "Plain literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
+        "Plain literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
+
+        "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
+      }.each_pair do |name, nt|
+        specify "test #{name}" do
+          statement = @reader.unserialize([nt].flatten.first)
+          @writer.serialize(statement).chomp.should == [nt].flatten.last.gsub(/\s+/, " ").strip
+        end
+      end
+    end
+
+    describe "with URI i18n URIs" do
+      {
+        %(<http://a/b#Dürst> a "URI straight in UTF8".) => %(<http://a/b#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
+        %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
+      }.each_pair do |src, res|
+        specify src do
+          begin
+            stmt1 = @reader.unserialize(src)
+            stmt2 = @reader.unserialize(res)
+            stmt1.should == stmt2
+          rescue
+            if defined?(::Encoding)
+              raise
+            else
+              pending("Unicode URIs not supported in Ruby 1.8") {  raise } 
+            end
+          end
+        end
+      end
     end
   end
 
