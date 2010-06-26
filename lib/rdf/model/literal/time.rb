@@ -9,7 +9,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Time < Literal
     DATATYPE = XSD.time
-    GRAMMAR  = %r(\A\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|Z)?\Z)
+    GRAMMAR  = %r(\A\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|Z)?\Z)
 
     ##
     # @param  [Time] value
@@ -19,8 +19,6 @@ module RDF; class Literal
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
-        when value.is_a?(::Time) then value
-        when value.is_a?(::DateTime) then value.to_time
         when value.respond_to?(:xmlschema) then value.to_time
         else ::Time.parse(value.to_s)
       end

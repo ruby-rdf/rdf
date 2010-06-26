@@ -14,11 +14,12 @@ module RDF; class Literal
     def initialize(value, options = {})
       @datatype = options[:datatype] || DATATYPE
       @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
-        when value.is_a?(::String)    then Integer(value)
+        when value.is_a?(::String)    then Integer(value) rescue nil
         when value.is_a?(::Integer)   then value
         when value.respond_to?(:to_i) then value.to_i
-        else Integer(value.to_s)
+        else Integer(value.to_s) rescue nil
       end
     end
 
@@ -28,7 +29,7 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#integer
     def canonicalize
-      # TODO: implement xsd:integer canonicalization
+      @string = @object.to_s
       self
     end
 

@@ -14,6 +14,7 @@ module RDF; class Literal
     def initialize(value, options = {})
       @datatype = options[:datatype] || DATATYPE
       @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
         when value.is_a?(BigDecimal) then value
         else BigDecimal(value.to_s)
@@ -26,7 +27,7 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#decimal
     def canonicalize
-      # TODO: implement xsd:decimal canonicalization
+      @string = to_canonical
       self
     end
 
@@ -36,12 +37,7 @@ module RDF; class Literal
     # @return [String]
     # @see    BigDecimal#to_s
     def to_s
-      # FIXME: are {NaN, INF, -INF} actually part of the xsd:decimal value space?
-      @string || case
-        when @object.nan?      then 'NaN'
-        when @object.infinite? then @object.to_s('F')[0...-'inity'.length].upcase
-        else @object.to_s('F')
-      end
+      @string || to_canonical
     end
 
     ##
@@ -80,6 +76,17 @@ module RDF; class Literal
     # @see    BigDecimal#to_r
     def to_r
       @object.to_r # only available on Ruby 1.9+
+    end
+    
+    private
+    def to_canonical
+      # Can't use simple %f transformation do to special requirements from N3 tests in representation
+      i, f = @object.to_s("F").split(".")
+      f = f.to_s[0,16]  # Truncate after 15 decimal places
+      i.sub!(/^\+?0+(\d)$/, '\1')
+      f.sub!(/0*$/, '')
+      f = "0" if f.empty?
+      "#{i}.#{f}"
     end
   end # class Decimal
 end; end # class RDF::Literal

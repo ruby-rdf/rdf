@@ -14,11 +14,12 @@ module RDF; class Literal
     def initialize(value, options = {})
       @datatype = options[:datatype] || DATATYPE
       @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
-        when value.is_a?(::String)    then Float(value)
+        when value.is_a?(::String)    then Float(value) rescue nil
         when value.is_a?(::Float)     then value
         when value.respond_to?(:to_f) then value.to_f
-        else Float(value.to_s)
+        else Float(value.to_s) rescue nil
       end
     end
 
@@ -28,7 +29,7 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#double
     def canonicalize
-      # TODO: implement xsd:double canonicalization
+      @string = to_canonical
       self
     end
 
@@ -37,11 +38,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || case
-        when @object.nan?      then 'NaN'
-        when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
-        else @object.to_s
-      end
+      @string || to_canonical
     end
 
     ##
@@ -74,6 +71,21 @@ module RDF; class Literal
     # @return [Rational]
     def to_r
       @object.to_r # only available on Ruby 1.9+
+    end
+    
+    private
+    def to_canonical
+      # Can't use simple %f transformation do to special requirements from N3 tests in representation
+      case
+      when @object.nan?      then 'NaN'
+      when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
+      else
+        i, f, e = ("%.16E" % @object.to_f).split(/[\.E]/)
+        f.sub!(/0*$/, '')
+        f = "0" if f.empty?
+        e.sub!(/^\+?0+(\d)$/, '\1')
+        "#{i}.#{f}E#{e}"
+      end
     end
   end # class Double
 end; end # class RDF::Literal
