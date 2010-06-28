@@ -18,10 +18,10 @@ module RDF; class Literal
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
-        when true.equal?(value)          then true
-        when false.equal?(value)         then false
-        when TRUES.include?(value.downcase.to_s)  then true
-        when FALSES.include?(value.downcase.to_s) then false
+        when true.equal?(value)  then true
+        when false.equal?(value) then false
+        when TRUES.include?(value.to_s.downcase)  then true
+        when FALSES.include?(value.to_s.downcase) then false
         else value
       end
     end
