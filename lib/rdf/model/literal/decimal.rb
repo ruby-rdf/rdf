@@ -27,7 +27,16 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#decimal
     def canonicalize
-      @string = to_canonical
+      # Can't use simple %f transformation due to special requirements from
+      # N3 tests in representation
+      @string = begin
+        i, f = @object.to_s('F').split('.')
+        i.sub!(/^\+?0+(\d)$/, '\1') # remove the optional leading '+' sign and any extra leading zeroes
+        f = f[0, 16]                # truncate the fractional part after 15 decimal places
+        f.sub!(/0*$/, '')           # remove any trailing zeroes
+        f = '0' if f.empty?         # ...but there must be a digit to the right of the decimal point
+        "#{i}.#{f}"
+      end
       self
     end
 
@@ -37,7 +46,7 @@ module RDF; class Literal
     # @return [String]
     # @see    BigDecimal#to_s
     def to_s
-      @string || to_canonical
+      @string || @object.to_s('F')
     end
 
     ##
@@ -76,19 +85,6 @@ module RDF; class Literal
     # @see    BigDecimal#to_r
     def to_r
       @object.to_r # only available on Ruby 1.9+
-    end
-
-    private
-
-    def to_canonical
-      # Can't use simple %f transformation due to special requirements from
-      # N3 tests in representation
-      i, f = @object.to_s('F').split('.')
-      i.sub!(/^\+?0+(\d)$/, '\1') # remove the optional leading '+' sign and any extra leading zeroes
-      f = f[0, 16]                # truncate the fractional part after 15 decimal places
-      f.sub!(/0*$/, '')           # remove any trailing zeroes
-      f = '0' if f.empty?         # ...but there must be a digit to the right of the decimal point
-      "#{i}.#{f}"
     end
   end # class Decimal
 end; end # class RDF::Literal
