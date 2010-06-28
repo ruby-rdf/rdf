@@ -63,4 +63,20 @@ module RDF
       Writer.serialize(value)
     end
   end
+
+  ##
+  # Extensions for `RDF::Value`.
+  module Value
+    ##
+    # Returns the N-Triples representation of this value.
+    #
+    # This method is only available when the 'rdf/ntriples' serializer has
+    # been explicitly required.
+    #
+    # @return [String]
+    # @since  0.2.1
+    def to_ntriples
+      RDF::NTriples.serialize(self)
+    end
+  end
 end
