@@ -135,7 +135,7 @@ module RDF
       ##
       # @private
       def self.extend_object(obj)
-        obj.instance_variable_set(:@data, {})
+        obj.instance_variable_set(:@data, obj.options.delete(:data) || {})
         super
       end
 
