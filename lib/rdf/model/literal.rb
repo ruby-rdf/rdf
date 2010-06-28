@@ -263,10 +263,12 @@ module RDF
     ##
     # Converts the literal into its canonical lexical representation.
     #
+    # Subclasses should override this as needed and appropriate.
+    #
     # @return [Literal]
     # @since  0.2.1
     def canonicalize
-      # subclasses should override this as needed and appropriate
+      @language = @language.to_s.downcase.to_sym if @language
       self
     end
 
