@@ -153,15 +153,15 @@ describe RDF::NTriples do
 
     describe "with literal encodings" do
       {
-        'Dürst' => ':a :b "D\u00FCrst" .',
+        'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',
         'simple literal' => '<http://subj> <http://pred>  "simple literal" .',
-        'backslash:\\' => '<http://subj> <http://pred> "backslash:\\\\" .',
-        'dquote:"' => '<http://subj> <http://pred> "dquote:\"" .',
-        "newline:\n" => '<http://subj> <http://pred> "newline:\n" .',
-        "return\r" => '<http://subj> <http://pred> "return\r" .',
-        "tab:\t" => '<http://subj> <http://pred> "tab:\t" .',
-        "é" => '<http://subj> <http://pred> "\u00E9" .',
-        "€" => '<http://subj> <http://pred> "\u20AC" .',
+        'backslash:\\'   => '<http://subj> <http://pred> "backslash:\\\\" .',
+        'dquote:"'       => '<http://subj> <http://pred> "dquote:\"" .',
+        "newline:\n"     => '<http://subj> <http://pred> "newline:\n" .',
+        "return\r"       => '<http://subj> <http://pred> "return\r" .',
+        "tab:\t"         => '<http://subj> <http://pred> "tab:\t" .',
+        "é"              => '<http://subj> <http://pred> "\u00E9" .',
+        "€"              => '<http://subj> <http://pred> "\u20AC" .',
       }.each_pair do |contents, triple|
         specify "test #{contents}" do
           stmt = @reader.unserialize(triple)
@@ -252,7 +252,7 @@ describe RDF::NTriples do
             if defined?(::Encoding)
               raise
             else
-              pending("Unicode URIs not supported in Ruby 1.8") {  raise } 
+              pending("Unicode URIs not supported in Ruby 1.8") { raise } 
             end
           end
         end
