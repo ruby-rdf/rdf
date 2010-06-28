@@ -29,7 +29,7 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#integer
     def canonicalize
-      @string = @object.to_s
+      @string = @object.to_s if @object
       self
     end
 

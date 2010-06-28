@@ -162,7 +162,7 @@ module RDF
     def literal?
       true
     end
-    
+
     ##
     # Returns `false`.
     #

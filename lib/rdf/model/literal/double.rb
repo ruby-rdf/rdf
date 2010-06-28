@@ -29,7 +29,7 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#double
     def canonicalize
-      @string = to_canonical
+      @string = to_canonical if @object
       self
     end
 
@@ -72,19 +72,22 @@ module RDF; class Literal
     def to_r
       @object.to_r # only available on Ruby 1.9+
     end
-    
+
     private
+
     def to_canonical
-      # Can't use simple %f transformation do to special requirements from N3 tests in representation
+      # Can't use simple %f transformation due to special requirements from
+      # N3 tests in representation
       case
-      when @object.nan?      then 'NaN'
-      when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
-      else
-        i, f, e = ("%.16E" % @object.to_f).split(/[\.E]/)
-        f.sub!(/0*$/, '')
-        f = "0" if f.empty?
-        e.sub!(/^\+?0+(\d)$/, '\1')
-        "#{i}.#{f}E#{e}"
+        when @object.nan?      then 'NaN'
+        when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
+        when @object.zero?     then '0.0E0'
+        else
+          i, f, e = ('%.16E' % @object.to_f).split(/[\.E]/)
+          f.sub!(/0*$/, '')           # remove any trailing zeroes
+          f = '0' if f.empty?         # ...but there must be a digit to the right of the decimal point
+          e.sub!(/^\+?0+(\d)$/, '\1') # remove the optional leading '+' sign and any extra leading zeroes
+          "#{i}.#{f}E#{e}"
       end
     end
   end # class Double
