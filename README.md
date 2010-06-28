@@ -189,6 +189,7 @@ Authors
 Contributors
 ------------
 
+* [Gregg Kellogg](mailto:gregg@kellogg-assoc.com) - <http://kellogg-assoc.com/>
 * [Hellekin O. Wolf](mailto:hellekin@cepheide.org) - <http://hellekin.cepheide.org/>
 * [John Fieber](mailto:jrf@ursamaris.org) - <http://github.com/jfieber>
 * [Pius Uzamere](mailto:pius@alum.mit.edu) - <http://pius.me/>
