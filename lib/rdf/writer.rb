@@ -146,6 +146,7 @@ module RDF
     ##
     # @param  [IO, File]               output
     # @param  [Hash{Symbol => Object}] options
+    # @option options [Hash] :prefixes ({})
     # @yield  [writer]
     # @yieldparam [RDF::Writer] writer
     def initialize(output = $stdout, options = {}, &block)
@@ -161,6 +162,38 @@ module RDF
         write_epilogue
       end
     end
+
+    ##
+    # Returns the options for this writer.
+    #
+    # @return [Hash{Symbol => Object}]
+    attr_reader :options
+
+    ##
+    # Returns the URI prefixes currently defined for this writer.
+    #
+    # @return [Hash{Symbol => RDF::URI}]
+    def prefixes
+      options[:prefixes] ||= {}
+    end
+
+    ##
+    # Defines a named URI prefix for this writer.
+    #
+    # @overload prefix(name, uri)
+    #   @param  [Symbol, #to_s]   name
+    #   @param  [RDF::URI, #to_s] uri
+    #
+    # @overload prefix(name)
+    #   @param  [Symbol, #to_s]   name
+    #
+    # @return [void]
+    def prefix(name, uri = nil)
+      name = name.respond_to?(:to_sym) ? name.to_sym : name.to_s.to_sym
+      uri.nil? ? prefixes[name] : prefixes[name] = RDF::URI(uri)
+    end
+
+    alias_method :prefix!, :prefix
 
     ##
     # Flushes the underlying output buffer.
