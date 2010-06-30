@@ -113,7 +113,7 @@ module RDF
     # @option options [URI]    :datatype (nil)
     def initialize(value, options = {})
       @object   = value
-      @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   = options[:lexical] if options[:lexical]
       @language = options[:language].to_s.to_sym if options[:language]
       @datatype = RDF::URI(options[:datatype]) if options[:datatype]
     end
