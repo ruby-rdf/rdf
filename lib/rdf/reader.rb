@@ -125,7 +125,13 @@ module RDF
         when String then StringIO.new(input)
         else input
       end
-      block.call(self) if block_given?
+      if block_given?
+        begin
+          block.call(self) 
+        ensure
+          close
+        end
+      end
     end
 
     ##
@@ -156,6 +162,12 @@ module RDF
         loop { block.call(*read_triple) }
       rescue EOFError => e
       end
+    end
+
+    ##
+    #
+    def close
+      @input.close unless @input.closed?
     end
 
     protected
