@@ -32,12 +32,7 @@ module RDF
         when Query
           pattern.execute(self, &block)
         else
-          pattern = case pattern
-            when Query::Pattern, Statement then pattern
-            when Array then Query::Pattern.new(*pattern)
-            when Hash  then Query::Pattern.new(pattern)
-            else raise ArgumentError.new("expected RDF::Query, RDF::Query::Pattern, Array, or Hash, but got #{pattern.inspect}")
-          end
+          pattern = Query::Pattern.from(pattern)
 
           if block_given?
             query_pattern(pattern, &block)

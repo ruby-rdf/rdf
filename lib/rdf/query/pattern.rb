@@ -1,7 +1,20 @@
-class RDF::Query
+module RDF; class Query
   ##
   # An RDF query pattern.
   class Pattern < RDF::Statement
+    ##
+    # @private
+    # @since 0.2.2
+    def self.from(pattern)
+      case pattern
+        when Pattern   then pattern
+        when Statement then self.new(pattern.to_hash)
+        when Hash      then self.new(pattern)
+        when Array     then self.new(*pattern)
+        else raise ArgumentError.new("expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}")
+      end
+    end
+
     # @return [Hash{Symbol => Object}]
     attr_reader :options
 
@@ -11,6 +24,7 @@ class RDF::Query
     #   @option options [Variable, Resource] :subject   (nil)
     #   @option options [Variable, URI]      :predicate (nil)
     #   @option options [Variable, Value]    :object    (nil)
+    #   @option options [Variable, Resource] :context   (nil)
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
@@ -18,6 +32,7 @@ class RDF::Query
     #   @param  [Variable, URI]              predicate
     #   @param  [Variable, Value]            object
     #   @param  [Hash{Symbol => Object}]     options
+    #   @option options [Variable, Resource] :context   (nil)
     #   @option options [Boolean]            :optional  (false)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       super
@@ -146,5 +161,5 @@ class RDF::Query
         buffer.string
       end
     end
-  end
-end
+  end # class Pattern
+end; end # module RDF class Query
