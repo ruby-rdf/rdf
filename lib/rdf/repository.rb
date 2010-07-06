@@ -236,6 +236,25 @@ module RDF
 
       ##
       # @private
+      # @see RDF::Queryable#query
+      def query_pattern(pattern, &block)
+        @data.dup.each do |c, ss|
+          next if pattern.has_context? && pattern.context != c
+          ss.dup.each do |s, ps|
+            next if pattern.has_subject? && pattern.subject != s
+            ps.dup.each do |p, os|
+              next if pattern.has_predicate? && pattern.predicate != p
+              os.dup.each do |o|
+                next if pattern.has_object? && pattern.object != o
+                block.call(RDF::Statement.new(s, p, o, :context => c))
+              end
+            end
+          end
+        end
+      end
+
+      ##
+      # @private
       # @see RDF::Mutable#insert
       def insert_statement(statement)
         unless has_statement?(statement)
@@ -267,6 +286,7 @@ module RDF
         @data.clear
       end
 
+      protected :query_pattern
       protected :insert_statement
       protected :delete_statement
       protected :clear_statements
