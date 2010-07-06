@@ -125,13 +125,7 @@ module RDF
         when String then StringIO.new(input)
         else input
       end
-      if block_given?
-        begin
-          block.call(self) 
-        ensure
-          close
-        end
-      end
+      block.call(self) if block_given?
     end
 
     ##
@@ -165,7 +159,8 @@ module RDF
     end
 
     ##
-    #
+    # @return [void]
+    # @since  0.2.2
     def close
       @input.close unless @input.closed?
     end
