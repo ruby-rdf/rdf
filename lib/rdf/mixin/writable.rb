@@ -126,14 +126,9 @@ module RDF
     #
     # @param  [RDF::Statement, Hash, Array, #to_a] statement
     # @return [RDF::Statement]
+    # @deprecated
     def create_statement(statement)
-      # TODO: move this to RDF::Statement.construct or the like.
-      case statement
-        when Statement then statement
-        when Hash      then Statement.new(statement)
-        when Array     then Statement.new(*statement)
-        else raise ArgumentError.new # FIXME
-      end
+      Statement.from(statement)
     end
 
     protected :insert_statements

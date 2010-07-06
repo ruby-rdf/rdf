@@ -21,6 +21,18 @@ module RDF
   class Statement
     include RDF::Value
 
+    ##
+    # @private
+    # @since 0.2.2
+    def self.from(statement)
+      case statement
+        when Statement then statement
+        when Hash      then self.new(statement)
+        when Array     then self.new(*statement)
+        else raise ArgumentError.new("expected RDF::Statement, Hash, or Array, but got #{statement.inspect}")
+      end
+    end
+
     # @return [Object]
     attr_accessor :id
 
