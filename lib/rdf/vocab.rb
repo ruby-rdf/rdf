@@ -6,6 +6,7 @@ module RDF
   #
   # The following vocabularies are pre-defined for your convenience:
   #
+  # * {RDF}        - Resource Description Framework (RDF)
   # * {RDF::CC}    - Creative Commons (CC)
   # * {RDF::CERT}  - W3 Authentication Certificate (CERT)
   # * {RDF::DC}    - Dublin Core (DC)
@@ -30,6 +31,7 @@ module RDF
   #
   #   DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
   #   FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+  #   RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
   #   RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
   #   RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
   #   OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")

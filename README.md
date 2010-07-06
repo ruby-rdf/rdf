@@ -124,6 +124,7 @@ Documentation
 
 ### RDF Vocabularies
 
+* {RDF}        - Resource Description Framework (RDF)
 * {RDF::CC}    - Creative Commons (CC)
 * {RDF::CERT}  - W3 Authentication Certificate (CERT)
 * {RDF::DC}    - Dublin Core (DC)
