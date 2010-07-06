@@ -190,6 +190,7 @@ Authors
 Contributors
 ------------
 
+* [Fumihiro Kato](mailto:fumi@fumi.me) - <http://fumi.me/>
 * [Gregg Kellogg](mailto:gregg@kellogg-assoc.com) - <http://kellogg-assoc.com/>
 * [Hellekin O. Wolf](mailto:hellekin@cepheide.org) - <http://hellekin.cepheide.org/>
 * [John Fieber](mailto:jrf@ursamaris.org) - <http://github.com/jfieber>
