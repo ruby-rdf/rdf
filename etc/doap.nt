@@ -27,6 +27,8 @@
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid1 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid2 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid3 .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid4 .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid5 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rdf.rubyforge.org/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://ar.to/#self> .
@@ -37,11 +39,17 @@
 <http://rubygems.org/gems/rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
 <http://rubygems.org/gems/rdf> <http://xmlns.com/foaf/0.1/maker> <http://ar.to/#self> .
 _:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid1 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
-_:genid1 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
+_:genid1 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930" .
+_:genid1 <http://xmlns.com/foaf/0.1/name> "Fumihiro Kato" .
 _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid2 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
-_:genid2 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
+_:genid2 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" .
+_:genid2 <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .
 _:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid3 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
-_:genid3 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .
+_:genid3 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
+_:genid3 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:genid4 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
+_:genid4 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:genid5 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
+_:genid5 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .

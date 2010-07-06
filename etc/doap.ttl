@@ -23,6 +23,12 @@
   doap:maintainer    <http://ar.to/#self> ;
   doap:documenter    <http://ar.to/#self> ;
   doap:helper        [a foaf:Person ;
+                      foaf:name "Fumihiro Kato" ;
+                      foaf:mbox_sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Gregg Kellogg" ;
+                      foaf:mbox_sha1sum "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd"] ;
+  doap:helper        [a foaf:Person ;
                       foaf:name "Hellekin O. Wolf" ;
                       foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;
   doap:helper        [a foaf:Person ;
