@@ -195,11 +195,17 @@ module RDF
     end
 
     ##
-    # Inserts the given RDF statement into the graph.
-    #
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    # @see    RDF::Mutable#insert
+    # @private
+    # @see RDF::Queryable#query
+    def query_pattern(pattern, &block)
+      pattern = pattern.dup
+      pattern.context = context
+      @data.query(pattern, &block)
+    end
+
+    ##
+    # @private
+    # @see RDF::Mutable#insert
     def insert_statement(statement)
       statement = statement.dup
       statement.context = context
@@ -207,11 +213,8 @@ module RDF
     end
 
     ##
-    # Deletes the given RDF statement from the graph.
-    #
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    # @see    RDF::Mutable#delete
+    # @private
+    # @see RDF::Mutable#delete
     def delete_statement(statement)
       statement = statement.dup
       statement.context = context
@@ -219,14 +222,13 @@ module RDF
     end
 
     ##
-    # Deletes all RDF statements from this graph.
-    #
-    # @return [void]
-    # @see    RDF::Mutable#clear
+    # @private
+    # @see RDF::Mutable#clear
     def clear_statements
       @data.delete(:context => context)
     end
 
+    protected :query_pattern
     protected :insert_statement
     protected :delete_statement
     protected :clear_statements
