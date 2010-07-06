@@ -49,6 +49,8 @@ module RDF
     #
     # @param  [String] data
     # @return [RDF::Value]
+    # @see    RDF::NTriples::Reader.unserialize
+    # @since  0.1.5
     def self.unserialize(data)
       Reader.unserialize(data)
     end
@@ -59,8 +61,28 @@ module RDF
     #
     # @param  [RDF::Value] value
     # @return [String]
+    # @see    RDF::NTriples::Writer.serialize
+    # @since  0.1.5
     def self.serialize(value)
       Writer.serialize(value)
+    end
+
+    ##
+    # @param  [String] string
+    # @return [String]
+    # @see    RDF::NTriples::Reader.unescape
+    # @since  0.2.2
+    def self.unescape(string)
+      Reader.unescape(string)
+    end
+
+    ##
+    # @param  [String] string
+    # @return [String]
+    # @see    RDF::NTriples::Writer.escape
+    # @since  0.2.2
+    def self.escape(string)
+      Writer.escape(string)
     end
   end
 
