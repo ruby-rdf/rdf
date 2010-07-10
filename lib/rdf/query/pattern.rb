@@ -153,7 +153,6 @@ module RDF; class Query
     #
     # @return [String]
     def to_s
-      require 'stringio' unless defined?(StringIO)
       StringIO.open do |buffer| # FIXME in RDF::Statement
         buffer << (subject.is_a?(Variable)   ? subject.to_s :   "<#{subject}>") << ' '
         buffer << (predicate.is_a?(Variable) ? predicate.to_s : "<#{predicate}>") << ' '

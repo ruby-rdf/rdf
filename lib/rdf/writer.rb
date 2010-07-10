@@ -125,8 +125,6 @@ module RDF
     # @yieldparam [Writer] writer
     # @return [String]
     def self.buffer(*args, &block)
-      require 'stringio' unless defined?(StringIO)
-
       StringIO.open do |buffer|
         self.new(buffer, *args) { |writer| block.call(writer) }
         buffer.string

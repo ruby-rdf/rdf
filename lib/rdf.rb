@@ -1,5 +1,6 @@
 require 'enumerator'
 require 'open-uri'
+require 'stringio'
 require 'bigdecimal'
 require 'date'
 require 'time'

@@ -246,7 +246,6 @@ module RDF
     #
     # @return [String]
     def to_s
-      require 'stringio' unless defined?(StringIO)
       StringIO.open do |buffer|
         buffer << case subject
           when RDF::Node    then subject.to_s
