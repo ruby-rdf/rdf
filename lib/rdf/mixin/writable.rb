@@ -19,6 +19,8 @@ module RDF
     # @return [Writable]
     def <<(data)
       case data
+        when RDF::Reader
+          insert_reader(data)
         when RDF::Graph
           insert_graph(data)
         when RDF::Enumerable
@@ -62,6 +64,24 @@ module RDF
     alias_method :insert!, :insert
 
   protected
+
+    ##
+    # Inserts statements from the given RDF reader into the underlying
+    # storage or output stream.
+    #
+    # Defaults to passing the reader to the {#insert_statements} method.
+    #
+    # Subclasses of {RDF::Repository} may wish to override this method in
+    # case their underlying storage can efficiently import RDF data directly
+    # in particular serialization formats, thus avoiding the intermediate
+    # parsing overhead.
+    #
+    # @param  [RDF::Reader] reader
+    # @return [void]
+    # @since  0.2.3
+    def insert_reader(reader)
+      insert_statements(reader)
+    end
 
     ##
     # Inserts the given RDF graph into the underlying storage or output
