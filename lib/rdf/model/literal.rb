@@ -172,6 +172,14 @@ module RDF
     end
 
     ##
+    # Returns a hash code for this literal.
+    #
+    # @return [Fixnum]
+    def hash
+      to_s.hash
+    end
+
+    ##
     # @return [Boolean]
     def eql?(other)
       other.is_a?(Literal) && self == other
