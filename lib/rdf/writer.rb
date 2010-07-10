@@ -268,22 +268,13 @@ module RDF
     # @return [String]
     def format_value(value, options = {})
       case value
-        when String       then format_literal(value, options) # FIXME
+        when String       then format_literal(RDF::Literal.new(value, options), options)
+        when RDF::List    then format_list(value, options)
         when RDF::Literal then format_literal(value, options)
         when RDF::URI     then format_uri(value, options)
         when RDF::Node    then format_node(value, options)
         else nil
       end
-    end
-
-    ##
-    # @param  [URI]                    value
-    # @param  [Hash{Symbol => Object}] options
-    # @return [String]
-    # @raise  [NotImplementedError] unless implemented in subclass
-    # @abstract
-    def format_uri(value, options = {})
-      raise NotImplementedError.new("#{self.class}#format_uri") # override in subclasses
     end
 
     ##
@@ -297,6 +288,16 @@ module RDF
     end
 
     ##
+    # @param  [URI]                    value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def format_uri(value, options = {})
+      raise NotImplementedError.new("#{self.class}#format_uri") # override in subclasses
+    end
+
+    ##
     # @param  [Literal, String, #to_s] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
@@ -304,6 +305,15 @@ module RDF
     # @abstract
     def format_literal(value, options = {})
       raise NotImplementedError.new("#{self.class}#format_literal") # override in subclasses
+    end
+
+    ##
+    # @param  [List] value
+    # @param  [Hash{Symbol => Object}] options
+    # @return [String]
+    # @abstract
+    def format_list(value, options = {})
+      format_value(value.subject, options)
     end
 
   protected

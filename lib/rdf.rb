@@ -44,6 +44,9 @@ module RDF
   autoload :URI,        'rdf/model/uri'
   autoload :Value,      'rdf/model/value'
 
+  # RDF collections
+  autoload :List,       'rdf/model/list'
+
   # RDF serialization
   autoload :Format,     'rdf/format'
   autoload :Reader,     'rdf/reader'
