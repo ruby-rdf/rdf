@@ -73,7 +73,7 @@ module RDF; module Util
       # @return [Object]
       def [](key)
         if value_id = @cache[key]
-          value = ObjectSpace._id2ref(value_id)
+          value = ObjectSpace._id2ref(value_id) rescue nil
         end
       end
 
@@ -110,7 +110,7 @@ module RDF; module Util
       # @return [Object]
       def [](key)
         if (ref = @cache[key]) && ref.weakref_alive?
-          value = ref.__getobj__
+          value = ref.__getobj__ rescue nil
         end
       end
 
