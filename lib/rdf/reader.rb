@@ -159,8 +159,22 @@ module RDF
     end
 
     ##
+    # Rewinds the input stream to the beginning of input.
+    #
+    # @return [void]
+    # @since  0.2.3
+    # @see    http://ruby-doc.org/core-1.9/classes/IO.html#M001692
+    def rewind
+      @input.rewind
+    end
+
+    ##
+    # Closes the input stream. An `IOError` is raised for further read
+    # attempts.
+    #
     # @return [void]
     # @since  0.2.2
+    # @see    http://ruby-doc.org/core-1.9/classes/IO.html#M001699
     def close
       @input.close unless @input.closed?
     end
