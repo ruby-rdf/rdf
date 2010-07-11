@@ -33,6 +33,7 @@ module RDF
   # @see RDF::Format
   # @see RDF::Reader
   class Writer
+    extend RDF::Util::Aliasing::LateBound
     extend  ::Enumerable
     include RDF::Writable
 
@@ -312,6 +313,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     # @abstract
+    # @since  0.2.3
     def format_list(value, options = {})
       format_value(value.subject, options)
     end
