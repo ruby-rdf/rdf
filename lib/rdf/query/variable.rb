@@ -2,10 +2,14 @@ class RDF::Query
   ##
   # An RDF query variable.
   #
-  # @example Creating an unbound variable
+  # @example Creating a named unbound variable
   #   var = RDF::Query::Variable.new(:x)
   #   var.unbound?   #=> true
   #   var.value      #=> nil
+  #
+  # @example Creating an anonymous unbound variable
+  #   var = RDF::Query::Variable.new
+  #   var.name       #=> :g2166151240
   #
   # @example Unbound variables match any value
   #   var === 42     #=> true
@@ -52,8 +56,9 @@ class RDF::Query
     ##
     # @param  [Symbol] name
     # @param  [Value]  value
-    def initialize(name, value = nil)
-      @name, @value = name.to_sym, value
+    def initialize(name = nil, value = nil)
+      @name  = (name || "g#{__id__.to_i.abs}").to_sym
+      @value = value
     end
 
     ##
