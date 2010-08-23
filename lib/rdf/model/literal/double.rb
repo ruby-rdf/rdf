@@ -2,6 +2,12 @@ module RDF; class Literal
   ##
   # An floating point number literal.
   #
+  # @example Arithmetic with floating point literals
+  #   RDF::Literal(1.0) + 0.5                 #=> RDF::Literal(1.5)
+  #   RDF::Literal(3.0) - 6                   #=> RDF::Literal(-3.0)
+  #   RDF::Literal(Math::PI) * 2              #=> RDF::Literal(Math::PI * 2)
+  #   RDF::Literal(Math::PI) / 2              #=> RDF::Literal(Math::PI / 2)
+  #
   # @see   http://www.w3.org/TR/xmlschema-2/#double
   # @since 0.2.1
   class Double < Literal
@@ -43,6 +49,64 @@ module RDF; class Literal
           "#{i}.#{f}E#{e}"
       end unless @object.nil?
       self
+    end
+
+    ##
+    # Returns `self`.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def +@
+      self # unary plus
+    end
+
+    ##
+    # Returns `self` negated.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def -@
+      RDF::Literal(-to_f) # unary minus
+    end
+
+    ##
+    # Returns the sum of `self` plus `other`.
+    #
+    # @param  [#to_f] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def +(other)
+      RDF::Literal(to_f + other.to_f)
+    end
+
+    ##
+    # Returns the difference of `self` minus `other`.
+    #
+    # @param  [#to_f] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def -(other)
+      RDF::Literal(to_f - other.to_f)
+    end
+
+    ##
+    # Returns the product of `self` times `other`.
+    #
+    # @param  [#to_f] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def *(other)
+      RDF::Literal(to_f * other.to_f)
+    end
+
+    ##
+    # Returns the quotient of `self` divided by `other`.
+    #
+    # @param  [#to_f] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def /(other)
+      RDF::Literal(to_f / other.to_f)
     end
 
     ##

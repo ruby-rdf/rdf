@@ -2,6 +2,12 @@ module RDF; class Literal
   ##
   # An integer literal.
   #
+  # @example Arithmetic with integer literals
+  #   RDF::Literal(40) + 2                    #=> RDF::Literal(42)
+  #   RDF::Literal(45) - 3                    #=> RDF::Literal(42)
+  #   RDF::Literal(6) * 7                     #=> RDF::Literal(42)
+  #   RDF::Literal(84) / 2                    #=> RDF::Literal(42)
+  #
   # @see   http://www.w3.org/TR/xmlschema-2/#integer
   # @since 0.2.1
   class Integer < Decimal
@@ -31,6 +37,65 @@ module RDF; class Literal
     def canonicalize
       @string = @object.to_s if @object
       self
+    end
+
+    ##
+    # Returns `self`.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def +@
+      self # unary plus
+    end
+
+    ##
+    # Returns `self` negated.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def -@
+      RDF::Literal(-to_i) # unary minus
+    end
+
+    ##
+    # Returns the sum of `self` plus `other`.
+    #
+    # @param  [#to_i] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def +(other)
+      RDF::Literal(to_i + other.to_i)
+    end
+
+    ##
+    # Returns the difference of `self` minus `other`.
+    #
+    # @param  [#to_i] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def -(other)
+      RDF::Literal(to_i - other.to_i)
+    end
+
+    ##
+    # Returns the product of `self` times `other`.
+    #
+    # @param  [#to_i] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def *(other)
+      RDF::Literal(to_i * other.to_i)
+    end
+
+    ##
+    # Returns the quotient of `self` divided by `other`.
+    #
+    # @param  [#to_i] other
+    # @return [RDF::Literal]
+    # @raise  [ZeroDivisionError] if divided by zero
+    # @since  0.2.3
+    def /(other)
+      RDF::Literal(to_i / other.to_i)
     end
 
     ##
