@@ -40,6 +40,24 @@ module RDF; class Literal
     end
 
     ##
+    # Returns `true` if the value is even.
+    #
+    # @return [Boolean]
+    # @since  0.2.3
+    def even?
+      to_i.even?
+    end
+
+    ##
+    # Returns `true` if the value is odd.
+    #
+    # @return [Boolean]
+    # @since  0.2.3
+    def odd?
+      to_i.odd?
+    end
+
+    ##
     # Returns the absolute value of `self`.
     #
     # @return [RDF::Literal]
@@ -140,6 +158,7 @@ module RDF; class Literal
     def to_i
       @object.to_i
     end
+    alias_method :to_int, :to_i
 
     ##
     # Returns the value as a floating point number.
