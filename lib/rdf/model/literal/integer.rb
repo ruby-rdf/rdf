@@ -40,6 +40,25 @@ module RDF; class Literal
     end
 
     ##
+    # Returns the successor value of `self`.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def pred
+      RDF::Literal(to_i.pred)
+    end
+
+    ##
+    # Returns the predecessor value of `self`.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def succ
+      RDF::Literal(to_i.succ)
+    end
+    alias_method :next, :succ
+
+    ##
     # Returns `true` if the value is even.
     #
     # @return [Boolean]
@@ -63,7 +82,7 @@ module RDF; class Literal
     # @return [RDF::Literal]
     # @since  0.2.3
     def abs
-      (n = to_n) && n > 0 ? self : RDF::Literal(n.abs)
+      (n = to_i) && n > 0 ? self : RDF::Literal(n.abs)
     end
 
     ##
@@ -159,6 +178,7 @@ module RDF; class Literal
       @object.to_i
     end
     alias_method :to_int, :to_i
+    alias_method :ord,    :to_i
 
     ##
     # Returns the value as a floating point number.
