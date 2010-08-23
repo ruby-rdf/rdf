@@ -52,6 +52,33 @@ module RDF; class Literal
     end
 
     ##
+    # Returns the absolute value of `self`.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def abs
+      (f = to_f) && f > 0 ? self : RDF::Literal(f.abs)
+    end
+
+    ##
+    # Returns `true` if the value is zero.
+    #
+    # @return [Boolean]
+    # @since  0.2.3
+    def zero?
+      to_f.zero?
+    end
+
+    ##
+    # Returns `self` if the value is not zero, `nil` otherwise.
+    #
+    # @return [Boolean]
+    # @since  0.2.3
+    def nonzero?
+      to_f.nonzero? ? self : nil
+    end
+
+    ##
     # Returns `self`.
     #
     # @return [RDF::Literal]
