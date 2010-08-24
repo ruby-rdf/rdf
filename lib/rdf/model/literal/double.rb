@@ -52,6 +52,35 @@ module RDF; class Literal
     end
 
     ##
+    # Returns `true` if the value is an invalid IEEE floating point number.
+    #
+    # @return [Boolean]
+    # @since  0.2.3
+    def nan?
+      to_f.nan?
+    end
+
+    ##
+    # Returns `true` if the value is a valid IEEE floating point number (it
+    # is not infinite, and `nan?` is `false`).
+    #
+    # @return [Boolean]
+    # @since  0.2.3
+    def finite?
+      to_f.finite?
+    end
+
+    ##
+    # Returns `nil`, `-1`, or `+1` depending on whether the value is finite,
+    # `-INF`, or `+INF`.
+    #
+    # @return [Integer]
+    # @since  0.2.3
+    def infinite?
+      to_f.infinite?
+    end
+
+    ##
     # Returns the absolute value of `self`.
     #
     # @return [RDF::Literal]
