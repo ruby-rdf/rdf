@@ -54,6 +54,11 @@ module RDF; class Literal
     ##
     # Returns `true` if the value is an invalid IEEE floating point number.
     #
+    # @example
+    #   RDF::Literal(-1.0).nan?           #=> false
+    #   RDF::Literal(1.0/0.0).nan?        #=> false
+    #   RDF::Literal(0.0/0.0).nan?        #=> true
+    #
     # @return [Boolean]
     # @since  0.2.3
     def nan?
@@ -63,6 +68,11 @@ module RDF; class Literal
     ##
     # Returns `true` if the value is a valid IEEE floating point number (it
     # is not infinite, and `nan?` is `false`).
+    #
+    # @example
+    #   RDF::Literal(-1.0).finite?        #=> true
+    #   RDF::Literal(1.0/0.0).finite?     #=> false
+    #   RDF::Literal(0.0/0.0).finite?     #=> false
     #
     # @return [Boolean]
     # @since  0.2.3
@@ -74,10 +84,45 @@ module RDF; class Literal
     # Returns `nil`, `-1`, or `+1` depending on whether the value is finite,
     # `-INF`, or `+INF`.
     #
+    # @example
+    #   RDF::Literal(0.0/0.0).infinite?   #=> nil
+    #   RDF::Literal(-1.0/0.0).infinite?  #=> -1
+    #   RDF::Literal(+1.0/0.0).infinite?  #=> 1
+    #
     # @return [Integer]
     # @since  0.2.3
     def infinite?
       to_f.infinite?
+    end
+
+    ##
+    # Returns the smallest integer greater than or equal to `self`.
+    #
+    # @example
+    #   RDF::Literal(1.2).ceil            #=> RDF::Literal(2)
+    #   RDF::Literal(-1.2).ceil           #=> RDF::Literal(-1)
+    #   RDF::Literal(2.0).ceil            #=> RDF::Literal(2)
+    #   RDF::Literal(-2.0).ceil           #=> RDF::Literal(-2)
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def ceil
+      RDF::Literal(to_f.ceil)
+    end
+
+    ##
+    # Returns the largest integer less than or equal to `self`.
+    #
+    # @example
+    #   RDF::Literal(1.2).floor           #=> RDF::Literal(1)
+    #   RDF::Literal(-1.2).floor          #=> RDF::Literal(-2)
+    #   RDF::Literal(2.0).floor           #=> RDF::Literal(2)
+    #   RDF::Literal(-2.0).floor          #=> RDF::Literal(-2)
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    def floor
+      RDF::Literal(to_f.floor)
     end
 
     ##
