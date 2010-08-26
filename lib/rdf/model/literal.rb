@@ -90,7 +90,7 @@ module RDF
           when ::BigDecimal then RDF::Literal::Decimal
           when ::DateTime   then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date
-          when ::Time       then RDF::Literal::Time
+          when ::Time       then RDF::Literal::Time # FIXME: Ruby's Time class can represent datetimes as well
           else self
         end
       end
