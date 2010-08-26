@@ -1,13 +1,9 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Query::Variable do
-  context "when created" do
+  context "when created with a name" do
     before :each do
       @var = RDF::Query::Variable.new(:x)
-    end
-
-    it "should require a name" do
-      lambda { var = RDF::Query::Variable.new }.should raise_error(ArgumentError)
     end
 
     it "should have a name" do
