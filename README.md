@@ -148,7 +148,7 @@ Dependencies
 ------------
 
 * [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
-* [Addressable](http://rubygems.org/gems/addressable) (>= 2.1.2)
+* [Addressable](http://rubygems.org/gems/addressable) (>= 2.2.0)
 
 Installation
 ------------
