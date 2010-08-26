@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF list.
   #
-  # @example
+  # @example Constructing a new list
   #   RDF::List[1, 2, 3]
   #
   # @since 0.2.3
@@ -32,8 +32,8 @@ module RDF
     ##
     # Initializes a newly-constructed list.
     #
-    # @param  [RDF::Resource]          subject
-    # @param  [RDF::Graph]             graph
+    # @param  [RDF::Resource]     subject
+    # @param  [RDF::Graph]        graph
     # @param  [Array<RDF::Value>] values
     # @yield  [list]
     # @yieldparam [RDF::List] list
@@ -72,7 +72,7 @@ module RDF
     ##
     # Returns the set intersection of this list and `other`.
     #
-    # The resulting list contains the values common to both lists, with no
+    # The resulting list contains the elements common to both lists, with no
     # duplicates.
     #
     # @example
@@ -90,7 +90,7 @@ module RDF
     ##
     # Returns the set union of this list and `other`.
     #
-    # The resulting list contains the values from both lists, with no
+    # The resulting list contains the elements from both lists, with no
     # duplicates.
     #
     # @example
@@ -120,7 +120,7 @@ module RDF
 
     ##
     # Returns the difference between this list and `other`, removing any
-    # values that appear in both lists.
+    # elements that appear in both lists.
     #
     # @example
     #   RDF::List[1, 2, 2, 3] - RDF::List[2]    #=> RDF::List[1, 3]
@@ -133,7 +133,8 @@ module RDF
     end
 
     ##
-    # ...
+    # Returns either a repeated list or a string concatenation of the
+    # elements in this list.
     #
     # @overload *(times)
     #   Returns a new list built of `times` repetitions of this list.
@@ -145,7 +146,7 @@ module RDF
     #   @return [RDF::List]
     #
     # @overload *(sep)
-    #   Returns the string concatenation of the values in this list
+    #   Returns the string concatenation of the elements in this list
     #   separated by `sep`. Equivalent to `self.join(sep)`.
     #
     #   @example
@@ -177,7 +178,7 @@ module RDF
     end
 
     ##
-    # Appends a value to the tail of this list.
+    # Appends an element to the tail of this list.
     #
     # @example
     #   RDF::List[] << 1 << 2 << 3              #=> RDF::List[1, 2, 3]
@@ -270,7 +271,7 @@ module RDF
     end
 
     ##
-    # Returns the value at `index`.
+    # Returns the element at `index`.
     #
     # @example
     #   RDF::List[1, 2, 3].at(0)                #=> 1
@@ -302,7 +303,7 @@ module RDF
     protected :slice_with_range
 
     ##
-    # Returns the value at `index`.
+    # Returns the element at `index`.
     #
     # @example
     #   RDF::List[1, 2, 3].fetch(0)             #=> 1
@@ -325,7 +326,7 @@ module RDF
     end
 
     ##
-    # Returns the value at `index`.
+    # Returns the element at `index`.
     #
     # @example
     #   RDF::List[1, 2, 3].at(0)                #=> 1
@@ -342,7 +343,7 @@ module RDF
     alias_method :nth, :at
 
     ##
-    # Returns the first value in this list.
+    # Returns the first element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].first               #=> 1
@@ -353,7 +354,7 @@ module RDF
     end
 
     ##
-    # Returns the second value in this list.
+    # Returns the second element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].second              #=> 2
@@ -364,7 +365,7 @@ module RDF
     end
 
     ##
-    # Returns the third value in this list.
+    # Returns the third element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].third               #=> 3
@@ -375,7 +376,7 @@ module RDF
     end
 
     ##
-    # Returns the fourth value in this list.
+    # Returns the fourth element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].fourth              #=> 4
@@ -386,7 +387,7 @@ module RDF
     end
 
     ##
-    # Returns the fifth value in this list.
+    # Returns the fifth element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].fifth               #=> 5
@@ -397,7 +398,7 @@ module RDF
     end
 
     ##
-    # Returns the sixth value in this list.
+    # Returns the sixth element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].sixth               #=> 6
@@ -408,7 +409,7 @@ module RDF
     end
 
     ##
-    # Returns the seventh value in this list.
+    # Returns the seventh element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].seventh             #=> 7
@@ -419,7 +420,7 @@ module RDF
     end
 
     ##
-    # Returns the eighth value in this list.
+    # Returns the eighth element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].eighth              #=> 8
@@ -430,7 +431,7 @@ module RDF
     end
 
     ##
-    # Returns the ninth value in this list.
+    # Returns the ninth element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].ninth               #=> 9
@@ -441,7 +442,7 @@ module RDF
     end
 
     ##
-    # Returns the tenth value in this list.
+    # Returns the tenth element in this list.
     #
     # @example
     #   RDF::List[*(1..10)].tenth               #=> 10
@@ -452,7 +453,7 @@ module RDF
     end
 
     ##
-    # Returns the last value in this list.
+    # Returns the last element in this list.
     #
     # @example
     #   RDF::List[1, 2, 3].last                 #=> 3
@@ -464,7 +465,7 @@ module RDF
     end
 
     ##
-    # TODO
+    # Returns a list containing all but the first element of this list.
     #
     # @example
     #   RDF::List[1, 2, 3].rest                 #=> RDF::List[2, 3]
@@ -475,7 +476,7 @@ module RDF
     end
 
     ##
-    # TODO
+    # Returns a list containing the last element of this list.
     #
     # @example
     #   RDF::List[1, 2, 3].tail                 #=> RDF::List[3]
@@ -542,7 +543,7 @@ module RDF
     end
 
     ##
-    # Yields each value in this list.
+    # Yields each element in this list.
     #
     # @example
     #   RDF::List[1, 2, 3].each do |value|
@@ -595,7 +596,7 @@ module RDF
     end
 
     ##
-    # Returns the values in this list in reversed order.
+    # Returns the elements in this list in reversed order.
     #
     # @example
     #   RDF::List[1, 2, 3].reverse              #=> RDF::List[3, 2, 1]
@@ -607,7 +608,7 @@ module RDF
     end
 
     ##
-    # Returns the values in this list in sorted order.
+    # Returns the elements in this list in sorted order.
     #
     # @example
     #   RDF::List[2, 3, 1].sort                 #=> RDF::List[1, 2, 3]
@@ -619,7 +620,7 @@ module RDF
     end
 
     ##
-    # Returns the values in this list in sorted order.
+    # Returns the elements in this list in sorted order.
     #
     # @example
     #   RDF::List[2, 3, 1].sort_by(&:to_i)      #=> RDF::List[1, 2, 3]
@@ -643,7 +644,7 @@ module RDF
     end
 
     ##
-    # Returns the values in this list as an array.
+    # Returns the elements in this list as an array.
     #
     # @example
     #   RDF::List[].to_a                        #=> []
@@ -655,7 +656,7 @@ module RDF
     end
 
     ##
-    # Returns the values in this list as a set.
+    # Returns the elements in this list as a set.
     #
     # @example
     #   RDF::List[1, 2, 3].to_set               #=> Set[1, 2, 3]
