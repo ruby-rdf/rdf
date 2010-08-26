@@ -46,6 +46,7 @@ module RDF
     autoload :Date,     'rdf/model/literal/date'
     autoload :DateTime, 'rdf/model/literal/datetime'
     autoload :Time,     'rdf/model/literal/time'
+    autoload :Token,    'rdf/model/literal/token'
     autoload :XML,      'rdf/model/literal/xml'
 
     include RDF::Value
@@ -78,6 +79,8 @@ module RDF
               RDF::Literal::Integer
             when XSD.unsignedLong, XSD.unsignedInt, XSD.unsignedShort, XSD.unsignedByte
               RDF::Literal::Integer
+            when XSD.token, XSD.language
+              RDF::Literal::Token
             when RDF.XMLLiteral
               RDF::Literal::XML
             else self
@@ -91,6 +94,7 @@ module RDF
           when ::DateTime   then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date
           when ::Time       then RDF::Literal::Time # FIXME: Ruby's Time class can represent datetimes as well
+          when ::Symbol     then RDF::Literal::Token
           else self
         end
       end
