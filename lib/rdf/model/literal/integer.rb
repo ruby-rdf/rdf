@@ -203,5 +203,16 @@ module RDF; class Literal
     def to_r
       @object.to_r
     end
+
+    ##
+    # Returns the value as an `OpenSSL::BN` instance.
+    #
+    # @return [OpenSSL::BN]
+    # @see    http://ruby-doc.org/stdlib/libdoc/openssl/rdoc/classes/OpenSSL/BN.html
+    # @since  0.2.4
+    def to_bn
+      require 'openssl' unless defined?(OpenSSL::BN)
+      OpenSSL::BN.new(to_s)
+    end
   end # class Integer
 end; end # class RDF::Literal
