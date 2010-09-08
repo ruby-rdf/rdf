@@ -126,6 +126,11 @@ module RDF
     ##
     # Joins several URIs together.
     #
+    # **Note:** the exact semantics of this method are subject to be
+    # examined and possibly revised in RDF.rb 0.3.0. As such, it is not
+    # advisable to strongly rely on the current semantics.
+    #
+    # @deprecated
     # @param  [Array<String, URI, #to_str>] uris
     # @return [URI]
     def join(*uris)
