@@ -7,6 +7,11 @@ module RDF; module Util
   # evicting most objects if memory pressure increases to the point of
   # scarcity.
   #
+  # While this cache is something of an internal implementation detail of
+  # RDF.rb, some external libraries do currently make use of it as well,
+  # including [Spira](http://spira.rubyforge.org/). Do be sure to include
+  # any changes here in the RDF.rb changelog.
+  #
   # @see   RDF::URI.intern
   # @see   http://en.wikipedia.org/wiki/Weak_reference
   # @since 0.2.0
