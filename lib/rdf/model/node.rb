@@ -21,11 +21,17 @@ module RDF
     def self.uuid
       begin
         require 'uuid'
-        self.new(UUID.generate)
+          begin
+            uuid = UUID.generate(:compact)
+          end until (uuid =~ /^[a-zA-Z][a-zA-Z0-9]*/)
+        self.new(uuid)
       rescue LoadError => e
         begin
           require 'uuidtools'
-          self.new(UUIDTools::UUID.random_create)
+          begin
+            uuid = UUIDTools::UUID.random_create.hexdigest
+          end until (uuid =~ /^[a-zA-Z][a-zA-Z0-9]*/)
+          self.new(uuid)
         rescue LoadError => e
           raise LoadError.new("no such file to load -- uuid or uuidtools")
         end
