@@ -9,32 +9,27 @@ module RDF
   #   bnode = RDF::Node.uuid
   #   bnode.to_s #=> "_:504c0a30-0d11-012d-3f50-001b63cac539"
   #
-  # @see http://rubygems.org/gems/uuid
-  # @see http://rubygems.org/gems/uuidtools
   class Node
     include RDF::Resource
 
     ##
     # Returns a blank node with a random UUID-based identifier.
     #
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [Regexp] :grammar (nil)
+    #   a grammar specification that the generated UUID must match
     # @return [RDF::Node]
-    def self.uuid
-      begin
-        require 'uuid'
-          begin
-            uuid = UUID.generate(:compact)
-          end until (uuid =~ /^[a-zA-Z][a-zA-Z0-9]*/)
-        self.new(uuid)
-      rescue LoadError => e
-        begin
-          require 'uuidtools'
-          begin
-            uuid = UUIDTools::UUID.random_create.hexdigest
-          end until (uuid =~ /^[a-zA-Z][a-zA-Z0-9]*/)
-          self.new(uuid)
-        rescue LoadError => e
-          raise LoadError.new("no such file to load -- uuid or uuidtools")
-        end
+    def self.uuid(options = {})
+      case
+        when options[:grammar]
+          # The UUID is generated such that its initial part is guaranteed
+          # to match the given `grammar`, e.g. `/^[A-Za-z][A-Za-z0-9]*/`.
+          # Some RDF storage systems (e.g. AllegroGraph) require this.
+          # @see http://github.com/bendiken/rdf/pull/43
+          uuid = RDF::Util::UUID.generate(options) until uuid =~ options[:grammar]
+          uuid
+        else
+          uuid = RDF::Util::UUID.generate(options)
       end
     end
 
