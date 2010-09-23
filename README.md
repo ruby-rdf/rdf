@@ -195,6 +195,7 @@ Authors
 Contributors
 ------------
 
+* [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
 * [Fumihiro Kato](mailto:fumi@fumi.me) - <http://fumi.me/>
 * [Gregg Kellogg](mailto:gregg@kellogg-assoc.com) - <http://kellogg-assoc.com/>
 * [Hellekin O. Wolf](mailto:hellekin@cepheide.org) - <http://hellekin.cepheide.org/>
