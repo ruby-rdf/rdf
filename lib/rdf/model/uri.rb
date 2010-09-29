@@ -134,7 +134,7 @@ module RDF
     # @param  [Array<String, URI, #to_str>] uris
     # @return [URI]
     def join(*uris)
-      result = @uri
+      result = @uri.dup
       uris.each do |uri|
         result.path += '/' unless result.path[-1] == ?/ # '/'
         result = result.join(uri)
