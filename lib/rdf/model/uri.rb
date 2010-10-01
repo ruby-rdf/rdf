@@ -143,6 +143,70 @@ module RDF
     end
 
     ##
+    # 'Smart separator' URI builder
+    #
+    # This method attempts to use some understanding of the most common use
+    # cases for URLs and URNs to create a simple method for building new URIs
+    # from fragments.  This means that it will always insert a separator of
+    # some sort, will remove duplicate seperators, will always assume that a
+    # fragment argument represents a relative and not absolute path, and throws
+    # an exception when an absolute URI is received for a fragment argument.
+    #
+    # This is separate from the semantics for `#join`, which are well-defined by
+    # RFC3986 section 5.2 as part of the merging and normalization process;
+    # this method does not perform any normalization, removal of spurious
+    # paths, or removal of parent directory references `(/../)`.
+    #
+    # See also `#+`, which concatenates the string forms of two URIs without
+    # any sort of checking or processing.
+    #
+    # For an up-to-date list of edge case behavior, see the shared examples for
+    # RDF::URI in the rdf-spec project.
+    #
+    # @param [Any] fragment A URI fragment to be appended to this URI
+    # @return [RDF::URI]
+    # @see RDF::URI#+
+    # @see RDF::URI#join
+    # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
+    # @see <http://github.com/bendiken/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
+    # @example Building a HTTP URL
+    #     RDF::URI.new('http://example.org') / 'jhacker' / 'foaf.ttl'
+    #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
+    # @example Building a HTTP URL
+    #     RDF::URI.new('http://example.org/') / '/jhacker/' / '/foaf.ttl'
+    #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
+    # @example Using an anchored base URI
+    #     RDF::URI.new('http://example.org/users#') / 'jhacker'
+    #     #=> RDF::URI('http://example.org/users#jhacker')
+    # @example Building a URN
+    #     RDF::URI.new('urn:isbn') / 125235111
+    #     #=> RDF::URI('urn:isbn:125235111')
+    def /(fragment)
+      fragment = fragment.respond_to?(:to_uri) ? fragment.to_uri : RDF::URI.intern(fragment.to_s)
+      raise ArgumentError, "Non-absolute URI or string required, got #{fragment}" unless fragment.relative?
+      if urn?
+        RDF::URI.intern(to_s.sub(/:+$/,'') + ':' + fragment.to_s.sub(/^:+/,''))
+      else # !urn?
+        case to_s[-1].chr
+          when '#'
+            case fragment.to_s[0].chr
+              when '/' then # Base ending with '#', fragment beginning with '/'.  The fragment wins, we use '/'.
+              RDF::URI.intern(to_s.sub(/#+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
+            else
+              RDF::URI.intern(to_s.sub(/#+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
+            end
+          else # includes '/'.  Results from bases ending in '/' are the same as if there were no trailing slash.
+            case fragment.to_s[0].chr
+              when '#' then # Base ending with '/', fragment beginning with '#'.  The fragment wins, we use '#'.
+                RDF::URI.intern(to_s.sub(/\/+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
+              else
+                RDF::URI.intern(to_s.sub(/\/+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
+              end
+          end
+      end
+    end
+
+    ##
     # Simple concatenation operator.  Returns a URI formed from concatenating
     # the string form of two elements.
     #
