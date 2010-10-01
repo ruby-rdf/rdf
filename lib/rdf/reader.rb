@@ -100,17 +100,21 @@ module RDF
 
     ##
     # @param  [String] filename
+    # @param  [String] options Other options to pass to Util::File.open
     # @option options [Symbol] :format (:ntriples)
     # @yield  [reader]
     # @yieldparam [Reader]
     # @raise  [FormatError] if no reader available for the specified format
     def self.open(filename, options = {}, &block)
-      if reader = self.for(options[:format] || filename)
-        Kernel.open(filename, 'rb') do |file|
+      Util::File.open_file(filename, options) do |file|
+        reader = self.for(options[:format]) if options[:format]
+        content_type = file.content_type if file.respond_to?(:content_type)
+        reader ||= self.for(options.merge(:file_name => filename, :content_type => content_type))
+        if reader
           reader.new(file, options, &block)
+        else
+          raise FormatError.new("unknown RDF format: #{options[:format] || {:file_name => filename, :content_type => content_type}.inspect}")
         end
-      else
-        raise FormatError.new("unknown RDF format: #{options[:format] || filename}")
       end
     end
 
