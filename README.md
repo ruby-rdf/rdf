@@ -189,15 +189,15 @@ Mailing List
 Authors
 -------
 
-* [Arto Bendiken](mailto:arto.bendiken@gmail.com) - <http://ar.to/>
-* [Ben Lavender](mailto:blavender@gmail.com) - <http://bhuga.net/>
+* [Arto Bendiken](http://github.com/bendiken) - <http://ar.to/>
+* [Ben Lavender](http://github.com/bhuga) - <http://bhuga.net/>
+* [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
 
 Contributors
 ------------
 
 * [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
 * [Fumihiro Kato](http://github.com/fumi) - <http://fumi.me/>
-* [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
 * [Hellekin O. Wolf](http://github.com/hellekin) - <http://hellekin.cepheide.org/>
 * [John Fieber](http://github.com/jfieber) - <http://github.com/jfieber>
 * [Keita Urashima](http://github.com/ursm) - <http://ursm.jp/>
