@@ -196,11 +196,12 @@ Contributors
 ------------
 
 * [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
-* [Fumihiro Kato](mailto:fumi@fumi.me) - <http://fumi.me/>
-* [Gregg Kellogg](mailto:gregg@kellogg-assoc.com) - <http://kellogg-assoc.com/>
-* [Hellekin O. Wolf](mailto:hellekin@cepheide.org) - <http://hellekin.cepheide.org/>
-* [John Fieber](mailto:jrf@ursamaris.org) - <http://github.com/jfieber>
-* [Pius Uzamere](mailto:pius@alum.mit.edu) - <http://pius.me/>
+* [Fumihiro Kato](http://github.com/fumi) - <http://fumi.me/>
+* [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
+* [Hellekin O. Wolf](http://github.com/hellekin) - <http://hellekin.cepheide.org/>
+* [John Fieber](http://github.com/jfieber) - <http://github.com/jfieber>
+* [Keita Urashima](http://github.com/ursm) - <http://ursm.jp/>
+* [Pius Uzamere](http://github.com/pius) - <http://pius.me/>
 
 Contributing
 ------------
