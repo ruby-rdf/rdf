@@ -16,7 +16,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.email              = 'public-rdf-ruby@w3.org'
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS CONTRIBUTORS README UNLICENSE VERSION bin/rdf etc/doap.nt) + Dir.glob('lib/**/*.rb')
+  gem.files              = %w(AUTHORS CREDITS README UNLICENSE VERSION bin/rdf etc/doap.nt) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w(rdf)
   gem.default_executable = gem.executables.first

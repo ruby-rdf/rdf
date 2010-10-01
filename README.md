@@ -212,7 +212,7 @@ Contributing
   [tutorial][YARD-GS] or just look at the existing code for examples.
 * Don't touch the `.gemspec` or `VERSION` files. If you need to change them,
   do so on your private branch only.
-* Do feel free to add yourself to the `CONTRIBUTORS` file and the
+* Do feel free to add yourself to the `CREDITS` file and the
   corresponding list in the the `README`. Alphabetical order applies.
 * Don't touch the `AUTHORS` file. If your contributions are significant
   enough, be assured we will eventually add you in there.
