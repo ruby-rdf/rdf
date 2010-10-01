@@ -143,6 +143,28 @@ module RDF
     end
 
     ##
+    # Simple concatenation operator.  Returns a URI formed from concatenating
+    # the string form of two elements.
+    #
+    # For building URIs from fragments, you may want to use the smart
+    # separator, `#/`.  `#join` implements another set of URI building
+    # semantics.
+    #
+    # @example Concatenating a string to a URI
+    #     RDF::URI.new('http://example.org/test') + 'test'
+    #     #=> RDF::URI('http://example.org/testtest')
+    # @example Concatenating two URIs
+    #     RDF::URI.new('http://example.org/test') + RDF::URI.new('test')
+    #     #=> RDF::URI('http://example.org/testtest')
+    # @see RDF::URI#/
+    # @see RDF::URI#join
+    # @param [Any]
+    # @return [RDF::URI]
+    def +(other)
+      RDF::URI.intern(self.to_s + other.to_s)
+    end
+
+    ##
     # Returns `true` if this URI's path component is equal to `/`.
     #
     # @return [Boolean]
