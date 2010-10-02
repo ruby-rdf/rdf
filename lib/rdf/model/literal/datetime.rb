@@ -28,8 +28,20 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#dateTime
     def canonicalize
-      @string = @object.strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
       self
+    end
+
+    ##
+    # Returns `true` if the value adheres to the defined grammar of the
+    # datatype.
+    #
+    # Special case for date and dateTime, for which '0000' is not a valid year
+    #
+    # @return [Boolean]
+    # @since  0.2.1
+    def valid?
+      !!(value =~ GRAMMAR) && value !~ %r(\A0000)
     end
 
     ##
