@@ -126,17 +126,28 @@ module RDF
     ##
     # Joins several URIs together.
     #
-    # **Note:** the exact semantics of this method are subject to be
-    # examined and possibly revised in RDF.rb 0.3.0. As such, it is not
-    # advisable to strongly rely on the current semantics.
+    # This method conforms to join normalization semantics as per RFC3986,
+    # section 5.2.  This method normalizes URIs, removes some duplicate path
+    # information, such as double slashes, and other behavior specified in the
+    # RFC.
     #
-    # @deprecated
+    # Other URI building methods are `#/` and `#+`.
+    #
+    # For an up-to-date list of edge case behavior, see the shared examples for
+    # RDF::URI in the rdf-spec project.
+    #
+    # @example Joining two URIs
+    #     RDF::URI.new('http://example.org/foo/bar').join('/foo')
+    #     #=> RDF::URI('http://example.org/foo')
+    # @see <http://github.com/bendiken/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
+    # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
+    # @see RDF::URI#/
+    # @see RDF::URI#+
     # @param  [Array<String, URI, #to_str>] uris
     # @return [URI]
     def join(*uris)
       result = @uri.dup
       uris.each do |uri|
-        result.path += '/' unless result.path[-1] == ?/ # '/'
         result = result.join(uri)
       end
       self.class.new(result)
