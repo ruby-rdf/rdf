@@ -33,6 +33,18 @@ module RDF; class Literal
     end
 
     ##
+    # Returns `true` if the value adheres to the defined grammar of the
+    # datatype.
+    #
+    # Special case for date and dateTime, for which '0000' is not a valid year
+    #
+    # @return [Boolean]
+    # @since  0.2.1
+    def valid?
+      !!(value =~ GRAMMAR) && value !~ %r(\A0000)
+    end
+
+    ##
     # Returns the value as a string.
     #
     # @return [String]

@@ -40,7 +40,7 @@ module RDF; class Literal
     # @return [Literal]
     # @see    http://www.w3.org/TR/xmlschema-2/#time
     def canonicalize
-      @string = @object.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string = @object.utc.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
       self
     end
 
