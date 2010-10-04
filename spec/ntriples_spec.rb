@@ -28,13 +28,23 @@ describe RDF::NTriples do
 
   context "when decoding text" do
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape ASCII characters (#x0-#x7F)"
+    it "should correctly unescape ASCII characters (#x0-#x7F)" do
+      (0x00..0x7F).each { |u| @reader.unescape(@writer.escape(u.chr)).should == u.chr }
+    end
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape Unicode characters (#x80-#x10FFFF)"
-
-    # @see http://github.com/bendiken/rdf/commit/fa5e42e40b97cf303139325ed247db6c096e5204
-    it "should correctly unescape Unicode surrogate pairs"
+    it "should correctly unescape Unicode characters (#x80-#x10FFFF)" do
+      if defined?(::Encoding) # executed in Ruby 1.9+ only
+        (0x7F..0xFFFF).each do |u|
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @reader.unescape(@writer.escape(c)).should == c
+        end
+        (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @reader.unescape(@writer.escape(c)).should == c
+        end
+      end
+    end
 
     context "unescape Unicode strings" do
       strings = {
@@ -53,9 +63,6 @@ describe RDF::NTriples do
         end
       end
     end
-    it "should correctly unescape Unicode strings" do
-    end
-
   end
 
   context "when encoding text" do
