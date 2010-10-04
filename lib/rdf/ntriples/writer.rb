@@ -185,7 +185,7 @@ module RDF::NTriples
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_uri(uri, options = {})
-      "<%s>" % uri_for(uri)
+      "<%s>" % escaped(uri_for(uri))
     end
 
     ##
