@@ -127,7 +127,7 @@ describe RDF::NTriples do
     end
 
     it "should parse W3C's test data" do
-      lambda { @reader.new(File.open(@testfile)).to_a.size.should == 30 }.should_not raise_error # FIXME
+      @reader.new(File.open(@testfile)).to_a.size.should == 30
     end
 
     it "should parse terms" do
