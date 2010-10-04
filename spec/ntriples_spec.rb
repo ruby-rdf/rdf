@@ -240,7 +240,7 @@ describe RDF::NTriples do
 
     describe "with URI i18n URIs" do
       {
-        %(<http://a/b#Dürst> a "URI straight in UTF8".) => %(<http://a/b#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
+        %(<http://a/b#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8".) => %(<http://a/b#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |src, res|
         specify src do
