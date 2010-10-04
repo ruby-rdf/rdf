@@ -198,6 +198,7 @@ module RDF::NTriples
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
     def read_uriref(options = {})
       if uri = match(URIREF)
+        uri = self.class.unescape(uri)
         RDF::URI.send(options[:intern] ? :intern : :new, uri)
       end
     end
