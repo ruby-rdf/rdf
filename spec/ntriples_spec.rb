@@ -41,8 +41,10 @@ describe RDF::NTriples do
         "_\\u221E_"                 => "_\xE2\x88\x9E_", # U+221E, infinity symbol
         "_\\u6C34_"                 => "_\xE6\xB0\xB4_", # U+6C34, 'water' in Chinese
         "\u677E\u672C \u540E\u5B50" => "松本 后子",
+        "\\u677E\\u672C \\u540E\\u5B50" => "松本 后子",
         "D\u00FCrst"                => "Dürst",
-        "\U00015678another"         => "\u{15678}another",
+        "D\\u00FCrst"                => "Dürst",
+        "\\U00015678another"         => "\u{15678}another",
       }
       strings.each do |string, unescaped|
         specify string do
