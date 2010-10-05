@@ -289,20 +289,40 @@ module RDF
     end
 
     ##
+    # Returns the most appropriate Vocabulary for this URI, if possible.
+    #
+    # @return [Vocabulary]
+    def vocab
+      # Find vocabulary if not assigned
+      return @vocab if @vocab
+      
+      Vocabulary.each do |vocab|
+        return self.vocab = vocab if to_s.index(vocab.to_uri.to_s) == 0
+      end
+      nil
+    end
+
+    ##
+    # Set vocabulary to use for this URI.
+    #
+    # @param [Vocabulary] value
+    #
+    # @return [Vocabulary]
+    def vocab=(value)
+      raise "Vocab #{value.inspect} is not a Vocabulary!" if value.is_a?(Array)
+      @vocab = value
+    end
+    
+    ##
     # Returns a qualified name (QName) for this URI, if possible.
     #
     # @return [Array(Symbol, Symbol)]
     def qname
-      Vocabulary.each do |vocab|
-        if to_s.index(vocab.to_uri.to_s) == 0
-          vocab_name = vocab.__name__.split('::').last.downcase
-          local_name = to_s[vocab.to_uri.to_s.size..-1]
-          unless vocab_name.empty? || local_name.empty?
-            return [vocab_name.to_sym, local_name.to_sym]
-          end
-        end
+      @qname ||= if vocab
+        vocab_name = vocab.__name__.to_s.split('::').last.downcase
+        local_name = to_s[vocab.to_uri.to_s.size..-1]
+        vocab_name && local_name && [vocab_name.to_sym, local_name.empty? ? nil : local_name.to_sym]
       end
-      nil # no QName found
     end
 
     ##

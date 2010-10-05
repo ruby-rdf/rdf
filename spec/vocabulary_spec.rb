@@ -11,6 +11,29 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe ".[]" do
+    subject {RDF::CC}
+    it "returns a URI" do
+      subject["foo"].should == RDF::URI.new("http://creativecommons.org/ns#foo")
+    end
+    
+    it "returns a URI referencing itself as a vocabulary" do
+      subject["foo"].vocab.should == subject
+    end
+  end
+  
+  describe "to_uri" do
+    subject {RDF::CC}
+    it "returns a URI" do
+      subject.to_uri.should be_a(RDF::URI)
+      subject.to_uri.should == RDF::URI.new("http://creativecommons.org/ns#")
+    end
+    
+    it "returns a URI referencing itself as a vocabulary" do
+      subject.to_uri.vocab.should == subject
+    end
+  end
+  
   context "pre-defined vocabularies" do
     it "should support pre-defined vocabularies" do
       VOCABS.map { |s| s.to_s.upcase.to_sym }.each do |vocab|

@@ -82,7 +82,12 @@ module RDF
     # @param  [#to_s] property
     # @return [URI]
     def self.[](property)
-      RDF::URI.intern([to_s, property.to_s].join(''))
+      @prop_uri ||= {}
+      @prop_uri[property] ||= begin
+        uri = RDF::URI.intern([to_s, property.to_s].join(''))
+        uri.vocab = self
+        uri
+      end
     end
 
     ##
@@ -90,7 +95,11 @@ module RDF
     #
     # @return [URI]
     def self.to_uri
-      RDF::URI.intern(to_s)
+      @uri ||= begin
+        uri = RDF::URI.intern(to_s)
+        uri.vocab = self
+        uri
+      end
     end
 
     ##
@@ -137,7 +146,12 @@ module RDF
     # @param  [#to_s] property
     # @return [URI]
     def [](property)
-      RDF::URI.intern([to_s, property.to_s].join(''))
+      @prop_uri ||= {}
+      @prop_uri[property] ||= begin
+        uri = RDF::URI.intern([to_s, property.to_s].join(''))
+        uri.vocab = self
+        uri
+      end
     end
 
     ##
@@ -145,7 +159,11 @@ module RDF
     #
     # @return [URI]
     def to_uri
-      RDF::URI.intern(to_s)
+      @uri ||= begin
+        uri = RDF::URI.intern(to_s)
+        uri.vocab = self
+        uri
+      end
     end
 
     ##
