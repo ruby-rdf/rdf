@@ -27,10 +27,10 @@ module RDF
           # Some RDF storage systems (e.g. AllegroGraph) require this.
           # @see http://github.com/bendiken/rdf/pull/43
           uuid = RDF::Util::UUID.generate(options) until uuid =~ options[:grammar]
-          uuid
         else
           uuid = RDF::Util::UUID.generate(options)
       end
+      self.new(uuid)
     end
 
     ##
