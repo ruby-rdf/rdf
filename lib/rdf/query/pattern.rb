@@ -49,6 +49,14 @@ module RDF; class Query
     end
 
     ##
+    # Returns `true` if this is an optional pattern.
+    #
+    # @return [Boolean]
+    def optional?
+      !!options[:optional]
+    end
+
+    ##
     # @param  [Graph, Repository] graph
     # @return [Enumerator]
     def execute(graph, &block)
