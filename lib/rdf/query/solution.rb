@@ -127,6 +127,18 @@ class RDF::Query
     end
 
     ##
+    # Merges the bindings from the given `other` query solution into this
+    # one, overwriting any existing ones having the same name.
+    #
+    # @param  [RDF::Query::Solution, #to_hash] other
+    #   another query solution or hash bindings
+    # @return [void] self
+    def merge!(other)
+      @bindings.merge!(other.to_hash)
+      self
+    end
+
+    ##
     # @return [Array<Array(Symbol, Value)>}
     def to_a
       @bindings.to_a
