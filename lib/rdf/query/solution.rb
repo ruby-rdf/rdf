@@ -47,34 +47,44 @@ class RDF::Query
     # Enumerates over every variable binding in this solution.
     #
     # @yield  [name, value]
-    # @yieldparam [Symbol, Value]
+    # @yieldparam [Symbol] name
+    # @yieldparam [RDF::Value] value
     # @return [Enumerator]
     def each_binding(&block)
       @bindings.each(&block)
     end
-
     alias_method :each, :each_binding
 
     ##
     # Enumerates over every variable name in this solution.
     #
     # @yield  [name]
-    # @yieldparam [Symbol]
+    # @yieldparam [Symbol] name
     # @return [Enumerator]
     def each_name(&block)
       @bindings.each_key(&block)
     end
-
     alias_method :each_key, :each_name
 
     ##
     # Enumerates over every variable value in this solution.
     #
     # @yield  [value]
-    # @yieldparam [Value]
+    # @yieldparam [RDF::Value] value
     # @return [Enumerator]
     def each_value(&block)
       @bindings.each_value(&block)
+    end
+
+    ##
+    # Returns `true` if this solution contains bindings of any of the given
+    # `variables`.
+    #
+    # @param  [Enumerable] variables
+    #   an array of variables to check
+    # @return [Boolean] `true` or `false`
+    def has_variables?(variables)
+      variables.any? { |variable| bound?(variable) }
     end
 
     ##
@@ -93,7 +103,7 @@ class RDF::Query
     # Returns `true` if the variable `name` is bound in this solution.
     #
     # @param  [Symbol] name
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def bound?(name)
       !unbound?(name)
     end
@@ -102,7 +112,7 @@ class RDF::Query
     # Returns `true` if the variable `name` is unbound in this solution.
     #
     # @param  [Symbol] name
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def unbound?(name)
       @bindings[name.to_sym].nil?
     end
@@ -139,13 +149,13 @@ class RDF::Query
     end
 
     ##
-    # @return [Array<Array(Symbol, Value)>}
+    # @return [Array<Array(Symbol, RDF::Value)>}
     def to_a
       @bindings.to_a
     end
 
     ##
-    # @return [Hash{Symbol => Value}}
+    # @return [Hash{Symbol => RDF::Value}}
     def to_hash
       @bindings.dup
     end
@@ -156,18 +166,17 @@ class RDF::Query
       sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, @bindings.inspect)
     end
 
-    protected
+  protected
 
-      ##
-      # @param  [Symbol] name
-      # @return [Value]
-      def method_missing(name, *args, &block)
-        if args.empty? && @bindings.has_key?(name.to_sym)
-          @bindings[name.to_sym]
-        else
-          super
-        end
+    ##
+    # @param  [Symbol] name
+    # @return [RDF::Value]
+    def method_missing(name, *args, &block)
+      if args.empty? && @bindings.has_key?(name.to_sym)
+        @bindings[name.to_sym]
+      else
+        super
       end
-
+    end
   end # Solution
 end # RDF::Query
