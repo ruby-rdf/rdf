@@ -28,9 +28,19 @@ class RDF::Query
     include Enumerable
 
     ##
-    # @param  [Hash{Symbol => Value}] bindings
-    def initialize(bindings = {})
+    # Initializes the query solution.
+    #
+    # @param  [Hash{Symbol => RDF::Value}] bindings
+    # @yield  [solution]
+    def initialize(bindings = {}, &block)
       @bindings = bindings.to_hash
+
+      if block_given?
+        case block.arity
+          when 1 then block.call(self)
+          else instance_eval(&block)
+        end
+      end
     end
 
     ##
@@ -137,5 +147,5 @@ class RDF::Query
         end
       end
 
-  end
-end
+  end # Solution
+end # RDF::Query
