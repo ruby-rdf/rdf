@@ -110,10 +110,20 @@ class RDF::Query
     ##
     # Returns the value of the variable `name`.
     #
-    # @param  [Symbol] name
-    # @return [Value]
+    # @param  [Symbol, #to_sym] name
+    # @return [RDF::Value]
     def [](name)
       @bindings[name.to_sym]
+    end
+
+    ##
+    # Binds or rebinds the variable `name` to the given `value`.
+    #
+    # @param  [Symbol, #to_sym] name
+    # @param  [RDF::Value] value
+    # @return [RDF::Value]
+    def []=(name, value)
+      @bindings[name.to_sym] = value
     end
 
     ##
