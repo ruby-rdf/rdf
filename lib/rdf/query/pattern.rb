@@ -57,10 +57,34 @@ module RDF; class Query
     end
 
     ##
-    # @param  [Graph, Repository] graph
+    # Executes this query pattern on the given `queryable` object.
+    #
+    # By default any variable terms in this pattern will be treated as `nil`
+    # wildcards when executing the query. If the optional `bindings` are
+    # given, variables will be substituted with their values when executing
+    # the query.
+    #
+    # @param  [RDF::Queryable] queryable
+    #   the graph or repository to query
+    # @param  [Hash{Symbol => RDF::Value}] bindings
+    #   optional variable bindings to use
+    # @yield  [statement]
+    #   each matching statement
+    # @yieldparam [RDF::Statement] statement
+    #   an RDF statement matching this pattern
     # @return [Enumerator]
-    def execute(graph, &block)
-      graph.query(self) # FIXME
+    # @see    RDF::Queryable#query
+    def execute(queryable, bindings = {}, &block)
+      if variables?
+        queryable.query({
+          # TODO: context handling?
+          :subject   => subject.variable?   ? bindings[subject.to_sym]   : subject,
+          :predicate => predicate.variable? ? bindings[predicate.to_sym] : predicate,
+          :object    => object.variable?    ? bindings[object.to_sym]    : object,
+        }, &block)
+      else
+        queryable.query(self, &block)
+      end
     end
 
     ##
