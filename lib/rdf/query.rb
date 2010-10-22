@@ -84,6 +84,50 @@ module RDF
     end
 
     ##
+    # Executes this query on the given `queryable` object.
+    #
+    # @param  [RDF::Queryable] queryable
+    #   the graph or repository to query
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional keyword options
+    # @return [Array]
+    #   the query solutions
+    def execute(queryable, options = {})
+      self.solutions = []
+      patterns.each do |pattern|
+        case pattern.variable_count
+          when 0 # no variables
+            self.solutions.clear if pattern.execute(queryable).empty?
+
+          when 3 # only variables
+            pattern.execute(queryable) do |statement|
+              self.solutions << pattern.solution(statement)
+            end
+
+          else case # 1 or 2 variables
+
+            when self.solutions.all? { |solution| !solution.has_variables?(pattern.variables.values) }
+              pattern.execute(queryable) do |statement|
+                self.solutions << pattern.solution(statement)
+              end
+
+            else
+              self.solutions.each_with_index do |solution, index|
+                failed = true
+                pattern.execute(queryable, solution) do |statement|
+                  failed = false
+                  solution.merge!(pattern.solution(statement))
+                end
+                self.solutions[index] = nil if failed
+              end
+              self.solutions.compact! # remove `nil` entries
+          end
+        end
+      end
+      self.solutions
+    end
+
+    ##
     # Enumerates over each query solution.
     #
     # @yield  [solution]
@@ -98,7 +142,6 @@ module RDF
         end
       end
     end
-
     alias_method :each, :each_solution
 
     ##
@@ -108,7 +151,6 @@ module RDF
     def count
       solutions.size
     end
-
     alias_method :size, :count
 
     ##
@@ -135,7 +177,6 @@ module RDF
       end
       self
     end
-
     alias_method :filter!, :filter
 
     ##
@@ -157,7 +198,6 @@ module RDF
       end
       self
     end
-
     alias_method :order_by, :order
 
     ##
@@ -174,7 +214,6 @@ module RDF
       end
       self
     end
-
     alias_method :select, :project
 
     ##
@@ -185,7 +224,6 @@ module RDF
       solutions.uniq!
       self
     end
-
     alias_method :distinct!, :distinct
     alias_method :reduced,   :distinct
     alias_method :reduced!,  :distinct
@@ -199,7 +237,6 @@ module RDF
     def offset(start)
       slice(start, solutions.size - start.to_i)
     end
-
     alias_method :offset!, :offset
 
     ##
@@ -210,7 +247,6 @@ module RDF
     def limit(length)
       slice(0, length)
     end
-
     alias_method :limit!, :limit
 
     ##
@@ -228,7 +264,6 @@ module RDF
       end
       self
     end
-
     alias_method :slice!, :slice
-  end
-end
+  end # Query
+end # RDF
