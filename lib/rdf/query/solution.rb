@@ -22,7 +22,8 @@ class RDF::Query
   #
   class Solution
     # Undefine all superfluous instance methods:
-    undef_method(*(instance_methods.map(&:to_sym) - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?]))
+    undef_method(*(instance_methods.map(&:to_sym) - [:__id__, :__send__, :__class__, :__eval__,
+      :object_id, :instance_eval, :inspect, :class, :is_a?, :respond_to?]))
 
     include Enumerable
 
