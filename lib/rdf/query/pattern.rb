@@ -51,6 +51,10 @@ module RDF; class Query
     ##
     # Returns `true` if this is an optional pattern.
     #
+    # @example
+    #   Pattern.new(:s, :p, :o).optional?                     #=> false
+    #   Pattern.new(:s, :p, :o, :optional => true).optional?  #=> true
+    #
     # @return [Boolean]
     def optional?
       !!options[:optional]
@@ -64,6 +68,9 @@ module RDF; class Query
     # given, variables will be substituted with their values when executing
     # the query.
     #
+    # @example
+    #   Pattern.new(:s, :p, :o).execute(RDF::Repository.load('data.nt'))
+    #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
     # @param  [Hash{Symbol => RDF::Value}] bindings
@@ -73,6 +80,7 @@ module RDF; class Query
     # @yieldparam [RDF::Statement] statement
     #   an RDF statement matching this pattern
     # @return [Enumerator]
+    #   an enumerator yielding matching statements
     # @see    RDF::Queryable#query
     def execute(queryable, bindings = {}, &block)
       if variables?
@@ -84,6 +92,24 @@ module RDF; class Query
         }, &block)
       else
         queryable.query(self, &block)
+      end
+    end
+
+    ##
+    # Returns a query solution constructed by binding any variables in this
+    # pattern with the corresponding terms in the given `statement`.
+    #
+    # @example
+    #   pattern.solution(statement)
+    #
+    # @param  [RDF::Statement] statement
+    #   an RDF statement to bind terms from
+    # @return [RDF::Query::Solution]
+    def solution(statement)
+      RDF::Query::Solution.new do |solution|
+        solution[subject.to_sym]   = statement.subject   if subject.variable?
+        solution[predicate.to_sym] = statement.predicate if predicate.variable?
+        solution[object.to_sym]    = statement.object    if object.variable?
       end
     end
 
