@@ -74,6 +74,16 @@ module RDF
     end
 
     ##
+    # Inserts a new query `pattern` into this query.
+    #
+    # @param  [RDF::Query::Pattern] pattern
+    # @return [void] self
+    def <<(pattern)
+      self.patterns << Pattern.from(pattern)
+      self
+    end
+
+    ##
     # Enumerates over each query solution.
     #
     # @yield  [solution]
