@@ -33,9 +33,9 @@ module RDF::NTriples
     NODEID                = /^_:([A-Za-z][A-Za-z0-9]*)/.freeze
     URIREF                = /^<([^>]+)>/.freeze
     LITERAL_PLAIN         = /^"((?:\\"|[^"])*)"/.freeze
-    LITERAL_WITH_LANGUAGE = /^"((?:\\"|[^"])*)"@([a-z]+[\-A-Z0-9]*)/.freeze
+    LITERAL_WITH_LANGUAGE = /^"((?:\\"|[^"])*)"@([a-z]+[\-A-Za-z0-9]*)/.freeze
     LITERAL_WITH_DATATYPE = /^"((?:\\"|[^"])*)"\^\^<([^>]+)>/.freeze
-    LANGUAGE_TAG          = /^@([a-z]+[\-A-Z0-9]*)/.freeze
+    LANGUAGE_TAG          = /^@([a-z]+[\-A-Za-z0-9]*)/.freeze
     DATATYPE_URI          = /^\^\^<([^>]+)>/.freeze
     LITERAL               = Regexp.union(LITERAL_WITH_LANGUAGE, LITERAL_WITH_DATATYPE, LITERAL_PLAIN).freeze
     SUBJECT               = Regexp.union(URIREF, NODEID).freeze
