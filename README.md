@@ -196,6 +196,7 @@ Authors
 Contributors
 ------------
 
+* [Călin Ardelean](http://github.com/clnx) - <http://github.com/clnx>
 * [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
 * [Fumihiro Kato](http://github.com/fumi) - <http://fumi.me/>
 * [Hellekin O. Wolf](http://github.com/hellekin) - <http://hellekin.cepheide.org/>
