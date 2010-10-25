@@ -86,9 +86,9 @@ module RDF; class Query
       if variables?
         queryable.query({
           # TODO: context handling?
-          :subject   => subject.variable?   ? bindings[subject.to_sym]   : subject,
-          :predicate => predicate.variable? ? bindings[predicate.to_sym] : predicate,
-          :object    => object.variable?    ? bindings[object.to_sym]    : object,
+          :subject   => subject   && subject.variable?   ? bindings[subject.to_sym]   : subject,
+          :predicate => predicate && predicate.variable? ? bindings[predicate.to_sym] : predicate,
+          :object    => object    && object.variable?    ? bindings[object.to_sym]    : object,
         }, &block)
       else
         queryable.query(self, &block)
