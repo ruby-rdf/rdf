@@ -109,6 +109,8 @@ Documentation
 * {RDF::Repository}
   * {RDF::Countable}
   * {RDF::Enumerable}
+  * {RDF::Indexable}
+  * {RDF::Inferable}
   * {RDF::Queryable}
   * {RDF::Mutable}
   * {RDF::Durable}

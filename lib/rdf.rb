@@ -29,6 +29,7 @@ module RDF
   autoload :Countable,  'rdf/mixin/countable'
   autoload :Durable,    'rdf/mixin/durable'
   autoload :Enumerable, 'rdf/mixin/enumerable'
+  autoload :Indexable,  'rdf/mixin/indexable'
   autoload :Inferable,  'rdf/mixin/inferable'
   autoload :Mutable,    'rdf/mixin/mutable'
   autoload :Queryable,  'rdf/mixin/queryable'
