@@ -26,52 +26,53 @@ module RDF
   Enumerator = defined?(::Enumerator) ? ::Enumerator : ::Enumerable::Enumerator
 
   # RDF mixins
-  autoload :Countable,  'rdf/mixin/countable'
-  autoload :Durable,    'rdf/mixin/durable'
-  autoload :Enumerable, 'rdf/mixin/enumerable'
-  autoload :Indexable,  'rdf/mixin/indexable'
-  autoload :Inferable,  'rdf/mixin/inferable'
-  autoload :Mutable,    'rdf/mixin/mutable'
-  autoload :Queryable,  'rdf/mixin/queryable'
-  autoload :Readable,   'rdf/mixin/readable'
-  autoload :Writable,   'rdf/mixin/writable'
+  autoload :Countable,   'rdf/mixin/countable'
+  autoload :Durable,     'rdf/mixin/durable'
+  autoload :Enumerable,  'rdf/mixin/enumerable'
+  autoload :Indexable,   'rdf/mixin/indexable'
+  autoload :Inferable,   'rdf/mixin/inferable'
+  autoload :Mutable,     'rdf/mixin/mutable'
+  autoload :Queryable,   'rdf/mixin/queryable'
+  autoload :Readable,    'rdf/mixin/readable'
+  autoload :Writable,    'rdf/mixin/writable'
 
   # RDF objects
-  autoload :Graph,      'rdf/model/graph'
-  autoload :Literal,    'rdf/model/literal'
-  autoload :Node,       'rdf/model/node'
-  autoload :Resource,   'rdf/model/resource'
-  autoload :Statement,  'rdf/model/statement'
-  autoload :URI,        'rdf/model/uri'
-  autoload :Value,      'rdf/model/value'
+  autoload :Graph,       'rdf/model/graph'
+  autoload :Literal,     'rdf/model/literal'
+  autoload :Node,        'rdf/model/node'
+  autoload :Resource,    'rdf/model/resource'
+  autoload :Statement,   'rdf/model/statement'
+  autoload :URI,         'rdf/model/uri'
+  autoload :Value,       'rdf/model/value'
 
   # RDF collections
-  autoload :List,       'rdf/model/list'
+  autoload :List,        'rdf/model/list'
 
   # RDF serialization
-  autoload :Format,     'rdf/format'
-  autoload :Reader,     'rdf/reader'
-  autoload :ReaderError,'rdf/reader'
-  autoload :Writer,     'rdf/writer'
-  autoload :WriterError,'rdf/writer'
+  autoload :Format,      'rdf/format'
+  autoload :Reader,      'rdf/reader'
+  autoload :ReaderError, 'rdf/reader'
+  autoload :Writer,      'rdf/writer'
+  autoload :WriterError, 'rdf/writer'
 
   # RDF serialization formats
-  autoload :NTriples,   'rdf/ntriples'
-  autoload :NQuads,     'rdf/nquads'
+  autoload :NTriples,    'rdf/ntriples'
+  autoload :NQuads,      'rdf/nquads'
 
   # RDF storage
-  autoload :Repository, 'rdf/repository'
+  autoload :Repository,  'rdf/repository'
+  autoload :Transaction, 'rdf/transaction'
 
   # RDF querying
-  autoload :Query,      'rdf/query'
+  autoload :Query,       'rdf/query'
 
   # RDF vocabularies
-  autoload :Vocabulary, 'rdf/vocab'
+  autoload :Vocabulary,  'rdf/vocab'
   VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
   VOCABS.each { |v| autoload v.to_s.upcase.to_sym, "rdf/vocab/#{v}" unless v == :rdf }
 
   # Utilities
-  autoload :Util,       'rdf/util'
+  autoload :Util,        'rdf/util'
 
   ##
   # Alias for `RDF::Resource.new`.
