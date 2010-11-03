@@ -167,6 +167,7 @@ module RDF
       commit_transaction(tx)
       self
     end
+    alias_method :transact, :transaction
 
   protected
 
