@@ -112,6 +112,16 @@ module RDF
     end
 
     ##
+    # Returns `true` if this repository supports the given `feature`.
+    #
+    # @param  [Symbol, #to_sym] feature
+    # @return [Boolean]
+    # @since  0.1.10
+    def supports?(feature)
+      false
+    end
+
+    ##
     # Returns a developer-friendly representation of this object.
     #
     # @return [String]
@@ -130,6 +140,79 @@ module RDF
     end
 
     ##
+    # Executes the given block in a transaction.
+    #
+    # @example
+    #   repository.transaction do |tx|
+    #     tx.insert [RDF::URI("http://rdf.rubyforge.org/"), RDF::DC.title, "RDF.rb"]
+    #   end
+    #
+    # @param  [RDF::Resource] context
+    # @yield  [tx]
+    # @yieldparam [RDF::Transaction] tx
+    # @return [void]
+    # @see    RDF::Transaction
+    # @since  0.3.0
+    def transaction(context = nil, &block)
+      tx = begin_transaction(context)
+      begin
+        case block.arity
+          when 1 then block.call(tx)
+          else tx.instance_eval(&block)
+        end
+      rescue => error
+        rollback_transaction(tx)
+        raise error
+      end
+      commit_transaction(tx)
+      self
+    end
+
+  protected
+
+    ##
+    # Begins a new transaction.
+    #
+    # Subclasses implementing transaction-capable storage adapters may wish
+    # to override this method in order to begin a transaction against the
+    # underlying storage.
+    #
+    # @param  [RDF::Resource] context
+    # @return [RDF::Transaction]
+    # @since  0.3.0
+    def begin_transaction(context)
+      RDF::Transaction.new(:context => context)
+    end
+
+    ##
+    # Rolls back the given transaction.
+    #
+    # Subclasses implementing transaction-capable storage adapters may wish
+    # to override this method in order to roll back the given transaction in
+    # the underlying storage.
+    #
+    # @param  [RDF::Transaction] tx
+    # @return [void]
+    # @since  0.3.0
+    def rollback_transaction(tx)
+      # nothing to do
+    end
+
+    ##
+    # Commits the given transaction.
+    #
+    # Subclasses implementing transaction-capable storage adapters may wish
+    # to override this method in order to commit the given transaction to
+    # the underlying storage.
+    #
+    # @param  [RDF::Transaction] tx
+    # @return [void]
+    # @since  0.3.0
+    def commit_transaction(tx)
+      tx.execute(self)
+    end
+
+    ##
     # @see RDF::Repository
     module Implementation
       ##
@@ -140,11 +223,8 @@ module RDF
       end
 
       ##
-      # Returns `true` if this repository supports `feature`.
-      #
-      # @param  [Symbol, #to_sym] feature
-      # @return [Boolean]
-      # @since  0.1.10
+      # @private
+      # @see RDF::Repository#supports?
       def supports?(feature)
         case feature.to_sym
           when :context   then true   # statement contexts / named graphs
@@ -229,7 +309,8 @@ module RDF
       # @private
       # @see RDF::Enumerable#each_context
       def each_context(&block)
-        block_given? ? @data.keys.compact.each(&block) : enum_context
+        @data.keys.compact.each(&block) if block_given?
+        enum_context
       end
 
     protected
