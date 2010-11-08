@@ -33,6 +33,21 @@ describe RDF::Query do
       end
     end
 
+    it "should provide single solution sets for multi-statement BGP's" do
+      graph = RDF::Repository.new
+      example = RDF::Vocabulary.new('http://example.org')
+      graph << RDF::Statement.new(example.test1, example.property, example.test2)
+      graph << RDF::Statement.new(example.test3, example.property2, example.test4)
+      query = RDF::Query.new do |query|
+        query << [:s1, example.property, :o1]
+        query << [:s2, example.property2, :o2]
+      end
+      result = query.execute(graph)
+
+      results = result.map(&:to_hash)
+      results.should == [{ :s1 => example.test1, :o1 => example.test2, :s2 => example.test3, :o2 => example.test4 }]
+    end
+
     it "should support duplicate elimination" do
       [:distinct, :reduced].each do |op|
         @query.solutions *= 2
