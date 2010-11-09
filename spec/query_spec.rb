@@ -1,5 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
+require 'set'
 
 describe RDF::Query do
   EX = RDF::EX = RDF::Vocabulary.new('http://example.org/')
@@ -33,12 +34,13 @@ describe RDF::Query do
         self << [:s1, EX.p, :o1]
         self << [:s2, EX.p, :o2]
       end
-      query.execute(graph).map(&:to_hash).should == [
+      # Use set comparison for unodered compare on 1.8.7
+      query.execute(graph).map(&:to_hash).to_set.should == [
         {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x1, :o2 => RDF::Literal(1)},
         {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x2, :o2 => RDF::Literal(2)},
         {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x1, :o2 => RDF::Literal(1)},
         {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x2, :o2 => RDF::Literal(2)},
-      ]
+      ].to_set
     end
   end
 
