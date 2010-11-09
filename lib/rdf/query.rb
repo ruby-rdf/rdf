@@ -91,13 +91,17 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     #   any additional keyword options
     # @return [Array]
-    #   the query solutions
+    #   the query solution sequence
     def execute(queryable, options = {})
       self.solutions = []
       patterns.each do |pattern|
         case pattern.variable_count
           when 0 # no variables
-            self.solutions.clear if pattern.execute(queryable).empty?
+            if pattern.execute(queryable).empty?
+              # return an empty solution sequence:
+              self.solutions.clear
+              break
+            end
 
           when 3 # only variables
             pattern.execute(queryable) do |statement|
