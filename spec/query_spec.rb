@@ -24,6 +24,18 @@ describe RDF::Query do
     end
   end
 
+  context "querying for a literal" do
+    it "should return a sequence with an existing literal" do
+      graph = RDF::Graph.new do
+        self << [EX.x1, EX.p1, 123.0]
+      end
+      query = RDF::Query.new do
+        self << [:s, EX.p1, 123.0]
+      end
+      query.execute(graph).map(&:to_hash).should == [{:s => EX.x1}]
+    end
+  end
+
   context "querying with unioned triple patterns" do
     it "should return a union of solution sequences" do
       graph = RDF::Graph.new do
