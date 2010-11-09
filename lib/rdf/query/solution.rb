@@ -23,7 +23,7 @@ class RDF::Query
   class Solution
     # Undefine all superfluous instance methods:
     undef_method(*(instance_methods.map(&:to_sym) - [:__id__, :__send__, :__class__, :__eval__,
-      :object_id, :instance_eval, :inspect, :to_s,
+      :object_id, :dup, :instance_eval, :inspect, :to_s,
       :class, :is_a?, :respond_to?, :respond_to_missing?]))
 
     include Enumerable
@@ -84,6 +84,7 @@ class RDF::Query
     # @param  [Enumerable] variables
     #   an array of variables to check
     # @return [Boolean] `true` or `false`
+    # @since  0.3.0
     def has_variables?(variables)
       variables.any? { |variable| bound?(variable) }
     end
@@ -133,6 +134,7 @@ class RDF::Query
     # @param  [Symbol, #to_sym] name
     # @param  [RDF::Value] value
     # @return [RDF::Value]
+    # @since  0.3.0
     def []=(name, value)
       @bindings[name.to_sym] = value
     end
@@ -144,9 +146,22 @@ class RDF::Query
     # @param  [RDF::Query::Solution, #to_hash] other
     #   another query solution or hash bindings
     # @return [void] self
+    # @since  0.3.0
     def merge!(other)
       @bindings.merge!(other.to_hash)
       self
+    end
+
+    ##
+    # Merges the bindings from the given `other` query solution with a copy
+    # of this one.
+    #
+    # @param  [RDF::Query::Solution, #to_hash] other
+    #   another query solution or hash bindings
+    # @return [RDF::Query::Solution]
+    # @since  0.3.0
+    def merge(other)
+      self.class.new(@bindings.dup).merge!(other)
     end
 
     ##
