@@ -30,11 +30,38 @@ module RDF; class Literal
     # Converts the literal into its canonical lexical representation.
     #
     # @return [Literal]
-    # @see    http://www.w3.org/TR/xmlschema-2/#boolean
+    # @see    http://www.w3.org/TR/xmlschema-2/#boolean-canonical-representation
     def canonicalize
       @string = (@object ? :true : :false).to_s
       self
     end
+
+    ##
+    # Compares this literal to `other` for sorting purposes.
+    #
+    # @param  [Object] other
+    # @return [Integer] `-1`, `0`, or `1`
+    # @since  0.3.0
+    def <=>(other)
+      case other
+        when TrueClass, FalseClass
+          to_i <=> (other ? 1 : 0)
+        when RDF::Literal::Boolean
+          to_i <=> other.to_i
+        else super
+      end
+    end
+
+    ##
+    # Returns `true` if this literal is equivalent to `other`.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def ==(other)
+      (self <=> other).zero?
+    end
+    alias_method :===, :==
 
     ##
     # Returns the value as a string.
@@ -42,6 +69,15 @@ module RDF; class Literal
     # @return [String]
     def to_s
       @string || @object.to_s
+    end
+
+    ##
+    # Returns the value as an integer.
+    #
+    # @return [Integer] `0` or `1`
+    # @since  0.3.0
+    def to_i
+      @object ? 1 : 0
     end
 
     ##
