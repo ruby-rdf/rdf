@@ -47,6 +47,33 @@ module RDF; class Literal
     end
 
     ##
+    # Compares this literal to `other` for sorting purposes.
+    #
+    # @param  [Object] other
+    # @return [Integer] `-1`, `0`, or `1`
+    # @since  0.3.0
+    def <=>(other)
+      case other
+        when BigDecimal, Integer, Float
+          to_d <=> other
+        when RDF::Literal::Decimal
+          to_d <=> other.to_d
+        else super
+      end
+    end
+
+    ##
+    # Returns `true` if this literal is equivalent to `other`.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def ==(other)
+      (self <=> other).zero?
+    end
+    alias_method :===, :==
+
+    ##
     # Returns the absolute value of `self`.
     #
     # @return [RDF::Literal]
