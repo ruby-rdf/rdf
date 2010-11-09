@@ -92,6 +92,7 @@ module RDF
     #   any additional keyword options
     # @return [Array]
     #   the query solution sequence
+    # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     def execute(queryable, options = {})
       self.solutions = []
       patterns.each do |pattern|
@@ -111,18 +112,27 @@ module RDF
           else case # 1 or 2 variables
 
             when self.solutions.all? { |solution| !solution.has_variables?(pattern.variables.values) }
-              pattern.execute(queryable) do |statement|
-                self.solutions << pattern.solution(statement)
+              if self.solutions.empty?
+                pattern.execute(queryable) do |statement|
+                  self.solutions << pattern.solution(statement)
+                end
+              else # union
+                old_solutions, self.solutions = self.solutions, []
+                old_solutions.each do |solution|
+                  pattern.execute(queryable) do |statement|
+                    self.solutions << solution.merge(pattern.solution(statement))
+                  end
+                end
               end
 
-            else
+            else # intersect
               self.solutions.each_with_index do |solution, index|
                 failed = true
                 pattern.execute(queryable, solution) do |statement|
                   failed = false
                   solution.merge!(pattern.solution(statement))
                 end
-                self.solutions[index] = nil if failed
+                self.solutions[index] = nil if failed # TODO: `options[:optional]`
               end
               self.solutions.compact! # remove `nil` entries
           end
