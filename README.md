@@ -17,6 +17,9 @@ Features
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing N-Triples out of the box, with more
   serialization format support available through add-on plugins.
+* Includes in-memory graph and repository implementations, with more storage
+  adapter support available through add-on plugins.
+* Implements basic graph pattern (BGP) query evaluation.
 * Plays nice with others: entirely contained in the `RDF` module, and does
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
@@ -122,6 +125,7 @@ Documentation
 * {RDF::Query}
   * {RDF::Query::Pattern}
   * {RDF::Query::Solution}
+  * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
 
 ### RDF Vocabularies
