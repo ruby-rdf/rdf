@@ -4,8 +4,8 @@ module RDF
   #
   # @example Constructing and executing a basic graph pattern query
   #   query = RDF::Query.new do
-  #     self << [:person, RDF.type, RDF::FOAF.Person]
-  #     self << [:person, RDF::FOAF.name, :name]
+  #     pattern [:person, RDF.type, RDF::FOAF.Person]
+  #     pattern [:person, RDF::FOAF.name, :name]
   #   end
   #   query.execute(RDF::Graph.load('doap.nt'))
   #
@@ -81,11 +81,25 @@ module RDF
     end
 
     ##
-    # Inserts a new query `pattern` into this query.
+    # Appends a new query `pattern` into this query.
     #
     # @param  [RDF::Query::Pattern] pattern
     # @return [void] self
     def <<(pattern)
+      self.patterns << Pattern.from(pattern)
+      self
+    end
+
+    ##
+    # Appends a new query `pattern` into this query.
+    #
+    # @param  [RDF::Query::Pattern] pattern
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [Boolean] :optional (false)
+    # @return [void] self
+    # @since  0.3.0
+    def pattern(pattern, options = {})
+      # TODO: handle any given options
       self.patterns << Pattern.from(pattern)
       self
     end
@@ -100,6 +114,7 @@ module RDF
     # @return [Array]
     #   the query solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
+    # @since  0.3.0
     def execute(queryable, options = {})
       self.solutions = []
       patterns.each do |pattern|
