@@ -155,13 +155,12 @@ module RDF
     # @yieldparam [Solution] solution
     # @return [Enumerator]
     def each_solution(&block)
-      unless block_given?
-        enum_for(:each_solution)
-      else
-        solutions.each do |solution|
+      if block_given?
+        self.solutions.each do |solution|
           block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
         end
       end
+      enum_for(:each_solution)
     end
     alias_method :each, :each_solution
 
@@ -170,7 +169,7 @@ module RDF
     #
     # @return [Integer]
     def count
-      solutions.size
+      self.solutions.size
     end
     alias_method :size, :count
 
@@ -184,11 +183,11 @@ module RDF
     # @return [Query]
     def filter(criteria = {}, &block)
       if block_given?
-        solutions.reject! do |solution|
+        self.solutions.reject! do |solution|
           !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
         end
       else
-        solutions.reject! do |solution|
+        self.solutions.reject! do |solution|
           solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
           results = criteria.map do |name, value|
             solution[name] == value
@@ -211,7 +210,7 @@ module RDF
       else
         # TODO: support for descending sort, e.g. `order(:s => :asc, :p => :desc)`
         variables.map!(&:to_sym)
-        solutions.sort! do |a, b|
+        self.solutions.sort! do |a, b|
           a = variables.map { |variable| a[variable].to_s }
           b = variables.map { |variable| b[variable].to_s }
           a <=> b
@@ -229,7 +228,7 @@ module RDF
     def project(*variables)
       unless variables.empty?
         variables.map!(&:to_sym)
-        solutions.each do |solution|
+        self.solutions.each do |solution|
           solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
         end
       end
@@ -242,7 +241,7 @@ module RDF
     #
     # @return [Query]
     def distinct
-      solutions.uniq!
+      self.solutions.uniq!
       self
     end
     alias_method :distinct!, :distinct
@@ -256,7 +255,7 @@ module RDF
     # @param  [Integer, #to_i] start
     # @return [Query]
     def offset(start)
-      slice(start, solutions.size - start.to_i)
+      slice(start, self.solutions.size - start.to_i)
     end
     alias_method :offset!, :offset
 
@@ -278,10 +277,10 @@ module RDF
     # @param  [Integer, #to_i] length
     # @return [Query]
     def slice(start, length)
-      if (start = start.to_i) < solutions.size
-        solutions.slice!(start, length.to_i)
+      if (start = start.to_i) < self.solutions.size
+        self.solutions = self.solutions.slice(start, length.to_i)
       else
-        solutions = []
+        self.solutions = []
       end
       self
     end
