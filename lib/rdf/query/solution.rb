@@ -44,6 +44,9 @@ class RDF::Query
       end
     end
 
+    # @private
+    attr_reader :bindings
+
     ##
     # Enumerates over every variable binding in this solution.
     #
@@ -191,7 +194,7 @@ class RDF::Query
       if args.empty? && @bindings.has_key?(name.to_sym)
         @bindings[name.to_sym]
       else
-        super
+        super # raises NoMethodError
       end
     end
   end # Solution

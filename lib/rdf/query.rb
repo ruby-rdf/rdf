@@ -229,8 +229,8 @@ module RDF
     def project(*variables)
       unless variables.empty?
         variables.map!(&:to_sym)
-        solutions.each do |bindings|
-          bindings.delete_if { |k, v| !variables.include?(k) } # FIXME
+        solutions.each do |solution|
+          solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
         end
       end
       self
