@@ -2,11 +2,18 @@ module RDF
   ##
   # An RDF basic graph pattern query.
   #
+  # @example Constructing and executing a basic graph pattern query
+  #   query = RDF::Query.new do
+  #     self << [:person, RDF.type, RDF::FOAF.Person]
+  #     self << [:person, RDF::FOAF.name, :name]
+  #   end
+  #   query.execute(RDF::Graph.load('doap.nt'))
+  #
   # @example Filtering solutions using a hash
-  #   query.filter(:author  => RDF::URI.new("http://ar.to/#self"))
+  #   query.filter(:author  => RDF::URI("http://ar.to/#self"))
   #   query.filter(:author  => "Arto Bendiken")
-  #   query.filter(:author  => [RDF::URI.new("http://ar.to/#self"), "Arto Bendiken"])
-  #   query.filter(:updated => RDF::Literal.new(Date.today))
+  #   query.filter(:author  => [RDF::URI("http://ar.to/#self"), "Arto Bendiken"])
+  #   query.filter(:updated => RDF::Literal(Date.today))
   #
   # @example Filtering solutions using a block
   #   query.filter { |solution| solution.author.literal? }
@@ -202,7 +209,7 @@ module RDF
       if variables.empty?
         raise ArgumentError.new("wrong number of arguments (0 for 1)")
       else
-        # TODO: support for descending sort, e.g. order(:s => :asc, :p => :desc)
+        # TODO: support for descending sort, e.g. `order(:s => :asc, :p => :desc)`
         variables.map!(&:to_sym)
         solutions.sort! do |a, b|
           a = variables.map { |variable| a[variable].to_s }
@@ -231,7 +238,7 @@ module RDF
     alias_method :select, :project
 
     ##
-    # Ensures solutions in the solution sequence are unique.
+    # Ensures that solutions in the solution sequence are unique.
     #
     # @return [Query]
     def distinct
