@@ -22,21 +22,28 @@ module RDF
     #
     # @param  [Query, Statement, Array(Value), Hash] pattern
     # @yield  [statement]
-    # @yieldparam [RDF::Statement]
-    # @return [Enumerator<RDF::Statement>]
+    # @yieldparam [RDF::Statement] statement
+    # @return [Enumerator]
     # @see    RDF::Queryable#query_pattern
     def query(pattern, &block)
-      raise TypeError.new("#{self} is not readable") if respond_to?(:readable?) && !readable?
+      raise TypeError, "#{self} is not readable" if respond_to?(:readable?) && !readable?
 
       case pattern
+        # A basic graph pattern (BGP) query:
         when Query
-          pattern.execute(self, &block)
+          if block_given?
+            query_execute(pattern, &block)
+            return self
+          else
+            return enum_for(:query_execute, pattern)
+          end
+
+        # A simple triple pattern query:
         else
           pattern = Query::Pattern.from(pattern)
-
           if block_given?
             query_pattern(pattern, &block)
-            return nil
+            return self
           else
             enum = enum_for(:query_pattern, pattern)
             enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
@@ -49,24 +56,55 @@ module RDF
     end
 
     ##
+    # Queries `self` using the given basic graph pattern (BGP) query,
+    # yielding each matched solution to the given block.
+    #
+    # Since RDF.rb 0.3.0, repository implementations can override this
+    # method in order to provide for storage-specific optimized graph
+    # pattern query execution.
+    #
+    # @param  [RDF::Query] query
+    #   the query to execute
+    # @yield  [solution]
+    # @yieldparam  [RDF::Query::Solution] solution
+    # @yieldreturn [void] ignored
+    # @return [void] ignored
+    # @see    RDF::Queryable#query
+    # @see    RDF::Query#execute
+    # @since  0.3.0
+    def query_execute(query, &block)
+      # By default, we let RDF.rb's built-in `RDF::Query#execute` handle BGP
+      # query execution by breaking down the query into its constituent
+      # triple patterns and invoking `RDF::Query::Pattern#execute` on each
+      # pattern.
+      query.execute(self, &block)
+    end
+    protected :query_execute
+
+    ##
     # Queries `self` for RDF statements matching the given `pattern`,
     # yielding each matched statement to the given block.
     #
-    # Since RDF.rb 0.2.0, this is the preferred method that subclasses of
-    # `RDF::Repository` should override in order to provide an optimized
-    # query implementation.
+    # Since RDF.rb 0.2.0, repository implementations should override this
+    # method in order to provide for storage-specific optimized triple
+    # pattern matching.
     #
     # @param  [RDF::Query::Pattern] pattern
+    #   the query pattern to match
     # @yield  [statement]
-    # @yieldparam [RDF::Statement]
-    # @return [void]
+    # @yieldparam  [RDF::Statement] statement
+    # @yieldreturn [void] ignored
+    # @return [void] ignored
     # @see    RDF::Queryable#query
+    # @see    RDF::Query::Pattern#execute
     # @since  0.2.0
     def query_pattern(pattern, &block)
+      # By default, we let Ruby's built-in `Enumerable#grep` handle the
+      # matching of statements by iterating over all statements and calling
+      # `RDF::Query::Pattern#===` on each statement.
       # @see http://ruby-doc.org/core/classes/Enumerable.html#M003121
       grep(pattern, &block)
     end
-
     protected :query_pattern
 
     ##
