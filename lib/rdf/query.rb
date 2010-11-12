@@ -1,304 +1,168 @@
 module RDF
   ##
-  # An RDF basic graph pattern query.
+  # An RDF basic graph pattern (BGP) query.
   #
-  # @example Constructing and executing a basic graph pattern query
+  # @example Constructing a basic graph pattern query
   #   query = RDF::Query.new do
   #     pattern [:person, RDF.type, RDF::FOAF.Person]
   #     pattern [:person, RDF::FOAF.name, :name]
+  #     pattern [:person, RDF::FOAF.mbox, :email], :optional => true
   #   end
-  #   query.execute(RDF::Graph.load('doap.nt'))
   #
-  # @example Filtering solutions using a hash
-  #   query.filter(:author  => RDF::URI("http://ar.to/#self"))
-  #   query.filter(:author  => "Arto Bendiken")
-  #   query.filter(:author  => [RDF::URI("http://ar.to/#self"), "Arto Bendiken"])
-  #   query.filter(:updated => RDF::Literal(Date.today))
+  # @example Executing a basic graph pattern query
+  #   graph = RDF::Graph.load('etc/doap.nt')
+  #   query.execute(graph).each do |solution|
+  #     solution.inspect
+  #   end
   #
-  # @example Filtering solutions using a block
-  #   query.filter { |solution| solution.author.literal? }
-  #   query.filter { |solution| solution.title =~ /^SPARQL/ }
-  #   query.filter { |solution| solution.price < 30.5 }
-  #   query.filter { |solution| solution.bound?(:date) }
-  #   query.filter { |solution| solution.age.datatype == RDF::XSD.integer }
-  #   query.filter { |solution| solution.name.language == :es }
-  #
-  # @example Reordering solutions based on a variable
-  #   query.order_by(:updated)
-  #   query.order_by(:updated, :created)
-  #
-  # @example Selecting particular variables only
-  #   query.select(:title)
-  #   query.select(:title, :description)
-  #
-  # @example Eliminating duplicate solutions
-  #   query.distinct!
-  #
-  # @example Limiting the number of solutions
-  #   query.offset(25).limit(10)
-  #
-  # @example Counting the number of solutions
-  #   query.count
-  #
-  # @example Iterating over all found solutions
-  #   query.each_solution { |solution| puts solution.inspect }
-  #
+  # @since 0.3.0
   class Query
-    autoload :Pattern,  'rdf/query/pattern'
-    autoload :Solution, 'rdf/query/solution'
-    autoload :Variable, 'rdf/query/variable'
+    autoload :Pattern,   'rdf/query/pattern'
+    autoload :Solution,  'rdf/query/solution'
+    autoload :Solutions, 'rdf/query/solutions'
+    autoload :Variable,  'rdf/query/variable'
 
-    include ::Enumerable
-
+    ##
+    # The variables used in this query.
+    #
     # @return [Hash{Symbol => RDF::Query::Variable}]
     attr_reader :variables
 
+    ##
+    # The patterns that constitute this query.
+    #
     # @return [Array<RDF::Query::Pattern>]
     attr_reader :patterns
 
-    # @return [Array<Hash{Symbol => RDF::Value}>] An unordered sequence of query solutions.
-    attr_accessor :solutions
+    ##
+    # The solution sequence for this query.
+    #
+    # @return [RDF::Query::Solutions]
+    attr_reader :solutions
 
+    ##
+    # Any additional options for this query.
+    #
     # @return [Hash]
     attr_reader :options
 
     ##
+    # Initializes a new query.
+    #
     # @param  [Hash{Symbol => Object}] options
+    #   any additional keyword options
+    # @option options [Array<RDF::Query::Pattern>] :patterns  (Array.new)
+    # @option options [RDF::Query::Solutions]      :solutions (Solutions.new)
     # @yield  [query]
-    # @yieldparam [Query]
+    # @yieldparam [RDF::Query] query
     def initialize(options = {}, &block)
       @options   = options.dup
       @variables = @options.delete(:variables) || {}
       @patterns  = @options.delete(:patterns)  || []
-      @solutions = @options.delete(:solutions) || []
+      @solutions = @options.delete(:solutions) || Solutions.new
 
       if block_given?
         case block.arity
-          when 1 then block.call(self)
-          else instance_eval(&block)
+          when 0 then instance_eval(&block)
+          else block.call(self)
         end
       end
     end
 
     ##
-    # Appends a new query `pattern` into this query.
+    # Appends the given query `pattern` to this query.
     #
     # @param  [RDF::Query::Pattern] pattern
+    #   a triple query pattern
     # @return [void] self
     def <<(pattern)
-      self.patterns << Pattern.from(pattern)
+      @patterns << Pattern.from(pattern)
       self
     end
 
     ##
-    # Appends a new query `pattern` into this query.
+    # Appends the given query `pattern` to this query.
     #
     # @param  [RDF::Query::Pattern] pattern
+    #   a triple query pattern
     # @param  [Hash{Symbol => Object}] options
+    #   any additional keyword options
     # @option options [Boolean] :optional (false)
+    #   whether this is an optional pattern
     # @return [void] self
-    # @since  0.3.0
     def pattern(pattern, options = {})
-      # TODO: handle any given options
-      self.patterns << Pattern.from(pattern)
+      # TODO: handle any given additional options
+      @patterns << Pattern.from(pattern)
       self
     end
 
     ##
-    # Executes this query on the given `queryable` object.
+    # Executes this query on the given `queryable` graph or repository.
     #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
     # @param  [Hash{Symbol => Object}] options
     #   any additional keyword options
-    # @return [Array]
-    #   the query solution sequence
+    # @return [RDF::Query::Solutions]
+    #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
-    # @since  0.3.0
     def execute(queryable, options = {})
-      self.solutions = []
-      patterns.each do |pattern|
+      @solutions = Solutions.new
+      @patterns.each do |pattern|
         case pattern.variable_count
           when 0 # no variables
             if pattern.execute(queryable).empty?
               # return an empty solution sequence:
-              self.solutions.clear
+              @solutions.clear
               break
             end
 
           when 3 # only variables
             pattern.execute(queryable) do |statement|
-              self.solutions << pattern.solution(statement)
+              @solutions << pattern.solution(statement)
             end
 
           else case # 1 or 2 variables
 
-            when self.solutions.all? { |solution| !solution.has_variables?(pattern.variables.values) }
-              if self.solutions.empty?
+            when @solutions.all? { |solution| !solution.has_variables?(pattern.variables.values) }
+              if @solutions.empty?
                 pattern.execute(queryable) do |statement|
-                  self.solutions << pattern.solution(statement)
+                  @solutions << pattern.solution(statement)
                 end
               else # union
-                old_solutions, self.solutions = self.solutions, []
+                old_solutions, @solutions = @solutions, Solutions.new
                 old_solutions.each do |solution|
                   pattern.execute(queryable) do |statement|
-                    self.solutions << solution.merge(pattern.solution(statement))
+                    @solutions << solution.merge(pattern.solution(statement))
                   end
                 end
               end
 
-            else # intersect
-              self.solutions.each_with_index do |solution, index|
+            else # intersection
+              @solutions.each_with_index do |solution, index|
                 failed = true
                 pattern.execute(queryable, solution) do |statement|
                   failed = false
                   solution.merge!(pattern.solution(statement))
                 end
-                self.solutions[index] = nil if failed # TODO: `options[:optional]`
+                @solutions[index] = nil if failed # TODO: `options[:optional]`
               end
-              self.solutions.compact! # remove `nil` entries
+              @solutions.compact! # remove `nil` entries
           end
         end
       end
-      self.solutions
+      @solutions
     end
 
     ##
-    # Enumerates over each query solution.
+    # Enumerates over each matching query solution.
     #
     # @yield  [solution]
-    # @yieldparam [Solution] solution
+    # @yieldparam [RDF::Query::Solution] solution
     # @return [Enumerator]
     def each_solution(&block)
-      if block_given?
-        self.solutions.each do |solution|
-          block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
-        end
-      end
-      enum_for(:each_solution)
+      @solutions.each(&block)
     end
     alias_method :each, :each_solution
-
-    ##
-    # Returns the number of query solutions.
-    #
-    # @return [Integer]
-    def count
-      self.solutions.size
-    end
-    alias_method :size, :count
-
-    ##
-    # Filters the solution sequence by the given criteria.
-    #
-    # @param  [Hash{Symbol => Object}] criteria
-    # @yield  [solution]
-    # @yieldparam  [Solution] solution
-    # @yieldreturn [Boolean]
-    # @return [Query]
-    def filter(criteria = {}, &block)
-      if block_given?
-        self.solutions.reject! do |solution|
-          !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
-        end
-      else
-        self.solutions.reject! do |solution|
-          solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
-          results = criteria.map do |name, value|
-            solution[name] == value
-          end
-          !results.all?
-        end
-      end
-      self
-    end
-    alias_method :filter!, :filter
-
-    ##
-    # Reorders the solution sequence based on `variables`.
-    #
-    # @param  [Array<Symbol>] variables
-    # @return [Query]
-    def order(*variables)
-      if variables.empty?
-        raise ArgumentError.new("wrong number of arguments (0 for 1)")
-      else
-        # TODO: support for descending sort, e.g. `order(:s => :asc, :p => :desc)`
-        variables.map!(&:to_sym)
-        self.solutions.sort! do |a, b|
-          a = variables.map { |variable| a[variable].to_s }
-          b = variables.map { |variable| b[variable].to_s }
-          a <=> b
-        end
-      end
-      self
-    end
-    alias_method :order_by, :order
-
-    ##
-    # Restricts the the solution sequence to the given `variables` only.
-    #
-    # @param  [Array<Symbol>] variables
-    # @return [Query]
-    def project(*variables)
-      unless variables.empty?
-        variables.map!(&:to_sym)
-        self.solutions.each do |solution|
-          solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
-        end
-      end
-      self
-    end
-    alias_method :select, :project
-
-    ##
-    # Ensures that solutions in the solution sequence are unique.
-    #
-    # @return [Query]
-    def distinct
-      self.solutions.uniq!
-      self
-    end
-    alias_method :distinct!, :distinct
-    alias_method :reduced,   :distinct
-    alias_method :reduced!,  :distinct
-
-    ##
-    # Limits the solution sequence to bindings starting from the `start`
-    # offset in the overall solution sequence.
-    #
-    # @param  [Integer, #to_i] start
-    # @return [Query]
-    def offset(start)
-      slice(start, self.solutions.size - start.to_i)
-    end
-    alias_method :offset!, :offset
-
-    ##
-    # Limits the number of solutions to `length`.
-    #
-    # @param  [Integer, #to_i] length
-    # @return [Query]
-    def limit(length)
-      slice(0, length)
-    end
-    alias_method :limit!, :limit
-
-    ##
-    # Limits the solution sequence to `length` bindings starting from the
-    # `start` offset in the overall solution sequence.
-    #
-    # @param  [Integer, #to_i] start
-    # @param  [Integer, #to_i] length
-    # @return [Query]
-    def slice(start, length)
-      if (start = start.to_i) < self.solutions.size
-        self.solutions = self.solutions.slice(start, length.to_i)
-      else
-        self.solutions = []
-      end
-      self
-    end
-    alias_method :slice!, :slice
   end # Query
 end # RDF
