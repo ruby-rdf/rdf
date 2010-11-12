@@ -43,7 +43,7 @@ module RDF
     # The maximum number of cached interned URI references is given by the
     # `CACHE_SIZE` constant. This value is unlimited by default, in which
     # case an interned URI object will be purged only when the last strong
-    # reference to it is garbage collection (i.e., when its finalizer runs).
+    # reference to it is garbage collected (i.e., when its finalizer runs).
     #
     # Excepting special memory-limited circumstances, it should always be
     # safe and preferred to construct new URI references using
@@ -54,7 +54,7 @@ module RDF
     # @param  [String, #to_s] str
     # @return [RDF::URI]
     def self.intern(str)
-      cache[str = str.to_s] ||= self.new(str)
+      cache[str = str.to_s] ||= self.new(str).freeze
     end
 
     ##
@@ -311,6 +311,13 @@ module RDF
     # @return [URI]
     def dup
       self.class.new(@uri.dup)
+    end
+
+    ##
+    # @private
+    def freeze
+      @uri.freeze
+      super
     end
 
     ##
