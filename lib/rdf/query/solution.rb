@@ -81,10 +81,10 @@ class RDF::Query
     end
 
     ##
-    # Returns `true` if this solution contains bindings of any of the given
+    # Returns `true` if this solution contains bindings for any of the given
     # `variables`.
     #
-    # @param  [Enumerable] variables
+    # @param  [Array<Symbol, #to_sym>] variables
     #   an array of variables to check
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
@@ -107,7 +107,8 @@ class RDF::Query
     ##
     # Returns `true` if the variable `name` is bound in this solution.
     #
-    # @param  [Symbol] name
+    # @param  [Symbol, #to_sym] name
+    #   the variable name
     # @return [Boolean] `true` or `false`
     def bound?(name)
       !unbound?(name)
@@ -116,7 +117,8 @@ class RDF::Query
     ##
     # Returns `true` if the variable `name` is unbound in this solution.
     #
-    # @param  [Symbol] name
+    # @param  [Symbol, #to_sym] name
+    #   the variable name
     # @return [Boolean] `true` or `false`
     def unbound?(name)
       @bindings[name.to_sym].nil?
@@ -126,6 +128,7 @@ class RDF::Query
     # Returns the value of the variable `name`.
     #
     # @param  [Symbol, #to_sym] name
+    #   the variable name
     # @return [RDF::Value]
     def [](name)
       @bindings[name.to_sym]
@@ -135,6 +138,7 @@ class RDF::Query
     # Binds or rebinds the variable `name` to the given `value`.
     #
     # @param  [Symbol, #to_sym] name
+    #   the variable name
     # @param  [RDF::Value] value
     # @return [RDF::Value]
     # @since  0.3.0

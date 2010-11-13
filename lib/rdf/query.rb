@@ -125,7 +125,7 @@ module RDF
 
           else case # 1 or 2 variables
 
-            when @solutions.all? { |solution| !solution.has_variables?(pattern.variables.values) }
+            when !@solutions.have_variables?(pattern.variables.values)
               if @solutions.empty?
                 pattern.execute(queryable) do |statement|
                   @solutions << pattern.solution(statement)

@@ -169,5 +169,19 @@ module RDF; class Query
       self
     end
     alias_method :limit!, :limit
+
+    ##
+    # Returns `true` if this solution sequence contains bindings for any of
+    # the given `variables`.
+    #
+    # @param  [Array<Symbol, #to_sym>] variables
+    #   an array of variables to check
+    # @return [Boolean] `true` or `false`
+    # @see    RDF::Query::Solution#has_variables?
+    # @see    RDF::Query#execute
+    def have_variables?(variables)
+      self.any? { |solution| solution.has_variables?(variables) }
+    end
+    alias_method :has_variables?, :have_variables?
   end # Solutions
 end; end # RDF::Query
