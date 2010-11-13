@@ -5,12 +5,12 @@ module RDF; class Query
     ##
     # @private
     # @since 0.2.2
-    def self.from(pattern)
+    def self.from(pattern, options = {})
       case pattern
         when Pattern   then pattern
-        when Statement then self.new(pattern.to_hash)
-        when Hash      then self.new(pattern)
-        when Array     then self.new(*pattern)
+        when Statement then self.new(options.merge(pattern.to_hash))
+        when Hash      then self.new(options.merge(pattern))
+        when Array     then self.new(pattern[0], pattern[1], pattern[2], options.merge(:context => pattern[3]))
         else raise ArgumentError.new("expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}")
       end
     end
@@ -207,11 +207,12 @@ module RDF; class Query
     end
 
     ##
-    # Returns the string representation of this pattern.
+    # Returns a string representation of this pattern.
     #
     # @return [String]
     def to_s
       StringIO.open do |buffer| # FIXME in RDF::Statement
+        buffer << 'OPTIONAL ' if optional?
         buffer << (subject.is_a?(Variable)   ? subject.to_s :   "<#{subject}>") << ' '
         buffer << (predicate.is_a?(Variable) ? predicate.to_s : "<#{predicate}>") << ' '
         buffer << (object.is_a?(Variable)    ? object.to_s :    "<#{object}>") << ' .'

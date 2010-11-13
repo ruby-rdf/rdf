@@ -91,8 +91,7 @@ module RDF
     #   whether this is an optional pattern
     # @return [void] self
     def pattern(pattern, options = {})
-      # TODO: handle any given additional options
-      @patterns << Pattern.from(pattern)
+      @patterns << Pattern.from(pattern, options)
       self
     end
 
@@ -147,7 +146,7 @@ module RDF
                   failed = false
                   solution.merge!(pattern.solution(statement))
                 end
-                @solutions[index] = nil if failed # TODO: `options[:optional]`
+                @solutions[index] = nil if failed && !pattern.optional?
               end
               @solutions.compact! # remove `nil` entries
           end
