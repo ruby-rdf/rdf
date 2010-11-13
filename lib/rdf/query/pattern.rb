@@ -84,15 +84,45 @@ module RDF; class Query
     #   an enumerator yielding matching statements
     # @see    RDF::Queryable#query
     def execute(queryable, bindings = {}, &block)
-      if variables?
-        queryable.query({
-          # TODO: context handling?
+      variables = self.variables
+
+      # Does this pattern contain any variables?
+      if variables.empty?
+        # With no variables to worry about, we will let the repository
+        # implementation yield matching statements directly:
+        queryable.query(self, &block)
+
+      # Yes, this pattern uses at least one variable...
+      else
+        query = {
           :subject   => subject   && subject.variable?   ? bindings[subject.to_sym]   : subject,
           :predicate => predicate && predicate.variable? ? bindings[predicate.to_sym] : predicate,
           :object    => object    && object.variable?    ? bindings[object.to_sym]    : object,
-        }, &block)
-      else
-        queryable.query(self, &block)
+          # TODO: context handling?
+        }
+
+        # Do all the variable terms refer to distinct variables?
+        if variable_count == variables.size
+          # If so, we can just let the repository implementation handle
+          # everything and yield matching statements directly:
+          queryable.query(query, &block)
+
+        # No, some terms actually refer to the same variable...
+        else
+          # Figure out which terms refer to the same variable:
+          terms = variables.each_key.find do |name|
+            terms = variable_terms(name)
+            break terms if terms.size > 1
+          end
+          queryable.query(query) do |statement|
+            # Only yield those matching statements where the variable
+            # constraint is also satisfied:
+            # FIXME: `Array#uniq` uses `#eql?` and `#hash`, not `#==`
+            if matches = terms.map { |term| statement.send(term) }.uniq.size.equal?(1)
+              block.call(statement)
+            end
+          end
+        end
       end
     end
 
@@ -130,13 +160,15 @@ module RDF; class Query
     # @example
     #   Pattern.new(RDF::Node.new, :p, 123).variable_terms    #=> [:predicate]
     #
+    # @param  [Symbol, #to_sym] name
+    #   an optional variable name
     # @return [Array<Symbol>]
     # @since  0.3.0
-    def variable_terms
+    def variable_terms(name = nil)
       terms = []
-      terms << :subject   if subject.is_a?(Variable)
-      terms << :predicate if predicate.is_a?(Variable)
-      terms << :object    if object.is_a?(Variable)
+      terms << :subject   if subject.is_a?(Variable)   && (!name || name.eql?(subject.name))
+      terms << :predicate if predicate.is_a?(Variable) && (!name || name.eql?(predicate.name))
+      terms << :object    if object.is_a?(Variable)    && (!name || name.eql?(object.name))
       terms
     end
 
