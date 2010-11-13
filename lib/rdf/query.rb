@@ -2,12 +2,21 @@ module RDF
   ##
   # An RDF basic graph pattern (BGP) query.
   #
-  # @example Constructing a basic graph pattern query
+  # @example Constructing a basic graph pattern query (1)
   #   query = RDF::Query.new do
-  #     pattern [:person, RDF.type, RDF::FOAF.Person]
-  #     pattern [:person, RDF::FOAF.name, :name]
-  #     pattern [:person, RDF::FOAF.mbox, :email], :optional => true
+  #     pattern [:person, RDF.type,  FOAF.Person]
+  #     pattern [:person, FOAF.name, :name]
+  #     pattern [:person, FOAF.mbox, :email]
   #   end
+  #
+  # @example Constructing a basic graph pattern query (2)
+  #   query = RDF::Query.new({
+  #     :person => {
+  #       RDF.type  => FOAF.Person,
+  #       FOAF.name => :name,
+  #       FOAF.mbox => :email,
+  #     }
+  #   })
   #
   # @example Executing a basic graph pattern query
   #   graph = RDF::Graph.load('etc/doap.nt')
@@ -47,19 +56,37 @@ module RDF
     attr_reader :options
 
     ##
-    # Initializes a new query.
+    # Initializes a new basic graph pattern query.
     #
-    # @param  [Hash{Symbol => Object}] options
-    #   any additional keyword options
-    # @option options [Array<RDF::Query::Pattern>] :patterns  (Array.new)
-    # @option options [RDF::Query::Solutions]      :solutions (Solutions.new)
-    # @yield  [query]
-    # @yieldparam [RDF::Query] query
-    def initialize(options = {}, &block)
+    # @overload initialize(patterns = [], options = {})
+    #   @param  [Array<RDF::Query::Pattern>] patterns
+    #     ...
+    #   @param  [Hash{Symbol => Object}] options
+    #     any additional keyword options
+    #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
+    #   @yield  [query]
+    #   @yieldparam  [RDF::Query] query
+    #   @yieldreturn [void] ignored
+    #
+    # @overload initialize(patterns, options = {})
+    #   @param  [Hash{Object => Object}] patterns
+    #     ...
+    #   @param  [Hash{Symbol => Object}] options
+    #     any additional keyword options
+    #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
+    #   @yield  [query]
+    #   @yieldparam  [RDF::Query] query
+    #   @yieldreturn [void] ignored
+    def initialize(patterns = nil, options = {}, &block)
       @options   = options.dup
-      @variables = @options.delete(:variables) || {}
-      @patterns  = @options.delete(:patterns)  || []
+      @variables = {}
       @solutions = @options.delete(:solutions) || Solutions.new
+
+      @patterns  = case patterns
+        when Hash  then compile_hash_patterns(patterns.dup)
+        when Array then patterns
+        else []
+      end
 
       if block_given?
         case block.arity
@@ -189,5 +216,28 @@ module RDF
       @solutions.each(&block)
     end
     alias_method :each, :each_solution
+
+  protected
+
+    ##
+    # @private
+    def compile_hash_patterns(hash_patterns)
+      patterns = []
+      hash_patterns.each do |s, pos|
+        raise ArgumentError, "invalid hash pattern: #{hash_patterns.inspect}" unless pos.is_a?(Hash)
+        pos.each do |p, os|
+          case os
+            when Hash
+              patterns += os.keys.map { |o| [s, p, o] }
+              patterns += compile_hash_patterns(os)
+            when Array
+              patterns += os.map { |o| [s, p, o] }
+            else
+              patterns << [s, p, os]
+          end
+        end
+      end
+      patterns.map { |pattern| Pattern.from(pattern) }
+    end
   end # Query
 end # RDF
