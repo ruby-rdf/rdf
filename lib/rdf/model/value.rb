@@ -104,7 +104,7 @@ module RDF
     #
     # @abstract
     # @param  [Object]  other
-    # @return [Integer] -1, 0, 1
+    # @return [Integer] `-1`, `0`, or `1`
     def <=>(other)
       self.to_s <=> other.to_s
     end

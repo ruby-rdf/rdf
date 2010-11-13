@@ -45,17 +45,24 @@ class RDF::Query
   class Variable
     include RDF::Value
 
-    # @return [Symbol] The variable's name.
+    ##
+    # The variable's name.
+    #
+    # @return [Symbol]
     attr_accessor :name
-
     alias_method :to_sym, :name
 
-    # @return [Value] The variable's value.
+    ##
+    # The variable's value.
+    #
+    # @return [RDF::Value]
     attr_accessor :value
 
     ##
-    # @param  [Symbol] name
-    # @param  [Value]  value
+    # @param  [Symbol, #to_sym] name
+    #   the variable name
+    # @param  [RDF::Value]  value
+    #   an optional variable value
     def initialize(name = nil, value = nil)
       @name  = (name || "g#{__id__.to_i.abs}").to_sym
       @value = value
@@ -98,50 +105,67 @@ class RDF::Query
     ##
     # Rebinds this variable to the given `value`.
     #
-    # @param  [Value] value
-    # @return [Value] The previous value, if any.
+    # @param  [RDF::Value] value
+    # @return [RDF::Value] the previous value, if any.
     def bind(value)
       old_value = self.value
       self.value = value
       old_value
     end
-
     alias_method :bind!, :bind
 
     ##
     # Unbinds this variable, discarding any currently bound value.
     #
-    # @return [Value] The previous value, if any.
+    # @return [RDF::Value] the previous value, if any.
     def unbind
       old_value = self.value
       self.value = nil
       old_value
     end
-
     alias_method :unbind!, :unbind
 
     ##
     # Returns this variable as `Hash`.
     #
-    # @return [Hash{Symbol => Variable}]
+    # @return [Hash{Symbol => RDF::Query::Variable}]
     def variables
-      { name => self }
+      {name => self}
     end
-
     alias_method :to_hash, :variables
 
     ##
     # Returns this variable's bindings (if any) as a `Hash`.
     #
-    # @return [Hash{Symbol => Value}]
+    # @return [Hash{Symbol => RDF::Value}]
     def bindings
-      unbound? ? {} : { name => value }
+      unbound? ? {} : {name => value}
+    end
+
+    ##
+    # Returns a hash code for this variable.
+    #
+    # @return [Fixnum]
+    # @since  0.3.0
+    def hash
+      @name.hash
+    end
+
+    ##
+    # Returns `true` if this variable is equivalent to a given `other`
+    # variable.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def eql?(other)
+      other.is_a?(RDF::Query::Variable) && @name.eql?(other.name)
     end
 
     ##
     # Compares this variable with the given value.
     #
-    # @param  [Value] other
+    # @param  [RDF::Value] other
     # @return [Boolean]
     def ===(other)
       if unbound?
@@ -158,5 +182,5 @@ class RDF::Query
     def to_s
       unbound? ? "?#{name}" : "?#{name}=#{value}"
     end
-  end
-end
+  end # Variable
+end # RDF::Query
