@@ -56,6 +56,7 @@ module RDF; class Query
     #   Pattern.new(:s, :p, :o, :optional => true).optional?  #=> true
     #
     # @return [Boolean]
+    # @since  0.3.0
     def optional?
       !!options[:optional]
     end
@@ -114,9 +115,9 @@ module RDF; class Query
     end
 
     ##
-    # Returns `true` if this pattern contains variables.
+    # Returns `true` if this pattern contains any variables.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def variables?
       subject.is_a?(Variable) ||
         predicate.is_a?(Variable) ||
@@ -124,18 +125,42 @@ module RDF; class Query
     end
 
     ##
+    # Returns the variable terms in this pattern.
+    #
+    # @example
+    #   Pattern.new(RDF::Node.new, :p, 123).variable_terms    #=> [:predicate]
+    #
+    # @return [Array<Symbol>]
+    # @since  0.3.0
+    def variable_terms
+      terms = []
+      terms << :subject   if subject.is_a?(Variable)
+      terms << :predicate if predicate.is_a?(Variable)
+      terms << :object    if object.is_a?(Variable)
+      terms
+    end
+
+    ##
     # Returns the number of variables in this pattern.
+    #
+    # Note: this does not count distinct variables, and will therefore e.g.
+    # return 3 even if two terms are actually the same variable.
     #
     # @return [Integer] (0..3)
     def variable_count
-      variables.size
+      count = 0
+      count += 1 if subject.is_a?(Variable)
+      count += 1 if predicate.is_a?(Variable)
+      count += 1 if object.is_a?(Variable)
+      count
     end
-
     alias_method :cardinality, :variable_count
     alias_method :arity,       :variable_count
 
     ##
     # Returns all variables in this pattern.
+    #
+    # Note: this returns a hash containing distinct variables only.
     #
     # @return [Hash{Symbol => Variable}]
     def variables
@@ -149,7 +174,7 @@ module RDF; class Query
     ##
     # Returns `true` if this pattern contains bindings.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def bindings?
       !bindings.empty?
     end
@@ -219,5 +244,5 @@ module RDF; class Query
         buffer.string
       end
     end
-  end # class Pattern
-end; end # module RDF class Query
+  end # Pattern
+end; end # RDF::Query
