@@ -108,12 +108,14 @@ module RDF
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     def execute(queryable, options = {})
       @solutions = Solutions.new
+      @failed = false
       @patterns.each do |pattern|
         case pattern.variable_count
           when 0 # no variables
             if pattern.execute(queryable).empty?
               # return an empty solution sequence:
               @solutions.clear
+              @failed = true
               break
             end
 
@@ -152,6 +154,30 @@ module RDF
         end
       end
       @solutions
+    end
+
+    ##
+    # Returns `true` if this query did not match when last executed.
+    #
+    # When the solution sequence is empty, this method can be used to
+    # determine whether the query failed to match or not.
+    #
+    # @return [Boolean]
+    # @see    #matched?
+    def failed?
+      @failed
+    end
+
+    ##
+    # Returns `true` if this query matched when last executed.
+    #
+    # When the solution sequence is empty, this method can be used to
+    # determine whether the query matched successfully or not.
+    #
+    # @return [Boolean]
+    # @see    #failed?
+    def matched?
+      !@failed
     end
 
     ##
