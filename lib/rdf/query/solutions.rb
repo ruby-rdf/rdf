@@ -171,6 +171,21 @@ module RDF; class Query
     alias_method :limit!, :limit
 
     ##
+    # Returns an array of the distinct variable names used in this solution
+    # sequence.
+    #
+    # @return [Array<Symbol>]
+    def variable_names
+      variables = self.inject({}) do |result, solution|
+        solution.each_name do |name|
+          result[name] ||= true
+        end
+        result
+      end
+      variables.keys
+    end
+
+    ##
     # Returns `true` if this solution sequence contains bindings for any of
     # the given `variables`.
     #
