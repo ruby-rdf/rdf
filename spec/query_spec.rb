@@ -1,5 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
+require 'set'
 
 describe RDF::Query do
   EX = RDF::EX = RDF::Vocabulary.new('http://example.org/')
@@ -23,6 +24,18 @@ describe RDF::Query do
     end
   end
 
+  context "querying for a literal" do
+    it "should return a sequence with an existing literal" do
+      graph = RDF::Graph.new do
+        self << [EX.x1, EX.p1, 123.0]
+      end
+      query = RDF::Query.new do
+        self << [:s, EX.p1, 123.0]
+      end
+      query.execute(graph).map(&:to_hash).should == [{:s => EX.x1}]
+    end
+  end
+
   context "querying with unioned triple patterns" do
     it "should return a union of solution sequences" do
       graph = RDF::Graph.new do
@@ -33,12 +46,13 @@ describe RDF::Query do
         self << [:s1, EX.p, :o1]
         self << [:s2, EX.p, :o2]
       end
-      query.execute(graph).map(&:to_hash).should == [
+      # Use set comparison for unodered compare on 1.8.7
+      query.execute(graph).map(&:to_hash).to_set.should == [
         {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x1, :o2 => RDF::Literal(1)},
         {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x2, :o2 => RDF::Literal(2)},
         {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x1, :o2 => RDF::Literal(1)},
         {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x2, :o2 => RDF::Literal(2)},
-      ]
+      ].to_set
     end
   end
 
