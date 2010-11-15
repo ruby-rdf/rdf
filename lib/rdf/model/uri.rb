@@ -329,7 +329,7 @@ module RDF
         local_name = $1
         vocab_uri  = local_name.empty? ? self.to_s : self.to_s[0...-(local_name.length)]
         Vocabulary.each do |vocab|
-          if vocab.to_uri.to_s == vocab_uri
+          if vocab.to_uri == vocab_uri
             return [vocab.__prefix__, local_name.empty? ? nil : local_name.to_sym]
           end
         end
@@ -376,7 +376,9 @@ module RDF
     # @return [Boolean] `true` or `false`
     def ==(other)
       case other
-        when Addressable::URI
+        when String
+          to_s == other
+        when URI, Addressable::URI
           to_s == other.to_s
         else
           other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
