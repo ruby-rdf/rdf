@@ -71,7 +71,7 @@ module RDF
 
     ##
     # @overload URI.new(uri)
-    #   @param  [URI, String, #to_s]    uri
+    #   @param  [RDF::URI, String, #to_s] uri
     #
     # @overload URI.new(options = {})
     #   @param  [Hash{Symbol => Object} options
@@ -124,6 +124,18 @@ module RDF
     end
 
     ##
+    # Validates this URI, raising an error if it is invalid.
+    #
+    # @return [RDF::URI] `self`
+    # @raise  [ArgumentError] if the URI is invalid
+    # @since  0.3.0
+    def validate!
+      # TODO: raise error if the URI fails validation
+      self
+    end
+    alias_method :validate, :validate!
+
+    ##
     # Joins several URIs together.
     #
     # This method conforms to join normalization semantics as per RFC3986,
@@ -143,8 +155,8 @@ module RDF
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
     # @see RDF::URI#/
     # @see RDF::URI#+
-    # @param  [Array<String, URI, #to_str>] uris
-    # @return [URI]
+    # @param  [Array<String, RDF::URI, #to_s>] uris
+    # @return [RDF::URI]
     def join(*uris)
       result = @uri.dup
       uris.each do |uri|
@@ -250,7 +262,7 @@ module RDF
     ##
     # Returns a copy of this URI with the path component set to `/`.
     #
-    # @return [URI]
+    # @return [RDF::URI]
     def root
       if root?
         self
@@ -273,7 +285,7 @@ module RDF
     # Returns a copy of this URI with the path component ascended to the
     # parent directory, if any.
     #
-    # @return [URI]
+    # @return [RDF::URI]
     def parent
       case
         when root? then nil
@@ -308,7 +320,7 @@ module RDF
     ##
     # Returns a duplicate copy of `self`.
     #
-    # @return [URI]
+    # @return [RDF::URI]
     def dup
       self.class.new(@uri.dup)
     end
@@ -323,7 +335,7 @@ module RDF
     ##
     # Checks whether this URI is equal to `other`.
     #
-    # @param  [URI] other
+    # @param  [RDF::URI] other
     # @return [Boolean]
     def eql?(other)
       other.is_a?(URI) && self == other
@@ -346,7 +358,7 @@ module RDF
     ##
     # Returns `self`.
     #
-    # @return [URI]
+    # @return [RDF::URI]
     def to_uri
       self
     end
@@ -376,6 +388,8 @@ module RDF
       @uri.respond_to?(symbol) || super
     end
 
+  protected
+
     ##
     # @param  [Symbol, String, #to_s] symbol
     # @param  [Array<Object>]         args
@@ -392,7 +406,5 @@ module RDF
         super
       end
     end
-
-    protected :method_missing
-  end
-end
+  end # URI
+end # RDF
