@@ -6,7 +6,7 @@ module RDF
     ##
     # Returns `true` if `self` is writable.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see    RDF::Readable#readable?
     def writable?
       true
@@ -16,7 +16,7 @@ module RDF
     # Inserts RDF data into `self`.
     #
     # @param  [RDF::Enumerable, RDF::Statement, #to_rdf] data
-    # @return [Writable]
+    # @return [RDF::Writable] `self`
     def <<(data)
       case data
         when RDF::Reader
@@ -31,7 +31,7 @@ module RDF
           when data.respond_to?(:to_rdf) && !data.equal?(rdf = data.to_rdf)
             self << rdf
           else
-            insert_statement(create_statement(data))
+            insert_statement(Statement.from(data))
         end
       end
 
@@ -42,14 +42,14 @@ module RDF
     # Inserts RDF statements into `self`.
     #
     # @param  [Array<RDF::Statement>] statements
-    # @return [Writable]
+    # @return [RDF::Writable] `self`
     def insert(*statements)
       statements.map! do |value|
         case
           when value.respond_to?(:each_statement)
             insert_statements(value)
             nil
-          when (statement = create_statement(value)).valid?
+          when (statement = Statement.from(value)).valid?
             statement
           else
             raise ArgumentError.new("not a valid statement: #{value.inspect}")
@@ -60,7 +60,6 @@ module RDF
 
       return self
     end
-
     alias_method :insert!, :insert
 
   protected
@@ -119,6 +118,7 @@ module RDF
     #
     # @param  [RDF::Enumerable] statements
     # @return [void]
+    # @since  0.1.6
     def insert_statements(statements)
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
@@ -141,18 +141,7 @@ module RDF
       raise NotImplementedError.new("#{self.class}#insert_statement")
     end
 
-    ##
-    # Transforms various input into an `RDF::Statement` instance.
-    #
-    # @param  [RDF::Statement, Hash, Array, #to_a] statement
-    # @return [RDF::Statement]
-    # @deprecated
-    def create_statement(statement)
-      Statement.from(statement)
-    end
-
     protected :insert_statements
     protected :insert_statement
-    protected :create_statement
-  end
-end
+  end # Writable
+end # RDF
