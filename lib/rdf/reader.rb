@@ -205,6 +205,29 @@ module RDF
     end
 
     ##
+    # Defines the given named URI prefix for this reader.
+    #
+    # @example Defining a URI prefix
+    #   reader.prefix :dc, RDF::URI('http://purl.org/dc/terms/')
+    #
+    # @example Returning a URI prefix
+    #   reader.prefix(:dc)    #=> RDF::URI('http://purl.org/dc/terms/')
+    #
+    # @overload prefix(name, uri)
+    #   @param  [Symbol, #to_s]   name
+    #   @param  [RDF::URI, #to_s] uri
+    #
+    # @overload prefix(name)
+    #   @param  [Symbol, #to_s]   name
+    #
+    # @return [RDF::URI]
+    def prefix(name, uri = nil)
+      name = name.respond_to?(:to_sym) ? name.to_sym : name.to_s.to_sym
+      uri.nil? ? prefixes[name] : prefixes[name] = RDF::URI(uri)
+    end
+    alias_method :prefix!, :prefix
+
+    ##
     # Iterates the given block for each RDF statement.
     #
     # If no block was given, returns an enumerator.
