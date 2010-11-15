@@ -12,15 +12,15 @@ module RDF
   #   enumerable.count
   #
   # @example Checking whether a specific statement exists
-  #   enumerable.has_statement?(RDF::Statement.new(subject, predicate, object))
+  #   enumerable.has_statement?(RDF::Statement(subject, predicate, object))
   #   enumerable.has_triple?([subject, predicate, object])
   #   enumerable.has_quad?([subject, predicate, object, context])
   #
   # @example Checking whether a specific value exists
-  #   enumerable.has_subject?(RDF::URI.new("http://rdf.rubyforge.org/"))
+  #   enumerable.has_subject?(RDF::URI("http://rdf.rubyforge.org/"))
   #   enumerable.has_predicate?(RDF::DC.creator)
-  #   enumerable.has_object?(RDF::Literal.new("Hello!", :language => :en))
-  #   enumerable.has_context?(RDF::URI.new("http://rubyforge.org/"))
+  #   enumerable.has_object?(RDF::Literal("Hello!", :language => :en))
+  #   enumerable.has_context?(RDF::URI("http://rubyforge.org/"))
   #
   # @example Enumerating all statements
   #   enumerable.each_statement do |statement|
@@ -65,7 +65,7 @@ module RDF
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Statement>]
+    # @return [Enumerator<RDF::Statement>]
     # @see    #each_statement
     # @see    #enum_statement
     def statements(options = {})
@@ -75,12 +75,11 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF statement.
     #
-    # @param  [Statement] statement
+    # @param  [RDF::Statement] statement
     # @return [Boolean]
     def has_statement?(statement)
       !enum_statement.find { |s| s.eql?(statement) }.nil?
     end
-
     alias_method :include?, :has_statement?
 
     ##
@@ -92,7 +91,9 @@ module RDF
     #
     # @overload each_statement
     #   @yield  [statement]
-    #   @yieldparam [Statement] statement
+    #     each statement
+    #   @yieldparam  [RDF::Statement] statement
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_statement
@@ -104,9 +105,8 @@ module RDF
       if block_given?
         # Invoke {#each} in the containing class:
         each(&block)
-      else
-        enum_statement
       end
+      enum_statement
     end
 
     ##
@@ -117,14 +117,13 @@ module RDF
     def enum_statement
       enum_for(:each_statement).extend(RDF::Queryable, RDF::Enumerable)
     end
-
     alias_method :enum_statements, :enum_statement
 
     ##
     # Returns all RDF triples.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(Resource, URI, Value)>]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Value)>]
     # @see    #each_triple
     # @see    #enum_triple
     def triples(options = {})
@@ -134,7 +133,7 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF triple.
     #
-    # @param  [Array(Resource, URI, Value)] triple
+    # @param  [Array(RDF::Resource, RDF::URI, RDF::Value)] triple
     # @return [Boolean]
     def has_triple?(triple)
       enum_triple.include?(triple)
@@ -149,9 +148,11 @@ module RDF
     #
     # @overload each_triple
     #   @yield  [subject, predicate, object]
-    #   @yieldparam [Resource] subject
-    #   @yieldparam [URI]      predicate
-    #   @yieldparam [Value]    object
+    #     each triple
+    #   @yieldparam  [RDF::Resource] subject
+    #   @yieldparam  [RDF::URI]      predicate
+    #   @yieldparam  [RDF::Value]    object
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_triple
@@ -164,9 +165,8 @@ module RDF
         each_statement do |statement|
           block.call(*statement.to_triple)
         end
-      else
-        enum_triple
       end
+      enum_triple
     end
 
     ##
@@ -177,14 +177,13 @@ module RDF
     def enum_triple
       enum_for(:each_triple)
     end
-
     alias_method :enum_triples, :enum_triple
 
     ##
     # Returns all RDF quads.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(Resource, URI, Value, Resource)>]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Value, RDF::Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
     def quads(options = {})
@@ -194,7 +193,7 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF quad.
     #
-    # @param  [Array(Resource, URI, Value, Resource)] quad
+    # @param  [Array(RDF::Resource, RDF::URI, RDF::Value, RDF::Resource)] quad
     # @return [Boolean]
     def has_quad?(quad)
       enum_quad.include?(quad)
@@ -209,10 +208,12 @@ module RDF
     #
     # @overload each_quad
     #   @yield  [subject, predicate, object, context]
-    #   @yieldparam [Resource] subject
-    #   @yieldparam [URI]      predicate
-    #   @yieldparam [Value]    object
-    #   @yieldparam [Resource] context
+    #     each quad
+    #   @yieldparam [RDF::Resource] subject
+    #   @yieldparam [RDF::URI]      predicate
+    #   @yieldparam [RDF::Value]    object
+    #   @yieldparam [RDF::Resource] context
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_quad
@@ -225,9 +226,8 @@ module RDF
         each_statement do |statement|
           block.call(*statement.to_quad)
         end
-      else
-        enum_quad
       end
+      enum_quad
     end
 
     ##
@@ -238,15 +238,14 @@ module RDF
     def enum_quad
       enum_for(:each_quad)
     end
-
     alias_method :enum_quads, :enum_quad
 
     ##
-    # Returns all unique RDF subjects.
+    # Returns all unique RDF subject terms.
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<Resource>]
+    # @return [Enumerator<RDF::Resource>]
     # @see    #each_subject
     # @see    #enum_subject
     def subjects(options = {})
@@ -258,16 +257,16 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` contains the given RDF subject.
+    # Returns `true` if `self` contains the given RDF subject term.
     #
-    # @param  [Resource] value
+    # @param  [RDF::Resource] value
     # @return [Boolean]
     def has_subject?(value)
       enum_subject.include?(value)
     end
 
     ##
-    # Iterates the given block for each unique RDF subject.
+    # Iterates the given block for each unique RDF subject term.
     #
     # If no block was given, returns an enumerator.
     #
@@ -275,7 +274,9 @@ module RDF
     #
     # @overload each_subject
     #   @yield  [subject]
-    #   @yieldparam [Resource] subject
+    #     each subject term
+    #   @yieldparam  [RDF::Resource] subject
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_subject
@@ -293,9 +294,8 @@ module RDF
             block.call(value)
           end
         end
-      else
-        enum_subject
       end
+      enum_subject
     end
 
     ##
@@ -306,15 +306,14 @@ module RDF
     def enum_subject
       enum_for(:each_subject)
     end
-
     alias_method :enum_subjects, :enum_subject
 
     ##
-    # Returns all unique RDF predicates.
+    # Returns all unique RDF predicate terms.
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<URI>]
+    # @return [Enumerator<RDF::URI>]
     # @see    #each_predicate
     # @see    #enum_predicate
     def predicates(options = {})
@@ -326,16 +325,16 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` contains the given RDF predicate.
+    # Returns `true` if `self` contains the given RDF predicate term.
     #
-    # @param  [URI] value
+    # @param  [RDF::URI] value
     # @return [Boolean]
     def has_predicate?(value)
       enum_predicate.include?(value)
     end
 
     ##
-    # Iterates the given block for each unique RDF predicate.
+    # Iterates the given block for each unique RDF predicate term.
     #
     # If no block was given, returns an enumerator.
     #
@@ -343,7 +342,9 @@ module RDF
     #
     # @overload each_predicate
     #   @yield  [predicate]
-    #   @yieldparam [URI] predicate
+    #     each predicate term
+    #   @yieldparam  [RDF::URI] predicate
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_predicate
@@ -361,9 +362,8 @@ module RDF
             block.call(value)
           end
         end
-      else
-        enum_predicate
       end
+      enum_predicate
     end
 
     ##
@@ -374,15 +374,14 @@ module RDF
     def enum_predicate
       enum_for(:each_predicate)
     end
-
     alias_method :enum_predicates, :enum_predicate
 
     ##
-    # Returns all unique RDF objects.
+    # Returns all unique RDF object terms.
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<Value>]
+    # @return [Enumerator<RDF::Value>]
     # @see    #each_object
     # @see    #enum_object
     def objects(options = {})
@@ -394,16 +393,16 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` contains the given RDF object.
+    # Returns `true` if `self` contains the given RDF object term.
     #
-    # @param  [Value] value
+    # @param  [RDF::Value] value
     # @return [Boolean]
     def has_object?(value)
       enum_object.include?(value)
     end
 
     ##
-    # Iterates the given block for each unique RDF object.
+    # Iterates the given block for each unique RDF object term.
     #
     # If no block was given, returns an enumerator.
     #
@@ -411,7 +410,9 @@ module RDF
     #
     # @overload each_object
     #   @yield  [object]
-    #   @yieldparam [Value] object
+    #     each object term
+    #   @yieldparam  [RDF::Value] object
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_object
@@ -429,9 +430,8 @@ module RDF
             block.call(value)
           end
         end
-      else
-        enum_object
       end
+      enum_object
     end
 
     ##
@@ -442,7 +442,6 @@ module RDF
     def enum_object
       enum_for(:each_object)
     end
-
     alias_method :enum_objects, :enum_object
 
     ##
@@ -450,7 +449,7 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<Resource>]
+    # @return [Enumerator<RDF::Resource>]
     # @see    #each_context
     # @see    #enum_context
     def contexts(options = {})
@@ -464,7 +463,7 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF context.
     #
-    # @param  [Resource] value
+    # @param  [RDF::Resource] value
     # @return [Boolean]
     def has_context?(value)
       enum_context.include?(value)
@@ -479,7 +478,9 @@ module RDF
     #
     # @overload each_context
     #   @yield  [context]
-    #   @yieldparam [Resource] context
+    #     each context term
+    #   @yieldparam  [RDF::Resource] context
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_context
@@ -497,9 +498,8 @@ module RDF
             block.call(value)
           end
         end
-      else
-        enum_context
       end
+      enum_context
     end
 
     ##
@@ -510,7 +510,6 @@ module RDF
     def enum_context
       enum_for(:each_context)
     end
-
     alias_method :enum_contexts, :enum_context
 
     ##
@@ -522,7 +521,9 @@ module RDF
     #
     # @overload each_graph
     #   @yield  [graph]
-    #   @yieldparam [RDF::Graph] graph
+    #     each graph
+    #   @yieldparam  [RDF::Graph] graph
+    #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_graph
@@ -537,9 +538,8 @@ module RDF
         each_context do |context|
           block.call(RDF::Graph.new(context, :data => self))
         end
-      else
-        enum_graph
       end
+      enum_graph
     end
 
     ##
@@ -551,7 +551,6 @@ module RDF
     def enum_graph
       enum_for(:each_graph)
     end
-
     alias_method :enum_graphs, :enum_graph
 
     ##
@@ -578,12 +577,13 @@ module RDF
     end
 
     ##
-    # Returns all RDF objects indexed by their subjects and predicates.
+    # Returns all RDF object terms indexed by their subject and predicate
+    # terms.
     #
     # The return value is a `Hash` instance that has the structure:
     # `{subject => {predicate => [*objects]}}`.
     #
-    # @return [Hash{Resource => Hash{URI => Array<Value>}}]
+    # @return [Hash]
     def to_hash
       result = {}
       each_statement do |statement|
@@ -613,5 +613,5 @@ module RDF
     def dump(*args)
       RDF::Writer.for(*args).dump(self)
     end
-  end
-end
+  end # Enumerable
+end # RDF
