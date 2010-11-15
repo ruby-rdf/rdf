@@ -89,7 +89,7 @@ module RDF
     ##
     # Returns `false`.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def anonymous?
       false
     end
@@ -97,7 +97,7 @@ module RDF
     ##
     # Returns `true`.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
     def uri?
       true
@@ -106,7 +106,7 @@ module RDF
     ##
     # Returns `true` if this URI is a URN.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Name
     # @since  0.2.0
     def urn?
@@ -116,7 +116,7 @@ module RDF
     ##
     # Returns `true` if this URI is a URL.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Locator
     # @since  0.2.0
     def url?
@@ -274,7 +274,7 @@ module RDF
     ##
     # Returns `true` if this URI's path component is equal to `/`.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def root?
       self.path == '/' || self.path.empty?
     end
@@ -296,7 +296,7 @@ module RDF
     ##
     # Returns `true` if this URI's path component isn't equal to `/`.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def has_parent?
       !root?
     end
@@ -323,18 +323,26 @@ module RDF
     ##
     # Returns a qualified name (QName) for this URI, if possible.
     #
-    # @return [Array(Symbol, Symbol)]
+    # @return [Array(Symbol, Symbol)] or `nil` if no QName found
     def qname
-      Vocabulary.each do |vocab|
-        if to_s.index(vocab.to_uri.to_s) == 0
-          vocab_name = vocab.__name__.split('::').last.downcase
-          local_name = to_s[vocab.to_uri.to_s.size..-1]
-          unless vocab_name.empty? || local_name.empty?
-            return [vocab_name.to_sym, local_name.to_sym]
+      if self.to_s =~ %r([:/#]([^:/#]*)$)
+        local_name = $1
+        vocab_uri  = local_name.empty? ? self.to_s : self.to_s[0...-(local_name.length)]
+        Vocabulary.each do |vocab|
+          if vocab.to_uri.to_s == vocab_uri
+            return [vocab.__prefix__, local_name.empty? ? nil : local_name.to_sym]
+          end
+        end
+      else
+        Vocabulary.each do |vocab|
+          vocab_uri = vocab.to_uri.to_s
+          if self.to_s.start_with?(vocab_uri)
+            local_name = self.to_s[vocab_uri.length..-1]
+            return [vocab.__prefix__, local_name.empty? ? nil : local_name.to_sym]
           end
         end
       end
-      nil # no QName found
+      return nil # no QName found
     end
 
     ##
@@ -356,7 +364,7 @@ module RDF
     # Checks whether this URI is equal to `other`.
     #
     # @param  [RDF::URI] other
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def eql?(other)
       other.is_a?(URI) && self == other
     end
@@ -365,7 +373,7 @@ module RDF
     # Checks whether this URI is equal to `other`.
     #
     # @param  [Object] other
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def ==(other)
       case other
         when Addressable::URI
@@ -403,7 +411,7 @@ module RDF
     # Returns `true` if this URI instance supports the `symbol` method.
     #
     # @param  [Symbol, String, #to_s] symbol
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def respond_to?(symbol)
       @uri.respond_to?(symbol) || super
     end
@@ -412,8 +420,9 @@ module RDF
 
     ##
     # @param  [Symbol, String, #to_s] symbol
-    # @param  [Array<Object>]         args
+    # @param  [Array<Object>] args
     # @yield
+    # @return [Object]
     # @private
     def method_missing(symbol, *args, &block)
       if @uri.respond_to?(symbol)
