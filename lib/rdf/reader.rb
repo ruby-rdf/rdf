@@ -146,7 +146,7 @@ module RDF
     # @option options [#to_s]    :base_uri     (nil)
     #   the base URI to use when resolving relative URIs (not supported by
     #   all readers)
-    # @yield  [reader] self
+    # @yield  [reader] `self`
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
     def initialize(input = $stdin, options = {}, &block)

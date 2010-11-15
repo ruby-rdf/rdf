@@ -1,6 +1,9 @@
 module RDF
   ##
-  # An RDF serializer.
+  # The base class for RDF serializers.
+  #
+  # @example Loading an RDF writer implementation
+  #   require 'rdf/ntriples'
   #
   # @example Iterating over known RDF writer classes
   #   RDF::Writer.each { |klass| puts klass.name }
@@ -33,15 +36,16 @@ module RDF
   # @see RDF::Format
   # @see RDF::Reader
   class Writer
-    extend RDF::Util::Aliasing::LateBound
     extend  ::Enumerable
+    extend  RDF::Util::Aliasing::LateBound
     include RDF::Writable
 
     ##
     # Enumerates known RDF writer classes.
     #
     # @yield  [klass]
-    # @yieldparam [Class]
+    # @yieldparam  [Class] klass
+    # @yieldreturn [void] ignored
     # @return [Enumerator]
     def self.each(&block)
       @@subclasses.each(&block)
@@ -122,8 +126,11 @@ module RDF
     end
 
     ##
+    # Buffers output into a string buffer.
+    #
     # @yield  [writer]
-    # @yieldparam [Writer] writer
+    # @yieldparam  [RDF::Writer] writer
+    # @yieldreturn [void]
     # @return [String]
     def self.buffer(*args, &block)
       StringIO.open do |buffer|
@@ -133,9 +140,13 @@ module RDF
     end
 
     ##
-    # @param  [String]                 filename
+    # Writes output to the given `filename`.
+    #
+    # @param  [String, #to_s] filename
     # @param  [Hash{Symbol => Object}] options
-    # @return [Writer]
+    #   any additional options (see {RDF::Writer#initialize})
+    # @option options [Symbol] :format (nil)
+    # @return [RDF::Writer]
     def self.open(filename, options = {}, &block)
       File.open(filename, 'wb') do |file|
         self.for(options[:format] || filename).new(file, options, &block)
@@ -143,11 +154,24 @@ module RDF
     end
 
     ##
-    # @param  [IO, File]               output
+    # Initializes the writer.
+    #
+    # @param  [IO, File] output
+    #   the output stream
     # @param  [Hash{Symbol => Object}] options
-    # @option options [Hash] :prefixes ({})
-    # @yield  [writer]
-    # @yieldparam [RDF::Writer] writer
+    #   any additional options
+    # @option options [Encoding] :encoding     (Encoding::UTF_8)
+    #   the encoding to use on the output stream (Ruby 1.9+)
+    # @option options [Boolean]  :canonicalize (false)
+    #   whether to canonicalize literals when serializing
+    # @option options [Hash]     :prefixes     (Hash.new)
+    #   the prefix mappings to use (not supported by all writers)
+    # @option options [#to_s]    :base_uri     (nil)
+    #   the base URI to use when constructing relative URIs (not supported
+    #   by all writers)
+    # @yield  [writer] `self`
+    # @yieldparam  [RDF::Writer] writer
+    # @yieldreturn [void]
     def initialize(output = $stdout, options = {}, &block)
       @output, @options = output, options.dup
       @nodes, @node_id  = {}, 0
@@ -155,29 +179,55 @@ module RDF
       if block_given?
         write_prologue
         case block.arity
-          when 1 then block.call(self)
-          else instance_eval(&block)
+          when 0 then instance_eval(&block)
+          else block.call(self)
         end
         write_epilogue
       end
     end
 
     ##
-    # Returns the options for this writer.
+    # Any additional options for this writer.
     #
-    # @return [Hash{Symbol => Object}]
+    # @return [Hash]
+    # @since  0.2.2
     attr_reader :options
 
     ##
     # Returns the URI prefixes currently defined for this writer.
     #
+    # @example
+    #   writer.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
+    #
     # @return [Hash{Symbol => RDF::URI}]
+    # @since  0.2.2
     def prefixes
-      options[:prefixes] ||= {}
+      @options[:prefixes] ||= {}
     end
 
     ##
-    # Defines a named URI prefix for this writer.
+    # Defines the given URI prefixes for this writer.
+    #
+    # @example
+    #   writer.prefixes = {
+    #     :dc => RDF::URI('http://purl.org/dc/terms/'),
+    #   }
+    #
+    # @param  [Hash{Symbol => RDF::URI}] prefixes
+    # @return [Hash{Symbol => RDF::URI}]
+    # @since  0.3.0
+    def prefixes=(prefixes)
+      @options[:prefixes] = prefixes
+    end
+
+    ##
+    # Defines the given named URI prefix for this writer.
+    #
+    # @example Defining a URI prefix
+    #   writer.prefix :dc, RDF::URI('http://purl.org/dc/terms/')
+    #
+    # @example Returning a URI prefix
+    #   writer.prefix(:dc)    #=> RDF::URI('http://purl.org/dc/terms/')
     #
     # @overload prefix(name, uri)
     #   @param  [Symbol, #to_s]   name
@@ -186,73 +236,82 @@ module RDF
     # @overload prefix(name)
     #   @param  [Symbol, #to_s]   name
     #
-    # @return [void]
+    # @return [RDF::URI]
     def prefix(name, uri = nil)
       name = name.respond_to?(:to_sym) ? name.to_sym : name.to_s.to_sym
       uri.nil? ? prefixes[name] : prefixes[name] = RDF::URI(uri)
     end
-
     alias_method :prefix!, :prefix
 
     ##
     # Flushes the underlying output buffer.
     #
-    # @return [void]
+    # @return [void] `self`
     def flush
       @output.flush if @output.respond_to?(:flush)
+      self
     end
-
     alias_method :flush!, :flush
 
     ##
-    # @return [void]
+    # @return [void] `self`
     # @abstract
-    def write_prologue() end
+    def write_prologue
+      self
+    end
 
     ##
-    # @return [void]
+    # @return [void] `self`
     # @abstract
-    def write_epilogue() end
+    def write_epilogue
+      self
+    end
 
     ##
     # @param  [String] text
-    # @return [void]
+    # @return [void] `self`
     # @abstract
-    def write_comment(text) end
+    def write_comment(text)
+      self
+    end
 
     ##
     # @param  [RDF::Graph] graph
-    # @return [void]
+    # @return [void] `self`
     def write_graph(graph)
       graph.each_triple { |*triple| write_triple(*triple) }
+      self
     end
 
     ##
     # @param  [Array<RDF::Statement>] statements
-    # @return [void]
+    # @return [void] `self`
     def write_statements(*statements)
       statements.flatten.each { |statement| write_statement(statement) }
+      self
     end
 
     ##
     # @param  [RDF::Statement] statement
-    # @return [void]
+    # @return [void] `self`
     def write_statement(statement)
       write_triple(*statement.to_triple)
+      self
     end
 
     ##
     # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Value)>] triples
-    # @return [void]
+    # @return [void] `self`
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
+      self
     end
 
     ##
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Value]    object
-    # @return [void]
+    # @return [void] `self`
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def write_triple(subject, predicate, object)
@@ -269,7 +328,7 @@ module RDF
     # @return [String]
     def format_value(value, options = {})
       case value
-        when String       then format_literal(RDF::Literal.new(value, options), options)
+        when String       then format_literal(RDF::Literal(value, options), options)
         when RDF::List    then format_list(value, options)
         when RDF::Literal then format_literal(value, options)
         when RDF::URI     then format_uri(value, options)
@@ -279,7 +338,7 @@ module RDF
     end
 
     ##
-    # @param  [Node]                   value
+    # @param  [RDF::Node] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
@@ -289,7 +348,7 @@ module RDF
     end
 
     ##
-    # @param  [URI]                    value
+    # @param  [RDF::URI] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
@@ -299,7 +358,7 @@ module RDF
     end
 
     ##
-    # @param  [Literal, String, #to_s] value
+    # @param  [RDF::Literal, String, #to_s] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
@@ -309,7 +368,7 @@ module RDF
     end
 
     ##
-    # @param  [List] value
+    # @param  [RDF::List] value
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     # @abstract
@@ -375,11 +434,17 @@ module RDF
 
     @@subclasses = [] # @private
 
-    def self.inherited(child) # @private
+    ##
+    # @private
+    # @return [void]
+    def self.inherited(child)
       @@subclasses << child
       super
     end
-  end # class Writer
+  end # Writer
 
-  class WriterError < IOError; end
-end
+  ##
+  # The base class for RDF serialization errors.
+  class WriterError < IOError
+  end # WriterError
+end # RDF
