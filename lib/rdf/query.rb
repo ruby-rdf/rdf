@@ -24,12 +24,43 @@ module RDF
   #     solution.inspect
   #   end
   #
+  # @example Constructing and executing a query in one go (1)
+  #   solutions = RDF::Query.execute(graph) do
+  #     pattern [:person, RDF.type, FOAF.Person]
+  #   end
+  #
+  # @example Constructing and executing a query in one go (2)
+  #   solutions = RDF::Query.execute(graph, {
+  #     :person => {
+  #       RDF.type => FOAF.Person,
+  #     }
+  #   })
+  #
   # @since 0.3.0
   class Query
     autoload :Pattern,   'rdf/query/pattern'
     autoload :Solution,  'rdf/query/solution'
     autoload :Solutions, 'rdf/query/solutions'
     autoload :Variable,  'rdf/query/variable'
+
+    ##
+    # Executes a query on the given `queryable` graph or repository.
+    #
+    # @param  [RDF::Queryable] queryable
+    #   the graph or repository to query
+    # @param  [Hash{Object => Object}] patterns
+    #   optional hash patterns to initialize the query with
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional keyword options (see {RDF::Query#initialize})
+    # @yield  [query]
+    # @yieldparam  [RDF::Query] query
+    # @yieldreturn [void] ignored
+    # @return [RDF::Query::Solutions]
+    #   the resulting solution sequence
+    # @see    RDF::Query#execute
+    def self.execute(queryable, patterns = nil, options = {}, &block)
+      self.new(patterns, options, &block).execute(queryable, options)
+    end
 
     ##
     # The variables used in this query.
