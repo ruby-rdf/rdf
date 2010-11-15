@@ -344,8 +344,8 @@ module RDF
         end
       else
         Vocabulary.each do |vocab|
-          vocab_uri = vocab.to_uri.to_s
-          if self.to_s.start_with?(vocab_uri)
+          vocab_uri = vocab.to_uri
+          if self.start_with?(vocab_uri)
             local_name = self.to_s[vocab_uri.length..-1]
             return [vocab.__prefix__, local_name.empty? ? nil : local_name.to_sym]
           end
@@ -368,6 +368,30 @@ module RDF
       @uri.freeze
       super
     end
+
+    ##
+    # Returns `true` if this URI starts with the given `string`.
+    #
+    # @param  [String, #to_s] string
+    # @return [Boolean] `true` or `false`
+    # @see    String#start_with?
+    # @since  0.3.0
+    def start_with?(string)
+      to_s.start_with?(string.to_s)
+    end
+    alias_method :starts_with?, :start_with?
+
+    ##
+    # Returns `true` if this URI ends with the given `string`.
+    #
+    # @param  [String, #to_s] string
+    # @return [Boolean] `true` or `false`
+    # @see    String#end_with?
+    # @since  0.3.0
+    def end_with?(string)
+      to_s.end_with?(string.to_s)
+    end
+    alias_method :ends_with?, :end_with?
 
     ##
     # Checks whether this URI is equal to `other`.
