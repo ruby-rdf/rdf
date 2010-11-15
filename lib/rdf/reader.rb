@@ -2,13 +2,16 @@ module RDF
   ##
   # The base class for RDF parsers.
   #
+  # @example Loading an RDF reader implementation
+  #   require 'rdf/ntriples'
+  #
   # @example Iterating over known RDF reader classes
   #   RDF::Reader.each { |klass| puts klass.name }
   #
   # @example Obtaining an RDF reader class
   #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
-  #   RDF::Reader.for("spec/data/test.nt")
-  #   RDF::Reader.for(:file_name      => "spec/data/test.nt")
+  #   RDF::Reader.for("etc/doap.nt")
+  #   RDF::Reader.for(:file_name      => "etc/doap.nt")
   #   RDF::Reader.for(:file_extension => "nt")
   #   RDF::Reader.for(:content_type   => "text/plain")
   #
@@ -16,14 +19,14 @@ module RDF
   #   RDF::Reader.for(:ntriples).new($stdin) { |reader| ... }
   #
   # @example Parsing RDF statements from a file
-  #   RDF::Reader.open("spec/data/test.nt") do |reader|
+  #   RDF::Reader.open("etc/doap.nt") do |reader|
   #     reader.each_statement do |statement|
   #       puts statement.inspect
   #     end
   #   end
   #
   # @example Parsing RDF statements from a string
-  #   data = StringIO.new(File.read("spec/data/test.nt"))
+  #   data = StringIO.new(File.read("etc/doap.nt"))
   #   RDF::Reader.for(:ntriples).new(data) do |reader|
   #     reader.each_statement do |statement|
   #       puts statement.inspect
@@ -173,6 +176,33 @@ module RDF
     # @return [Hash]
     # @since  0.3.0
     attr_reader :options
+
+    ##
+    # Returns the URI prefixes currently defined for this reader.
+    #
+    # @example
+    #   reader.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
+    #
+    # @return [Hash{Symbol => RDF::URI}]
+    # @since  0.3.0
+    def prefixes
+      options[:prefixes] ||= {}
+    end
+
+    ##
+    # Defines the given URI prefixes for this reader.
+    #
+    # @example
+    #   reader.prefixes = {
+    #     :dc => RDF::URI('http://purl.org/dc/terms/'),
+    #   }
+    #
+    # @param  [Hash{Symbol => RDF::URI}] prefixes
+    # @return [Hash{Symbol => RDF::URI}]
+    # @since  0.3.0
+    def prefixes=(prefixes)
+      options[:prefixes] = prefixes
+    end
 
     ##
     # Iterates the given block for each RDF statement.
