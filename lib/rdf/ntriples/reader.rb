@@ -197,9 +197,12 @@ module RDF::NTriples
     # @return [RDF::URI]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
     def read_uriref(options = {})
-      if uri = match(URIREF)
-        uri = self.class.unescape(uri)
-        RDF::URI.send(options[:intern] ? :intern : :new, uri)
+      if uri_str = match(URIREF)
+        uri_str = self.class.unescape(uri_str)
+        uri = RDF::URI.send(intern? && options[:intern] ? :intern : :new, uri_str)
+        uri.validate!     if validate?
+        uri.canonicalize! if canonicalize?
+        uri
       end
     end
 
@@ -217,17 +220,20 @@ module RDF::NTriples
     # @return [RDF::Literal]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
     def read_literal
-      if literal = match(LITERAL_PLAIN)
-        literal = self.class.unescape(literal)
-
-        if language = match(LANGUAGE_TAG)
-          RDF::Literal.new(literal, :language => language)
-        elsif datatype = match(/^(\^\^)/) # FIXME
-          RDF::Literal.new(literal, :datatype => read_uriref || fail_object)
-        else
-          RDF::Literal.new(literal) # plain string literal
+      if literal_str = match(LITERAL_PLAIN)
+        literal_str = self.class.unescape(literal_str)
+        literal = case
+          when language = match(LANGUAGE_TAG)
+            RDF::Literal.new(literal_str, :language => language)
+          when datatype = match(/^(\^\^)/) # FIXME
+            RDF::Literal.new(literal_str, :datatype => read_uriref || fail_object)
+          else
+            RDF::Literal.new(literal_str) # plain string literal
         end
+        literal.validate!     if validate?
+        literal.canonicalize! if canonicalize?
+        literal
       end
     end
-  end
-end
+  end # Reader
+end # RDF::NTriples
