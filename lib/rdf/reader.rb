@@ -186,7 +186,7 @@ module RDF
     # @return [Hash{Symbol => RDF::URI}]
     # @since  0.3.0
     def prefixes
-      options[:prefixes] ||= {}
+      @options[:prefixes] ||= {}
     end
 
     ##
@@ -201,7 +201,7 @@ module RDF
     # @return [Hash{Symbol => RDF::URI}]
     # @since  0.3.0
     def prefixes=(prefixes)
-      options[:prefixes] = prefixes
+      @options[:prefixes] = prefixes
     end
 
     ##
@@ -364,6 +364,43 @@ module RDF
       raise RDF::ReaderError, "expected object in #{@input.inspect} line #{lineno}"
     end
 
+    ##
+    # Returns the encoding of the input stream.
+    #
+    # _Note: this method requires Ruby 1.9 or newer._
+    #
+    # @return [Encoding]
+    def encoding
+      @options[:encoding] ||= Encoding::UTF_8
+    end
+
+    ##
+    # Returns `true` if parsed statements and values should be validated.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def validate?
+      @options[:validate]
+    end
+
+    ##
+    # Returns `true` if parsed values should be canonicalized.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def canonicalize?
+      @options[:canonicalize]
+    end
+
+    ##
+    # Returns `true` if parsed URIs should be interned.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def intern?
+      @options[:intern]
+    end
+
   private
 
     @@subclasses = [] # @private
@@ -388,12 +425,6 @@ module RDF
       @line = @input.readline.chomp
       @line.force_encoding(encoding) if @line.respond_to?(:force_encoding) # for Ruby 1.9+
       @line
-    end
-
-    ##
-    # @return [Encoding]
-    def encoding
-      @options[:encoding] ||= Encoding::UTF_8
     end
 
     ##
