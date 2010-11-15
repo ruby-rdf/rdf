@@ -124,6 +124,15 @@ module RDF
     end
 
     ##
+    # Returns the string length of this URI.
+    #
+    # @return [Integer]
+    def length
+      to_s.length
+    end
+    alias_method :size, :length
+
+    ##
     # Validates this URI, raising an error if it is invalid.
     #
     # @return [RDF::URI] `self`
