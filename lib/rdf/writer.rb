@@ -406,16 +406,6 @@ module RDF
     end
 
     ##
-    # @deprecated
-    def register!(resource)
-      if resource.kind_of?(RDF::Resource)
-        unless @nodes[resource] # have we already seen it?
-          @nodes[resource] = resource.uri || node_id
-        end
-      end
-    end
-
-    ##
     # @param  [String] string
     # @return [String]
     def escaped(string)
