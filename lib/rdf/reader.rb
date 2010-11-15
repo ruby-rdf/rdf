@@ -1,6 +1,6 @@
 module RDF
   ##
-  # An RDF parser.
+  # The base class for RDF parsers.
   #
   # @example Iterating over known RDF reader classes
   #   RDF::Reader.each { |klass| puts klass.name }
@@ -35,14 +35,15 @@ module RDF
   # @see RDF::Writer
   class Reader
     extend  ::Enumerable
+    extend  RDF::Util::Aliasing::LateBound
     include RDF::Readable
-    include ::Enumerable
+    include RDF::Enumerable # @since 0.3.0
 
     ##
     # Enumerates known RDF reader classes.
     #
     # @yield  [klass]
-    # @yieldparam [Class]
+    # @yieldparam [Class] klass
     # @return [Enumerator]
     def self.each(&block)
       @@subclasses.each(&block)
@@ -99,12 +100,16 @@ module RDF
     end
 
     ##
-    # @param  [String] filename
-    # @param  [String] options Other options to pass to Util::File.open
+    # Parses input from the given file name or URL.
+    #
+    # @param  [String, #to_s] filename
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional options (see {RDF::Reader#initialize})
     # @option options [Symbol] :format (:ntriples)
     # @yield  [reader]
-    # @yieldparam [Reader]
-    # @raise  [FormatError] if no reader available for the specified format
+    # @yieldparam  [RDF::Reader] reader
+    # @yieldreturn [void] ignored
+    # @raise  [RDF::FormatError] if no reader found for the specified format
     def self.open(filename, options = {}, &block)
       Util::File.open_file(filename, options) do |file|
         reader = self.for(options[:format]) if options[:format]
@@ -113,53 +118,120 @@ module RDF
         if reader
           reader.new(file, options, &block)
         else
-          raise FormatError.new("unknown RDF format: #{options[:format] || {:file_name => filename, :content_type => content_type}.inspect}")
+          raise FormatError, "unknown RDF format: #{options[:format] || {:file_name => filename, :content_type => content_type}.inspect}"
         end
       end
     end
 
     ##
+    # Initializes the reader.
+    #
     # @param  [IO, File, String] input
-    # @yield  [reader]
-    # @yieldparam [Reader] reader
+    #   the input stream to read
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional options
+    # @option options [Encoding] :encoding     (Encoding::UTF_8)
+    #   the encoding of the input stream (Ruby 1.9+)
+    # @option options [Boolean]  :validate     (false)
+    #   whether to validate the parsed statements and values
+    # @option options [Boolean]  :canonicalize (false)
+    #   whether to canonicalize parsed literals
+    # @option options [Boolean]  :intern       (true)
+    #   whether to intern all parsed URIs
+    # @option options [Hash]     :prefixes     (Hash.new)
+    #   the prefix mappings to use (not supported by all readers)
+    # @yield  [reader] self
+    # @yieldparam  [RDF::Reader] reader
+    # @yieldreturn [void] ignored
     def initialize(input = $stdin, options = {}, &block)
-      @options = options
-      @nodes   = {}
-      @input   = case input
+      @options = options.dup
+      @options[:encoding]     ||= Encoding::UTF_8
+      @options[:validate]     ||= false
+      @options[:canonicalize] ||= false
+      @options[:intern]       ||= true
+      @options[:prefixes]     ||= Hash.new
+
+      @input = case input
         when String then StringIO.new(input)
         else input
       end
-      block.call(self) if block_given?
+
+      if block_given?
+        case block.arity
+          when 0 then instance_eval(&block)
+          else block.call(self)
+        end
+      end
     end
 
     ##
-    # @yield  [statement]
-    # @yieldparam [Statement]
-    # @return [Reader]
-    def each(&block)
-      each_statement(&block)
-    end
+    # Any additional options for this reader.
+    #
+    # @return [Hash]
+    # @since  0.3.0
+    attr_reader :options
 
     ##
-    # @yield  [statement]
-    # @yieldparam [Statement]
-    # @return [Enumerator]
+    # Iterates the given block for each RDF statement.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # Statements are yielded in the order that they are read from the input
+    # stream.
+    #
+    # @overload each_statement
+    #   @yield  [statement]
+    #     each statement
+    #   @yieldparam  [RDF::Statement] statement
+    #   @yieldreturn [void] ignored
+    #   @return [void]
+    #
+    # @overload each_statement
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see    RDF::Enumerable#each_statement
     def each_statement(&block)
-      begin
-        loop { block.call(read_statement) }
-      rescue EOFError => e
+      if block_given?
+        begin
+          loop { block.call(read_statement) }
+        rescue EOFError => e
+        end
       end
+      enum_for(:each_statement)
     end
+    alias_method :each, :each_statement
 
     ##
-    # @yield  [triple]
-    # @yieldparam [Array(RDF::Value)]
-    # @return [Enumerator]
+    # Iterates the given block for each RDF triple.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # Triples are yielded in the order that they are read from the input
+    # stream.
+    #
+    # @overload each_triple
+    #   @yield  [subject, predicate, object]
+    #     each triple
+    #   @yieldparam  [RDF::Resource] subject
+    #   @yieldparam  [RDF::URI]      predicate
+    #   @yieldparam  [RDF::Value]    object
+    #   @yieldreturn [void] ignored
+    #   @return [void]
+    #
+    # @overload each_triple
+    #   @return [Enumerator]
+    #
+    # @return [void]
+    # @see    RDF::Enumerable#each_triple
     def each_triple(&block)
-      begin
-        loop { block.call(*read_triple) }
-      rescue EOFError => e
+      if block_given?
+        begin
+          loop { block.call(*read_triple) }
+        rescue EOFError => e
+        end
       end
+      enum_for(:each_triple)
     end
 
     ##
@@ -171,10 +243,13 @@ module RDF
     def rewind
       @input.rewind
     end
+    alias_method :rewind!, :rewind
 
     ##
-    # Closes the input stream. An `IOError` is raised for further read
-    # attempts.
+    # Closes the input stream, after which an `IOError` will be raised for
+    # further read attempts.
+    #
+    # If the input stream is already closed, does nothing.
     #
     # @return [void]
     # @since  0.2.2
@@ -182,93 +257,114 @@ module RDF
     def close
       @input.close unless @input.closed?
     end
+    alias_method :close!, :close
 
-    protected
+  protected
 
-      ##
-      # @raise [NotImplementedError] unless implemented in subclass
-      def read_statement
-        Statement.new(*read_triple)
+    ##
+    # Reads a statement from the input stream.
+    #
+    # @return [RDF::Statement] a statement
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def read_statement
+      Statement.new(*read_triple)
+    end
+
+    ##
+    # Reads a triple from the input stream.
+    #
+    # @return [Array(RDF::Value)] a triple
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def read_triple
+      raise NotImplementedError, "#{self.class}#read_triple" # override in subclasses
+    end
+
+    ##
+    # Raises an "expected subject" parsing error on the current line.
+    #
+    # @return [void]
+    # @raise  [RDF::ReaderError]
+    def fail_subject
+      raise RDF::ReaderError, "expected subject in #{@input.inspect} line #{lineno}"
+    end
+
+    ##
+    # Raises an "expected predicate" parsing error on the current line.
+    #
+    # @return [void]
+    # @raise  [RDF::ReaderError]
+    def fail_predicate
+      raise RDF::ReaderError, "expected predicate in #{@input.inspect} line #{lineno}"
+    end
+
+    ##
+    # Raises an "expected object" parsing error on the current line.
+    #
+    # @return [void]
+    # @raise  [RDF::ReaderError]
+    def fail_object
+      raise RDF::ReaderError, "expected object in #{@input.inspect} line #{lineno}"
+    end
+
+  private
+
+    @@subclasses = [] # @private
+
+    ##
+    # @private
+    # @return [void]
+    def self.inherited(child)
+      @@subclasses << child
+      super
+    end
+
+    ##
+    # @return [Integer]
+    def lineno
+      @input.lineno
+    end
+
+    ##
+    # @return [String]
+    def readline
+      @line = @input.readline.chomp
+      @line.force_encoding(encoding) if @line.respond_to?(:force_encoding) # for Ruby 1.9+
+      @line
+    end
+
+    ##
+    # @return [Encoding]
+    def encoding
+      @options[:encoding] ||= Encoding::UTF_8
+    end
+
+    ##
+    # @return [void]
+    def strip!
+      @line.strip!
+    end
+
+    ##
+    # @return [Boolean]
+    def blank?
+      @line.nil? || @line.empty?
+    end
+
+    ##
+    # @param  [Regexp] pattern
+    # @return [Object]
+    def match(pattern)
+      if @line =~ pattern
+        result, @line = $1, $'.lstrip
+        result || true
       end
+    end
+  end # Reader
 
-      ##
-      # @raise [NotImplementedError] unless implemented in subclass
-      def read_triple
-        raise NotImplementedError.new("#{self.class}#read_triple") # override in subclasses
-      end
-
-      ##
-      # @raise [ReaderError]
-      def fail_subject
-        raise RDF::ReaderError, "expected subject in #{@input.inspect} line #{lineno}"
-      end
-
-      ##
-      # @raise [ReaderError]
-      def fail_predicate
-        raise RDF::ReaderError, "expected predicate in #{@input.inspect} line #{lineno}"
-      end
-
-      ##
-      # @raise [ReaderError]
-      def fail_object
-        raise RDF::ReaderError, "expected object in #{@input.inspect} line #{lineno}"
-      end
-
-    private
-
-      @@subclasses = [] # @private
-
-      ##
-      # @private
-      def self.inherited(child)
-        @@subclasses << child
-        super
-      end
-
-      ##
-      # @return [Integer]
-      def lineno
-        @input.lineno
-      end
-
-      ##
-      # @return [String]
-      def readline
-        @line = @input.readline.chomp
-        @line.force_encoding(encoding) if @line.respond_to?(:force_encoding) # for Ruby 1.9+
-        @line
-      end
-
-      ##
-      # @return [Encoding]
-      def encoding
-        @encoding ||= ::Encoding::UTF_8
-      end
-
-      ##
-      # @return [void]
-      def strip!
-        @line.strip!
-      end
-
-      ##
-      # @return [Boolean]
-      def blank?
-        @line.nil? || @line.empty?
-      end
-
-      ##
-      # @param  [Regexp] pattern
-      # @return [Object]
-      def match(pattern)
-        if @line =~ pattern
-          result, @line = $1, $'.lstrip
-          result || true
-        end
-      end
-
-  end
-
-  class ReaderError < IOError; end
-end
+  ##
+  # The base class for RDF parsing errors.
+  class ReaderError < IOError
+  end # ReaderError
+end # RDF

@@ -208,6 +208,7 @@ module RDF::NTriples
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (nodeID)
     def read_node
       if node_id = match(NODEID)
+        @nodes ||= {}
         @nodes[node_id] ||= RDF::Node.new(node_id)
       end
     end
