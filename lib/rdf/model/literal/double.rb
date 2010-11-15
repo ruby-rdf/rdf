@@ -30,11 +30,11 @@ module RDF; class Literal
     end
 
     ##
-    # Converts the literal into its canonical lexical representation.
+    # Converts this literal into its canonical lexical representation.
     #
-    # @return [Literal]
+    # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#double
-    def canonicalize
+    def canonicalize!
       # Can't use simple %f transformation due to special requirements from
       # N3 tests in representation
       @string = case
@@ -280,5 +280,5 @@ module RDF; class Literal
     def to_r
       @object.to_r # only available on Ruby 1.9+
     end
-  end # class Double
-end; end # class RDF::Literal
+  end # Double
+end; end # RDF::Literal

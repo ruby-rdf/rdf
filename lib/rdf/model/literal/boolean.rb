@@ -27,11 +27,11 @@ module RDF; class Literal
     end
 
     ##
-    # Converts the literal into its canonical lexical representation.
+    # Converts this literal into its canonical lexical representation.
     #
-    # @return [Literal]
+    # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#boolean-canonical-representation
-    def canonicalize
+    def canonicalize!
       @string = (@object ? :true : :false).to_s
       self
     end
@@ -95,5 +95,5 @@ module RDF; class Literal
     def false?
       @object.equal?(false)
     end
-  end # class Boolean
-end; end # class RDF::Literal
+  end # Boolean
+end; end # RDF::Literal

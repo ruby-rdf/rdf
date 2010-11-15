@@ -100,8 +100,8 @@ module RDF
       end
       literal = klass.allocate
       literal.send(:initialize, value, options)
-      literal.validate if options[:validate]
-      literal.canonicalize if options[:canonicalize]
+      literal.validate!     if options[:validate]
+      literal.canonicalize! if options[:canonicalize]
       literal
     end
 
@@ -263,23 +263,36 @@ module RDF
     # Validates the value using {#valid?}, raising an error if the value is
     # invalid.
     #
+    # @return [RDF::Literal] `self`
     # @raise  [ArgumentError] if the value is invalid
-    # @return [Literal]
     # @since  0.2.1
-    def validate
-      raise ArgumentError.new("#{to_s.inspect} is not a valid <#{datatype.to_s}> literal") if invalid?
+    def validate!
+      raise ArgumentError, "#{to_s.inspect} is not a valid <#{datatype.to_s}> literal" if invalid?
       self
     end
-    alias_method :validate!, :validate
+    alias_method :validate, :validate!
 
     ##
-    # Converts the literal into its canonical lexical representation.
+    # Returns a copy of this literal converted into its canonical lexical
+    # representation.
+    #
+    # Subclasses should override `#canonicalize!` as needed and appropriate,
+    # not this method.
+    #
+    # @return [RDF::Literal]
+    # @since  0.2.1
+    def canonicalize
+      self.dup.canonicalize!
+    end
+
+    ##
+    # Converts this literal into its canonical lexical representation.
     #
     # Subclasses should override this as needed and appropriate.
     #
-    # @return [Literal]
-    # @since  0.2.1
-    def canonicalize
+    # @return [RDF::Literal] `self`
+    # @since  0.3.0
+    def canonicalize!
       @language = @language.to_s.downcase.to_sym if @language
       self
     end
@@ -299,5 +312,5 @@ module RDF
     def inspect
       sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, RDF::NTriples.serialize(self))
     end
-  end
-end
+  end # Literal
+end # RDF

@@ -27,7 +27,7 @@ module RDF; class Literal
     end
 
     ##
-    # Converts the literal into its canonical lexical representation.
+    # Converts this literal into its canonical lexical representation.
     #
     # §3.2.8.2 Canonical representation
     #
@@ -37,9 +37,9 @@ module RDF; class Literal
     # time zone must be Coordinated Universal Time (UTC) indicated by a "Z".
     # Additionally, the canonical representation for midnight is 00:00:00.
     #
-    # @return [Literal]
+    # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#time
-    def canonicalize
+    def canonicalize!
       @string = @object.utc.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
       self
     end
@@ -51,5 +51,5 @@ module RDF; class Literal
     def to_s
       @string || @object.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
     end
-  end # class Time
-end; end # class RDF::Literal
+  end # Time
+end; end # RDF::Literal

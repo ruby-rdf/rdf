@@ -19,11 +19,11 @@ module RDF; class Literal
     end
 
     ##
-    # Converts the literal into its canonical lexical representation.
+    # Converts this literal into its canonical lexical representation.
     #
-    # @return [Literal]
+    # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#boolean
-    def canonicalize
+    def canonicalize!
       @string = @object.to_s if @object
       self
     end
@@ -43,5 +43,5 @@ module RDF; class Literal
     def to_s
       @string || @object.to_s
     end
-  end # class Token
-end; end # class RDF::Literal
+  end # Token
+end; end # RDF::Literal
