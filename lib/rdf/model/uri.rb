@@ -376,30 +376,55 @@ module RDF
     # @return [Boolean] `true` or `false`
     def ==(other)
       case other
-        when String
-          to_s == other
-        when URI, Addressable::URI
-          to_s == other.to_s
-        else
-          other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
+        when String then to_s == other
+        when URI, Addressable::URI then to_s == other.to_s
+        else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
+      end
+    end
+
+    ##
+    # Checks for case equality to the given `other` object.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def ===(other)
+      case other
+        when Regexp then other === to_s
+        else self == other
+      end
+    end
+
+    ##
+    # Performs a pattern match using the given regular expression.
+    #
+    # @param  [Regexp] pattern
+    # @return [Integer] the position the match starts
+    # @see    String#=~
+    # @since  0.3.0
+    def =~(pattern)
+      case pattern
+        when Regexp then to_s =~ pattern
+        else super # `Object#=~` returns `false`
       end
     end
 
     ##
     # Returns `self`.
     #
-    # @return [RDF::URI]
+    # @return [RDF::URI] `self`
     def to_uri
       self
     end
 
     ##
-    # Returns a string representation of this URI.
+    # Returns the string representation of this URI.
     #
     # @return [String]
-    def to_s
+    def to_str
       @uri.to_s
     end
+    alias_method :to_s, :to_str
 
     ##
     # Returns a hash code for this URI.
