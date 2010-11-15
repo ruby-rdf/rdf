@@ -23,9 +23,7 @@ module RDF
       each { count += 1 }
       count
     end
-
-    alias_method :size,   :count
-    alias_method :length, :count # @deprecated
+    alias_method :size, :count
 
     ##
     # @private
@@ -36,7 +34,6 @@ module RDF
       # Ensure that enumerators support the `#empty?` and `#count` methods:
       super.extend(RDF::Countable)
     end
-
     alias_method :to_enum, :enum_for
-  end
-end
+  end # Countable
+end # RDF
