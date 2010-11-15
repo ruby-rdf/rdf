@@ -80,7 +80,7 @@ module RDF
     # Returns the URI for the term `property` in this vocabulary.
     #
     # @param  [#to_s] property
-    # @return [URI]
+    # @return [RDF::URI]
     def self.[](property)
       RDF::URI.intern([to_s, property.to_s].join(''))
     end
@@ -88,7 +88,7 @@ module RDF
     ##
     # Returns the base URI for this vocabulary class.
     #
-    # @return [URI]
+    # @return [RDF::URI]
     def self.to_uri
       RDF::URI.intern(to_s)
     end
@@ -119,11 +119,20 @@ module RDF
       alias_method :__name__, :name
     end
 
+    ##
+    # Returns a suggested CURIE/QName prefix for this vocabulary class.
+    #
+    # @return [Symbol]
+    # @since  0.3.0
+    def self.__prefix__
+      self.__name__.split('::').last.downcase.to_sym
+    end
+
     # Undefine all superfluous instance methods:
     undef_method(*(instance_methods.map(&:to_sym) - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?]))
 
     ##
-    # @param  [URI, String, #to_s]
+    # @param  [RDF::URI, String, #to_s]
     def initialize(uri)
       @uri = case uri
         when RDF::URI then uri.to_s
@@ -164,44 +173,43 @@ module RDF
       sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, to_s)
     end
 
-    protected
+  protected
 
-      def self.create(uri) # @private
-        @@uri = uri
-        self
+    def self.create(uri) # @private
+      @@uri = uri
+      self
+    end
+
+    def self.inherited(subclass) # @private
+      @@subclasses << subclass
+      unless @@uri.nil?
+        subclass.send(:private_class_method, :new)
+        @@uris[subclass] = @@uri
+        @@uri = nil
       end
+      super
+    end
 
-      def self.inherited(subclass) # @private
-        @@subclasses << subclass
-        unless @@uri.nil?
-          subclass.send(:private_class_method, :new)
-          @@uris[subclass] = @@uri
-          @@uri = nil
-        end
+    def self.method_missing(property, *args, &block)
+      if args.empty? && @@uris.has_key?(self)
+        self[property]
+      else
         super
       end
+    end
 
-      def self.method_missing(property, *args, &block)
-        if args.empty? && @@uris.has_key?(self)
-          self[property]
-        else
-          super
-        end
+    def method_missing(property, *args, &block)
+      if args.empty?
+        self[property]
+      else
+        raise ArgumentError.new("wrong number of arguments (#{args.size} for 0)")
       end
+    end
 
-      def method_missing(property, *args, &block)
-        if args.empty?
-          self[property]
-        else
-          raise ArgumentError.new("wrong number of arguments (#{args.size} for 0)")
-        end
-      end
+  private
 
-    private
-
-      @@subclasses = [::RDF] # @private
-      @@uris       = {}      # @private
-      @@uri        = nil     # @private
-
-  end
-end
+    @@subclasses = [::RDF] # @private
+    @@uris       = {}      # @private
+    @@uri        = nil     # @private
+  end # Vocabulary
+end # RDF
