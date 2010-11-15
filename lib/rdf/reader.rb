@@ -140,6 +140,9 @@ module RDF
     #   whether to intern all parsed URIs
     # @option options [Hash]     :prefixes     (Hash.new)
     #   the prefix mappings to use (not supported by all readers)
+    # @option options [#to_s]    :base_uri     (nil)
+    #   the base URI to use when resolving relative URIs (not supported by
+    #   all readers)
     # @yield  [reader] self
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
