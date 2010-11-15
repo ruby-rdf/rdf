@@ -136,6 +136,26 @@ module RDF
     alias_method :validate, :validate!
 
     ##
+    # Returns a copy of this URI converted into its canonical lexical
+    # representation.
+    #
+    # @return [RDF::URI]
+    # @since  0.3.0
+    def canonicalize
+      self.dup.canonicalize!
+    end
+
+    ##
+    # Converts this URI into its canonical lexical representation.
+    #
+    # @return [RDF::URI] `self`
+    # @since  0.3.0
+    def canonicalize!
+      # TODO: canonicalize this URI
+      self
+    end
+
+    ##
     # Joins several URIs together.
     #
     # This method conforms to join normalization semantics as per RFC3986,
