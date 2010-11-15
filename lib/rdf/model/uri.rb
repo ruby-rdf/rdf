@@ -106,15 +106,21 @@ module RDF
     ##
     # Returns `true` if this URI is a URN.
     #
+    # @example
+    #   RDF::URI('http://example.org/').urn?                    #=> false
+    #
     # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Name
     # @since  0.2.0
     def urn?
-      to_s.index('urn:') == 0
+      self.start_with?('urn:')
     end
 
     ##
     # Returns `true` if this URI is a URL.
+    #
+    # @example
+    #   RDF::URI('http://example.org/').url?                    #=> true
     #
     # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Locator
@@ -126,7 +132,11 @@ module RDF
     ##
     # Returns the string length of this URI.
     #
+    # @example
+    #   RDF::URI('http://example.org/').length                  #=> 19
+    #
     # @return [Integer]
+    # @since  0.3.0
     def length
       to_s.length
     end
@@ -283,6 +293,10 @@ module RDF
     ##
     # Returns `true` if this URI's path component is equal to `/`.
     #
+    # @example
+    #   RDF::URI('http://example.org/').root?                   #=> true
+    #   RDF::URI('http://example.org/path/').root?              #=> false
+    #
     # @return [Boolean] `true` or `false`
     def root?
       self.path == '/' || self.path.empty?
@@ -290,6 +304,10 @@ module RDF
 
     ##
     # Returns a copy of this URI with the path component set to `/`.
+    #
+    # @example
+    #   RDF::URI('http://example.org/').root                    #=> RDF::URI('http://example.org/')
+    #   RDF::URI('http://example.org/path/').root               #=> RDF::URI('http://example.org/')
     #
     # @return [RDF::URI]
     def root
@@ -305,6 +323,10 @@ module RDF
     ##
     # Returns `true` if this URI's path component isn't equal to `/`.
     #
+    # @example
+    #   RDF::URI('http://example.org/').has_parent?             #=> false
+    #   RDF::URI('http://example.org/path/').has_parent?        #=> true
+    #
     # @return [Boolean] `true` or `false`
     def has_parent?
       !root?
@@ -313,6 +335,10 @@ module RDF
     ##
     # Returns a copy of this URI with the path component ascended to the
     # parent directory, if any.
+    #
+    # @example
+    #   RDF::URI('http://example.org/').parent                  #=> nil
+    #   RDF::URI('http://example.org/path/').parent             #=> RDF::URI('http://example.org/')
     #
     # @return [RDF::URI]
     def parent
@@ -331,6 +357,11 @@ module RDF
 
     ##
     # Returns a qualified name (QName) for this URI, if possible.
+    #
+    # @example
+    #   RDF::URI('http://purl.org/dc/terms/').qname             #=> [:dc, nil]
+    #   RDF::URI('http://purl.org/dc/terms/title').qname        #=> [:dc, :title]
+    #   RDF::DC.title.qname                                     #=> [:dc, :title]
     #
     # @return [Array(Symbol, Symbol)] or `nil` if no QName found
     def qname
@@ -372,6 +403,10 @@ module RDF
     ##
     # Returns `true` if this URI starts with the given `string`.
     #
+    # @example
+    #   RDF::URI('http://example.org/').start_with?('http')     #=> true
+    #   RDF::URI('http://example.org/').start_with?('ftp')      #=> false
+    #
     # @param  [String, #to_s] string
     # @return [Boolean] `true` or `false`
     # @see    String#start_with?
@@ -383,6 +418,10 @@ module RDF
 
     ##
     # Returns `true` if this URI ends with the given `string`.
+    #
+    # @example
+    #   RDF::URI('http://example.org/').end_with?('/')          #=> true
+    #   RDF::URI('http://example.org/').end_with?('#')          #=> false
     #
     # @param  [String, #to_s] string
     # @return [Boolean] `true` or `false`
@@ -396,6 +435,11 @@ module RDF
     ##
     # Checks whether this URI is equal to `other`.
     #
+    # @example
+    #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/')) #=> true
+    #   RDF::URI('http://t.co/').eql?('http://t.co/')           #=> false
+    #   RDF::URI('http://purl.org/dc/terms/').eql?(RDF::DC)     #=> false
+    #
     # @param  [RDF::URI] other
     # @return [Boolean] `true` or `false`
     def eql?(other)
@@ -404,6 +448,11 @@ module RDF
 
     ##
     # Checks whether this URI is equal to `other`.
+    #
+    # @example
+    #   RDF::URI('http://t.co/') == RDF::URI('http://t.co/')    #=> true
+    #   RDF::URI('http://t.co/') == 'http://t.co/'              #=> true
+    #   RDF::URI('http://purl.org/dc/terms/') == RDF::DC        #=> true
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
@@ -418,6 +467,13 @@ module RDF
     ##
     # Checks for case equality to the given `other` object.
     #
+    # @example
+    #   RDF::URI('http://example.org/') === /example/           #=> true
+    #   RDF::URI('http://example.org/') === /foobar/            #=> false
+    #   RDF::URI('http://t.co/') === RDF::URI('http://t.co/')   #=> true
+    #   RDF::URI('http://t.co/') === 'http://t.co/'             #=> true
+    #   RDF::URI('http://purl.org/dc/terms/') === RDF::DC       #=> true
+    #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
@@ -430,6 +486,10 @@ module RDF
 
     ##
     # Performs a pattern match using the given regular expression.
+    #
+    # @example
+    #   RDF::URI('http://example.org/') =~ /example/            #=> 7
+    #   RDF::URI('http://example.org/') =~ /foobar/             #=> nil
     #
     # @param  [Regexp] pattern
     # @return [Integer] the position the match starts
@@ -452,6 +512,9 @@ module RDF
 
     ##
     # Returns the string representation of this URI.
+    #
+    # @example
+    #   RDF::URI('http://example.org/').to_str                  #=> 'http://example.org/'
     #
     # @return [String]
     def to_str
