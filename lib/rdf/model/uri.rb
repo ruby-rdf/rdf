@@ -52,9 +52,9 @@ module RDF
     # to returning a freshly-allocated one.
     #
     # @param  [String, #to_s] str
-    # @return [RDF::URI]
+    # @return [RDF::URI] an immutable, frozen URI object
     def self.intern(str)
-      cache[str = str.to_s] ||= self.new(str).freeze
+      (cache[str = str.to_s] ||= self.new(str)).freeze
     end
 
     ##
