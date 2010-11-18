@@ -63,7 +63,7 @@
   rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
 
 <http://kellogg-assoc.com/#me> a foaf:Person ;
-  foaf:name         "Gregg Kellogg" ;
-  foaf:mbox         <mailto:gregg@kellogg-assoc.com> ;
-  foaf:mbox_sha1sum "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
+  foaf:name          "Gregg Kellogg" ;
+  foaf:mbox          <mailto:gregg@kellogg-assoc.com> ;
+  foaf:mbox_sha1sum  "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
   foaf:homepage      <http://kellogg-assoc.com/> .
