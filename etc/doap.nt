@@ -12,6 +12,11 @@
 <http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox> <mailto:blavender@gmail.com> .
 <http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" .
 <http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/name> "Ben Lavender" .
+<http://kellogg-assoc.com/#me> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/homepage> <http://kellogg-assoc.com/> .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/mbox> <mailto:gregg@kellogg-assoc.com> .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .
 <http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://ar.to/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://blog.datagraph.org/> .
@@ -22,16 +27,23 @@
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://ar.to/#self> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://bhuga.net/#ben> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://kellogg-assoc.com/#me> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://bhuga.net/#ben> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://kellogg-assoc.com/#me> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#download-page> <http://rubyforge.org/projects/rdf/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid1 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid2 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid3 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid4 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid5 .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid6 .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid7 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rdf.rubyforge.org/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://ar.to/#self> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://bhuga.net/#ben> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://kellogg-assoc.com/#me> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#platform> "Ruby" .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
@@ -39,17 +51,23 @@
 <http://rubygems.org/gems/rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
 <http://rubygems.org/gems/rdf> <http://xmlns.com/foaf/0.1/maker> <http://ar.to/#self> .
 _:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid1 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930" .
-_:genid1 <http://xmlns.com/foaf/0.1/name> "Fumihiro Kato" .
+_:genid1 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "274bd18402fc773ffc0606996aa1fb90b603aa29" .
+_:genid1 <http://xmlns.com/foaf/0.1/name> "C\u0103lin Ardelean" .
 _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid2 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" .
-_:genid2 <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .
+_:genid2 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f412d743150d7b27b8468d56e69ca147917ea6fc" .
+_:genid2 <http://xmlns.com/foaf/0.1/name> "Joey Geiger" .
 _:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid3 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
-_:genid3 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
+_:genid3 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930" .
+_:genid3 <http://xmlns.com/foaf/0.1/name> "Fumihiro Kato" .
 _:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid4 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
-_:genid4 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
+_:genid4 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
+_:genid4 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
 _:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid5 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
-_:genid5 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .
+_:genid5 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
+_:genid5 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
+_:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:genid6 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "2b4247b6fd5bb4a1383378f325784318680d5ff9" .
+_:genid6 <http://xmlns.com/foaf/0.1/name> "Keita Urashima" .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:genid7 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
+_:genid7 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .

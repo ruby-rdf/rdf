@@ -19,21 +19,27 @@
   doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:vendor        <http://datagraph.org/> ;
-  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben> ;
-  doap:maintainer    <http://ar.to/#self> ;
-  doap:documenter    <http://ar.to/#self> ;
+  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://kellogg-assoc.com/#me> ;
+  doap:maintainer    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://kellogg-assoc.com/#me> ;
+  doap:documenter    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://kellogg-assoc.com/#me> ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Călin Ardelean" ;
+                      foaf:mbox_sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Joey Geiger" ;
+                      foaf:mbox_sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"] ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Fumihiro Kato" ;
                       foaf:mbox_sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"] ;
-  doap:helper        [a foaf:Person ;
-                      foaf:name "Gregg Kellogg" ;
-                      foaf:mbox_sha1sum "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd"] ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Hellekin O. Wolf" ;
                       foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;
   doap:helper        [a foaf:Person ;
                       foaf:name "John Fieber" ;
                       foaf:mbox_sha1sum "f7653fc1ac0e82ebb32f092389bd5fc728eaae12"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Keita Urashima" ;
+                      foaf:mbox_sha1sum "2b4247b6fd5bb4a1383378f325784318680d5ff9"] ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Pius Uzamere" ;
                       foaf:mbox_sha1sum "bedbbf2451e5beb38d59687c0460032aff92cd3c"] ;
@@ -55,3 +61,9 @@
   foaf:mbox_sha1sum  "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" ;
   foaf:homepage      <http://bhuga.net/> ;
   rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
+
+<http://kellogg-assoc.com/#me> a foaf:Person ;
+  foaf:name         "Gregg Kellogg" ;
+  foaf:mbox         <mailto:gregg@kellogg-assoc.com> ;
+  foaf:mbox_sha1sum "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
+  foaf:homepage      <http://kellogg-assoc.com/> .
