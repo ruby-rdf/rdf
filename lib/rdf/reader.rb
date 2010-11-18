@@ -151,7 +151,6 @@ module RDF
     # @yieldreturn [void] ignored
     def initialize(input = $stdin, options = {}, &block)
       @options = options.dup
-      @options[:encoding]     ||= Encoding::UTF_8
       @options[:validate]     ||= false
       @options[:canonicalize] ||= false
       @options[:intern]       ||= true
