@@ -95,7 +95,7 @@ module RDF
       raise TypeError.new("#{self} is immutable") if immutable?
 
       statements.each do |statement|
-        if (statement = create_statement(statement))
+        if (statement = Statement.from(statement))
           delete([statement.subject, statement.predicate, nil])
           insert(statement) if statement.has_object?
         end
@@ -118,7 +118,7 @@ module RDF
           when value.respond_to?(:each_statement)
             delete_statements(value)
             nil
-          when (statement = create_statement(value)).valid?
+          when (statement = Statement.from(value)).valid?
             statement
           else
             delete_statements(query(value))
