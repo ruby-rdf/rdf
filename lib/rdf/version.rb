@@ -1,9 +1,9 @@
 module RDF
   module VERSION
     MAJOR = 0
-    MINOR = 2
-    TINY  = 3
-    EXTRA = nil
+    MINOR = 3
+    TINY  = 0
+    EXTRA = :pre
 
     STRING = [MAJOR, MINOR, TINY, EXTRA].compact.join('.')
 
