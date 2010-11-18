@@ -252,6 +252,7 @@ module RDF
         begin
           loop { block.call(read_statement) }
         rescue EOFError => e
+          rewind rescue nil
         end
       end
       enum_for(:each_statement)
@@ -285,6 +286,7 @@ module RDF
         begin
           loop { block.call(*read_triple) }
         rescue EOFError => e
+          rewind rescue nil
         end
       end
       enum_for(:each_triple)
