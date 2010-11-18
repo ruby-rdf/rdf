@@ -1,14 +1,17 @@
 module RDF
   ##
-  # An RDF serialization format.
+  # The base class for RDF serialization formats.
+  #
+  # @example Loading an RDF serialization format implementation
+  #   require 'rdf/ntriples'
   #
   # @example Iterating over known RDF serialization formats
   #   RDF::Format.each { |klass| puts klass.name }
   #
   # @example Getting a serialization format class
   #   RDF::Format.for(:ntriples)     #=> RDF::NTriples::Format
-  #   RDF::Format.for("spec/data/test.nt")
-  #   RDF::Format.for(:file_name => "spec/data/test.nt")
+  #   RDF::Format.for("etc/doap.nt")
+  #   RDF::Format.for(:file_name => "etc/doap.nt")
   #   RDF::Format.for(:file_extension => "nt")
   #   RDF::Format.for(:content_type => "text/plain")
   #
@@ -270,49 +273,54 @@ module RDF
       end
     end
 
-    protected
+  protected
 
-      ##
-      # Defines a required Ruby library for this RDF serialization format.
-      #
-      # The given library will be required lazily, i.e. only when it is
-      # actually first needed, such as when instantiating a reader or parser
-      # instance for this format.
-      #
-      # @param  [String, #to_s] library
-      # @return [void]
-      def self.require(library)
-        (@@requires[self] ||= []) << library.to_s
-      end
+    ##
+    # Defines a required Ruby library for this RDF serialization format.
+    #
+    # The given library will be required lazily, i.e. only when it is
+    # actually first needed, such as when instantiating a reader or parser
+    # instance for this format.
+    #
+    # @param  [String, #to_s] library
+    # @return [void]
+    def self.require(library)
+      (@@requires[self] ||= []) << library.to_s
+    end
 
-      ##
-      # Defines the content encoding for this RDF serialization format.
-      #
-      # @param  [#to_sym] encoding
-      # @return [void]
-      def self.content_encoding(encoding)
-        @@content_encoding[self] = encoding.to_sym
-      end
+    ##
+    # Defines the content encoding for this RDF serialization format.
+    #
+    # @param  [#to_sym] encoding
+    # @return [void]
+    def self.content_encoding(encoding)
+      @@content_encoding[self] = encoding.to_sym
+    end
 
-    private
+  private
 
-      private_class_method :new
+    private_class_method :new
 
-      @@subclasses       = [] # @private
-      @@requires         = {} # @private
-      @@file_extensions  = {} # @private
-      @@content_type     = {} # @private
-      @@content_types    = {} # @private
-      @@content_encoding = {} # @private
-      @@readers          = {} # @private
-      @@writers          = {} # @private
+    @@requires         = {} # @private
+    @@file_extensions  = {} # @private
+    @@content_type     = {} # @private
+    @@content_types    = {} # @private
+    @@content_encoding = {} # @private
+    @@readers          = {} # @private
+    @@writers          = {} # @private
+    @@subclasses       = [] # @private
 
-      def self.inherited(child) # @private
-        @@subclasses << child
-        super
-      end
+    ##
+    # @private
+    # @return [void]
+    def self.inherited(child)
+      @@subclasses << child
+      super
+    end
+  end # Format
 
-  end
-
-  class FormatError < IOError; end
-end
+  ##
+  # The base class for RDF serialization format errors.
+  class FormatError < IOError
+  end # FormatError
+end # RDF
