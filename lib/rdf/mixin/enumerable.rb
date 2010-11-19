@@ -58,8 +58,8 @@ module RDF
   # @see RDF::Repository
   module Enumerable
     extend  RDF::Util::Aliasing::LateBound
-    include RDF::Countable
     include ::Enumerable
+    include RDF::Countable # NOTE: must come after ::Enumerable
 
     ##
     # Returns all RDF statements.
