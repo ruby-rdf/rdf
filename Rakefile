@@ -2,9 +2,10 @@
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), 'lib')))
 require 'rubygems'
 begin
-  require 'rakefile' # http://github.com/bendiken/rakefile
+  require 'rakefile' # @see http://github.com/bendiken/rakefile
 rescue LoadError => e
 end
+
 require 'rdf'
 
 desc "Build the rdf-#{File.read('VERSION').chomp}.gem file"
