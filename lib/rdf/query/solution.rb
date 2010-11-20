@@ -31,7 +31,7 @@ class RDF::Query
     ##
     # Initializes the query solution.
     #
-    # @param  [Hash{Symbol => RDF::Value}] bindings
+    # @param  [Hash{Symbol => RDF::Term}] bindings
     # @yield  [solution]
     def initialize(bindings = {}, &block)
       @bindings = bindings.to_hash
@@ -52,7 +52,7 @@ class RDF::Query
     #
     # @yield  [name, value]
     # @yieldparam [Symbol] name
-    # @yieldparam [RDF::Value] value
+    # @yieldparam [RDF::Term] value
     # @return [Enumerator]
     def each_binding(&block)
       @bindings.each(&block)
@@ -74,7 +74,7 @@ class RDF::Query
     # Enumerates over every variable value in this solution.
     #
     # @yield  [value]
-    # @yieldparam [RDF::Value] value
+    # @yieldparam [RDF::Term] value
     # @return [Enumerator]
     def each_value(&block)
       @bindings.each_value(&block)
@@ -129,7 +129,7 @@ class RDF::Query
     #
     # @param  [Symbol, #to_sym] name
     #   the variable name
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def [](name)
       @bindings[name.to_sym]
     end
@@ -139,8 +139,8 @@ class RDF::Query
     #
     # @param  [Symbol, #to_sym] name
     #   the variable name
-    # @param  [RDF::Value] value
-    # @return [RDF::Value]
+    # @param  [RDF::Term] value
+    # @return [RDF::Term]
     # @since  0.3.0
     def []=(name, value)
       @bindings[name.to_sym] = value
@@ -172,13 +172,13 @@ class RDF::Query
     end
 
     ##
-    # @return [Array<Array(Symbol, RDF::Value)>}
+    # @return [Array<Array(Symbol, RDF::Term)>}
     def to_a
       @bindings.to_a
     end
 
     ##
-    # @return [Hash{Symbol => RDF::Value}}
+    # @return [Hash{Symbol => RDF::Term}}
     def to_hash
       @bindings.dup
     end
@@ -193,7 +193,7 @@ class RDF::Query
 
     ##
     # @param  [Symbol] name
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def method_missing(name, *args, &block)
       if args.empty? && @bindings.has_key?(name.to_sym)
         @bindings[name.to_sym]

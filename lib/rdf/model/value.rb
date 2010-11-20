@@ -26,8 +26,6 @@ module RDF
   # @see RDF::Statement
   # @see RDF::URI
   module Value
-    include Comparable
-
     ##
     # Returns `true` if `self` is a graph.
     #
@@ -96,20 +94,6 @@ module RDF
     end
 
     ##
-    # Compares `self` to `other` for sorting purposes.
-    #
-    # Subclasses should override this to provide a more meaningful
-    # implementation than the default which simply performs a string
-    # comparison based on `#to_s`.
-    #
-    # @abstract
-    # @param  [Object]  other
-    # @return [Integer] `-1`, `0`, or `1`
-    def <=>(other)
-      self.to_s <=> other.to_s
-    end
-
-    ##
     # Returns an `RDF::Value` representation of `self`.
     #
     # @return [RDF::Value]
@@ -135,5 +119,5 @@ module RDF
     def inspect!
       warn(inspect)
     end
-  end
-end
+  end # Value
+end # RDF

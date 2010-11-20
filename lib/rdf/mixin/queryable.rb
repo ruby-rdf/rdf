@@ -20,9 +20,11 @@ module RDF
     #     queryable.query([nil, RDF::DOAP.developer, nil])
     #     queryable.query(:predicate => RDF::DOAP.developer)
     #
-    # @param  [Query, Statement, Array(Value), Hash] pattern
+    # @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     # @yield  [statement]
-    # @yieldparam [RDF::Statement] statement
+    #   each matching statement
+    # @yieldparam  [RDF::Statement] statement
+    # @yieldreturn [void] ignored
     # @return [Enumerator]
     # @see    RDF::Queryable#query_pattern
     def query(pattern, &block)
@@ -117,7 +119,7 @@ module RDF
     #   @return [RDF::Statement]
     #
     # @overload first(pattern)
-    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     #   @return [RDF::Statement]
     #
     # @return [RDF::Statement]
@@ -143,7 +145,7 @@ module RDF
     #   @return [RDF::Resource]
     #
     # @overload first_subject(pattern)
-    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     #   @return [RDF::Resource]
     #
     # @return [RDF::Resource]
@@ -165,7 +167,7 @@ module RDF
     #   @return [RDF::URI]
     #
     # @overload first_predicate(pattern)
-    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     #   @return [RDF::URI]
     #
     # @return [RDF::URI]
@@ -184,13 +186,13 @@ module RDF
     # Returns `nil` if no statements match `pattern`.
     #
     # @overload first_object
-    #   @return [RDF::Value]
+    #   @return [RDF::Term]
     #
     # @overload first_object(pattern)
-    #   @param  [Query, Statement, Array(Value), Hash] pattern
-    #   @return [RDF::Value]
+    #   @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
+    #   @return [RDF::Term]
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     # @since  0.1.9
     def first_object(pattern = nil)
       __send__(*(pattern ? [:query, pattern] : [:each])) do |statement|
@@ -210,7 +212,7 @@ module RDF
     #   @return [RDF::Literal]
     #
     # @overload first_literal(pattern)
-    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     #   @return [RDF::Literal]
     #
     # @return [RDF::Literal]
@@ -233,7 +235,7 @@ module RDF
     #   @return [Object]
     #
     # @overload first_value(pattern)
-    #   @param  [Query, Statement, Array(Value), Hash] pattern
+    #   @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     #   @return [Object]
     #
     # @return [Object]
@@ -241,5 +243,5 @@ module RDF
     def first_value(pattern = nil)
       (literal = first_literal(pattern)) ? literal.value : nil
     end
-  end
-end
+  end # Queryable
+end # RDF

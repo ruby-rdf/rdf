@@ -50,7 +50,7 @@ module RDF
     autoload :Token,    'rdf/model/literal/token'
     autoload :XML,      'rdf/model/literal/xml'
 
-    include RDF::Value
+    include RDF::Term
 
     ##
     # @private

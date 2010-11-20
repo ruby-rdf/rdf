@@ -271,7 +271,7 @@ module RDF
     #     each triple
     #   @yieldparam  [RDF::Resource] subject
     #   @yieldparam  [RDF::URI]      predicate
-    #   @yieldparam  [RDF::Value]    object
+    #   @yieldparam  [RDF::Term]     object
     #   @yieldreturn [void] ignored
     #   @return [void]
     #
@@ -331,7 +331,7 @@ module RDF
     ##
     # Reads a triple from the input stream.
     #
-    # @return [Array(RDF::Value)] a triple
+    # @return [Array(RDF::Term)] a triple
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def read_triple

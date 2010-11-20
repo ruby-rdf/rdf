@@ -56,7 +56,7 @@ module RDF::NTriples
     # representation.
     #
     # @param  [String] input
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def self.unserialize(input)
       case input
         when nil then nil
@@ -80,7 +80,7 @@ module RDF::NTriples
 
     ##
     # @param  [String] input
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def self.parse_object(input)
       parse_uri(input) || parse_node(input) || parse_literal(input)
     end
@@ -155,7 +155,7 @@ module RDF::NTriples
     end
 
     ##
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def read_value
       begin
         read_statement

@@ -82,11 +82,12 @@ Documentation
 <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 
 * {RDF::Value}
-  * {RDF::Literal}
-  * {RDF::Resource}
-    * {RDF::Node}
-    * {RDF::URI}
-    * {RDF::Graph}
+  * {RDF::Term}
+    * {RDF::Literal}
+    * {RDF::Resource}
+      * {RDF::Node}
+      * {RDF::URI}
+      * {RDF::Graph}
   * {RDF::Statement}
 
 ### RDF Serialization
@@ -172,8 +173,8 @@ To get a local working copy of the development repository, do:
 
     % git clone git://github.com/bendiken/rdf.git
 
-Alternatively, you can download the latest development version as a tarball
-as follows:
+Alternatively, download the latest development version as a tarball as
+follows:
 
     % wget http://github.com/bendiken/rdf/tarball/master
 
@@ -230,8 +231,8 @@ Contributing
 License
 -------
 
-RDF.rb is free and unencumbered public domain software. For more
-information, see <http://unlicense.org/> or the accompanying UNLICENSE file.
+This is free and unencumbered public domain software. For more information,
+see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
 [RDF]:       http://www.w3.org/RDF/
 [YARD]:      http://yardoc.org/

@@ -44,6 +44,7 @@ module RDF
   autoload :Statement,   'rdf/model/statement'
   autoload :URI,         'rdf/model/uri'
   autoload :Value,       'rdf/model/value'
+  autoload :Term,        'rdf/model/term'
 
   # RDF collections
   autoload :List,        'rdf/model/list'

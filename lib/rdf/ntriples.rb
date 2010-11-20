@@ -84,7 +84,7 @@ module RDF
     def self.escape(string)
       Writer.escape(string)
     end
-  end
+  end # NTriples
 
   ##
   # Extensions for `RDF::Value`.
@@ -100,5 +100,5 @@ module RDF
     def to_ntriples
       RDF::NTriples.serialize(self)
     end
-  end
-end
+  end # Value
+end # RDF

@@ -300,7 +300,7 @@ module RDF
     end
 
     ##
-    # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Value)>] triples
+    # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>] triples
     # @return [void] `self`
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
@@ -310,7 +310,7 @@ module RDF
     ##
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
-    # @param  [RDF::Value]    object
+    # @param  [RDF::Term]     object
     # @return [void] `self`
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
@@ -324,18 +324,20 @@ module RDF
     alias_method :insert_statement,  :write_statement
 
     ##
-    # @param  [RDF::Value] value
+    # @param  [RDF::Term] term
     # @return [String]
-    def format_value(value, options = {})
-      case value
-        when String       then format_literal(RDF::Literal(value, options), options)
-        when RDF::List    then format_list(value, options)
-        when RDF::Literal then format_literal(value, options)
-        when RDF::URI     then format_uri(value, options)
-        when RDF::Node    then format_node(value, options)
+    # @since  0.3.0
+    def format_term(term, options = {})
+      case term
+        when String       then format_literal(RDF::Literal(term, options), options)
+        when RDF::List    then format_list(term, options)
+        when RDF::Literal then format_literal(term, options)
+        when RDF::URI     then format_uri(term, options)
+        when RDF::Node    then format_node(term, options)
         else nil
       end
     end
+    alias_method :format_value, :format_term # @deprecated
 
     ##
     # @param  [RDF::Node] value
@@ -374,7 +376,7 @@ module RDF
     # @abstract
     # @since  0.2.3
     def format_list(value, options = {})
-      format_value(value.subject, options)
+      format_term(value.subject, options)
     end
 
   protected

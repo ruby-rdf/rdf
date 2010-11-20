@@ -23,7 +23,7 @@ module RDF
     #   RDF::List["foo", "bar"]
     #   RDF::List["a", 1, "b", 2, "c", 3]
     #
-    # @param  [Array<RDF::Value>] values
+    # @param  [Array<RDF::Term>] values
     # @return [RDF::List]
     def self.[](*values)
       self.new(nil, nil, values)
@@ -34,7 +34,7 @@ module RDF
     #
     # @param  [RDF::Resource]     subject
     # @param  [RDF::Graph]        graph
-    # @param  [Array<RDF::Value>] values
+    # @param  [Array<RDF::Term>] values
     # @yield  [list]
     # @yieldparam [RDF::List] list
     def initialize(subject = nil, graph = nil, values = nil, &block)
@@ -171,7 +171,7 @@ module RDF
     #   RDF::List[1, 2, 3][0]                   #=> 1
     #
     # @param  [Integer] index
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000417
     def [](index)
       at(index)
@@ -183,14 +183,14 @@ module RDF
     # @example
     #   RDF::List[] << 1 << 2 << 3              #=> RDF::List[1, 2, 3]
     #
-    # @param  [RDF::Value] value
+    # @param  [RDF::Term] value
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000424
     def <<(value)
       value = case value
-        when nil        then RDF.nil
-        when RDF::Value then value
-        when Array      then RDF::List.new(nil, graph, value)
+        when nil         then RDF.nil
+        when RDF::Value  then value
+        when Array       then RDF::List.new(nil, graph, value)
         else value
       end
 
@@ -260,7 +260,7 @@ module RDF
     #   RDF::List['a', 'b', 'c'].index('a')     #=> 0
     #   RDF::List['a', 'b', 'c'].index('d')     #=> nil
     #
-    # @param  [RDF::Value] value
+    # @param  [RDF::Term] value
     # @return [Integer]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000436
     def index(value)
@@ -276,7 +276,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].at(0)                #=> 1
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000462
     def slice(*args)
       case argc = args.size
@@ -311,7 +311,7 @@ module RDF
     #   RDF::List[1, 2, 3].fetch(4, nil)        #=> nil
     #   RDF::List[1, 2, 3].fetch(4) { |n| n*n } #=> 16
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000420
     def fetch(index, default = UNSET, &block)
       each.with_index do |v, i|
@@ -331,7 +331,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].at(0)                #=> 1
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000419
     def at(index)
       each.with_index do |v, i|
@@ -348,7 +348,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].first               #=> 1
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def first
       graph.first_object(:subject => first_subject, :predicate => RDF.first)
     end
@@ -359,7 +359,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].second              #=> 2
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def second
       at(1)
     end
@@ -370,7 +370,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].third               #=> 3
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def third
       at(2)
     end
@@ -381,7 +381,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].fourth              #=> 4
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def fourth
       at(3)
     end
@@ -392,7 +392,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].fifth               #=> 5
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def fifth
       at(4)
     end
@@ -403,7 +403,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].sixth               #=> 6
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def sixth
       at(5)
     end
@@ -414,7 +414,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].seventh             #=> 7
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def seventh
       at(6)
     end
@@ -425,7 +425,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].eighth              #=> 8
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def eighth
       at(7)
     end
@@ -436,7 +436,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].ninth               #=> 9
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def ninth
       at(8)
     end
@@ -447,7 +447,7 @@ module RDF
     # @example
     #   RDF::List[*(1..10)].tenth               #=> 10
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     def tenth
       at(9)
     end
@@ -458,7 +458,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].last                 #=> 3
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000422
     def last
       graph.first_object(:subject => last_subject, :predicate => RDF.first)

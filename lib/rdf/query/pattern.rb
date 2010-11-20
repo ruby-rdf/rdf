@@ -23,14 +23,14 @@ module RDF; class Query
     #   @param  [Hash{Symbol => Object}]     options
     #   @option options [Variable, Resource] :subject   (nil)
     #   @option options [Variable, URI]      :predicate (nil)
-    #   @option options [Variable, Value]    :object    (nil)
+    #   @option options [Variable, Term]     :object    (nil)
     #   @option options [Variable, Resource] :context   (nil)
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
     #   @param  [Variable, Resource]         subject
     #   @param  [Variable, URI]              predicate
-    #   @param  [Variable, Value]            object
+    #   @param  [Variable, Term]             object
     #   @param  [Hash{Symbol => Object}]     options
     #   @option options [Variable, Resource] :context   (nil)
     #   @option options [Boolean]            :optional  (false)
@@ -74,7 +74,7 @@ module RDF; class Query
     #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
-    # @param  [Hash{Symbol => RDF::Value}] bindings
+    # @param  [Hash{Symbol => RDF::Term}] bindings
     #   optional variable bindings to use
     # @yield  [statement]
     #   each matching statement
@@ -222,7 +222,7 @@ module RDF; class Query
     ##
     # Returns all bindings in this pattern.
     #
-    # @return [Hash{Symbol => Value}]
+    # @return [Hash{Symbol => RDF::Term}]
     def bindings
       bindings = {}
       bindings.merge!(subject.bindings)   if subject.is_a?(Variable)

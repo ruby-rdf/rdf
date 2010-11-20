@@ -37,11 +37,11 @@ module RDF
   #     puts [subject, predicate, object, context].inspect
   #   end
   #
-  # @example Enumerating all values
-  #   enumerable.each_subject   { |value| puts value.inspect }
-  #   enumerable.each_predicate { |value| puts value.inspect }
-  #   enumerable.each_object    { |value| puts value.inspect }
-  #   enumerable.each_context   { |value| puts value.inspect }
+  # @example Enumerating all terms
+  #   enumerable.each_subject   { |term| puts term.inspect }
+  #   enumerable.each_predicate { |term| puts term.inspect }
+  #   enumerable.each_object    { |term| puts term.inspect }
+  #   enumerable.each_context   { |term| puts term.inspect }
   #
   # @example Obtaining all statements
   #   enumerable.statements  #=> [RDF::Statement(subject1, predicate1, object1), ...]
@@ -123,7 +123,7 @@ module RDF
     # Returns all RDF triples.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Value)>]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     # @see    #enum_triple
     def triples(options = {})
@@ -133,7 +133,7 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF triple.
     #
-    # @param  [Array(RDF::Resource, RDF::URI, RDF::Value)] triple
+    # @param  [Array(RDF::Resource, RDF::URI, RDF::Term)] triple
     # @return [Boolean]
     def has_triple?(triple)
       enum_triple.include?(triple)
@@ -151,7 +151,7 @@ module RDF
     #     each triple
     #   @yieldparam  [RDF::Resource] subject
     #   @yieldparam  [RDF::URI]      predicate
-    #   @yieldparam  [RDF::Value]    object
+    #   @yieldparam  [RDF::Term]     object
     #   @yieldreturn [void] ignored
     #   @return [void]
     #
@@ -183,7 +183,7 @@ module RDF
     # Returns all RDF quads.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Value, RDF::Resource)>]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
     def quads(options = {})
@@ -193,7 +193,7 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF quad.
     #
-    # @param  [Array(RDF::Resource, RDF::URI, RDF::Value, RDF::Resource)] quad
+    # @param  [Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)] quad
     # @return [Boolean]
     def has_quad?(quad)
       enum_quad.include?(quad)
@@ -211,7 +211,7 @@ module RDF
     #     each quad
     #   @yieldparam [RDF::Resource] subject
     #   @yieldparam [RDF::URI]      predicate
-    #   @yieldparam [RDF::Value]    object
+    #   @yieldparam [RDF::Term]     object
     #   @yieldparam [RDF::Resource] context
     #   @yieldreturn [void] ignored
     #   @return [void]
@@ -381,7 +381,7 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::Value>]
+    # @return [Enumerator<RDF::Term>]
     # @see    #each_object
     # @see    #enum_object
     def objects(options = {})
@@ -395,7 +395,7 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF object term.
     #
-    # @param  [RDF::Value] value
+    # @param  [RDF::Term] value
     # @return [Boolean]
     def has_object?(value)
       enum_object.include?(value)
@@ -411,7 +411,7 @@ module RDF
     # @overload each_object
     #   @yield  [object]
     #     each object term
-    #   @yieldparam  [RDF::Value] object
+    #   @yieldparam  [RDF::Term] object
     #   @yieldreturn [void] ignored
     #   @return [void]
     #

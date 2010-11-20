@@ -117,14 +117,17 @@ module RDF::NTriples
     #
     # @param  [RDF::Value] value
     # @return [String]
+    # @raise  [ArgumentError] if `value` is not an `RDF::Statement` or `RDF::Term`
     def self.serialize(value)
       writer = self.new
       case value
         when nil then nil
         when RDF::Statement
           writer.format_statement(value) + "\n"
+        when RDF::Term
+          writer.format_term(value)
         else
-          writer.format_value(value)
+          raise ArgumentError, "expected an RDF::Statement or RDF::Term, but got #{value.inspect}"
       end
     end
 
@@ -142,7 +145,7 @@ module RDF::NTriples
     #
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
-    # @param  [RDF::Value]    object
+    # @param  [RDF::Term]     object
     # @return [void]
     def write_triple(subject, predicate, object)
       puts format_triple(subject, predicate, object)
@@ -162,10 +165,10 @@ module RDF::NTriples
     #
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
-    # @param  [RDF::Value]    object
+    # @param  [RDF::Term]     object
     # @return [String]
     def format_triple(subject, predicate, object)
-      "%s %s %s ." % [subject, predicate, object].map { |value| format_value(value) }
+      "%s %s %s ." % [subject, predicate, object].map { |value| format_term(value) }
     end
 
     ##

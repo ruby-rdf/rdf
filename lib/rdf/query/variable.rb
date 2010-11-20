@@ -43,7 +43,7 @@ class RDF::Query
   #   var.to_s       #=> "?y=123"
   #
   class Variable
-    include RDF::Value
+    include RDF::Term
 
     ##
     # The variable's name.
@@ -55,13 +55,13 @@ class RDF::Query
     ##
     # The variable's value.
     #
-    # @return [RDF::Value]
+    # @return [RDF::Term]
     attr_accessor :value
 
     ##
     # @param  [Symbol, #to_sym] name
     #   the variable name
-    # @param  [RDF::Value]  value
+    # @param  [RDF::Term] value
     #   an optional variable value
     def initialize(name = nil, value = nil)
       @name  = (name || "g#{__id__.to_i.abs}").to_sym
@@ -72,7 +72,7 @@ class RDF::Query
     # Returns `true`.
     #
     # @return [Boolean]
-    # @see    RDF::Value#variable?
+    # @see    RDF::Term#variable?
     # @since  0.1.7
     def variable? 
       true
@@ -105,8 +105,8 @@ class RDF::Query
     ##
     # Rebinds this variable to the given `value`.
     #
-    # @param  [RDF::Value] value
-    # @return [RDF::Value] the previous value, if any.
+    # @param  [RDF::Term] value
+    # @return [RDF::Term] the previous value, if any.
     def bind(value)
       old_value = self.value
       self.value = value
@@ -117,7 +117,7 @@ class RDF::Query
     ##
     # Unbinds this variable, discarding any currently bound value.
     #
-    # @return [RDF::Value] the previous value, if any.
+    # @return [RDF::Term] the previous value, if any.
     def unbind
       old_value = self.value
       self.value = nil
@@ -137,7 +137,7 @@ class RDF::Query
     ##
     # Returns this variable's bindings (if any) as a `Hash`.
     #
-    # @return [Hash{Symbol => RDF::Value}]
+    # @return [Hash{Symbol => RDF::Term}]
     def bindings
       unbound? ? {} : {name => value}
     end
@@ -165,7 +165,7 @@ class RDF::Query
     ##
     # Compares this variable with the given value.
     #
-    # @param  [RDF::Value] other
+    # @param  [RDF::Term] other
     # @return [Boolean]
     def ===(other)
       if unbound?

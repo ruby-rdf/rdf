@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF resource.
   module Resource
-    include RDF::Value
+    include RDF::Term
 
     ##
     # Instantiates an {RDF::Node} or an {RDF::URI}, depending on the given
@@ -24,5 +24,5 @@ module RDF
     def resource?
       true
     end
-  end
-end
+  end # Resource
+end # RDF
