@@ -105,6 +105,10 @@ module RDF
       literal
     end
 
+    TRUE  = RDF::Literal.new(true).freeze
+    FALSE = RDF::Literal.new(false).freeze
+    ZERO  = RDF::Literal.new(0).freeze
+
     # @return [Symbol] The language tag (optional).
     attr_accessor :language
 
