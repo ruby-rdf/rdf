@@ -115,7 +115,10 @@ module RDF
   #
   # @return [RDF::Literal]
   def self.Literal(*args, &block)
-    Literal.new(*args, &block)
+    case literal = args.first
+      when RDF::Literal then literal
+      else Literal.new(*args, &block)
+    end
   end
 
   ##
