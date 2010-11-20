@@ -213,6 +213,7 @@ module RDF
     def plain?
       language.nil? && datatype.nil?
     end
+    alias_method :simple?, :plain?
 
     ##
     # Returns `true` if this is a language-tagged literal.
