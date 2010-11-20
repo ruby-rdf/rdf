@@ -14,6 +14,8 @@ module RDF; class Literal
     DATATYPE = XSD.double
     GRAMMAR  = /^[\+\-]?\d+(\.\d*([eE][\+\-]?\d+)?)?$/.freeze # FIXME: support 'INF', '-INF' and 'NaN'
 
+    include RDF::Literal::Numeric
+
     ##
     # @param  [Float, #to_f] value
     # @option options [String] :lexical (nil)

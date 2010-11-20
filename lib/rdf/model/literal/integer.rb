@@ -14,6 +14,8 @@ module RDF; class Literal
     DATATYPE = XSD.integer
     GRAMMAR  = /^[\+\-]?\d+$/.freeze
 
+    include RDF::Literal::Numeric
+
     ##
     # @param  [Integer, #to_i] value
     # @option options [String] :lexical (nil)

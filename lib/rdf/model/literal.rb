@@ -40,6 +40,7 @@ module RDF
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal
     autoload :Boolean,  'rdf/model/literal/boolean'
+    autoload :Numeric,  'rdf/model/literal/numeric'
     autoload :Integer,  'rdf/model/literal/integer'
     autoload :Double,   'rdf/model/literal/double'
     autoload :Decimal,  'rdf/model/literal/decimal'
