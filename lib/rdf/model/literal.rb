@@ -167,7 +167,7 @@ module RDF
     ##
     # Returns `true`.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def literal?
       true
     end
@@ -175,7 +175,7 @@ module RDF
     ##
     # Returns `false`.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def anonymous?
       false
     end
@@ -189,31 +189,45 @@ module RDF
     end
 
     ##
-    # @return [Boolean]
+    # Returns `true` if this literal is equal to `other`.
+    #
+    # @example
+    #   RDF::Literal(1).eql?(RDF::Literal(1.0))  #=> false
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
     def eql?(other)
-      other.is_a?(Literal) && self == other
+      self.equal?(other) ||
+        (self.class.eql?(other.class) &&
+         self.datatype.eql?(other.datatype) &&
+         self == other)
     end
 
     ##
-    # @return [Boolean]
+    # Returns `true` if this literal is equivalent to `other`.
+    #
+    # @example
+    #   RDF::Literal(1) == RDF::Literal(1.0)     #=> true
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
     def ==(other)
       case other
         when Literal
-          value.eql?(other.value) &&
-          language.eql?(other.language) &&
-          datatype.eql?(other.datatype)
+          self.value.eql?(other.value) &&
+          self.language.eql?(other.language) &&
+          self.datatype.eql?(other.datatype)
         when String
-          value.eql?(other) &&
-            language.nil? &&
-            datatype.nil?
+          self.plain? && self.value.eql?(other)
         else false
       end
     end
+    alias_method :===, :==
 
     ##
     # Returns `true` if this is a plain literal.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def plain?
       language.nil? && datatype.nil?
@@ -223,23 +237,21 @@ module RDF
     ##
     # Returns `true` if this is a language-tagged literal.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def has_language?
       !language.nil?
     end
-
     alias_method :language?, :has_language?
 
     ##
     # Returns `true` if this is a datatyped literal.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
     def has_datatype?
       !datatype.nil?
     end
-
     alias_method :datatype?,  :has_datatype?
     alias_method :typed?,     :has_datatype?
     alias_method :datatyped?, :has_datatype?
@@ -248,7 +260,7 @@ module RDF
     # Returns `true` if the value adheres to the defined grammar of the
     # datatype.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @since  0.2.1
     def valid?
       grammar = self.class.const_get(:GRAMMAR) rescue nil
@@ -259,7 +271,7 @@ module RDF
     # Returns `true` if the value does not adhere to the defined grammar of
     # the datatype.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @since  0.2.1
     def invalid?
       !valid?
