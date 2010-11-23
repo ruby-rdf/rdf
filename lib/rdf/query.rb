@@ -190,8 +190,8 @@ module RDF
                 end
               else # union
                 old_solutions, @solutions = @solutions, Solutions.new
-                old_solutions.each do |solution|
-                  pattern.execute(queryable) do |statement|
+                pattern.execute(queryable) do |statement|
+                  old_solutions.each do |solution|
                     @solutions << solution.merge(pattern.solution(statement))
                   end
                 end
