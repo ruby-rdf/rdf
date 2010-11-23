@@ -201,7 +201,7 @@ module RDF; class Literal
     # @return [RDF::Literal]
     # @since  0.2.3
     def -@
-      RDF::Literal(-to_f) # unary minus
+      RDF::Literal(-to_f, :datatype => datatype) # unary minus
     end
 
     ##
