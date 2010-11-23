@@ -24,10 +24,15 @@ module RDF; class Literal
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   = value if !defined?(@string) && value.is_a?(String)
       @object   = case
-        when value.is_a?(::String)    then Float(value) rescue nil
+        when value.is_a?(::String) then case value
+          when 'INF'  then 1/0.0
+          when '-INF' then -1/0.0
+          when 'NaN'  then 0/0.0
+          else Float(value) rescue nil
+        end
         when value.is_a?(::Float)     then value
         when value.respond_to?(:to_f) then value.to_f
-        else Float(value.to_s) rescue nil
+        else Float(value.to_s) rescue nil # FIXME
       end
     end
 
