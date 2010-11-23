@@ -59,7 +59,7 @@ module RDF; class Literal
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def ==(other)
-      (self <=> other).zero?
+      (cmp = (self <=> other)) ? cmp.zero? : false
     end
     alias_method :===, :==
 
