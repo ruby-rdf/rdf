@@ -30,7 +30,7 @@ module RDF::NTriples
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     COMMENT               = /^#\s*(.*)$/.freeze
-    NODEID                = /^_:([A-Za-z][A-Za-z0-9]*)/.freeze
+    NODEID                = /^_:([A-Za-z][A-Za-z0-9\-_]*)/.freeze
     URIREF                = /^<([^>]+)>/.freeze
     LITERAL_PLAIN         = /^"((?:\\"|[^"])*)"/.freeze
     LITERAL_WITH_LANGUAGE = /^"((?:\\"|[^"])*)"@([a-z]+[\-A-Za-z0-9]*)/.freeze
