@@ -95,5 +95,17 @@ module RDF; class Literal
     def false?
       @object.equal?(false)
     end
+
+    ##
+    # Returns a developer-friendly representation of `self`.
+    #
+    # @return [String]
+    def inspect
+      case
+        when self.equal?(RDF::Literal::TRUE)  then 'RDF::Literal::TRUE'
+        when self.equal?(RDF::Literal::FALSE) then 'RDF::Literal::FALSE'
+        else super
+      end
+    end
   end # Boolean
 end; end # RDF::Literal
