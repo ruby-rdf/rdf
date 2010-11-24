@@ -9,8 +9,9 @@ module RDF; module Util
   #
   # While this cache is something of an internal implementation detail of
   # RDF.rb, some external libraries do currently make use of it as well,
-  # including [Spira](http://spira.rubyforge.org/). Do be sure to include
-  # any changes here in the RDF.rb changelog.
+  # including [SPARQL::Algebra](http://sparql.rubyforge.org/algebra/) and
+  # [Spira](http://spira.rubyforge.org/). Do be sure to include any changes
+  # here in the RDF.rb changelog.
   #
   # @see   RDF::URI.intern
   # @see   http://en.wikipedia.org/wiki/Weak_reference
@@ -48,7 +49,7 @@ module RDF; module Util
     ##
     # @return [Boolean]
     def has_capacity?
-      @capacity == -1 || @capacity > @cache.size
+      @capacity.equal?(-1) || @capacity > @cache.size
     end
 
     ##
