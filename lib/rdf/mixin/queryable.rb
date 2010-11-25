@@ -33,35 +33,38 @@ module RDF
       case pattern
         # A basic graph pattern (BGP) query:
         when Query
-          if block_given?
-            query_execute(pattern, &block)
-            return self
-          else
-            return enum_for(:query_execute, pattern)
-          end
+          query_execute(pattern, &block) if block_given?
+          enum_for(:query_execute, pattern)
 
         # A simple triple/quad pattern query:
         else
           pattern = Query::Pattern.from(pattern)
-          case
+          enum = case
             # Blank triple/quad patterns are equivalent to iterating over
             # every statement, so as a minor optimization we'll just do that
             # directly instead of bothering with `#query_pattern`:
             when pattern.blank?
-              return each_statement(&block)
+              each(&block) if block_given?
+              enum_for(:each)
+
+            # Constant triple/quad patterns are equivalent to looking up a
+            # particular statement, so as a minor optimization we'll just do
+            # that directly instead of bothering with `#query_pattern`:
+            when pattern.constant?
+              statement = Statement.from(pattern)
+              block.call(statement) if block_given? && include?(statement)
+              enum_for(:query, pattern)
 
             # Otherwise, we delegate to `#query_pattern`:
-            when block_given?
-              query_pattern(pattern, &block)
-              return self
-            else
-              enum = enum_for(:query_pattern, pattern)
-              enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
-              def enum.to_a
-                super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
-              end
-              return enum
+            else # pattern.variable?
+              query_pattern(pattern, &block) if block_given?
+              enum_for(:query_pattern, pattern)
           end
+          enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
+          def enum.to_a
+            super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
+          end
+          enum
       end
     end
 

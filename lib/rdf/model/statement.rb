@@ -24,12 +24,13 @@ module RDF
     ##
     # @private
     # @since 0.2.2
-    def self.from(statement)
+    def self.from(statement, options = {})
       case statement
+        when Array, Query::Pattern
+          self.new(statement[0], statement[1], statement[2], options.merge(:context => statement[3] || nil))
         when Statement then statement
-        when Hash      then self.new(statement)
-        when Array     then self.new(*statement)
-        else raise ArgumentError.new("expected RDF::Statement, Hash, or Array, but got #{statement.inspect}")
+        when Hash      then self.new(options.merge(statement))
+        else raise ArgumentError, "expected RDF::Statement, Hash, or Array, but got #{statement.inspect}"
       end
     end
 
@@ -76,7 +77,7 @@ module RDF
           @object    = object
       end
       @id      = @options.delete(:id) if @options.has_key?(:id)
-      @context = @options.delete(:context) || @options.delete(:graph)
+      @context = @options.delete(:context)
       initialize!
     end
 

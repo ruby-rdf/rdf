@@ -7,11 +7,11 @@ module RDF; class Query
     # @since 0.2.2
     def self.from(pattern, options = {})
       case pattern
-        when Pattern   then pattern
-        when Statement then self.new(options.merge(pattern.to_hash))
-        when Hash      then self.new(options.merge(pattern))
-        when Array     then self.new(pattern[0], pattern[1], pattern[2], options.merge(:context => pattern[3]))
-        else raise ArgumentError.new("expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}")
+        when Pattern then pattern
+        when Array, Statement
+          self.new(pattern[0], pattern[1], pattern[2], options.merge(:context => pattern[3]))
+        when Hash    then self.new(options.merge(pattern))
+        else raise ArgumentError, "expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}"
       end
     end
 
@@ -91,7 +91,7 @@ module RDF; class Query
     def has_variables?
       subject.is_a?(Variable) ||
         predicate.is_a?(Variable) ||
-        object.is_a?(Variable)
+        object.is_a?(Variable) ||
         context.is_a?(Variable)
     end
     alias_method :variables?, :has_variables?
