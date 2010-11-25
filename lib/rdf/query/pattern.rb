@@ -15,9 +15,6 @@ module RDF; class Query
       end
     end
 
-    # @return [Hash{Symbol => Object}]
-    attr_reader :options
-
     ##
     # @overload initialize(options = {})
     #   @param  [Hash{Symbol => Object}]     options
@@ -49,13 +46,28 @@ module RDF; class Query
     end
 
     ##
+    # Any additional options for this pattern.
+    #
+    # @return [Hash]
+    attr_reader :options
+
+    ##
+    # Returns `true` if this is a blank pattern, with all terms being `nil`.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def blank?
+      subject.nil? && predicate.nil? && object.nil? && context.nil?
+    end
+
+    ##
     # Returns `true` if this is an optional pattern.
     #
     # @example
     #   Pattern.new(:s, :p, :o).optional?                     #=> false
     #   Pattern.new(:s, :p, :o, :optional => true).optional?  #=> true
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def optional?
       !!options[:optional]
@@ -83,6 +95,7 @@ module RDF; class Query
     # @return [Enumerator]
     #   an enumerator yielding matching statements
     # @see    RDF::Queryable#query
+    # @since  0.3.0
     def execute(queryable, bindings = {}, &block)
       variables = self.variables
 
@@ -136,6 +149,7 @@ module RDF; class Query
     # @param  [RDF::Statement] statement
     #   an RDF statement to bind terms from
     # @return [RDF::Query::Solution]
+    # @since  0.3.0
     def solution(statement)
       RDF::Query::Solution.new do |solution|
         solution[subject.to_sym]   = statement.subject   if subject.variable?
@@ -234,7 +248,7 @@ module RDF; class Query
     ##
     # Returns `true` if all variables in this pattern are bound.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def bound?
       !variables.empty? && variables.values.all?(&:bound?)
     end
@@ -250,7 +264,7 @@ module RDF; class Query
     ##
     # Returns `true` if all variables in this pattern are unbound.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def unbound?
       !variables.empty? && variables.values.all?(&:unbound?)
     end
