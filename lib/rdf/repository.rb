@@ -149,8 +149,9 @@ module RDF
     #
     # @param  [RDF::Resource] context
     # @yield  [tx]
-    # @yieldparam [RDF::Transaction] tx
-    # @return [void]
+    # @yieldparam  [RDF::Transaction] tx
+    # @yieldreturn [void] ignored
+    # @return [void] `self`
     # @see    RDF::Transaction
     # @since  0.3.0
     def transaction(context = nil, &block)
@@ -193,7 +194,7 @@ module RDF
     # the underlying storage.
     #
     # @param  [RDF::Transaction] tx
-    # @return [void]
+    # @return [void] ignored
     # @since  0.3.0
     def rollback_transaction(tx)
       # nothing to do
@@ -207,7 +208,7 @@ module RDF
     # the underlying storage.
     #
     # @param  [RDF::Transaction] tx
-    # @return [void]
+    # @return [void] ignored
     # @since  0.3.0
     def commit_transaction(tx)
       tx.execute(self)
@@ -216,6 +217,8 @@ module RDF
     ##
     # @see RDF::Repository
     module Implementation
+      DEFAULT_CONTEXT = false
+
       ##
       # @private
       def self.extend_object(obj)
@@ -268,6 +271,7 @@ module RDF
       # @see RDF::Enumerable#has_statement?
       def has_statement?(statement)
         s, p, o, c = statement.to_quad
+        c ||= DEFAULT_CONTEXT
         @data.has_key?(c) &&
           @data[c].has_key?(s) &&
           @data[c][s].has_key?(p) &&
@@ -287,30 +291,32 @@ module RDF
             ss.dup.each do |s, ps|
               ps.dup.each do |p, os|
                 os.dup.each do |o|
-                  block.call(RDF::Statement.new(s, p, o, :context => c))
+                  block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
                 end
               end
             end
           end
-        else
-          enum_statement
         end
+        enum_statement
       end
-
       alias_method :each, :each_statement
 
       ##
       # @private
       # @see RDF::Enumerable#has_context?
       def has_context?(value)
-        @data.keys.compact.include?(value)
+        @data.keys.include?(value)
       end
 
       ##
       # @private
       # @see RDF::Enumerable#each_context
       def each_context(&block)
-        @data.keys.compact.each(&block) if block_given?
+        if block_given?
+          contexts = @data.keys
+          contexts.delete(DEFAULT_CONTEXT)
+          contexts.each(&block)
+        end
         enum_context
       end
 
@@ -320,15 +326,24 @@ module RDF
       # @private
       # @see RDF::Queryable#query
       def query_pattern(pattern, &block)
-        @data.dup.each do |c, ss|
-          next if pattern.has_context? && pattern.context != c
-          ss.dup.each do |s, ps|
-            next if pattern.has_subject? && pattern.subject != s
-            ps.dup.each do |p, os|
-              next if pattern.has_predicate? && pattern.predicate != p
-              os.dup.each do |o|
-                next if pattern.has_object? && pattern.object != o
-                block.call(RDF::Statement.new(s, p, o, :context => c))
+        context   = pattern.context
+        subject   = pattern.subject
+        predicate = pattern.predicate
+        object    = pattern.object
+
+        cs = @data.has_key?(context) ? {context => @data[context]} : @data.dup
+        cs.each do |c, ss|
+          next unless context.nil? || context == c
+          ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
+          ss.each do |s, ps|
+            next unless subject.nil? || subject == s
+            ps = ps.has_key?(predicate) ? {predicate => ps[predicate]} : ps.dup
+            ps.each do |p, os|
+              next unless predicate.nil? || predicate == p
+              os = os.dup # TODO: is this really needed?
+              os.each do |o|
+                next unless object.nil? || object == o
+                block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
               end
             end
           end
@@ -341,6 +356,7 @@ module RDF
       def insert_statement(statement)
         unless has_statement?(statement)
           s, p, o, c = statement.to_quad
+          c ||= DEFAULT_CONTEXT
           @data[c] ||= {}
           @data[c][s] ||= {}
           @data[c][s][p] ||= []
@@ -354,6 +370,7 @@ module RDF
       def delete_statement(statement)
         if has_statement?(statement)
           s, p, o, c = statement.to_quad
+          c ||= DEFAULT_CONTEXT
           @data[c][s][p].delete(o)
           @data[c][s].delete(p) if @data[c][s][p].empty?
           @data[c].delete(s) if @data[c][s].empty?
