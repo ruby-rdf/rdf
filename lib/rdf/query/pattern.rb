@@ -61,6 +61,42 @@ module RDF; class Query
     end
 
     ##
+    # Returns `true` if this is a constant pattern, with all terms being
+    # either URIs, blank nodes, or literals.
+    #
+    # A constant pattern is structurally and functionally equivalent to an
+    # RDF statement.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def constant?
+      !(variable?)
+    end
+
+    ##
+    # Returns `true` if this is a variable pattern, with any term being
+    # `nil` or a variable.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def variable?
+      subject.nil? || predicate.nil? || object.nil? || context.nil? || has_variables?
+    end
+
+    ##
+    # Returns `true` if this pattern contains any variables.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def has_variables?
+      subject.is_a?(Variable) ||
+        predicate.is_a?(Variable) ||
+        object.is_a?(Variable)
+        context.is_a?(Variable)
+    end
+    alias_method :variables?, :has_variables?
+
+    ##
     # Returns `true` if this is an optional pattern.
     #
     # @example
@@ -97,10 +133,8 @@ module RDF; class Query
     # @see    RDF::Queryable#query
     # @since  0.3.0
     def execute(queryable, bindings = {}, &block)
-      variables = self.variables
-
       # Does this pattern contain any variables?
-      if variables.empty?
+      if !(has_variables?)
         # With no variables to worry about, we will let the repository
         # implementation yield matching statements directly:
         queryable.query(self, &block)
@@ -115,6 +149,7 @@ module RDF; class Query
         }
 
         # Do all the variable terms refer to distinct variables?
+        variables = self.variables
         if variable_count == variables.size
           # If so, we can just let the repository implementation handle
           # everything and yield matching statements directly:
@@ -156,16 +191,6 @@ module RDF; class Query
         solution[predicate.to_sym] = statement.predicate if predicate.variable?
         solution[object.to_sym]    = statement.object    if object.variable?
       end
-    end
-
-    ##
-    # Returns `true` if this pattern contains any variables.
-    #
-    # @return [Boolean] `true` or `false`
-    def variables?
-      subject.is_a?(Variable) ||
-        predicate.is_a?(Variable) ||
-        object.is_a?(Variable)
     end
 
     ##
