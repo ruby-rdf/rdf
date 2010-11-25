@@ -40,19 +40,27 @@ module RDF
             return enum_for(:query_execute, pattern)
           end
 
-        # A simple triple pattern query:
+        # A simple triple/quad pattern query:
         else
           pattern = Query::Pattern.from(pattern)
-          if block_given?
-            query_pattern(pattern, &block)
-            return self
-          else
-            enum = enum_for(:query_pattern, pattern)
-            enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
-            def enum.to_a
-              super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
-            end
-            return enum
+          case
+            # Blank triple/quad patterns are equivalent to iterating over
+            # every statement, so as a minor optimization we'll just do that
+            # directly instead of bothering with `#query_pattern`:
+            when pattern.blank?
+              return each_statement(&block)
+
+            # Otherwise, we delegate to `#query_pattern`:
+            when block_given?
+              query_pattern(pattern, &block)
+              return self
+            else
+              enum = enum_for(:query_pattern, pattern)
+              enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
+              def enum.to_a
+                super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
+              end
+              return enum
           end
       end
     end
