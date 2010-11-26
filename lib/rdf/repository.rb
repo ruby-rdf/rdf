@@ -58,6 +58,7 @@ module RDF
     #
     # @return [URI]
     attr_reader :uri
+    alias_method :url, :uri
 
     ##
     # Returns the title of this repository.
