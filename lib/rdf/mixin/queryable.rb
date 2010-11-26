@@ -33,12 +33,17 @@ module RDF
       case pattern
         # A basic graph pattern (BGP) query:
         when Query
-          query_execute(pattern, &block) if block_given?
+          if block_given?
+            before_query(pattern) if respond_to?(:before_query)
+            query_execute(pattern, &block)
+            after_query(pattern) if respond_to?(:after_query)
+          end
           enum_for(:query_execute, pattern)
 
         # A simple triple/quad pattern query:
         else
           pattern = Query::Pattern.from(pattern)
+          before_query(pattern) if block_given? && respond_to?(:before_query)
           enum = case
             # Blank triple/quad patterns are equivalent to iterating over
             # every statement, so as a minor optimization we'll just do that
@@ -60,6 +65,7 @@ module RDF
               query_pattern(pattern, &block) if block_given?
               enum_for(:query_pattern, pattern)
           end
+          after_query(pattern) if block_given? && respond_to?(:after_query)
           enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
           def enum.to_a
             super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
