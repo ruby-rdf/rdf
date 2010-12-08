@@ -201,6 +201,12 @@ module RDF
               end
           end
         end
+        if !pattern.optional? && pattern.variables.keys.any? { |variable| !@solutions.variable_names.include?(variable) }
+          # no point continuing, there are no bindings.  It's important to
+          # abort because later patterns that can have constraints are often
+          # broad without them.
+          return Solutions.new
+        end
       end
       @solutions
     end
