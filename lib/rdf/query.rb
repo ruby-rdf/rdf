@@ -192,16 +192,13 @@ module RDF
                 end
               end
 
-            else # intersection
-              @solutions.each_with_index do |solution, index|
-                failed = true
+            else # also union
+              old_solutions, @solutions = @solutions, Solutions.new
+              old_solutions.each_with_index do |solution, index|
                 pattern.execute(queryable, solution) do |statement|
-                  failed = false
-                  solution.merge!(pattern.solution(statement))
+                  @solutions << solution.merge(pattern.solution(statement))
                 end
-                @solutions[index] = nil if failed && !pattern.optional?
               end
-              @solutions.compact! # remove `nil` entries
           end
         end
       end
