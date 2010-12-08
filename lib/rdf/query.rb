@@ -176,11 +176,6 @@ module RDF
               break
             end
 
-          when 3 # only variables
-            pattern.execute(queryable) do |statement|
-              @solutions << pattern.solution(statement)
-            end
-
           else case # 1 or 2 variables
 
             when !@solutions.have_variables?(pattern.variables.values)
