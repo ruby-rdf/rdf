@@ -314,12 +314,24 @@ describe RDF::Query do
         end
       end
 
-      it "should limit a variable to the initial bindings" do
+      it "limits a variable to the initial bindings" do
         query = RDF::Query.new do
           self << [EX.x1, EX.p, :o]
         end
         query.execute(@graph, :bindings => { :o => [EX.o1, EX.o4]}).should have_result_set [
           {:o => EX.o1}, {:o => EX.o4}]
+      end
+
+      it "uses bindings for multiple variables" do
+        @graph << [EX.x1, EX.p1, EX.o1]
+        @graph << [EX.x1, EX.p1, EX.o2]
+        @graph << [EX.x2, EX.p1, EX.o1]
+        query = RDF::Query.new do
+          self << [:s, EX.p1, :o]
+        end
+        query.execute(@graph, :bindings => {:o => [EX.o1], :s => [EX.x1]}).should have_result_set [
+          {:s => EX.x1, :o => EX.o1} 
+        ]
       end
 
     end
