@@ -29,6 +29,13 @@ describe RDF::Query do
       it "returns an empty solution sequence if the statement does not exist" do
         query = RDF::Query.new do
           self << [EX.x1, EX.p2, EX.x2] # nonexistent statement
+        end
+        query.execute(@graph).should == []
+      end
+
+      it "returns an empty solution sequence if the statement does not exist as part of a multi-pattern bgp" do
+        query = RDF::Query.new do
+          self << [EX.x1, EX.p2, EX.x2] # nonexistent statement
           self << [:s, :p, :o]
         end
         query.execute(@graph).should == []
