@@ -301,7 +301,29 @@ describe RDF::Query do
         ].to_set
       end
     end
-  
+
+    context "with preliminary bindings" do
+      before :each do
+        @graph = RDF::Graph.new do
+          self << [EX.x1, EX.p, EX.o1]
+          self << [EX.x1, EX.p, EX.o2]
+          self << [EX.x1, EX.p, EX.o3]
+          self << [EX.x1, EX.p, EX.o4]
+          self << [EX.x1, EX.p, EX.o5]
+          self << [EX.x1, EX.p, EX.o6]
+        end
+      end
+
+      it "should limit a variable to the initial bindings" do
+        query = RDF::Query.new do
+          self << [EX.x1, EX.p, :o]
+        end
+        query.execute(@graph, :bindings => { :o => [EX.o1, EX.o4]}).should have_result_set [
+          {:o => EX.o1}, {:o => EX.o4}]
+      end
+
+    end
+
     context "solution modifiers" do
       before :each do
         pending "TODO"
