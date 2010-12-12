@@ -204,6 +204,19 @@ module RDF
       @patterns.each do |pattern|
         
         old_solutions, @solutions = @solutions, Solutions.new
+
+        options[:bindings].keys.each do |variable|
+          if pattern.variables.include?(variable)
+            unbound_solutions, old_solutions = old_solutions, Solutions.new
+            options[:bindings][variable].each do |binding|
+              unbound_solutions.each do |solution|
+                old_solutions << solution.merge(variable => binding)
+              end
+            end
+            options[:bindings].delete(variable)
+          end
+        end
+
         old_solutions.each do |solution|
           pattern.execute(queryable, solution) do |statement|
             @solutions << solution.merge(pattern.solution(statement))
