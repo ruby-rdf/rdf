@@ -191,32 +191,25 @@ module RDF
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     def execute(queryable, options = {})
+      options = options.dup
+
+      # just so we can call #keys below without worrying
+      options[:bindings] ||= {}
+
       @solutions = Solutions.new
+      # A quick empty solution simplifies the logic below; no special case for
+      # the first pattern
+      @solutions << RDF::Query::Solution.new({})
+
       @patterns.each do |pattern|
-        case # 1 or 2 variables
-
-          when !@solutions.have_variables?(pattern.variables.values)
-            if @solutions.empty?
-              pattern.execute(queryable) do |statement|
-                @solutions << pattern.solution(statement)
-              end
-            else # union
-              old_solutions, @solutions = @solutions, Solutions.new
-              pattern.execute(queryable) do |statement|
-                old_solutions.each do |solution|
-                  @solutions << solution.merge(pattern.solution(statement))
-                end
-              end
-            end
-
-          else # also union
-            old_solutions, @solutions = @solutions, Solutions.new
-            old_solutions.each_with_index do |solution, index|
-              pattern.execute(queryable, solution) do |statement|
-                @solutions << solution.merge(pattern.solution(statement))
-              end
-            end
+        
+        old_solutions, @solutions = @solutions, Solutions.new
+        old_solutions.each do |solution|
+          pattern.execute(queryable, solution) do |statement|
+            @solutions << solution.merge(pattern.solution(statement))
+          end
         end
+
         # It's important to abort failed queries quickly because later patterns
         # that can have constraints are often broad without them.
         # We have no solutions at all:
