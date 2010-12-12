@@ -8,9 +8,6 @@ Spec::Matchers.define :have_result_set do |expected|
   end
 end
 
-
-
-
 describe RDF::Query do
   EX = RDF::EX = RDF::Vocabulary.new('http://example.org/')
 
@@ -87,6 +84,43 @@ describe RDF::Query do
           self << [:s, EX.p, 1]
         end
         query.execute(@graph).should have_result_set([{ :s => EX.x1 }])
+      end
+
+      it "s ?p o" do
+        query = RDF::Query.new do
+          self << [EX.x2, :p, 2]
+        end
+        query.execute(@graph).should have_result_set [ { :p => EX.p } ]
+      end
+
+      it "s p ?o" do
+        query = RDF::Query.new do
+          self << [EX.x3, EX.p, :o]
+        end
+        query.execute(@graph).should have_result_set [ { :o => RDF::Literal.new(3) } ]
+      end
+
+      it "?s p ?o" do
+        query = RDF::Query.new do
+          self << [:s, EX.p, :o]
+        end
+        query.execute(@graph).should have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
+                                                       { :s => EX.x2, :o => RDF::Literal.new(2) },
+                                                       { :s => EX.x3, :o => RDF::Literal.new(3) }]
+      end
+
+      it "?s ?p o" do
+        query = RDF::Query.new do
+          self << [:s, :p, 3]
+        end
+        query.execute(@graph).should have_result_set [ { :s => EX.x3, :p => EX.p } ]
+      end
+
+      it "s ?p ?o" do
+        query = RDF::Query.new do
+          self << [ EX.x1, :p, :o]
+        end
+        query.execute(@graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
     end
 
