@@ -154,6 +154,33 @@ module RDF
     end
 
     ##
+    # Returns an optimized copy of this query.
+    #
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional options for optimization
+    # @return [RDF::Query] a copy of `self`
+    # @since  0.3.0
+    def optimize(options = {})
+      self.dup.optimize!(options)
+    end
+
+    ##
+    # Optimizes this query by reordering its constituent triple patterns
+    # according to their cost estimates.
+    #
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional options for optimization
+    # @return [void] `self`
+    # @see    RDF::Query::Pattern#cost
+    # @since  0.3.0
+    def optimize!(options = {})
+      @patterns.sort! do |a, b|
+        (a.cost || 0) <=> (b.cost || 0)
+      end
+      self
+    end
+
+    ##
     # Executes this query on the given `queryable` graph or repository.
     #
     # @param  [RDF::Queryable] queryable
