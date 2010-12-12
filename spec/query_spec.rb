@@ -2,6 +2,15 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 require 'set'
 
+Spec::Matchers.define :have_result_set do |expected|
+  match do |result|
+    result.map(&:to_hash).to_set.should == expected.to_set
+  end
+end
+
+
+
+
 describe RDF::Query do
   EX = RDF::EX = RDF::Vocabulary.new('http://example.org/')
 
@@ -35,7 +44,7 @@ describe RDF::Query do
         query.execute(@graph).map(&:to_hash).should == [{}]
       end
     end
-  
+ 
     context "querying for a literal" do
       it "should return a sequence with an existing literal" do
         graph = RDF::Graph.new do
@@ -47,7 +56,44 @@ describe RDF::Query do
         query.execute(graph).map(&:to_hash).should == [{:s => EX.x1}]
       end
     end
-  
+
+    context "triple pattern combinations" do
+      before :each do
+        # Normally we would not want all of this crap in the graph for each
+        # test, but this gives us the nice benefit that each test implicitly
+        # tests returning only the correct results and not random other ones.
+        @graph = RDF::Graph.new do
+          # simple patterns
+          self << [EX.x1, EX.p, 1]
+          self << [EX.x2, EX.p, 2]
+          self << [EX.x3, EX.p, 3]
+
+          # pattern with same variable twice
+          self << [EX.x4, EX.psame, EX.x4]
+
+          # pattern with variable across 2 patterns
+          self << [EX.x5, EX.p3, EX.x3]
+          self << [EX.x5, EX.p2, EX.x3]
+
+          # pattern following a chain
+          self << [EX.x6, EX.pchain, EX.target]
+          self << [EX.target, EX.pchain2, EX.target2]
+          self << [EX.target2, EX.pchain3, EX.target3]
+        end
+      end
+
+      it "?s p o" do
+        query = RDF::Query.new do
+          self << [:s, EX.p, 1]
+        end
+        query.execute(@graph).should have_result_set([{ :s => EX.x1 }])
+      end
+    end
+
+    context "with pre-existing constraints" do
+      # TODO
+    end
+
     context "querying with unioned triple patterns" do
       it "should return a union of solution sequences" do
         graph = RDF::Graph.new do
@@ -70,6 +116,7 @@ describe RDF::Query do
   
     context "solution modifiers" do
       before :each do
+        pending "TODO"
         @graph = RDF::Repository.load(fixture_path('test.nt'))
         @query = RDF::Query.new(:solutions => @graph.map { |stmt| stmt.to_hash(:s, :p, :o) })
       end
