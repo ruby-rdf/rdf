@@ -130,6 +130,19 @@ describe RDF::Query do
         query.execute(@graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
 
+      it "?s p o / ?s p1 o1" do
+          # pattern with variable across 2 patterns
+          #self << [EX.x5, EX.p3, EX.x3]
+          #self << [EX.x5, EX.p2, EX.x3]
+        query = RDF::Query.new do
+          self << [:s, EX.p3, EX.x3]
+          self << [:s, EX.p2, EX.x3]
+        end
+        query.execute(@graph).should have_result_set [ { :s => EX.x5 } ]
+      end
+
+      it "?s p ?o with duplicates" do
+      end
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
         query = RDF::Query.new do
           self << [:s, EX.pchain, :o]
@@ -146,7 +159,7 @@ describe RDF::Query do
         query.execute(@graph).should have_result_set [ { :same => EX.x4 } ]
       end
 
-      # From sp2b benchmark
+      # From sp2b benchmark, query 7 bgp 2
       it "?class3 p o / ?doc3 p2 ?class3 / ?doc3 p3 ?bag3 / ?bag3 ?member3 ?doc" do
         @graph << [EX.class1, EX.subclass, EX.document] 
         @graph << [EX.class2, EX.subclass, EX.document] 
@@ -159,12 +172,17 @@ describe RDF::Query do
         @graph << [EX.doc5, EX.type, EX.class3] 
 
         @graph << [EX.doc1, EX.refs, EX.bag1]
+        @graph << [EX.doc2, EX.refs, EX.bag2]
         @graph << [EX.doc3, EX.refs, EX.bag3]
         @graph << [EX.doc5, EX.refs, EX.bag5]
 
         @graph << [EX.bag1, RDF::Node.new('ref1'), EX.doc11]
         @graph << [EX.bag1, RDF::Node.new('ref2'), EX.doc12]
         @graph << [EX.bag1, RDF::Node.new('ref3'), EX.doc13]
+
+        @graph << [EX.bag2, RDF::Node.new('ref1'), EX.doc21]
+        @graph << [EX.bag2, RDF::Node.new('ref2'), EX.doc22]
+        @graph << [EX.bag2, RDF::Node.new('ref3'), EX.doc23]
 
         @graph << [EX.bag3, RDF::Node.new('ref1'), EX.doc31]
         @graph << [EX.bag3, RDF::Node.new('ref2'), EX.doc32]
@@ -185,21 +203,87 @@ describe RDF::Query do
           { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref1'), :doc => EX.doc11 },
           { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref2'), :doc => EX.doc12 },
           { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref3'), :doc => EX.doc13 },
+          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => RDF::Node.new('ref1'), :doc => EX.doc21 },
+          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => RDF::Node.new('ref2'), :doc => EX.doc22 },
+          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => RDF::Node.new('ref3'), :doc => EX.doc23 },
           { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref1'), :doc => EX.doc31 },
           { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref2'), :doc => EX.doc32 },
           { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref3'), :doc => EX.doc33 }
         ]
       end
 
+      # From sp2b benchmark, query 7 bgp 1
+      it "?class subclass document / ?doc type ?class / ?doc title ?title / ?bag2 ?member2 ?doc / ?doc2 refs ?bag2" do
+        @graph << [EX.class1, EX.subclass, EX.document]
+        @graph << [EX.class2, EX.subclass, EX.document]
+        @graph << [EX.class3, EX.subclass, EX.other]
 
-    end
+        @graph << [EX.doc1, EX.type, EX.class1]
+        @graph << [EX.doc2, EX.type, EX.class1]
+        @graph << [EX.doc3, EX.type, EX.class2]
+        @graph << [EX.doc4, EX.type, EX.class2]
+        @graph << [EX.doc5, EX.type, EX.class3]
+        # no doc6 type
 
-    context "with pre-existing constraints" do
-      # TODO
-    end
+        @graph << [EX.doc1, EX.title, EX.title1]
+        @graph << [EX.doc2, EX.title, EX.title2]
+        @graph << [EX.doc3, EX.title, EX.title3]
+        @graph << [EX.doc4, EX.title, EX.title4]
+        @graph << [EX.doc5, EX.title, EX.title5]
+        @graph << [EX.doc6, EX.title, EX.title6]
 
-    context "querying with unioned triple patterns" do
-      it "should return a union of solution sequences" do
+        @graph << [EX.doc1, EX.refs, EX.bag1]
+        @graph << [EX.doc2, EX.refs, EX.bag2]
+        @graph << [EX.doc3, EX.refs, EX.bag3]
+        @graph << [EX.doc5, EX.refs, EX.bag5]
+
+        @graph << [EX.bag1, RDF::Node.new('ref1'), EX.doc11]
+        @graph << [EX.bag1, RDF::Node.new('ref2'), EX.doc12]
+        @graph << [EX.bag1, RDF::Node.new('ref3'), EX.doc13]
+
+        @graph << [EX.bag2, RDF::Node.new('ref1'), EX.doc21]
+        @graph << [EX.bag2, RDF::Node.new('ref2'), EX.doc22]
+        @graph << [EX.bag2, RDF::Node.new('ref3'), EX.doc23]
+
+        @graph << [EX.bag3, RDF::Node.new('ref1'), EX.doc31]
+        @graph << [EX.bag3, RDF::Node.new('ref2'), EX.doc32]
+        @graph << [EX.bag3, RDF::Node.new('ref3'), EX.doc33]
+
+        @graph << [EX.bag5, RDF::Node.new('ref1'), EX.doc51]
+        @graph << [EX.bag5, RDF::Node.new('ref2'), EX.doc52]
+        @graph << [EX.bag5, RDF::Node.new('ref3'), EX.doc53]
+
+        query = RDF::Query.new do
+          self << [:class, EX.subclass, EX.document]
+          self << [:doc, EX.type, :class]
+          self << [:doc, EX.title, :title]
+          self << [:doc, EX.refs, :bag]
+          self << [:bag, :member, :doc2]
+        end
+
+        query.execute(@graph).should have_result_set [
+          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1, 
+            :member => RDF::Node.new('ref1'), :doc2 => EX.doc11, :title => EX.title1 },
+          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1, 
+            :member => RDF::Node.new('ref2'), :doc2 => EX.doc12, :title => EX.title1 },
+          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1, 
+            :member => RDF::Node.new('ref3'), :doc2 => EX.doc13, :title => EX.title1 },
+          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2, 
+            :member => RDF::Node.new('ref1'), :doc2 => EX.doc21, :title => EX.title2 },
+          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2, 
+            :member => RDF::Node.new('ref2'), :doc2 => EX.doc22, :title => EX.title2 },
+          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2, 
+            :member => RDF::Node.new('ref3'), :doc2 => EX.doc23, :title => EX.title2 },
+          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3, 
+            :member => RDF::Node.new('ref1'), :doc2 => EX.doc31, :title => EX.title3 },
+          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3, 
+            :member => RDF::Node.new('ref2'), :doc2 => EX.doc32, :title => EX.title3 },
+          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3, 
+            :member => RDF::Node.new('ref3'), :doc2 => EX.doc33, :title => EX.title3 },
+        ]
+      end
+
+      it "?s1 p ?o1 / ?s2 p ?o2" do
         graph = RDF::Graph.new do
           self << [EX.x1, EX.p, 1]
           self << [EX.x2, EX.p, 2]
