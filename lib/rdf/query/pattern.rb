@@ -52,6 +52,12 @@ module RDF; class Query
     attr_reader :options
 
     ##
+    # The estimated cost of this pattern (for query optimization).
+    #
+    # @return [Numeric]
+    attr_accessor :cost
+
+    ##
     # Returns `true` if this is a blank pattern, with all terms being `nil`.
     #
     # @return [Boolean] `true` or `false`
