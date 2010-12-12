@@ -122,6 +122,69 @@ describe RDF::Query do
         end
         query.execute(@graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
+
+      it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
+        query = RDF::Query.new do
+          self << [:s, EX.pchain, :o]
+          self << [:o, EX.pchain2, :o2]
+          self << [:o2, EX.pchain3, :o3]
+        end
+        query.execute(@graph).should have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
+      end
+
+      it "?same p ?same" do
+        query = RDF::Query.new do
+          self << [:same, EX.psame, :same]
+        end
+        query.execute(@graph).should have_result_set [ { :same => EX.x4 } ]
+      end
+
+      # From sp2b benchmark
+      it "?class3 p o / ?doc3 p2 ?class3 / ?doc3 p3 ?bag3 / ?bag3 ?member3 ?doc" do
+        @graph << [EX.class1, EX.subclass, EX.document] 
+        @graph << [EX.class2, EX.subclass, EX.document] 
+        @graph << [EX.class3, EX.subclass, EX.other] 
+
+        @graph << [EX.doc1, EX.type, EX.class1] 
+        @graph << [EX.doc2, EX.type, EX.class1] 
+        @graph << [EX.doc3, EX.type, EX.class2] 
+        @graph << [EX.doc4, EX.type, EX.class2] 
+        @graph << [EX.doc5, EX.type, EX.class3] 
+
+        @graph << [EX.doc1, EX.refs, EX.bag1]
+        @graph << [EX.doc3, EX.refs, EX.bag3]
+        @graph << [EX.doc5, EX.refs, EX.bag5]
+
+        @graph << [EX.bag1, RDF::Node.new('ref1'), EX.doc11]
+        @graph << [EX.bag1, RDF::Node.new('ref2'), EX.doc12]
+        @graph << [EX.bag1, RDF::Node.new('ref3'), EX.doc13]
+
+        @graph << [EX.bag3, RDF::Node.new('ref1'), EX.doc31]
+        @graph << [EX.bag3, RDF::Node.new('ref2'), EX.doc32]
+        @graph << [EX.bag3, RDF::Node.new('ref3'), EX.doc33]
+
+        @graph << [EX.bag5, RDF::Node.new('ref1'), EX.doc51]
+        @graph << [EX.bag5, RDF::Node.new('ref2'), EX.doc52]
+        @graph << [EX.bag5, RDF::Node.new('ref3'), EX.doc53]
+
+        query = RDF::Query.new do
+          self << [:class3, EX.subclass, EX.document]
+          self << [:doc3, EX.type, :class3]
+          self << [:doc3, EX.refs, :bag3]
+          self << [:bag3, :member3, :doc]
+        end
+
+        query.execute(@graph).should have_result_set [
+          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref1'), :doc => EX.doc11 },
+          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref2'), :doc => EX.doc12 },
+          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref3'), :doc => EX.doc13 },
+          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref1'), :doc => EX.doc31 },
+          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref2'), :doc => EX.doc32 },
+          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref3'), :doc => EX.doc33 }
+        ]
+      end
+
+
     end
 
     context "with pre-existing constraints" do
