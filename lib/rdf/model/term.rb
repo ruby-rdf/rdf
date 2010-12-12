@@ -23,5 +23,23 @@ module RDF
     def <=>(other)
       self.to_s <=> other.to_s
     end
+
+    ##
+    # Returns `true` if this term is constant.
+    #
+    # @return [Boolean] `true` or `false`
+    # @see    #variable?
+    def constant?
+      !(variable?)
+    end
+
+    ##
+    # Returns `true` if this term is variable.
+    #
+    # @return [Boolean] `true` or `false`
+    # @see    #constant?
+    def variable?
+      false
+    end
   end # Term
 end # RDF
