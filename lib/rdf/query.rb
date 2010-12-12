@@ -238,7 +238,7 @@ module RDF
     # @return [Boolean]
     # @see    #matched?
     def failed?
-      @failed
+      @solutions.empty?
     end
 
     ##
