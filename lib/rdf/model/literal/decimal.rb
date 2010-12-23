@@ -45,6 +45,7 @@ module RDF; class Literal
         f = '0' if f.empty?         # ...but there must be a digit to the right of the decimal point
         "#{i}.#{f}"
       end
+      @object = BigDecimal(@string) unless @object.nil?
       self
     end
 
