@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 require 'set'
 
-Spec::Matchers.define :have_result_set do |expected|
+::RSpec::Matchers.define :have_result_set do |expected|
   match do |result|
     result.map(&:to_hash).to_set.should == expected.to_set
   end
