@@ -1,5 +1,6 @@
 require 'rdf'
 require 'rdf/spec'
+require 'rdf/spec/matchers'
 
 RSpec.configure do |config|
   config.include(RDF::Spec::Matchers)
