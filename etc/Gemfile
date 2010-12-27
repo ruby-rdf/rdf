@@ -1,0 +1,24 @@
+source 'http://rubygems.org'
+
+gem 'rdf',            :git => 'git://github.com/bendiken/rdf.git'
+gem 'rdf-arq',        :git => 'git://github.com/bendiken/rdf-arq.git'
+gem 'rdf-bert',       :git => 'git://github.com/bendiken/rdf-bert.git'
+gem 'rdf-cassandra',  :git => 'git://github.com/bendiken/rdf-cassandra.git'
+gem 'rdf-json',       :git => 'git://github.com/bendiken/rdf-json.git'
+gem 'rdf-raptor',     :git => 'git://github.com/bendiken/rdf-raptor.git'
+gem 'rdf-rasqal',     :git => 'git://github.com/bendiken/rdf-rasqal.git'
+gem 'rdf-sesame',     :git => 'git://github.com/bendiken/rdf-sesame.git'
+gem 'rdf-spec',       :git => 'git://github.com/bendiken/rdf-spec.git'
+gem 'rdf-trix',       :git => 'git://github.com/bendiken/rdf-trix.git'
+
+gem 'rdf-do',         :git => 'git://github.com/bhuga/rdf-do.git'
+gem 'rdf-isomorphic', :git => 'git://github.com/bhuga/rdf-isomorphic.git'
+gem 'rdf-talis',      :git => 'git://github.com/bhuga/rdf-talis.git'
+
+gem 'rdf-n3',         :git => 'git://github.com/gkellogg/rdf-n3.git'
+gem 'rdf-rdfa',       :git => 'git://github.com/gkellogg/rdf-rdfa.git'
+gem 'rdf-rdfxml',     :git => 'git://github.com/gkellogg/rdf-rdfxml.git'
+
+gem 'rdf-4store',     :git => 'git://github.com/fumi/rdf-4store.git'
+gem 'rdf-redstore',   :git => 'git://github.com/njh/rdf-redstore.git'
+gem 'rdf-mongo',      :git => 'git://github.com/pius/rdf-mongo.git'
