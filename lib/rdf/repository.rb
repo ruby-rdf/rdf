@@ -390,6 +390,6 @@ module RDF
       protected :insert_statement
       protected :delete_statement
       protected :clear_statements
-    end # module Implementation
-  end # class Repository
-end # module RDF
+    end # Implementation
+  end # Repository
+end # RDF

@@ -95,7 +95,7 @@ module RDF; module Util
         end
         value
       end
-    end # class ObjectSpaceCache
+    end # ObjectSpaceCache
 
     ##
     # This implementation uses the `WeakRef` class from Ruby's standard
@@ -132,6 +132,6 @@ module RDF; module Util
         end
         value
       end
-    end # class WeakRefCache
-  end # class Cache
-end; end # module RDF::Util
+    end # WeakRefCache
+  end # Cache
+end; end # RDF::Util

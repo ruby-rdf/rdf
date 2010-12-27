@@ -58,6 +58,6 @@ module RDF; module Util
 
         return self
       end
-    end # module LateBound
-  end # module Aliasing
-end; end # module RDF::Util
+    end # LateBound
+  end # Aliasing
+end; end # RDF::Util
