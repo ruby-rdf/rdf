@@ -1,6 +1,45 @@
-# coding: utf-8
+# -*- encoding: utf-8 -*-
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
+
+describe RDF::NTriples::Format do
+  it "should be discoverable" do
+    formats = [
+      RDF::Format.for(:ntriples),
+      RDF::Format.for('etc/doap.nt'),
+      RDF::Format.for(:file_name      => 'etc/doap.nt'),
+      RDF::Format.for(:file_extension => 'nt'),
+      RDF::Format.for(:content_type   => 'text/plain'),
+    ]
+    formats.each { |format| format.should == RDF::NTriples::Format }
+  end
+end
+
+describe RDF::NTriples::Reader do
+  it "should be discoverable" do
+    readers = [
+      RDF::Reader.for(:ntriples),
+      RDF::Reader.for('etc/doap.nt'),
+      RDF::Reader.for(:file_name      => 'etc/doap.nt'),
+      RDF::Reader.for(:file_extension => 'nt'),
+      RDF::Reader.for(:content_type   => 'text/plain'),
+    ]
+    readers.each { |reader| reader.should == RDF::NTriples::Reader }
+  end
+end
+
+describe RDF::NTriples::Writer do
+  it "should be discoverable" do
+    writers = [
+      RDF::Writer.for(:ntriples),
+      RDF::Writer.for('tmp/test.nt'),
+      RDF::Writer.for(:file_name      => 'tmp/test.nt'),
+      RDF::Writer.for(:file_extension => 'nt'),
+      RDF::Writer.for(:content_type   => 'text/plain'),
+    ]
+    writers.each { |writer| writer.should == RDF::NTriples::Writer }
+  end
+end
 
 describe RDF::NTriples do
   before :all do
