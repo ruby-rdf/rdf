@@ -117,10 +117,13 @@ Documentation
 ### RDF Serialization Formats
 
 * {RDF::NTriples}
-* [`RDF::JSON`](http://rdf.rubyforge.org/json/) (plugin)
-* [`RDF::Trix`](http://rdf.rubyforge.org/trix/) (plugin)
-* [`RDF::Raptor::RDFXML`](http://rdf.rubyforge.org/raptor/) (plugin)
-* [`RDF::Raptor::Turtle`](http://rdf.rubyforge.org/raptor/) (plugin)
+* [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
+* [RDF::N3](http://rdf.rubyforge.org/n3/) (plugin)
+* [RDF::Raptor::RDFXML](http://rdf.rubyforge.org/raptor/) (plugin)
+* [RDF::Raptor::Turtle](http://rdf.rubyforge.org/raptor/) (plugin)
+* [RDF::RDFa](http://rdf.rubyforge.org/rdfa/) (plugin)
+* [RDF::RDFXML](http://rdf.rubyforge.org/rdfxml/) (plugin)
+* [RDF::Trix](http://rdf.rubyforge.org/trix/) (plugin)
 
 ### RDF Storage
 
@@ -135,8 +138,8 @@ Documentation
   * {RDF::Mutable}
   * {RDF::Durable}
 * {RDF::Transaction}
-* [`RDF::DataObjects`](http://rdf.rubyforge.org/do/) (plugin)
-* [`RDF::Sesame`](http://rdf.rubyforge.org/sesame/) (plugin)
+* [RDF::DataObjects](http://rdf.rubyforge.org/do/) (plugin)
+* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
 
 ### RDF Querying
 
