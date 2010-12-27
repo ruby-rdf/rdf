@@ -19,13 +19,13 @@ describe RDF::Query do
 
   context "BGPs" do
     context "querying for a specific statement" do
-  
+
       before :each do
         @graph = RDF::Graph.new do
           self << [EX.x1, EX.p1, EX.x2]
         end
       end
-  
+
       it "returns an empty solution sequence if the statement does not exist" do
         query = RDF::Query.new do
           self << [EX.x1, EX.p2, EX.x2] # nonexistent statement
@@ -40,7 +40,7 @@ describe RDF::Query do
         end
         query.execute(@graph).should == []
       end
-  
+
       it "should return a solution sequence with a single empty set if the statement exists" do
         query = RDF::Query.new do
           self << [EX.x1, EX.p1, EX.x2]
@@ -48,7 +48,7 @@ describe RDF::Query do
         query.execute(@graph).map(&:to_hash).should == [{}]
       end
     end
- 
+
     context "querying for a literal" do
       it "should return a sequence with an existing literal" do
         graph = RDF::Graph.new do
@@ -161,15 +161,15 @@ describe RDF::Query do
 
       # From sp2b benchmark, query 7 bgp 2
       it "?class3 p o / ?doc3 p2 ?class3 / ?doc3 p3 ?bag3 / ?bag3 ?member3 ?doc" do
-        @graph << [EX.class1, EX.subclass, EX.document] 
-        @graph << [EX.class2, EX.subclass, EX.document] 
-        @graph << [EX.class3, EX.subclass, EX.other] 
+        @graph << [EX.class1, EX.subclass, EX.document]
+        @graph << [EX.class2, EX.subclass, EX.document]
+        @graph << [EX.class3, EX.subclass, EX.other]
 
-        @graph << [EX.doc1, EX.type, EX.class1] 
-        @graph << [EX.doc2, EX.type, EX.class1] 
-        @graph << [EX.doc3, EX.type, EX.class2] 
-        @graph << [EX.doc4, EX.type, EX.class2] 
-        @graph << [EX.doc5, EX.type, EX.class3] 
+        @graph << [EX.doc1, EX.type, EX.class1]
+        @graph << [EX.doc2, EX.type, EX.class1]
+        @graph << [EX.doc3, EX.type, EX.class2]
+        @graph << [EX.doc4, EX.type, EX.class2]
+        @graph << [EX.doc5, EX.type, EX.class3]
 
         @graph << [EX.doc1, EX.refs, EX.bag1]
         @graph << [EX.doc2, EX.refs, EX.bag2]
@@ -262,23 +262,23 @@ describe RDF::Query do
         end
 
         query.execute(@graph).should have_result_set [
-          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1, 
+          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
             :member => RDF::Node.new('ref1'), :doc2 => EX.doc11, :title => EX.title1 },
-          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1, 
+          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
             :member => RDF::Node.new('ref2'), :doc2 => EX.doc12, :title => EX.title1 },
-          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1, 
+          { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
             :member => RDF::Node.new('ref3'), :doc2 => EX.doc13, :title => EX.title1 },
-          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2, 
+          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2,
             :member => RDF::Node.new('ref1'), :doc2 => EX.doc21, :title => EX.title2 },
-          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2, 
+          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2,
             :member => RDF::Node.new('ref2'), :doc2 => EX.doc22, :title => EX.title2 },
-          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2, 
+          { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2,
             :member => RDF::Node.new('ref3'), :doc2 => EX.doc23, :title => EX.title2 },
-          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3, 
+          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3,
             :member => RDF::Node.new('ref1'), :doc2 => EX.doc31, :title => EX.title3 },
-          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3, 
+          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3,
             :member => RDF::Node.new('ref2'), :doc2 => EX.doc32, :title => EX.title3 },
-          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3, 
+          { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3,
             :member => RDF::Node.new('ref3'), :doc2 => EX.doc33, :title => EX.title3 },
         ]
       end
@@ -330,7 +330,7 @@ describe RDF::Query do
           self << [:s, EX.p1, :o]
         end
         query.execute(@graph, :bindings => {:o => [EX.o1], :s => [EX.x1]}).should have_result_set [
-          {:s => EX.x1, :o => EX.o1} 
+          {:s => EX.x1, :o => EX.o1}
         ]
       end
 
@@ -342,26 +342,26 @@ describe RDF::Query do
         @graph = RDF::Repository.load(fixture_path('test.nt'))
         @query = RDF::Query.new(:solutions => @graph.map { |stmt| stmt.to_hash(:s, :p, :o) })
       end
-  
+
       it "should support projection" do
         @query.project(:s, :p, :o)
         @query.solutions.each do |vars, vals|
           vars.keys.should include(:s, :p, :o)
         end
-  
+
         @query.project(:s, :p)
         @query.solutions.each do |vars, vals|
           vars.keys.should include(:s, :p)
           vars.keys.should_not include(:o)
         end
-  
+
         @query.project(:s)
         @query.solutions.each do |vars, vals|
           vars.keys.should include(:s)
           vars.keys.should_not include(:p, :o)
         end
       end
-  
+
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
           @query.solutions *= 2
@@ -370,12 +370,12 @@ describe RDF::Query do
           @query.count == @graph.size
         end
       end
-  
+
       it "should support offsets" do
         @query.offset(10)
         @query.count == (@graph.size - 10)
       end
-  
+
       it "should support limits" do
         @query.limit(10)
         @query.count == 10
