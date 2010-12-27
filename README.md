@@ -30,8 +30,9 @@ Features
 Examples
 --------
 
-    require 'rubygems'
     require 'rdf'
+    
+    include RDF
 
 ### Writing RDF data using the N-Triples format
 
@@ -53,10 +54,25 @@ Examples
       end
     end
 
+### Querying RDF data using basic graph patterns (BGPs)
+
+    require 'rdf/ntriples'
+    
+    graph = RDF::Graph.load("http://rdf.rubyforge.org/doap.nt")
+    query = RDF::Query.new({
+      :person => {
+        RDF.type  => FOAF.Person,
+        FOAF.name => :name,
+        FOAF.mbox => :email,
+      }
+    })
+    
+    query.execute(graph).each do |solution|
+      puts "name=#{solution.name} email=#{solution.email}"
+    end
+
 ### Using pre-defined RDF vocabularies
 
-    include RDF
-    
     DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
     FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
     RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
@@ -118,6 +134,7 @@ Documentation
   * {RDF::Queryable}
   * {RDF::Mutable}
   * {RDF::Durable}
+* {RDF::Transaction}
 * [`RDF::DataObjects`](http://rdf.rubyforge.org/do/) (plugin)
 * [`RDF::Sesame`](http://rdf.rubyforge.org/sesame/) (plugin)
 

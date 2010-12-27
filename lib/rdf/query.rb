@@ -21,7 +21,7 @@ module RDF
   # @example Executing a basic graph pattern query
   #   graph = RDF::Graph.load('etc/doap.nt')
   #   query.execute(graph).each do |solution|
-  #     solution.inspect
+  #     puts solution.inspect
   #   end
   #
   # @example Constructing and executing a query in one go (1)
