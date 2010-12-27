@@ -21,29 +21,29 @@ describe RDF::Query do
     context "querying for a specific statement" do
 
       before :each do
-        @graph = RDF::Graph.new do
-          self << [EX.x1, EX.p1, EX.x2]
+        @graph = RDF::Graph.new do |graph|
+          graph << [EX.x1, EX.p1, EX.x2]
         end
       end
 
       it "returns an empty solution sequence if the statement does not exist" do
-        query = RDF::Query.new do
-          self << [EX.x1, EX.p2, EX.x2] # nonexistent statement
+        query = RDF::Query.new do |query|
+          query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
         end
         query.execute(@graph).should == []
       end
 
       it "returns an empty solution sequence if the statement does not exist as part of a multi-pattern bgp" do
-        query = RDF::Query.new do
-          self << [EX.x1, EX.p2, EX.x2] # nonexistent statement
-          self << [:s, :p, :o]
+        query = RDF::Query.new do |query|
+          query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
+          query << [:s, :p, :o]
         end
         query.execute(@graph).should == []
       end
 
       it "should return a solution sequence with a single empty set if the statement exists" do
-        query = RDF::Query.new do
-          self << [EX.x1, EX.p1, EX.x2]
+        query = RDF::Query.new do |query|
+          query << [EX.x1, EX.p1, EX.x2]
         end
         query.execute(@graph).map(&:to_hash).should == [{}]
       end
@@ -51,11 +51,11 @@ describe RDF::Query do
 
     context "querying for a literal" do
       it "should return a sequence with an existing literal" do
-        graph = RDF::Graph.new do
-          self << [EX.x1, EX.p1, 123.0]
+        graph = RDF::Graph.new do |graph|
+          graph << [EX.x1, EX.p1, 123.0]
         end
-        query = RDF::Query.new do
-          self << [:s, EX.p1, 123.0]
+        query = RDF::Query.new do |query|
+          query << [:s, EX.p1, 123.0]
         end
         query.execute(graph).map(&:to_hash).should == [{:s => EX.x1}]
       end
@@ -66,50 +66,50 @@ describe RDF::Query do
         # Normally we would not want all of this crap in the graph for each
         # test, but this gives us the nice benefit that each test implicitly
         # tests returning only the correct results and not random other ones.
-        @graph = RDF::Graph.new do
+        @graph = RDF::Graph.new do |graph|
           # simple patterns
-          self << [EX.x1, EX.p, 1]
-          self << [EX.x2, EX.p, 2]
-          self << [EX.x3, EX.p, 3]
+          graph << [EX.x1, EX.p, 1]
+          graph << [EX.x2, EX.p, 2]
+          graph << [EX.x3, EX.p, 3]
 
           # pattern with same variable twice
-          self << [EX.x4, EX.psame, EX.x4]
+          graph << [EX.x4, EX.psame, EX.x4]
 
           # pattern with variable across 2 patterns
-          self << [EX.x5, EX.p3, EX.x3]
-          self << [EX.x5, EX.p2, EX.x3]
+          graph << [EX.x5, EX.p3, EX.x3]
+          graph << [EX.x5, EX.p2, EX.x3]
 
           # pattern following a chain
-          self << [EX.x6, EX.pchain, EX.target]
-          self << [EX.target, EX.pchain2, EX.target2]
-          self << [EX.target2, EX.pchain3, EX.target3]
+          graph << [EX.x6, EX.pchain, EX.target]
+          graph << [EX.target, EX.pchain2, EX.target2]
+          graph << [EX.target2, EX.pchain3, EX.target3]
         end
       end
 
       it "?s p o" do
-        query = RDF::Query.new do
-          self << [:s, EX.p, 1]
+        query = RDF::Query.new do |query|
+          query << [:s, EX.p, 1]
         end
         query.execute(@graph).should have_result_set([{ :s => EX.x1 }])
       end
 
       it "s ?p o" do
-        query = RDF::Query.new do
-          self << [EX.x2, :p, 2]
+        query = RDF::Query.new do |query|
+          query << [EX.x2, :p, 2]
         end
         query.execute(@graph).should have_result_set [ { :p => EX.p } ]
       end
 
       it "s p ?o" do
-        query = RDF::Query.new do
-          self << [EX.x3, EX.p, :o]
+        query = RDF::Query.new do |query|
+          query << [EX.x3, EX.p, :o]
         end
         query.execute(@graph).should have_result_set [ { :o => RDF::Literal.new(3) } ]
       end
 
       it "?s p ?o" do
-        query = RDF::Query.new do
-          self << [:s, EX.p, :o]
+        query = RDF::Query.new do |query|
+          query << [:s, EX.p, :o]
         end
         query.execute(@graph).should have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
                                                        { :s => EX.x2, :o => RDF::Literal.new(2) },
@@ -117,15 +117,15 @@ describe RDF::Query do
       end
 
       it "?s ?p o" do
-        query = RDF::Query.new do
-          self << [:s, :p, 3]
+        query = RDF::Query.new do |query|
+          query << [:s, :p, 3]
         end
         query.execute(@graph).should have_result_set [ { :s => EX.x3, :p => EX.p } ]
       end
 
       it "s ?p ?o" do
-        query = RDF::Query.new do
-          self << [ EX.x1, :p, :o]
+        query = RDF::Query.new do |query|
+          query << [ EX.x1, :p, :o]
         end
         query.execute(@graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
@@ -134,9 +134,9 @@ describe RDF::Query do
           # pattern with variable across 2 patterns
           #self << [EX.x5, EX.p3, EX.x3]
           #self << [EX.x5, EX.p2, EX.x3]
-        query = RDF::Query.new do
-          self << [:s, EX.p3, EX.x3]
-          self << [:s, EX.p2, EX.x3]
+        query = RDF::Query.new do |query|
+          query << [:s, EX.p3, EX.x3]
+          query << [:s, EX.p2, EX.x3]
         end
         query.execute(@graph).should have_result_set [ { :s => EX.x5 } ]
       end
@@ -144,17 +144,17 @@ describe RDF::Query do
       it "?s p ?o with duplicates" do
       end
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
-        query = RDF::Query.new do
-          self << [:s, EX.pchain, :o]
-          self << [:o, EX.pchain2, :o2]
-          self << [:o2, EX.pchain3, :o3]
+        query = RDF::Query.new do |query|
+          query << [:s, EX.pchain, :o]
+          query << [:o, EX.pchain2, :o2]
+          query << [:o2, EX.pchain3, :o3]
         end
         query.execute(@graph).should have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
       end
 
       it "?same p ?same" do
-        query = RDF::Query.new do
-          self << [:same, EX.psame, :same]
+        query = RDF::Query.new do |query|
+          query << [:same, EX.psame, :same]
         end
         query.execute(@graph).should have_result_set [ { :same => EX.x4 } ]
       end
@@ -192,11 +192,11 @@ describe RDF::Query do
         @graph << [EX.bag5, RDF::Node.new('ref2'), EX.doc52]
         @graph << [EX.bag5, RDF::Node.new('ref3'), EX.doc53]
 
-        query = RDF::Query.new do
-          self << [:class3, EX.subclass, EX.document]
-          self << [:doc3, EX.type, :class3]
-          self << [:doc3, EX.refs, :bag3]
-          self << [:bag3, :member3, :doc]
+        query = RDF::Query.new do |query|
+          query << [:class3, EX.subclass, EX.document]
+          query << [:doc3, EX.type, :class3]
+          query << [:doc3, EX.refs, :bag3]
+          query << [:bag3, :member3, :doc]
         end
 
         query.execute(@graph).should have_result_set [
@@ -253,12 +253,12 @@ describe RDF::Query do
         @graph << [EX.bag5, RDF::Node.new('ref2'), EX.doc52]
         @graph << [EX.bag5, RDF::Node.new('ref3'), EX.doc53]
 
-        query = RDF::Query.new do
-          self << [:class, EX.subclass, EX.document]
-          self << [:doc, EX.type, :class]
-          self << [:doc, EX.title, :title]
-          self << [:doc, EX.refs, :bag]
-          self << [:bag, :member, :doc2]
+        query = RDF::Query.new do |query|
+          query << [:class, EX.subclass, EX.document]
+          query << [:doc, EX.type, :class]
+          query << [:doc, EX.title, :title]
+          query << [:doc, EX.refs, :bag]
+          query << [:bag, :member, :doc2]
         end
 
         query.execute(@graph).should have_result_set [
@@ -284,13 +284,13 @@ describe RDF::Query do
       end
 
       it "?s1 p ?o1 / ?s2 p ?o2" do
-        graph = RDF::Graph.new do
-          self << [EX.x1, EX.p, 1]
-          self << [EX.x2, EX.p, 2]
+        graph = RDF::Graph.new do |graph|
+          graph << [EX.x1, EX.p, 1]
+          graph << [EX.x2, EX.p, 2]
         end
-        query = RDF::Query.new do
-          self << [:s1, EX.p, :o1]
-          self << [:s2, EX.p, :o2]
+        query = RDF::Query.new do |query|
+          query << [:s1, EX.p, :o1]
+          query << [:s2, EX.p, :o2]
         end
         # Use set comparison for unordered compare on 1.8.7
         query.execute(graph).map(&:to_hash).to_set.should == [
@@ -304,19 +304,19 @@ describe RDF::Query do
 
     context "with preliminary bindings" do
       before :each do
-        @graph = RDF::Graph.new do
-          self << [EX.x1, EX.p, EX.o1]
-          self << [EX.x1, EX.p, EX.o2]
-          self << [EX.x1, EX.p, EX.o3]
-          self << [EX.x1, EX.p, EX.o4]
-          self << [EX.x1, EX.p, EX.o5]
-          self << [EX.x1, EX.p, EX.o6]
+        @graph = RDF::Graph.new do |graph|
+          graph << [EX.x1, EX.p, EX.o1]
+          graph << [EX.x1, EX.p, EX.o2]
+          graph << [EX.x1, EX.p, EX.o3]
+          graph << [EX.x1, EX.p, EX.o4]
+          graph << [EX.x1, EX.p, EX.o5]
+          graph << [EX.x1, EX.p, EX.o6]
         end
       end
 
       it "limits a variable to the initial bindings" do
-        query = RDF::Query.new do
-          self << [EX.x1, EX.p, :o]
+        query = RDF::Query.new do |query|
+          query << [EX.x1, EX.p, :o]
         end
         query.execute(@graph, :bindings => { :o => [EX.o1, EX.o4]}).should have_result_set [
           {:o => EX.o1}, {:o => EX.o4}]
@@ -326,8 +326,8 @@ describe RDF::Query do
         @graph << [EX.x1, EX.p1, EX.o1]
         @graph << [EX.x1, EX.p1, EX.o2]
         @graph << [EX.x2, EX.p1, EX.o1]
-        query = RDF::Query.new do
-          self << [:s, EX.p1, :o]
+        query = RDF::Query.new do |query|
+          query << [:s, EX.p1, :o]
         end
         query.execute(@graph, :bindings => {:o => [EX.o1], :s => [EX.x1]}).should have_result_set [
           {:s => EX.x1, :o => EX.o1}
