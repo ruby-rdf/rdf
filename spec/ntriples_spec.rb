@@ -72,16 +72,14 @@ describe RDF::NTriples do
     end
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape Unicode characters (#x80-#x10FFFF)" do
-      if defined?(::Encoding) # executed in Ruby 1.9+ only
-        (0x7F..0xFFFF).each do |u|
-          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @reader.unescape(@writer.escape(c)).should == c
-        end
-        (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
-          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @reader.unescape(@writer.escape(c)).should == c
-        end
+    it "should correctly unescape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+      (0x7F..0xFFFF).each do |u|
+        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+        @reader.unescape(@writer.escape(c)).should == c
+      end
+      (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
+        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+        @reader.unescape(@writer.escape(c)).should == c
       end
     end
 
@@ -123,16 +121,14 @@ describe RDF::NTriples do
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
-    it "should correctly escape Unicode characters (#x80-#x10FFFF)" do
-      if defined?(::Encoding) # executed in Ruby 1.9+ only
-        (0x7F..0xFFFF).each do |u|
-          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
-        end
-        (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
-          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
-        end
+    it "should correctly escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+      (0x7F..0xFFFF).each do |u|
+        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+        @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
+      end
+      (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
+        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+        @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
       end
     end
 
@@ -225,7 +221,7 @@ describe RDF::NTriples do
           statement = @reader.unserialize(nt)
           statement.object.value.should == "\u{15678}another"
         else
-          pending("Not supported in Ruby 1.8")
+          pending("Not supported on Ruby 1.8")
         end
       end
 
@@ -277,7 +273,7 @@ describe RDF::NTriples do
             if defined?(::Encoding)
               raise
             else
-              pending("Unicode URIs not supported in Ruby 1.8") { raise }
+              pending("Unicode URIs not supported on Ruby 1.8") { raise }
             end
           end
         end
