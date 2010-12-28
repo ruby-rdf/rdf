@@ -110,14 +110,14 @@ module RDF
       io = File.open(io, 'w') if io.is_a?(String)
       method = data.respond_to?(:each_statement) ? :each_statement : :each
       if io
-        new(io) do |writer|
+        new(io, options) do |writer|
           data.send(method) do |statement|
             writer << statement
           end
           writer.flush
         end
       else
-        buffer do |writer|
+        buffer(options) do |writer|
           data.send(method) do |statement|
             writer << statement
           end

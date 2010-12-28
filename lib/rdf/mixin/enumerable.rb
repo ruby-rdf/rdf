@@ -610,8 +610,8 @@ module RDF
     # @return [String]
     # @see    RDF::Writer.dump
     # @since  0.2.0
-    def dump(*args)
-      RDF::Writer.for(*args).dump(self)
+    def dump(format, options={})
+      RDF::Writer.for(format).dump(self, nil, options)
     end
   end # Enumerable
 end # RDF
