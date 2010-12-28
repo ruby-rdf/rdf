@@ -370,15 +370,17 @@ module RDF
         vocab_uri  = local_name.empty? ? self.to_s : self.to_s[0...-(local_name.length)]
         Vocabulary.each do |vocab|
           if vocab.to_uri == vocab_uri
-            return [vocab.__prefix__, local_name.empty? ? nil : local_name.to_sym]
+            prefix = vocab.equal?(RDF) ? :rdf : vocab.__prefix__
+            return [prefix, local_name.empty? ? nil : local_name.to_sym]
           end
         end
       else
         Vocabulary.each do |vocab|
           vocab_uri = vocab.to_uri
           if self.start_with?(vocab_uri)
+            prefix = vocab.equal?(RDF) ? :rdf : vocab.__prefix__
             local_name = self.to_s[vocab_uri.length..-1]
-            return [vocab.__prefix__, local_name.empty? ? nil : local_name.to_sym]
+            return [prefix, local_name.empty? ? nil : local_name.to_sym]
           end
         end
       end
