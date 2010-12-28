@@ -607,14 +607,14 @@ module RDF
     #   ntriples = enumerable.dump(:ntriples)
     #
     # @param  [Array<Object>] args
-    #   The first element is passed to Writer.for.
-    #   If the last argument is a hash, it is passed to Writer.dump as options
+    #   if the last argument is a hash, it is passed as keyword options to
+    #   {RDF::Writer.dump}.
     # @return [String]
     # @see    RDF::Writer.dump
     # @since  0.2.0
     def dump(*args)
-      opts = args.last.is_a?(Hash) ? args.last : {}
-      RDF::Writer.for(args.first).dump(self, nil, opts)
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      RDF::Writer.for(*args).dump(self, nil, options)
     end
   end # Enumerable
 end # RDF

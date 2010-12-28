@@ -102,9 +102,12 @@ module RDF
     end
 
     ##
-    # @param  [Object]                 data
-    # @param  [IO, File]               io
-    # @param  [Hash{Symbol => Object}] options Passed to Writer.new or Writer.buffer
+    # @param  [RDF::Enumerable, #each] data
+    #   the graph or repository to dump
+    # @param  [IO, File] io
+    #   the output stream or file to write to
+    # @param  [Hash{Symbol => Object}] options
+    #   passed to {RDF::Writer.new} or {RDF::Writer.buffer}
     # @return [void]
     def self.dump(data, io = nil, options = {})
       io = File.open(io, 'w') if io.is_a?(String)
