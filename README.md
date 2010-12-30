@@ -5,6 +5,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
 * <http://github.com/bendiken/rdf>
+* <http://blog.datagraph.org/2010/12/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 * <http://blog.datagraph.org/2010/04/rdf-repository-howto>
