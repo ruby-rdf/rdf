@@ -9,6 +9,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 * <http://blog.datagraph.org/2010/04/rdf-repository-howto>
+* <http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_(Ruby)>
 
 Features
 --------
