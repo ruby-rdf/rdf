@@ -107,7 +107,7 @@ module RDF
     #
     # @param  [String, #to_s] filename
     # @param  [Hash{Symbol => Object}] options
-    #   any additional options (see {RDF::Reader#initialize})
+    #   any additional options (see {RDF::Reader#initialize} and {RDF::Format.for})
     # @option options [Symbol] :format (:ntriples)
     # @yield  [reader]
     # @yieldparam  [RDF::Reader] reader
@@ -115,9 +115,10 @@ module RDF
     # @raise  [RDF::FormatError] if no reader found for the specified format
     def self.open(filename, options = {}, &block)
       Util::File.open_file(filename, options) do |file|
-        reader = self.for(options[:format]) if options[:format]
-        content_type = file.content_type if file.respond_to?(:content_type)
-        reader ||= self.for(options.merge(:file_name => filename, :content_type => content_type))
+        format_options = options.dup
+        format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
+        format_options[:file_name] ||= filename
+        reader = self.for(format_options)
         if reader
           reader.new(file, options, &block)
         else
