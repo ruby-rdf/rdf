@@ -9,7 +9,6 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 * <http://blog.datagraph.org/2010/04/rdf-repository-howto>
-* <http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_(Ruby)>
 
 Features
 --------
@@ -28,6 +27,16 @@ Features
   use of any one part of the library without needing to load up the rest.
 * Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.
 * Compatible with older Ruby versions with the help of the [Backports][] gem.
+
+Tutorials
+---------
+
+* [Getting data from the Semantic Web using Ruby and RDF.rb]
+  (http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
+* [Using RDF.rb and Spira to process RDF data from the British Ordnance Survey]
+  (http://ultramagnus.org/?p=85)
+* [Getting started with RDF and SPARQL using 4store and RDF.rb]
+  (http://www.jenitennison.com/blog/node/152)
 
 Examples
 --------
