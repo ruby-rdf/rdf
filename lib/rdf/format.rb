@@ -88,15 +88,17 @@ module RDF
 
         when Hash
           case
-            # Find a format based on the MIME content type
+            # Find a format based on the MIME content type:
             when mime_type = options[:content_type]
-              if content_types.has_key?(mime_type = mime_type.to_s)
-                content_types[mime_type].first
-              end
-            # Find a format based on the file name
+              # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
+              # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
+              mime_type = mime_type.to_s
+              mime_type = mime_type.split(';').first if mime_type.include?(?;) # remove any media type parameters
+              content_types.has_key?(mime_type) ? content_types[mime_type].first : nil
+            # Find a format based on the file name:
             when file_name = options[:file_name]
               self.for(:file_extension => File.extname(file_name.to_s)[1..-1])
-            # Find a format based on the file extension
+            # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
               if file_extensions.has_key?(file_ext = file_ext.to_sym)
                 self.for(:content_type => file_extensions[file_ext])
