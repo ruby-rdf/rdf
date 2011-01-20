@@ -281,6 +281,7 @@ module RDF
     ##
     # @param  [RDF::Graph] graph
     # @return [void] `self`
+    # @deprecated replace by `RDF::Writable#insert_graph`
     def write_graph(graph)
       graph.each_triple { |*triple| write_triple(*triple) }
       self
@@ -289,6 +290,7 @@ module RDF
     ##
     # @param  [Array<RDF::Statement>] statements
     # @return [void] `self`
+    # @deprecated replace by `RDF::Writable#insert_statements`
     def write_statements(*statements)
       statements.flatten.each { |statement| write_statement(statement) }
       self
@@ -301,6 +303,7 @@ module RDF
       write_triple(*statement.to_triple)
       self
     end
+    alias_method :insert_statement, :write_statement # support the RDF::Writable interface
 
     ##
     # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>] triples
@@ -320,11 +323,6 @@ module RDF
     def write_triple(subject, predicate, object)
       raise NotImplementedError.new("#{self.class}#write_triple") # override in subclasses
     end
-
-    # Support the RDF::Writable interface:
-    alias_method :insert_graph,      :write_graph
-    alias_method :insert_statements, :write_statements
-    alias_method :insert_statement,  :write_statement
 
     ##
     # @param  [RDF::Term] term
