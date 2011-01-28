@@ -2,6 +2,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 require 'rdf/spec/format'
+require 'rdf/spec/reader'
 
 describe RDF::NTriples::Format do
   before(:each) do
@@ -24,6 +25,13 @@ describe RDF::NTriples::Format do
 end
 
 describe RDF::NTriples::Reader do
+  before(:each) do
+    @reader = RDF::NTriples::Reader.new
+  end
+  
+  # @see lib/rdf/spec/reader.rb in rdf-spec
+  it_should_behave_like RDF_Reader
+
   it "should be discoverable" do
     readers = [
       RDF::Reader.for(:ntriples),

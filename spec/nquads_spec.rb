@@ -2,6 +2,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/nquads'
 require 'rdf/spec/format'
+require 'rdf/spec/reader'
 
 describe RDF::NQuads::Format do
   before(:each) { pending "N-Quads is not supported yet" }
@@ -27,6 +28,13 @@ end
 
 describe RDF::NQuads::Reader do
   before(:each) { pending "N-Quads is not supported yet" }
+  before(:each) do
+    @reader = RDF::NQuads::Reader.new
+  end
+  
+  # @see lib/rdf/spec/reader.rb in rdf-spec
+  it_should_behave_like RDF_Reader
+
 
   it "should be discoverable" do
     readers = [
