@@ -1,9 +1,17 @@
 # -*- encoding: utf-8 -*-
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/nquads'
+require 'rdf/spec/format'
 
 describe RDF::NQuads::Format do
   before(:each) { pending "N-Quads is not supported yet" }
+  before(:each) do
+    @format = RDF::NQuads::Format
+  end
+  
+  # @see lib/rdf/spec/format.rb in rdf-spec
+  it_should_behave_like RDF_Format
+
 
   it "should be discoverable" do
     formats = [
