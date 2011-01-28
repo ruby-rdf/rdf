@@ -118,7 +118,7 @@ module RDF
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
-        reader = self.for(format_options)
+        reader = self.for(format_options[:format] || format_options)
         if reader
           reader.new(file, options, &block)
         else
