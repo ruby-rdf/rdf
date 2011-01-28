@@ -3,7 +3,7 @@ require 'rdf/spec/format'
 
 describe RDF::Format do
   before(:each) do
-    @format = RDF::Format
+    @format_class = RDF::Format
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec

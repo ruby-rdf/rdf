@@ -5,7 +5,7 @@ require 'rdf/spec/format'
 
 describe RDF::NTriples::Format do
   before(:each) do
-    @format = RDF::NTriples::Format
+    @format_class = RDF::NTriples::Format
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec

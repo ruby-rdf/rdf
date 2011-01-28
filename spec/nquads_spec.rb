@@ -6,7 +6,7 @@ require 'rdf/spec/format'
 describe RDF::NQuads::Format do
   before(:each) { pending "N-Quads is not supported yet" }
   before(:each) do
-    @format = RDF::NQuads::Format
+    @format_class = RDF::NQuads::Format
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec
