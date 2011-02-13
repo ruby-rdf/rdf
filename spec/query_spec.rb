@@ -12,8 +12,27 @@ describe RDF::Query do
   EX = RDF::EX = RDF::Vocabulary.new('http://example.org/')
 
   context "when created" do
+    before(:each) do
+      @pattern = RDF::Query::Pattern.new(RDF::URI("a"), RDF::URI("b"), "c")
+    end
+
     it "should be instantiable" do
       lambda { RDF::Query.new }.should_not raise_error
+    end
+    
+    it "adds patterns from closure" do
+      RDF::Query.new { pattern [RDF::URI("a"), RDF::URI("b"), "c"] }.patterns.should == [@pattern]
+    end
+    
+    it "adds patterns from argument" do
+      RDF::Query.new(@pattern).patterns.should == [@pattern]
+    end
+    
+    it "adds patterns from array" do
+      RDF::Query.new([@pattern]).patterns.should == [@pattern]
+    end
+    it "adds patterns from hash" do
+      RDF::Query.new(RDF::URI("a") => { RDF::URI("b")  => "c" }).patterns.should == [@pattern]
     end
   end
 
@@ -380,6 +399,56 @@ describe RDF::Query do
         @query.limit(10)
         @query.count == 10
       end
+    end
+  end
+
+  context "#context" do
+    it "returns nil by default" do
+      subject.context.should be_nil
+    end
+    
+    it "sets and returns a context" do
+      subject.context = RDF.first
+      subject.context.should == RDF.first
+    end
+  end
+
+  describe "#named?" do
+    it "returns false with no context" do
+      subject.named?.should be_false
+    end
+    
+    it "returns true with a context" do
+      subject.context = RDF.first
+      subject.named?.should be_true
+    end
+  end
+  
+  describe "#unnamed?" do
+    it "returns true with no context" do
+      subject.unnamed?.should be_true
+    end
+    
+    it "returns false with a context" do
+      subject.context = RDF.first
+      subject.unnamed?.should be_false
+    end
+  end
+  
+  describe "#+" do
+    it "returns a new RDF::Query" do
+      rhs = RDF::Query.new
+      q = subject + rhs
+      q.should_not be_equal(subject)
+      q.should_not be_equal(rhs)
+    end
+    
+    it "contains patterns from each query in order" do
+      subject.pattern [RDF.first, RDF.second, RDF.third]
+      rhs = RDF::Query.new
+      subject.pattern [RDF.a, RDF.b, RDF.c]
+      q = subject + rhs
+      q.patterns.should == [[RDF.first, RDF.second, RDF.third], [RDF.a, RDF.b, RDF.c]]
     end
   end
 end

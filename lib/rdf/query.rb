@@ -108,15 +108,16 @@ module RDF
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
-    def initialize(patterns = nil, options = {}, &block)
-      @options   = options.dup
+    def initialize(*patterns, &block)
+      @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
+      patterns << @options if patterns.empty?
       @variables = {}
       @solutions = @options.delete(:solutions) || Solutions.new
 
-      @patterns  = case patterns
-        when Hash  then compile_hash_patterns(patterns.dup)
-        when Array then patterns
-        else []
+      @patterns  = case patterns.first
+        when Hash  then compile_hash_patterns(patterns.first.dup)
+        when Array then patterns.first
+        else patterns
       end
 
       if block_given?
@@ -257,6 +258,44 @@ module RDF
     # @see    #failed?
     def matched?
       !@failed
+    end
+
+    # Add patterns from another query to form a new Query
+    # @param [RDF::Query] other
+    # @return [RDF::Query]
+    def +(other)
+      Query.new(self.patterns + other.patterns)
+    end
+    
+    # Is this is a named query?
+    # @return [Boolean]
+    def named?
+      !unnamed?
+    end
+    
+    # Is this is an unamed query?
+    # @return [Boolean]
+    def unnamed?
+      options[:context].nil?
+    end
+    
+    # Add name to query
+    # @param [RDF::Value] value
+    # @return [RDF::Value]
+    def context=(value)
+      options[:context] = value
+    end
+    
+    # Name of this query, if any
+    # @return [RDF::Value]
+    def context
+      options[:context]
+    end
+
+    # Query has no patterns
+    # @return [Boolean]
+    def empty?
+      patterns.empty?
     end
 
     ##
