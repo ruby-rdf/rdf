@@ -321,6 +321,29 @@ describe RDF::Query do
           {:s => EX.s2, :o => EX.o2}
         ].to_set
       end
+
+      it "should raise an error unless all optional patterns follow regular patterns" do
+        # SPARQL requires optional patterns to follow the regular patterns.
+        # In the interest of compatibility, we enforce similar
+        # restrictions, because the semantics of leading optional patterns
+        # are hard to get right.
+        lambda do
+          query = RDF::Query.new do |query|
+            query.pattern [:s, EX.p2, :o], :optional => true
+            query.pattern [:s, EX.p, EX.o]
+          end
+          query.execute(@graph)
+        end.should raise_error(ArgumentError)
+
+        lambda do
+          query = RDF::Query.new do |query|
+            query.pattern [:s, EX.p, EX.o]
+            query.pattern [:s, EX.p2, :o], :optional => true
+            query.pattern [:s, EX.x, EX.x]
+          end
+          query.execute(@graph)
+        end.should raise_error(ArgumentError)
+      end
     end
 
     context "with preliminary bindings" do

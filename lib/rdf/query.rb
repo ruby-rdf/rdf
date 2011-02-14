@@ -191,6 +191,7 @@ module RDF
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     def execute(queryable, options = {})
+      validate!
       options = options.dup
 
       # just so we can call #keys below without worrying
@@ -272,6 +273,34 @@ module RDF
       @solutions.each(&block)
     end
     alias_method :each, :each_solution
+
+    ##
+    # Validate this query, making sure it can be executed by our query engine.
+    # This method is public so that it may be called by implementations of
+    # RDF::Queryable#query_execute that bypass our built-in query engine.
+    #
+    # @return [void]
+    # @raise [ArgumentError] This query cannot be executed.
+    def validate!
+      # Our first pattern, if it exists, cannot be an optional pattern.
+      if @patterns.length > 0 && @patterns[0].optional?
+        raise ArgumentError.new("Query must not begin with an optional pattern")
+      end
+
+      # All optional patterns must appear after the regular patterns.  We
+      # could test this more cleanly using Ruby 1.9-specific features, but
+      # we want to run under Ruby 1.8, too.
+      i = 0
+      i += 1 while i < @patterns.length && !@patterns[i].optional?
+      while i < @patterns.length
+        unless @patterns[i].optional?
+          raise ArgumentError.new("Optional patterns must appear at end of query")
+        end
+        i += 1
+      end
+
+      nil
+    end
 
   protected
 
