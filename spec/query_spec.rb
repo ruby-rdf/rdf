@@ -302,6 +302,27 @@ describe RDF::Query do
       end
     end
 
+    context "with an optional pattern" do
+      before :each do
+        @graph = RDF::Graph.new do |graph|
+          graph << [EX.s1, EX.p, EX.o]
+          graph << [EX.s2, EX.p, EX.o]
+          graph << [EX.s2, EX.p2, EX.o2]
+        end
+      end
+
+      it "should match graphs with and without the optional pattern" do
+        query = RDF::Query.new do |query|
+          query.pattern [:s, EX.p, EX.o]
+          query.pattern [:s, EX.p2, :o], :optional => true
+        end
+        query.execute(@graph).map(&:to_hash).to_set.should == [
+          {:s => EX.s1},
+          {:s => EX.s2, :o => EX.o2}
+        ].to_set
+      end
+    end
+
     context "with preliminary bindings" do
       before :each do
         @graph = RDF::Graph.new do |graph|

@@ -218,8 +218,15 @@ module RDF
         end
 
         old_solutions.each do |solution|
+          found_match = false
           pattern.execute(queryable, solution) do |statement|
+            found_match = true
             @solutions << solution.merge(pattern.solution(statement))
+          end
+          # If this pattern was optional, and we didn't find any matches,
+          # just copy it over as-is.
+          if !found_match && pattern.optional?
+            @solutions << solution
           end
         end
 
@@ -227,10 +234,6 @@ module RDF
         # that can have constraints are often broad without them.
         # We have no solutions at all:
         return @solutions if @solutions.empty?
-        # We have no solutions for variables we should have solutions for:
-        if !pattern.optional? && pattern.variables.keys.any? { |variable| !@solutions.variable_names.include?(variable) }
-          return Solutions.new
-        end
       end
       @solutions
     end
