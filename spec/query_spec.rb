@@ -457,12 +457,33 @@ describe RDF::Query do
 
       context "filter" do
         it "returns matching solutions" do
-          @solutions.filter(:subject => RDF::URI("http://example.org/resource1"))
+          @solutions.filter(:s => RDF::URI("http://example.org/resource1"))
           @solutions.count.should == 1
         end
       end
       
       context "order" do
+        it "returns ordered solutions using a symbol" do
+          orig = @solutions.dup
+          @solutions.order(:o)
+          @solutions.map(&:o).should == orig.map(&:o).sort
+        end
+
+        it "returns ordered solutions using a variable" do
+          orig = @solutions.dup
+          @solutions.order(RDF::Query::Variable.new("o"))
+          @solutions.map(&:o).should == orig.map(&:o).sort
+        end
+
+        it "returns ordered solutions using a lambda" do
+          orig = @solutions.dup
+          @solutions.order(lambda {|a, b| a[:o] <=> b[:o]})
+          @solutions.map(&:o).should == orig.map(&:o).sort
+        end
+
+        it "returns ordered solutions using a lambda symbols" do
+          @solutions.order(:s, lambda {|a, b| a[:p] <=> b[:p]}, RDF::Query::Variable.new("o"))
+        end
       end
       
       it "should support duplicate elimination" do

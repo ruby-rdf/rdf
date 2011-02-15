@@ -102,7 +102,10 @@ module RDF; class Query
         self.sort! do |a, b|
           # Try each variable until a difference is found.
           variables.inject(nil) do |memo, v|
-            memo || ((v.is_a?(Proc) ? v(a, b) : (v = v.to_sym; a[v] <=> b[v])) != 0)
+            memo || begin
+              comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
+              comp == 0 ? false : comp
+            end
           end || 0
         end
       end
