@@ -321,6 +321,76 @@ describe RDF::Query do
       end
     end
 
+    context "with variables" do
+      before :each do
+        # Normally we would not want all of this crap in the graph for each
+        # test, but this gives us the nice benefit that each test implicitly
+        # tests returning only the correct results and not random other ones.
+        @graph = RDF::Graph.new do |graph|
+          # simple patterns
+          graph << [EX.x1, EX.p, 1]
+          graph << [EX.x2, EX.p, 2]
+          graph << [EX.x3, EX.p, 3]
+
+          # pattern with same variable twice
+          graph << [EX.x4, EX.psame, EX.x4]
+
+          # pattern with variable across 2 patterns
+          graph << [EX.x5, EX.p3, EX.x3]
+          graph << [EX.x5, EX.p2, EX.x3]
+
+          # pattern following a chain
+          graph << [EX.x6, EX.pchain, EX.target]
+          graph << [EX.target, EX.pchain2, EX.target2]
+          graph << [EX.target2, EX.pchain3, EX.target3]
+        end
+      end
+
+      it "?s p o" do
+        query = RDF::Query.new do |query|
+          query << [RDF::Query::Variable.new("s"), EX.p, 1]
+        end
+        query.execute(@graph).should have_result_set([{ :s => EX.x1 }])
+      end
+
+      it "s ?p o" do
+        query = RDF::Query.new do |query|
+          query << [EX.x2, RDF::Query::Variable.new("p"), 2]
+        end
+        query.execute(@graph).should have_result_set [ { :p => EX.p } ]
+      end
+
+      it "s p ?o" do
+        query = RDF::Query.new do |query|
+          query << [EX.x3, EX.p, RDF::Query::Variable.new("o")]
+        end
+        query.execute(@graph).should have_result_set [ { :o => RDF::Literal.new(3) } ]
+      end
+
+      it "?s p ?o" do
+        query = RDF::Query.new do |query|
+          query << [RDF::Query::Variable.new("s"), EX.p, RDF::Query::Variable.new("o")]
+        end
+        query.execute(@graph).should have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
+                                                       { :s => EX.x2, :o => RDF::Literal.new(2) },
+                                                       { :s => EX.x3, :o => RDF::Literal.new(3) }]
+      end
+
+      it "?s ?p o" do
+        query = RDF::Query.new do |query|
+          query << [RDF::Query::Variable.new("s"), RDF::Query::Variable.new("p"), 3]
+        end
+        query.execute(@graph).should have_result_set [ { :s => EX.x3, :p => EX.p } ]
+      end
+
+      it "s ?p ?o" do
+        query = RDF::Query.new do |query|
+          query << [ EX.x1, RDF::Query::Variable.new("p"), RDF::Query::Variable.new("o")]
+        end
+        query.execute(@graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
+      end
+    end
+    
     context "with preliminary bindings" do
       before :each do
         @graph = RDF::Graph.new do |graph|

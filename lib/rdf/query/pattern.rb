@@ -144,7 +144,7 @@ module RDF; class Query
         :predicate => predicate && predicate.variable? ? bindings[predicate.to_sym] : predicate,
         :object    => object    && object.variable?    ? bindings[object.to_sym]    : object,
         # TODO: context handling?
-      }
+      }.delete_if{|k,v| v.nil?}
 
       # Do all the variable terms refer to distinct variables?
       variables = self.variables
@@ -306,9 +306,13 @@ module RDF; class Query
     def to_s
       StringIO.open do |buffer| # FIXME in RDF::Statement
         buffer << 'OPTIONAL ' if optional?
-        buffer << (subject.is_a?(Variable)   ? subject.to_s :   "<#{subject}>") << ' '
-        buffer << (predicate.is_a?(Variable) ? predicate.to_s : "<#{predicate}>") << ' '
-        buffer << (object.is_a?(Variable)    ? object.to_s :    "<#{object}>") << ' .'
+        buffer << [subject, predicate, object].map do |r|
+          r.is_a?(RDF::Query::Variable) ? r.to_s : RDF::NTriples.serialize(r)
+        end.join(" ")
+        buffer << case context
+          when nil then " ."
+          else " <#{context}> ."
+        end
         buffer.string
       end
     end
