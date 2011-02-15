@@ -427,47 +427,61 @@ describe RDF::Query do
 
     context "solution modifiers" do
       before :each do
-        pending "TODO"
         @graph = RDF::Repository.load(fixture_path('test.nt'))
-        @query = RDF::Query.new(:solutions => @graph.map { |stmt| stmt.to_hash(:s, :p, :o) })
+        @query = RDF::Query.new() { pattern [:s, :p, :o]}
+        @solutions = @query.execute(@graph)
       end
 
-      it "should support projection" do
-        @query.project(:s, :p, :o)
-        @query.solutions.each do |vars, vals|
-          vars.keys.should include(:s, :p, :o)
+      context "projection" do
+        it "projects all variables" do
+          @solutions.project(:s, :p, :o)
+          @solutions.each do |solution|
+            solution.bindings.keys.should include(:s, :p, :o)
+          end
         end
 
-        @query.project(:s, :p)
-        @query.solutions.each do |vars, vals|
-          vars.keys.should include(:s, :p)
-          vars.keys.should_not include(:o)
+        it "projects some variables" do
+          @solutions.project(:s, :p)
+          @solutions.each do |solution|
+            solution.bindings.keys.should include(:s, :p)
+          end
         end
 
-        @query.project(:s)
-        @query.solutions.each do |vars, vals|
-          vars.keys.should include(:s)
-          vars.keys.should_not include(:p, :o)
+        it "projects a variable" do
+          @solutions.project(:s)
+          @solutions.each do |solution|
+            solution.bindings.keys.should include(:s)
+          end
         end
       end
 
+      context "filter" do
+        it "returns matching solutions" do
+          @solutions.filter(:subject => RDF::URI("http://example.org/resource1"))
+          @solutions.count.should == 1
+        end
+      end
+      
+      context "order" do
+      end
+      
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
-          @query.solutions *= 2
-          @query.count == @graph.size * 2
-          @query.send(op)
-          @query.count == @graph.size
+          solutions = @solutions * 2
+          solutions.count == @graph.size * 2
+          solutions.send(op)
+          solutions.count == @graph.size
         end
       end
 
       it "should support offsets" do
-        @query.offset(10)
-        @query.count == (@graph.size - 10)
+        @solutions.offset(10)
+        @solutions.count == (@graph.size - 10)
       end
 
       it "should support limits" do
-        @query.limit(10)
-        @query.count == 10
+        @solutions.limit(10)
+        @solutions.count == 10
       end
     end
   end
