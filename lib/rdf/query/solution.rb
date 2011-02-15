@@ -182,6 +182,20 @@ class RDF::Query
     def to_hash
       @bindings.dup
     end
+    
+    ##
+    # Integer hash of this solution
+    # @return [Integer]
+    def hash
+      @bindings.hash
+    end
+    
+    ##
+    # Equivalence of solution
+    def eql?(other)
+      @other.is_a?(Solution) && @bindings == @other.bindings
+    end
+    alias_method :==, :eql?
 
     ##
     # @return [String]
