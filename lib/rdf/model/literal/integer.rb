@@ -14,8 +14,6 @@ module RDF; class Literal
     DATATYPE = XSD.integer
     GRAMMAR  = /^[\+\-]?\d+$/.freeze
 
-    include RDF::Literal::Numeric
-
     ##
     # @param  [Integer, #to_i] value
     # @option options [String] :lexical (nil)
@@ -106,15 +104,6 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `self`.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +@
-      self # unary plus
-    end
-
-    ##
     # Returns `self` negated.
     #
     # @return [RDF::Literal]
@@ -170,40 +159,6 @@ module RDF; class Literal
     # @return [String]
     def to_s
       @string || @object.to_s
-    end
-
-    ##
-    # Returns the value as an integer.
-    #
-    # @return [Integer]
-    def to_i
-      @object.to_i
-    end
-    alias_method :to_int, :to_i
-    alias_method :ord,    :to_i
-
-    ##
-    # Returns the value as a floating point number.
-    #
-    # @return [Float]
-    def to_f
-      @object.to_f
-    end
-
-    ##
-    # Returns the value as a decimal number.
-    #
-    # @return [BigDecimal]
-    def to_d
-      @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
-    end
-
-    ##
-    # Returns the value as a rational number.
-    #
-    # @return [Rational]
-    def to_r
-      @object.to_r
     end
 
     ##

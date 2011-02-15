@@ -10,11 +10,9 @@ module RDF; class Literal
   #
   # @see   http://www.w3.org/TR/xmlschema-2/#decimal
   # @since 0.2.1
-  class Decimal < Literal
+  class Decimal < Numeric
     DATATYPE = XSD.decimal
     GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
-
-    include RDF::Literal::Numeric
 
     ##
     # @param  [BigDecimal] value
@@ -47,22 +45,6 @@ module RDF; class Literal
       end
       @object = BigDecimal(@string) unless @object.nil?
       self
-    end
-
-    ##
-    # Compares this literal to `other` for sorting purposes.
-    #
-    # @param  [Object] other
-    # @return [Integer] `-1`, `0`, or `1`
-    # @since  0.3.0
-    def <=>(other)
-      case other
-        when ::Numeric
-          to_d <=> other
-        when RDF::Literal::Decimal, RDF::Literal::Double
-          to_d <=> other.to_d
-        else super
-      end
     end
 
     ##
@@ -101,15 +83,6 @@ module RDF; class Literal
     # @since  0.2.3
     def nonzero?
       to_d.nonzero? ? self : nil
-    end
-
-    ##
-    # Returns `self`.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +@
-      self # unary plus
     end
 
     ##
@@ -168,44 +141,6 @@ module RDF; class Literal
     # @see    BigDecimal#to_s
     def to_s
       @string || @object.to_s('F')
-    end
-
-    ##
-    # Returns the value as an integer.
-    #
-    # @return [Integer]
-    # @see    BigDecimal#to_i
-    def to_i
-      @object.to_i
-    end
-
-    ##
-    # Returns the value as a floating point number.
-    #
-    # The usual accuracy limits and errors of binary float arithmetic apply.
-    #
-    # @return [Float]
-    # @see    BigDecimal#to_f
-    def to_f
-      @object.to_f
-    end
-
-    ##
-    # Returns the value as a decimal number.
-    #
-    # @return [BigDecimal]
-    # @see    BigDecimal#to_d
-    def to_d
-      @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
-    end
-
-    ##
-    # Returns the value as a rational number.
-    #
-    # @return [Rational]
-    # @see    BigDecimal#to_r
-    def to_r
-      @object.to_r # only available on Ruby 1.9+
     end
   end # Decimal
 end; end # RDF::Literal

@@ -10,11 +10,9 @@ module RDF; class Literal
   #
   # @see   http://www.w3.org/TR/xmlschema-2/#double
   # @since 0.2.1
-  class Double < Literal
+  class Double < Numeric
     DATATYPE = XSD.double
     GRAMMAR  = /^[\+\-]?\d+(\.\d*([eE][\+\-]?\d+)?)?$/.freeze # FIXME: support 'INF', '-INF' and 'NaN'
-
-    include RDF::Literal::Numeric
 
     ##
     # @param  [Float, #to_f] value
@@ -188,15 +186,6 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `self`.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +@
-      self # unary plus
-    end
-
-    ##
     # Returns `self` negated.
     #
     # @return [RDF::Literal]
@@ -255,38 +244,6 @@ module RDF; class Literal
         when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
         else @object.to_s
       end
-    end
-
-    ##
-    # Returns the value as an integer.
-    #
-    # @return [Integer]
-    def to_i
-      @object.to_i
-    end
-
-    ##
-    # Returns the value as a floating point number.
-    #
-    # @return [Float]
-    def to_f
-      @object.to_f
-    end
-
-    ##
-    # Returns the value as a decimal number.
-    #
-    # @return [BigDecimal]
-    def to_d
-      @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
-    end
-
-    ##
-    # Returns the value as a rational number.
-    #
-    # @return [Rational]
-    def to_r
-      @object.to_r # only available on Ruby 1.9+
     end
   end # Double
 end; end # RDF::Literal
