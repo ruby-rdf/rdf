@@ -89,24 +89,35 @@ module RDF; class Query
     ##
     # Reorders this solution sequence by the given `variables`.
     #
-    # Variables may be symboles or {Query::Variable} instances.
+    # Variables may be symbols or {Query::Variable} instances.
     # A variable may also be a Procedure/Lambda, compatible with {Enumerable#sort}.
     # This takes two arguments (solutions) and returns -1, 0, or 1 equivalently to <=>.
     #
+    # If called with a block, variables are ignored, and the block is invoked with
+    # pairs of solutions. The block is expected to return -1, 0, or 1 equivalently to <=>.
+    #
     # @param  [Array<Proc, Query::Variable, Symbol, #to_sym>] variables
+    # @yield  [solution]
+    # @yieldparam  [RDF::Query::Solution] q
+    # @yieldparam  [RDF::Query::Solution] b
+    # @yieldreturn [Integer] -1, 0, or 1 depending on value of comparator
     # @return [void] `self`
-    def order(*variables)
-      if variables.empty?
+    def order(*variables, &block)
+      if variables.empty? && !block_given?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
       else
         self.sort! do |a, b|
-          # Try each variable until a difference is found.
-          variables.inject(nil) do |memo, v|
-            memo || begin
-              comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
-              comp == 0 ? false : comp
-            end
-          end || 0
+          if block_given?
+            block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
+          else
+            # Try each variable until a difference is found.
+            variables.inject(nil) do |memo, v|
+              memo || begin
+                comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
+                comp == 0 ? false : comp
+              end
+            end || 0
+          end
         end
       end
       self

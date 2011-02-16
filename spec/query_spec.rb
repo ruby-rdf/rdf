@@ -460,6 +460,11 @@ describe RDF::Query do
           @solutions.filter(:s => RDF::URI("http://example.org/resource1"))
           @solutions.count.should == 1
         end
+        
+        it "accepts a block" do
+          @solutions.filter {|s| s[:s] == RDF::URI("http://example.org/resource1")}
+          @solutions.count.should == 1
+        end
       end
       
       context "order" do
@@ -483,6 +488,10 @@ describe RDF::Query do
 
         it "returns ordered solutions using a lambda symbols" do
           @solutions.order(:s, lambda {|a, b| a[:p] <=> b[:p]}, RDF::Query::Variable.new("o"))
+        end
+
+        it "returns ordered solutions using block" do
+          @solutions.order {|a, b| a[:p] <=> b[:p]}
         end
       end
       
