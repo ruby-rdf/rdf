@@ -15,13 +15,13 @@ describe RDF::Query::Variable do
       @var.value.should be_nil
     end
     
-    it "is destinguished" do
-      @var.should be_destinguished
+    it "is distinguished" do
+      @var.should be_distinguished
     end
     
     it "can be made non-distinguished" do
-      @var.destinguished = false
-      @var.should_not be_destinguished
+      @var.distinguished = false
+      @var.should_not be_distinguished
     end
 
     it "is convertible to a symbol" do

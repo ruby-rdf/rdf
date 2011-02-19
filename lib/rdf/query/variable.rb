@@ -103,20 +103,20 @@ class RDF::Query
     end
 
     ##
-    # Returns `true` if this variable is destinguished.
+    # Returns `true` if this variable is distinguished.
     #
     # @return [Boolean]
-    def destinguished?
-      @destinguished.nil? || @distinguished
+    def distinguished?
+      @distinguished.nil? || @distinguished
     end
 
     ##
-    # Sets if variable is destinguished or non-destinguished.
-    # By default, variables are destinguished
+    # Sets if variable is distinguished or non-distinguished.
+    # By default, variables are distinguished
     #
     # @return [Boolean]
-    def destinguished=(value)
-      @destinguished = value
+    def distinguished=(value)
+      @distinguished = value
     end
 
     ##
