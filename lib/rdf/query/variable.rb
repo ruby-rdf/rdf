@@ -103,6 +103,23 @@ class RDF::Query
     end
 
     ##
+    # Returns `true` if this variable is destinguished.
+    #
+    # @return [Boolean]
+    def destinguished?
+      @destinguished.nil? || @distinguished
+    end
+
+    ##
+    # Sets if variable is destinguished or non-destinguished.
+    # By default, variables are destinguished
+    #
+    # @return [Boolean]
+    def destinguished=(value)
+      @destinguished = value
+    end
+
+    ##
     # Rebinds this variable to the given `value`.
     #
     # @param  [RDF::Term] value
