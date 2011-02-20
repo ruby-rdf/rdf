@@ -188,6 +188,10 @@ module RDF
     #   the graph or repository to query
     # @param  [Hash{Symbol => Object}] options
     #   any additional keyword options
+    # @option options [Hash{Symbol => RDF::Term}] bindings
+    #   optional variable bindings to use
+    # @option options [Hash{Symbol => RDF::Term}] solutions
+    #   optional initial solutions for chained queries
     # @return [RDF::Query::Solutions]
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
@@ -197,10 +201,10 @@ module RDF
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}
 
-      @solutions = Solutions.new
-      # A quick empty solution simplifies the logic below; no special case for
+      # Use provided solutions to allow for query chaining
+      # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      @solutions << RDF::Query::Solution.new({})
+      @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
 
       @patterns.each do |pattern|
         

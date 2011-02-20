@@ -160,8 +160,6 @@ describe RDF::Query do
         query.execute(@graph).should have_result_set [ { :s => EX.x5 } ]
       end
 
-      it "?s p ?o with duplicates" do
-      end
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
         query = RDF::Query.new do |query|
           query << [:s, EX.pchain, :o]
@@ -176,6 +174,26 @@ describe RDF::Query do
           query << [:same, EX.psame, :same]
         end
         query.execute(@graph).should have_result_set [ { :same => EX.x4 } ]
+      end
+
+      it "chains solutions" do
+        q1 = RDF::Query.new << [:s, EX.pchain, :o]
+        q2 = RDF::Query.new << [:o, EX.pchain2, :o2]
+        q3 = RDF::Query.new << [:o2, EX.pchain3, :o3]
+        sol1 = q1.execute(@graph)
+        sol2 = q2.execute(@graph, :solutions => sol1)
+        sol3 = q3.execute(@graph, :solutions => sol2)
+        sol3.should have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
+      end
+      
+      it "has bindings" do
+        query = RDF::Query.new do |query|
+          query << [:s, EX.p, :o]
+        end
+        query.execute(@graph).bindings.should == {
+          :s => [EX.x1, EX.x2, EX.x3],
+          :o => [RDF::Literal.new(1), RDF::Literal.new(2), RDF::Literal.new(3) ]
+        }
       end
 
       # From sp2b benchmark, query 7 bgp 2
