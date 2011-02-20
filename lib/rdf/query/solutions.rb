@@ -61,6 +61,22 @@ module RDF; class Query
     end
 
     ##
+    # Returns hash of bindings from each solution. Each bound variable will have
+    # an array of bound values representing those from each solution, where a given
+    # solution will have just a single value for each bound variable
+    # @return [Hash{Symbol => Array<RDF::Term>}]
+    def bindings
+      bindings = {}
+      each do |solution|
+        solution.each do |key, value|
+          bindings[key] ||= []
+          bindings[key] << value
+        end
+      end
+      bindings
+    end
+    
+    ##
     # Filters this solution sequence by the given `criteria`.
     #
     # @param  [Hash{Symbol => Object}] criteria
