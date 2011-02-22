@@ -118,11 +118,12 @@ module RDF
     # @see    RDF::Query::Pattern#execute
     # @since  0.2.0
     def query_pattern(pattern, &block)
-      # By default, we let Ruby's built-in `Enumerable#grep` handle the
-      # matching of statements by iterating over all statements and calling
+      # Note that patterns must match with the same eql? not == or ===,
+      # therefore Ruby's built-in `Enumerable#grep` is not appropriate,
+      # as it matches using ===.
       # `RDF::Query::Pattern#===` on each statement.
-      # @see http://ruby-doc.org/core/classes/Enumerable.html#M003121
-      grep(pattern, &block)
+      select {|statement| statement.eql?(pattern)}.
+         map {|statement| block.call(statement)}
     end
     protected :query_pattern
 

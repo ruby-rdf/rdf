@@ -9,7 +9,7 @@ require 'set'
 end
 
 describe RDF::Query do
-  EX = RDF::EX = RDF::Vocabulary.new('http://example.org/')
+  EX = RDF::Vocabulary.new('http://example.org/')
 
   context "when created" do
     before(:each) do
@@ -196,61 +196,6 @@ describe RDF::Query do
         }
       end
 
-      # From data-r2/expr-equals
-      context "data/r2/expr-equals" do
-        before(:each) do
-          @graph << [EX.xi1, EX.p, RDF::Literal::Integer.new("1")]
-          @graph << [EX.xi2, EX.p, RDF::Literal::Integer.new("1")]
-          @graph << [EX.xi3, EX.p, RDF::Literal::Integer.new("01")]
-
-          @graph << [EX.xd1, EX.p, RDF::Literal::Double.new("1.0e0")]
-          @graph << [EX.xd2, EX.p, RDF::Literal::Double.new("1.0")]
-          @graph << [EX.xd3, EX.p, RDF::Literal::Double.new("1")]
-
-          @graph << [EX.xt1, EX.p, RDF::Literal.new("zzz", :datatype => EX.myType)]
-
-          @graph << [EX.xp1, EX.p, RDF::Literal.new("zzz")]
-          @graph << [EX.xp2, EX.p, RDF::Literal.new("1")]
-
-          @graph << [EX.xu, EX.p, EX.z]
-        end
-        
-        describe "graph-1" do
-          before(:each) do
-            query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Integer.new(1)]}
-            @solutions = query.execute(@graph)
-          end
-
-          it "has two solutions" do
-            @solutions.count.should == 2
-          end
-          
-          it "has xi1 as a solution" do
-            @solutions.filter(:x => EX.xi1).should_not be_empty
-          end
-          
-          it "has xi2 as a solution" do
-            @solutions.filter(:x => EX.xi2).should_not be_empty
-          end
-        end
-
-        
-        describe "graph-2" do
-          before(:each) do
-            query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Double.new(1.0e0)]}
-            @solutions = query.execute(@graph)
-          end
-
-          it "has one solution" do
-            @solutions.count.should == 1
-          end
-          
-          it "has xd1 as a solution" do
-            @solutions.filter(:x => EX.xd1).should_not be_empty
-          end
-        end
-      end
-
       # From sp2b benchmark, query 7 bgp 2
       it "?class3 p o / ?doc3 p2 ?class3 / ?doc3 p3 ?bag3 / ?bag3 ?member3 ?doc" do
         @graph << [EX.class1, EX.subclass, EX.document]
@@ -391,6 +336,64 @@ describe RDF::Query do
           {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x1, :o2 => RDF::Literal(1)},
           {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x2, :o2 => RDF::Literal(2)},
         ].to_set
+      end
+    end
+
+    # From data-r2/expr-equals
+    context "data/r2/expr-equals" do
+      before(:each) do
+        @graph = RDF::Graph.new do |graph|
+          graph << [EX.xi1, EX.p, RDF::Literal::Integer.new("1")]
+          graph << [EX.xi2, EX.p, RDF::Literal::Integer.new("1")]
+          graph << [EX.xi3, EX.p, RDF::Literal::Integer.new("01")]
+
+          graph << [EX.xd1, EX.p, RDF::Literal::Double.new("1.0e0")]
+          graph << [EX.xd2, EX.p, RDF::Literal::Double.new("1.0")]
+          graph << [EX.xd3, EX.p, RDF::Literal::Double.new("1")]
+
+          graph << [EX.xt1, EX.p, RDF::Literal.new("zzz", :datatype => EX.myType)]
+
+          graph << [EX.xp1, EX.p, RDF::Literal.new("zzz")]
+          graph << [EX.xp2, EX.p, RDF::Literal.new("1")]
+
+          graph << [EX.xu, EX.p, EX.z]
+        end
+      end
+      
+      describe "graph-1" do
+        before(:each) do
+          query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Integer.new(1)]}
+          @solutions = query.execute(@graph)
+        end
+
+        it "has two solutions" do
+          puts @solutions.inspect
+          @solutions.count.should == 2
+        end
+        
+        it "has xi1 as a solution" do
+          @solutions.filter(:x => EX.xi1).should_not be_empty
+        end
+        
+        it "has xi2 as a solution" do
+          @solutions.filter(:x => EX.xi2).should_not be_empty
+        end
+      end
+
+      
+      describe "graph-2" do
+        before(:each) do
+          query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Double.new("1.0e0")]}
+          @solutions = query.execute(@graph)
+        end
+
+        it "has one solution" do
+          @solutions.count.should == 1
+        end
+        
+        it "has xd1 as a solution" do
+          @solutions.filter(:x => EX.xd1).should_not be_empty
+        end
       end
     end
 

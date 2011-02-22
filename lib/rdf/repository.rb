@@ -324,6 +324,7 @@ module RDF
     protected
 
       ##
+      # Match elements with eql?, not ==
       # @private
       # @see RDF::Queryable#query
       def query_pattern(pattern, &block)
@@ -334,16 +335,16 @@ module RDF
 
         cs = @data.has_key?(context) ? {context => @data[context]} : @data.dup
         cs.each do |c, ss|
-          next unless context.nil? || context == c
+          next unless context.nil? || context.eql?(c)
           ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
           ss.each do |s, ps|
-            next unless subject.nil? || subject == s
+            next unless subject.nil? || subject.eql?(s)
             ps = ps.has_key?(predicate) ? {predicate => ps[predicate]} : ps.dup
             ps.each do |p, os|
-              next unless predicate.nil? || predicate == p
+              next unless predicate.nil? || predicate.eql?(p)
               os = os.dup # TODO: is this really needed?
               os.each do |o|
-                next unless object.nil? || object == o
+                next unless object.nil? || object.eql?(o)
                 block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
               end
             end
