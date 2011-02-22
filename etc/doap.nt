@@ -71,3 +71,13 @@ _:genid6 <http://xmlns.com/foaf/0.1/name> "Keita Urashima" .
 _:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
 _:genid7 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
 _:genid7 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .
+<http://example.org/xi1> <http://example.org/p> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/xi2> <http://example.org/p> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/xi3> <http://example.org/p> "01"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/xd1> <http://example.org/p> "1.0e0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://example.org/xd2> <http://example.org/p> "1.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://example.org/xd3> <http://example.org/p> "1"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://example.org/xt1> <http://example.org/p> "zzz"^^<http://example.org/myType> .
+<http://example.org/xp1> <http://example.org/p> "zzz" .
+<http://example.org/xp2> <http://example.org/p> "1" .
+<http://example.org/xu> <http://example.org/p> <http://example.org/z> .
