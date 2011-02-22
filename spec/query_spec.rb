@@ -196,6 +196,61 @@ describe RDF::Query do
         }
       end
 
+      # From data-r2/expr-equals
+      context "data/r2/expr-equals" do
+        before(:each) do
+          @graph << [EX.xi1, EX.p, RDF::Literal::Integer.new("1")]
+          @graph << [EX.xi2, EX.p, RDF::Literal::Integer.new("1")]
+          @graph << [EX.xi3, EX.p, RDF::Literal::Integer.new("01")]
+
+          @graph << [EX.xd1, EX.p, RDF::Literal::Double.new("1.0e0")]
+          @graph << [EX.xd2, EX.p, RDF::Literal::Double.new("1.0")]
+          @graph << [EX.xd3, EX.p, RDF::Literal::Double.new("1")]
+
+          @graph << [EX.xt1, EX.p, RDF::Literal.new("zzz", :datatype => EX.myType)]
+
+          @graph << [EX.xp1, EX.p, RDF::Literal.new("zzz")]
+          @graph << [EX.xp2, EX.p, RDF::Literal.new("1")]
+
+          @graph << [EX.xu, EX.p, EX.z]
+        end
+        
+        describe "graph-1" do
+          before(:each) do
+            query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Integer.new(1)]}
+            @solutions = query.execute(@graph)
+          end
+
+          it "has two solutions" do
+            @solutions.count.should == 2
+          end
+          
+          it "has xi1 as a solution" do
+            @solutions.filter(:x => EX.xi1).should_not be_empty
+          end
+          
+          it "has xi2 as a solution" do
+            @solutions.filter(:x => EX.xi2).should_not be_empty
+          end
+        end
+
+        
+        describe "graph-2" do
+          before(:each) do
+            query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Double.new(1.0e0)]}
+            @solutions = query.execute(@graph)
+          end
+
+          it "has one solution" do
+            @solutions.count.should == 1
+          end
+          
+          it "has xd1 as a solution" do
+            @solutions.filter(:x => EX.xd1).should_not be_empty
+          end
+        end
+      end
+
       # From sp2b benchmark, query 7 bgp 2
       it "?class3 p o / ?doc3 p2 ?class3 / ?doc3 p3 ?bag3 / ?bag3 ?member3 ?doc" do
         @graph << [EX.class1, EX.subclass, EX.document]
