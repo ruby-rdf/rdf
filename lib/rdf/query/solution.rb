@@ -206,9 +206,15 @@ class RDF::Query
     ##
     # Equivalence of solution
     def eql?(other)
-      other.is_a?(Solution) && @bindings == other.bindings
+      other.is_a?(Solution) && @bindings.eql?(other.bindings)
     end
     alias_method :==, :eql?
+
+    ##
+    # Equals of solution
+    def ==(other)
+      other.is_a?(Solution) && @bindings == other.bindings
+    end
 
     ##
     # @return [String]
