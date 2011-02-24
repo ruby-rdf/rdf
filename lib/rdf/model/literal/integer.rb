@@ -9,6 +9,7 @@ module RDF; class Literal
   #   RDF::Literal(84) / 2                    #=> RDF::Literal(42)
   #
   # @see   http://www.w3.org/TR/xmlschema-2/#integer
+  # @see   http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#integer
   # @since 0.2.1
   class Integer < Decimal
     DATATYPE = XSD.integer
@@ -104,56 +105,6 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `self` negated.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -@
-      RDF::Literal(-to_i) # unary minus
-    end
-
-    ##
-    # Returns the sum of `self` plus `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +(other)
-      RDF::Literal(to_i + other.to_i)
-    end
-
-    ##
-    # Returns the difference of `self` minus `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -(other)
-      RDF::Literal(to_i - other.to_i)
-    end
-
-    ##
-    # Returns the product of `self` times `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def *(other)
-      RDF::Literal(to_i * other.to_i)
-    end
-
-    ##
-    # Returns the quotient of `self` divided by `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @raise  [ZeroDivisionError] if divided by zero
-    # @since  0.2.3
-    def /(other)
-      RDF::Literal(to_i / other.to_i)
-    end
-
-    ##
     # Returns the value as a string.
     #
     # @return [String]
@@ -172,4 +123,156 @@ module RDF; class Literal
       OpenSSL::BN.new(to_s)
     end
   end # Integer
+  
+  # Derived types
+  # @see http://www.w3.org/TR/xpath-functions/#datatypes
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#nonPositiveInteger
+  class NonPositiveInteger < Integer
+    DATATYPE = XSD.nonPositiveInteger
+    GRAMMAR  = /^(?:[\+\-]?0)|(?:-\d+)$/.freeze
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#negativeInteger
+  class NegativeInteger < NonPositiveInteger
+    DATATYPE = XSD.negativeInteger
+    GRAMMAR  = /^\-\d+$/.freeze
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#long
+  class Long < Integer
+    DATATYPE = XSD.long
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#int
+  class Int < Long
+    DATATYPE = XSD.int
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#short
+  class Short < Int
+    DATATYPE = XSD.short
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#byte
+  class Byte < Short
+    DATATYPE = XSD.byte
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#nonNegativeInteger
+  class NonNegativeInteger < Integer
+    DATATYPE = XSD.nonNegativeInteger
+    GRAMMAR  = /^(?:[\+\-]?0)|(?:\+?\d+)$/.freeze
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedLong
+  class UnsignedLong < NonNegativeInteger
+    DATATYPE = XSD.unsignedLong
+    GRAMMAR  = /^\d+$/.freeze
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedInt
+  class UnsignedInt < UnsignedLong
+    DATATYPE = XSD.unsignedInt
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedShort
+  class UnsignedShort < UnsignedInt
+    DATATYPE = XSD.unsignedShort
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedByte
+  class UnsignedByte < UnsignedShort
+    DATATYPE = XSD.unsignedByte
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#positiveInteger
+  class PositiveInteger < NonNegativeInteger
+    DATATYPE = XSD.positiveInteger
+    GRAMMAR  = /^\+?\d+$/.freeze
+
+    ##
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
+    end
+  end
 end; end # RDF::Literal

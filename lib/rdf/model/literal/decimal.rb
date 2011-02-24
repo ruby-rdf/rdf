@@ -86,55 +86,6 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `self` negated.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -@
-      RDF::Literal(-to_d) # unary minus
-    end
-
-    ##
-    # Returns the sum of `self` plus `other`.
-    #
-    # @param  [#to_d] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +(other)
-      RDF::Literal(to_d + (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
-    end
-
-    ##
-    # Returns the difference of `self` minus `other`.
-    #
-    # @param  [#to_d] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -(other)
-      RDF::Literal(to_d - (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
-    end
-
-    ##
-    # Returns the product of `self` times `other`.
-    #
-    # @param  [#to_d] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def *(other)
-      RDF::Literal(to_d * (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
-    end
-
-    ##
-    # Returns the quotient of `self` divided by `other`.
-    #
-    # @param  [#to_d] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def /(other)
-      RDF::Literal(to_d / (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
-    end
-
-    ##
     # Returns the value as a string.
     #
     # @return [String]

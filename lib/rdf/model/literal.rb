@@ -39,16 +39,29 @@ module RDF
   # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal
-    autoload :Boolean,  'rdf/model/literal/boolean'
-    autoload :Numeric,  'rdf/model/literal/numeric'
-    autoload :Integer,  'rdf/model/literal/integer'
-    autoload :Double,   'rdf/model/literal/double'
-    autoload :Decimal,  'rdf/model/literal/decimal'
-    autoload :Date,     'rdf/model/literal/date'
-    autoload :DateTime, 'rdf/model/literal/datetime'
-    autoload :Time,     'rdf/model/literal/time'
-    autoload :Token,    'rdf/model/literal/token'
-    autoload :XML,      'rdf/model/literal/xml'
+    autoload :Boolean,            'rdf/model/literal/boolean'
+    autoload :Numeric,            'rdf/model/literal/numeric'
+    autoload :Integer,            'rdf/model/literal/integer'
+    autoload :NonPositiveInteger, 'rdf/model/literal/integer'
+    autoload :NegativeInteger,    'rdf/model/literal/integer'
+    autoload :Long,               'rdf/model/literal/integer'
+    autoload :Int,                'rdf/model/literal/integer'
+    autoload :Short,              'rdf/model/literal/integer'
+    autoload :Byte,               'rdf/model/literal/integer'
+    autoload :NonNegativeInteger, 'rdf/model/literal/integer'
+    autoload :UnsignedLong,       'rdf/model/literal/integer'
+    autoload :UnsignedInt,        'rdf/model/literal/integer'
+    autoload :UnsignedShort,      'rdf/model/literal/integer'
+    autoload :UnsignedInteger,    'rdf/model/literal/integer'
+    autoload :UnsignedByte,       'rdf/model/literal/double'
+    autoload :PositiveInteger,    'rdf/model/literal/double'
+    autoload :Double,             'rdf/model/literal/double'
+    autoload :Decimal,            'rdf/model/literal/decimal'
+    autoload :Date,               'rdf/model/literal/date'
+    autoload :DateTime,           'rdf/model/literal/datetime'
+    autoload :Time,               'rdf/model/literal/time'
+    autoload :Token,              'rdf/model/literal/token'
+    autoload :XML,                'rdf/model/literal/xml'
 
     include RDF::Term
 
@@ -62,9 +75,19 @@ module RDF
           case RDF::URI(datatype)
             when XSD.boolean
               RDF::Literal::Boolean
-            when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
+            when XSD.integer
               RDF::Literal::Integer
-            when XSD.double, XSD.float
+            when XSD.long
+              RDF::Literal::Long
+            when XSD.int
+              RDF::Literal::Int
+            when XSD.short
+              RDF::Literal::Short
+            when XSD.byte
+              RDF::Literal::Byte
+            when XSD.float
+              RDF::Literal::Float
+            when XSD.double
               RDF::Literal::Double
             when XSD.decimal
               RDF::Literal::Decimal
@@ -74,12 +97,22 @@ module RDF
               RDF::Literal::DateTime
             when XSD.time
               RDF::Literal::Time
-            when XSD.nonPositiveInteger, XSD.negativeInteger
-              RDF::Literal::Integer
-            when XSD.nonNegativeInteger, XSD.positiveInteger
-              RDF::Literal::Integer
-            when XSD.unsignedLong, XSD.unsignedInt, XSD.unsignedShort, XSD.unsignedByte
-              RDF::Literal::Integer
+            when XSD.nonPositiveInteger
+              RDF::Literal::NonPositiveInteger
+            when XSD.negativeInteger
+              RDF::Literal::NegativeInteger
+            when XSD.nonNegativeInteger
+              RDF::Literal::NonNegativeInteger
+            when XSD.positiveInteger
+              RDF::Literal::PositiveInteger
+            when XSD.unsignedLong
+              RDF::Literal::UnsignedLong
+            when XSD.unsignedInt
+              RDF::Literal::UnsignedInt
+            when XSD.unsignedShort
+              RDF::Literal::UnsignedShort
+            when XSD.unsignedByte
+              RDF::Literal::UnsignedByte
             when XSD.token, XSD.language
               RDF::Literal::Token
             when RDF.XMLLiteral

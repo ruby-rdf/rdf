@@ -51,5 +51,11 @@ module RDF; class Literal
     def to_s
       @string || @object.strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
     end
+
+    ##
+    # Equal compares as DateTime objects
+    def ==(other)
+      other.is_a?(RDF::Literal::DateTime) && self.object == other.object
+    end
   end # DateTime
 end; end # RDF::Literal
