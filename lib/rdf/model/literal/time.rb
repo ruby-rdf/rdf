@@ -55,7 +55,7 @@ module RDF; class Literal
     ##
     # Equal compares as Time objects
     def ==(other)
-      other.is_a?(RDF::Literal::Time) && self.object == other.object
+      other.is_a?(RDF::Literal::Time) && self.to_s == other.to_s
     end
   end # Time
 end; end # RDF::Literal
