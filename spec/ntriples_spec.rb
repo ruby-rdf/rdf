@@ -221,6 +221,21 @@ describe RDF::NTriples do
       stmt.should be_a_statement
     end
 
+    describe "with nodes" do
+      it "should read two named nodes as the same node" do
+        stmt = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt.subject.should == stmt.object
+        stmt.subject.should be_eql(stmt.object)
+      end
+      
+      it "should read two named nodes in different instances as different nodes" do
+        stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt1.subject.should == stmt2.subject
+        stmt1.subject.should_not be_eql(stmt2.subject)
+      end
+    end
+    
     describe "with literal encodings" do
       {
         'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',
