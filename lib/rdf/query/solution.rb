@@ -180,7 +180,7 @@ class RDF::Query
     # @return [Boolean]
     def compatible?(other)
       @bindings.all? do |k, v|
-        !other.to_hash.has_key?(k) || other[k] == v
+        !other.to_hash.has_key?(k) || other[k].eql?(v)
       end
     end
     
