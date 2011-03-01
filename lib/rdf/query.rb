@@ -2,6 +2,15 @@ module RDF
   ##
   # An RDF basic graph pattern (BGP) query.
   #
+  # Named queries either match against a specifically named
+  # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+  # Names that are against unbound variables match either detault
+  # or named contexts.
+  # The name of `false' will only match against the default context.
+  #
+  # Variable names cause the variable to be added to the solution set
+  # elements.
+  #
   # @example Constructing a basic graph pattern query (1)
   #   query = RDF::Query.new do
   #     pattern [:person, RDF.type,  FOAF.Person]
@@ -36,6 +45,27 @@ module RDF
   #     }
   #   })
   #
+  # @example In this example, the default graph contains the names of the publishers of two named graphs. The triples in the named graphs are not visible in the default graph in this example.
+  #   # default graph
+  #   @prefix dc: <http://purl.org/dc/elements/1.1/
+  #
+  #   <http://example.org/bob>    dc:publisher  "Bob" .
+  #   <http://example.org/alice>  dc:publisher  "Alice" .
+  #
+  #   # Named graph: http://example.org/bob
+  #   @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+  #
+  #   _:a foaf:name "Bob" .
+  #   _:a foaf:mbox <mailto:bob@oldcorp.example.org> .
+  #
+  #   # Named graph: http://example.org/alice
+  #   @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+  #
+  #   _:a foaf:name "Alice" .
+  #   _:a foaf:mbox <mailto:alice@work.example.org> .
+  #
+  #   
+  # @see http://www.w3.org/TR/rdf-sparql-query/#rdfDataset
   # @since 0.3.0
   class Query
     autoload :Pattern,   'rdf/query/pattern'
@@ -95,6 +125,13 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
     #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
+    #   @option options [RDF::Term, RDF::Query::Variable, Boolean] :context (nil)
+    #     Default context for matching against queryable.
+    #     Named queries either match against a specifically named
+    #     contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+    #     Names that are against unbound variables match either detault
+    #     or named contexts.
+    #     The name of `false' will only match against the default context.
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
@@ -105,6 +142,12 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
     #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
+    #   @option options [RDF::Term, RDF::Query::Variable, Boolean] :context (nil)
+    #     Default context for matching against queryable.
+    #     Named queries either match against a specifically named
+    #     contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+    #     Names that are against unbound variables match either detault
+    #     or named contexts.
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
@@ -113,12 +156,15 @@ module RDF
       patterns << @options if patterns.empty?
       @variables = {}
       @solutions = @options.delete(:solutions) || Solutions.new
+      context = @options.delete(:context)
 
       @patterns  = case patterns.first
         when Hash  then compile_hash_patterns(patterns.first.dup)
         when Array then patterns.first
         else patterns
       end
+
+      self.context = context
 
       if block_given?
         case block.arity
@@ -184,6 +230,12 @@ module RDF
     ##
     # Executes this query on the given `queryable` graph or repository.
     #
+    # Named queries either match against a specifically named
+    # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+    # Names that are against unbound variables match either detault
+    # or named contexts.
+    # The name of `false' will only match against the default context.
+    #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
     # @param  [Hash{Symbol => Object}] options
@@ -206,7 +258,21 @@ module RDF
       # the first pattern
       @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
 
-      @patterns.each do |pattern|
+      patterns = @patterns
+
+      # Filter queryable by context, if necessary
+      unless self.context.nil?
+        queryable = queryable.query(:context => self.context.is_a?(Variable) ? true : self.context)
+
+        # Add solution with context variable, if necessary
+        if self.context.is_a?(Variable)
+          patterns = [Pattern.new(:context => self.context)] + patterns
+        end
+      end
+
+      #puts "queryable is #{queryable.to_a.inspect}"
+      
+      patterns.each do |pattern|
         
         old_solutions, @solutions = @solutions, Solutions.new
 
