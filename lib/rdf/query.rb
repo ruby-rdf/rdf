@@ -263,16 +263,17 @@ module RDF
       # Filter queryable by context, if necessary
       unless self.context.nil?
         queryable = queryable.query(:context => self.context.is_a?(Variable) ? true : self.context)
-
-        # Add solution with context variable, if necessary
-        if self.context.is_a?(Variable)
-          patterns = [Pattern.new(:context => self.context)] + patterns
-        end
       end
 
       #puts "queryable is #{queryable.to_a.inspect}"
       
       patterns.each do |pattern|
+
+        # Add context to pattern, if necessary
+        if self.context.is_a?(Variable)
+          pattern = pattern.dup
+          pattern.context = self.context
+        end
         
         old_solutions, @solutions = @solutions, Solutions.new
 
@@ -293,6 +294,8 @@ module RDF
             @solutions << solution.merge(pattern.solution(statement))
           end
         end
+
+        #puts "solutions after #{pattern} are #{@solutions.to_a.inspect}"
 
         # It's important to abort failed queries quickly because later patterns
         # that can have constraints are often broad without them.
