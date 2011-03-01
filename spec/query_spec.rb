@@ -240,6 +240,10 @@ describe RDF::Query do
 
       # From sp2b benchmark, query 7 bgp 2
       it "?class3 p o / ?doc3 p2 ?class3 / ?doc3 p3 ?bag3 / ?bag3 ?member3 ?doc" do
+        @n1 = RDF::Node.new('ref1')
+        @n2 = RDF::Node.new('ref2')
+        @n3 = RDF::Node.new('ref3')
+
         @graph << [EX.class1, EX.subclass, EX.document]
         @graph << [EX.class2, EX.subclass, EX.document]
         @graph << [EX.class3, EX.subclass, EX.other]
@@ -255,21 +259,21 @@ describe RDF::Query do
         @graph << [EX.doc3, EX.refs, EX.bag3]
         @graph << [EX.doc5, EX.refs, EX.bag5]
 
-        @graph << [EX.bag1, RDF::Node.new('ref1'), EX.doc11]
-        @graph << [EX.bag1, RDF::Node.new('ref2'), EX.doc12]
-        @graph << [EX.bag1, RDF::Node.new('ref3'), EX.doc13]
+        @graph << [EX.bag1, @n1, EX.doc11]
+        @graph << [EX.bag1, @n2, EX.doc12]
+        @graph << [EX.bag1, @n3, EX.doc13]
 
-        @graph << [EX.bag2, RDF::Node.new('ref1'), EX.doc21]
-        @graph << [EX.bag2, RDF::Node.new('ref2'), EX.doc22]
-        @graph << [EX.bag2, RDF::Node.new('ref3'), EX.doc23]
+        @graph << [EX.bag2, @n1, EX.doc21]
+        @graph << [EX.bag2, @n2, EX.doc22]
+        @graph << [EX.bag2, @n3, EX.doc23]
 
-        @graph << [EX.bag3, RDF::Node.new('ref1'), EX.doc31]
-        @graph << [EX.bag3, RDF::Node.new('ref2'), EX.doc32]
-        @graph << [EX.bag3, RDF::Node.new('ref3'), EX.doc33]
+        @graph << [EX.bag3, @n1, EX.doc31]
+        @graph << [EX.bag3, @n2, EX.doc32]
+        @graph << [EX.bag3, @n3, EX.doc33]
 
-        @graph << [EX.bag5, RDF::Node.new('ref1'), EX.doc51]
-        @graph << [EX.bag5, RDF::Node.new('ref2'), EX.doc52]
-        @graph << [EX.bag5, RDF::Node.new('ref3'), EX.doc53]
+        @graph << [EX.bag5, @n1, EX.doc51]
+        @graph << [EX.bag5, @n2, EX.doc52]
+        @graph << [EX.bag5, @n3, EX.doc53]
 
         query = RDF::Query.new do |query|
           query << [:class3, EX.subclass, EX.document]
@@ -279,20 +283,24 @@ describe RDF::Query do
         end
 
         query.execute(@graph).should have_result_set [
-          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref1'), :doc => EX.doc11 },
-          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref2'), :doc => EX.doc12 },
-          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => RDF::Node.new('ref3'), :doc => EX.doc13 },
-          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => RDF::Node.new('ref1'), :doc => EX.doc21 },
-          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => RDF::Node.new('ref2'), :doc => EX.doc22 },
-          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => RDF::Node.new('ref3'), :doc => EX.doc23 },
-          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref1'), :doc => EX.doc31 },
-          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref2'), :doc => EX.doc32 },
-          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => RDF::Node.new('ref3'), :doc => EX.doc33 }
+          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => @n1, :doc => EX.doc11 },
+          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => @n2, :doc => EX.doc12 },
+          { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => @n3, :doc => EX.doc13 },
+          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => @n1, :doc => EX.doc21 },
+          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => @n2, :doc => EX.doc22 },
+          { :doc3 => EX.doc2, :class3 => EX.class1, :bag3 => EX.bag2, :member3 => @n3, :doc => EX.doc23 },
+          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => @n1, :doc => EX.doc31 },
+          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => @n2, :doc => EX.doc32 },
+          { :doc3 => EX.doc3, :class3 => EX.class2, :bag3 => EX.bag3, :member3 => @n3, :doc => EX.doc33 }
         ]
       end
 
       # From sp2b benchmark, query 7 bgp 1
       it "?class subclass document / ?doc type ?class / ?doc title ?title / ?bag2 ?member2 ?doc / ?doc2 refs ?bag2" do
+        @n1 = RDF::Node.new('ref1')
+        @n2 = RDF::Node.new('ref2')
+        @n3 = RDF::Node.new('ref3')
+
         @graph << [EX.class1, EX.subclass, EX.document]
         @graph << [EX.class2, EX.subclass, EX.document]
         @graph << [EX.class3, EX.subclass, EX.other]
@@ -316,21 +324,21 @@ describe RDF::Query do
         @graph << [EX.doc3, EX.refs, EX.bag3]
         @graph << [EX.doc5, EX.refs, EX.bag5]
 
-        @graph << [EX.bag1, RDF::Node.new('ref1'), EX.doc11]
-        @graph << [EX.bag1, RDF::Node.new('ref2'), EX.doc12]
-        @graph << [EX.bag1, RDF::Node.new('ref3'), EX.doc13]
+        @graph << [EX.bag1, @n1, EX.doc11]
+        @graph << [EX.bag1, @n2, EX.doc12]
+        @graph << [EX.bag1, @n3, EX.doc13]
 
-        @graph << [EX.bag2, RDF::Node.new('ref1'), EX.doc21]
-        @graph << [EX.bag2, RDF::Node.new('ref2'), EX.doc22]
-        @graph << [EX.bag2, RDF::Node.new('ref3'), EX.doc23]
+        @graph << [EX.bag2, @n1, EX.doc21]
+        @graph << [EX.bag2, @n2, EX.doc22]
+        @graph << [EX.bag2, @n3, EX.doc23]
 
-        @graph << [EX.bag3, RDF::Node.new('ref1'), EX.doc31]
-        @graph << [EX.bag3, RDF::Node.new('ref2'), EX.doc32]
-        @graph << [EX.bag3, RDF::Node.new('ref3'), EX.doc33]
+        @graph << [EX.bag3, @n1, EX.doc31]
+        @graph << [EX.bag3, @n2, EX.doc32]
+        @graph << [EX.bag3, @n3, EX.doc33]
 
-        @graph << [EX.bag5, RDF::Node.new('ref1'), EX.doc51]
-        @graph << [EX.bag5, RDF::Node.new('ref2'), EX.doc52]
-        @graph << [EX.bag5, RDF::Node.new('ref3'), EX.doc53]
+        @graph << [EX.bag5, @n1, EX.doc51]
+        @graph << [EX.bag5, @n2, EX.doc52]
+        @graph << [EX.bag5, @n3, EX.doc53]
 
         query = RDF::Query.new do |query|
           query << [:class, EX.subclass, EX.document]
@@ -342,23 +350,23 @@ describe RDF::Query do
 
         query.execute(@graph).should have_result_set [
           { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
-            :member => RDF::Node.new('ref1'), :doc2 => EX.doc11, :title => EX.title1 },
+            :member => @n1, :doc2 => EX.doc11, :title => EX.title1 },
           { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
-            :member => RDF::Node.new('ref2'), :doc2 => EX.doc12, :title => EX.title1 },
+            :member => @n2, :doc2 => EX.doc12, :title => EX.title1 },
           { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
-            :member => RDF::Node.new('ref3'), :doc2 => EX.doc13, :title => EX.title1 },
+            :member => @n3, :doc2 => EX.doc13, :title => EX.title1 },
           { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2,
-            :member => RDF::Node.new('ref1'), :doc2 => EX.doc21, :title => EX.title2 },
+            :member => @n1, :doc2 => EX.doc21, :title => EX.title2 },
           { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2,
-            :member => RDF::Node.new('ref2'), :doc2 => EX.doc22, :title => EX.title2 },
+            :member => @n2, :doc2 => EX.doc22, :title => EX.title2 },
           { :doc => EX.doc2, :class => EX.class1, :bag => EX.bag2,
-            :member => RDF::Node.new('ref3'), :doc2 => EX.doc23, :title => EX.title2 },
+            :member => @n3, :doc2 => EX.doc23, :title => EX.title2 },
           { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3,
-            :member => RDF::Node.new('ref1'), :doc2 => EX.doc31, :title => EX.title3 },
+            :member => @n1, :doc2 => EX.doc31, :title => EX.title3 },
           { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3,
-            :member => RDF::Node.new('ref2'), :doc2 => EX.doc32, :title => EX.title3 },
+            :member => @n2, :doc2 => EX.doc32, :title => EX.title3 },
           { :doc => EX.doc3, :class => EX.class2, :bag => EX.bag3,
-            :member => RDF::Node.new('ref3'), :doc2 => EX.doc33, :title => EX.title3 },
+            :member => @n3, :doc2 => EX.doc33, :title => EX.title3 },
         ]
       end
 
@@ -409,7 +417,6 @@ describe RDF::Query do
         end
 
         it "has two solutions" do
-          puts @solutions.inspect
           @solutions.count.should == 2
         end
         
