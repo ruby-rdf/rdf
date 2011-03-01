@@ -88,16 +88,20 @@ module RDF
     end
 
     ##
-    # Checks whether this blank node is equal to `other`.
+    # Checks whether this blank node is same as `other`.
+    #
+    # In this case, nodes must be the same object
     #
     # @param  [Node] other
     # @return [Boolean]
     def eql?(other)
-      other.is_a?(Node) && self == other
+      equal?(other)
     end
 
     ##
     # Checks whether this blank node is equal to `other`.
+    #
+    # In this case, different nodes having the same id are considered the same.
     #
     # @param  [Object] other
     # @return [Boolean]
