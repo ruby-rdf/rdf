@@ -80,6 +80,48 @@ describe RDF::Query do
       end
     end
 
+    context "with contexts" do
+      before(:each) do
+        @repo = RDF::Repository.new do |r|
+          r << [EX.s1, EX.p1, EX.o1]
+          r << [EX.s2, EX.p2, EX.o2, EX.c]
+        end
+        @query = RDF::Query.new {pattern [:s, :p, :o]}
+      end
+
+       context "with no context" do
+         it "returns statements differing in context" do
+           @query.execute(@repo).map(&:to_hash).should == [
+             {:s => EX.s1, :p => EX.p1, :o => EX.o1},
+             {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
+         end
+       end
+
+       context "with default context" do
+         it "returns statement from default context" do
+           @query.context = false
+           @query.execute(@repo).map(&:to_hash).should == [
+             {:s => EX.s1, :p => EX.p1, :o => EX.o1}]
+         end
+       end
+
+       context "with constant context" do
+         it "returns statement from specified context" do
+           @query.context = EX.c
+           @query.execute(@repo).map(&:to_hash).should == [
+             {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
+         end
+       end
+
+       context "with variable context" do
+         it "returns statement having a context" do
+           @query.context = RDF::Query::Variable.new(:c)
+           @query.execute(@repo).map(&:to_hash).should == [
+             {:s => EX.s2, :p => EX.p2, :o => EX.o2, :c => EX.c}]
+         end
+       end
+    end
+    
     context "triple pattern combinations" do
       before :each do
         # Normally we would not want all of this crap in the graph for each
@@ -600,6 +642,13 @@ describe RDF::Query do
     it "sets and returns a context" do
       subject.context = RDF.first
       subject.context.should == RDF.first
+    end
+  end
+
+  context "#context=" do
+    it "returns set context" do
+      (subject.context = RDF::URI("c")).should == RDF::URI("c")
+      (subject.context = :default).should == :default
     end
   end
 
