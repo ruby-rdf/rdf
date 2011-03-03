@@ -12,7 +12,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Double < Numeric
     DATATYPE = XSD.double
-    GRAMMAR  = /^[\+\-]?\d+(\.\d*([eE][\+\-]?\d+)?)?$/.freeze # FIXME: support 'INF', '-INF' and 'NaN'
+    GRAMMAR  = /^NaN|(?:[\+\-]?(?:INF|(?:\d+(\.\d*([eE][\+\-]?\d+)?)?)))$/.freeze
 
     ##
     # @param  [Float, #to_f] value
