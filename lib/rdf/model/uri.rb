@@ -482,9 +482,9 @@ module RDF
     # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
     def equal_tc?(other)
       case other
-      when Literal::Numeric
-        # Interpreting SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
-        raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
+      when Literal
+        # If other is a Literal, reverse test to consolodate complex type checking logic
+        other.equal_tc?(self)
       when String then to_s == other
       when URI, Addressable::URI then to_s == other.to_s
       else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
