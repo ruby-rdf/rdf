@@ -254,12 +254,11 @@ module RDF
       when Literal
         case
         when self.eql?(other)
-          #puts "eql?"
           true
         when self.has_language? && self.language.to_s.downcase == other.language.to_s.downcase
+          # Literals with languages can compare if languages are identical
           self.value == other.value
         when (self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)
-          #puts "(self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)"
           self.value == other.value
         when other.comperable_datatype?(self) || self.comperable_datatype?(other)
           # Comoparing plain with undefined datatypes does not generate an error, but returns false
@@ -350,15 +349,24 @@ module RDF
     # This behavior is intuited from SPARQL data-r2/expr-equal/eq-2-2
     # @return [Boolean]
     def comperable_datatype?(other)
-      return false unless self.plain?
+      return false unless self.plain? || self.has_language?
 
       case other
       when RDF::Literal::Numeric, RDF::Literal::Boolean,
            RDF::Literal::Date, RDF::Literal::Time, RDF::Literal::DateTime
-        false
+        # Invald types can be compared without raising a TypeError if literal has a language (open-eq-08)
+        !other.valid? && self.has_language?
       else
-        # An unknown datatype can be used for comparison
-        other.datatype && other.datatype != XSD.string
+        case other.datatype
+        when XSD.string
+          true
+        when nil
+          # A different language will not generate a type error
+          other.has_language?
+        else
+          # An unknown datatype may not be used for comparison, unless it has a language? (open-eq-8)
+          self.has_language?
+        end
       end
     end
 
