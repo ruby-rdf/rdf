@@ -54,8 +54,15 @@ module RDF; class Literal
 
     ##
     # Equal compares as Date objects
-    def ==(other)
-      other.is_a?(RDF::Literal::Date) && self.object == other.object
+    def equal_tc?(other)
+      case other
+      when Literal::Date
+        self.object == other.object
+      when Literal::Time, Literal::DateTime
+        false
+      else
+        super
+      end
     end
   end # Date
 end; end # RDF::Literal

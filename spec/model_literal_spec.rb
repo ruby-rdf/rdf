@@ -849,4 +849,97 @@ describe RDF::Literal do
       end
     end
   end
+  
+  describe "SPARQL tests" do
+    context "#==" do
+      {
+        "boolean true=true" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("true")],
+        "boolean false=false" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("false")],
+        "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-01:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00+04:00")],
+        "datetime 2" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T23:00:00+06:00")],
+        "datetime 3" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00")],
+        "datetime 4" => [RDF::Literal::DateTime.new("2002-04-02T23:00:00-04:00"), RDF::Literal::DateTime.new("2002-04-03T02:00:00-01:00")],
+        "datetime 5" => [RDF::Literal::DateTime.new("1999-12-31T24:00:00-05:00"), RDF::Literal::DateTime.new("2000-01-01T00:00:00-05:00")],
+        "numeric 1=1" => [RDF::Literal(1), RDF::Literal(1)],
+        "numeric 1.0=1.0" => [RDF::Literal(1.0), RDF::Literal(1.0)],
+        "numeric 1^^xsd:decimal=1^^xsd:decimal" => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1)],
+        "numeric 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
+        "numeric 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
+        "numeric 1='1'^xsd:int" => [RDF::Literal(1), RDF::Literal::Int.new("1")],
+        "numeric '1'^xsd:int=1" => [RDF::Literal::Int.new(1), RDF::Literal(1)],
+        "numeric 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
+        "numeric 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
+        "numeric 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
+        "numeric INF=INF" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+        "numeric -INF=-INF" => [-RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
+        "numeric 'xyz'^^xsd:integer='xyz'^^xsd:integer" => [-RDF::Literal::Integer.new("xyz"), -RDF::Literal::Integer.new("xyz")],
+        "string 'foo'='foo'" => [RDF::Literal("foo"), RDF::Literal("foo")],
+        "string 'foo'^^xsd:string='foo'xsd:string" => [RDF::Literal("foo", :datatype => XSD.string), RDF::Literal("foo", :datatype => XSD.string)],
+        "string 'foo'='foo'xsd:string" => [RDF::Literal("foo"), RDF::Literal("foo", :datatype => XSD.string)],
+        "string 'foo'xsd:string='foo'" => [RDF::Literal("foo", :datatype => XSD.string), RDF::Literal("foo")],
+        "language 'xyz'@en='xyz'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :en)],
+        "language 'xyz'@en='xyz'@EN" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :EN)],
+        "language 'xyz'@EN='xyz'@en" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :en)],
+        "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
+        "unknown 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+      }.each do |label, (left, right)|
+        it "returns true for #{label}" do
+          left.should == right
+          left.should be_equal_tc(right)
+        end
+      end
+    end
+    
+    context "#!=" do
+      {
+        "boolean true=false" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("false")],
+        "boolean false=true" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("true")],
+        "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00-05:00")],
+        "datetime 2" => [RDF::Literal::DateTime.new("2005-04-04T24:00:00-05:00"), RDF::Literal::DateTime.new("2005-04-04T00:00:00-05:00")],
+        "numeric 1=2" => [RDF::Literal(1), RDF::Literal(2)],
+        "numeric 1.0=2.0" => [RDF::Literal(1.0), RDF::Literal(2.0)],
+        "numeric +INF=-INF" => [RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
+        "numeric -INF=INF" => [-RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+        "numeric NaN=NaN" => [-RDF::Literal::Double.new("NaN"), RDF::Literal::Double.new("NaN")],
+        "string 'foo'='bar'" => [RDF::Literal("foo"), RDF::Literal("bar")],
+        "language 'xyz'@en='abc'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :language => :en)],
+        "uri 'xyz'=<xyz>" => [RDF::Literal("xyz"), RDF::URI("xyz")],
+        "uri <xyz>='xyz'" => [RDF::URI("xyz"), RDF::Literal("xyz")],
+        "node 'xyz'=_:xyz" => [RDF::Literal("xyz"), RDF::Node.new("xyz")],
+        "node _:xyz=_'xyz'" => [RDF::Node.new("xyz"), RDF::Literal("xyz")],
+      }.each do |label, (left, right)|
+        it "returns false for #{label}" do
+          left.should_not == right
+          left.should_not be_equal_tc(right)
+        end
+      end
+    end
+    
+    context TypeError do
+      {
+        "numeric 1='1'" => [RDF::Literal(1), RDF::Literal("1")],
+        "numeric '1'=1" => [RDF::Literal("1"), RDF::Literal(1)],
+        "boolean true='true'" => [RDF::Literal::Boolean.new("true"), RDF::Literal("true")],
+        "boolean 'true'=true" => [RDF::Literal("true"), RDF::Literal::Boolean.new("true")],
+        "plain 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.string)],
+        "plain 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.integer)],
+        "plain 'xyz'='xyz'<unknown>" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+        "language 'xyz'@en='xyz'" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz")],
+        "language 'xyz'='xyz'@en" => [RDF::Literal("xyz"), RDF::Literal("xyz", :language => :en)],
+        "language 'xyz'@en='xyz'@dr" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"dr")],
+        "language 'xyz'@en='xyz'@en-us" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"en-us")],
+        "language 'xyz'@en='xyz'" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz")],
+        "language 'xyz'@en='xyz'^^xsd:string" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.string)],
+        "language 'xyz'@en='xyz'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.integer)],
+        "language 'xyz'@en='xyz'<unknown>" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+        "string 'xyz'^^xsd:string='xyz'@en" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :language => :en)],
+        "unknown 'xyz'^^<unknown>='abc'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("abc", :datatype => RDF::URI("unknown"))],
+      }.each do |label, (left, right)|
+        it "raises TypeError for #{label}" do
+          left.should_not == right
+          lambda {left.equal_tc?(right)}.should raise_error(TypeError)
+        end
+      end
+    end
+  end
 end

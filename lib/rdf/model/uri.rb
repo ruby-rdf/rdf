@@ -435,7 +435,7 @@ module RDF
     alias_method :ends_with?, :end_with?
 
     ##
-    # Checks whether this URI is equal to `other`.
+    # Checks whether this URI the same term as `other'.
     #
     # @example
     #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/')) #=> true
@@ -458,6 +458,7 @@ module RDF
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
     def ==(other)
       case other
         when String then to_s == other
@@ -465,6 +466,7 @@ module RDF
         else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
       end
     end
+    alias_method :equal_tc?, :==
 
     ##
     # Checks for case equality to the given `other` object.

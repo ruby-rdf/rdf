@@ -54,8 +54,17 @@ module RDF; class Literal
 
     ##
     # Equal compares as Time objects
-    def ==(other)
-      other.is_a?(RDF::Literal::Time) && self.to_s == other.to_s
+    def equal_tc?(other)
+      case other
+      when Literal::Time
+        # Compare as strings, as time includes a date portion, and adjusting for UTC
+        # can create a mismatch in the date portion.
+        self.object.utc.strftime('%H%M%S') == other.object.utc.strftime('%H%M%S')
+      when Literal::DateTime, Literal::Date
+        false
+      else
+        super
+      end
     end
   end # Time
 end; end # RDF::Literal

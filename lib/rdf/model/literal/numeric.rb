@@ -21,6 +21,22 @@ module RDF; class Literal
     end
 
     ##
+    # Returns `true` if this literal is equal to `other`.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @raise [TypeError] if Literal terms are not comparable
+    # @since  0.3.0
+    def equal_tc?(other)
+      case other
+      when Literal::Numeric
+        (cmp = (self <=> other)) ? cmp.zero? : false
+      else
+        super
+      end
+    end
+
+    ##
     # Returns `self`.
     #
     # @return [RDF::Literal::Numeric]

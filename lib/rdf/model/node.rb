@@ -88,7 +88,7 @@ module RDF
     end
 
     ##
-    # Checks whether this blank node is same as `other`.
+    # Determins if `self` is the same term as `other`.
     #
     # In this case, nodes must be the same object
     #
@@ -105,10 +105,12 @@ module RDF
     #
     # @param  [Object] other
     # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
     def ==(other)
       other.respond_to?(:node?) && other.node? &&
         other.respond_to?(:id) && @id == other.id
     end
+    alias_method :equal_tc?, :==
 
     ##
     # Returns a string representation of this blank node.

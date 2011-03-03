@@ -74,17 +74,6 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `true` if this literal is equivalent to `other`.
-    #
-    # @param  [Object] other
-    # @return [Boolean] `true` or `false`
-    # @since  0.3.0
-    def ==(other)
-      (cmp = (self <=> other)) ? cmp.zero? : false
-    end
-    alias_method :===, :==
-
-    ##
     # Returns `true` if the value is an invalid IEEE floating point number.
     #
     # @example

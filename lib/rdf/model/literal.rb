@@ -222,7 +222,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this literal is equal to `other`.
+    # Determins if `self` is the same term as `other`.
     #
     # @example
     #   RDF::Literal(1).eql?(RDF::Literal(1.0))  #=> false
@@ -238,6 +238,39 @@ module RDF
     end
 
     ##
+    # Returns `true` if this literal is equivalent to `other` (with type check).
+    #
+    # @example
+    #   RDF::Literal(1) == RDF::Literal(1.0)     #=> true
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @raise [TypeError] if Literal terms are not comparable
+    #
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    # @see http://www.w3.org/TR/rdf-concepts/#section-Literal-Equality
+    def equal_tc?(other)
+      case other
+      when Literal
+        case
+        when self.eql?(other)
+          #puts "eql?"
+          true
+        when self.has_language? && self.language.to_s.downcase == other.language.to_s.downcase
+          self.value == other.value
+        when (self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)
+          #puts "(self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)"
+          self.value == other.value
+        else
+          raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
+        end
+      when String
+        self.plain? && self.value.eql?(other)
+      else false
+      end
+    end
+    
+    ##
     # Returns `true` if this literal is equivalent to `other`.
     #
     # @example
@@ -245,16 +278,11 @@ module RDF
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
+    #
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    # @see http://www.w3.org/TR/rdf-concepts/#section-Literal-Equality
     def ==(other)
-      case other
-        when Literal
-          self.value.eql?(other.value) &&
-          self.language.to_s.downcase.eql?(other.language.to_s.downcase) &&
-          self.datatype.eql?(other.datatype)
-        when String
-          self.plain? && self.value.eql?(other)
-        else false
-      end
+      self.equal_tc?(other) rescue false
     end
     alias_method :===, :==
 

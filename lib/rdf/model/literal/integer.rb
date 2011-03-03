@@ -129,150 +129,131 @@ module RDF; class Literal
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#nonPositiveInteger
   class NonPositiveInteger < Integer
-    DATATYPE = XSD.nonPositiveInteger
     GRAMMAR  = /^(?:[\+\-]?0)|(?:-\d+)$/.freeze
 
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.nonPositiveInteger))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#negativeInteger
   class NegativeInteger < NonPositiveInteger
-    DATATYPE = XSD.negativeInteger
     GRAMMAR  = /^\-\d+$/.freeze
 
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.negativeInteger))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#long
   class Long < Integer
-    DATATYPE = XSD.long
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.long))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#int
   class Int < Long
-    DATATYPE = XSD.int
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.int))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#short
   class Short < Int
-    DATATYPE = XSD.short
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.short))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#byte
   class Byte < Short
-    DATATYPE = XSD.byte
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.byte))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#nonNegativeInteger
   class NonNegativeInteger < Integer
-    DATATYPE = XSD.nonNegativeInteger
     GRAMMAR  = /^(?:[\+\-]?0)|(?:\+?\d+)$/.freeze
 
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.nonNegativeInteger))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedLong
   class UnsignedLong < NonNegativeInteger
-    DATATYPE = XSD.unsignedLong
     GRAMMAR  = /^\d+$/.freeze
 
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.unsignedLong))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedInt
   class UnsignedInt < UnsignedLong
-    DATATYPE = XSD.unsignedInt
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.unsignedInt))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedShort
   class UnsignedShort < UnsignedInt
-    DATATYPE = XSD.unsignedShort
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.unsignedShort))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedByte
   class UnsignedByte < UnsignedShort
-    DATATYPE = XSD.unsignedByte
-
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.unsignedByte))
     end
   end
   
   # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#positiveInteger
   class PositiveInteger < NonNegativeInteger
-    DATATYPE = XSD.positiveInteger
     GRAMMAR  = /^\+?\d+$/.freeze
 
     ##
-    # @param  [Float, #to_f] value
+    # @param  [#to_i] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
+      super(value, options.merge(:datatype => XSD.positiveInteger))
     end
   end
 end; end # RDF::Literal

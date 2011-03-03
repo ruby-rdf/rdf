@@ -57,12 +57,17 @@ module RDF; class Literal
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
+    # @raise [TypeError] if Literal terms are not comparable
     # @since  0.3.0
-    def ==(other)
-      (cmp = (self <=> other)) ? cmp.zero? : false
+    def equal_tc?(other)
+      case other
+      when Literal::Boolean, TrueClass, FalseClass
+        (cmp = (self <=> other)) ? cmp.zero? : false
+      else
+        super
+      end
     end
-    alias_method :===, :==
-
+    
     ##
     # Returns the value as a string.
     #
