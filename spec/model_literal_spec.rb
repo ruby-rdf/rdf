@@ -902,6 +902,7 @@ describe RDF::Literal do
         "numeric -INF=INF" => [-RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
         "numeric NaN=NaN" => [-RDF::Literal::Double.new("NaN"), RDF::Literal::Double.new("NaN")],
         "string 'foo'='bar'" => [RDF::Literal("foo"), RDF::Literal("bar")],
+        "string 'xyz'='xyz'<unknown>" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))], # From expr-equal/eq-2-2
         "language 'xyz'@en='abc'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :language => :en)],
         "uri 'xyz'=<xyz>" => [RDF::Literal("xyz"), RDF::URI("xyz")],
         "uri <xyz>='xyz'" => [RDF::URI("xyz"), RDF::Literal("xyz")],
@@ -919,11 +920,12 @@ describe RDF::Literal do
       {
         "numeric 1='1'" => [RDF::Literal(1), RDF::Literal("1")],
         "numeric '1'=1" => [RDF::Literal("1"), RDF::Literal(1)],
+        "numeric <xyz>=1" => [RDF::URI("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
+        "numeric 1=<xyz>" => [RDF::Literal(1), RDF::URI("xyz")],  # From expr-equal/expr-2-2
+        "numeric _:xyz=1" => [RDF::Node.new("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
+        "numeric 1=_:xyz" => [RDF::Literal(1), RDF::Node.new("xyz")],  # From expr-equal/expr-2-2
         "boolean true='true'" => [RDF::Literal::Boolean.new("true"), RDF::Literal("true")],
         "boolean 'true'=true" => [RDF::Literal("true"), RDF::Literal::Boolean.new("true")],
-        "plain 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.string)],
-        "plain 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.integer)],
-        "plain 'xyz'='xyz'<unknown>" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
         "language 'xyz'@en='xyz'" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz")],
         "language 'xyz'='xyz'@en" => [RDF::Literal("xyz"), RDF::Literal("xyz", :language => :en)],
         "language 'xyz'@en='xyz'@dr" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"dr")],
@@ -933,6 +935,7 @@ describe RDF::Literal do
         "language 'xyz'@en='xyz'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.integer)],
         "language 'xyz'@en='xyz'<unknown>" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
         "string 'xyz'^^xsd:string='xyz'@en" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :language => :en)],
+        "string 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.integer)],
         "unknown 'xyz'^^<unknown>='abc'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("abc", :datatype => RDF::URI("unknown"))],
       }.each do |label, (left, right)|
         it "raises TypeError for #{label}" do

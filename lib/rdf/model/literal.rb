@@ -261,6 +261,10 @@ module RDF
         when (self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)
           #puts "(self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)"
           self.value == other.value
+        when other.comperable_datatype?(self) || self.comperable_datatype?(other)
+          # Comoparing plain with undefined datatypes does not generate an error, but returns false
+          # From data-r2/expr-equal/eq-2-2.
+          false
         else
           raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
         end
@@ -337,6 +341,25 @@ module RDF
     # @since  0.2.1
     def invalid?
       !valid?
+    end
+
+    ##
+    # Returns `true` if the literal has a datatype and the comparison should
+    # return false instead of raise a type error.
+    #
+    # This behavior is intuited from SPARQL data-r2/expr-equal/eq-2-2
+    # @return [Boolean]
+    def comperable_datatype?(other)
+      return false unless self.plain?
+
+      case other
+      when RDF::Literal::Numeric, RDF::Literal::Boolean,
+           RDF::Literal::Date, RDF::Literal::Time, RDF::Literal::DateTime
+        false
+      else
+        # An unknown datatype can be used for comparison
+        other.datatype && other.datatype != XSD.string
+      end
     end
 
     ##

@@ -113,6 +113,39 @@ module RDF
     alias_method :equal_tc?, :==
 
     ##
+    # Checks whether this blank node is equal to `other` (type checking).
+    #
+    # In this case, different nodes having the same id are considered the same.
+    #
+    # Per SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
+    #
+    # @param  [Object] other
+    # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    def equal_tc?(other)
+      case other
+      when Literal::Numeric
+        # Interpreting SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
+        raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
+      else 
+        other.respond_to?(:node?) && other.node? && other.respond_to?(:id) && @id == other.id
+      end
+    end
+
+    ##
+    # Checks whether this blank node is equal to `other`.
+    #
+    # In this case, different nodes having the same id are considered the same.
+    #
+    # @param  [Object] other
+    # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    def ==(other)
+      self.equal_tc?(other) rescue false
+    end
+    alias_method :===, :==
+
+    ##
     # Returns a string representation of this blank node.
     #
     # @return [String]

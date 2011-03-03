@@ -31,6 +31,9 @@ module RDF; class Literal
       case other
       when Literal::Numeric
         (cmp = (self <=> other)) ? cmp.zero? : false
+      when RDF::URI, RDF::Node
+        # Interpreting SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
+        raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
       else
         super
       end

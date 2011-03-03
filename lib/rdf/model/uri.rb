@@ -466,7 +466,46 @@ module RDF
         else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
       end
     end
-    alias_method :equal_tc?, :==
+
+    ##
+    # Checks whether this URI is equal to `other` (type checking).
+    #
+    # Per SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
+    #
+    # @example
+    #   RDF::URI('http://t.co/') == RDF::URI('http://t.co/')    #=> true
+    #   RDF::URI('http://t.co/') == 'http://t.co/'              #=> true
+    #   RDF::URI('http://purl.org/dc/terms/') == RDF::DC        #=> true
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    def equal_tc?(other)
+      case other
+      when Literal::Numeric
+        # Interpreting SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
+        raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
+      when String then to_s == other
+      when URI, Addressable::URI then to_s == other.to_s
+      else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
+      end
+    end
+
+    ##
+    # Checks whether this URI is equal to `other`.
+    #
+    # @example
+    #   RDF::URI('http://t.co/') == RDF::URI('http://t.co/')    #=> true
+    #   RDF::URI('http://t.co/') == 'http://t.co/'              #=> true
+    #   RDF::URI('http://purl.org/dc/terms/') == RDF::DC        #=> true
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    def ==(other)
+      self.equal_tc?(other) rescue false
+    end
+    alias_method :===, :==
 
     ##
     # Checks for case equality to the given `other` object.
