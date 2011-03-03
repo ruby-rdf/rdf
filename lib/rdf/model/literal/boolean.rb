@@ -60,8 +60,14 @@ module RDF; class Literal
     # @raise [TypeError] if Literal terms are not comparable
     # @since  0.3.0
     def equal_tc?(other)
+      # If lexically invalid, use regular literal testing
+      return super unless self.valid?
+
+      other = Literal::Boolean.new(other) if other.class == TrueClass || other.class == FalseClass
+
       case other
-      when Literal::Boolean, TrueClass, FalseClass
+      when Literal::Boolean
+        return super unless other.valid?
         (cmp = (self <=> other)) ? cmp.zero? : false
       else
         super
