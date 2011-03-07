@@ -44,6 +44,23 @@ module RDF
       self.new(id)
     end
 
+    ##
+    # Override #dup to remember original object.
+    # This allows .eql? to determine that two nodes
+    # are the same thing, and not different nodes
+    # instantiated with the same identifier.
+    # @return [RDF::Node]
+    def dup
+      node = super
+      node.original = self.original || self
+      node
+    end
+
+    ##
+    # Originally instantiated node, if any
+    # @return [RDF::Node]
+    attr_accessor :original
+
     # @return [String]
     attr_accessor :id
 
@@ -95,7 +112,7 @@ module RDF
     # @param  [Node] other
     # @return [Boolean]
     def eql?(other)
-      equal?(other)
+      other.is_a?(RDF::Node) && (self.original || self).equal?(other.original || other)
     end
 
     ##
@@ -110,7 +127,6 @@ module RDF
       other.respond_to?(:node?) && other.node? &&
         other.respond_to?(:id) && @id == other.id
     end
-    alias_method :equal_tc?, :==
 
     ##
     # Checks whether this blank node is equal to `other` (type checking).
