@@ -122,7 +122,7 @@ module RDF
         if reader
           reader.new(file, options, &block)
         else
-          raise FormatError, "unknown RDF format: #{format_options}.inspect}"
+          raise FormatError, "unknown RDF format: #{format_options.inspect}"
         end
       end
     end
