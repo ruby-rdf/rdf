@@ -343,13 +343,13 @@ module RDF
     # Is this is a named query?
     # @return [Boolean]
     def named?
-      !unnamed?
+      !!options[:context]
     end
     
     # Is this is an unamed query?
     # @return [Boolean]
     def unnamed?
-      options[:context].nil?
+      !named?
     end
     
     # Add name to query
