@@ -59,6 +59,7 @@ module RDF
     autoload :Decimal,            'rdf/model/literal/decimal'
     autoload :Date,               'rdf/model/literal/date'
     autoload :DateTime,           'rdf/model/literal/datetime'
+    autoload :Float,              'rdf/model/literal/double'
     autoload :Time,               'rdf/model/literal/time'
     autoload :Token,              'rdf/model/literal/token'
     autoload :XML,                'rdf/model/literal/xml'
