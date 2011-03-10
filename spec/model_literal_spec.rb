@@ -911,10 +911,6 @@ describe RDF::Literal do
         "date-2 3" => [RDF::Literal::DateTime.new("2006-08-23T09:00:00+01:00"), RDF::Literal::Date.new("2006-08-23")],
         "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00-05:00")],
         "datetime 2" => [RDF::Literal::DateTime.new("2005-04-04T24:00:00-05:00"), RDF::Literal::DateTime.new("2005-04-04T00:00:00-05:00")],
-        "eq-2-2 'zzz'^^<unknown>='1'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("1")],
-        "eq-2-2 '1'='zzz'^^<unknown>" => [RDF::Literal("1"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
-        "eq-2-2 'zzz'^^<unknown>='zzz'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("zzz")],
-        "eq-2-2 'zzz'='zzz'^^<unknown>" => [RDF::Literal("zzz"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
         "language 'xyz'@en='xyz'@dr" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"dr")],
         "language 'xyz'@en='xyz'@en-us" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"en-us")],
         "numeric +INF=-INF" => [RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
@@ -966,6 +962,10 @@ describe RDF::Literal do
       {
         "boolean 'true'=true" => [RDF::Literal("true"), RDF::Literal::Boolean.new("true")],
         "boolean true='true'" => [RDF::Literal::Boolean.new("true"), RDF::Literal("true")],
+        "eq-2-2(bug) 'zzz'^^<unknown>='1'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("1")],
+        "eq-2-2(bug) '1'='zzz'^^<unknown>" => [RDF::Literal("1"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
+        "eq-2-2(bug) 'zzz'^^<unknown>='zzz'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("zzz")],
+        "eq-2-2(bug) 'zzz'='zzz'^^<unknown>" => [RDF::Literal("zzz"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
         "numeric '1'=1" => [RDF::Literal("1"), RDF::Literal(1)],
         "numeric 1='1'" => [RDF::Literal(1), RDF::Literal("1")],
         "numeric 1=<xyz>" => [RDF::Literal(1), RDF::URI("xyz")],  # From expr-equal/expr-2-2
