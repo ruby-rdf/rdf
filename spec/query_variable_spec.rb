@@ -15,22 +15,42 @@ describe RDF::Query::Variable do
       @var.value.should be_nil
     end
     
-    it "is distinguished" do
-      @var.should be_distinguished
+    context "distinguished" do
+      subject {@var}
+      it "is distinguished" do
+        subject.should be_distinguished
+      end
+
+      it "can be made non-distinguished" do
+        subject.distinguished = false
+        subject.should_not be_distinguished
+      end
+
+      it "has a string representation" do
+        subject.to_s.should == "?x"
+      end
     end
     
-    it "can be made non-distinguished" do
-      @var.distinguished = false
-      @var.should_not be_distinguished
-    end
+    context "non-distinguished" do
+      subject { @var.distinguished = false; @var }
+      it "is nondistinguished" do
+        subject.should_not be_distinguished
+      end
 
+      it "can be made distinguished" do
+        subject.distinguished = true
+        subject.should be_distinguished
+      end
+
+      it "has a string representation" do
+        subject.to_s.should == "??x"
+      end
+    end
+    
     it "is convertible to a symbol" do
       @var.to_sym.should == :x
     end
 
-    it "has a string representation" do
-      @var.to_s.should == "?x"
-    end
 
     it "has no value" do
       @var.value.should be_nil

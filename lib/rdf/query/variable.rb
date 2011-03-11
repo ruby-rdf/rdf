@@ -195,9 +195,20 @@ class RDF::Query
     ##
     # Returns a string representation of this variable.
     #
+    # Distinguished variables are indicated with a single `?`.
+    #
+    # Non-distinguished variables are indicated with a double `??`
+    #
+    # @example
+    #   v = Variable.new("a")
+    #   v.to_s => '?a'
+    #   v.distinguished = false
+    #   v.to_s => '??a'
+    #
     # @return [String]
     def to_s
-      unbound? ? "?#{name}" : "?#{name}=#{value}"
+      prefix = distinguished? ? '?' : "??"
+      unbound? ? "#{prefix}#{name}" : "#{prefix}#{name}=#{value}"
     end
   end # Variable
 end # RDF::Query
