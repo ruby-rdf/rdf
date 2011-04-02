@@ -122,6 +122,7 @@ module RDF::NTriples
       writer = self.new
       case value
         when nil then nil
+        when FalseClass then value.to_s
         when RDF::Statement
           writer.format_statement(value) + "\n"
         when RDF::Term
