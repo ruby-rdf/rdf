@@ -1,0 +1,5 @@
+<http://kellogg-assoc.com/#me> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/mbox> <mailto:gregg@kellogg-assoc.com> .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" .
+<http://kellogg-assoc.com/#me> <http://xmlns.com/foaf/0.1/homepage> <http://kellogg-assoc.com/> .

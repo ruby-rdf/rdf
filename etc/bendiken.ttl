@@ -1,0 +1,17 @@
+@base         <http://rubygems.org/gems/rdf> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix ex:   <http://example.org/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<http://ar.to/#self> a foaf:Person ;
+  foaf:name          "Arto Bendiken" ;
+  foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
+  foaf:mbox_sha1sum  "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
+                     "a033f652c84a4d73b8c26d318c2395699dd2bdfb" ;
+  foaf:homepage      <http://ar.to/> ;
+  foaf:made          <> ;
+  rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
