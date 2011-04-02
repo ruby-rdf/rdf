@@ -260,21 +260,17 @@ module RDF
 
       patterns = @patterns
 
-      # Filter queryable by context, if necessary
+      # Add context to pattern, if necessary
       unless self.context.nil?
-        queryable = queryable.query(:context => self.context.is_a?(Variable) ? true : self.context)
+        if patterns.empty?
+          patterns = [Pattern.new(nil, nil, nil, :context => self.context)]
+        elsif patterns.first.context.nil?
+          patterns.first.context = self.context
+        end
       end
-
-      #puts "queryable is #{queryable.to_a.inspect}"
       
       patterns.each do |pattern|
 
-        # Add context to pattern, if necessary
-        if self.context.is_a?(Variable)
-          pattern = pattern.dup
-          pattern.context = self.context
-        end
-        
         old_solutions, @solutions = @solutions, Solutions.new
 
         options[:bindings].keys.each do |variable|
