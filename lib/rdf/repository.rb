@@ -325,7 +325,7 @@ module RDF
 
       ##
       # Match elements with eql?, not ==
-      # Context of `false` matches default context, context of `true` matches any non-default context
+      # Context of `false` matches default context. Unbound variable matches non-false context
       # @private
       # @see RDF::Queryable#query
       def query_pattern(pattern, &block)
@@ -336,7 +336,7 @@ module RDF
 
         cs = @data.has_key?(context) ? {context => @data[context]} : @data.dup
         cs.each do |c, ss|
-          next unless context.nil? || context.eql?(c) || context == true && c
+          next unless context.nil? || context == false && !c || context.eql?(c)
           ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
           ss.each do |s, ps|
             next unless subject.nil? || subject.eql?(s)
