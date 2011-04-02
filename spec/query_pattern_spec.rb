@@ -6,7 +6,7 @@ describe RDF::Query::Pattern do
       @pattern = RDF::Query::Pattern.new
     end
 
-    context ".from" do
+    describe ".from" do
       it "creates using triple array" do
         RDF::Query::Pattern.from([:s, :p, :o]).should == RDF::Query::Pattern.new(:s, :p, :o)
       end

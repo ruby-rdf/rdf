@@ -87,7 +87,7 @@ module RDF; class Query
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def variable?
-      subject.nil? || predicate.nil? || object.nil? || context.nil? || context == true || has_variables?
+      subject.nil? || predicate.nil? || object.nil? || context.nil? || has_variables?
     end
 
     ##
@@ -119,10 +119,10 @@ module RDF; class Query
     ##
     # Executes this query pattern on the given `queryable` object.
     #
-    # By default any variable terms in this pattern will be treated as `nil`
-    # wildcards when executing the query. If the optional `bindings` are
-    # given, variables will be substituted with their values when executing
-    # the query.
+    # Values are matched using using Queryable#query_pattern.
+    #
+    # If the optional `bindings` are given, variables will be substituted with their values
+    # when executing the query.
     #
     # To match triples only in the default context, set context to `false'.
     #
@@ -143,10 +143,10 @@ module RDF; class Query
     # @since  0.3.0
     def execute(queryable, bindings = {}, &block)
       query = {
-        :subject   => subject.is_a?(Variable)   ? bindings[subject.to_sym]   : subject,
-        :predicate => predicate.is_a?(Variable) ? bindings[predicate.to_sym] : predicate,
-        :object    => object.is_a?(Variable)    ? bindings[object.to_sym]    : object,
-        :context   => context.is_a?(Variable)   ? bindings[context.to_sym]   : context,
+        :subject   => subject.is_a?(Variable)   && bindings[subject.to_sym]   ? bindings[subject.to_sym]   : subject,
+        :predicate => predicate.is_a?(Variable) && bindings[predicate.to_sym] ? bindings[predicate.to_sym] : predicate,
+        :object    => object.is_a?(Variable)    && bindings[object.to_sym]    ? bindings[object.to_sym]    : object,
+        :context   => context.is_a?(Variable)   && bindings[context.to_sym]   ? bindings[context.to_sym]   : context,
       }.delete_if{|k,v| v.nil?}
 
       # Do all the variable terms refer to distinct variables?
