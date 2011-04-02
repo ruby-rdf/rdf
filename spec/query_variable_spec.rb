@@ -63,34 +63,70 @@ describe RDF::Query::Variable do
       @var.bindings.should == {}
     end
 
-    it "matches any value" do
-      [nil, true, false, 123].each do |value|
-        (@var === value).should be_true
+    describe "#==" do
+      it "matches any Term" do
+        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), @var].each do |value|
+          @var.should == value
+        end
+      end
+
+      it "does not match non-terms" do
+        [nil, true, false, 123].each do |value|
+          @var.should_not == value
+        end
+      end
+    end
+
+    describe "#eql?" do
+      it "matches any Term" do
+        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), @var].each do |value|
+          @var.should be_eql value
+        end
+      end
+
+      it "does not match non-terms" do
+        [nil, true, false, 123].each do |value|
+          @var.should_not be_eql value
+        end
+      end
+    end
+
+    describe "#===" do
+      it "matches any Term" do
+        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), @var].each do |value|
+          (@var === value).should be_true
+        end
+      end
+
+      it "does not match non-terms" do
+        [nil, true, false, 123].each do |value|
+          (@var === value).should be_false
+        end
       end
     end
   end
 
   context ".new(:x, 123)" do
     before :each do
-      @var = RDF::Query::Variable.new(:x, 123)
+      @var = RDF::Query::Variable.new(:x, RDF::Literal(123))
     end
 
     it "has a value" do
-      @var.value.should == 123
+      @var.value.should == RDF::Literal(123)
     end
 
     it "is bound" do
       @var.unbound?.should be_false
       @var.bound?.should be_true
       @var.variables.should == {:x => @var}
-      @var.bindings.should == {:x => 123}
+      @var.bindings.should == {:x => RDF::Literal(123)}
     end
 
     it "matches only its value" do
-      [nil, true, false, 456].each do |value|
+      [nil, true, false, RDF::Literal(456)].each do |value|
         (@var === value).should be_false
       end
-      (@var === 123).should be_true
+      (@var === RDF::Literal(123)).should be_true
     end
 
     it "has a string representation" do
@@ -100,16 +136,16 @@ describe RDF::Query::Variable do
 
   context "when rebound" do
     before :each do
-      @var = RDF::Query::Variable.new(:x, 123)
+      @var = RDF::Query::Variable.new(:x, RDF::Literal(123))
     end
 
     it "returns the previous value" do
-      @var.bind(456).should == 123
-      @var.bind(789).should == 456
+      @var.bind(RDF::Literal(456)).should == RDF::Literal(123)
+      @var.bind(RDF::Literal(789)).should == RDF::Literal(456)
     end
 
     it "is still bound" do
-      @var.bind!(456)
+      @var.bind!(RDF::Literal(456))
       @var.unbound?.should be_false
       @var.bound?.should be_true
     end
@@ -117,11 +153,11 @@ describe RDF::Query::Variable do
 
   context "when unbound" do
     before :each do
-      @var = RDF::Query::Variable.new(:x, 123)
+      @var = RDF::Query::Variable.new(:x, RDF::Literal(123))
     end
 
     it "returns the previous value" do
-      @var.unbind.should == 123
+      @var.unbind.should == RDF::Literal(123)
       @var.unbind.should == nil
     end
 

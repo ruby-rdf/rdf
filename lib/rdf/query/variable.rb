@@ -170,14 +170,21 @@ class RDF::Query
 
     ##
     # Returns `true` if this variable is equivalent to a given `other`
-    # variable.
+    # variable. Or, to another Term if bound, or to any other Term
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def eql?(other)
-      other.is_a?(RDF::Query::Variable) && @name.eql?(other.name)
+      if unbound?
+        other.is_a?(RDF::Term) # match any Term when unbound
+      elsif other.is_a?(RDF::Query::Variable)
+        @name.eql?(other.name)
+      else
+        value.eql?(other)
+      end
     end
+    alias_method :==, :eql?
 
     ##
     # Compares this variable with the given value.
@@ -186,7 +193,7 @@ class RDF::Query
     # @return [Boolean]
     def ===(other)
       if unbound?
-        true # match anything when unbound
+        other.is_a?(RDF::Term) # match any Term when unbound
       else
         value === other
       end
