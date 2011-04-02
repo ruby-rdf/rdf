@@ -116,19 +116,6 @@ module RDF
     end
 
     ##
-    # Checks whether this blank node is equal to `other`.
-    #
-    # In this case, different nodes having the same id are considered the same.
-    #
-    # @param  [Object] other
-    # @return [Boolean]
-    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
-    def ==(other)
-      other.respond_to?(:node?) && other.node? &&
-        other.respond_to?(:id) && @id == other.id
-    end
-
-    ##
     # Checks whether this blank node is equal to `other` (type checking).
     #
     # In this case, different nodes having the same id are considered the same.

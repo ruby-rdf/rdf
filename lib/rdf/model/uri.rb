@@ -449,25 +449,6 @@ module RDF
     end
 
     ##
-    # Checks whether this URI is equal to `other`.
-    #
-    # @example
-    #   RDF::URI('http://t.co/') == RDF::URI('http://t.co/')    #=> true
-    #   RDF::URI('http://t.co/') == 'http://t.co/'              #=> true
-    #   RDF::URI('http://purl.org/dc/terms/') == RDF::DC        #=> true
-    #
-    # @param  [Object] other
-    # @return [Boolean] `true` or `false`
-    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
-    def ==(other)
-      case other
-        when String then to_s == other
-        when URI, Addressable::URI then to_s == other.to_s
-        else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
-      end
-    end
-
-    ##
     # Checks whether this URI is equal to `other` (type checking).
     #
     # Per SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
@@ -505,7 +486,6 @@ module RDF
     def ==(other)
       self.equal_tc?(other) rescue false
     end
-    alias_method :===, :==
 
     ##
     # Checks for case equality to the given `other` object.
