@@ -996,29 +996,22 @@ describe RDF::Literal do
       end
     end
 
+    # Term equivalence
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-sameTerm
     context "#eql?" do
       {
         "boolean false=false" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("false")],
         "boolean true=true" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("true")],
         "date-1 1" => [RDF::Literal::Date.new("2006-08-23"), RDF::Literal::Date.new("2006-08-23")],
         "datetime 3" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00")],
-        "eq-1 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
-        "eq-1 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
         "eq-1 1=1" => [RDF::Literal(1), RDF::Literal(1)],
-        "eq-1 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
         "eq-2-1 1.0=1.0" => [RDF::Literal(1.0), RDF::Literal(1.0)],
-        "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
-        "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
         "eq-2-1 1^^xsd:decimal=1^^xsd:decimal" => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1)],
         "eq-3 '1'='1'" => [RDF::Literal("1"), RDF::Literal("1")],
         "eq-4 'zzz'='zzz'" => [RDF::Literal("zzz"), RDF::Literal("zzz")],
-        "numeric '1'^xsd:int=1" => [RDF::Literal::Int.new("1"), RDF::Literal(1)],
         "numeric -INF=-INF" => [-RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
-        "numeric 1='1'^xsd:int" => [RDF::Literal(1), RDF::Literal::Int.new("1")],
-        "numeric 1='1'^xsd:int" => [RDF::Literal(1), RDF::Literal::Int.new("1")],
         "numeric INF=INF" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
         "open-eq-02 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
         "open-eq-03 '1'^xsd:integer=1" => [RDF::Literal::Integer.new("1"), RDF::Literal(1)],
         "open-eq-07 'xyz'='xyz'" => [RDF::Literal("xyz"), RDF::Literal("xyz")],
         "open-eq-07 'xyz'@EN='xyz'@EN" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :EN)],
@@ -1038,15 +1031,23 @@ describe RDF::Literal do
 
     context "not #eql?" do
       {
-        "term-6 '456.'^^xsd:decimal='456.0'^^xsd:decimal" => [RDF::Literal::Decimal.new("456."), RDF::Literal::Decimal.new("456.0")],
         "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-01:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00+04:00")],
         "datetime 2" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T23:00:00+06:00")],
         "datetime 4" => [RDF::Literal::DateTime.new("2002-04-02T23:00:00-04:00"), RDF::Literal::DateTime.new("2002-04-03T02:00:00-01:00")],
         "datetime 5" => [RDF::Literal::DateTime.new("1999-12-31T24:00:00-05:00"), RDF::Literal::DateTime.new("2000-01-01T00:00:00-05:00")],
+        "eq-1 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
+        "eq-1 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
+        "eq-1 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
+        "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
+        "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
+        "numeric '1'^xsd:int=1" => [RDF::Literal::Int.new("1"), RDF::Literal(1)],
+        "numeric 1='1'^xsd:int" => [RDF::Literal(1), RDF::Literal::Int.new("1")],
+        "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
         "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
         "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
+        "term-6 '456.'^^xsd:decimal='456.0'^^xsd:decimal" => [RDF::Literal::Decimal.new("456."), RDF::Literal::Decimal.new("456.0")],
       }.each do |label, (left, right)|
-        it "returns true for #{label}" do
+        it "returns false for #{label}" do
           left.should_not eql right
         end
       end
