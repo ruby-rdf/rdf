@@ -32,6 +32,9 @@
                       foaf:name "Fumihiro Kato" ;
                       foaf:mbox_sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"] ;
   doap:helper        [a foaf:Person ;
+                      foaf:name "Naoki Kawamukai" ;
+                      foaf:mbox_sha1sum "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d"] ;
+  doap:helper        [a foaf:Person ;
                       foaf:name "Hellekin O. Wolf" ;
                       foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;
   doap:helper        [a foaf:Person ;
