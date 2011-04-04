@@ -28,11 +28,17 @@
                       foaf:name "Călin Ardelean" ;
                       foaf:mbox_sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"] ;
   doap:helper        [a foaf:Person ;
+                      foaf:name "Danny Gagne" ;
+                      foaf:mbox_sha1sum "6de43e9cf7de53427fea9765706703e4d957c17b"] ;
+  doap:helper        [a foaf:Person ;
                       foaf:name "Joey Geiger" ;
                       foaf:mbox_sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"] ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Fumihiro Kato" ;
                       foaf:mbox_sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Naoki Kawamukai" ;
+                      foaf:mbox_sha1sum "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d"] ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Hellekin O. Wolf" ;
                       foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;

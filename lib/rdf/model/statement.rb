@@ -97,6 +97,14 @@ module RDF
     end
 
     ##
+    # Returns `true` to indicate that this value is a statement.
+    #
+    # @return [Boolean]
+    def statement?
+      true
+    end
+
+    ##
     # @return [Boolean]
     def invalid?
       !valid?
