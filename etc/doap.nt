@@ -40,6 +40,7 @@
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid6 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid7 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid8 .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid9 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rdf.rubyforge.org/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://ar.to/#self> .
@@ -55,23 +56,26 @@ _:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foa
 _:genid1 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "274bd18402fc773ffc0606996aa1fb90b603aa29" .
 _:genid1 <http://xmlns.com/foaf/0.1/name> "C\u0103lin Ardelean" .
 _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid2 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f412d743150d7b27b8468d56e69ca147917ea6fc" .
-_:genid2 <http://xmlns.com/foaf/0.1/name> "Joey Geiger" .
+_:genid2 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "6de43e9cf7de53427fea9765706703e4d957c17b" .
+_:genid2 <http://xmlns.com/foaf/0.1/name> "Danny Gagne" .
 _:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid3 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930" .
-_:genid3 <http://xmlns.com/foaf/0.1/name> "Fumihiro Kato" .
+_:genid3 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f412d743150d7b27b8468d56e69ca147917ea6fc" .
+_:genid3 <http://xmlns.com/foaf/0.1/name> "Joey Geiger" .
 _:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid4 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d" .
-_:genid4 <http://xmlns.com/foaf/0.1/name> "Naoki Kawamukai" .
+_:genid4 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930" .
+_:genid4 <http://xmlns.com/foaf/0.1/name> "Fumihiro Kato" .
 _:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid5 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
-_:genid5 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
+_:genid5 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d" .
+_:genid5 <http://xmlns.com/foaf/0.1/name> "Naoki Kawamukai" .
 _:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid6 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
-_:genid6 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
+_:genid6 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
+_:genid6 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
 _:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid7 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "2b4247b6fd5bb4a1383378f325784318680d5ff9" .
-_:genid7 <http://xmlns.com/foaf/0.1/name> "Keita Urashima" .
+_:genid7 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
+_:genid7 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
 _:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-_:genid8 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
-_:genid8 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .
+_:genid8 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "2b4247b6fd5bb4a1383378f325784318680d5ff9" .
+_:genid8 <http://xmlns.com/foaf/0.1/name> "Keita Urashima" .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:genid9 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
+_:genid9 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .

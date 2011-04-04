@@ -26,6 +26,9 @@
                       foaf:name "Călin Ardelean" ;
                       foaf:mbox_sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"] ;
   doap:helper        [a foaf:Person ;
+                      foaf:name "Danny Gagne" ;
+                      foaf:mbox_sha1sum "6de43e9cf7de53427fea9765706703e4d957c17b"] ;
+  doap:helper        [a foaf:Person ;
                       foaf:name "Joey Geiger" ;
                       foaf:mbox_sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"] ;
   doap:helper        [a foaf:Person ;
