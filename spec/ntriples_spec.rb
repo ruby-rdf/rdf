@@ -1,8 +1,17 @@
 # -*- encoding: utf-8 -*-
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
+require 'rdf/spec/format'
+require 'rdf/spec/reader'
 
 describe RDF::NTriples::Format do
+  before(:each) do
+    @format_class = RDF::NTriples::Format
+  end
+  
+  # @see lib/rdf/spec/format.rb in rdf-spec
+  it_should_behave_like RDF_Format
+
   it "should be discoverable" do
     formats = [
       RDF::Format.for(:ntriples),
@@ -16,6 +25,13 @@ describe RDF::NTriples::Format do
 end
 
 describe RDF::NTriples::Reader do
+  before(:each) do
+    @reader = RDF::NTriples::Reader.new
+  end
+  
+  # @see lib/rdf/spec/reader.rb in rdf-spec
+  it_should_behave_like RDF_Reader
+
   it "should be discoverable" do
     readers = [
       RDF::Reader.for(:ntriples),
@@ -197,6 +213,21 @@ describe RDF::NTriples do
       stmt.should be_a_statement
     end
 
+    describe "with nodes" do
+      it "should read two named nodes as the same node" do
+        stmt = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt.subject.should == stmt.object
+        stmt.subject.should be_eql(stmt.object)
+      end
+      
+      it "should read two named nodes in different instances as different nodes" do
+        stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt1.subject.should == stmt2.subject
+        stmt1.subject.should_not be_eql(stmt2.subject)
+      end
+    end
+    
     describe "with literal encodings" do
       {
         'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',

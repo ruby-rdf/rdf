@@ -147,12 +147,14 @@ module RDF
     #
     # @param  [String, #to_s] filename
     # @param  [Hash{Symbol => Object}] options
-    #   any additional options (see {RDF::Writer#initialize})
+    #   any additional options (see {RDF::Writer#initialize and {RDF::Format.for}})
     # @option options [Symbol] :format (nil)
     # @return [RDF::Writer]
     def self.open(filename, options = {}, &block)
       File.open(filename, 'wb') do |file|
-        self.for(options[:format] || filename).new(file, options, &block)
+        format_options = options.dup
+        format_options[:file_name] ||= filename
+        self.for(options[:format] || format_options).new(file, options, &block)
       end
     end
 

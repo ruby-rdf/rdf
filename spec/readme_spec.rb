@@ -52,7 +52,7 @@ describe 'README' do
     def example2
       require 'rdf/ntriples'
 
-      RDF::Reader.open("http://rdf.rubyforge.org/doap.nt") do |reader|
+      RDF::NTriples::Reader.open("http://rdf.rubyforge.org/doap.nt") do |reader|
         reader.each_statement do |statement|
           puts statement.inspect
         end
