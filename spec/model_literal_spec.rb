@@ -1,5 +1,4 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
-require 'rdf/spec/literal'
 
 describe RDF::Literal do
   XSD = RDF::XSD
