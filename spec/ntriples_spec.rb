@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 require 'rdf/spec/format'
 require 'rdf/spec/reader'
+require 'rdf/spec/writer'
 
 describe RDF::NTriples::Format do
   before(:each) do
@@ -45,6 +46,13 @@ describe RDF::NTriples::Reader do
 end
 
 describe RDF::NTriples::Writer do
+  before(:each) do
+    @writer = RDF::NTriples::Writer.new
+  end
+  
+  # @see lib/rdf/spec/writer.rb in rdf-spec
+  it_should_behave_like RDF_Writer
+
   it "should be discoverable" do
     writers = [
       RDF::Writer.for(:ntriples),

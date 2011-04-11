@@ -4,6 +4,8 @@
 @prefix dc:   <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix ex:   <http://example.org/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
@@ -52,24 +54,14 @@
   foaf:maker         <http://ar.to/#self> ;
   dc:creator         <http://ar.to/#self> .
 
-<http://ar.to/#self> a foaf:Person ;
-  foaf:name          "Arto Bendiken" ;
-  foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
-  foaf:mbox_sha1sum  "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
-                     "a033f652c84a4d73b8c26d318c2395699dd2bdfb" ;
-  foaf:homepage      <http://ar.to/> ;
-  foaf:made          <> ;
-  rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
-
-<http://bhuga.net/#ben> a foaf:Person ;
-  foaf:name          "Ben Lavender" ;
-  foaf:mbox          <mailto:blavender@gmail.com> ;
-  foaf:mbox_sha1sum  "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" ;
-  foaf:homepage      <http://bhuga.net/> ;
-  rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
-
-<http://kellogg-assoc.com/#me> a foaf:Person ;
-  foaf:name          "Gregg Kellogg" ;
-  foaf:mbox          <mailto:gregg@kellogg-assoc.com> ;
-  foaf:mbox_sha1sum  "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
-  foaf:homepage      <http://kellogg-assoc.com/> .
+# Test data from data-r2/expr-equals/data-eq.ttl
+ex:xi1  ex:p        "1"^^xsd:integer .
+ex:xi2  ex:p        "1"^^xsd:integer .
+ex:xi3  ex:p        "01"^^xsd:integer .
+ex:xd1  ex:p        "1.0e0"^^xsd:double .
+ex:xd2  ex:p        "1.0"^^xsd:double .
+ex:xd3  ex:p        "1"^^xsd:double .
+ex:xt1  ex:p        "zzz"^^ex:myType .
+ex:xp1  ex:p        "zzz" .
+ex:xp2  ex:p        "1" .
+ex:xu   ex:p        ex:z .

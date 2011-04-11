@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/nquads'
 require 'rdf/spec/format'
 require 'rdf/spec/reader'
+require 'rdf/spec/writer'
 
 describe RDF::NQuads::Format do
   before(:each) { pending "N-Quads is not supported yet" }
@@ -49,6 +50,13 @@ end
 
 describe RDF::NQuads::Writer do
   before(:each) { pending "N-Quads is not supported yet" }
+  before(:each) do
+    @writer = RDF::NTriples::Writer.new
+  end
+  
+  # @see lib/rdf/spec/writer.rb in rdf-spec
+  it_should_behave_like RDF_Writer
+
 
   it "should be discoverable" do
     writers = [

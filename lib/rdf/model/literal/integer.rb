@@ -9,12 +9,11 @@ module RDF; class Literal
   #   RDF::Literal(84) / 2                    #=> RDF::Literal(42)
   #
   # @see   http://www.w3.org/TR/xmlschema-2/#integer
+  # @see   http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#integer
   # @since 0.2.1
   class Integer < Decimal
     DATATYPE = XSD.integer
     GRAMMAR  = /^[\+\-]?\d+$/.freeze
-
-    include RDF::Literal::Numeric
 
     ##
     # @param  [Integer, #to_i] value
@@ -106,104 +105,11 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `self`.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +@
-      self # unary plus
-    end
-
-    ##
-    # Returns `self` negated.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -@
-      RDF::Literal(-to_i) # unary minus
-    end
-
-    ##
-    # Returns the sum of `self` plus `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +(other)
-      RDF::Literal(to_i + other.to_i)
-    end
-
-    ##
-    # Returns the difference of `self` minus `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -(other)
-      RDF::Literal(to_i - other.to_i)
-    end
-
-    ##
-    # Returns the product of `self` times `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def *(other)
-      RDF::Literal(to_i * other.to_i)
-    end
-
-    ##
-    # Returns the quotient of `self` divided by `other`.
-    #
-    # @param  [#to_i] other
-    # @return [RDF::Literal]
-    # @raise  [ZeroDivisionError] if divided by zero
-    # @since  0.2.3
-    def /(other)
-      RDF::Literal(to_i / other.to_i)
-    end
-
-    ##
     # Returns the value as a string.
     #
     # @return [String]
     def to_s
       @string || @object.to_s
-    end
-
-    ##
-    # Returns the value as an integer.
-    #
-    # @return [Integer]
-    def to_i
-      @object.to_i
-    end
-    alias_method :to_int, :to_i
-    alias_method :ord,    :to_i
-
-    ##
-    # Returns the value as a floating point number.
-    #
-    # @return [Float]
-    def to_f
-      @object.to_f
-    end
-
-    ##
-    # Returns the value as a decimal number.
-    #
-    # @return [BigDecimal]
-    def to_d
-      @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
-    end
-
-    ##
-    # Returns the value as a rational number.
-    #
-    # @return [Rational]
-    def to_r
-      @object.to_r
     end
 
     ##
@@ -217,4 +123,137 @@ module RDF; class Literal
       OpenSSL::BN.new(to_s)
     end
   end # Integer
+  
+  # Derived types
+  # @see http://www.w3.org/TR/xpath-functions/#datatypes
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#nonPositiveInteger
+  class NonPositiveInteger < Integer
+    GRAMMAR  = /^(?:[\+\-]?0)|(?:-\d+)$/.freeze
+
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.nonPositiveInteger))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#negativeInteger
+  class NegativeInteger < NonPositiveInteger
+    GRAMMAR  = /^\-\d+$/.freeze
+
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.negativeInteger))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#long
+  class Long < Integer
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.long))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#int
+  class Int < Long
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.int))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#short
+  class Short < Int
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.short))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#byte
+  class Byte < Short
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.byte))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#nonNegativeInteger
+  class NonNegativeInteger < Integer
+    GRAMMAR  = /^(?:[\+\-]?0)|(?:\+?\d+)$/.freeze
+
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.nonNegativeInteger))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedLong
+  class UnsignedLong < NonNegativeInteger
+    GRAMMAR  = /^\d+$/.freeze
+
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.unsignedLong))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedInt
+  class UnsignedInt < UnsignedLong
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.unsignedInt))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedShort
+  class UnsignedShort < UnsignedInt
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.unsignedShort))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#unsignedByte
+  class UnsignedByte < UnsignedShort
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.unsignedByte))
+    end
+  end
+  
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#positiveInteger
+  class PositiveInteger < NonNegativeInteger
+    GRAMMAR  = /^\+?\d+$/.freeze
+
+    ##
+    # @param  [#to_i] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => XSD.positiveInteger))
+    end
+  end
 end; end # RDF::Literal

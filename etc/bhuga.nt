@@ -1,0 +1,6 @@
+<http://bhuga.net/#ben> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/name> "Ben Lavender" .
+<http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox> <mailto:blavender@gmail.com> .
+<http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" .
+<http://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/homepage> <http://bhuga.net/> .
+<http://bhuga.net/#ben> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <http://datagraph.org/bhuga/foaf> .

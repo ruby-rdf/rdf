@@ -39,16 +39,30 @@ module RDF
   # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal
-    autoload :Boolean,  'rdf/model/literal/boolean'
-    autoload :Numeric,  'rdf/model/literal/numeric'
-    autoload :Integer,  'rdf/model/literal/integer'
-    autoload :Double,   'rdf/model/literal/double'
-    autoload :Decimal,  'rdf/model/literal/decimal'
-    autoload :Date,     'rdf/model/literal/date'
-    autoload :DateTime, 'rdf/model/literal/datetime'
-    autoload :Time,     'rdf/model/literal/time'
-    autoload :Token,    'rdf/model/literal/token'
-    autoload :XML,      'rdf/model/literal/xml'
+    autoload :Boolean,            'rdf/model/literal/boolean'
+    autoload :Numeric,            'rdf/model/literal/numeric'
+    autoload :Integer,            'rdf/model/literal/integer'
+    autoload :NonPositiveInteger, 'rdf/model/literal/integer'
+    autoload :NegativeInteger,    'rdf/model/literal/integer'
+    autoload :Long,               'rdf/model/literal/integer'
+    autoload :Int,                'rdf/model/literal/integer'
+    autoload :Short,              'rdf/model/literal/integer'
+    autoload :Byte,               'rdf/model/literal/integer'
+    autoload :NonNegativeInteger, 'rdf/model/literal/integer'
+    autoload :UnsignedLong,       'rdf/model/literal/integer'
+    autoload :UnsignedInt,        'rdf/model/literal/integer'
+    autoload :UnsignedShort,      'rdf/model/literal/integer'
+    autoload :UnsignedInteger,    'rdf/model/literal/integer'
+    autoload :UnsignedByte,       'rdf/model/literal/integer'
+    autoload :PositiveInteger,    'rdf/model/literal/integer'
+    autoload :Double,             'rdf/model/literal/double'
+    autoload :Decimal,            'rdf/model/literal/decimal'
+    autoload :Date,               'rdf/model/literal/date'
+    autoload :DateTime,           'rdf/model/literal/datetime'
+    autoload :Float,              'rdf/model/literal/double'
+    autoload :Time,               'rdf/model/literal/time'
+    autoload :Token,              'rdf/model/literal/token'
+    autoload :XML,                'rdf/model/literal/xml'
 
     include RDF::Term
 
@@ -62,9 +76,19 @@ module RDF
           case RDF::URI(datatype)
             when XSD.boolean
               RDF::Literal::Boolean
-            when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
+            when XSD.integer
               RDF::Literal::Integer
-            when XSD.double, XSD.float
+            when XSD.long
+              RDF::Literal::Long
+            when XSD.int
+              RDF::Literal::Int
+            when XSD.short
+              RDF::Literal::Short
+            when XSD.byte
+              RDF::Literal::Byte
+            when XSD.float
+              RDF::Literal::Float
+            when XSD.double
               RDF::Literal::Double
             when XSD.decimal
               RDF::Literal::Decimal
@@ -74,12 +98,22 @@ module RDF
               RDF::Literal::DateTime
             when XSD.time
               RDF::Literal::Time
-            when XSD.nonPositiveInteger, XSD.negativeInteger
-              RDF::Literal::Integer
-            when XSD.nonNegativeInteger, XSD.positiveInteger
-              RDF::Literal::Integer
-            when XSD.unsignedLong, XSD.unsignedInt, XSD.unsignedShort, XSD.unsignedByte
-              RDF::Literal::Integer
+            when XSD.nonPositiveInteger
+              RDF::Literal::NonPositiveInteger
+            when XSD.negativeInteger
+              RDF::Literal::NegativeInteger
+            when XSD.nonNegativeInteger
+              RDF::Literal::NonNegativeInteger
+            when XSD.positiveInteger
+              RDF::Literal::PositiveInteger
+            when XSD.unsignedLong
+              RDF::Literal::UnsignedLong
+            when XSD.unsignedInt
+              RDF::Literal::UnsignedInt
+            when XSD.unsignedShort
+              RDF::Literal::UnsignedShort
+            when XSD.unsignedByte
+              RDF::Literal::UnsignedByte
             when XSD.token, XSD.language
               RDF::Literal::Token
             when RDF.XMLLiteral
@@ -189,7 +223,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this literal is equal to `other`.
+    # Determins if `self` is the same term as `other`.
     #
     # @example
     #   RDF::Literal(1).eql?(RDF::Literal(1.0))  #=> false
@@ -199,10 +233,47 @@ module RDF
     def eql?(other)
       self.equal?(other) ||
         (self.class.eql?(other.class) &&
-         self.datatype.eql?(other.datatype) &&
-         self == other)
+         self.value.eql?(other.value) &&
+         self.language.to_s.downcase.eql?(other.language.to_s.downcase) &&
+         self.datatype.eql?(other.datatype))
     end
 
+    ##
+    # Returns `true` if this literal is equivalent to `other` (with type check).
+    #
+    # @example
+    #   RDF::Literal(1) == RDF::Literal(1.0)     #=> true
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @raise [TypeError] if Literal terms are not comparable
+    #
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    # @see http://www.w3.org/TR/rdf-concepts/#section-Literal-Equality
+    def equal_tc?(other)
+      case other
+      when Literal
+        case
+        when self.eql?(other)
+          true
+        when self.has_language? && self.language.to_s.downcase == other.language.to_s.downcase
+          # Literals with languages can compare if languages are identical
+          self.value == other.value
+        when (self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)
+          self.value == other.value
+        when other.comperable_datatype?(self) || self.comperable_datatype?(other)
+          # Comoparing plain with undefined datatypes does not generate an error, but returns false
+          # From data-r2/expr-equal/eq-2-2.
+          false
+        else
+          raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
+        end
+      when String
+        self.plain? && self.value.eql?(other)
+      else false
+      end
+    end
+    
     ##
     # Returns `true` if this literal is equivalent to `other`.
     #
@@ -211,16 +282,11 @@ module RDF
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
+    #
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    # @see http://www.w3.org/TR/rdf-concepts/#section-Literal-Equality
     def ==(other)
-      case other
-        when Literal
-          self.value.eql?(other.value) &&
-          self.language.eql?(other.language) &&
-          self.datatype.eql?(other.datatype)
-        when String
-          self.plain? && self.value.eql?(other)
-        else false
-      end
+      self.equal_tc?(other) rescue false
     end
     alias_method :===, :==
 
@@ -275,6 +341,34 @@ module RDF
     # @since  0.2.1
     def invalid?
       !valid?
+    end
+
+    ##
+    # Returns `true` if the literal has a datatype and the comparison should
+    # return false instead of raise a type error.
+    #
+    # This behavior is intuited from SPARQL data-r2/expr-equal/eq-2-2
+    # @return [Boolean]
+    def comperable_datatype?(other)
+      return false unless self.plain? || self.has_language?
+
+      case other
+      when RDF::Literal::Numeric, RDF::Literal::Boolean,
+           RDF::Literal::Date, RDF::Literal::Time, RDF::Literal::DateTime
+        # Invald types can be compared without raising a TypeError if literal has a language (open-eq-08)
+        !other.valid? && self.has_language?
+      else
+        case other.datatype
+        when XSD.string
+          true
+        when nil
+          # A different language will not generate a type error
+          other.has_language?
+        else
+          # An unknown datatype may not be used for comparison, unless it has a language? (open-eq-8)
+          self.has_language?
+        end
+      end
     end
 
     ##

@@ -103,6 +103,23 @@ class RDF::Query
     end
 
     ##
+    # Returns `true` if this variable is distinguished.
+    #
+    # @return [Boolean]
+    def distinguished?
+      @distinguished.nil? || @distinguished
+    end
+
+    ##
+    # Sets if variable is distinguished or non-distinguished.
+    # By default, variables are distinguished
+    #
+    # @return [Boolean]
+    def distinguished=(value)
+      @distinguished = value
+    end
+
+    ##
     # Rebinds this variable to the given `value`.
     #
     # @param  [RDF::Term] value
@@ -153,14 +170,21 @@ class RDF::Query
 
     ##
     # Returns `true` if this variable is equivalent to a given `other`
-    # variable.
+    # variable. Or, to another Term if bound, or to any other Term
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def eql?(other)
-      other.is_a?(RDF::Query::Variable) && @name.eql?(other.name)
+      if unbound?
+        other.is_a?(RDF::Term) # match any Term when unbound
+      elsif other.is_a?(RDF::Query::Variable)
+        @name.eql?(other.name)
+      else
+        value.eql?(other)
+      end
     end
+    alias_method :==, :eql?
 
     ##
     # Compares this variable with the given value.
@@ -169,7 +193,7 @@ class RDF::Query
     # @return [Boolean]
     def ===(other)
       if unbound?
-        true # match anything when unbound
+        other.is_a?(RDF::Term) # match any Term when unbound
       else
         value === other
       end
@@ -178,9 +202,20 @@ class RDF::Query
     ##
     # Returns a string representation of this variable.
     #
+    # Distinguished variables are indicated with a single `?`.
+    #
+    # Non-distinguished variables are indicated with a double `??`
+    #
+    # @example
+    #   v = Variable.new("a")
+    #   v.to_s => '?a'
+    #   v.distinguished = false
+    #   v.to_s => '??a'
+    #
     # @return [String]
     def to_s
-      unbound? ? "?#{name}" : "?#{name}=#{value}"
+      prefix = distinguished? ? '?' : "??"
+      unbound? ? "#{prefix}#{name}" : "#{prefix}#{name}=#{value}"
     end
   end # Variable
 end # RDF::Query

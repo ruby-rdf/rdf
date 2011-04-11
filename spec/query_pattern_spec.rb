@@ -6,6 +6,24 @@ describe RDF::Query::Pattern do
       @pattern = RDF::Query::Pattern.new
     end
 
+    describe ".from" do
+      it "creates using triple array" do
+        RDF::Query::Pattern.from([:s, :p, :o]).should == RDF::Query::Pattern.new(:s, :p, :o)
+      end
+
+      it "creates using hash" do
+        RDF::Query::Pattern.from(:subject => :s, :predicate => :p, :object => :o).should == RDF::Query::Pattern.new(:s, :p, :o)
+      end
+
+      it "creates using quad array" do
+        RDF::Query::Pattern.from([:s, :p, :o, :c]).should == RDF::Query::Pattern.new(:s, :p, :o, :context => :c)
+      end
+
+      it "creates using hash" do
+        RDF::Query::Pattern.from(:subject => :s, :predicate => :p, :object => :o, :context => :c).should == RDF::Query::Pattern.new(:s, :p, :o, :context => :c)
+      end
+    end
+    
     it "should not have variables" do
       @pattern.variables?.should be_false
       @pattern.variable_count.should == 0
@@ -102,6 +120,18 @@ describe RDF::Query::Pattern do
     end
   end
 
+  context "with a context" do
+    it "uses a variable for a symbol" do
+      p = RDF::Query::Pattern.new(@s, @p, @o, :context => :c)
+      p.context.should == RDF::Query::Variable.new(:c)
+    end
+    
+    it "uses a constant for :default" do
+      p = RDF::Query::Pattern.new(@s, @p, @o, :context => false)
+      p.context.should == false
+    end
+  end
+  
   context "with one bound and one unbound variable" do
     # TODO
   end
