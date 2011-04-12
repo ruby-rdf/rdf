@@ -125,26 +125,14 @@ module RDF
     # @param  [Object] other
     # @return [Boolean]
     # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
-    def equal_tc?(other)
+    def ==(other)
       case other
       when Literal
         # If other is a Literal, reverse test to consolodate complex type checking logic
-        other.equal_tc?(self)
+        other == self
       else 
         other.respond_to?(:node?) && other.node? && other.respond_to?(:id) && @id == other.id
       end
-    end
-
-    ##
-    # Checks whether this blank node is equal to `other`.
-    #
-    # In this case, different nodes having the same id are considered the same.
-    #
-    # @param  [Object] other
-    # @return [Boolean]
-    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
-    def ==(other)
-      self.equal_tc?(other) rescue false
     end
     alias_method :===, :==
 

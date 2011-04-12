@@ -54,7 +54,7 @@ module RDF; class Literal
 
     ##
     # Equal compares as Time objects
-    def equal_tc?(other)
+    def ==(other)
       # If lexically invalid, use regular literal testing
       return super unless self.valid?
 
