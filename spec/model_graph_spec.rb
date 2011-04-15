@@ -13,8 +13,8 @@ describe RDF::Graph do
   it_should_behave_like RDF_Graph
 
   it "should maintain arbitrary options" do
-    @graph = RDF::Graph.new(nil, :foo => :bar)
-    @graph.options.should have_key(:foo)
-    @graph.options[:foo].should == :bar
+    graph = @new.call(nil, :foo => :bar)
+    graph.options.should have_key(:foo)
+    graph.options[:foo].should == :bar
   end
 end
