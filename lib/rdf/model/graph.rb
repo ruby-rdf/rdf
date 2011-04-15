@@ -178,9 +178,7 @@ module RDF
     # @return [Boolean]
     # @see    RDF::Enumerable#has_statement?
     def has_statement?(statement)
-      statement = statement.dup
-      statement.context = context
-      @data.has_statement?(statement)
+      @data.has_statement?(duplicate_statement(statement))
     end
 
     ##
@@ -191,34 +189,28 @@ module RDF
     # @return [Enumerator]
     # @see    RDF::Enumerable#each_statement
     def each(&block)
-      @data.query(:context => context).each(&block)
+      @data.query({}).each(&block)
     end
 
     ##
     # @private
     # @see RDF::Queryable#query
     def query_pattern(pattern, &block)
-      pattern = pattern.dup
-      pattern.context = context
-      @data.query(pattern, &block)
+      @data.query(duplicate_statement(pattern), &block)
     end
 
     ##
     # @private
     # @see RDF::Mutable#insert
     def insert_statement(statement)
-      statement = statement.dup
-      statement.context = context
-      @data.insert(statement)
+      @data.insert(duplicate_statement(statement))
     end
 
     ##
     # @private
     # @see RDF::Mutable#delete
     def delete_statement(statement)
-      statement = statement.dup
-      statement.context = context
-      @data.delete(statement)
+      @data.delete(duplicate_statement(statement))
     end
 
     ##
@@ -227,11 +219,24 @@ module RDF
     def clear_statements
       @data.delete(:context => context)
     end
+    
+    ##
+    # @private
+    # Duplicates a statement, adding context of this graph if applicable.
+    #
+    # @param  [Statement] statement
+    # @return [Statement]
+    def duplicate_statement(statement)
+      statement = statement.dup
+      statement.context ||= context
+      statement
+    end
 
     protected :query_pattern
     protected :insert_statement
     protected :delete_statement
     protected :clear_statements
+    protected :duplicate_statement
 
     ##
     # @private
