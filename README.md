@@ -65,6 +65,26 @@ Examples
       end
     end
 
+### Writing RDF data using the N-Quads format
+
+    require 'rdf/nquads'
+
+    RDF::Writer.open("hello.nq") do |writer|
+      writer << RDF::Repository.new do |repo|
+        repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+      end
+    end
+
+### Reading RDF data in the N-Quads format
+
+    require 'rdf/nquads'
+    
+    RDF::Reader.open("http://rdf.rubyforge.org/doap.nq") do |reader|
+      reader.each_statement do |statement|
+        puts statement.inspect
+      end
+    end
+
 ### Querying RDF data using basic graph patterns (BGPs)
 
     require 'rdf/ntriples'
@@ -128,6 +148,7 @@ Documentation
 ### RDF Serialization Formats
 
 * {RDF::NTriples}
+* {RDF::NQuads}
 * [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
 * [RDF::N3](http://rdf.rubyforge.org/n3/) (plugin)
 * [RDF::Raptor::RDFXML](http://rdf.rubyforge.org/raptor/) (plugin)
