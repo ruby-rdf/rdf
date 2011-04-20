@@ -10,10 +10,10 @@ module RDF
   module TypeCheck
     ##
     # Default implementation of type_error, which returns false.
-    # Classes including RDF::TypeCheck will raise RDF::TypeError
+    # Classes including RDF::TypeCheck will raise TypeError
     # instead.
     #
-    # @raise [RDF::TypeError]
+    # @raise [TypeError]
     def type_error(message)
       raise TypeError, message
     end
