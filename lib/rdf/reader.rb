@@ -128,6 +128,23 @@ module RDF
     end
 
     ##
+    # Returns a symbol appropriate to use with RDF::Reader.for()
+    # @return [Symbol]
+    def self.to_sym
+      elements = self.to_s.split("::")
+      sym = elements.pop
+      sym = elements.pop if sym == 'Reader'
+      sym.downcase.to_s.to_sym
+    end
+
+    ##
+    # Returns a symbol appropriate to use with RDF::Reader.for()
+    # @return [Symbol]
+    def to_sym
+      self.class.to_sym
+    end
+    
+    ##
     # Initializes the reader.
     #
     # @param  [IO, File, String] input

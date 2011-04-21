@@ -24,6 +24,10 @@ describe RDF::NQuads::Format do
     ]
     formats.each { |format| format.should == RDF::NQuads::Format }
   end
+  
+  it "should return :nquads for to_sym" do
+    RDF::NQuads::Format.to_sym.should == :nquads
+  end
 end
 
 describe RDF::NQuads::Reader do
@@ -35,7 +39,6 @@ describe RDF::NQuads::Reader do
   # @see lib/rdf/spec/reader.rb in rdf-spec
   it_should_behave_like RDF_Reader
 
-
   it "should be discoverable" do
     readers = [
       RDF::Reader.for(:nquads),
@@ -45,6 +48,11 @@ describe RDF::NQuads::Reader do
       RDF::Reader.for(:content_type   => 'text/x-nquads'),
     ]
     readers.each { |reader| reader.should == RDF::NQuads::Reader }
+  end
+
+  it "should return :nquads for to_sym" do
+    @reader.class.to_sym.should == :nquads
+    @reader.to_sym.should == :nquads
   end
 end
 
@@ -67,5 +75,9 @@ describe RDF::NQuads::Writer do
       RDF::Writer.for(:content_type   => 'text/x-nquads'),
     ]
     writers.each { |writer| writer.should == RDF::NQuads::Writer }
+  end
+
+  it "should return :nquads for to_sym" do
+    RDF::NQuads::Writer.to_sym.should == :nquads
   end
 end
