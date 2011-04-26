@@ -140,6 +140,16 @@ module RDF
     end
 
     ##
+    # Returns a symbol appropriate to use with RDF::Format.for()
+    # @return [Symbol]
+    def self.to_sym
+      elements = self.to_s.split("::")
+      sym = elements.pop
+      sym = elements.pop if sym == 'Format'
+      sym.downcase.to_s.to_sym
+    end
+
+    ##
     # Retrieves or defines the reader class for this RDF serialization
     # format.
     #

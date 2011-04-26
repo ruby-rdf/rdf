@@ -23,6 +23,10 @@ describe RDF::NTriples::Format do
     ]
     formats.each { |format| format.should == RDF::NTriples::Format }
   end
+  
+  it "should return :ntriples for to_sym" do
+    RDF::NTriples::Format.to_sym.should == :ntriples
+  end
 end
 
 describe RDF::NTriples::Reader do
@@ -43,6 +47,11 @@ describe RDF::NTriples::Reader do
     ]
     readers.each { |reader| reader.should == RDF::NTriples::Reader }
   end
+
+  it "should return :ntriples for to_sym" do
+    @reader.class.to_sym.should == :ntriples
+    @reader.to_sym.should == :ntriples
+  end
 end
 
 describe RDF::NTriples::Writer do
@@ -62,6 +71,10 @@ describe RDF::NTriples::Writer do
       RDF::Writer.for(:content_type   => 'text/plain'),
     ]
     writers.each { |writer| writer.should == RDF::NTriples::Writer }
+  end
+
+  it "should return :ntriples for to_sym" do
+    RDF::NTriples::Writer.to_sym.should == :ntriples
   end
 end
 
