@@ -27,10 +27,10 @@
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://ar.to/#self> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://bhuga.net/#ben> .
-<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://kellogg-assoc.com/#me> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <http://greggkellogg.net/foaf.rdf#me> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://ar.to/#self> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://bhuga.net/#ben> .
-<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://kellogg-assoc.com/#me> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <http://greggkellogg.net/foaf.rdf#me> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#download-page> <http://rubyforge.org/projects/rdf/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid1 .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:genid2 .
@@ -45,7 +45,7 @@
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://ar.to/#self> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://bhuga.net/#ben> .
-<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://kellogg-assoc.com/#me> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <http://greggkellogg.net/foaf.rdf#me> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#platform> "Ruby" .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
