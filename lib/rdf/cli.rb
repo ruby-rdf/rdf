@@ -17,13 +17,15 @@ module RDF
     
     COMMANDS = {
       "count"       => lambda do |argv, opts|
+        start = Time.new
         count = 0
         self.parse(*argv, opts) do |reader|
           reader.each_statement do |statement|
             count += 1
           end
         end
-        puts count
+        secs = Time.new - start
+        puts "Parsed #{count} statements in #{secs} seconds @ #{count/secs} statements/second."
       end,
       "lenghts"     => lambda do |argv, opts|
         self.parse(*argv, opts) do |reader|
@@ -43,6 +45,17 @@ module RDF
         self.parse(*argv, opts) do |reader|
           reader.each_statement do |statement|
             puts statement.predicate.to_ntriples
+          end
+        end
+      end,
+      "serialize" => lambda do |argv, opts|
+        writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
+        out = opts[:output] || STDOUT
+        opts = opts.merge(:prefixes => {})
+        writer_opts = opts.merge(:standard_prefixes => true)
+        self.parse(*argv, opts) do |reader|
+          writer_class.new(out, writer_opts) do |writer|
+            writer << reader
           end
         end
       end,
@@ -73,7 +86,6 @@ module RDF
         :format         => nil,
         :output         => STDOUT,
         :output_format  => :ntriples,
-        :quiet          => false,
         :validate       => false,
       }
 
@@ -108,10 +120,6 @@ module RDF
 
       options.on("--output-format FORMAT", "Format of output file, defaults to NTriples") do |arg|
         opts[:output_format] = arg.downcase.to_sym
-      end
-
-      options.on('-q', '--quite', 'Quiet output.') do
-        opts[:quiet] = true
       end
 
       options.on('--uri URI', 'Base URI of input file, defaults to the filename.') do |arg|
