@@ -3,20 +3,15 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
 require 'rdf/cli'
 
 options = RDF::CLI.options do
-  self.banner = "Usage: #{RDF::CLI.basename} [options] command [args...]"
-  self.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
-    $DEBUG = true
-  end
   self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
     $VERBOSE = true
   end
+
   self.on('-V', '--version', 'Display the RDF.rb version and exit.') do
     puts RDF::VERSION; exit
   end
 end
 
-abort options.banner if ARGV.empty?
+abort options.banner if ARGV.empty? && !options.has_key?(:evaluate)
 
-unless RDF::CLI.exec_command(command = ARGV.shift, *ARGV)
-  abort "#{File.basename($0)}: unknown command `#{command}'"
-end
+RDF::CLI.exec_command(command = ARGV.shift, *ARGV, options.options)
