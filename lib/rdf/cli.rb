@@ -19,7 +19,7 @@ module RDF
       "count"       => lambda do |argv, opts|
         start = Time.new
         count = 0
-        self.parse(*argv, opts) do |reader|
+        self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             count += 1
           end
@@ -28,21 +28,21 @@ module RDF
         puts "Parsed #{count} statements in #{secs} seconds @ #{count/secs} statements/second."
       end,
       "lenghts"     => lambda do |argv, opts|
-        self.parse(*argv, opts) do |reader|
+        self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             puts statement.to_s.size
           end
         end
       end,
       "objects"     => lambda do |argv, opts|
-        self.parse(*argv, opts) do |reader|
+        self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             puts statement.object.to_ntriples
           end
         end
       end,
       "predicates"   => lambda do |argv, opts|
-        self.parse(*argv, opts) do |reader|
+        self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             puts statement.predicate.to_ntriples
           end
@@ -53,14 +53,14 @@ module RDF
         out = opts[:output] || STDOUT
         opts = opts.merge(:prefixes => {})
         writer_opts = opts.merge(:standard_prefixes => true)
-        self.parse(*argv, opts) do |reader|
+        self.parse(argv, opts) do |reader|
           writer_class.new(out, writer_opts) do |writer|
             writer << reader
           end
         end
       end,
       "subjects"   => lambda do |argv, opts|
-        self.parse(*argv, opts) do |reader|
+        self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             puts statement.subject.to_ntriples
           end
@@ -171,15 +171,18 @@ module RDF
     # @yield  [reader]
     # @yieldparam [RDF::Reader]
     # @return [nil]
-    def self.parse(*files, &block)
-      options = files.last.is_a?(Hash) ? files.pop : {}
-      
+    def self.parse(files, options = {}, &block)      
       if files.empty?
         # If files are empty, either use options[:execute]
-        RDF::Reader.new(options[:input] ? StringIO.new(options[:evaluate], options) : STDIN) {|reader| yield(reader)}
+        input = options[:evaluate] ? StringIO.new(options[:evaluate]) : STDIN
+        RDF::Reader.for(options[:format] || :ntriples).new(input, options) do |reader|
+          yield(reader)
+        end
       else
         files.each do |file|
-          RDF::Reader.open(file, options) {|reader| yield(reader)}
+          RDF::Reader.open(file, options) do |reader|
+            yield(reader)
+          end
         end
       end
     end
