@@ -589,6 +589,9 @@ describe RDF::Literal do
    describe "#invalid?" do
      {
        "foo"                    => RDF::XSD.boolean,
+       "bar"                    => RDF::XSD.integer,
+       "baz"                    => RDF::XSD.decimal,
+       "fub"                    => RDF::XSD.double,
        "xyz"                    => RDF::XSD.integer,
        "12xyz"                  => RDF::XSD.integer,
        "12.xyz"                 => RDF::XSD.decimal,
@@ -601,12 +604,16 @@ describe RDF::Literal do
        "2010-01-01"             => RDF::XSD.dateTime,
        "2010-1-1T00:00:00"      => RDF::XSD.dateTime,
        "0000-01-01T00:00:00"    => RDF::XSD.dateTime,
+       "2010-07"                => RDF::XSD.dateTime,
+       "2010"                   => RDF::XSD.dateTime,
 
        "+2010-01-01Z"           => RDF::XSD.date,
        "2010-01-01TFOO"         => RDF::XSD.date,
        "02010-01-01"            => RDF::XSD.date,
        "2010-1-1"               => RDF::XSD.date,
        "0000-01-01"             => RDF::XSD.date,
+       "2011-07"                => RDF::XSD.date,
+       "2011"                   => RDF::XSD.date,
 
        "+00:00:00Z"             => RDF::XSD.time,
        "-00:00:00Z"             => RDF::XSD.time,

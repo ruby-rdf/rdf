@@ -23,7 +23,7 @@ module RDF; class Literal
         when value.is_a?(::Time)         then value
         when value.respond_to?(:to_time) then value.to_time # Ruby 1.9+
         else ::Time.parse(value.to_s)
-      end
+      end rescue nil
     end
 
     ##
