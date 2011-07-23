@@ -119,5 +119,15 @@ module RDF
     def inspect!
       warn(inspect)
     end
+    
+    ##
+    # Default implementation of raise_error, which returns false.
+    # Classes including RDF::TypeCheck will raise RDF::TypeError
+    # instead.
+    #
+    # @return [false]
+    def type_error(message)
+      false
+    end
   end # Value
 end # RDF

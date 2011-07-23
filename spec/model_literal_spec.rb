@@ -902,8 +902,9 @@ describe RDF::Literal do
         "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
       }.each do |label, (left, right)|
         it "returns true for #{label}" do
+          left.extend(RDF::TypeCheck)
+          right.extend(RDF::TypeCheck)
           left.should == right
-          left.should be_equal_tc(right)
         end
       end
     end
@@ -958,8 +959,9 @@ describe RDF::Literal do
         "open-eq-10 'xyz'@en='abc'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :datatype => XSD.integer)],
       }.each do |label, (left, right)|
         it "returns false for #{label}" do
+          left.extend(RDF::TypeCheck)
+          right.extend(RDF::TypeCheck)
           left.should_not == right
-          left.should_not be_equal_tc(right)
         end
       end
     end
@@ -996,8 +998,9 @@ describe RDF::Literal do
         "token 'xyz'^^xsd:token=abc'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:abc)],
       }.each do |label, (left, right)|
         it "raises TypeError for #{label}" do
-          left.should_not == right
-          lambda {left.equal_tc?(right)}.should raise_error(TypeError)
+          left.extend(RDF::TypeCheck)
+          right.extend(RDF::TypeCheck)
+          lambda {left == right}.should raise_error(TypeError)
         end
       end
     end

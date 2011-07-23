@@ -40,9 +40,6 @@ module RDF
       super
     end
 
-    # Compares `self` to `other` to implement RDFterm-equal (with type checking).
-    alias_method :equal_tc?, :==
-
     ##
     # Determins if `self` is the same term as `other`.
     #

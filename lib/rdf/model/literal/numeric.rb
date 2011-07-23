@@ -25,9 +25,8 @@ module RDF; class Literal
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
-    # @raise [TypeError] if Literal terms are not comparable
     # @since  0.3.0
-    def equal_tc?(other)
+    def ==(other)
       # If lexically invalid, use regular literal testing
       return super unless self.valid?
 
@@ -37,7 +36,7 @@ module RDF; class Literal
         (cmp = (self <=> other)) ? cmp.zero? : false
       when RDF::URI, RDF::Node
         # Interpreting SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
-        raise TypeError, "unable to determine whether #{self.inspect} and #{other.inspect} are equivalent"
+        type_error("unable to determine whether #{self.inspect} and #{other.inspect} are equivalent")
       else
         super
       end

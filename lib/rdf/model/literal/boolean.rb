@@ -57,9 +57,8 @@ module RDF; class Literal
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
-    # @raise [TypeError] if Literal terms are not comparable
     # @since  0.3.0
-    def equal_tc?(other)
+    def ==(other)
       # If lexically invalid, use regular literal testing
       return super unless self.valid?
 
