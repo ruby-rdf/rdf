@@ -6,7 +6,6 @@ require 'rdf/spec/reader'
 require 'rdf/spec/writer'
 
 describe RDF::NQuads::Format do
-  before(:each) { pending "N-Quads is not supported yet" }
   before(:each) do
     @format_class = RDF::NQuads::Format
   end
@@ -24,15 +23,15 @@ describe RDF::NQuads::Format do
     ]
     formats.each { |format| format.should == RDF::NQuads::Format }
   end
-  
+
   it "should return :nquads for to_sym" do
     RDF::NQuads::Format.to_sym.should == :nquads
   end
 end
 
 describe RDF::NQuads::Reader do
-  before(:each) { pending "N-Quads is not supported yet" }
   before(:each) do
+    @reader_class = RDF::NQuads::Reader
     @reader = RDF::NQuads::Reader.new
   end
   
@@ -50,21 +49,59 @@ describe RDF::NQuads::Reader do
     readers.each { |reader| reader.should == RDF::NQuads::Reader }
   end
 
-  it "should return :nquads for to_sym" do
-    @reader.class.to_sym.should == :nquads
-    @reader.to_sym.should == :nquads
+  context "#initialize" do
+    before :all do
+      @testfile = fixture_path('test.nt')
+    end
+
+    it "should accept files" do
+      lambda { @reader_class.new(File.open(@testfile)) }.should_not raise_error
+    end
+
+    it "should accept IO streams" do
+      lambda { @reader_class.new(StringIO.new('')) }.should_not raise_error
+    end
+
+    it "should accept strings" do
+      lambda { @reader_class.new('') }.should_not raise_error
+    end
+  end
+
+  context "with simple triples" do
+    [
+      ['<a> <b> <c> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
+      ['<a> <b> _:c .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
+      ['<a> <b> "c" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
+      ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
+    ].each do |(str, statement)|
+      it "parses #{str.inspect}" do
+        graph = RDF::Graph.new << @reader_class.new(str)
+        graph.size.should == 1
+        graph.statements.first.should == statement
+      end
+    end
+  end
+  
+  context "with simple quads" do
+    [
+      ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::URI("d"))],
+      ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Node.new("d"))],
+      ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Literal("d"))],
+    ].each do |(str, statement)|
+      it "parses #{str.inspect}" do
+        graph = RDF::Graph.new << @reader_class.new(str)
+        graph.size.should == 1
+        graph.statements.first.should == statement
+      end
+    end
   end
 end
 
 describe RDF::NQuads::Writer do
-  before(:each) { pending "N-Quads is not supported yet" }
   before(:each) do
-    @writer = RDF::NTriples::Writer.new
+    @writer_class = RDF::NQuads::Writer
+    @writer = RDF::NQuads::Writer.new
   end
-  
-  # @see lib/rdf/spec/writer.rb in rdf-spec
-  it_should_behave_like RDF_Writer
-
 
   it "should be discoverable" do
     writers = [
@@ -76,8 +113,36 @@ describe RDF::NQuads::Writer do
     ]
     writers.each { |writer| writer.should == RDF::NQuads::Writer }
   end
+  
+  # @see lib/rdf/spec/writer.rb in rdf-spec
+  it_should_behave_like RDF_Writer
+  
+  context "#initialize" do
+    describe "writing statements" do
+      context "with simple triples" do
+        [
+          ['<a> <b> <c> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
+          ['<a> <b> _:c .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
+          ['<a> <b> "c" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
+          ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
+        ].each do |(str, statement)|
+          it "writes #{str.inspect}" do
+            @writer_class.buffer {|w| w << statement}.should == "#{str}\n"
+          end
+        end
+      end
 
-  it "should return :nquads for to_sym" do
-    RDF::NQuads::Writer.to_sym.should == :nquads
+      context "with simple quads" do
+        [
+          ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::URI("d"))],
+          ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Node.new("d"))],
+          ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Literal("d"))],
+        ].each do |(str, statement)|
+          it "writes #{str.inspect}" do
+            @writer_class.buffer {|w| w << statement}.should == "#{str}\n"
+          end
+        end
+      end
+    end
   end
 end
