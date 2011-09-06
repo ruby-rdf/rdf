@@ -19,7 +19,7 @@ module RDF; class Literal
         when value.is_a?(::DateTime)         then value
         when value.respond_to?(:to_datetime) then value.to_datetime # Ruby 1.9+
         else ::DateTime.parse(value.to_s)
-      end
+      end rescue nil
     end
 
     ##
@@ -50,6 +50,23 @@ module RDF; class Literal
     # @return [String]
     def to_s
       @string || @object.strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+    end
+
+    ##
+    # Equal compares as DateTime objects
+    def ==(other)
+      # If lexically invalid, use regular literal testing
+      return super unless self.valid?
+
+      case other
+      when Literal::DateTime
+        return super unless other.valid?
+        self.object == other.object
+      when Literal::Time, Literal::Date
+        false
+      else
+        super
+      end
     end
   end # DateTime
 end; end # RDF::Literal
