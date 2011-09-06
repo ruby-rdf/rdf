@@ -1,9 +1,0 @@
-#!/usr/bin/env ruby
-$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
-require 'rdf/cli'
-
-abort "Usage: #{RDF::CLI.basename} [files...]" if ARGV.empty?
-
-RDF::CLI.each_statement(*ARGV) do |statement|
-  puts statement.object
-end
