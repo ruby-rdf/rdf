@@ -23,6 +23,10 @@ describe RDF::NQuads::Format do
     ]
     formats.each { |format| format.should == RDF::NQuads::Format }
   end
+  
+  it "should return :nquads for to_sym" do
+    RDF::NQuads::Format.to_sym.should == :nquads
+  end
 end
 
 describe RDF::NQuads::Reader do
