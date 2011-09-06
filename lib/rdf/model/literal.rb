@@ -199,8 +199,9 @@ module RDF
     def eql?(other)
       self.equal?(other) ||
         (self.class.eql?(other.class) &&
-         self.datatype.eql?(other.datatype) &&
-         self == other)
+         self.value.eql?(other.value) &&
+         self.language.to_s.downcase.eql?(other.language.to_s.downcase) &&
+         self.datatype.eql?(other.datatype))
     end
 
     ##
@@ -215,7 +216,7 @@ module RDF
       case other
         when Literal
           self.value.eql?(other.value) &&
-          self.language.eql?(other.language) &&
+          self.language.to_s.downcase == other.language.to_s.downcase &&
           self.datatype.eql?(other.datatype)
         when String
           self.plain? && self.value.eql?(other)
