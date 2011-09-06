@@ -76,6 +76,68 @@ describe 'README' do
     end
   end
 
+  context "the 'Writing RDF data using the N-Quads format' example" do
+    after(:each) { File.delete('hello.nq') }
+
+    def example3
+      require 'rdf/nquads'
+
+      RDF::Writer.open("hello.nq") do |writer|
+        writer << RDF::Repository.new do |repo|
+          repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+        end
+      end
+    end
+
+    it "should not raise errors" do
+      lambda { example3 }.should_not raise_error
+    end
+
+    before(:each) { example3 }
+
+    it "should not have output" do
+      $stdout.string.lines.to_a.should be_empty
+    end
+
+    it "should produce a hello.nq file" do
+      File.should exist('hello.nq')
+      File.stat('hello.nq').should be_file
+    end
+
+    it "should produce the expected data" do
+      File.read('hello.nq').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
+    end
+  end
+
+  context "the 'Reading RDF data in the N-Quads format' example" do
+    def example4
+      require 'rdf/nquads'
+
+      # FIXME: replace with "http://rdf.rubyforge.org/doap.nq"
+      RDF::NQuads::Reader.open(File.join(File.dirname(__FILE__), "..", "etc", "doap.nq")) do |reader|
+        reader.each_statement do |statement|
+          puts statement.inspect
+        end
+      end
+    end
+
+    it "should not raise errors" do
+      lambda { example4 }.should_not raise_error
+    end
+
+    before(:each) { example4 }
+
+    it "should have output" do
+      $stdout.string.lines.to_a.should_not be_empty
+    end
+
+    it "should output inspected statements" do
+      $stdout.string.each_line do |line|
+        line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+      end
+    end
+  end
+
   context "the 'Using pre-defined RDF vocabularies' example" do
     include RDF
 
