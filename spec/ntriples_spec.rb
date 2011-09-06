@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/ntriples'
 require 'rdf/spec/format'
 require 'rdf/spec/reader'
+require 'rdf/spec/writer'
 
 describe RDF::NTriples::Format do
   before(:each) do
@@ -54,6 +55,11 @@ describe RDF::NTriples::Reader do
 end
 
 describe RDF::NTriples::Writer do
+  before(:each) do
+    @writer_class = RDF::NTriples::Writer
+    @writer = RDF::NTriples::Writer.new
+  end
+
   it "should be discoverable" do
     writers = [
       RDF::Writer.for(:ntriples),
@@ -64,6 +70,9 @@ describe RDF::NTriples::Writer do
     ]
     writers.each { |writer| writer.should == RDF::NTriples::Writer }
   end
+
+  # @see lib/rdf/spec/writer.rb in rdf-spec
+  it_should_behave_like RDF_Writer
 
   it "should return :ntriples for to_sym" do
     RDF::NTriples::Writer.to_sym.should == :ntriples
@@ -233,7 +242,7 @@ describe RDF::NTriples do
         stmt.subject.should be_eql(stmt.object)
       end
       
-      it "should read two named nodes in different instances as different nodes" do
+      it "should read two named nodes in different instances as different nodes", :pending => "SPARQL Compatibility" do
         stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
         stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
         stmt1.subject.should == stmt2.subject
