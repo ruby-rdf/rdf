@@ -34,7 +34,7 @@ Tutorials
 * [Getting data from the Semantic Web using Ruby and RDF.rb]
   (http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
 * [Using RDF.rb and Spira to process RDF data from the British Ordnance Survey]
-  (http://ultramagnus.org/?p=85)
+  (http://stephenpope.co.uk/?p=85)
 * [Getting started with RDF and SPARQL using 4store and RDF.rb]
   (http://www.jenitennison.com/blog/node/152)
 
