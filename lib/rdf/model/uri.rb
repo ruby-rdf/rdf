@@ -244,8 +244,8 @@ module RDF
     #     RDF::URI.new('urn:isbn') / 125235111
     #     #=> RDF::URI('urn:isbn:125235111')
     def /(fragment)
-      fragment = fragment.respond_to?(:to_uri) ? fragment.to_uri : RDF::URI.intern(fragment.to_s)
-      raise ArgumentError, "Non-absolute URI or string required, got #{fragment}" unless fragment.relative?
+      frag = fragment.respond_to?(:to_uri) ? fragment.to_uri : RDF::URI(fragment.to_s)
+      raise ArgumentError, "Non-absolute URI or string required, got #{frag}" unless frag.relative?
       if urn?
         RDF::URI.intern(to_s.sub(/:+$/,'') + ':' + fragment.to_s.sub(/^:+/,''))
       else # !urn?
