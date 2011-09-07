@@ -24,6 +24,13 @@ module RDF
 
       reader { RDF::NQuads::Reader }
       writer { RDF::NQuads::Writer }
+    
+      ##
+      # Sample detection to see if it matches N-Quads (or N-Triples)
+      def self.detect(sample)
+        sample.match(%r(^\s*<[^>]*>.*\.\s*$)) &&
+          !sample.match(%r(@(base|prefix))) # Not Turtle/N3
+      end
     end
 
     class Reader < NTriples::Reader

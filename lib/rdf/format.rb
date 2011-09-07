@@ -78,11 +78,17 @@ module RDF
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
     #     Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
+    #   @option options [String]          :sample (nil)
+    #     A sample of input used for performing format detection.
+    #     If we find no formats, or we find more than one, and we have a sample, we can
+    #     perform format detection to find a specific format to use, in which case
+    #     we pick the first one we find
     #   @return [Class]
+    #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
     # @return [Class]
     def self.for(options = {})
-      case options
+      format = case options
         when String
           # Find a format based on the file name
           self.for(:file_name => options)
@@ -95,7 +101,7 @@ module RDF
               # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
               mime_type = mime_type.to_s
               mime_type = mime_type.split(';').first if mime_type.include?(?;) # remove any media type parameters
-              content_types.has_key?(mime_type) ? content_types[mime_type].first : nil
+              content_types[mime_type]
             # Find a format based on the file name:
             when file_name = options[:file_name]
               self.for(:file_extension => File.extname(file_name.to_s)[1..-1])
@@ -121,6 +127,21 @@ module RDF
               end
               nil # not found
           end
+      end
+      
+      if format.is_a?(Array)
+        return format.first if format.length == 1
+      elsif !format.nil?
+        return format
+      end
+
+      # If we have a sample, use that for format detection
+      if sample = (options[:sample] if options.is_a?(Hash)) || (yield if block_given?)
+        # Given a sample, perform format detection across the appropriate formats, choosing
+        # the first that matches
+        format ||= @@subclasses
+
+        format.detect {|f| f.detect(sample)}
       end
     end
 
@@ -234,6 +255,24 @@ module RDF
           klass = @@writers[self] = klass.call if klass.is_a?(Proc)
           klass
       end
+    end
+
+
+    ##
+    # Use a text sample to detect the format of an input file. Sub-classes implement
+    # a matcher sufficient to detect probably format matches, including disambiguating
+    # between other similar formats.
+    #
+    # Used to determine format class from loaded formats by {RDF::Format.for} when a
+    # match cannot be unambigiously found otherwise.
+    #
+    # @example
+    #     RDF::NTriples::Format.detect("<a> <b> <c> .") => true
+    #
+    # @param [String] sample Beginning several bytes (~ 1K) of input.
+    # @result [Boolean]
+    def self.detect(sample)
+      false
     end
 
     class << self

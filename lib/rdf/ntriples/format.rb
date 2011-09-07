@@ -22,5 +22,7 @@ module RDF::NTriples
 
     reader { RDF::NTriples::Reader }
     writer { RDF::NTriples::Writer }
+    
+    # No format detection, as N-Triples can be parsed by N-Quads
   end
 end

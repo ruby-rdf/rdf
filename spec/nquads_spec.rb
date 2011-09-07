@@ -25,10 +25,44 @@ describe RDF::NQuads::Format do
         RDF::Format.for(arg).should == @format_class
       end
     end
+
+    {
+      :ntriples => "<a> <b> <c> .",
+      :nquads => "<a> <b> <c> <d> . ",
+      :literal => '<a> <b> "literal" .',
+      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+    }.each do |sym, str|
+      it "detects #{sym}" do
+        @format_class.for {str}.should == @format_class
+      end
+    end
   end
 
   describe "#to_sym" do
     specify {@format_class.to_sym.should == :nquads}
+  end
+
+  describe ".detect" do
+    {
+      :ntriples => "<a> <b> <c> .",
+      :nquads => "<a> <b> <c> <d> . ",
+      :literal => '<a> <b> "literal" .',
+      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+    }.each do |sym, str|
+      it "detects #{sym}" do
+        @format_class.detect(str).should be_true
+      end
+    end
+
+    {
+      :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
+      :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
+      :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+    }.each do |sym, str|
+      it "does not detect #{sym}" do
+        @format_class.detect(str).should be_false
+      end
+    end
   end
 end
 
@@ -41,15 +75,18 @@ describe RDF::NQuads::Reader do
   # @see lib/rdf/spec/reader.rb in rdf-spec
   it_should_behave_like RDF_Reader
 
-  it "should be discoverable" do
-    readers = [
-      RDF::Reader.for(:nquads),
-      RDF::Reader.for('etc/doap.nq'),
-      RDF::Reader.for(:file_name      => 'etc/doap.nq'),
-      RDF::Reader.for(:file_extension => 'nq'),
-      RDF::Reader.for(:content_type   => 'text/x-nquads'),
-    ]
-    readers.each { |reader| reader.should == RDF::NQuads::Reader }
+  describe ".for" do
+    formats = [
+      :nquads,
+      'etc/doap.nq',
+      {:file_name      => 'etc/doap.nq'},
+      {:file_extension => 'nq'},
+      {:content_type   => 'text/x-nquads'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Reader.for(arg).should == RDF::NQuads::Reader
+      end
+    end
   end
 
   context "#initialize" do
@@ -106,15 +143,18 @@ describe RDF::NQuads::Writer do
     @writer = RDF::NQuads::Writer.new
   end
 
-  it "should be discoverable" do
-    writers = [
-      RDF::Writer.for(:nquads),
-      RDF::Writer.for('tmp/test.nq'),
-      RDF::Writer.for(:file_name      => 'tmp/test.nq'),
-      RDF::Writer.for(:file_extension => 'nq'),
-      RDF::Writer.for(:content_type   => 'text/x-nquads'),
-    ]
-    writers.each { |writer| writer.should == RDF::NQuads::Writer }
+  describe ".for" do
+    formats = [
+      :nquads,
+      'etc/doap.nq',
+      {:file_name      => 'etc/doap.nq'},
+      {:file_extension => 'nq'},
+      {:content_type   => 'text/x-nquads'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Writer.for(arg).should == RDF::NQuads::Writer
+      end
+    end
   end
   
   # @see lib/rdf/spec/writer.rb in rdf-spec

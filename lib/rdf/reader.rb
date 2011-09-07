@@ -77,10 +77,17 @@ module RDF
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
     #   @return [Class]
+    #   @option options [String]          :sample (nil)
+    #     A sample of input used for performing format detection.
+    #     If we find no formats, or we find more than one, and we have a sample, we can
+    #     perform format detection to find a specific format to use, in which case
+    #     we pick the first one we find
+    #   @return [Class]
+    #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
     # @return [Class]
-    def self.for(options = {})
-      if format = self.format || Format.for(options)
+    def self.for(options = {}, &block)
+      if format = self.format || Format.for(options, &block)
         format.reader
       end
     end
@@ -120,7 +127,12 @@ module RDF
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
-        reader = self.for(format_options[:format] || format_options)
+        reader = self.for(format_options[:format] || format_options) do
+          # Return a sample from the input file
+          sample = file.read(1000)
+          file.rewind
+          sample
+        end
         if reader
           reader.new(file, options, &block)
         else

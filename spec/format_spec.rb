@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/spec/format'
+require 'rdf/ntriples'
+require 'rdf/nquads'
 
 describe RDF::Format do
   before(:each) do

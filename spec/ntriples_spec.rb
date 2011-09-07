@@ -26,10 +26,41 @@ describe RDF::NTriples::Format do
         RDF::Format.for(arg).should == @format_class
       end
     end
+
+    {
+      :ntriples => "<a> <b> <c> .",
+      :nquads => "<a> <b> <c> <d> . ",
+      :literal => '<a> <b> "literal" .',
+      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+    }.each do |sym, str|
+      it "detects #{sym}" do
+        @format_class.for {str}.should_not == @format_class
+      end
+    end
   end
 
   describe "#to_sym" do
     specify {@format_class.to_sym.should == :ntriples}
+  end
+  
+  describe ".detect" do
+    {
+      :ntriples => "<a> <b> <c> .",
+      :nquads => "<a> <b> <c> <d> . ",
+      :literal => '<a> <b> "literal" .',
+      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+      :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
+      :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
+      :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+    }.each do |sym, str|
+      it "does not detect #{sym}" do
+        @format_class.detect(str).should be_false
+      end
+    end
+
+    it "always returns false" do
+      @format_class.detect("<a> <b> <c> .").should be_false
+    end
   end
 end
 
@@ -41,15 +72,19 @@ describe RDF::NTriples::Reader do
   # @see lib/rdf/spec/reader.rb in rdf-spec
   it_should_behave_like RDF_Reader
 
-  it "should be discoverable" do
-    readers = [
-      RDF::Reader.for(:ntriples),
-      RDF::Reader.for('etc/doap.nt'),
-      RDF::Reader.for(:file_name      => 'etc/doap.nt'),
-      RDF::Reader.for(:file_extension => 'nt'),
-      RDF::Reader.for(:content_type   => 'text/plain'),
-    ]
-    readers.each { |reader| reader.should == RDF::NTriples::Reader }
+  describe ".for" do
+    formats = [
+      :ntriples,
+      'etc/doap.nt',
+      {:file_name      => 'etc/doap.nt'},
+      {:file_extension => 'nt'},
+      {:content_type   => 'text/plain'},
+      {:content_type   => 'text/ntriples+turtle'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Reader.for(arg).should == RDF::NTriples::Reader
+      end
+    end
   end
 
   it "should return :ntriples for to_sym" do
@@ -64,15 +99,19 @@ describe RDF::NTriples::Writer do
     @writer = RDF::NTriples::Writer.new
   end
 
-  it "should be discoverable" do
-    writers = [
-      RDF::Writer.for(:ntriples),
-      RDF::Writer.for('tmp/test.nt'),
-      RDF::Writer.for(:file_name      => 'tmp/test.nt'),
-      RDF::Writer.for(:file_extension => 'nt'),
-      RDF::Writer.for(:content_type   => 'text/plain'),
-    ]
-    writers.each { |writer| writer.should == RDF::NTriples::Writer }
+  describe ".for" do
+    formats = [
+      :ntriples,
+      'etc/doap.nt',
+      {:file_name      => 'etc/doap.nt'},
+      {:file_extension => 'nt'},
+      {:content_type   => 'text/plain'},
+      {:content_type   => 'text/ntriples+turtle'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Writer.for(arg).should == RDF::NTriples::Writer
+      end
+    end
   end
 
   # @see lib/rdf/spec/writer.rb in rdf-spec
