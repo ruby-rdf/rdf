@@ -34,6 +34,7 @@ module RDF
   autoload :Mutable,     'rdf/mixin/mutable'
   autoload :Queryable,   'rdf/mixin/queryable'
   autoload :Readable,    'rdf/mixin/readable'
+  autoload :TypeCheck,   'rdf/mixin/type_check'
   autoload :Writable,    'rdf/mixin/writable'
 
   # RDF objects

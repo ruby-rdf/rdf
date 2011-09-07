@@ -172,6 +172,33 @@ class RDF::Query
     end
 
     ##
+    # Compatible Mappings
+    # Two solution mappings μ1 and μ2 are compatible if, for every variable v in dom(μ1) and in dom(μ2), μ1(v) = μ2(v).
+    #
+    # @param [RDF::Query::Solution, #to_hash] other
+    #   another query solution or hash bindings
+    # @return [Boolean]
+    def compatible?(other)
+      @bindings.all? do |k, v|
+        !other.to_hash.has_key?(k) || other[k].eql?(v)
+      end
+    end
+    
+    ##
+    # Isomorphic Mappings
+    # Two solution mappings μ1 and μ2 are isomorphic if,
+    # for every variable v in dom(μ1) and in dom(μ2), μ1(v) = μ2(v).
+    #
+    # @param [RDF::Query::Solution, #to_hash] other
+    #   another query solution or hash bindings
+    # @return [Boolean]
+    def isomorphic_with?(other)
+      @bindings.all? do |k, v|
+        !other.to_hash.has_key?(k) || other[k].eql?(v)
+      end
+    end
+    
+    ##
     # @return [Array<Array(Symbol, RDF::Term)>}
     def to_a
       @bindings.to_a
@@ -181,6 +208,26 @@ class RDF::Query
     # @return [Hash{Symbol => RDF::Term}}
     def to_hash
       @bindings.dup
+    end
+    
+    ##
+    # Integer hash of this solution
+    # @return [Integer]
+    def hash
+      @bindings.hash
+    end
+    
+    ##
+    # Equivalence of solution
+    def eql?(other)
+      other.is_a?(Solution) && @bindings.eql?(other.bindings)
+    end
+    alias_method :==, :eql?
+
+    ##
+    # Equals of solution
+    def ==(other)
+      other.is_a?(Solution) && @bindings == other.bindings
     end
 
     ##

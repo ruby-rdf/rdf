@@ -44,6 +44,23 @@ module RDF
       self.new(id)
     end
 
+    ##
+    # Override #dup to remember original object.
+    # This allows .eql? to determine that two nodes
+    # are the same thing, and not different nodes
+    # instantiated with the same identifier.
+    # @return [RDF::Node]
+    def dup
+      node = super
+      node.original = self.original || self
+      node
+    end
+
+    ##
+    # Originally instantiated node, if any
+    # @return [RDF::Node]
+    attr_accessor :original
+
     # @return [String]
     attr_accessor :id
 
@@ -88,23 +105,36 @@ module RDF
     end
 
     ##
-    # Checks whether this blank node is equal to `other`.
+    # Determins if `self` is the same term as `other`.
+    #
+    # In this case, nodes must be the same object
     #
     # @param  [Node] other
     # @return [Boolean]
     def eql?(other)
-      other.is_a?(Node) && self == other
+      other.is_a?(RDF::Node) && (self.original || self).equal?(other.original || other)
     end
 
     ##
-    # Checks whether this blank node is equal to `other`.
+    # Checks whether this blank node is equal to `other` (type checking).
+    #
+    # In this case, different nodes having the same id are considered the same.
+    #
+    # Per SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types
     #
     # @param  [Object] other
     # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
     def ==(other)
-      other.respond_to?(:node?) && other.node? &&
-        other.respond_to?(:id) && @id == other.id
+      case other
+      when Literal
+        # If other is a Literal, reverse test to consolodate complex type checking logic
+        other == self
+      else 
+        other.respond_to?(:node?) && other.node? && other.respond_to?(:id) && @id == other.id
+      end
     end
+    alias_method :===, :==
 
     ##
     # Returns a string representation of this blank node.

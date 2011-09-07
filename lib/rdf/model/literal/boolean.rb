@@ -59,10 +59,20 @@ module RDF; class Literal
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def ==(other)
-      (cmp = (self <=> other)) ? cmp.zero? : false
-    end
-    alias_method :===, :==
+      # If lexically invalid, use regular literal testing
+      return super unless self.valid?
 
+      other = Literal::Boolean.new(other) if other.class == TrueClass || other.class == FalseClass
+
+      case other
+      when Literal::Boolean
+        return super unless other.valid?
+        (cmp = (self <=> other)) ? cmp.zero? : false
+      else
+        super
+      end
+    end
+    
     ##
     # Returns the value as a string.
     #

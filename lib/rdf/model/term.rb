@@ -25,6 +25,38 @@ module RDF
     end
 
     ##
+    # Compares `self` to `other` to implement RDFterm-equal.
+    #
+    # Subclasses should override this to provide a more meaningful
+    # implementation than the default which simply performs a string
+    # comparison based on `#to_s`.
+    #
+    # @abstract
+    # @param  [Object]  other
+    # @return [Integer] `-1`, `0`, or `1`
+    #
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
+    def ==(other)
+      super
+    end
+
+    ##
+    # Determins if `self` is the same term as `other`.
+    #
+    # Subclasses should override this to provide a more meaningful
+    # implementation than the default which simply performs a string
+    # comparison based on `#to_s`.
+    #
+    # @abstract
+    # @param  [Object]  other
+    # @return [Integer] `-1`, `0`, or `1`
+    #
+    # @see http://www.w3.org/TR/rdf-sparql-query/#func-sameTerm
+    def eql?(other)
+      super
+    end
+
+    ##
     # Returns `true` if this term is constant.
     #
     # @return [Boolean] `true` or `false`

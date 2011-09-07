@@ -10,7 +10,7 @@ module RDF; class Literal
   #
   # @see   http://www.w3.org/TR/xmlschema-2/#double
   # @since 0.2.1
-  class Double < Literal
+  class Double < Numeric
     DATATYPE = XSD.double
     GRAMMAR  = /^NaN|(?:[\+\-]?(?:INF|(?:\d+(\.\d*)?([eE][\+\-]?\d+)?)))$/.freeze
 
@@ -72,17 +72,6 @@ module RDF; class Literal
         else super
       end
     end
-
-    ##
-    # Returns `true` if this literal is equivalent to `other`.
-    #
-    # @param  [Object] other
-    # @return [Boolean] `true` or `false`
-    # @since  0.3.0
-    def ==(other)
-      (cmp = (self <=> other)) ? cmp.zero? : false
-    end
-    alias_method :===, :==
 
     ##
     # Returns `true` if the value is an invalid IEEE floating point number.
@@ -186,64 +175,6 @@ module RDF; class Literal
     end
 
     ##
-    # Returns `self`.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +@
-      self # unary plus
-    end
-
-    ##
-    # Returns `self` negated.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -@
-      RDF::Literal(-to_f, :datatype => datatype) # unary minus
-    end
-
-    ##
-    # Returns the sum of `self` plus `other`.
-    #
-    # @param  [#to_f] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def +(other)
-      RDF::Literal(to_f + other.to_f)
-    end
-
-    ##
-    # Returns the difference of `self` minus `other`.
-    #
-    # @param  [#to_f] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def -(other)
-      RDF::Literal(to_f - other.to_f)
-    end
-
-    ##
-    # Returns the product of `self` times `other`.
-    #
-    # @param  [#to_f] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def *(other)
-      RDF::Literal(to_f * other.to_f)
-    end
-
-    ##
-    # Returns the quotient of `self` divided by `other`.
-    #
-    # @param  [#to_f] other
-    # @return [RDF::Literal]
-    # @since  0.2.3
-    def /(other)
-      RDF::Literal(to_f / other.to_f)
-    end
-
-    ##
     # Returns the value as a string.
     #
     # @return [String]
@@ -254,29 +185,22 @@ module RDF; class Literal
         else @object.to_s
       end
     end
+  end # Double
+  
+  # Derived types
+  # @see http://www.w3.org/TR/xpath-functions/#datatypes
+  
+  # Note that in XML Schema, Float is not really derived from Double,
+  # but implementations are identical in Ruby
+  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#float
+  class Float < Double
+    DATATYPE = XSD.float
 
     ##
-    # Returns the value as an integer.
-    #
-    # @return [Integer]
-    def to_i
-      @object.to_i
-    end
-
-    ##
-    # Returns the value as a floating point number.
-    #
-    # @return [Float]
-    def to_f
-      @object.to_f
-    end
-
-    ##
-    # Returns the value as a decimal number.
-    #
-    # @return [BigDecimal]
-    def to_d
-      @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
+    # @param  [Float, #to_f] value
+    # @option options [String] :lexical (nil)
+    def initialize(value, options = {})
+      super(value, options.merge(:datatype => DATATYPE))
     end
 
     ##
@@ -285,6 +209,6 @@ module RDF; class Literal
     # @return [Rational]
     def to_r
       @object.to_r # only available on Ruby 1.9+
-    end
+  end
   end # Double
 end; end # RDF::Literal

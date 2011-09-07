@@ -22,6 +22,7 @@ module RDF; class Query
     #   @option options [Variable, URI]      :predicate (nil)
     #   @option options [Variable, Term]     :object    (nil)
     #   @option options [Variable, Resource] :context   (nil)
+    #     A context of nil matches any context, a context of false, matches only the default context.
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
@@ -118,10 +119,12 @@ module RDF; class Query
     ##
     # Executes this query pattern on the given `queryable` object.
     #
-    # By default any variable terms in this pattern will be treated as `nil`
-    # wildcards when executing the query. If the optional `bindings` are
-    # given, variables will be substituted with their values when executing
-    # the query.
+    # Values are matched using using Queryable#query_pattern.
+    #
+    # If the optional `bindings` are given, variables will be substituted with their values
+    # when executing the query.
+    #
+    # To match triples only in the default context, set context to `false'.
     #
     # @example
     #   Pattern.new(:s, :p, :o).execute(RDF::Repository.load('data.nt'))
@@ -140,11 +143,11 @@ module RDF; class Query
     # @since  0.3.0
     def execute(queryable, bindings = {}, &block)
       query = {
-        :subject   => subject   && subject.variable?   ? bindings[subject.to_sym]   : subject,
-        :predicate => predicate && predicate.variable? ? bindings[predicate.to_sym] : predicate,
-        :object    => object    && object.variable?    ? bindings[object.to_sym]    : object,
-        # TODO: context handling?
-      }
+        :subject   => subject.is_a?(Variable)   && bindings[subject.to_sym]   ? bindings[subject.to_sym]   : subject,
+        :predicate => predicate.is_a?(Variable) && bindings[predicate.to_sym] ? bindings[predicate.to_sym] : predicate,
+        :object    => object.is_a?(Variable)    && bindings[object.to_sym]    ? bindings[object.to_sym]    : object,
+        :context   => context.is_a?(Variable)   && bindings[context.to_sym]   ? bindings[context.to_sym]   : context,
+      }.delete_if{|k,v| v.nil?}
 
       # Do all the variable terms refer to distinct variables?
       variables = self.variables
@@ -184,9 +187,10 @@ module RDF; class Query
     # @since  0.3.0
     def solution(statement)
       RDF::Query::Solution.new do |solution|
-        solution[subject.to_sym]   = statement.subject   if subject.variable?
-        solution[predicate.to_sym] = statement.predicate if predicate.variable?
-        solution[object.to_sym]    = statement.object    if object.variable?
+        solution[subject.to_sym]   = statement.subject   if subject.is_a?(Variable)
+        solution[predicate.to_sym] = statement.predicate if predicate.is_a?(Variable)
+        solution[object.to_sym]    = statement.object    if object.is_a?(Variable)
+        solution[context.to_sym]   = statement.context   if context.is_a?(Variable)
       end
     end
 
@@ -205,6 +209,7 @@ module RDF; class Query
       terms << :subject   if subject.is_a?(Variable)   && (!name || name.eql?(subject.name))
       terms << :predicate if predicate.is_a?(Variable) && (!name || name.eql?(predicate.name))
       terms << :object    if object.is_a?(Variable)    && (!name || name.eql?(object.name))
+      terms << :context   if context.is_a?(Variable)   && (!name || name.eql?(context.name))
       terms
     end
 
@@ -220,6 +225,7 @@ module RDF; class Query
       count += 1 if subject.is_a?(Variable)
       count += 1 if predicate.is_a?(Variable)
       count += 1 if object.is_a?(Variable)
+      count += 1 if context.is_a?(Variable)
       count
     end
     alias_method :cardinality, :variable_count
@@ -236,6 +242,7 @@ module RDF; class Query
       variables.merge!(subject.variables)   if subject.is_a?(Variable)
       variables.merge!(predicate.variables) if predicate.is_a?(Variable)
       variables.merge!(object.variables)    if object.is_a?(Variable)
+      variables.merge!(context.variables)   if context.is_a?(Variable)
       variables
     end
 
@@ -264,6 +271,7 @@ module RDF; class Query
       bindings.merge!(subject.bindings)   if subject.is_a?(Variable)
       bindings.merge!(predicate.bindings) if predicate.is_a?(Variable)
       bindings.merge!(object.bindings)    if object.is_a?(Variable)
+      bindings.merge!(context.bindings)   if context.is_a?(Variable)
       bindings
     end
 
@@ -306,9 +314,14 @@ module RDF; class Query
     def to_s
       StringIO.open do |buffer| # FIXME in RDF::Statement
         buffer << 'OPTIONAL ' if optional?
-        buffer << (subject.is_a?(Variable)   ? subject.to_s :   "<#{subject}>") << ' '
-        buffer << (predicate.is_a?(Variable) ? predicate.to_s : "<#{predicate}>") << ' '
-        buffer << (object.is_a?(Variable)    ? object.to_s :    "<#{object}>") << ' .'
+        buffer << [subject, predicate, object].map do |r|
+          r.is_a?(RDF::Query::Variable) ? r.to_s : RDF::NTriples.serialize(r)
+        end.join(" ")
+        buffer << case context
+          when nil, false then " ."
+          when Variable then " #{context.to_s} ."
+          else " #{RDF::NTriples.serialize(context)} ."
+        end
         buffer.string
       end
     end

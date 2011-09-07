@@ -27,7 +27,8 @@ module RDF
     def self.from(statement, options = {})
       case statement
         when Array, Query::Pattern
-          self.new(statement[0], statement[1], statement[2], options.merge(:context => statement[3] || nil))
+          context = statement[3] == false ? nil : statement[3]
+          self.new(statement[0], statement[1], statement[2], options.merge(:context => context))
         when Statement then statement
         when Hash      then self.new(options.merge(statement))
         else raise ArgumentError, "expected RDF::Statement, Hash, or Array, but got #{statement.inspect}"
@@ -176,7 +177,7 @@ module RDF
     # @param  [Statement] other
     # @return [Boolean]
     def eql?(other)
-      other.is_a?(Statement) && self == other && self.context == other.context
+      other.is_a?(Statement) && self == other && (self.context || false) == (other.context || false)
     end
 
     ##
@@ -190,10 +191,10 @@ module RDF
     # @param  [Statement] other
     # @return [Boolean]
     def ===(other)
-      return false if has_context?   && context   != other.context
-      return false if has_subject?   && subject   != other.subject
-      return false if has_predicate? && predicate != other.predicate
-      return false if has_object?    && object    != other.object
+      return false if has_context?   && !context.eql?(other.context)
+      return false if has_subject?   && !subject.eql?(other.subject)
+      return false if has_predicate? && !predicate.eql?(other.predicate)
+      return false if has_object?    && !object.eql?(other.object)
       return true
     end
 
