@@ -1,3 +1,4 @@
+# coding: utf-8
 module RDF; class Literal
   ##
   # A time literal.

@@ -70,6 +70,8 @@ module RDF
     # Loads one or more RDF files into a new transient in-memory repository.
     #
     # @param  [String, Array<String>] filenames
+    # @param  [Hash{Symbol => Object}] options
+    #   Options from {RDF::Reader#initialize}, {RDF::Format.for} and {RDF::Repository#initialize}
     # @yield  [repository]
     # @yieldparam [Repository]
     # @return [void]

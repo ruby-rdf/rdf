@@ -42,48 +42,66 @@ Examples
 --------
 
     require 'rdf'
-    
     include RDF
 
 ### Writing RDF data using the N-Triples format
 
     require 'rdf/ntriples'
+    graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
+    graph.dump(:ntriples)
     
-    RDF::Writer.open("hello.nt") do |writer|
-      writer << RDF::Graph.new do |graph|
-        graph << [:hello, RDF::DC.title, "Hello, world!"]
-      end
-    end
+or
+
+  RDF::Writer.open("hello.nt") { |writer| writer << graph }
 
 ### Reading RDF data in the N-Triples format
 
     require 'rdf/ntriples'
+    graph = RDF::Graph.load("http://rdf.rubyforge.org/doap.nt")
     
+or
+
     RDF::Reader.open("http://rdf.rubyforge.org/doap.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
     end
 
-### Writing RDF data using the N-Quads format
+### Reading RDF data in other
+{RDF::Reader.open} and {RDF::Repository.load} use a number of mechanisms to determine the appropriate reader
+to use when loading a file. The specific format to use can be forced using, e.g. `:format => :ntriples`
+option where the specific format symbol is determined by the available readers. Both also use
+MimeType or file extension, where available.
+
+    require 'linkeddata'
+    
+    graph = RDF::Graph.load("etc/doap.nq", :format => :nquads)
+
+A specific sub-type of Reader can also be invoked directly:
 
     require 'rdf/nquads'
+    
+    RDF::NQuads::Reader.open("http://rdf.rubyforge.org/doap.nq") do |reader|
+      reader.each_statement do |statement|
+        puts statement.inspect
+      end
+    end
 
-    RDF::Writer.open("hello.nq") do |writer|
+### Writing RDF data using other formats
+{RDF::Writer.open}, {RDF::Enumerable#dump}, {RDF::Writer#dump} take similar options to {RDF::Reader.open} to determine the
+appropriate writer to use.
+
+    require 'linkeddata'
+
+    RDF::Writer.open("hello.nq", :format => :nquads) do |writer|
       writer << RDF::Repository.new do |repo|
         repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
       end
     end
 
-### Reading RDF data in the N-Quads format
+A specific sub-type of Writer can also be invoked directly:
 
-    require 'rdf/nquads'
-    
-    RDF::Reader.open("http://rdf.rubyforge.org/doap.nq") do |reader|
-      reader.each_statement do |statement|
-        puts statement.inspect
-      end
-    end
+    graph.dump(:nq)
 
 ### Querying RDF data using basic graph patterns (BGPs)
 
@@ -147,15 +165,23 @@ Documentation
 
 ### RDF Serialization Formats
 
+The following is a partial list of RDF formats implemented either natively, or through the inclusion of
+other gems:
+
 * {RDF::NTriples}
 * {RDF::NQuads}
+* [JSON::LD][JSONLD doc] (plugin)
 * [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
-* [RDF::N3](http://rdf.rubyforge.org/n3/) (plugin)
+* [RDF::Microdata][Microdata doc] (plugin)
+* [RDF::N3][N3 doc] (plugin)
 * [RDF::Raptor::RDFXML](http://rdf.rubyforge.org/raptor/) (plugin)
 * [RDF::Raptor::Turtle](http://rdf.rubyforge.org/raptor/) (plugin)
-* [RDF::RDFa](http://rdf.rubyforge.org/rdfa/) (plugin)
-* [RDF::RDFXML](http://rdf.rubyforge.org/rdfxml/) (plugin)
+* [RDF::RDFa][RDFa doc] (plugin)
+* [RDF::RDFXML][RDFXML doc] (plugin)
 * [RDF::Trix](http://rdf.rubyforge.org/trix/) (plugin)
+* [RDF::Turtle][Turtle doc] (plugin)
+
+The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 
 ### RDF Storage
 
@@ -288,8 +314,15 @@ License
 This is free and unencumbered public domain software. For more information,
 see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
-[RDF]:       http://www.w3.org/RDF/
-[YARD]:      http://yardoc.org/
-[YARD-GS]:   http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:       http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[Backports]: http://rubygems.org/gems/backports
+[RDF]:              http://www.w3.org/RDF/
+[YARD]:             http://yardoc.org/
+[YARD-GS]:          http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
+[PDD]:              http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[Backports]:        http://rubygems.org/gems/backports
+[JSONLD doc]:       http://rubydoc.info/github/gkellogg/json-ld/frames
+[LinkedData doc]:   http://rubydoc.info/github/datagraph/linkeddata/master/frames
+[Microdata doc]:    http://rubydoc.info/github/gkellogg/rdf-microdata/frames
+[N3 doc]:           http://rubydoc.info/github/gkellogg/rdf-n3/master/frames
+[RDFa doc]:         http://rubydoc.info/github/gkellogg/rdf-rdfa/master/frames
+[RDFXML doc]:       http://rubydoc.info/github/gkellogg/rdf-rdfxml/master/frames
+[Turtle doc]:       http://rubydoc.info/github/gkellogg/rdf-turtle/master/frames

@@ -77,6 +77,7 @@ module RDF
     #   @option options [String, #to_s]   :file_name      (nil)
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
+    #     Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
     #   @return [Class]
     #
     # @return [Class]

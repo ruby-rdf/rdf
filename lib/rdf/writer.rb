@@ -107,7 +107,7 @@ module RDF
     # @param  [IO, File] io
     #   the output stream or file to write to
     # @param  [Hash{Symbol => Object}] options
-    #   passed to {RDF::Writer.new} or {RDF::Writer.buffer}
+    #   passed to {RDF::Writer#initialize} or {RDF::Writer.buffer}
     # @return [void]
     def self.dump(data, io = nil, options = {})
       io = File.open(io, 'w') if io.is_a?(String)
@@ -147,7 +147,7 @@ module RDF
     #
     # @param  [String, #to_s] filename
     # @param  [Hash{Symbol => Object}] options
-    #   any additional options (see {RDF::Writer#initialize and {RDF::Format.for}})
+    #   any additional options (see {RDF::Writer#initialize} and {RDF::Format.for})
     # @option options [Symbol] :format (nil)
     # @return [RDF::Writer]
     def self.open(filename, options = {}, &block)
