@@ -55,6 +55,8 @@ module RDF
     ##
     # Finds an RDF reader class based on the given criteria.
     #
+    # If the reader class has a defined format, use that.
+    #
     # @overload for(format)
     #   Finds an RDF reader class based on a symbolic name.
     #
@@ -78,13 +80,13 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {})
-      if format = Format.for(options)
+      if format = self.format || Format.for(options)
         format.reader
       end
     end
 
     ##
-    # Retrieves the RDF serialization format class for this writer class.
+    # Retrieves the RDF serialization format class for this reader class.
     #
     # @return [Class]
     def self.format(klass = nil)

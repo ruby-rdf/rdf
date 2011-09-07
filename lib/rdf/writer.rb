@@ -77,7 +77,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {})
-      if format = Format.for(options)
+      if format = self.format || Format.for(options)
         format.writer
       end
     end
