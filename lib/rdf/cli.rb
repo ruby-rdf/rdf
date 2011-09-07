@@ -25,32 +25,32 @@ module RDF
           end
         end
         secs = Time.new - start
-        puts "Parsed #{count} statements in #{secs} seconds @ #{count/secs} statements/second."
+        $stdout.puts "Parsed #{count} statements in #{secs} seconds @ #{count/secs} statements/second."
       end,
       "lenghts"     => lambda do |argv, opts|
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
-            puts statement.to_s.size
+            $stdout.puts statement.to_s.size
           end
         end
       end,
       "objects"     => lambda do |argv, opts|
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
-            puts statement.object.to_ntriples
+            $stdout.puts statement.object.to_ntriples
           end
         end
       end,
       "predicates"   => lambda do |argv, opts|
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
-            puts statement.predicate.to_ntriples
+            $stdout.puts statement.predicate.to_ntriples
           end
         end
       end,
       "serialize" => lambda do |argv, opts|
         writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
-        out = opts[:output] || STDOUT
+        out = opts[:output] || $stdout
         opts = opts.merge(:prefixes => {})
         writer_opts = opts.merge(:standard_prefixes => true)
         self.parse(argv, opts) do |reader|
@@ -62,7 +62,7 @@ module RDF
       "subjects"   => lambda do |argv, opts|
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
-            puts statement.subject.to_ntriples
+            $stdout.puts statement.subject.to_ntriples
           end
         end
       end
@@ -84,7 +84,7 @@ module RDF
         :debug          => false,
         :evaluate       => nil,
         :format         => nil,
-        :output         => STDOUT,
+        :output         => $stdout,
         :output_format  => :ntriples,
         :validate       => false,
       }
@@ -131,8 +131,8 @@ module RDF
       end
 
       options.on_tail("-h", "--help", "Show this message") do
-        puts options
-        puts "Available commands:\n\t#{self.commands.join("\n\t")}"
+        $stdout.puts options
+        $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
         exit
       end
       
