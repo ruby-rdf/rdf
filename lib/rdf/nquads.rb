@@ -20,7 +20,7 @@ module RDF
     # @since  0.4.0
     class Format < RDF::Format
       content_type     'text/x-nquads', :extension => :nq
-      content_encoding 'ascii'
+      content_encoding 'utf-8'
 
       reader { RDF::NQuads::Reader }
       writer { RDF::NQuads::Writer }

@@ -13,19 +13,22 @@ describe RDF::NQuads::Format do
   # @see lib/rdf/spec/format.rb in rdf-spec
   it_should_behave_like RDF_Format
 
-  it "should be discoverable" do
+  describe ".for" do
     formats = [
-      RDF::Format.for(:nquads),
-      RDF::Format.for('etc/doap.nq'),
-      RDF::Format.for(:file_name      => 'etc/doap.nq'),
-      RDF::Format.for(:file_extension => 'nq'),
-      RDF::Format.for(:content_type   => 'text/x-nquads'),
-    ]
-    formats.each { |format| format.should == RDF::NQuads::Format }
+      :nquads,
+      'etc/doap.nq',
+      {:file_name      => 'etc/doap.nq'},
+      {:file_extension => 'nq'},
+      {:content_type   => 'text/x-nquads'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Format.for(arg).should == @format_class
+      end
+    end
   end
-  
-  it "should return :nquads for to_sym" do
-    RDF::NQuads::Format.to_sym.should == :nquads
+
+  describe "#to_sym" do
+    specify {@format_class.to_sym.should == :nquads}
   end
 end
 

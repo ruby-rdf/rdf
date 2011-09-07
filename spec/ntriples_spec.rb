@@ -13,19 +13,23 @@ describe RDF::NTriples::Format do
   # @see lib/rdf/spec/format.rb in rdf-spec
   it_should_behave_like RDF_Format
 
-  it "should be discoverable" do
+  describe ".for" do
     formats = [
-      RDF::Format.for(:ntriples),
-      RDF::Format.for('etc/doap.nt'),
-      RDF::Format.for(:file_name      => 'etc/doap.nt'),
-      RDF::Format.for(:file_extension => 'nt'),
-      RDF::Format.for(:content_type   => 'text/plain'),
-    ]
-    formats.each { |format| format.should == RDF::NTriples::Format }
+      :ntriples,
+      'etc/doap.nt',
+      {:file_name      => 'etc/doap.nt'},
+      {:file_extension => 'nt'},
+      {:content_type   => 'text/plain'},
+      {:content_type   => 'text/ntriples+turtle'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Format.for(arg).should == @format_class
+      end
+    end
   end
-  
-  it "should return :ntriples for to_sym" do
-    RDF::NTriples::Format.to_sym.should == :ntriples
+
+  describe "#to_sym" do
+    specify {@format_class.to_sym.should == :ntriples}
   end
 end
 
