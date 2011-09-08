@@ -2,6 +2,10 @@ module RDF
   ##
   # An RDF literal.
   #
+  # Subclasses of {RDF::Literal} should define DATATYPE and GRAMMAR constants, which are used
+  # for identifying the appropriate class to use for a datatype URI and to perform lexical
+  # matching on the value.
+  #
   # @example Creating a plain literal
   #   value = RDF::Literal.new("Hello, world!")
   #   value.plain?                                   #=> true
@@ -39,32 +43,39 @@ module RDF
   # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
   # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
   class Literal
-    autoload :Boolean,            'rdf/model/literal/boolean'
-    autoload :Numeric,            'rdf/model/literal/numeric'
-    autoload :Integer,            'rdf/model/literal/integer'
-    autoload :NonPositiveInteger, 'rdf/model/literal/integer'
-    autoload :NegativeInteger,    'rdf/model/literal/integer'
-    autoload :Long,               'rdf/model/literal/integer'
-    autoload :Int,                'rdf/model/literal/integer'
-    autoload :Short,              'rdf/model/literal/integer'
-    autoload :Byte,               'rdf/model/literal/integer'
-    autoload :NonNegativeInteger, 'rdf/model/literal/integer'
-    autoload :UnsignedLong,       'rdf/model/literal/integer'
-    autoload :UnsignedInt,        'rdf/model/literal/integer'
-    autoload :UnsignedShort,      'rdf/model/literal/integer'
-    autoload :UnsignedInteger,    'rdf/model/literal/integer'
-    autoload :UnsignedByte,       'rdf/model/literal/integer'
-    autoload :PositiveInteger,    'rdf/model/literal/integer'
-    autoload :Double,             'rdf/model/literal/double'
-    autoload :Decimal,            'rdf/model/literal/decimal'
-    autoload :Date,               'rdf/model/literal/date'
-    autoload :DateTime,           'rdf/model/literal/datetime'
-    autoload :Float,              'rdf/model/literal/double'
-    autoload :Time,               'rdf/model/literal/time'
-    autoload :Token,              'rdf/model/literal/token'
-    autoload :XML,                'rdf/model/literal/xml'
+
+  private
+    @@subclasses       = [] # @private
+
+    ##
+    # @private
+    # @return [void]
+    def self.inherited(child)
+      @@subclasses << child
+      super
+    end
+  
+  public
+
+    require 'rdf/model/literal/numeric'
+    require 'rdf/model/literal/boolean'
+    require 'rdf/model/literal/decimal'
+    require 'rdf/model/literal/integer'
+    require 'rdf/model/literal/double'
+    require 'rdf/model/literal/date'
+    require 'rdf/model/literal/dateTime'
+    require 'rdf/model/literal/time'
+    require 'rdf/model/literal/token'
+    require 'rdf/model/literal/xml'
 
     include RDF::Term
+
+    ##
+    # @private
+    # Return datatype class for uri, or nil if none is found
+    def self.datatyped_class(uri)
+      @@subclasses.detect {|klass| klass.const_defined?(:DATATYPE) && klass.const_get(:DATATYPE) == uri}
+    end
 
     ##
     # @private
@@ -72,54 +83,8 @@ module RDF
       klass = case
         when !self.equal?(RDF::Literal)
           self # subclasses can be directly constructed without type dispatch
-        when datatype = options[:datatype]
-          case RDF::URI(datatype)
-            when XSD.boolean
-              RDF::Literal::Boolean
-            when XSD.integer
-              RDF::Literal::Integer
-            when XSD.long
-              RDF::Literal::Long
-            when XSD.int
-              RDF::Literal::Int
-            when XSD.short
-              RDF::Literal::Short
-            when XSD.byte
-              RDF::Literal::Byte
-            when XSD.float
-              RDF::Literal::Float
-            when XSD.double
-              RDF::Literal::Double
-            when XSD.decimal
-              RDF::Literal::Decimal
-            when XSD.date
-              RDF::Literal::Date
-            when XSD.dateTime
-              RDF::Literal::DateTime
-            when XSD.time
-              RDF::Literal::Time
-            when XSD.nonPositiveInteger
-              RDF::Literal::NonPositiveInteger
-            when XSD.negativeInteger
-              RDF::Literal::NegativeInteger
-            when XSD.nonNegativeInteger
-              RDF::Literal::NonNegativeInteger
-            when XSD.positiveInteger
-              RDF::Literal::PositiveInteger
-            when XSD.unsignedLong
-              RDF::Literal::UnsignedLong
-            when XSD.unsignedInt
-              RDF::Literal::UnsignedInt
-            when XSD.unsignedShort
-              RDF::Literal::UnsignedShort
-            when XSD.unsignedByte
-              RDF::Literal::UnsignedByte
-            when XSD.token, XSD.language
-              RDF::Literal::Token
-            when RDF.XMLLiteral
-              RDF::Literal::XML
-            else self
-          end
+        when typed_literal = datatyped_class(RDF::URI(options[:datatype]))
+          typed_literal
         else case value
           when ::TrueClass  then RDF::Literal::Boolean
           when ::FalseClass then RDF::Literal::Boolean
@@ -157,8 +122,10 @@ module RDF
     def initialize(value, options = {})
       @object   = value
       @string   = options[:lexical] if options[:lexical]
+      @string   = value if !defined?(@string) && value.is_a?(String)
       @language = options[:language].to_s.to_sym if options[:language]
       @datatype = RDF::URI(options[:datatype]) if options[:datatype]
+      @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
     end
 
     ##

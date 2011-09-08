@@ -57,9 +57,6 @@ module RDF; class Literal
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
     def -@
-      if (self.class == NonPositiveInteger || self.class == NegativeInteger) && object != 0
-        # XXX Raise error?
-      end
       self.class.new(-self.object)
     end
 

@@ -14,9 +14,7 @@ module RDF; class Literal
     # @param  [Boolean] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      @datatype = RDF::URI(options[:datatype] || DATATYPE)
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   = value if !defined?(@string) && value.is_a?(String)
+      super
       @object   = case
         when true.equal?(value)  then true
         when false.equal?(value) then false

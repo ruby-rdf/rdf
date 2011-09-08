@@ -18,9 +18,7 @@ module RDF; class Literal
     # @param  [Float, #to_f] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      @datatype = RDF::URI(options[:datatype] || DATATYPE)
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   = value if !defined?(@string) && value.is_a?(String)
+      super
       @object   = case
         when value.is_a?(::String) then case value
           when 'INF'  then 1/0.0
@@ -185,30 +183,5 @@ module RDF; class Literal
         else @object.to_s
       end
     end
-  end # Double
-  
-  # Derived types
-  # @see http://www.w3.org/TR/xpath-functions/#datatypes
-  
-  # Note that in XML Schema, Float is not really derived from Double,
-  # but implementations are identical in Ruby
-  # @see http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#float
-  class Float < Double
-    DATATYPE = XSD.float
-
-    ##
-    # @param  [Float, #to_f] value
-    # @option options [String] :lexical (nil)
-    def initialize(value, options = {})
-      super(value, options.merge(:datatype => DATATYPE))
-    end
-
-    ##
-    # Returns the value as a rational number.
-    #
-    # @return [Rational]
-    def to_r
-      @object.to_r # only available on Ruby 1.9+
-  end
   end # Double
 end; end # RDF::Literal
