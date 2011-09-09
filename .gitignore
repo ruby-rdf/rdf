@@ -3,3 +3,4 @@
 .yardoc
 pkg
 tmp
+/*.gem
