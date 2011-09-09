@@ -7,6 +7,7 @@ module RDF; class Literal
   class Date < Literal
     DATATYPE = XSD.date
     GRAMMAR  = %r(\A-?\d{4}-\d{2}-\d{2}(([\+\-]\d{2}:\d{2})|UTC|Z)?\Z).freeze
+    FORMAT   = '%Y-%m-%d%Z'.freeze
 
     ##
     # @param  [Date] value
@@ -26,7 +27,7 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#date
     def canonicalize!
-      @string = @object.strftime('%Y-%m-%d%Z').sub(/\+00:00|UTC/, 'Z')
+      @string = @object.strftime(FORMAT).sub(/\+00:00|UTC/, 'Z')
       self
     end
 
@@ -39,7 +40,7 @@ module RDF; class Literal
     # @return [Boolean]
     # @since  0.2.1
     def valid?
-      !!(value =~ GRAMMAR) && value !~ %r(\A0000)
+      super && value !~ %r(\A0000)
     end
 
     ##
@@ -47,7 +48,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%Y-%m-%d%Z').sub(/\+00:00|UTC/, 'Z')
+      @string || @object.strftime(FORMAT).sub(/\+00:00|UTC/, 'Z')
     end
 
     ##

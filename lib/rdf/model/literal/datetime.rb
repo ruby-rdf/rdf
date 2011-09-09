@@ -39,7 +39,7 @@ module RDF; class Literal
     # @return [Boolean]
     # @since  0.2.1
     def valid?
-      !!(value =~ GRAMMAR) && value !~ %r(\A0000)
+      super && value !~ %r(\A0000)
     end
 
     ##
