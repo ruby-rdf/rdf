@@ -427,9 +427,9 @@ describe RDF::Literal do
        literal(:xml_def_ns)  => %("foo <sup xmlns=\\"http://purl.org/dc/terms/\\">bar</sup> baz!"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>),
        literal(:xml_ns2)     => %(fixme),
      }.each_pair do |args, rep|
-       it "returns n3 rep for #{args.inspect}" do
+       it "returns xml representation for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
-         pending {literal.to_s.should == rep}
+         pending("XMLLiteral support") {literal.to_s.should == rep}
        end
      end
    end

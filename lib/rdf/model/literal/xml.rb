@@ -13,7 +13,7 @@ module RDF; class Literal
     # @param  [Object] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      @datatype = options[:datatype] || DATATYPE
+      @datatype = options[:datatype] || self.class.const_get(:DATATYPE)
       @string   = options[:lexical] if options.has_key?(:lexical)
       @object   = value # TODO: parse XML string using REXML
     end

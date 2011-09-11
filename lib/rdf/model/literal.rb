@@ -139,30 +139,7 @@ module RDF
     ##
     # @return [Object]
     def object
-      @object || case datatype
-        when XSD.string, nil
-          value
-        when XSD.boolean
-          %w(true 1).include?(value)
-        when XSD.integer, XSD.long, XSD.int, XSD.short, XSD.byte
-          value.to_i
-        when XSD.double, XSD.float
-          value.to_f
-        when XSD.decimal
-          ::BigDecimal.new(value)
-        when XSD.date
-          ::Date.parse(value)
-        when XSD.dateTime
-          ::DateTime.parse(value)
-        when XSD.time
-          ::Time.parse(value)
-        when XSD.nonPositiveInteger, XSD.negativeInteger
-          value.to_i
-        when XSD.nonNegativeInteger, XSD.positiveInteger
-          value.to_i
-        when XSD.unsignedLong, XSD.unsignedInt, XSD.unsignedShort, XSD.unsignedByte
-          value.to_i
-      end
+      defined?(@object) ? @object : value
     end
 
     ##
