@@ -12,7 +12,9 @@ module RDF; class Literal
     # @param  [Symbol, #to_s]  value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super
+      @datatype = RDF::URI(options[:datatype] || DATATYPE)
+      @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   ||= value if value.is_a?(String)
       @object   = value.is_a?(Symbol) ? value : value.to_s
     end
 

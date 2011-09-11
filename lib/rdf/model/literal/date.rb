@@ -13,7 +13,9 @@ module RDF; class Literal
     # @param  [Date] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      super
+      @datatype = RDF::URI(options[:datatype] || DATATYPE)
+      @string   = options[:lexical] if options.has_key?(:lexical)
+      @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(::Date)         then value
         when value.respond_to?(:to_date) then value.to_date # Ruby 1.9+
