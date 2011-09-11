@@ -201,8 +201,8 @@ module RDF
       if block_given?
         write_prologue
         case block.arity
-          when 0 then instance_eval(&block)
-          else block.call(self)
+          when 1 then block.call(self)
+          else instance_eval(&block)
         end
         write_epilogue
       end
