@@ -164,15 +164,26 @@ describe RDF::NTriples do
       end
     end
 
-    context "unescape Unicode strings" do
+    context "unescape Unicode strings", :ruby => 1.9 do
+      strings = {
+        "\u677E\u672C \u540E\u5B50" => "松本 后子",
+        "D\u00FCrst"                => "Dürst",
+        "\\U00015678another"         => "\u{15678}another",
+      }
+      strings.each do |string, unescaped|
+        specify string do
+          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          @reader.unescape(string.dup).should == unescaped
+        end
+      end
+    end
+
+    context "unescape escaped Unicode strings" do
       strings = {
         "_\\u221E_"                 => "_\xE2\x88\x9E_", # U+221E, infinity symbol
         "_\\u6C34_"                 => "_\xE6\xB0\xB4_", # U+6C34, 'water' in Chinese
-        "\u677E\u672C \u540E\u5B50" => "松本 后子",
         "\\u677E\\u672C \\u540E\\u5B50" => "松本 后子",
-        "D\u00FCrst"                => "Dürst",
         "D\\u00FCrst"                => "Dürst",
-        "\\U00015678another"         => "\u{15678}another",
       }
       strings.each do |string, unescaped|
         specify string do
