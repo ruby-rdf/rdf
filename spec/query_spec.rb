@@ -232,10 +232,10 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [:s, EX.p, :o]
         end
-        query.execute(@graph).bindings.should == {
-          :s => [EX.x1, EX.x2, EX.x3],
-          :o => [RDF::Literal.new(1), RDF::Literal.new(2), RDF::Literal.new(3) ]
-        }
+        bindings = query.execute(@graph).bindings
+        bindings.keys.sort_by(&:to_s).should == [:o, :s]
+        bindings[:o].sort.should == [RDF::Literal.new(1), RDF::Literal.new(2), RDF::Literal.new(3)]
+        bindings[:s].sort.should == [EX.x1, EX.x2, EX.x3]
       end
 
       # From sp2b benchmark, query 7 bgp 2

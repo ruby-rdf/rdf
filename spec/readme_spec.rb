@@ -139,16 +139,14 @@ describe 'README' do
   end
 
   context "the 'Using pre-defined RDF vocabularies' example" do
-    include RDF
-
     def example3
-      DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
-      FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
-      RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-      RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
-      RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
-      OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
-      XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
+      RDF::DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
+      RDF::FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+      RDF.type           #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+      RDF::RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
+      RDF::RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
+      RDF::OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
+      RDF::XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
     end
 
     it "should not raise errors" do
