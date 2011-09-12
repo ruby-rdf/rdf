@@ -216,6 +216,18 @@ module RDF
     attr_reader :options
 
     ##
+    # Returns the base URI used for this writer.
+    #
+    # @example
+    #   reader.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
+    #
+    # @return [Hash{Symbol => RDF::URI}]
+    # @since  0.3.4
+    def base_uri
+      @options[:base_uri]
+    end
+
+    ##
     # Returns the URI prefixes currently defined for this writer.
     #
     # @example
