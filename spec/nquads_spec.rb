@@ -30,7 +30,7 @@ describe RDF::NQuads::Format do
       :ntriples => "<a> <b> <c> .",
       :nquads => "<a> <b> <c> <d> . ",
       :literal => '<a> <b> "literal" .',
-      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+      :multi_line => %(<a>\n  <b>\n  "literal"\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.for {str}.should == @format_class
@@ -47,7 +47,7 @@ describe RDF::NQuads::Format do
       :ntriples => "<a> <b> <c> .",
       :nquads => "<a> <b> <c> <d> . ",
       :literal => '<a> <b> "literal" .',
-      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+      :multi_line => %(<a>\n  <b>\n  "literal"\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.detect(str).should be_true
@@ -58,15 +58,14 @@ describe RDF::NQuads::Format do
       :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
       :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
       :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+      :jsonld => '{"@context" => "foo"}',
+      :rdfa   => '<div about="foo"></div>',
+      :microdata => '<div itemref="bar"></div>',
     }.each do |sym, str|
       it "does not detect #{sym}" do
         @format_class.detect(str).should be_false
       end
     end
-  end
-
-  it "should return :nquads for to_sym" do
-    RDF::NQuads::Format.to_sym.should == :nquads
   end
 end
 

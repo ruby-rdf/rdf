@@ -27,9 +27,24 @@ module RDF
     
       ##
       # Sample detection to see if it matches N-Quads (or N-Triples)
+      #
+      # Use a text sample to detect the format of an input file. Sub-classes implement
+      # a matcher sufficient to detect probably format matches, including disambiguating
+      # between other similar formats.
+      #
+      # @param [String] sample Beginning several bytes (~ 1K) of input.
+      # @result [Boolean]
       def self.detect(sample)
-        sample.match(%r(^\s*<[^>]*>.*\.\s*$)) &&
-          !sample.match(%r(@(base|prefix))) # Not Turtle/N3
+        !!sample.match(%r(
+          (?:\s*(?:<[^>]*>) | (?:_:\w+))                        # Subject
+          (?:\s*<[^>]*>)                                        # Predicate
+          \s*
+          (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"]*"(?:^^|@\S+)?)) # Object
+          (?:\s*<[^>]*>)?                                       # Optional context
+          \s*\.
+        )mx) && (
+          !sample.match(%r(@(base|prefix|keywords)))            # Not Turtle/N3
+        )
       end
     end
 
