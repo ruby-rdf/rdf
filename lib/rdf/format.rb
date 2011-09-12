@@ -119,9 +119,9 @@ module RDF
               RDF::NTriples::Format
             # For anything else, find a match based on the full class name
             else
-              format = format.to_s.downcase
               @@subclasses.each do |klass|
-                if klass.name.to_s.split('::').map(&:downcase).include?(format)
+                if klass.to_sym == format ||
+                   klass.name.to_s.split('::').map(&:downcase).include?(format.to_s.downcase)
                   return klass
                 end
               end
