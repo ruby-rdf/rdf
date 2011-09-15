@@ -106,7 +106,7 @@ module RDF; class Query
     # Reorders this solution sequence by the given `variables`.
     #
     # Variables may be symbols or {Query::Variable} instances.
-    # A variable may also be a Procedure/Lambda, compatible with {Enumerable#sort}.
+    # A variable may also be a Procedure/Lambda, compatible with {::Enumerable#sort}.
     # This takes two arguments (solutions) and returns -1, 0, or 1 equivalently to <=>.
     #
     # If called with a block, variables are ignored, and the block is invoked with

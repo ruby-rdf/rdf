@@ -4,7 +4,7 @@ module RDF
   #
   # Named queries either match against a specifically named
   # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
-  # Names that are against unbound variables match either detault
+  # Names that are against unbound variables match either default
   # or named contexts.
   # The name of `false' will only match against the default context.
   #

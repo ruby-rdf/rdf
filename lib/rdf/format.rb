@@ -270,7 +270,7 @@ module RDF
     #     RDF::NTriples::Format.detect("<a> <b> <c> .") => true
     #
     # @param [String] sample Beginning several bytes (~ 1K) of input.
-    # @result [Boolean]
+    # @return [Boolean]
     def self.detect(sample)
       false
     end

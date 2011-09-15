@@ -6,9 +6,26 @@ module RDF
   # for identifying the appropriate class to use for a datatype URI and to perform lexical
   # matching on the value.
   #
+  # Literal comparison with other {RDF::Value} instances call {RDF::Value#type_error},
+  # which, returns false. Implementations wishing to have {RDF::TypeError} raised
+  # should mix-in {RDF::TypeCheck}. This is required for strict SPARQL conformance.
+  #
+  # Specific typed literals may have behavior different from the default implementation. See
+  # the following defined sub-classes for specific documentation. Additional sub-classes may
+  # be defined, and will interoperate by defining `DATATYPE` and `GRAMMAR` constants, in addition
+  # other required overrides of RDF::Literal behavior.
+  #
+  # * {RDF::Literal::Boolean}
+  # * {RDF::Literal::Date}
+  # * {RDF::Literal::DateTime}
+  # * {RDF::Literal::Decimal}
+  # * {RDF::Literal::Double}
+  # * {RDF::Literal::Integer}
+  # * {RDF::Literal::Time}
+  #
   # @example Creating a plain literal
   #   value = RDF::Literal.new("Hello, world!")
-  #   value.plain?                                   #=> true
+  #   value.plain?                                   #=> true`
   #
   # @example Creating a language-tagged literal (1)
   #   value = RDF::Literal.new("Hello!", :language => :en)

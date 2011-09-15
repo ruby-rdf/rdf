@@ -32,8 +32,8 @@ module RDF
       # a matcher sufficient to detect probably format matches, including disambiguating
       # between other similar formats.
       #
-      # @param [String] sample Beginning several bytes (~ 1K) of input.
-      # @result [Boolean]
+      # @param [String] sample Beginning several bytes (about 1K) of input.
+      # @return [Boolean]
       def self.detect(sample)
         !!sample.match(%r(
           (?:\s*(?:<[^>]*>) | (?:_:\w+))                        # Subject

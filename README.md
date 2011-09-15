@@ -33,12 +33,20 @@ Features
 Tutorials
 ---------
 
-* [Getting data from the Semantic Web using Ruby and RDF.rb]
-  (http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
-* [Using RDF.rb and Spira to process RDF data from the British Ordnance Survey]
-  (http://stephenpope.co.uk/?p=85)
-* [Getting started with RDF and SPARQL using 4store and RDF.rb]
-  (http://www.jenitennison.com/blog/node/152)
+* [Getting data from the Semantic Web using Ruby and RDF.rb](http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
+* [Using RDF.rb and Spira to process RDF data from the British Ordnance Survey](http://stephenpope.co.uk/?p=85)
+* [Getting started with RDF and SPARQL using 4store and RDF.rb](http://www.jenitennison.com/blog/node/152)
+
+Command Line
+------------
+When installed, RDF.rb includes a `rdf` shell script which acts as a wrapper to perform a number of different
+operations on RDF files using available readers and writers.
+
+* `serialize`: Parse an RDF input and re-serializing to N-Triples or another available format using `--output-format` option.
+* `count`: Parse and RDF input and count the number of statements.
+* `subjects`: Returns unique subjects from parsed input.
+* `objects`: Returns unique objects from parsed input.
+* `predicates`: Returns unique objects from parsed input.
 
 Examples
 --------
@@ -69,7 +77,7 @@ or
       end
     end
 
-### Reading RDF data in other
+### Reading RDF data in other formats
 {RDF::Reader.open} and {RDF::Repository.load} use a number of mechanisms to determine the appropriate reader
 to use when loading a file. The specific format to use can be forced using, e.g. `:format => :ntriples`
 option where the specific format symbol is determined by the available readers. Both also use
@@ -89,8 +97,14 @@ A specific sub-type of Reader can also be invoked directly:
       end
     end
 
+Reader/Writer implementations may override {RDF::Format.detect}, which takes a small sample if input
+and return a boolean indicating if it matches that specific format. In the case that a format cannot
+be detected from filename or other options, or that more than one format is identified,
+{RDF::Format.for} will query each loaded format by invoking it's `detect` method, and the first successful
+match will be used to read the input.
+
 ### Writing RDF data using other formats
-{RDF::Writer.open}, {RDF::Enumerable#dump}, {RDF::Writer#dump} take similar options to {RDF::Reader.open} to determine the
+{RDF::Writer.open}, {RDF::Enumerable#dump}, {RDF::Writer.dump} take similar options to {RDF::Reader.open} to determine the
 appropriate writer to use.
 
     require 'linkeddata'
@@ -122,6 +136,8 @@ A specific sub-type of Writer can also be invoked directly:
       puts "name=#{solution.name} email=#{solution.email}"
     end
 
+A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full support for [SPARQL 1.0](http://www.w3.org/TR/rdf-sparql-query/) queries.
+
 ### Using pre-defined RDF vocabularies
 
     DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
@@ -151,7 +167,16 @@ Documentation
 * {RDF::Value}
   * {RDF::Term}
     * {RDF::Literal}
+      * {RDF::Literal::Boolean}
+      * {RDF::Literal::Date}
+      * {RDF::Literal::DateTime}
+      * {RDF::Literal::Decimal}
+      * {RDF::Literal::Double}
+      * {RDF::Literal::Integer}
+      * {RDF::Literal::Time}
+      * [RDF::XSD](http://rubydoc.info/github/gkellogg/rdf-xsd/master/frames) (plugin)
     * {RDF::Resource}
+      * {RDF::List}
       * {RDF::Node}
       * {RDF::URI}
       * {RDF::Graph}
@@ -198,6 +223,8 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
   * {RDF::Mutable}
   * {RDF::Durable}
 * {RDF::Transaction}
+* [RDF::AllegroGraph](http://rubydoc.info/github/emk/rdf-agraph/master/frames) (plugin)
+* [RDF::Mongo](http://rubydoc.info/github/pius/rdf-mongo/master/frames) (plugin)
 * [RDF::DataObjects](http://rdf.rubyforge.org/do/) (plugin)
 * [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
 
@@ -208,6 +235,8 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
+* [SPARQL](http://rubydoc.info/github/gkellogg/sparql/frames) (plugin)
+
 
 ### RDF Vocabularies
 
@@ -328,3 +357,5 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDFa doc]:         http://rubydoc.info/github/gkellogg/rdf-rdfa/master/frames
 [RDFXML doc]:       http://rubydoc.info/github/gkellogg/rdf-rdfxml/master/frames
 [Turtle doc]:       http://rubydoc.info/github/gkellogg/rdf-turtle/master/frames
+[SPARQL doc]:       http://rubydoc.info/github/gkellogg/sparql/frames
+[SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/

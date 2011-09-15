@@ -92,14 +92,14 @@ module RDF
     ##
     # Returns the subject term of this list.
     #
-    # @return [RDF::Resource]
+    # @attr_reader [RDF::Resource]
     attr_reader :subject
 
     ##
     # Returns the underlying graph storing the statements that constitute
     # this list.
     #
-    # @return [RDF::Graph]
+    # @attr_reader [RDF::Graph]
     attr_reader :graph
 
     ##
@@ -522,7 +522,7 @@ module RDF
     ##
     # Returns the first subject term constituting this list.
     #
-    # This is equivalent to {#subject}.
+    # This is equivalent to `subject`.
     #
     # @example
     #   RDF::List[1, 2, 3].first_subject        #=> RDF::Node(...)
