@@ -1,9 +1,11 @@
 require 'rdf'
+require 'rdf/ntriples'
+require 'rdf/nquads'
 require 'optparse'
 begin
   gem 'linkeddata'
   require 'linkeddata'
-rescue
+rescue LoadError
   # Silently load without linkeddata
 end
 
