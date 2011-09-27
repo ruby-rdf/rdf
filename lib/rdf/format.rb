@@ -19,7 +19,7 @@ module RDF
   #   RDF::Format.content_types      #=> {"text/plain" => [RDF::NTriples::Format]}
   #
   # @example Obtaining serialization format file extension mappings
-  #   RDF::Format.file_extensions    #=> {:nt => "text/plain"}
+  #   RDF::Format.file_extensions    #=> {:nt => [RDF::NTriples::Format]}
   #
   # @example Defining a new RDF serialization format class
   #   class RDF::NTriples::Format < RDF::Format
@@ -107,9 +107,7 @@ module RDF
               self.for(:file_extension => File.extname(file_name.to_s)[1..-1])
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
-              if file_extensions.has_key?(file_ext = file_ext.to_sym)
-                self.for(:content_type => file_extensions[file_ext])
-              end
+              file_extensions[file_ext.to_sym]
           end
 
         when Symbol
@@ -130,7 +128,7 @@ module RDF
       end
       
       if format.is_a?(Array)
-        return format.first if format.length == 1
+        return format.first if format.uniq.length == 1
       elsif !format.nil?
         return format
       end
@@ -141,6 +139,7 @@ module RDF
         # the first that matches
         format ||= @@subclasses
 
+        # Return first format that has a positive detection
         format.detect {|f| f.detect(sample)}
       end
     end
@@ -156,7 +155,7 @@ module RDF
     ##
     # Returns file extensions for known RDF serialization formats.
     #
-    # @return [Hash{Symbol => String}]
+    # @return [Hash{Symbol => Array<Class>}]
     def self.file_extensions
       @@file_extensions
     end
@@ -317,7 +316,7 @@ module RDF
 
         if extensions = (options[:extension] || options[:extensions])
           extensions = [extensions].flatten.map(&:to_sym)
-          extensions.each { |ext| @@file_extensions[ext] = type }
+          extensions.each { |ext| (@@file_extensions[ext] ||= []) << self }
         end
         if aliases = (options[:alias] || options[:aliases])
           aliases = [aliases].flatten.each { |a| (@@content_types[a] ||= []) << self }
