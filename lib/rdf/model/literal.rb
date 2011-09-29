@@ -80,7 +80,7 @@ module RDF
     require 'rdf/model/literal/integer'
     require 'rdf/model/literal/double'
     require 'rdf/model/literal/date'
-    require 'rdf/model/literal/dateTime'
+    require 'rdf/model/literal/datetime'
     require 'rdf/model/literal/time'
     require 'rdf/model/literal/token'
     require 'rdf/model/literal/xml'
