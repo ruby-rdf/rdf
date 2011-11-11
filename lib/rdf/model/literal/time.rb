@@ -41,8 +41,20 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#time
     def canonicalize!
-      @string = @object.utc.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string = @object.utc.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z') if self.valid?
       self
+    end
+
+    ##
+    # Returns `true` if the value adheres to the defined grammar of the
+    # datatype.
+    #
+    # Special case for date and dateTime, for which '0000' is not a valid year
+    #
+    # @return [Boolean]
+    # @since  0.2.1
+    def valid?
+      super && object
     end
 
     ##

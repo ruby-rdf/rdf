@@ -28,7 +28,7 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#dateTime
     def canonicalize!
-      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z') if self.valid?
       self
     end
 
@@ -41,7 +41,7 @@ module RDF; class Literal
     # @return [Boolean]
     # @since  0.2.1
     def valid?
-      super && value !~ %r(\A0000)
+      super && object && value !~ %r(\A0000)
     end
 
     ##
