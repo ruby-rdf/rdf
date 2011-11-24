@@ -78,6 +78,10 @@ module RDF
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
     #     Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
+    #   @option options [Boolean]   :has_reader   (false)
+    #     Only return a format having a reader.
+    #   @option options [Boolean]   :has_writer   (false)
+    #     Only return a format having a writer.
     #   @option options [String]          :sample (nil)
     #     A sample of input used for performing format detection.
     #     If we find no formats, or we find more than one, and we have a sample, we can
@@ -100,7 +104,7 @@ module RDF
               # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
               # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
               mime_type = mime_type.to_s
-              mime_type = mime_type.split(';').first if mime_type.include?(?;) # remove any media type parameters
+              mime_type = mime_type.split(';').first # remove any media type parameters
               content_types[mime_type]
             # Find a format based on the file name:
             when file_name = options[:file_name]
@@ -127,7 +131,11 @@ module RDF
           end
       end
       
+
       if format.is_a?(Array)
+        format = format.select {|f| f.reader} if options[:has_reader]
+        format = format.select {|f| f.writer} if options[:has_writer]
+        
         return format.first if format.uniq.length == 1
       elsif !format.nil?
         return format
@@ -140,7 +148,10 @@ module RDF
         format ||= @@subclasses
 
         # Return first format that has a positive detection
-        format.detect {|f| f.detect(sample)}
+        format.detect {|f| f.detect(sample)} || format.first
+      else
+        # Otherwise, just return the first matching format
+        format.first
       end
     end
 

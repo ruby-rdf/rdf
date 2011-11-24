@@ -87,6 +87,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {}, &block)
+      options = options.merge(:has_reader => true) if options.is_a?(Hash)
       if format = self.format || Format.for(options, &block)
         format.reader
       end
