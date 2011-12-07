@@ -21,11 +21,13 @@ module RDF; module Util
     # @private
     def self.new(*args)
       # JRuby doesn't support `ObjectSpace#_id2ref` unless the `-X+O`
-      # startup option is given, so on that platform we'll default to using
+      # startup option is given.  In addition, ObjectSpaceCache is very slow
+      # on Rubinius.  On those platforms we'll default to using
       # the WeakRef-based cache:
-      klass = case RUBY_PLATFORM
-        when /java/ then WeakRefCache
-        else ObjectSpaceCache
+      if RUBY_PLATFORM == 'java' || (defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx')
+        klass = WeakRefCache
+      else
+        klass = ObjectSpaceCache
       end
       cache = klass.allocate
       cache.send(:initialize, *args)
