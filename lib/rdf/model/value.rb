@@ -122,7 +122,7 @@ module RDF
     
     ##
     # Default implementation of raise_error, which returns false.
-    # Classes including RDF::TypeCheck will raise RDF::TypeError
+    # Classes including RDF::TypeCheck will raise TypeError
     # instead.
     #
     # @return [false]
