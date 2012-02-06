@@ -33,15 +33,15 @@ module RDF::NTriples
     # @return [Boolean]
     def self.detect(sample)
       !!sample.match(%r(
-        (?:(?:<[^>]*>) | (?:_:\w+))                           # Subject
+        (?:(?:<[^>]*>) | (?:_:\w+))                             # Subject
         \s*
-        (?:<[^>]*>)                                           # Predicate
+        (?:<[^>]*>)                                             # Predicate
         \s*
         (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
         \s*\.
-      )mx) && (
-        !sample.match(%r(@(base|prefix|keywords)))            # Not Turtle/N3
-        !sample.match(%r(<(html|rdf))i)                       # Not HTML or XML
+      )mx) && !(
+        sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
+        sample.match(%r(<(html|rdf))i)                          # Not HTML or XML
       ) && !RDF::NQuads::Format.detect(sample)
     end
   end

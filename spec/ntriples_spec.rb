@@ -54,12 +54,13 @@ describe RDF::NTriples::Format do
     end
 
     {
-      :nquads => "<a> <b> <c> <d> . ",
-      :nq_literal => '<a> <b> "literal" <d> .',
+      :nquads        => "<a> <b> <c> <d> . ",
+      :nq_literal    => '<a> <b> "literal" <d> .',
       :nq_multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
-      :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
-      :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+      :turtle        => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
+      :trig          => "{<a> <b> <c> .}",
+      :rdfxml        => '<rdf:RDF about="foo"></rdf:RDF>',
+      :n3            => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
     }.each do |sym, str|
       it "does not detect #{sym}" do
         @format_class.detect(str).should be_false

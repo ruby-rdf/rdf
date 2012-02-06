@@ -63,12 +63,13 @@ describe RDF::NQuads::Format do
     end
 
     {
-      :ntriples => "<a> <b> <c> .",
-      :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
-      :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
-      :jsonld => '{"@context" => "foo"}',
-      :rdfa   => '<div about="foo"></div>',
+      :ntriples  => "<a> <b> <c> .",
+      :turtle    => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
+      :trig      => "{<a> <b> <c> .}",
+      :rdfxml    => '<rdf:RDF about="foo"></rdf:RDF>',
+      :n3        => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+      :jsonld    => '{"@context" => "foo"}',
+      :rdfa      => '<div about="foo"></div>',
       :microdata => '<div itemref="bar"></div>',
     }.each do |sym, str|
       it "does not detect #{sym}" do
