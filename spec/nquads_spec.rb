@@ -27,13 +27,22 @@ describe RDF::NQuads::Format do
     end
 
     {
-      :ntriples => "<a> <b> <c> .",
       :nquads => "<a> <b> <c> <d> . ",
-      :literal => '<a> <b> "literal" .',
-      :multi_line => %(<a>\n  <b>\n  "literal"\n .),
+      :literal => '<a> <b> "literal" <d> .',
+      :multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.for {str}.should == @format_class
+      end
+    end
+
+    {
+      :ntriples => "<a> <b> <c> .",
+      :nt_literal => '<a> <b> "literal" .',
+      :nt_multi_line => %(<a>\n  <b>\n  "literal"\n .),
+    }.each do |sym, str|
+      it "does not detect #{sym}" do
+        @format_class.for {str}.should_not == @format_class
       end
     end
   end
@@ -44,10 +53,9 @@ describe RDF::NQuads::Format do
 
   describe ".detect" do
     {
-      :ntriples => "<a> <b> <c> .",
       :nquads => "<a> <b> <c> <d> . ",
-      :literal => '<a> <b> "literal" .',
-      :multi_line => %(<a>\n  <b>\n  "literal"\n .),
+      :literal => '<a> <b> "literal" <d> .',
+      :multi_line => %(<a>\n  <b>\n  "literal"\n <d> .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.detect(str).should be_true
@@ -55,6 +63,7 @@ describe RDF::NQuads::Format do
     end
 
     {
+      :ntriples => "<a> <b> <c> .",
       :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
       :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
       :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',

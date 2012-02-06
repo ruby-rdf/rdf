@@ -39,11 +39,12 @@ module RDF
           (?:\s*(?:<[^>]*>) | (?:_:\w+))                        # Subject
           (?:\s*<[^>]*>)                                        # Predicate
           \s*
-          (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"]*"(?:^^|@\S+)?)) # Object
-          (?:\s*<[^>]*>)?                                       # Optional context
+          (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
+          (?:\s*<[^>]*>)                                        # Context
           \s*\.
         )mx) && (
           !sample.match(%r(@(base|prefix|keywords)))            # Not Turtle/N3
+          !sample.match(%r(<(html|rdf))i)                       # Not HTML or XML
         )
       end
     end

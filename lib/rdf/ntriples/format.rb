@@ -16,13 +16,33 @@ module RDF::NTriples
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Format < RDF::Format
-    content_type     'text/plain', :extension => :nt
-    content_type     'text/ntriples+turtle', :extension => :nt
+    content_type     'text/plain', :extension => :nt, :alias => 'text/ntriples+turtle'
     content_encoding 'utf-8'
 
     reader { RDF::NTriples::Reader }
     writer { RDF::NTriples::Writer }
     
-    # No format detection, as N-Triples can be parsed by N-Quads
+    ##
+    # Sample detection to see if it matches N-Triples
+    #
+    # Use a text sample to detect the format of an input file. Sub-classes implement
+    # a matcher sufficient to detect probably format matches, including disambiguating
+    # between other similar formats.
+    #
+    # @param [String] sample Beginning several bytes (about 1K) of input.
+    # @return [Boolean]
+    def self.detect(sample)
+      !!sample.match(%r(
+        (?:(?:<[^>]*>) | (?:_:\w+))                           # Subject
+        \s*
+        (?:<[^>]*>)                                           # Predicate
+        \s*
+        (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
+        \s*\.
+      )mx) && (
+        !sample.match(%r(@(base|prefix|keywords)))            # Not Turtle/N3
+        !sample.match(%r(<(html|rdf))i)                       # Not HTML or XML
+      ) && !RDF::NQuads::Format.detect(sample)
+    end
   end
 end
