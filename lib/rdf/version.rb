@@ -3,7 +3,7 @@ module RDF
     MAJOR = 0
     MINOR = 3
     TINY  = 4
-    EXTRA = 1
+    EXTRA = 2
 
     STRING = [MAJOR, MINOR, TINY, EXTRA].compact.join('.')
 

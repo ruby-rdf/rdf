@@ -1,13 +1,13 @@
 PATH
   remote: .
   specs:
-    rdf (0.3.4.1)
+    rdf (0.3.4.2)
       addressable (>= 2.2.6)
 
 PATH
   remote: ../rdf-spec
   specs:
-    rdf-spec (0.3.4)
+    rdf-spec (0.3.4.1)
       rspec (>= 2.6.0)
 
 GEM
@@ -15,16 +15,16 @@ GEM
   specs:
     addressable (2.2.6)
     diff-lcs (1.1.3)
-    rspec (2.7.0)
-      rspec-core (~> 2.7.0)
-      rspec-expectations (~> 2.7.0)
-      rspec-mocks (~> 2.7.0)
-    rspec-core (2.7.1)
-    rspec-expectations (2.7.0)
+    rspec (2.8.0)
+      rspec-core (~> 2.8.0)
+      rspec-expectations (~> 2.8.0)
+      rspec-mocks (~> 2.8.0)
+    rspec-core (2.8.0)
+    rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
-    rspec-mocks (2.7.0)
+    rspec-mocks (2.8.0)
     wirble (0.1.3)
-    yard (0.7.3)
+    yard (0.7.5)
 
 PLATFORMS
   java

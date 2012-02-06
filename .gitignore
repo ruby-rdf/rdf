@@ -4,3 +4,4 @@
 pkg
 tmp
 /*.gem
+/.rbx/
