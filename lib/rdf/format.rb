@@ -121,16 +121,9 @@ module RDF
               RDF::NTriples::Format
             # For anything else, find a match based on the full class name
             else
-              @@subclasses.each do |klass|
-                if klass.to_sym == format ||
-                   klass.name.to_s.split('::').map(&:downcase).include?(format.to_s.downcase)
-                  return klass
-                end
-              end
-              nil # not found
+              @@subclasses.detect { |klass| klass.to_sym == format }
           end
       end
-      
 
       if format.is_a?(Array)
         format = format.select {|f| f.reader} if options[:has_reader]
@@ -149,9 +142,11 @@ module RDF
 
         # Return first format that has a positive detection
         format.detect {|f| f.detect(sample)} || format.first
-      else
+      elsif format.is_a?(Array)
         # Otherwise, just return the first matching format
         format.first
+      else
+        nil
       end
     end
 
