@@ -150,7 +150,7 @@ module RDF
     # @param  [Array(RDF::Resource, RDF::URI, RDF::Term)] triple
     # @return [Boolean]
     def has_triple?(triple)
-      enum_triple.include?(triple)
+      triples.include?(triple)
     end
 
     ##
@@ -210,7 +210,7 @@ module RDF
     # @param  [Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)] quad
     # @return [Boolean]
     def has_quad?(quad)
-      enum_quad.include?(quad)
+      quads.include?(quad)
     end
 
     ##
