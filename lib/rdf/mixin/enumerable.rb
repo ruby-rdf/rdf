@@ -62,6 +62,20 @@ module RDF
     include RDF::Countable # NOTE: must come after ::Enumerable
 
     ##
+    # Returns `true` if this repository supports the given `feature`.
+    #
+    # Supported features include:
+    #   * `:context` supports statements with a context, allowing multiple contexts
+    #   * `:inferrence` supports RDFS inferrence of queryable contents.
+    #
+    # @param  [Symbol, #to_sym] feature
+    # @return [Boolean]
+    # @since  0.3.5
+    def supports?(feature)
+      false
+    end
+
+    ##
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
@@ -607,14 +621,17 @@ module RDF
     #   ntriples = enumerable.dump(:ntriples)
     #
     # @param  [Array<Object>] args
-    #   if the last argument is a hash, it is passed as keyword options to
+    #   if the last argument is a hash, it is passed as options to
     #   {RDF::Writer.dump}.
     # @return [String]
     # @see    RDF::Writer.dump
+    # @raise [RDF::WriterError] if no writer found
     # @since  0.2.0
     def dump(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      RDF::Writer.for(*args).dump(self, nil, options)
+      writer = RDF::Writer.for(*args)
+      raise RDF::WriterError, "No writer found using #{args.inspect}" unless writer
+      writer.dump(self, nil, options)
     end
   end # Enumerable
 end # RDF
