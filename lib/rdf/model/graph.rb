@@ -23,6 +23,7 @@ module RDF
     include RDF::Resource
 
     include RDF::Countable
+    include RDF::Durable
     include RDF::Enumerable
     include RDF::Queryable
     include RDF::Mutable
@@ -120,6 +121,15 @@ module RDF
     # @return [Boolean]
     def unnamed?
       context.nil?
+    end
+
+    ##
+    # Returns `false` to indicate that this graph is not durable
+    #
+    # @return [Boolean]
+    # @see    RDF::Durable#durable?
+    def durable?
+      false
     end
 
     ##

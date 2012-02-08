@@ -1,5 +1,10 @@
 module RDF
   ##
+  # Classes that include this module must implement the methods
+  # `#insert_statement`.
+  #
+  # @see RDF::Graph
+  # @see RDF::Repository
   module Writable
     extend RDF::Util::Aliasing::LateBound
 
