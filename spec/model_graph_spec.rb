@@ -66,7 +66,6 @@ describe RDF::Graph do
 
     before :each do
       @countable = @new.call
-      @countable.insert(*@statements)
     end
 
     it_should_behave_like RDF_Countable
@@ -77,7 +76,6 @@ describe RDF::Graph do
 
     before :each do
       @enumerable = @new.call
-      @enumerable.insert(*@statements)
     end
 
     it_should_behave_like RDF_Enumerable
