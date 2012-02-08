@@ -1,14 +1,14 @@
 PATH
   remote: .
   specs:
-    rdf (0.3.4.2)
+    rdf (0.3.5)
       addressable (>= 2.2.6)
 
 PATH
   remote: ../rdf-spec
   specs:
-    rdf-spec (0.3.4.1)
-      rspec (>= 2.6.0)
+    rdf-spec (0.3.5)
+      rspec (>= 2.8.0)
 
 GEM
   remote: http://rubygems.org/
@@ -33,6 +33,6 @@ PLATFORMS
 DEPENDENCIES
   rdf!
   rdf-spec!
-  rspec (>= 2.6.0)
+  rspec (>= 2.8.0)
   wirble
-  yard (>= 0.7.2)
+  yard (>= 0.7.5)
