@@ -62,7 +62,7 @@ Examples
     
 or
 
-  RDF::Writer.open("hello.nt") { |writer| writer << graph }
+    RDF::Writer.open("hello.nt") { |writer| writer << graph }
 
 ### Reading RDF data in the N-Triples format
 
