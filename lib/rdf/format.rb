@@ -95,7 +95,7 @@ module RDF
       format = case options
         when String
           # Find a format based on the file name
-          self.for(:file_name => options)
+          self.for(:file_name => options) { yield if block_given? }
 
         when Hash
           case
@@ -108,7 +108,7 @@ module RDF
               content_types[mime_type]
             # Find a format based on the file name:
             when file_name = options[:file_name]
-              self.for(:file_extension => File.extname(file_name.to_s)[1..-1])
+              self.for(:file_extension => File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
               file_extensions[file_ext.to_sym]
@@ -141,7 +141,7 @@ module RDF
         format ||= @@subclasses
 
         # Return first format that has a positive detection
-        format.detect {|f| f.detect(sample)} || format.first
+        format.detect {|f| f.detect(sample.to_s)} || format.first
       elsif format.is_a?(Array)
         # Otherwise, just return the first matching format
         format.first
