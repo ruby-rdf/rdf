@@ -389,7 +389,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_subject
-      raise RDF::ReaderError, "expected subject in #{@input.inspect} line #{lineno}"
+      raise RDF::ReaderError, "expected subject in line #{lineno}: #{current_line.inspect}"
     end
 
     ##
@@ -398,7 +398,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_predicate
-      raise RDF::ReaderError, "expected predicate in #{@input.inspect} line #{lineno}"
+      raise RDF::ReaderError, "expected predicate in line #{lineno}: #{current_line.inspect}"
     end
 
     ##
@@ -407,7 +407,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_object
-      raise RDF::ReaderError, "expected object in #{@input.inspect} line #{lineno}"
+      raise RDF::ReaderError, "expected object in line #{lineno}: #{current_line.inspect}"
     end
 
     ##
@@ -463,6 +463,13 @@ module RDF
     # @return [Integer]
     def lineno
       @input.lineno
+    end
+
+    ##
+    # @private
+    # @return [String] The most recently read line of the input
+    def current_line
+      @line
     end
 
     ##
