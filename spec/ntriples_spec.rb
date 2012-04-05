@@ -160,12 +160,18 @@ describe RDF::NTriples do
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     it "should correctly unescape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
       (0x7F..0xFFFF).each do |u|
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @reader.unescape(@writer.escape(c)).should == c
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @reader.unescape(@writer.escape(c)).should == c
+        rescue RangeError
+        end
       end
       (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @reader.unescape(@writer.escape(c)).should == c
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @reader.unescape(@writer.escape(c)).should == c
+        rescue RangeError
+        end
       end
     end
 
@@ -220,12 +226,18 @@ describe RDF::NTriples do
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
     it "should correctly escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
       (0x7F..0xFFFF).each do |u|
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
+        rescue RangeError
+        end
       end
       (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
+        rescue RangeError
+        end
       end
     end
 
