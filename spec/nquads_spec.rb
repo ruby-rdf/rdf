@@ -146,6 +146,14 @@ describe RDF::NQuads::Reader do
         graph.size.should == 1
         graph.statements.first.should == statement
       end
+      
+      it "serializes #{statement.inspect}" do
+        RDF::NQuads.serialize(statement).chomp.should == str
+      end
+      
+      it "unserializes #{str.inspect}" do
+        RDF::NQuads.unserialize(str).should == statement
+      end
     end
   end
 end

@@ -131,6 +131,30 @@ module RDF
         s + "."
       end
     end # Writer
+
+    ##
+    # Reconstructs an RDF value from its serialized N-Triples
+    # representation.
+    #
+    # @param  [String] data
+    # @return [RDF::Value]
+    # @see    RDF::NTriples::Reader.unserialize
+    # @since  0.1.5
+    def self.unserialize(data)
+      Reader.unserialize(data)
+    end
+
+    ##
+    # Returns the serialized N-Triples representation of the given RDF
+    # value.
+    #
+    # @param  [RDF::Value] value
+    # @return [String]
+    # @see    RDF::NTriples::Writer.serialize
+    # @since  0.1.5
+    def self.serialize(value)
+      Writer.serialize(value)
+    end
   end # NQuads
 
 
@@ -138,14 +162,14 @@ module RDF
   # Extensions for `RDF::Value`.
   module Value
     ##
-    # Returns the N-Triples representation of this value.
+    # Returns the N-Quads representation of this value.
     #
-    # This method is only available when the 'rdf/ntriples' serializer has
+    # This method is only available when the 'rdf/nquads' serializer has
     # been explicitly required.
     #
     # @return [String]
     # @since  0.4.0
-    def to_quad
+    def to_nquads
       RDF::NQuads.serialize(self)
     end
   end # Value
