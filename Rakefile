@@ -15,5 +15,5 @@ end
 
 desc "Generate etc/doap.nt from etc/doap.ttl."
 task :doap do
-  sh "rapper -i turtle -o ntriples etc/doap.ttl | sort > etc/doap.nt"
+  sh "rdf serialize etc/doap.ttl --output etc/doap.nt"
 end
