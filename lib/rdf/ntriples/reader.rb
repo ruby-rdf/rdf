@@ -135,8 +135,8 @@ module RDF::NTriples
           if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
             s = [$1, $2].pack('H*H*')
             s = s.respond_to?(:force_encoding) ?
-              s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8) : # for Ruby 1.9+
-              Iconv.conv('UTF-8', 'UTF-16BE', s)                              # for Ruby 1.8.x
+              s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8) :             # for Ruby 1.9+
+              Iconv.conv('UTF-8', 'UTF-16BE', s) if RUBY_VERSION.split('.')[1].to_i < 9   # for Ruby 1.8.x
           else
             s = [$1.hex].pack('U*') << '\u' << $2
           end
