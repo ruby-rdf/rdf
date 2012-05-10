@@ -38,7 +38,7 @@ module RDF
   #
   # @author [Arto Bendiken](http://ar.to/)
   module NTriples
-    require 'iconv' # needed on Ruby 1.8.x
+    require 'iconv' if RUBY_VERSION.split('.')[1].to_i < 9
     require 'rdf/ntriples/format'
     autoload :Reader, 'rdf/ntriples/reader'
     autoload :Writer, 'rdf/ntriples/writer'
