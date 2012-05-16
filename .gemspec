@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.date               = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name               = 'rdf'
-  gem.homepage           = 'http://rdf.rubyforge.org/'
+  gem.homepage           = 'http://github.com/ruby-rdf/rdf'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
