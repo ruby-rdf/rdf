@@ -7,7 +7,7 @@
 
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
-  doap:homepage      <http://rdf.rubyforge.org/> ;
+  doap:homepage      <http://rubygems.org/gems/rdf> ;
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
@@ -19,7 +19,7 @@
                      <http://sw.deri.org/2008/07/n-quads/>,
                      <http://www.w3.org/2001/sw/RDFCore/ntriples/> ;
   doap:download-page <http://rubyforge.org/projects/rdf/> ;
-  doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
+  doap:bug-database  <http://github.com/ruby-rdf/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:vendor        <http://datagraph.org/> ;
   doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
@@ -73,7 +73,7 @@
 
 <http://greggkellogg.net/foaf#me> a foaf:Person ;
   foaf:name          "Gregg Kellogg" ;
-  foaf:mbox          <mailto:gregg@kellogg-assoc.com> ;
+  foaf:mbox          <mailto:gregg@greggkellogg.net> ;
   foaf:mbox_sha1sum  "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
   foaf:homepage      <http://greggkellogg.net/>;
   rdfs:isDefinedBy   <http://greggkellogg.net/foaf> .

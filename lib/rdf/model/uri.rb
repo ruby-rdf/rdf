@@ -190,7 +190,7 @@ module RDF
     # @example Joining two URIs
     #     RDF::URI.new('http://example.org/foo/bar').join('/foo')
     #     #=> RDF::URI('http://example.org/foo')
-    # @see <http://github.com/bendiken/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
+    # @see <http://github.com/ruby-rdf/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
     # @see RDF::URI#/
     # @see RDF::URI#+
@@ -230,7 +230,7 @@ module RDF
     # @see RDF::URI#+
     # @see RDF::URI#join
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
-    # @see <http://github.com/bendiken/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
+    # @see <http://github.com/ruby-rdf/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
     # @example Building a HTTP URL
     #     RDF::URI.new('http://example.org') / 'jhacker' / 'foaf.ttl'
     #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')

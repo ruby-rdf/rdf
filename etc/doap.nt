@@ -1,6 +1,6 @@
 <http://rubygems.org/gems/rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
-<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rdf.rubyforge.org/> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <http://rubygems.org/gems/rdf> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <http://creativecommons.org/licenses/publicdomain/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .
@@ -12,7 +12,7 @@
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#implements> <http://sw.deri.org/2008/07/n-quads/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#implements> <http://www.w3.org/2001/sw/RDFCore/ntriples/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#download-page> <http://rubyforge.org/projects/rdf/> .
-<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#bug-database> <http://github.com/bendiken/rdf/issues> .
+<http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#bug-database> <http://github.com/ruby-rdf/rdf/issues> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://ar.to/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <http://blog.datagraph.org/> .
 <http://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#vendor> <http://datagraph.org/> .

@@ -4,7 +4,7 @@ RDF.rb: Linked Data for Ruby
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
-* <http://github.com/bendiken/rdf>
+* <http://github.com/ruby-rdf/rdf>
 * <http://blog.datagraph.org/2010/12/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
@@ -158,7 +158,7 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 Documentation
 -------------
 
-<http://rdf.rubyforge.org/>
+<http://rubydoc.info/github/ruby-rdf/rdf/frames>
 
 ### RDF Object Model
 
@@ -198,14 +198,14 @@ other gems:
 * {RDF::NTriples}
 * {RDF::NQuads}
 * [JSON::LD][JSONLD doc] (plugin)
-* [RDF::JSON](http://rdf.rubyforge.org/json/) (plugin)
+* [RDF::JSON](http://rubydoc.info/github/ruby-rdf/rdf-json/frames) (plugin)
 * [RDF::Microdata][Microdata doc] (plugin)
 * [RDF::N3][N3 doc] (plugin)
 * [RDF::Raptor::RDFXML](http://rdf.rubyforge.org/raptor/) (plugin)
 * [RDF::Raptor::Turtle](http://rdf.rubyforge.org/raptor/) (plugin)
 * [RDF::RDFa][RDFa doc] (plugin)
 * [RDF::RDFXML][RDFXML doc] (plugin)
-* [RDF::Trix](http://rdf.rubyforge.org/trix/) (plugin)
+* [RDF::Trix](http://rubydoc.info/github/ruby-rdf/rdf-trix/frames) (plugin)
 * [RDF::Turtle][Turtle doc] (plugin)
 
 The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
@@ -225,7 +225,7 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 * {RDF::Transaction}
 * [RDF::AllegroGraph](http://rubydoc.info/github/emk/rdf-agraph/master/frames) (plugin)
 * [RDF::Mongo](http://rubydoc.info/github/pius/rdf-mongo/master/frames) (plugin)
-* [RDF::DataObjects](http://rdf.rubyforge.org/do/) (plugin)
+* [RDF::DataObjects](http://rubydoc.info/github/ruby-rdf/rdf-do/frames) (plugin)
 * [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
 
 ### RDF Querying
@@ -235,7 +235,7 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
-* [SPARQL](http://rubydoc.info/github/gkellogg/sparql/frames) (plugin)
+* [SPARQL](http://rubydoc.info/github/ruby-rdf/sparql/frames) (plugin)
 
 
 ### RDF Vocabularies
@@ -280,18 +280,18 @@ Download
 
 To get a local working copy of the development repository, do:
 
-    % git clone git://github.com/bendiken/rdf.git
+    % git clone git://github.com/ruby-rdf/rdf.git
 
 Alternatively, download the latest development version as a tarball as
 follows:
 
-    % wget http://github.com/bendiken/rdf/tarball/master
+    % wget http://github.com/ruby-rdf/rdf/tarball/master
 
 Resources
 ---------
 
-* <http://rdf.rubyforge.org/>
-* <http://github.com/bendiken/rdf>
+* <http://rubydoc.info/github/ruby-rdf/rdf/frames>
+* <http://github.com/ruby-rdf/rdf>
 * <http://rubygems.org/gems/rdf>
 * <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
@@ -352,10 +352,10 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Backports]:        http://rubygems.org/gems/backports
 [JSONLD doc]:       http://rubydoc.info/github/gkellogg/json-ld/frames
 [LinkedData doc]:   http://rubydoc.info/github/datagraph/linkeddata/master/frames
-[Microdata doc]:    http://rubydoc.info/github/gkellogg/rdf-microdata/frames
-[N3 doc]:           http://rubydoc.info/github/gkellogg/rdf-n3/master/frames
-[RDFa doc]:         http://rubydoc.info/github/gkellogg/rdf-rdfa/master/frames
-[RDFXML doc]:       http://rubydoc.info/github/gkellogg/rdf-rdfxml/master/frames
-[Turtle doc]:       http://rubydoc.info/github/gkellogg/rdf-turtle/master/frames
-[SPARQL doc]:       http://rubydoc.info/github/gkellogg/sparql/frames
+[Microdata doc]:    http://rubydoc.info/github/ruby-rdf/rdf-microdata/frames
+[N3 doc]:           http://rubydoc.info/github/ruby-rdf/rdf-n3/master/frames
+[RDFa doc]:         http://rubydoc.info/github/ruby-rdf/rdf-rdfa/master/frames
+[RDFXML doc]:       http://rubydoc.info/github/ruby-rdf/rdf-rdfxml/master/frames
+[Turtle doc]:       http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/frames
+[SPARQL doc]:       http://rubydoc.info/github/ruby-rdf/sparql/frames
 [SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/
