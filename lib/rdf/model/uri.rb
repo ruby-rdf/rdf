@@ -284,7 +284,7 @@ module RDF
     #     #=> RDF::URI('http://example.org/testtest')
     # @see RDF::URI#/
     # @see RDF::URI#join
-    # @param [Any]
+    # @param [Any] other
     # @return [RDF::URI]
     def +(other)
       RDF::URI.intern(self.to_s + other.to_s)

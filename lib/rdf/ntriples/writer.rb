@@ -185,7 +185,7 @@ module RDF::NTriples
     ##
     # Returns the N-Triples representation of a URI reference.
     #
-    # @param  [RDF::URI] literal
+    # @param  [RDF::URI] uri
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_uri(uri, options = {})

@@ -595,7 +595,7 @@ module RDF
     # terms.
     #
     # The return value is a `Hash` instance that has the structure:
-    # `{subject => {predicate => [*objects]}}`.
+    #     {subject => {predicate => [*objects]}`.
     #
     # @return [Hash]
     def to_hash
