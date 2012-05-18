@@ -86,7 +86,7 @@ module RDF
     # Semantically-Interlinked Online Communities (SIOC) types vocabulary.
     #
     # @see http://rdfs.org/sioc/spec/#sec-modules
-    class Types < Vocabulary("http://rdfs.org/sioc/types#")
+    class Types < RDF::Vocabulary("http://rdfs.org/sioc/types#")
       # TODO
     end
   end
