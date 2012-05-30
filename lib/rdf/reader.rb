@@ -128,6 +128,7 @@ module RDF
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
+        options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
         reader = self.for(format_options[:format] || format_options) do
           # Return a sample from the input file
           sample = file.read(1000)
@@ -417,7 +418,14 @@ module RDF
     #
     # @return [Encoding]
     def encoding
-      @options[:encoding] ||= Encoding::UTF_8
+      case @options[:encoding]
+      when String, Symbol
+        Encoding.find(@options[:encoding].to_s)
+      when Encoding
+        @options[:encoding]
+      else
+        @options[:encoding] ||= Encoding.find(self.class.format.content_encoding.to_s)
+      end
     end
 
     ##

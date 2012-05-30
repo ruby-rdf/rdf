@@ -47,6 +47,9 @@ module RDF
           sample.match(%r(<(html|rdf))i)                          # Not HTML or XML
         )
       end
+
+      # Human readable name for this format
+      def self.name; "N-Quads"; end
     end
 
     class Reader < NTriples::Reader

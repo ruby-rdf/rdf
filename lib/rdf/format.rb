@@ -105,7 +105,11 @@ module RDF
               # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
               mime_type = mime_type.to_s
               mime_type = mime_type.split(';').first # remove any media type parameters
-              content_types[mime_type]
+
+              # Ignore text/plain, a historical encoding for N-Triples, which is
+              # problematic in format detection, as many web servers will serve
+              # content by default text/plain.
+              content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
             # Find a format based on the file name:
             when file_name = options[:file_name]
               self.for(:file_extension => File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
@@ -153,6 +157,10 @@ module RDF
     ##
     # Returns MIME content types for known RDF serialization formats.
     #
+    # @example retrieving a list of supported Mime types
+    #
+    #     RDF::Format.content_types.keys
+    #
     # @return [Hash{String => Array<Class>}]
     def self.content_types
       @@content_types
@@ -161,9 +169,39 @@ module RDF
     ##
     # Returns file extensions for known RDF serialization formats.
     #
+    # @example retrieving a list of supported file extensions
+    #
+    #     RDF::Format.file_extensions.keys
+    #
     # @return [Hash{Symbol => Array<Class>}]
     def self.file_extensions
       @@file_extensions
+    end
+
+    ##
+    # Returns the set of format symbols for loaded RDF::Reader subclasses.
+    #
+    # @example
+    #
+    #     formats = RDF::Format.reader_symbols
+    #     format = RDF::Format.for(formats.first)
+    #
+    # @return [Array<Symbol>]
+    def self.reader_symbols
+      RDF::Format.each.to_a.map(&:reader).compact.map(&:to_sym).uniq
+    end
+
+    ##
+    # Returns the set of format symbols for loaded RDF::Writer subclasses.
+    #
+    # @example
+    #
+    #     formats = RDF::Format.writer_symbols
+    #     format = RDF::Format.for(formats.first)
+    #
+    # @return [Array<Symbol>]
+    def self.writer_symbols
+      RDF::Format.each.to_a.map(&:writer).compact.map(&:to_sym).uniq
     end
 
     ##
@@ -174,6 +212,23 @@ module RDF
       sym = elements.pop
       sym = elements.pop if sym == 'Format'
       sym.downcase.to_s.to_sym
+    end
+
+    ##
+    # Returns a human-readable name for the format.
+    # Subclasses should override this to use something
+    # difererent than the Class name.
+    #
+    # @example
+    #
+    #     RDF::NTriples::Format.name => "NTriples"
+    #
+    # @return [Symbol]
+    def self.name
+      elements = self.to_s.split("::")
+      name = elements.pop
+      name = elements.pop if name == 'Format'
+      name.to_s
     end
 
     ##
@@ -348,10 +403,14 @@ module RDF
     ##
     # Defines the content encoding for this RDF serialization format.
     #
+    # When called without an encoding, it returns the currently defined
+    # content encoding for this format
+    #
     # @param  [#to_sym] encoding
     # @return [void]
-    def self.content_encoding(encoding)
-      @@content_encoding[self] = encoding.to_sym
+    def self.content_encoding(encoding = nil)
+      @@content_encoding[self] = encoding.to_sym if encoding
+      @@content_encoding[self] || "utf-8"
     end
 
   private
@@ -371,7 +430,7 @@ module RDF
     # @private
     # @return [void]
     def self.inherited(child)
-      @@subclasses << child
+      @@subclasses << child if child
       super
     end
   end # Format

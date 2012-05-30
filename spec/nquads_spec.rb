@@ -51,6 +51,10 @@ describe RDF::NQuads::Format do
     specify {@format_class.to_sym.should == :nquads}
   end
 
+  describe "#name" do
+    specify {@format_class.name.should == "N-Quads"}
+  end
+
   describe ".detect" do
     {
       :nquads => "<a> <b> <c> <d> . ",

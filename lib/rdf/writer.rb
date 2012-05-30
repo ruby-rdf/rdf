@@ -183,8 +183,9 @@ module RDF
     #   the output stream
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
-    # @option options [Encoding] :encoding     (Encoding::UTF_8)
-    #   the encoding to use on the output stream (Ruby 1.9+)
+    # @option options [Encoding, String, Symbol] :encoding
+    #   the encoding to use on the output stream (Ruby 1.9+).
+    #   Defaults to the format associated with `content_encoding`.
     # @option options [Boolean]  :canonicalize (false)
     #   whether to canonicalize literals when serializing
     # @option options [Hash]     :prefixes     (Hash.new)
@@ -277,6 +278,24 @@ module RDF
       uri.nil? ? prefixes[name] : prefixes[name] = uri
     end
     alias_method :prefix!, :prefix
+
+    ##
+    # Returns the encoding of the output stream.
+    #
+    # _Note: this method requires Ruby 1.9 or newer._
+    #
+    # @return [Encoding]
+    def encoding
+      return nil unless "".respond_to?(:force_encoding)
+      case @options[:encoding]
+      when String, Symbol
+        Encoding.find(@options[:encoding].to_s)
+      when Encoding
+        @options[:encoding]
+      else
+        @options[:encoding] ||= Encoding.find(self.class.format.content_encoding.to_s)
+      end
+    end
 
     ##
     # Flushes the underlying output buffer.
