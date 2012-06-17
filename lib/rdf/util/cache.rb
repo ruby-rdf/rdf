@@ -9,7 +9,7 @@ module RDF; module Util
   #
   # While this cache is something of an internal implementation detail of
   # RDF.rb, some external libraries do currently make use of it as well,
-  # including [SPARQL::Algebra](http://sparql.rubyforge.org/algebra/) and
+  # including [SPARQL](http://ruby-rdf/sparql/) and
   # [Spira](http://spira.rubyforge.org/). Do be sure to include any changes
   # here in the RDF.rb changelog.
   #
@@ -55,33 +55,20 @@ module RDF; module Util
     end
 
     ##
-    # @param  [Object] value
-    # @return [void]
-    def define_finalizer!(value)
-      ObjectSpace.define_finalizer(value, finalizer)
-    end
-
-    ##
-    # @return [Proc]
-    def finalizer
-      lambda { |object_id| @cache.delete(@index.delete(object_id)) }
-    end
-
-    ##
     # This implementation relies on `ObjectSpace#_id2ref` and performs
     # optimally on Ruby 1.8.x and 1.9.x; however, it does not work on JRuby
     # by default since much `ObjectSpace` functionality on that platform is
     # disabled unless the `-X+O` startup option is given.
     #
-    # @see http://ruby-doc.org/ruby-1.9/classes/ObjectSpace.html
-    # @see http://eigenclass.org/hiki/weakhash+and+weakref
+    # @see http://www.ruby-doc.org/core-1.9/ObjectSpace.html
+    # @see http://www.ruby-doc.org/stdlib-1.9.3/libdoc/weakref/rdoc/WeakRef.html
     class ObjectSpaceCache < Cache
       ##
       # @param  [Object] key
       # @return [Object]
       def [](key)
         if value_id = @cache[key]
-          value = ObjectSpace._id2ref(value_id) rescue nil
+          ObjectSpace._id2ref(value_id) rescue nil
         end
       end
 
@@ -91,9 +78,10 @@ module RDF; module Util
       # @return [Object]
       def []=(key, value)
         if has_capacity?
-          @cache[key] = value.__id__
-          @index[value.__id__] = key
-          define_finalizer!(value)
+          id = value.__id__
+          @cache[key] = id
+          @index[id] = key
+          ObjectSpace.define_finalizer(value, proc {|id| @cache.delete(@index.delete(id))})
         end
         value
       end
@@ -117,8 +105,13 @@ module RDF; module Util
       # @param  [Object] key
       # @return [Object]
       def [](key)
-        if (ref = @cache[key]) && ref.weakref_alive?
-          value = ref.__getobj__ rescue nil
+        if (ref = @cache[key])
+          if ref.weakref_alive?
+            value = ref.__getobj__ rescue nil
+          else
+            @cache.delete(key)
+            nil
+          end
         end
       end
 
@@ -129,8 +122,6 @@ module RDF; module Util
       def []=(key, value)
         if has_capacity?
           @cache[key] = WeakRef.new(value)
-          @index[value.__id__] = key
-          define_finalizer!(value)
         end
         value
       end

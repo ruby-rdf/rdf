@@ -100,6 +100,7 @@ module RDF
   #
   # @overload URI(options = {})
   #   @param  [Hash{Symbol => Object} options
+  #     passed to `Addressable::URI.new`
   #
   # @return [RDF::URI]
   def self.URI(*args, &block)
