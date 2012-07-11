@@ -27,7 +27,7 @@ module RDF
           end
         end
         secs = Time.new - start
-        $stdout.puts "Parsed #{count} statements in #{secs} seconds @ #{count/secs} statements/second."
+        $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
       end,
       "lenghts"     => lambda do |argv, opts|
         self.parse(argv, opts) do |reader|
@@ -183,6 +183,7 @@ module RDF
       else
         files.each do |file|
           RDF::Reader.open(file, options) do |reader|
+            (@readers ||= []) << reader.class.to_s
             yield(reader)
           end
         end
