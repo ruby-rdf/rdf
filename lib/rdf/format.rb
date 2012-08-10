@@ -119,13 +119,15 @@ module RDF
           end
 
         when Symbol
-          case format = options
-            # Special case, since we want this to work despite autoloading
-            when :ntriples
-              RDF::NTriples::Format
-            # For anything else, find a match based on the full class name
-            else
-              @@subclasses.detect { |klass| klass.to_sym == format }
+          # Try to find a match based on the full class name
+          # We want this to work even if autoloading fails
+          format = options
+          @@subclasses.detect { |klass| klass.to_sym == format } ||
+          case format
+          when :ntriples
+            RDF::NTriples::Format
+          when :nquads
+            RDF::NQuads::Format
           end
       end
 
