@@ -1,4 +1,4 @@
-require "bundler/setup"
+#require "bundler/setup"
 require 'rdf'
 require 'rdf/spec'
 require 'rdf/spec/matchers'
