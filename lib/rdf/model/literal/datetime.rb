@@ -6,7 +6,7 @@ module RDF; class Literal
   # @since 0.2.1
   class DateTime < Literal
     DATATYPE = XSD.dateTime
-    GRAMMAR  = %r(\A-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|Z)?\Z).freeze
+    GRAMMAR  = %r(\A-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
 
     ##
     # @param  [DateTime] value
@@ -28,7 +28,7 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#dateTime
     def canonicalize!
-      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z') if self.valid?
+      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC|GMT/, 'Z') if self.valid?
       self
     end
 
@@ -49,7 +49,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string || @object.strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC|GMT/, 'Z')
     end
 
     ##
