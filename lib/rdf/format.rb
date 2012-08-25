@@ -213,7 +213,7 @@ module RDF
       elements = self.to_s.split("::")
       sym = elements.pop
       sym = elements.pop if sym == 'Format'
-      sym.downcase.to_s.to_sym
+      sym.downcase.to_s.to_sym if sym.is_a?(String)
     end
 
     ##
