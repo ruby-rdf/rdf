@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:ruby-rdf/rdf-spec.git
+  remote: git://github.com/ruby-rdf/rdf-spec.git
   revision: a09c6934287885bd161cb0cf28b972a22c50583c
   specs:
     rdf-spec (0.3.7)

@@ -18,6 +18,11 @@ RSpec::Core::RakeTask.new do |spec|
   spec.rspec_opts = %w(--options spec/spec.opts) if File.exists?('spec/spec.opts')
 end
 
+desc "Run specifications for continuous integration"
+RSpec::Core::RakeTask.new("spec:ci") do |spec|
+  spec.rspec_opts = %w(--options spec/spec.opts) if File.exists?('spec/spec.opts')
+end
+
 desc "Build the rdf-#{File.read('VERSION').chomp}.gem file"
 task :build do
   sh "gem build .gemspec"
