@@ -4,7 +4,7 @@ RDF.rb: Linked Data for Ruby
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
-* <http://github.com/ruby-rdf/rdf>
+* <http://ruby-rdf.github.com/rdf>
 * <http://blog.datagraph.org/2010/12/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
@@ -67,11 +67,11 @@ or
 ### Reading RDF data in the N-Triples format
 
     require 'rdf/ntriples'
-    graph = RDF::Graph.load("http://rdf.rubyforge.org/doap.nt")
+    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
     
 or
 
-    RDF::Reader.open("http://rdf.rubyforge.org/doap.nt") do |reader|
+    RDF::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -85,13 +85,13 @@ MimeType or file extension, where available.
 
     require 'linkeddata'
     
-    graph = RDF::Graph.load("etc/doap.nq", :format => :nquads)
+    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", :format => :nquads)
 
 A specific sub-type of Reader can also be invoked directly:
 
     require 'rdf/nquads'
     
-    RDF::NQuads::Reader.open("http://rdf.rubyforge.org/doap.nq") do |reader|
+    RDF::NQuads::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nq") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -117,13 +117,13 @@ appropriate writer to use.
 
 A specific sub-type of Writer can also be invoked directly:
 
-    graph.dump(:nq)
+    graph.dump(:nquads)
 
 ### Querying RDF data using basic graph patterns (BGPs)
 
     require 'rdf/ntriples'
     
-    graph = RDF::Graph.load("http://rdf.rubyforge.org/doap.nt")
+    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
     query = RDF::Query.new({
       :person => {
         RDF.type  => FOAF.Person,
@@ -197,7 +197,7 @@ other gems:
 
 * {RDF::NTriples}
 * {RDF::NQuads}
-* [JSON::LD][JSONLD doc] (plugin)
+* [JSON::LD](http://gkellogg.github.com/json-ld) (plugin)
 * [RDF::JSON](http://rubydoc.info/github/ruby-rdf/rdf-json/frames) (plugin)
 * [RDF::Microdata][Microdata doc] (plugin)
 * [RDF::N3][N3 doc] (plugin)
@@ -359,3 +359,17 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Turtle doc]:       http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/frames
 [SPARQL doc]:       http://rubydoc.info/github/ruby-rdf/sparql/frames
 [SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/
+[RDF.rb]:           http://ruby-rdf.github.com/rdf
+[RDF::DO]:          http://ruby-rdf.github.com/rdf-do
+[RDF::Mongo]:       http://ruby-rdf.github.com/rdf-mongo
+[RDF::Sesame]:      http://ruby-rdf.github.com/rdf-sesame
+[RDF::JSON]:        http://ruby-rdf.github.com/rdf-json
+[RDF::Microdata]:   http://ruby-rdf.github.com/rdf-microdata
+[RDF::N3]:          http://ruby-rdf.github.com/rdf-n3
+[RDF::RDFa]:        http://ruby-rdf.github.com/rdf-rdfa
+[RDF::RDFXML]:      http://ruby-rdf.github.com/rdf-rdfxml
+[RDF::TriX]:        http://ruby-rdf.github.com/rdf-trix
+[RDF::Turtle]:      http://ruby-rdf.github.com/rdf-turtle
+[RDF::Raptor]:      http://ruby-rdf.github.com/rdf-raptor
+[LinkedData]:       http://ruby-rdf.github.com/linkeddata
+[JSON::LD]:         http://gkellogg.github.com/json-ld
