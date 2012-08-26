@@ -197,16 +197,17 @@ other gems:
 
 * {RDF::NTriples}
 * {RDF::NQuads}
-* [JSON::LD](http://gkellogg.github.com/json-ld) (plugin)
-* [RDF::JSON](http://rubydoc.info/github/ruby-rdf/rdf-json/frames) (plugin)
-* [RDF::Microdata][Microdata doc] (plugin)
-* [RDF::N3][N3 doc] (plugin)
-* [RDF::Raptor::RDFXML](http://rdf.rubyforge.org/raptor/) (plugin)
-* [RDF::Raptor::Turtle](http://rdf.rubyforge.org/raptor/) (plugin)
-* [RDF::RDFa][RDFa doc] (plugin)
-* [RDF::RDFXML][RDFXML doc] (plugin)
-* [RDF::Trix](http://rubydoc.info/github/ruby-rdf/rdf-trix/frames) (plugin)
-* [RDF::Turtle][Turtle doc] (plugin)
+* [JSON::LD][] (plugin)
+* [RDF::JSON][] (plugin)
+* [RDF::Microdata][] (plugin)
+* [RDF::N3][] (plugin)
+* [RDF::Raptor::RDFXML](http://ruby-rdf.github.com/rdf-raptor) (plugin)
+* [RDF::Raptor::Turtle](http://ruby-rdf.github.com/rdf-raptor) (plugin)
+* [RDF::RDFa][] (plugin)
+* [RDF::RDFXML][] (plugin)
+* [RDF::TriG][] (plugin)
+* [RDF::TriX][] (plugin)
+* [RDF::Turtle][] (plugin)
 
 The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 

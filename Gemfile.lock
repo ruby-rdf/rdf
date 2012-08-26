@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    rdf (0.3.7)
+    rdf (0.3.8)
       addressable (>= 2.2.6)
 
 GEM
