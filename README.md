@@ -231,6 +231,7 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 ### RDF Querying
 
 * {RDF::Query}
+  * {RDF::Query::HashPatternNormalizer}
   * {RDF::Query::Pattern}
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
