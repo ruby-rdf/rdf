@@ -132,6 +132,8 @@ module RDF; class Query
     
     ##
     # The options for this hash pattern normalizer.
+    #
+    # @return [Hash{Symbol => Object}]
     attr_reader :options
     
     ##
