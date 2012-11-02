@@ -89,12 +89,26 @@ module RDF; class Query
         anonymous_subject_format = (options[:anonymous_subject_format] || '__%s__').to_s
         
         hash_pattern.inject({}) { |acc, pair|
-          acc[pair.first] = normalize_hash!(pair.last, acc, counter, anonymous_subject_format)
+          subject, predicate_to_object = pair
+          
+          ensure_absence_of_duplicate_subjects!(acc, subject)
+          normalized_predicate_to_object = normalize_hash!(predicate_to_object, acc, counter, anonymous_subject_format)
+          ensure_absence_of_duplicate_subjects!(acc, subject)
+          
+          acc[subject] = normalized_predicate_to_object
           acc
         }
       end
       
       private
+      
+      ##
+      # @private
+      def ensure_absence_of_duplicate_subjects!(acc, subject)
+        raise "duplicate subject #{subject.inspect} in normalized hash pattern: #{acc.inspect}" if acc.key?(subject)
+        
+        return
+      end
       
       ##
       # @private
@@ -132,13 +146,15 @@ module RDF; class Query
       def replace_hash_with_anonymous_subject!(hash, acc, counter, anonymous_subject_format)
         raise ArgumentError, "invalid hash pattern: #{hash.inspect}" unless hash.is_a?(Hash)
         
-        key = (anonymous_subject_format % counter.increment!).to_sym
+        subject = (anonymous_subject_format % counter.increment!).to_sym
         
-        raise "duplicate subject in normalized hash pattern: #{key.inspect}" if acc.key?(key)
+        ensure_absence_of_duplicate_subjects!(acc, subject)
+        normalized_hash = normalize_hash!(hash, acc, counter, anonymous_subject_format)
+        ensure_absence_of_duplicate_subjects!(acc, subject)
         
-        acc[key] = normalize_hash!(hash, acc, counter, anonymous_subject_format)
+        acc[subject] = normalized_hash
 
-        key
+        subject
       end
     end
     
