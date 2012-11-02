@@ -8,23 +8,23 @@ module RDF; class Query
       ##
       # The offset (or initial value) for this counter.
       #
-      # @return [Fixnum]
+      # @return [Numeric]
       attr_reader :offset
       
       ##
       # The increment for this counter.
       #
-      # @return [Fixnum]
+      # @return [Numeric]
       attr_reader :increment
       
       ##
-      # @param [Fixnum] offset
+      # @param [Numeric] offset
       #   the offset (or initial value) for this counter.
-      # @param [Fixnum] increment
+      # @param [Numeric] increment
       #   the increment for this counter.
       def initialize(offset = 0, increment = 1)
-        @offset = offset.to_i
-        @increment = increment.to_i
+        @offset = offset
+        @increment = increment
         
         @value = @offset
       end
@@ -32,7 +32,7 @@ module RDF; class Query
       ##
       # Decrements this counter, and returns the new value. 
       #
-      # @return [Fixnum]      
+      # @return [Numeric]      
       def decrement!
         @value -= @increment
       end
@@ -40,15 +40,23 @@ module RDF; class Query
       ##
       # Increments this counter, and returns the new value. 
       #
-      # @return [Fixnum]
+      # @return [Numeric]
       def increment!
         @value += @increment
       end
       
       ##
+      # Returns a floating point representation of this counter.
+      #
+      # @return [Float]
+      def to_f
+        @value.to_f
+      end
+      
+      ##
       # Returns an integer representation of this counter.
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def to_i
         @value.to_i
       end
