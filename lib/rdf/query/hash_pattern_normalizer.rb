@@ -134,7 +134,7 @@ module RDF; class Query
         
         key = (anonymous_subject_format % counter.increment!).to_sym
         
-        raise "duplicate subject in hash pattern: #{key.inspect}" if hash.key?(key)
+        raise "duplicate subject in normalized hash pattern: #{key.inspect}" if acc.key?(key)
         
         acc[key] = normalize_hash!(hash, acc, counter, anonymous_subject_format)
 
