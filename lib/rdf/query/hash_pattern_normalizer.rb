@@ -88,31 +88,31 @@ module RDF; class Query
       
       ##
       # @private
-      def normalize_array!(array, normalized_hash_pattern, counter, options)
+      def normalize_array!(array, *args)
         raise ArgumentError, "invalid array pattern: #{array.inspect}" unless array.is_a?(Array)
         
         array.collect { |object| 
-          normalize_object!(object, normalized_hash_pattern, counter, options)
+          normalize_object!(object, *args)
         }
       end
       
       ##
       # @private
-      def normalize_hash!(hash, normalized_hash_pattern, counter, options)
+      def normalize_hash!(hash, *args)
         raise ArgumentError, "invalid hash pattern: #{hash.inspect}" unless hash.is_a?(Hash)
         
         hash.inject({}) { |acc, pair|
-          acc[pair.first] = normalize_object!(pair.last, normalized_hash_pattern, counter, options)
+          acc[pair.first] = normalize_object!(pair.last, *args)
           acc
         }
       end
       
       ##
       # @private
-      def normalize_object!(object, normalized_hash_pattern, counter, options)
+      def normalize_object!(object, *args)
         case object
-          when Array then normalize_array!(object, normalized_hash_pattern, counter, options)
-          when Hash  then replace_hash_with_anonymous_subject!(object, normalized_hash_pattern, counter, options)
+          when Array then normalize_array!(object, *args)
+          when Hash  then replace_hash_with_anonymous_subject!(object, *args)
                      else object
         end
       end
