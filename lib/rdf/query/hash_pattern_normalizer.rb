@@ -127,14 +127,14 @@ module RDF; class Query
       
       ##
       # @private      
-      def replace_hash_with_anonymous_subject!(hash, normalized_hash_pattern, counter, options)
+      def replace_hash_with_anonymous_subject!(hash, acc, counter, options)
         raise ArgumentError, "invalid hash pattern: #{hash.inspect}" unless hash.is_a?(Hash)
         
         key = ((options[:anonymous_subject_format] || '__%s__').to_s % counter.increment!).to_sym
         
-        normalized_hash_pattern[key] = normalize_hash!(hash, normalized_hash_pattern, counter, options)
+        acc[key] = normalize_hash!(hash, acc, counter, options)
 
-        return key
+        key
       end
     end
     
