@@ -86,8 +86,10 @@ module RDF; class Query
         
         counter = RDF::Query::HashPatternNormalizer::Counter.new
         
+        anonymous_subject_format = (options[:anonymous_subject_format] || '__%s__').to_s
+        
         hash_pattern.inject({}) { |acc, pair|
-          acc[pair.first] = normalize_hash!(pair.last, acc, counter, options)
+          acc[pair.first] = normalize_hash!(pair.last, acc, counter, anonymous_subject_format)
           acc
         }
       end
@@ -127,12 +129,12 @@ module RDF; class Query
       
       ##
       # @private      
-      def replace_hash_with_anonymous_subject!(hash, acc, counter, options)
+      def replace_hash_with_anonymous_subject!(hash, acc, counter, anonymous_subject_format)
         raise ArgumentError, "invalid hash pattern: #{hash.inspect}" unless hash.is_a?(Hash)
         
-        key = ((options[:anonymous_subject_format] || '__%s__').to_s % counter.increment!).to_sym
+        key = (anonymous_subject_format % counter.increment!).to_sym
         
-        acc[key] = normalize_hash!(hash, acc, counter, options)
+        acc[key] = normalize_hash!(hash, acc, counter, anonymous_subject_format)
 
         key
       end
