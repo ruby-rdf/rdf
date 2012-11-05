@@ -1,3 +1,4 @@
+# coding: utf-8
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::URI do
@@ -70,6 +71,149 @@ describe RDF::URI do
   it "should not be #anonymous?" do
     @new.call('http://example.org').should_not be_anonymous
   end
+
+  context "validation" do
+    subject {RDF::URI("http://example/for/validation")}
+
+    describe "#valid?", :ruby => "1.9" do
+      let(:refs) {
+        %W(
+          a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 \U00000053
+          foo Dürst %20
+        )
+      }
+      {
+        ""  => "%s",
+        "and query" => "%s?%s",
+        "and fragment" => "%s#%s",
+        "and query and fragment" => "%s?%s#%s",
+      }.each do |mod, fmt|
+        it "validates IRI with authority and abempty #{mod}" do
+          refs.each do |c|
+            RDF::URI("scheme:auth//#{fmt}" % ["", c, c]).should be_valid
+            RDF::URI("scheme:auth//#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("scheme:auth//#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+          end
+        end
+        it "validates IRI with ipath-absolute #{mod}" do
+          refs.each do |c|
+            RDF::URI("scheme:/#{fmt}" % ["", c, c]).should be_valid
+            RDF::URI("scheme:/#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("scheme:/#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+          end
+        end
+        it "validates IRI with ipath-rootless #{mod}" do
+          refs.each do |c|
+            RDF::URI("scheme:#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+          end
+        end
+        it "validates IRI with ipath-empty #{mod}", :pending => "Addressable bug" do
+          refs.each do |c|
+            RDF::URI("scheme:#{fmt}" % ["", c, c]).should be_valid
+          end
+        end
+
+        it "validates irelative-ref with authority #{mod}" do
+          refs.each do |c|
+            RDF::URI("//auth/#{fmt}" % [c, c, c]).should be_valid
+          end
+        end
+        it "validates irelative-ref with ipath-absolute #{mod}" do
+          refs.each do |c|
+            RDF::URI("/#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("/#{fmt}" % ["#{c}/", c, c]).should be_valid
+            RDF::URI("/#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+          end
+        end
+        it "validates irelative-ref with ipath-noscheme #{mod}" do
+          refs.each do |c|
+            RDF::URI("#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("#{fmt}" % ["#{c}/", c, c]).should be_valid
+            RDF::URI("#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+          end
+        end
+        it "validates irelative-ref with ipath-empty #{mod}" do
+          refs.each do |c|
+            RDF::URI("#{fmt}" % ["", c, c]).should be_valid
+          end
+        end
+      end
+    end
+
+    describe "#invalid?" do
+      it "is invalid if not valid" do
+        subject.should_receive(:valid?).and_return(false)
+        subject.should be_invalid
+      end
+    end
+
+    describe "#validate" do
+      it "raises ArgumentError if not valid" do
+        subject.should_receive(:valid?).and_return(false)
+        lambda { subject.validate }.should raise_error(ArgumentError)
+      end
+    end
+
+    describe "#validate!" do
+      it "raises ArgumentError if not valid" do
+        subject.should_receive(:valid?).and_return(false)
+        lambda { subject.validate! }.should raise_error(ArgumentError)
+      end
+    end
+  end
+
+  context "normalization" do
+    {
+      "syntax-based normalization" => [
+        "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
+        "example://a/b/c/%7Bfoo%7D/ros&#xE9;",
+        true
+      ],
+      "syntax-based normalization (addressable)" => [
+        "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
+        "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
+      ],
+      "case normalization(1)" => [
+        "http://example.com/%e1%cf",
+        "http://example.com/%E1%CF"
+      ],
+      "case normalization(2)" => [
+        "http://eXaMpLe.com/",
+        "http://example.com/"
+      ],
+      "percent-encoding normalization(1)" => [
+        "http://example.com/%7euser",
+        "http://example.com/~user"
+      ],
+      "percent-encoding normalization(2)" => [
+        "http://example.com/%7Euser",
+        "http://example.com/~user"
+      ],
+      "path-segment normalization(1)" => [
+        "http://example.com/./foo",
+        "http://example.com/foo/"
+      ],
+      "path-segment normalization(1)" => [
+        "http://example.com/foo/bar/..",
+        "http://example.com/foo/"
+      ],
+    }.each do |name, (input, output, pending)|
+      let(:u1) {RDF::URI(input)}
+      let(:u2) {RDF::URI(output)}
+      it "#canonicalize #{name}", :pending => (pending ? "Addressable" : false) do
+        u1.canonicalize.to_s.should == u2.to_s
+        u1.should == u1
+      end
+    end
+    it "#canonicalize! alters resource" do
+      u1 = RDF::URI("eXAMPLE:example.com/foo")
+      u2 = RDF::URI("example:example.com/foo")
+      u1.canonicalize!.to_s.should == u2.to_s
+      u1.should == u2
+    end
+  end
+
 
   context "using the smart separator (/)" do
     {
