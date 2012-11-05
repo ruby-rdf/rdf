@@ -172,31 +172,38 @@ describe RDF::URI do
       ],
       "syntax-based normalization (addressable)" => [
         "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
+        "example://a/b/c/%7Bfoo%7D/ros%C3%A9",
+        true
       ],
       "case normalization(1)" => [
         "http://example.com/%e1%cf",
-        "http://example.com/%E1%CF"
+        "http://example.com/%E1%CF",
+        true
       ],
       "case normalization(2)" => [
         "http://eXaMpLe.com/",
-        "http://example.com/"
+        "http://example.com/",
+        true
       ],
       "percent-encoding normalization(1)" => [
         "http://example.com/%7euser",
-        "http://example.com/~user"
+        "http://example.com/~user",
+        true
       ],
       "percent-encoding normalization(2)" => [
         "http://example.com/%7Euser",
-        "http://example.com/~user"
+        "http://example.com/~user",
+        true
       ],
       "path-segment normalization(1)" => [
         "http://example.com/./foo",
-        "http://example.com/foo/"
+        "http://example.com/foo/",
+        true
       ],
       "path-segment normalization(1)" => [
         "http://example.com/foo/bar/..",
-        "http://example.com/foo/"
+        "http://example.com/foo/",
+        true
       ],
     }.each do |name, (input, output, pending)|
       let(:u1) {RDF::URI(input)}

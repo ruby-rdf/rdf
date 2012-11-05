@@ -41,7 +41,7 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#time
     def canonicalize!
-      @string = @object.utc.strftime('%H:%M:%S%:z').sub(/\+00:00|UTC|GMT/, 'Z') if self.valid?
+      @string = @object.utc.strftime('%H:%M:%SZ') if self.valid?
       self
     end
 
@@ -59,10 +59,18 @@ module RDF; class Literal
 
     ##
     # Returns the value as a string.
+    # Does not normalize timezone
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%H:%M:%S%:z').sub(/\+00:00|UTC|GMT/, 'Z')
+      @string || if RUBY_VERSION >= '1.9' && RUBY_PLATFORM != 'java'
+        @object.strftime('%H:%M:%S%:z').
+        sub(/\+00:00|UTC|GMT/, 'Z')
+      else
+        # Ruby 1.8 doesn't do timezone's properly, use utc_offset
+        off = @object.utc? ? "Z" : ("%0.2d:00" % (@object.utc_offset/3600))
+        @object.strftime("%H:%M:%S#{off}")
+      end
     end
 
     ##
