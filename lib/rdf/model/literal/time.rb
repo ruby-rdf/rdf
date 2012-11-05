@@ -54,7 +54,7 @@ module RDF; class Literal
     # @return [Boolean]
     # @since  0.2.1
     def valid?
-      super && object
+      super && !object.nil?
     end
 
     ##

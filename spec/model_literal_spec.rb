@@ -171,7 +171,7 @@ describe RDF::Literal do
        # Native representations
        [Date.today, Time.now, DateTime.now].each do |v|
          it "creates a valid literal from #{v.inspect}" do
-           RDF::Literal(v).should be_valid
+           RDF::Literal(v, :canonicalize => true).should be_valid
          end
        end
        
