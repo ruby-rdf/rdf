@@ -68,7 +68,7 @@ module RDF; class Literal
         sub(/\+00:00|UTC|GMT/, 'Z')
       else
         # Ruby 1.8 doesn't do timezone's properly, use utc_offset
-        off = @object.utc? ? "Z" : ("%0.2d:00" % (@object.utc_offset/3600))
+        off = @object.utc_offset == 0 ? "Z" : ("%0.2d:00" % (@object.utc_offset/3600))
         @object.strftime("%H:%M:%S#{off}")
       end
     end
