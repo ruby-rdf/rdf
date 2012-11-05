@@ -41,7 +41,7 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#time
     def canonicalize!
-      @string = @object.utc.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC|GMT/, 'Z') if self.valid?
+      @string = @object.utc.strftime('%H:%M:%S%:z').sub(/\+00:00|UTC|GMT/, 'Z') if self.valid?
       self
     end
 
@@ -62,7 +62,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC|GMT/, 'Z')
+      @string || @object.strftime('%H:%M:%S%:z').sub(/\+00:00|UTC|GMT/, 'Z')
     end
 
     ##
