@@ -185,7 +185,7 @@ module RDF; class Query
     # @return [Hash{Symbol => Object}]
     #   the resulting query pattern as a normalized hash.
     def normalize(hash_pattern = {})
-      self.class.normalize(hash_pattern, options)
+      self.class.normalize(hash_pattern, @options)
     end
   end # RDF::Query::HashPatternNormalizer
 end; end # RDF::Query
