@@ -32,17 +32,21 @@ module RDF; class Query
       ##
       # Decrements this counter, and returns the new value. 
       #
-      # @return [Numeric]      
+      # @return [RDF::Query::HashPatternNormalizer::Counter]
       def decrement!
         @value -= @increment
+        
+        self
       end
       
       ##
       # Increments this counter, and returns the new value. 
       #
-      # @return [Numeric]
+      # @return [RDF::Query::HashPatternNormalizer::Counter]
       def increment!
         @value += @increment
+        
+        self
       end
       
       ##
