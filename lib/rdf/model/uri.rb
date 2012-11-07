@@ -42,44 +42,53 @@ module RDF
         [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
       EOS
       IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]")
-
-
-      SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*")
-      PORT = Regexp.compile("[0-9]*")
-      IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]")  # Simplified, no IPvFuture
-      PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f]{2}")
-      GEN_DELIMS = Regexp.compile("[:/\\?\\#\\[\\]@]")
-      SUB_DELIMS = Regexp.compile("[!\\$&'\\(\\)\\*\\+,;=]")
-      RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})")
-      UNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
-
-      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~|#{UCSCHAR}")
-
-      IPCHAR = Regexp.compile("(?:#{IUNRESERVED}|#{PCT_ENCODED}|#{SUB_DELIMS}|:|@)")
-      IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*")
-      IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
-
-      ISEGMENT = Regexp.compile("(?:#{IPCHAR})*")
-      ISEGMENT_NZ = Regexp.compile("(?:#{IPCHAR})+")
-      ISEGMENT_NZ_NC = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|@)+")
-
-      IPATH_ABEMPTY = Regexp.compile("(?:/#{ISEGMENT})*")
-      IPATH_ABSOLUTE = Regexp.compile("/(?:(?:#{ISEGMENT_NZ})(/#{ISEGMENT})*)?")
-      IPATH_NOSCHEME = Regexp.compile("(?:#{ISEGMENT_NZ_NC})(?:/#{ISEGMENT})*")
-      IPATH_ROOTLESS = Regexp.compile("(?:#{ISEGMENT_NZ})(?:/#{ISEGMENT})*")
-      IPATH_EMPTY = Regexp.compile("")
-
-      IREG_NAME   = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS}))*")
-      IHOST = Regexp.compile("(?:#{IP_literal})|(?:#{IREG_NAME})")
-      IUSERINFO = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|:)*")
-      IAUTHORITY = Regexp.compile("(?:#{IUSERINFO}@)?#{IHOST}(?:#{PORT})?")
-    
-      IRELATIVE_PART = Regexp.compile("(?:(?://#{IAUTHORITY}(?:#{IPATH_ABEMPTY}))|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_NOSCHEME})|(?:#{IPATH_EMPTY}))")
-      IRELATIVE_REF = Regexp.compile("^#{IRELATIVE_PART}(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$")
-
-      IHIER_PART = Regexp.compile("(?:(?://#{IAUTHORITY}#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY}))")
-      IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$")
     end
+
+    SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*")
+    PORT = Regexp.compile("[0-9]*")
+    IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]")  # Simplified, no IPvFuture
+    PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f]{2}")
+    GEN_DELIMS = Regexp.compile("[:/\\?\\#\\[\\]@]")
+    SUB_DELIMS = Regexp.compile("[!\\$&'\\(\\)\\*\\+,;=]")
+    RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})")
+    UNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
+
+    if RUBY_VERSION >= '1.9'
+      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~|#{UCSCHAR}")
+    else
+      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
+    end
+
+    IPCHAR = Regexp.compile("(?:#{IUNRESERVED}|#{PCT_ENCODED}|#{SUB_DELIMS}|:|@)")
+
+    if RUBY_VERSION >= '1.9'
+      IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*")
+    else
+      IQUERY = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
+    end
+
+    IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
+
+    ISEGMENT = Regexp.compile("(?:#{IPCHAR})*")
+    ISEGMENT_NZ = Regexp.compile("(?:#{IPCHAR})+")
+    ISEGMENT_NZ_NC = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|@)+")
+
+    IPATH_ABEMPTY = Regexp.compile("(?:/#{ISEGMENT})*")
+    IPATH_ABSOLUTE = Regexp.compile("/(?:(?:#{ISEGMENT_NZ})(/#{ISEGMENT})*)?")
+    IPATH_NOSCHEME = Regexp.compile("(?:#{ISEGMENT_NZ_NC})(?:/#{ISEGMENT})*")
+    IPATH_ROOTLESS = Regexp.compile("(?:#{ISEGMENT_NZ})(?:/#{ISEGMENT})*")
+    IPATH_EMPTY = Regexp.compile("")
+
+    IREG_NAME   = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS}))*")
+    IHOST = Regexp.compile("(?:#{IP_literal})|(?:#{IREG_NAME})")
+    IUSERINFO = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|:)*")
+    IAUTHORITY = Regexp.compile("(?:#{IUSERINFO}@)?#{IHOST}(?:#{PORT})?")
+    
+    IRELATIVE_PART = Regexp.compile("(?:(?://#{IAUTHORITY}(?:#{IPATH_ABEMPTY}))|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_NOSCHEME})|(?:#{IPATH_EMPTY}))")
+    IRELATIVE_REF = Regexp.compile("^#{IRELATIVE_PART}(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$")
+
+    IHIER_PART = Regexp.compile("(?:(?://#{IAUTHORITY}#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY}))")
+    IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$")
     
     ##
     # @return [RDF::Util::Cache]

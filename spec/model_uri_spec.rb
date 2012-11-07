@@ -75,7 +75,7 @@ describe RDF::URI do
   context "validation" do
     subject {RDF::URI("http://example/for/validation")}
 
-    describe "#valid?", :ruby => "1.9" do
+    describe "#valid?" do
       let(:refs) {
         %W(
           a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 \U00000053
