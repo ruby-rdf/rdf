@@ -214,11 +214,7 @@ module RDF
     def valid?
       # As Addressable::URI does not perform adequate validation, validate
       # relative to RFC3987
-      if RUBY_VERSION >= '1.9'
-        to_s.match(RDF::URI::IRI) || to_s.match(RDF::URI::IRELATIVE_REF) || false
-      else
-        true
-      end
+      to_s.match(RDF::URI::IRI) || to_s.match(RDF::URI::IRELATIVE_REF) || false
     end
 
     ##
