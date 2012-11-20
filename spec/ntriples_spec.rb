@@ -379,7 +379,7 @@ describe RDF::NTriples do
         stmt.subject.should be_eql(stmt.object)
       end
       
-      it "should read two named nodes in different instances as different nodes", :pending => "SPARQL Compatibility" do
+      it "should read two named nodes in different instances as different nodes" do
         stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
         stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
         stmt1.subject.should == stmt2.subject
