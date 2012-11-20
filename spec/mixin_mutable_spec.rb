@@ -4,8 +4,7 @@ require 'rdf/spec/mutable'
 describe RDF::Mutable do
   before :each do
     # The available reference implementations are `RDF::Repository` and
-    # `RDF::Graph`, but a plain Ruby array will do fine as well:
-    #@mutable = [].extend(RDF::Mutable) # FIXME
+    # `RDF::Graph`
     @mutable = RDF::Repository.new
   end
 
