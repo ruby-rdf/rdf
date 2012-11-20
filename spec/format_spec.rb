@@ -25,7 +25,7 @@ describe RDF::Format do
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec
-  it_should_behave_like RDF_Format
+  include RDF_Format
   
   # If there are multiple formats that assert the same type or extension,
   # Format.for should yield to return a sample used for detection

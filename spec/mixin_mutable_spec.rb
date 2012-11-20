@@ -9,5 +9,5 @@ describe RDF::Mutable do
   end
 
   # @see lib/rdf/spec/mutable.rb in rdf-spec
-  it_should_behave_like RDF_Mutable
+  include RDF_Mutable
 end

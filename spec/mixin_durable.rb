@@ -10,5 +10,5 @@ describe RDF::Durable do
   end
 
   # @see lib/rdf/spec/countable.rb in rdf-spec
-  it_should_behave_like RDF_Durable
+  include RDF_Durable
 end

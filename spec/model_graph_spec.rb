@@ -68,7 +68,7 @@ describe RDF::Graph do
       @countable = @new.call
     end
 
-    it_should_behave_like RDF_Countable
+    include RDF_Countable
   end
 
   context "when enumerating statements" do
@@ -78,7 +78,7 @@ describe RDF::Graph do
       @enumerable = @new.call
     end
 
-    it_should_behave_like RDF_Enumerable
+    include RDF_Enumerable
   end
 
   context "when querying statements" do
@@ -89,7 +89,7 @@ describe RDF::Graph do
       @subject   = RDF::URI.new('http://rubygems.org/gems/rdf')
     end
 
-    it_should_behave_like RDF_Queryable
+    include RDF_Queryable
   end
 
   context "when updating" do
@@ -101,7 +101,7 @@ describe RDF::Graph do
       @context = RDF::URI.new('http://example.org/context')
     end
 
-    it_should_behave_like RDF_Mutable
+    include RDF_Mutable
   end
 
   context "as a durable repository" do
@@ -111,6 +111,6 @@ describe RDF::Graph do
       @load_durable ||= lambda { @new.call }
     end
 
-    it_should_behave_like RDF_Durable
+    include RDF_Durable
   end
 end

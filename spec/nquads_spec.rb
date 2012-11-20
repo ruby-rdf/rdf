@@ -11,7 +11,7 @@ describe RDF::NQuads::Format do
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec
-  it_should_behave_like RDF_Format
+  include RDF_Format
 
   describe ".for" do
     formats = [
@@ -90,7 +90,7 @@ describe RDF::NQuads::Reader do
   end
   
   # @see lib/rdf/spec/reader.rb in rdf-spec
-  it_should_behave_like RDF_Reader
+  include RDF_Reader
 
   describe ".for" do
     formats = [
@@ -183,7 +183,7 @@ describe RDF::NQuads::Writer do
   end
   
   # @see lib/rdf/spec/writer.rb in rdf-spec
-  it_should_behave_like RDF_Writer
+  include RDF_Writer
   
   context "#initialize" do
     describe "writing statements" do

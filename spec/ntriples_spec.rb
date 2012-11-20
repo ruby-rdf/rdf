@@ -11,7 +11,7 @@ describe RDF::NTriples::Format do
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec
-  it_should_behave_like RDF_Format
+  include RDF_Format
 
   describe ".for" do
     formats = [
@@ -79,7 +79,7 @@ describe RDF::NTriples::Reader do
   end
   
   # @see lib/rdf/spec/reader.rb in rdf-spec
-  it_should_behave_like RDF_Reader
+  include RDF_Reader
 
   describe ".for" do
     formats = [
@@ -137,7 +137,7 @@ describe RDF::NTriples::Writer do
   end
 
   # @see lib/rdf/spec/writer.rb in rdf-spec
-  it_should_behave_like RDF_Writer
+  include RDF_Writer
 
   it "should return :ntriples for to_sym" do
     RDF::NTriples::Writer.to_sym.should == :ntriples

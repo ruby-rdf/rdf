@@ -10,5 +10,5 @@ describe RDF::Writable do
   end
 
   # @see lib/rdf/spec/writable.rb in rdf-spec
-  it_should_behave_like RDF_Writable
+  include RDF_Writable
 end

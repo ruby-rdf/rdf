@@ -10,5 +10,5 @@ describe RDF::Enumerable do
   end
 
   # @see lib/rdf/spec/enumerable.rb in rdf-spec
-  it_should_behave_like RDF_Enumerable
+  include RDF_Enumerable
 end

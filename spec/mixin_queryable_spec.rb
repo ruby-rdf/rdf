@@ -11,5 +11,5 @@ describe RDF::Queryable do
   end
 
   # @see lib/rdf/spec/queryable.rb in rdf-spec
-  it_should_behave_like RDF_Queryable
+  include RDF_Queryable
 end
