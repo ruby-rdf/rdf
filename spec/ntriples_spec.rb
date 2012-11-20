@@ -486,8 +486,9 @@ describe RDF::NTriples do
       @writer.new.format_statement(@stmt).should == @stmt_string
     end
 
-    it "should correctly format blank nodes" do
-      @writer.new.format_node(RDF::Node.new('foobar')).should == '_:foobar'
+    context "should correctly format blank nodes" do
+      specify {@writer.new.format_node(RDF::Node.new('foobar')).should == '_:foobar'}
+      specify {@writer.new.format_node(RDF::Node.new('')).should_not == '_:'}
     end
 
     it "should correctly format URI references" do

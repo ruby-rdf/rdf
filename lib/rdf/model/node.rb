@@ -67,6 +67,7 @@ module RDF
     ##
     # @param  [#to_s] id
     def initialize(id = nil)
+      id = nil if id.to_s.empty?
       @id = (id || "g#{__id__.to_i.abs}").to_s
     end
 

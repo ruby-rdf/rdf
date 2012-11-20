@@ -13,8 +13,10 @@ describe RDF::Node do
     @new.call("a").should == @new.call("a")
   end
 
-  
-  it "not eql? a node with the same identifier", :pending => "SPARQL compatibility" do
+  it "is unlabled given an empty ID" do
+    @new.call("").to_s.should_not == "_:"
+  end
+  it "not eql? a node with the same identifier" do
     @new.call("a").should_not be_eql(@new.call("a"))
   end
 end
