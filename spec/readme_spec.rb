@@ -7,12 +7,12 @@ describe 'README' do
     @stdout, $stdout = $stdout, StringIO.new
     @olddir, @tmpdir = Dir.pwd, File.join(File.dirname(__FILE__), '..', 'tmp')
     FileUtils.mkdir_p(@tmpdir)
-    Dir.chdir(@tmpdir)
+    Dir.chdir(@tmpdir) # FIXME: chdir causing warnings
   end
 
   after :each do
     $stdout = @stdout
-    Dir.chdir(@olddir)
+    Dir.chdir(@olddir) # FIXME: chdir causing warnings
   end
 
   context "the 'Writing RDF data using the N-Triples format' example" do

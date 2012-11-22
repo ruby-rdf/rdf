@@ -346,9 +346,7 @@ describe RDF::NTriples do
     end
 
     it "should parse W3C's test data" do
-      pending "lines separated by just \"\\r\" without a \"\\n\" are parsed incorrectly" do
-        @reader.new(File.open(@testfile)).to_a.size.should == 30
-      end
+      @reader.new(File.open(@testfile)).to_a.size.should == 30
     end
 
     it "should parse terms" do

@@ -483,9 +483,10 @@ module RDF
     ##
     # @return [String]
     def readline
-      @line = @input.readline
-      @line.chomp!
-      @line.force_encoding(encoding) if @line.respond_to?(:force_encoding) # for Ruby 1.9+
+      @line = @line_rest || @input.readline
+      @line, @line_rest = @line.split("\r", 2)
+      @line = @line.to_s.chomp
+      @line.force_encoding(encoding) if @line.respond_to?(:force_encoding)
       @line
     end
 
