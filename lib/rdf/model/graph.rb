@@ -136,7 +136,7 @@ module RDF
     # Returns all unique RDF contexts for this graph.
     #
     # @return [Enumerator<RDF::Resource>]
-    def contexts
+    def contexts(options = {})
       (named? ? [context] : []).to_enum.extend(RDF::Countable)
     end
 
