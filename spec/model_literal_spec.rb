@@ -168,6 +168,13 @@ describe RDF::Literal do
          end
        end
 
+       # Native representations
+       [Date.today, Time.now, DateTime.now].each do |v|
+         it "creates a valid literal from #{v.inspect}" do
+           RDF::Literal(v, :canonicalize => true).should be_valid
+         end
+       end
+       
        # DateTime
        {
          "2010-01-01T00:00:00Z"      => "2010-01-01T00:00:00Z",

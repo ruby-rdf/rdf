@@ -136,7 +136,10 @@ module RDF
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
     # @return [String]
+    # @raise [ArgumentError] if no block is provided
     def self.buffer(*args, &block)
+      raise ArgumentError, "block expected" unless block_given?
+
       StringIO.open do |buffer|
         self.new(buffer, *args) { |writer| block.call(writer) }
         buffer.string

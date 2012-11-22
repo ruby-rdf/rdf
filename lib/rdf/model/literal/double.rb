@@ -47,7 +47,7 @@ module RDF; class Literal
         when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
         when @object.zero?     then '0.0E0'
         else
-          i, f, e = ('%.16E' % @object.to_f).split(/[\.E]/)
+          i, f, e = ('%.15E' % @object.to_f).split(/[\.E]/)
           f.sub!(/0*$/, '')           # remove any trailing zeroes
           f = '0' if f.empty?         # ...but there must be a digit to the right of the decimal point
           e.sub!(/^\+?0+(\d)$/, '\1') # remove the optional leading '+' sign and any extra leading zeroes

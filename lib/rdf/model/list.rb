@@ -236,7 +236,7 @@ module RDF
       end
 
       graph.insert([new_subject, RDF.type, RDF.List])
-      graph.insert([new_subject, RDF.first, value])
+      graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
       graph.insert([new_subject, RDF.rest, RDF.nil])
 
       self

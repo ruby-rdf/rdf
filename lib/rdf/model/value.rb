@@ -94,6 +94,34 @@ module RDF
     end
 
     ##
+    # Returns `true` if the value has a valid representation
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.9
+    def valid?
+      true
+    end
+
+    ##
+    # Returns `true` if value is not valid
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.2.1
+    def invalid?
+      !valid?
+    end
+
+    ##
+    # Default validate! implementation, overridden in concrete classes
+    # @return [RDF::Literal] `self`
+    # @raise  [ArgumentError] if the value is invalid
+    # @since  0.3.9
+    def validate!
+      raise ArgumentError if invalid?
+    end
+    alias_method :validate, :validate!
+
+    ##
     # Returns an `RDF::Value` representation of `self`.
     #
     # @return [RDF::Value]

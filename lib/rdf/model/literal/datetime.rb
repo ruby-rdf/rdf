@@ -24,11 +24,12 @@ module RDF; class Literal
 
     ##
     # Converts this literal into its canonical lexical representation.
+    # with date and time normalized to UTC.
     #
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#dateTime
     def canonicalize!
-      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC|GMT/, 'Z') if self.valid?
+      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%SZ') if self.valid?
       self
     end
 
@@ -49,7 +50,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%Y-%m-%dT%H:%M:%S%Z').sub(/\+00:00|UTC|GMT/, 'Z')
+      @string || @object.strftime('%Y-%m-%dT%H:%M:%S%:z').sub(/\+00:00|UTC|GMT/, 'Z')
     end
 
     ##
