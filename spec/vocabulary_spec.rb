@@ -51,7 +51,7 @@ describe RDF::Vocabulary do
 
     it "should support WGS84 Geo Positioning (GEO)" do
       RDF::GEO.should be_a_vocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
-      RDF::GEO.should have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long alt lat_long))
+      RDF::GEO.should have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long lat_long))
       RDF::GEO.should have_subclasses("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
     end
 
@@ -67,7 +67,9 @@ describe RDF::Vocabulary do
 
     it "should support Resource Description Framework (RDF)" do
       RDF.should be_a_vocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-      RDF.should have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(first object predicate rest subject type value))
+      %w(first object predicate rest subject type value).each do |p|
+        RDF.send(p).should == RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns##{p}")
+      end
     end
 
     it "should support RDF Schema (RDFS)" do
