@@ -1,14 +1,14 @@
 GIT
   remote: git://github.com/ruby-rdf/rdf-spec.git
-  revision: 2aea17e8e476f1d2edfc89f49019348c2afe6ece
+  revision: a64e5ff9c74d5993a0ddb65460183ffceab9a773
   specs:
-    rdf-spec (0.3.9)
+    rdf-spec (0.3.10)
       rspec (>= 2.8.0)
 
 PATH
   remote: .
   specs:
-    rdf (0.3.9)
+    rdf (0.3.10)
       addressable (>= 2.2.6)
 
 GEM
