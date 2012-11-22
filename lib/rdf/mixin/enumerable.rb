@@ -468,7 +468,7 @@ module RDF
     # @see    #enum_context
     def contexts(options = {})
       if options[:unique] == false
-        enum_statement.map(&:context).to_enum # TODO: optimize
+        enum_statement.map(&:context).compact.to_enum # TODO: optimize
       else
         enum_context
       end
