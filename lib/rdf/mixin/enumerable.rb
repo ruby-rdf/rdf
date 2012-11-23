@@ -125,6 +125,8 @@ module RDF
 
     ##
     # Returns an enumerator for {#each_statement}.
+    # FIXME: enum_for doesn't seem to be working properly
+    # in JRuby 1.7, so specs are marked pending
     #
     # @return [Enumerator]
     # @see    #each_statement

@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/ruby-rdf/rdf-spec.git
-  revision: a64e5ff9c74d5993a0ddb65460183ffceab9a773
+  revision: fb50f91fbcc11ebe2a84af6f947688d09da79dbb
   specs:
     rdf-spec (0.3.10)
       rspec (>= 2.8.0)
