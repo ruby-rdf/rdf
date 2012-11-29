@@ -76,6 +76,37 @@ module RDF
     end
 
     ##
+    # Returns `true` if all statements are valid
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.11
+    def valid?
+      each_statement do |s|
+        return false if s.invalid?
+      end
+      true
+    end
+
+    ##
+    # Returns `true` if value is not valid
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.2.1
+    def invalid?
+      !valid?
+    end
+
+    ##
+    # Default validate! implementation, overridden in concrete classes
+    # @return [RDF::Literal] `self`
+    # @raise  [ArgumentError] if the value is invalid
+    # @since  0.3.9
+    def validate!
+      raise ArgumentError if invalid?
+    end
+    alias_method :validate, :validate!
+
+    ##
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
@@ -603,8 +634,6 @@ module RDF
     def to_hash
       result = {}
       each_statement do |statement|
-        next if statement.invalid? # skip any incomplete statements
-
         result[statement.subject] ||= {}
         values = (result[statement.subject][statement.predicate] ||= [])
         values << statement.object unless values.include?(statement.object)
