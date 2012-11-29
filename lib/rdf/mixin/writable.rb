@@ -54,7 +54,7 @@ module RDF
           when value.respond_to?(:each_statement)
             insert_statements(value)
             nil
-          when (statement = Statement.from(value)).valid?
+          when (statement = Statement.from(value))
             statement
           else
             raise ArgumentError.new("not a valid statement: #{value.inspect}")
