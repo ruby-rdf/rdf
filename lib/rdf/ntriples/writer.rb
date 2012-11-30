@@ -4,7 +4,7 @@ module RDF::NTriples
   #
   # Output is serialized for UTF-8, to serialize as ASCII
   # (with) unicode escapes, set :encoding => Encoding::ASCII as
-  # an option to {#initialize}.
+  # an option to {RDF::NTriples::Writer#initialize}.
   #
   # @example Obtaining an NTriples writer class
   #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer

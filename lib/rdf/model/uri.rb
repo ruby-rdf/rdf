@@ -122,7 +122,7 @@ module RDF
     ##
     # Creates a new `RDF::URI` instance based on the given `uri` string.
     #
-    # This is just an alias for {#initialize RDF::URI.new} for compatibity
+    # This is just an alias for {RDF::URI#initialize} for compatibity
     # with `Addressable::URI.parse`.
     #
     # @param  [String, #to_s] str
@@ -136,7 +136,7 @@ module RDF
     #   @param  [RDF::URI, String, #to_s] uri
     #
     # @overload URI.new(options = {})
-    #   @param  [Hash{Symbol => Object} options
+    #   @param  [Hash{Symbol => Object}] options
     def initialize(uri_or_options)
       case uri_or_options
         when Hash
@@ -509,7 +509,7 @@ module RDF
     alias_method :ends_with?, :end_with?
 
     ##
-    # Checks whether this URI the same term as `other'.
+    # Checks whether this URI the same term as `other`.
     #
     # @example
     #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/')) #=> true

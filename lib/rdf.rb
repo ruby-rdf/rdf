@@ -99,7 +99,7 @@ module RDF
   #   @param  [URI, String, #to_s]    uri
   #
   # @overload URI(options = {})
-  #   @param  [Hash{Symbol => Object} options
+  #   @param  [Hash{Symbol => Object}] options
   #     passed to `Addressable::URI.new`
   #
   # @return [RDF::URI]

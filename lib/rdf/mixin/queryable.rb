@@ -14,7 +14,7 @@ module RDF
     ##
     # Queries `self` for RDF statements matching the given `pattern`.
     #
-    # This method delegates to the protected {#query_pattern} method for the
+    # This method delegates to the protected {RDF::Queryable#query_pattern} method for the
     # actual lower-level query pattern matching implementation.
     #
     # @example

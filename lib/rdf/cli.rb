@@ -166,8 +166,8 @@ module RDF
     end
 
     ##
-    # Parse each file, STDIN or specified string in options[:evaluate] yielding
-    # a reader
+    # Parse each file, STDIN or specified string in `options[:evaluate]`
+    # yielding a reader
     #
     # @param  [Array<String>] files
     # @yield  [reader]

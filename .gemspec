@@ -28,8 +28,8 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = []
   gem.add_runtime_dependency     'addressable', '>= 2.2.6'
-  gem.add_development_dependency 'yard',        '>= 0.7.5'
-  gem.add_development_dependency 'rdf-spec',    '~> 0.3.10'
-  gem.add_development_dependency 'rspec',       '>= 2.8.0'
+  gem.add_development_dependency 'yard',        '>= 0.8.3'
+  gem.add_development_dependency 'rdf-spec',    '~> 0.3.11'
+  gem.add_development_dependency 'rspec',       '>= 2.12.0'
   gem.post_install_message       = nil
 end

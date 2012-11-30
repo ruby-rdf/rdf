@@ -155,7 +155,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_statement}.
+    # Returns an enumerator for {RDF::Enumerable#each_statement}.
     # FIXME: enum_for doesn't seem to be working properly
     # in JRuby 1.7, so specs are marked pending
     #
@@ -217,7 +217,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_triple}.
+    # Returns an enumerator for {RDF::Enumerable#each_triple}.
     #
     # @return [Enumerator]
     # @see    #each_triple
@@ -278,7 +278,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_quad}.
+    # Returns an enumerator for {RDF::Enumerable#each_quad}.
     #
     # @return [Enumerator]
     # @see    #each_quad
@@ -346,7 +346,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_subject}.
+    # Returns an enumerator for {RDF::Enumerable#each_subject}.
     #
     # @return [Enumerator]
     # @see    #each_subject
@@ -414,7 +414,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_predicate}.
+    # Returns an enumerator for {RDF::Enumerable#each_predicate}.
     #
     # @return [Enumerator]
     # @see    #each_predicate
@@ -482,7 +482,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_object}.
+    # Returns an enumerator for {RDF::Enumerable#each_object}.
     #
     # @return [Enumerator]
     # @see    #each_object
@@ -550,7 +550,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_context}.
+    # Returns an enumerator for {RDF::Enumerable#each_context}.
     #
     # @return [Enumerator]
     # @see    #each_context
@@ -590,7 +590,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_graph}.
+    # Returns an enumerator for {RDF::Enumerable#each_graph}.
     #
     # @return [Enumerator]
     # @see    #each_graph
@@ -628,7 +628,7 @@ module RDF
     # terms.
     #
     # The return value is a `Hash` instance that has the structure:
-    #     {subject => {predicate => [*objects]}`.
+    # `{subject => {predicate => [*objects]}}`.
     #
     # @return [Hash]
     def to_hash

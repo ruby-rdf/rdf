@@ -69,7 +69,7 @@ module RDF
     ##
     # Returns `true` if `self` is an IRI reference.
     #
-    # By default this is simply an alias for {#uri?}.
+    # By default this is simply an alias for {RDF::Value#uri?}.
     #
     # @return [Boolean]
     def iri?

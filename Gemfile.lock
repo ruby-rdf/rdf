@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/ruby-rdf/rdf-spec.git
-  revision: fb50f91fbcc11ebe2a84af6f947688d09da79dbb
+  revision: 3116de54c1fc56e6248b2cc0b6cd2b28b95c5ea7
   specs:
     rdf-spec (0.3.10)
       rspec (>= 2.8.0)
@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    rdf (0.3.10)
+    rdf (0.3.11)
       addressable (>= 2.2.6)
 
 GEM
@@ -36,6 +36,6 @@ DEPENDENCIES
   rake
   rdf!
   rdf-spec!
-  rspec (>= 2.8.0)
+  rspec (>= 2.12.0)
   wirble
-  yard (>= 0.7.5)
+  yard (>= 0.8.3)

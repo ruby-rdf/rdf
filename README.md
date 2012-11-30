@@ -355,6 +355,7 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::N3]:          http://ruby-rdf.github.com/rdf-n3
 [RDF::RDFa]:        http://ruby-rdf.github.com/rdf-rdfa
 [RDF::RDFXML]:      http://ruby-rdf.github.com/rdf-rdfxml
+[RDF::TriG]:        http://ruby-rdf.github.com/rdf-trig
 [RDF::TriX]:        http://ruby-rdf.github.com/rdf-trix
 [RDF::Turtle]:      http://ruby-rdf.github.com/rdf-turtle
 [RDF::Raptor]:      http://ruby-rdf.github.com/rdf-raptor

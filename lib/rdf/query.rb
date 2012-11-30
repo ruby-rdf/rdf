@@ -6,7 +6,7 @@ module RDF
   # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
   # Names that are against unbound variables match either default
   # or named contexts.
-  # The name of `false' will only match against the default context.
+  # The name of `false` will only match against the default context.
   #
   # Variable names cause the variable to be added to the solution set
   # elements.
@@ -131,7 +131,7 @@ module RDF
     #     contexts if the name is an RDF::Term or bound RDF::Query::Variable.
     #     Names that are against unbound variables match either detault
     #     or named contexts.
-    #     The name of `false' will only match against the default context.
+    #     The name of `false` will only match against the default context.
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
@@ -234,7 +234,7 @@ module RDF
     # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
     # Names that are against unbound variables match either detault
     # or named contexts.
-    # The name of `false' will only match against the default context.
+    # The name of `false` will only match against the default context.
     #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query

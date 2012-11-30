@@ -73,7 +73,7 @@ module RDF
     # Inserts statements from the given RDF reader into the underlying
     # storage or output stream.
     #
-    # Defaults to passing the reader to the {#insert_statements} method.
+    # Defaults to passing the reader to the {RDF::Writable#insert_statements} method.
     #
     # Subclasses of {RDF::Repository} may wish to override this method in
     # case their underlying storage can efficiently import RDF data directly
@@ -91,7 +91,7 @@ module RDF
     # Inserts the given RDF graph into the underlying storage or output
     # stream.
     #
-    # Defaults to passing the graph to the {#insert_statements} method.
+    # Defaults to passing the graph to the {RDF::Writable#insert_statements} method.
     #
     # Subclasses of {RDF::Repository} may wish to override this method in
     # case their underlying storage architecture is graph-centric rather
@@ -112,7 +112,7 @@ module RDF
     # Inserts the given RDF statements into the underlying storage or output
     # stream.
     #
-    # Defaults to invoking {#insert_statement} for each given statement.
+    # Defaults to invoking {RDF::Writable#insert_statement} for each given statement.
     #
     # Subclasses of {RDF::Repository} may wish to override this method if
     # they are capable of more efficiently inserting multiple statements at

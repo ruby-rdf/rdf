@@ -279,7 +279,7 @@ module RDF
     end
 
     ##
-    # Validates the value using {#valid?}, raising an error if the value is
+    # Validates the value using {RDF::Value#valid?}, raising an error if the value is
     # invalid.
     #
     # @return [RDF::Literal] `self`
