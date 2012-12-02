@@ -90,11 +90,11 @@ module RDF
     end
 
     # @!attribute [r] subject
-    #   @return [RDF::Resource] the subject term of this list.
+    # @return [RDF::Resource] the subject term of this list.
     attr_reader :subject
 
     # @!attribute [r] graph
-    #   @return [RDF::Graph] the underlying graph storing the statements that constitute this list
+    # @return [RDF::Graph] the underlying graph storing the statements that constitute this list
     attr_reader :graph
 
     ##
