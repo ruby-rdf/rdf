@@ -89,17 +89,13 @@ module RDF
       true
     end
 
-    ##
-    # Returns the subject term of this list.
-    #
-    # @attr_reader [RDF::Resource]
+    # @!attribute [r] subject
+    #   @return [RDF::Resource] the subject term of this list.
     attr_reader :subject
 
-    ##
-    # Returns the underlying graph storing the statements that constitute
-    # this list.
-    #
-    # @attr_reader [RDF::Graph]
+    # @!attribute [r] :graph
+    #   @return [RDF::Graph] the underlying graph storing the statements that constitute
+    # this list
     attr_reader :graph
 
     ##
