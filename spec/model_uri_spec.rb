@@ -86,14 +86,14 @@ describe RDF::URI do
         "and fragment" => "%s#%s",
         "and query and fragment" => "%s?%s#%s",
       }.each do |mod, fmt|
-        it "validates IRI with authority and abempty #{mod}" do
+        it "validates IRI with authority and ipath-abempty #{mod}" do
           refs.each do |c|
-            RDF::URI("scheme:auth//#{fmt}" % ["", c, c]).should be_valid
-            RDF::URI("scheme:auth//#{fmt}" % [c, c, c]).should be_valid
-            RDF::URI("scheme:auth//#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+            RDF::URI("scheme://auth/#{fmt}" % ["", c, c]).should be_valid
+            RDF::URI("scheme://auth/#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("scheme://auth/#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
           end
         end
-        it "validates IRI with ipath-absolute #{mod}" do
+        it "validates IRI with path-absolute #{mod}" do
           refs.each do |c|
             RDF::URI("scheme:/#{fmt}" % ["", c, c]).should be_valid
             RDF::URI("scheme:/#{fmt}" % [c, c, c]).should be_valid
@@ -115,6 +115,11 @@ describe RDF::URI do
         it "validates irelative-ref with authority #{mod}" do
           refs.each do |c|
             RDF::URI("//auth/#{fmt}" % [c, c, c]).should be_valid
+          end
+        end
+        it "validates irelative-ref with authority and port #{mod}" do
+          refs.each do |c|
+            RDF::URI("//auth:123/#{fmt}" % [c, c, c]).should be_valid
           end
         end
         it "validates irelative-ref with ipath-absolute #{mod}" do
