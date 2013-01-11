@@ -1,0 +1,78 @@
+module RDF
+  ##
+  # W3C Media Annotation vocabulary.
+  # @see www.w3.org/ns/ma-ont.rdf
+  class MA < Vocabulary("http://www.w3.org/ns/ma-ont#")
+    property :IsRatingOf
+    property :alternativeTitle
+    property :averageBitRate
+    property :collectionName
+    property :copyright
+    property :createdIn
+    property :creationDate
+    property :date
+    property :depictsFictionalLocation
+    property :description
+    property :duration
+    property :editDate
+    property :features
+    property :fragmentName
+    property :frameHeight
+    property :frameRate
+    property :frameSizeUnit
+    property :frameWidth
+    property :hasAccessConditions
+    property :hasAudioDescription
+    property :hasCaptioning
+    property :hasChapter
+    property :hasClassification
+    property :hasClassificationSystem
+    property :hasCompression
+    property :hasContributor
+    property :hasCreator
+    property :hasFormat
+    property :hasFragment
+    property :hasGenre
+    property :hasKeyword
+    property :hasLanguage
+    property :hasLocationCoordinateSystem
+    property :hasNamedFragment
+    property :hasPermissions
+    property :hasPolicy
+    property :hasPublished
+    property :hasPublisher
+    property :hasRating
+    property :hasRatingSystem
+    property :hasRelatedImage
+    property :hasRelatedLocation
+    property :hasRelatedResource
+    property :hasSigning
+    property :hasSource
+    property :hasSubtitling
+    property :hasTargetAudience
+    property :hasTrack
+    property :isChapterOf
+    property :isCopyrightedBy
+    property :isLocationRelatedTo
+    property :isMemberOf
+    property :isProvidedBy
+    property :isRelatedTo
+    property :isSourceOf
+    property :isTargetAudienceOf
+    property :locationAltitude
+    property :locationLatitude
+    property :locationLongitude
+    property :locationName
+    property :locator
+    property :mainOriginalTitle
+    property :numberOfTracks
+    property :ratingScaleMax
+    property :ratingScaleMin
+    property :ratingValue
+    property :recordDate
+    property :releaseDate
+    property :samplingRate
+    property :title
+    property :trackName
+  end
+end
