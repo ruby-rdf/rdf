@@ -57,9 +57,9 @@
 
 <http://ar.to/#self> a foaf:Person ;
   foaf:name          "Arto Bendiken" ;
-  foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
-  foaf:mbox_sha1sum  "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
-                     "a033f652c84a4d73b8c26d318c2395699dd2bdfb" ;
+  foaf:mbox          <mailto:arto@bendiken.net> ;
+  foaf:mbox_sha1sum  "a033f652c84a4d73b8c26d318c2395699dd2bdfb",
+                     "d0737cceb55eb7d740578d2db1bc0727e3ed49ce" ;
   foaf:homepage      <http://ar.to/> ;
   foaf:made          <> ;
   rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
