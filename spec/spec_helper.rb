@@ -15,3 +15,8 @@ end
 def fixture_path(filename)
   File.join(File.dirname(__FILE__), 'data', filename)
 end
+
+if RUBY_VERSION =~ /1.9/
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
