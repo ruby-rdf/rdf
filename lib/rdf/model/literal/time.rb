@@ -11,7 +11,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Time < Literal
     DATATYPE = XSD.time
-    GRAMMAR  = %r(\A\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|Z)?\Z).freeze
+    GRAMMAR  = %r(\A\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
 
     ##
     # @param  [Time] value
@@ -41,16 +41,36 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#time
     def canonicalize!
-      @string = @object.utc.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string = @object.utc.strftime('%H:%M:%SZ') if self.valid?
       self
     end
 
     ##
+    # Returns `true` if the value adheres to the defined grammar of the
+    # datatype.
+    #
+    # Special case for date and dateTime, for which '0000' is not a valid year
+    #
+    # @return [Boolean]
+    # @since  0.2.1
+    def valid?
+      super && !object.nil?
+    end
+
+    ##
     # Returns the value as a string.
+    # Does not normalize timezone
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%H:%M:%S%Z').sub(/\+00:00|UTC/, 'Z')
+      @string || if RUBY_VERSION >= '1.9' && RUBY_PLATFORM != 'java'
+        @object.strftime('%H:%M:%S%:z').
+        sub(/\+00:00|UTC|GMT/, 'Z')
+      else
+        # Ruby 1.8 doesn't do timezone's properly, use utc_offset
+        off = @object.utc_offset == 0 ? "Z" : ("%0.2d:00" % (@object.utc_offset/3600))
+        @object.strftime("%H:%M:%S#{off}")
+      end
     end
 
     ##

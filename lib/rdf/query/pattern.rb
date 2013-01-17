@@ -124,7 +124,7 @@ module RDF; class Query
     # If the optional `bindings` are given, variables will be substituted with their values
     # when executing the query.
     #
-    # To match triples only in the default context, set context to `false'.
+    # To match triples only in the default context, set context to `false`.
     #
     # @example
     #   Pattern.new(:s, :p, :o).execute(RDF::Repository.load('data.nt'))

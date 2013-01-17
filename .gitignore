@@ -4,3 +4,7 @@
 pkg
 tmp
 /*.gem
+/.rbx/
+/doc/
+Gemfile.lock
+

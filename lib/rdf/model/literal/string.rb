@@ -1,15 +1,11 @@
 module RDF; class Literal
   ##
-  # An XML literal.
+  # A String literal.
   #
-  # This class exists mostly as a stub. See RDF::XSD gem for full support.
-  
-  # @see   https://github.com/ruby-rdf/rdf-xsd/blob/master/lib/rdf/xsd/xml.rb
-  # @see   http://www.w3.org/TR/rdf-concepts/#section-XMLLiteral
-  # @see   http://www.w3.org/TR/rdfa-core/#s_xml_literals
-  # @since 0.2.1
-  class XML < Literal
-    DATATYPE = RDF.XMLLiteral
+  # @see   http://www.w3.org/TR/xmlschema-2/#string
+  # @since 0.3.11
+  class String < Literal
+    DATATYPE = XSD.string
     GRAMMAR  = nil
 
     ##
@@ -18,7 +14,8 @@ module RDF; class Literal
     def initialize(value, options = {})
       @datatype = options[:datatype] || self.class.const_get(:DATATYPE)
       @string   = options[:lexical] if options.has_key?(:lexical)
-      @object   = value # TODO: parse XML string using REXML
+      @string   ||= value if value.is_a?(String)
+      @object   = value.to_s
     end
 
     ##
@@ -35,7 +32,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.to_s
+      @string || @object
     end
   end # XML
 end; end # RDF::Literal

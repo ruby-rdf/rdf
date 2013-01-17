@@ -2,8 +2,9 @@ module RDF
   ##
   # An RDF query mixin.
   #
-  # Classes that include this module must implement an `#each` method that
-  # yields {RDF::Statement RDF statements}.
+  # Classes that include this module should implement a `#query_pattern` method that
+  # yields {RDF::Statement RDF statements}. Classes may also implement an optimized
+  # `#query_execute` method that yields {RDF::Statement RDF statements}.
   #
   # @see RDF::Graph
   # @see RDF::Repository
@@ -13,7 +14,7 @@ module RDF
     ##
     # Queries `self` for RDF statements matching the given `pattern`.
     #
-    # This method delegates to the protected {#query_pattern} method for the
+    # This method delegates to the protected {RDF::Queryable#query_pattern} method for the
     # actual lower-level query pattern matching implementation.
     #
     # @example

@@ -113,7 +113,10 @@ module RDF
     ##
     # @return [Boolean]
     def valid?
-      has_subject? && has_predicate? && has_object?
+      has_subject?    && subject.valid? && 
+      has_predicate?  && predicate.valid? &&
+      has_object?     && object.valid? &&
+      (has_context?    ? context.valid? : true )
     end
 
     ##

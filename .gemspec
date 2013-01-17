@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.date               = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name               = 'rdf'
-  gem.homepage           = 'http://rdf.rubyforge.org/'
+  gem.homepage           = 'http://ruby-rdf.github.com/rdf'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
@@ -28,8 +28,8 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = []
   gem.add_runtime_dependency     'addressable', '>= 2.2.6'
-  gem.add_development_dependency 'yard',        '>= 0.7.2'
-  gem.add_development_dependency 'rdf-spec',    '~> 0.3.4'
-  gem.add_development_dependency 'rspec',       '>= 2.6.0'
+  gem.add_development_dependency 'yard',        '>= 0.8.3'
+  gem.add_development_dependency 'rdf-spec',    '~> 0.3.11'
+  gem.add_development_dependency 'rspec',       '>= 2.12.0'
   gem.post_install_message       = nil
 end

@@ -69,7 +69,7 @@ module RDF
     ##
     # Returns `true` if `self` is an IRI reference.
     #
-    # By default this is simply an alias for {#uri?}.
+    # By default this is simply an alias for {RDF::Value#uri?}.
     #
     # @return [Boolean]
     def iri?
@@ -92,6 +92,34 @@ module RDF
     def variable?
       false
     end
+
+    ##
+    # Returns `true` if the value has a valid representation
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.9
+    def valid?
+      true
+    end
+
+    ##
+    # Returns `true` if value is not valid
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.2.1
+    def invalid?
+      !valid?
+    end
+
+    ##
+    # Default validate! implementation, overridden in concrete classes
+    # @return [RDF::Literal] `self`
+    # @raise  [ArgumentError] if the value is invalid
+    # @since  0.3.9
+    def validate!
+      raise ArgumentError if invalid?
+    end
+    alias_method :validate, :validate!
 
     ##
     # Returns an `RDF::Value` representation of `self`.
@@ -122,7 +150,7 @@ module RDF
     
     ##
     # Default implementation of raise_error, which returns false.
-    # Classes including RDF::TypeCheck will raise RDF::TypeError
+    # Classes including RDF::TypeCheck will raise TypeError
     # instead.
     #
     # @return [false]

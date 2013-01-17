@@ -89,17 +89,12 @@ module RDF
       true
     end
 
-    ##
-    # Returns the subject term of this list.
-    #
-    # @attr_reader [RDF::Resource]
+    # @!attribute [r] subject
+    # @return [RDF::Resource] the subject term of this list.
     attr_reader :subject
 
-    ##
-    # Returns the underlying graph storing the statements that constitute
-    # this list.
-    #
-    # @attr_reader [RDF::Graph]
+    # @!attribute [r] graph
+    # @return [RDF::Graph] the underlying graph storing the statements that constitute this list
     attr_reader :graph
 
     ##
@@ -236,7 +231,7 @@ module RDF
       end
 
       graph.insert([new_subject, RDF.type, RDF.List])
-      graph.insert([new_subject, RDF.first, value])
+      graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
       graph.insert([new_subject, RDF.rest, RDF.nil])
 
       self

@@ -83,7 +83,7 @@ module RDF
     #
     # Transactions do not support the `RDF::Enumerable` protocol directly.
     # To enumerate the RDF statements to be inserted or deleted, use the
-    # {#inserts} and {#deletes} accessors.
+    # {RDF::Transaction#inserts} and {RDF::Transaction#deletes} accessors.
     #
     # @return [Boolean]
     # @see    RDF::Readable#readable?

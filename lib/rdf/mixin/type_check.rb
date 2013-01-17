@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF type check mixin.
   #
-  # This module implements #raise_error, which will raise RDF::TypeError.
+  # This module implements #raise_error, which will raise TypeError.
   #
   # @see RDF::Value
   # @see RDF::Literal

@@ -7,7 +7,7 @@
 
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
-  doap:homepage      <http://rdf.rubyforge.org/> ;
+  doap:homepage      <http://rubygems.org/gems/rdf> ;
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
@@ -15,13 +15,16 @@
   doap:platform      "Ruby" ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
+  doap:implements    <http://www.w3.org/TR/rdf-concepts/>,
+                     <http://sw.deri.org/2008/07/n-quads/>,
+                     <http://www.w3.org/2001/sw/RDFCore/ntriples/> ;
   doap:download-page <http://rubyforge.org/projects/rdf/> ;
-  doap:bug-database  <http://github.com/bendiken/rdf/issues> ;
+  doap:bug-database  <http://github.com/ruby-rdf/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:vendor        <http://datagraph.org/> ;
-  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf.rdf#me> ;
-  doap:maintainer    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf.rdf#me> ;
-  doap:documenter    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf.rdf#me> ;
+  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:maintainer    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:documenter    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Călin Ardelean" ;
                       foaf:mbox_sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"] ;
@@ -54,9 +57,9 @@
 
 <http://ar.to/#self> a foaf:Person ;
   foaf:name          "Arto Bendiken" ;
-  foaf:mbox          <mailto:arto.bendiken@gmail.com> ;
-  foaf:mbox_sha1sum  "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
-                     "a033f652c84a4d73b8c26d318c2395699dd2bdfb" ;
+  foaf:mbox          <mailto:arto@bendiken.net> ;
+  foaf:mbox_sha1sum  "a033f652c84a4d73b8c26d318c2395699dd2bdfb",
+                     "d0737cceb55eb7d740578d2db1bc0727e3ed49ce" ;
   foaf:homepage      <http://ar.to/> ;
   foaf:made          <> ;
   rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
@@ -68,9 +71,9 @@
   foaf:homepage      <http://bhuga.net/> ;
   rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
 
-<http://greggkellogg.net/foaf.rdf#me> a foaf:Person ;
+<http://greggkellogg.net/foaf#me> a foaf:Person ;
   foaf:name          "Gregg Kellogg" ;
-  foaf:mbox          <mailto:gregg@kellogg-assoc.com> ;
+  foaf:mbox          <mailto:gregg@greggkellogg.net> ;
   foaf:mbox_sha1sum  "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
   foaf:homepage      <http://greggkellogg.net/>;
-  rdfs:isDefinedBy   <http://greggkellogg.net/foaf.rdf> .
+  rdfs:isDefinedBy   <http://greggkellogg.net/foaf> .

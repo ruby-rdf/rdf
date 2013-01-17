@@ -19,7 +19,7 @@ module RDF
   #   RDF::Format.content_types      #=> {"text/plain" => [RDF::NTriples::Format]}
   #
   # @example Obtaining serialization format file extension mappings
-  #   RDF::Format.file_extensions    #=> {:nt => "text/plain"}
+  #   RDF::Format.file_extensions    #=> {:nt => [RDF::NTriples::Format]}
   #
   # @example Defining a new RDF serialization format class
   #   class RDF::NTriples::Format < RDF::Format
@@ -78,6 +78,10 @@ module RDF
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
     #     Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
+    #   @option options [Boolean]   :has_reader   (false)
+    #     Only return a format having a reader.
+    #   @option options [Boolean]   :has_writer   (false)
+    #     Only return a format having a writer.
     #   @option options [String]          :sample (nil)
     #     A sample of input used for performing format detection.
     #     If we find no formats, or we find more than one, and we have a sample, we can
@@ -91,7 +95,7 @@ module RDF
       format = case options
         when String
           # Find a format based on the file name
-          self.for(:file_name => options)
+          self.for(:file_name => options) { yield if block_given? }
 
         when Hash
           case
@@ -100,37 +104,38 @@ module RDF
               # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
               # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
               mime_type = mime_type.to_s
-              mime_type = mime_type.split(';').first if mime_type.include?(?;) # remove any media type parameters
-              content_types[mime_type]
+              mime_type = mime_type.split(';').first # remove any media type parameters
+
+              # Ignore text/plain, a historical encoding for N-Triples, which is
+              # problematic in format detection, as many web servers will serve
+              # content by default text/plain.
+              content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
             # Find a format based on the file name:
             when file_name = options[:file_name]
-              self.for(:file_extension => File.extname(file_name.to_s)[1..-1])
+              self.for(:file_extension => File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
-              if file_extensions.has_key?(file_ext = file_ext.to_sym)
-                self.for(:content_type => file_extensions[file_ext])
-              end
+              file_extensions[file_ext.to_sym]
           end
 
         when Symbol
-          case format = options
-            # Special case, since we want this to work despite autoloading
-            when :ntriples
-              RDF::NTriples::Format
-            # For anything else, find a match based on the full class name
-            else
-              @@subclasses.each do |klass|
-                if klass.to_sym == format ||
-                   klass.name.to_s.split('::').map(&:downcase).include?(format.to_s.downcase)
-                  return klass
-                end
-              end
-              nil # not found
+          # Try to find a match based on the full class name
+          # We want this to work even if autoloading fails
+          format = options
+          @@subclasses.detect { |klass| klass.to_sym == format } ||
+          case format
+          when :ntriples
+            RDF::NTriples::Format
+          when :nquads
+            RDF::NQuads::Format
           end
       end
-      
+
       if format.is_a?(Array)
-        return format.first if format.length == 1
+        format = format.select {|f| f.reader} if options[:has_reader]
+        format = format.select {|f| f.writer} if options[:has_writer]
+        
+        return format.first if format.uniq.length == 1
       elsif !format.nil?
         return format
       end
@@ -141,12 +146,22 @@ module RDF
         # the first that matches
         format ||= @@subclasses
 
-        format.detect {|f| f.detect(sample)}
+        # Return first format that has a positive detection
+        format.detect {|f| f.detect(sample.to_s)} || format.first
+      elsif format.is_a?(Array)
+        # Otherwise, just return the first matching format
+        format.first
+      else
+        nil
       end
     end
 
     ##
     # Returns MIME content types for known RDF serialization formats.
+    #
+    # @example retrieving a list of supported Mime types
+    #
+    #     RDF::Format.content_types.keys
     #
     # @return [Hash{String => Array<Class>}]
     def self.content_types
@@ -156,9 +171,39 @@ module RDF
     ##
     # Returns file extensions for known RDF serialization formats.
     #
-    # @return [Hash{Symbol => String}]
+    # @example retrieving a list of supported file extensions
+    #
+    #     RDF::Format.file_extensions.keys
+    #
+    # @return [Hash{Symbol => Array<Class>}]
     def self.file_extensions
       @@file_extensions
+    end
+
+    ##
+    # Returns the set of format symbols for loaded RDF::Reader subclasses.
+    #
+    # @example
+    #
+    #     formats = RDF::Format.reader_symbols
+    #     format = RDF::Format.for(formats.first)
+    #
+    # @return [Array<Symbol>]
+    def self.reader_symbols
+      RDF::Format.each.to_a.map(&:reader).compact.map(&:to_sym).uniq
+    end
+
+    ##
+    # Returns the set of format symbols for loaded RDF::Writer subclasses.
+    #
+    # @example
+    #
+    #     formats = RDF::Format.writer_symbols
+    #     format = RDF::Format.for(formats.first)
+    #
+    # @return [Array<Symbol>]
+    def self.writer_symbols
+      RDF::Format.each.to_a.map(&:writer).compact.map(&:to_sym).uniq
     end
 
     ##
@@ -168,7 +213,24 @@ module RDF
       elements = self.to_s.split("::")
       sym = elements.pop
       sym = elements.pop if sym == 'Format'
-      sym.downcase.to_s.to_sym
+      sym.downcase.to_s.to_sym if sym.is_a?(String)
+    end
+
+    ##
+    # Returns a human-readable name for the format.
+    # Subclasses should override this to use something
+    # difererent than the Class name.
+    #
+    # @example
+    #
+    #     RDF::NTriples::Format.name => "NTriples"
+    #
+    # @return [Symbol]
+    def self.name
+      elements = self.to_s.split("::")
+      name = elements.pop
+      name = elements.pop if name == 'Format'
+      name.to_s
     end
 
     ##
@@ -317,7 +379,7 @@ module RDF
 
         if extensions = (options[:extension] || options[:extensions])
           extensions = [extensions].flatten.map(&:to_sym)
-          extensions.each { |ext| @@file_extensions[ext] = type }
+          extensions.each { |ext| (@@file_extensions[ext] ||= []) << self }
         end
         if aliases = (options[:alias] || options[:aliases])
           aliases = [aliases].flatten.each { |a| (@@content_types[a] ||= []) << self }
@@ -343,10 +405,14 @@ module RDF
     ##
     # Defines the content encoding for this RDF serialization format.
     #
+    # When called without an encoding, it returns the currently defined
+    # content encoding for this format
+    #
     # @param  [#to_sym] encoding
     # @return [void]
-    def self.content_encoding(encoding)
-      @@content_encoding[self] = encoding.to_sym
+    def self.content_encoding(encoding = nil)
+      @@content_encoding[self] = encoding.to_sym if encoding
+      @@content_encoding[self] || "utf-8"
     end
 
   private
@@ -366,7 +432,7 @@ module RDF
     # @private
     # @return [void]
     def self.inherited(child)
-      @@subclasses << child
+      @@subclasses << child if child
       super
     end
   end # Format

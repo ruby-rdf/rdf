@@ -23,12 +23,16 @@ module RDF; module Util
     #
     # @param [String] filename_or_url to open
     # @param  [Hash{Symbol => Object}] options
-    #   any options to pass through to the underlying UUID library
+    #   options are ignored in this implementation. Applications are encouraged
+    #   to override this implementation to provide more control over HTTP
+    #   headers and redirect following.
+    # @option options [Array, String] :headers
+    #   HTTP Request headers.
     # @return [IO] File stream
     # @yield [IO] File stream
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
-      f = Kernel.open(filename_or_url.to_s, &block)
+      Kernel.open(filename_or_url.to_s, &block)
     end
   end # File
 end; end # RDF::Util

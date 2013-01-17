@@ -51,7 +51,7 @@ describe RDF::Vocabulary do
 
     it "should support WGS84 Geo Positioning (GEO)" do
       RDF::GEO.should be_a_vocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
-      RDF::GEO.should have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long alt lat_long))
+      RDF::GEO.should have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long lat_long))
       RDF::GEO.should have_subclasses("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
     end
 
@@ -67,7 +67,9 @@ describe RDF::Vocabulary do
 
     it "should support Resource Description Framework (RDF)" do
       RDF.should be_a_vocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-      RDF.should have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(first object predicate rest subject type value))
+      %w(first object predicate rest subject type value).each do |p|
+        RDF.send(p).should == RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns##{p}")
+      end
     end
 
     it "should support RDF Schema (RDFS)" do
@@ -110,6 +112,11 @@ describe RDF::Vocabulary do
     it "should support XML Schema (XSD)" do
       RDF::XSD.should be_a_vocabulary("http://www.w3.org/2001/XMLSchema#")
       RDF::XSD.should have_properties("http://www.w3.org/2001/XMLSchema#", %w(NOTATION QName anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time ENTITIES ENTITY ID IDREF IDREFS NCName NMTOKEN NMTOKENS Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
+    end
+
+    it "should support W3C Media Annotation Ontology" do
+      RDF::MA.should be_a_vocabulary("http://www.w3.org/ns/ma-ont#")
+      RDF::MA.should have_properties("http://www.w3.org/ns/ma-ont#", %w(IsRatingOf alternativeTitle averageBitRate collectionName copyright createdIn creationDate date depictsFictionalLocation description duration editDate features fragmentName frameHeight frameRate frameSizeUnit frameWidth hasAccessConditions hasAudioDescription hasCaptioning hasChapter hasClassification hasClassificationSystem hasCompression hasContributor hasCreator hasFormat hasFragment hasGenre hasKeyword hasLanguage hasLocationCoordinateSystem hasNamedFragment hasPermissions hasPolicy hasPublished hasPublisher hasRating hasRatingSystem hasRelatedImage hasRelatedLocation hasRelatedResource hasSigning hasSource hasSubtitling hasTargetAudience hasTrack isChapterOf isCopyrightedBy isLocationRelatedTo isMemberOf isProvidedBy isRelatedTo isSourceOf isTargetAudienceOf locationAltitude locationLatitude locationLongitude locationName locator mainOriginalTitle numberOfTracks ratingScaleMax ratingScaleMin ratingValue recordDate releaseDate samplingRate title trackName))
     end
   end
 

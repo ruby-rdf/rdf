@@ -18,20 +18,6 @@ describe RDF::Literal do
      when :datetime    then [DateTime.new(2011)]
      when :time        then [Time.parse('01:02:03Z')]
      when :date        then [Date.new(2010)]
-     when :xml_no_ns   then ["foo <sup>bar</sup> baz!", {:datatype => RDF.XMLLiteral}]
-     when :xml_ns      then ["foo <sup>bar</sup> baz!", {:datatype => RDF.XMLLiteral,
-                             :namespaces => {"dc" => RDF::DC.to_s}}]
-     when :xml_ns2     then ["foo <sup xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">bar</sup> baz!",
-                            {:datatype => RDF.XMLLiteral,
-                            :namespaces => {"" => RDF::DC.to_s}}]
-     when :xml_ns_lang then ["foo <sup>bar</sup> baz!", {:datatype => RDF.XMLLiteral,
-                            :namespaces => {"dc" => RDF::DC.to_s}, :language => :fr}]
-     when :xml_lang_em then ["foo <sup>bar</sup><sub xml:lang=\"en\">baz</sub>",
-                            {:datatype => RDF.XMLLiteral,
-                            :namespaces => {"dc" => RDF::DC.to_s},
-                            :language => :fr}]
-     when :xml_def_ns  then ["foo <sup>bar</sup> baz!", {:datatype => RDF.XMLLiteral,
-                            :namespaces => {"" => RDF::DC.to_s}}]
      else
        raise("unexpected literal: :#{selector}")
      end
@@ -43,9 +29,8 @@ describe RDF::Literal do
        when :all_plain_no_lang then [:empty, :plain].map {|sel| literal(sel)}
        when :all_plain_lang    then [:empty_lang, :plain_lang].map {|sel| literal(sel)}
        when :all_native        then [:false, :true, :int, :long, :double, :time, :date, :datetime].map {|sel| literal(sel)}
-       when :all_xml           then [:xml_no_ns, :xml_ns, :xml_ns2, :xml_ns_lang, :xml_lang_em, :xml_def_ns].map {|sel| literal(sel)}
        when :all_plain         then literals(:all_plain_no_lang, :all_plain_lang)
-       else                         literals(:all_plain, :all_native, :all_xml)
+       else                         literals(:all_plain, :all_native)
        end
      end
    end
@@ -183,6 +168,13 @@ describe RDF::Literal do
          end
        end
 
+       # Native representations
+       [Date.today, Time.now, DateTime.now].each do |v|
+         it "creates a valid literal from #{v.inspect}" do
+           RDF::Literal(v, :canonicalize => true).should be_valid
+         end
+       end
+       
        # DateTime
        {
          "2010-01-01T00:00:00Z"      => "2010-01-01T00:00:00Z",
@@ -271,7 +263,7 @@ describe RDF::Literal do
        end
      end
 
-     literals(:all_plain_lang, :all_native, :all_xml).each do |args|
+     literals(:all_plain_lang, :all_native).each do |args|
        it "returns false for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
          literal.plain?.should be_false
@@ -280,7 +272,7 @@ describe RDF::Literal do
    end
 
    describe "#language" do
-     literals(:all_plain_no_lang, :all_native, :all_xml).each do |args|
+     literals(:all_plain_no_lang, :all_native).each do |args|
        it "returns nil for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
          literal.language.should be_nil
@@ -317,13 +309,6 @@ describe RDF::Literal do
          RDF::Literal.new(value).datatype.should == XSD[type]
        end
      end
-
-     literals(:all_xml).each do |args|
-       it "returns datatype for #{args.inspect}" do
-         literal = RDF::Literal.new(*args)
-         literal.datatype.should == RDF.XMLLiteral
-       end
-     end
    end
 
   describe "#typed?" do
@@ -331,13 +316,6 @@ describe RDF::Literal do
       it "returns false for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
         literal.typed?.should be_false
-      end
-    end
-
-    literals(:all_native, :all_xml).each do |args|
-      it "returns true for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
-        literal.typed?.should be_true
       end
     end
   end
@@ -375,19 +353,6 @@ describe RDF::Literal do
          #literal.should == literal.value # FIXME: fails on xsd:date, xsd:time, and xsd:dateTime
        end
      end
-
-     literals(:all_xml).each do |args|
-       it "returns true for #{args.inspect}" do
-         literal = RDF::Literal.new(*args)
-         literal.should == RDF::Literal.new(*args)
-       end
-
-       it "returns false for value of #{args.inspect}" do
-         literal = RDF::Literal.new(*args)
-         literal.should_not == literal.value
-       end
-     end
-
      it "returns true for languaged taged literals differring in case" do
        l1 = RDF::Literal.new("foo", :language => :en)
        l2 = RDF::Literal.new("foo", :language => :EN)
@@ -416,20 +381,6 @@ describe RDF::Literal do
        it "returns #{rep} for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
          literal.to_s.should eql(rep)
-       end
-     end
-
-     {
-       literal(:xml_no_ns)   => %("foo <sup>bar</sup> baz!"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>),
-       literal(:xml_ns)      => %("foo <sup>bar</sup> baz!"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>),
-       literal(:xml_ns_lang) => %("foo <sup xml:lang=\\"fr\\">bar</sup> baz!"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>),
-       literal(:xml_lang_em) => %("foo <sup xml:lang=\\"fr\\">bar</sup><sub xml:lang=\\"en\\">baz</sub>"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>),
-       literal(:xml_def_ns)  => %("foo <sup xmlns=\\"http://purl.org/dc/terms/\\">bar</sup> baz!"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>),
-       literal(:xml_ns2)     => %(fixme),
-     }.each_pair do |args, rep|
-       it "returns xml representation for #{args.inspect}" do
-         literal = RDF::Literal.new(*args)
-         pending("XMLLiteral support") {literal.to_s.should == rep}
        end
      end
    end

@@ -7,7 +7,7 @@ describe RDF::Repository do
   end
 
   # @see lib/rdf/spec/repository.rb in rdf-spec
-  it_should_behave_like RDF_Repository
+  include RDF_Repository
 
   it "should maintain arbitrary options" do
     @repository = RDF::Repository.new(:foo => :bar)

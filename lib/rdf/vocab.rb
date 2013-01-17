@@ -69,7 +69,7 @@ module RDF
     ##
     # Defines a vocabulary term called `property`.
     #
-    # @param  [Symbol]
+    # @param  [Symbol] property
     # @return [void]
     def self.property(property)
       metaclass = class << self; self; end
@@ -132,7 +132,7 @@ module RDF
     undef_method(*(instance_methods.map(&:to_sym) - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?]))
 
     ##
-    # @param  [RDF::URI, String, #to_s]
+    # @param  [RDF::URI, String, #to_s] uri
     def initialize(uri)
       @uri = case uri
         when RDF::URI then uri.to_s

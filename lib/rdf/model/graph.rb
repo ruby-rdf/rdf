@@ -23,6 +23,7 @@ module RDF
     include RDF::Resource
 
     include RDF::Countable
+    include RDF::Durable
     include RDF::Enumerable
     include RDF::Queryable
     include RDF::Mutable
@@ -35,6 +36,7 @@ module RDF
 
     ##
     # @return [RDF::Resource]
+    # @deprecated In the next release, graphs will have no name
     attr_accessor :context
 
     ##
@@ -66,11 +68,22 @@ module RDF
     end
 
     ##
-    # @param  [RDF::Resource]          context
-    # @param  [Hash{Symbol => Object}] options
+    # @overload initialize(context, options)
+    #   @param  [RDF::Resource]          context
+    #     The context only provides a context for loading relative documents
+    #   @param  [Hash{Symbol => Object}] options
+    #   @deprecated Graph context will be removed in the next release.
+    #     This is because context relates to a Named Graph in RDF 1.1
+    #     and a default graph has no context/name.
+    # @overload initialize(options)
+    #   @param  [Hash{Symbol => Object}] options
     # @yield  [graph]
     # @yieldparam [Graph]
-    def initialize(context = nil, options = {}, &block)
+    # @note Currently, context makes this a named garph;
+    # in the next release it will not
+    def initialize(*args, &block)
+      context = args.shift unless args.first.is_a?(Hash)
+      options = args.first || {}
       @context = case context
         when nil then nil
         when RDF::Resource then context
@@ -90,6 +103,7 @@ module RDF
 
     ##
     # @return [void]
+    # @note The next release, graphs will not be named
     def load!(*args)
       case
         when args.empty?
@@ -110,6 +124,7 @@ module RDF
     # Returns `true` if this is a named graph.
     #
     # @return [Boolean]
+    # @note The next release, graphs will not be named, this will return false
     def named?
       !unnamed?
     end
@@ -118,15 +133,25 @@ module RDF
     # Returns `true` if this is a unnamed graph.
     #
     # @return [Boolean]
+    # @note The next release, graphs will not be named, this will return true
     def unnamed?
       context.nil?
+    end
+
+    ##
+    # Returns `false` to indicate that this graph is not durable
+    #
+    # @return [Boolean]
+    # @see    RDF::Durable#durable?
+    def durable?
+      false
     end
 
     ##
     # Returns all unique RDF contexts for this graph.
     #
     # @return [Enumerator<RDF::Resource>]
-    def contexts
+    def contexts(options = {})
       (named? ? [context] : []).to_enum.extend(RDF::Countable)
     end
 
@@ -134,6 +159,7 @@ module RDF
     # Returns the URI representation of this graph.
     #
     # @return [RDF::URI]
+    # @note The next release, graphs will not be named, this will return nil
     def to_uri
       context
     end
@@ -159,6 +185,7 @@ module RDF
     # Returns `true` if this graph has an anonymous context, `false` otherwise.
     #
     # @return [Boolean]
+    # @note The next release, graphs will not be named, this will return true
     def anonymous?
       context.nil? ? false : context.anonymous?
     end
@@ -180,7 +207,7 @@ module RDF
     # @see    RDF::Enumerable#has_statement?
     def has_statement?(statement)
       statement = statement.dup
-      statement.context = context
+      statement.context = context # TODO: going away
       @data.has_statement?(statement)
     end
 

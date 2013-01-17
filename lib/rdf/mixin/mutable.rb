@@ -157,7 +157,7 @@ module RDF
     ##
     # Deletes the given RDF statements from the underlying storage.
     #
-    # Defaults to invoking {#delete_statement} for each given statement.
+    # Defaults to invoking {RDF::Mutable#delete_statement} for each given statement.
     #
     # Subclasses of {RDF::Repository} may wish to override this method if
     # they are capable of more efficiently deleting multiple statements at

@@ -3,6 +3,7 @@ require 'addressable/uri'
 module RDF
   ##
   # A Uniform Resource Identifier (URI).
+  # Also compatible with International Resource Identifier (IRI)
   #
   # `RDF::URI` supports all the instance methods of `Addressable::URI`.
   #
@@ -19,6 +20,8 @@ module RDF
   #   uri.to_s #=> "http://rdf.rubyforge.org/"
   #
   # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+  # @see http://www.ietf.org/rfc/rfc3986.txt
+  # @see http://www.ietf.org/rfc/rfc3987.txt
   # @see http://addressable.rubyforge.org/
   class URI
     include RDF::Resource
@@ -27,7 +30,66 @@ module RDF
     # Defines the maximum number of interned URI references that can be held
     # cached in memory at any one time.
     CACHE_SIZE = -1 # unlimited by default
+    
+    # IRI components
+    if RUBY_VERSION >= '1.9'
+      UCSCHAR = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
+        [\\u00A0-\\uD7FF]|[\\uF900-\\uFDCF]|[\\uFDF0-\\uFFEF]|
+        [\\u{10000}-\\u{1FFFD}]|[\\u{20000}-\\u{2FFFD}]|[\\u{30000}-\\u{3FFFD}]|
+        [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
+        [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
+        [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
+        [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
+      EOS
+      IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]")
+    end
 
+    SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*")
+    PORT = Regexp.compile("[0-9]*")
+    IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]")  # Simplified, no IPvFuture
+    PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f]{2}")
+    GEN_DELIMS = Regexp.compile("[:/\\?\\#\\[\\]@]")
+    SUB_DELIMS = Regexp.compile("[!\\$&'\\(\\)\\*\\+,;=]")
+    RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})")
+    UNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
+
+    if RUBY_VERSION >= '1.9'
+      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~|#{UCSCHAR}")
+    else
+      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
+    end
+
+    IPCHAR = Regexp.compile("(?:#{IUNRESERVED}|#{PCT_ENCODED}|#{SUB_DELIMS}|:|@)")
+
+    if RUBY_VERSION >= '1.9'
+      IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*")
+    else
+      IQUERY = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
+    end
+
+    IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
+
+    ISEGMENT = Regexp.compile("(?:#{IPCHAR})*")
+    ISEGMENT_NZ = Regexp.compile("(?:#{IPCHAR})+")
+    ISEGMENT_NZ_NC = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|@)+")
+
+    IPATH_ABEMPTY = Regexp.compile("(?:/#{ISEGMENT})*")
+    IPATH_ABSOLUTE = Regexp.compile("/(?:(?:#{ISEGMENT_NZ})(/#{ISEGMENT})*)?")
+    IPATH_NOSCHEME = Regexp.compile("(?:#{ISEGMENT_NZ_NC})(?:/#{ISEGMENT})*")
+    IPATH_ROOTLESS = Regexp.compile("(?:#{ISEGMENT_NZ})(?:/#{ISEGMENT})*")
+    IPATH_EMPTY = Regexp.compile("")
+
+    IREG_NAME   = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS}))*")
+    IHOST = Regexp.compile("(?:#{IP_literal})|(?:#{IREG_NAME})")
+    IUSERINFO = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|:)*")
+    IAUTHORITY = Regexp.compile("(?:#{IUSERINFO}@)?#{IHOST}(?::#{PORT})?")
+    
+    IRELATIVE_PART = Regexp.compile("(?:(?://#{IAUTHORITY}(?:#{IPATH_ABEMPTY}))|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_NOSCHEME})|(?:#{IPATH_EMPTY}))")
+    IRELATIVE_REF = Regexp.compile("^#{IRELATIVE_PART}(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$")
+
+    IHIER_PART = Regexp.compile("(?:(?://#{IAUTHORITY}#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY}))")
+    IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$")
+    
     ##
     # @return [RDF::Util::Cache]
     # @private
@@ -60,7 +122,7 @@ module RDF
     ##
     # Creates a new `RDF::URI` instance based on the given `uri` string.
     #
-    # This is just an alias for {#initialize RDF::URI.new} for compatibity
+    # This is just an alias for {RDF::URI#initialize} for compatibity
     # with `Addressable::URI.parse`.
     #
     # @param  [String, #to_s] str
@@ -74,7 +136,7 @@ module RDF
     #   @param  [RDF::URI, String, #to_s] uri
     #
     # @overload URI.new(options = {})
-    #   @param  [Hash{Symbol => Object} options
+    #   @param  [Hash{Symbol => Object}] options
     def initialize(uri_or_options)
       case uri_or_options
         when Hash
@@ -143,16 +205,28 @@ module RDF
     alias_method :size, :length
 
     ##
+    # Determine if the URI is avalid according to RFC3987
+    #
+    # Note, for Ruby versions < 1.9, this always returns true.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since 0.3.9
+    def valid?
+      # As Addressable::URI does not perform adequate validation, validate
+      # relative to RFC3987
+      to_s.match(RDF::URI::IRI) || to_s.match(RDF::URI::IRELATIVE_REF) || false
+    end
+
+    ##
     # Validates this URI, raising an error if it is invalid.
     #
     # @return [RDF::URI] `self`
     # @raise  [ArgumentError] if the URI is invalid
     # @since  0.3.0
     def validate!
-      # TODO: raise error if the URI fails validation
+      raise ArgumentError, "#{to_s.inspect} is not a valid IRI" if invalid?
       self
     end
-    alias_method :validate, :validate!
 
     ##
     # Returns a copy of this URI converted into its canonical lexical
@@ -170,7 +244,7 @@ module RDF
     # @return [RDF::URI] `self`
     # @since  0.3.0
     def canonicalize!
-      # TODO: canonicalize this URI
+      @uri.normalize!
       self
     end
 
@@ -190,7 +264,7 @@ module RDF
     # @example Joining two URIs
     #     RDF::URI.new('http://example.org/foo/bar').join('/foo')
     #     #=> RDF::URI('http://example.org/foo')
-    # @see <http://github.com/bendiken/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
+    # @see <http://github.com/ruby-rdf/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
     # @see RDF::URI#/
     # @see RDF::URI#+
@@ -230,7 +304,7 @@ module RDF
     # @see RDF::URI#+
     # @see RDF::URI#join
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
-    # @see <http://github.com/bendiken/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
+    # @see <http://github.com/ruby-rdf/rdf-spec/blob/master/lib/rdf/spec/uri.rb>
     # @example Building a HTTP URL
     #     RDF::URI.new('http://example.org') / 'jhacker' / 'foaf.ttl'
     #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
@@ -250,21 +324,21 @@ module RDF
         RDF::URI.intern(to_s.sub(/:+$/,'') + ':' + fragment.to_s.sub(/^:+/,''))
       else # !urn?
         case to_s[-1].chr
-          when '#'
-            case fragment.to_s[0].chr
-              when '/' then # Base ending with '#', fragment beginning with '/'.  The fragment wins, we use '/'.
-              RDF::URI.intern(to_s.sub(/#+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
-            else
-              RDF::URI.intern(to_s.sub(/#+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
-            end
-          else # includes '/'.  Results from bases ending in '/' are the same as if there were no trailing slash.
-            case fragment.to_s[0].chr
-              when '#' then # Base ending with '/', fragment beginning with '#'.  The fragment wins, we use '#'.
-                RDF::URI.intern(to_s.sub(/\/+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
-              else
-                RDF::URI.intern(to_s.sub(/\/+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
-              end
+        when '#'
+          case fragment.to_s[0].chr
+          when '/' then # Base ending with '#', fragment beginning with '/'.  The fragment wins, we use '/'.
+            RDF::URI.intern(to_s.sub(/#+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
+          else
+            RDF::URI.intern(to_s.sub(/#+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
           end
+        else # includes '/'.  Results from bases ending in '/' are the same as if there were no trailing slash.
+          case fragment.to_s[0].chr
+          when '#' then # Base ending with '/', fragment beginning with '#'.  The fragment wins, we use '#'.
+            RDF::URI.intern(to_s.sub(/\/+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
+          else
+            RDF::URI.intern(to_s.sub(/\/+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
+          end
+        end
       end
     end
 
@@ -284,7 +358,7 @@ module RDF
     #     #=> RDF::URI('http://example.org/testtest')
     # @see RDF::URI#/
     # @see RDF::URI#join
-    # @param [Any]
+    # @param [Any] other
     # @return [RDF::URI]
     def +(other)
       RDF::URI.intern(self.to_s + other.to_s)
@@ -435,7 +509,7 @@ module RDF
     alias_method :ends_with?, :end_with?
 
     ##
-    # Checks whether this URI the same term as `other'.
+    # Checks whether this URI the same term as `other`.
     #
     # @example
     #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/')) #=> true

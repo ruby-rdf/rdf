@@ -11,7 +11,7 @@ describe RDF::NTriples::Format do
   end
   
   # @see lib/rdf/spec/format.rb in rdf-spec
-  it_should_behave_like RDF_Format
+  include RDF_Format
 
   describe ".for" do
     formats = [
@@ -20,7 +20,7 @@ describe RDF::NTriples::Format do
       {:file_name      => 'etc/doap.nt'},
       {:file_extension => 'nt'},
       {:content_type   => 'text/plain'},
-      {:content_type   => 'text/ntriples+turtle'},
+      {:content_type   => 'application/n-triples'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         RDF::Format.for(arg).should == @format_class
@@ -29,12 +29,11 @@ describe RDF::NTriples::Format do
 
     {
       :ntriples => "<a> <b> <c> .",
-      :nquads => "<a> <b> <c> <d> . ",
       :literal => '<a> <b> "literal" .',
-      :multi_line => '<a>\n  <b>\n  "literal"\n .',
+      :multi_line => %(<a>\n  <b>\n  "literal"\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        @format_class.for {str}.should_not == @format_class
+        @format_class.for {str}.should == @format_class
       end
     end
   end
@@ -42,24 +41,34 @@ describe RDF::NTriples::Format do
   describe "#to_sym" do
     specify {@format_class.to_sym.should == :ntriples}
   end
+
+  describe "#name" do
+    specify {@format_class.name.should == "N-Triples"}
+  end
   
   describe ".detect" do
     {
       :ntriples => "<a> <b> <c> .",
-      :nquads => "<a> <b> <c> <d> . ",
       :literal => '<a> <b> "literal" .',
-      :multi_line => '<a>\n  <b>\n  "literal"\n .',
-      :turtle => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :rdfxml => '<rdf:RDF about="foo"></rdf:RDF>',
-      :n3 => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+      :multi_line => %(<a>\n  <b>\n  "literal"\n .),
+    }.each do |sym, str|
+      it "detects #{sym}" do
+        @format_class.detect(str).should be_true
+      end
+    end
+
+    {
+      :nquads        => "<a> <b> <c> <d> . ",
+      :nq_literal    => '<a> <b> "literal" <d> .',
+      :nq_multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
+      :turtle        => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
+      :trig          => "{<a> <b> <c> .}",
+      :rdfxml        => '<rdf:RDF about="foo"></rdf:RDF>',
+      :n3            => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
     }.each do |sym, str|
       it "does not detect #{sym}" do
         @format_class.detect(str).should be_false
       end
-    end
-
-    it "always returns false" do
-      @format_class.detect("<a> <b> <c> .").should be_false
     end
   end
 end
@@ -70,7 +79,7 @@ describe RDF::NTriples::Reader do
   end
   
   # @see lib/rdf/spec/reader.rb in rdf-spec
-  it_should_behave_like RDF_Reader
+  include RDF_Reader
 
   describe ".for" do
     formats = [
@@ -78,11 +87,24 @@ describe RDF::NTriples::Reader do
       'etc/doap.nt',
       {:file_name      => 'etc/doap.nt'},
       {:file_extension => 'nt'},
+      {:content_type   => 'application/n-triples'},
       {:content_type   => 'text/plain'},
-      {:content_type   => 'text/ntriples+turtle'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         RDF::Reader.for(arg).should == RDF::NTriples::Reader
+      end
+    end
+
+    context "content_type text/plain with non-N-Triples content" do
+      {
+        :nquads        => "<a> <b> <c> <d> . ",
+        :nq_literal    => '<a> <b> "literal" <d> .',
+        :nq_multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
+      }.each do |sym, str|
+        it "does not detect #{sym}" do
+          f = RDF::Reader.for(:content_type => "text/plain", :sample => str)
+          f.should_not == RDF::NTriples::Reader
+        end
       end
     end
   end
@@ -106,7 +128,7 @@ describe RDF::NTriples::Writer do
       {:file_name      => 'etc/doap.nt'},
       {:file_extension => 'nt'},
       {:content_type   => 'text/plain'},
-      {:content_type   => 'text/ntriples+turtle'},
+      {:content_type   => 'application/n-triples'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         RDF::Writer.for(arg).should == RDF::NTriples::Writer
@@ -115,7 +137,7 @@ describe RDF::NTriples::Writer do
   end
 
   # @see lib/rdf/spec/writer.rb in rdf-spec
-  it_should_behave_like RDF_Writer
+  include RDF_Writer
 
   it "should return :ntriples for to_sym" do
     RDF::NTriples::Writer.to_sym.should == :ntriples
@@ -154,13 +176,19 @@ describe RDF::NTriples do
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     it "should correctly unescape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
-      (0x7F..0xFFFF).each do |u|
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @reader.unescape(@writer.escape(c)).should == c
+      (0x7F..0xFFFF).to_a.sample(100).each do |u|
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @reader.unescape(@writer.escape(c)).should == c
+        rescue RangeError
+        end
       end
-      (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @reader.unescape(@writer.escape(c)).should == c
+      (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @reader.unescape(@writer.escape(c)).should == c
+        rescue RangeError
+        end
       end
     end
 
@@ -194,7 +222,7 @@ describe RDF::NTriples do
     end
   end
 
-  context "when encoding text" do
+  context "when encoding text to ASCII" do
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     it "should correctly escape ASCII characters (#x0-#x7F)" do
       (0x00..0x08).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
@@ -214,13 +242,19 @@ describe RDF::NTriples do
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
     it "should correctly escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
-      (0x7F..0xFFFF).each do |u|
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
+      (0x80..0xFFFF).to_a.sample(100).each do |u|
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
+        rescue RangeError
+        end
       end
-      (0x10000..0x2FFFF).each do |u| # NB: there's nothing much beyond U+2FFFF
-        next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-        @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
+      (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
+        rescue RangeError
+        end
       end
     end
 
@@ -237,9 +271,58 @@ describe RDF::NTriples do
 
     # @see http://github.com/bendiken/rdf/issues/#issue/7
     it "should correctly handle RDF.rb issue #7" do
-      input  = %Q(<http://openlibrary.org/b/OL3M> <http://RDVocab.info/Elements/titleProper> "Jh\xC5\xABl\xC4\x81." .\n)
-      output = %Q(<http://openlibrary.org/b/OL3M> <http://RDVocab.info/Elements/titleProper> "Jh\\u016Bl\\u0101." .\n)
-      RDF::NTriples.serialize(RDF::NTriples.unserialize(input)).should == output
+      input  = %Q(<http://openlibrary.org/b/OL3M> <http://RDVocab.info/Elements/titleProper> "Jh\xC5\xABl\xC4\x81." .)
+      output = %Q(<http://openlibrary.org/b/OL3M> <http://RDVocab.info/Elements/titleProper> "Jh\\u016Bl\\u0101." .)
+      writer = RDF::NTriples::Writer.new(StringIO.new, :encoding => :ascii)
+      writer.format_statement(RDF::NTriples.unserialize(input)).should == output
+    end
+  end
+
+  context "when encoding text to UTF-8" do
+    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    it "should correctly escape ASCII characters (#x0-#x7F)" do
+      (0x00..0x08).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      @writer.escape(0x09.chr).should == "\\t"
+      @writer.escape(0x0A.chr).should == "\\n"
+      (0x0B..0x0C).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      @writer.escape(0x0D.chr).should == "\\r"
+      (0x0E..0x1F).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      (0x20..0x21).each { |u| @writer.escape(u.chr).should == u.chr }
+      @writer.escape(0x22.chr).should == "\\\""
+      (0x23..0x5B).each { |u| @writer.escape(u.chr).should == u.chr }
+      @writer.escape(0x5C.chr).should == "\\\\"
+      (0x5D..0x7E).each { |u| @writer.escape(u.chr).should == u.chr }
+      @writer.escape(0x7F.chr).should == "\\u007F"
+    end
+
+    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
+    it "should not escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+      (0x80..0xFFFF).to_a.sample(100).each do |u|
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @writer.escape(c, Encoding::UTF_8).should == c
+        rescue RangeError
+        end
+      end
+      (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
+        begin
+          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+          @writer.escape(c, Encoding::UTF_8).should == c
+        rescue RangeError
+        end
+      end
+    end
+
+    it "should not escape Unicode strings", :ruby => 1.9 do
+      strings = [
+        "_\u221E_", # U+221E, infinity symbol
+        "_\u6C34_", # U+6C34, 'water' in Chinese
+      ]
+      strings.each do |string|
+        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        @writer.escape(string, Encoding::UTF_8).should == string
+      end
     end
   end
 
@@ -263,9 +346,7 @@ describe RDF::NTriples do
     end
 
     it "should parse W3C's test data" do
-      pending "lines separated by just \"\\r\" without a \"\\n\" are parsed incorrectly" do
-        @reader.new(File.open(@testfile)).to_a.size.should == 30
-      end
+      @reader.new(File.open(@testfile)).to_a.size.should == 30
     end
 
     it "should parse terms" do
@@ -296,7 +377,7 @@ describe RDF::NTriples do
         stmt.subject.should be_eql(stmt.object)
       end
       
-      it "should read two named nodes in different instances as different nodes", :pending => "SPARQL Compatibility" do
+      it "should read two named nodes in different instances as different nodes" do
         stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
         stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
         stmt1.subject.should == stmt2.subject
@@ -403,8 +484,9 @@ describe RDF::NTriples do
       @writer.new.format_statement(@stmt).should == @stmt_string
     end
 
-    it "should correctly format blank nodes" do
-      @writer.new.format_node(RDF::Node.new('foobar')).should == '_:foobar'
+    context "should correctly format blank nodes" do
+      specify {@writer.new.format_node(RDF::Node.new('foobar')).should == '_:foobar'}
+      specify {@writer.new.format_node(RDF::Node.new('')).should_not == '_:'}
     end
 
     it "should correctly format URI references" do

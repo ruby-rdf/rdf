@@ -42,8 +42,13 @@ describe RDF::List do
     end
 
     it "accepts array arguments" do
-      lambda { RDF::List[[]] }.should_not raise_error
-      RDF::List[[]].should == RDF::List[RDF::List[]]
+      lambda { RDF::List[[1]] }.should_not raise_error
+      l1 = RDF::List[[1]]
+      l1.size.should == 1
+      l1.first.should be_a(RDF::Node)
+      lambda { RDF::List.new(l1.first, l1.graph) }.should_not raise_error
+      l2 = RDF::List.new(l1.first, l1.graph)
+      l2.first.should == RDF::Literal(1)
     end
 
     it "accepts blank node arguments" do

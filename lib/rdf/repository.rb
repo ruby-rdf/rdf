@@ -115,16 +115,6 @@ module RDF
     end
 
     ##
-    # Returns `true` if this repository supports the given `feature`.
-    #
-    # @param  [Symbol, #to_sym] feature
-    # @return [Boolean]
-    # @since  0.1.10
-    def supports?(feature)
-      false
-    end
-
-    ##
     # Returns a developer-friendly representation of this object.
     #
     # @return [String]
@@ -231,7 +221,7 @@ module RDF
 
       ##
       # @private
-      # @see RDF::Repository#supports?
+      # @see RDF::Readable#supports?
       def supports?(feature)
         case feature.to_sym
           when :context   then true   # statement contexts / named graphs

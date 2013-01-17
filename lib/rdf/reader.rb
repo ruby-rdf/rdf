@@ -87,6 +87,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {}, &block)
+      options = options.merge(:has_reader => true) if options.is_a?(Hash)
       if format = self.format || Format.for(options, &block)
         format.reader
       end
@@ -127,6 +128,7 @@ module RDF
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
+        options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
         reader = self.for(format_options[:format] || format_options) do
           # Return a sample from the input file
           sample = file.read(1000)
@@ -388,7 +390,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_subject
-      raise RDF::ReaderError, "expected subject in #{@input.inspect} line #{lineno}"
+      raise RDF::ReaderError, "expected subject in line #{lineno}: #{current_line.inspect}"
     end
 
     ##
@@ -397,7 +399,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_predicate
-      raise RDF::ReaderError, "expected predicate in #{@input.inspect} line #{lineno}"
+      raise RDF::ReaderError, "expected predicate in line #{lineno}: #{current_line.inspect}"
     end
 
     ##
@@ -406,7 +408,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_object
-      raise RDF::ReaderError, "expected object in #{@input.inspect} line #{lineno}"
+      raise RDF::ReaderError, "expected object in line #{lineno}: #{current_line.inspect}"
     end
 
     ##
@@ -416,7 +418,14 @@ module RDF
     #
     # @return [Encoding]
     def encoding
-      @options[:encoding] ||= Encoding::UTF_8
+      case @options[:encoding]
+      when String, Symbol
+        Encoding.find(@options[:encoding].to_s)
+      when Encoding
+        @options[:encoding]
+      else
+        @options[:encoding] ||= Encoding.find(self.class.format.content_encoding.to_s)
+      end
     end
 
     ##
@@ -465,11 +474,19 @@ module RDF
     end
 
     ##
+    # @private
+    # @return [String] The most recently read line of the input
+    def current_line
+      @line
+    end
+
+    ##
     # @return [String]
     def readline
-      @line = @input.readline
-      @line.chomp!
-      @line.force_encoding(encoding) if @line.respond_to?(:force_encoding) # for Ruby 1.9+
+      @line = @line_rest || @input.readline
+      @line, @line_rest = @line.split("\r", 2)
+      @line = @line.to_s.chomp
+      @line.force_encoding(encoding) if @line.respond_to?(:force_encoding)
       @line
     end
 

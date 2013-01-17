@@ -62,6 +62,51 @@ module RDF
     include RDF::Countable # NOTE: must come after ::Enumerable
 
     ##
+    # Returns `true` if this repository supports the given `feature`.
+    #
+    # Supported features include:
+    #   * `:context` supports statements with a context, allowing multiple contexts
+    #   * `:inferrence` supports RDFS inferrence of queryable contents.
+    #
+    # @param  [Symbol, #to_sym] feature
+    # @return [Boolean]
+    # @since  0.3.5
+    def supports?(feature)
+      false
+    end
+
+    ##
+    # Returns `true` if all statements are valid
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.11
+    def valid?
+      each_statement do |s|
+        return false if s.invalid?
+      end
+      true
+    end
+
+    ##
+    # Returns `true` if value is not valid
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  0.2.1
+    def invalid?
+      !valid?
+    end
+
+    ##
+    # Default validate! implementation, overridden in concrete classes
+    # @return [RDF::Literal] `self`
+    # @raise  [ArgumentError] if the value is invalid
+    # @since  0.3.9
+    def validate!
+      raise ArgumentError if invalid?
+    end
+    alias_method :validate, :validate!
+
+    ##
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
@@ -110,7 +155,9 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_statement}.
+    # Returns an enumerator for {RDF::Enumerable#each_statement}.
+    # FIXME: enum_for doesn't seem to be working properly
+    # in JRuby 1.7, so specs are marked pending
     #
     # @return [Enumerator]
     # @see    #each_statement
@@ -136,7 +183,7 @@ module RDF
     # @param  [Array(RDF::Resource, RDF::URI, RDF::Term)] triple
     # @return [Boolean]
     def has_triple?(triple)
-      enum_triple.include?(triple)
+      triples.include?(triple)
     end
 
     ##
@@ -170,7 +217,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_triple}.
+    # Returns an enumerator for {RDF::Enumerable#each_triple}.
     #
     # @return [Enumerator]
     # @see    #each_triple
@@ -196,7 +243,7 @@ module RDF
     # @param  [Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)] quad
     # @return [Boolean]
     def has_quad?(quad)
-      enum_quad.include?(quad)
+      quads.include?(quad)
     end
 
     ##
@@ -231,7 +278,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_quad}.
+    # Returns an enumerator for {RDF::Enumerable#each_quad}.
     #
     # @return [Enumerator]
     # @see    #each_quad
@@ -299,7 +346,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_subject}.
+    # Returns an enumerator for {RDF::Enumerable#each_subject}.
     #
     # @return [Enumerator]
     # @see    #each_subject
@@ -367,7 +414,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_predicate}.
+    # Returns an enumerator for {RDF::Enumerable#each_predicate}.
     #
     # @return [Enumerator]
     # @see    #each_predicate
@@ -435,7 +482,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_object}.
+    # Returns an enumerator for {RDF::Enumerable#each_object}.
     #
     # @return [Enumerator]
     # @see    #each_object
@@ -454,7 +501,7 @@ module RDF
     # @see    #enum_context
     def contexts(options = {})
       if options[:unique] == false
-        enum_statement.map(&:context).to_enum # TODO: optimize
+        enum_statement.map(&:context).compact.to_enum # TODO: optimize
       else
         enum_context
       end
@@ -503,7 +550,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_context}.
+    # Returns an enumerator for {RDF::Enumerable#each_context}.
     #
     # @return [Enumerator]
     # @see    #each_context
@@ -543,7 +590,7 @@ module RDF
     end
 
     ##
-    # Returns an enumerator for {#each_graph}.
+    # Returns an enumerator for {RDF::Enumerable#each_graph}.
     #
     # @return [Enumerator]
     # @see    #each_graph
@@ -587,8 +634,6 @@ module RDF
     def to_hash
       result = {}
       each_statement do |statement|
-        next if statement.invalid? # skip any incomplete statements
-
         result[statement.subject] ||= {}
         values = (result[statement.subject][statement.predicate] ||= [])
         values << statement.object unless values.include?(statement.object)
@@ -607,14 +652,17 @@ module RDF
     #   ntriples = enumerable.dump(:ntriples)
     #
     # @param  [Array<Object>] args
-    #   if the last argument is a hash, it is passed as keyword options to
+    #   if the last argument is a hash, it is passed as options to
     #   {RDF::Writer.dump}.
     # @return [String]
     # @see    RDF::Writer.dump
+    # @raise [RDF::WriterError] if no writer found
     # @since  0.2.0
     def dump(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      RDF::Writer.for(*args).dump(self, nil, options)
+      writer = RDF::Writer.for(*args)
+      raise RDF::WriterError, "No writer found using #{args.inspect}" unless writer
+      writer.dump(self, nil, options)
     end
   end # Enumerable
 end # RDF

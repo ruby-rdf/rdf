@@ -5,10 +5,10 @@ describe RDF::Enumerable do
   before :each do
     # The available reference implementations are `RDF::Repository` and
     # `RDF::Graph`, but a plain Ruby array will do fine as well:
-    #@enumerable = [].extend(RDF::Enumerable) # FIXME
-    @enumerable = RDF::Repository.new
+    @statements = RDF::NTriples::Reader.new(File.open('etc/doap.nt')).to_a
+    @enumerable = @statements.dup.extend(RDF::Enumerable)
   end
 
   # @see lib/rdf/spec/enumerable.rb in rdf-spec
-  it_should_behave_like RDF_Enumerable
+  include RDF_Enumerable
 end

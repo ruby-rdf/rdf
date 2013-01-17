@@ -80,7 +80,7 @@ module RDF
     require 'rdf/model/literal/integer'
     require 'rdf/model/literal/double'
     require 'rdf/model/literal/date'
-    require 'rdf/model/literal/dateTime'
+    require 'rdf/model/literal/datetime'
     require 'rdf/model/literal/time'
     require 'rdf/model/literal/token'
     require 'rdf/model/literal/xml'
@@ -279,13 +279,15 @@ module RDF
     end
 
     ##
-    # Returns `true` if the value does not adhere to the defined grammar of
-    # the datatype.
+    # Validates the value using {RDF::Value#valid?}, raising an error if the value is
+    # invalid.
     #
-    # @return [Boolean] `true` or `false`
+    # @return [RDF::Literal] `self`
+    # @raise  [ArgumentError] if the value is invalid
     # @since  0.2.1
-    def invalid?
-      !valid?
+    def validate!
+      raise ArgumentError, "#{to_s.inspect} is not a valid <#{datatype.to_s}> literal" if invalid?
+      self
     end
 
     ##
@@ -315,19 +317,6 @@ module RDF
         end
       end
     end
-
-    ##
-    # Validates the value using {#valid?}, raising an error if the value is
-    # invalid.
-    #
-    # @return [RDF::Literal] `self`
-    # @raise  [ArgumentError] if the value is invalid
-    # @since  0.2.1
-    def validate!
-      raise ArgumentError, "#{to_s.inspect} is not a valid <#{datatype.to_s}> literal" if invalid?
-      self
-    end
-    alias_method :validate, :validate!
 
     ##
     # Returns a copy of this literal converted into its canonical lexical

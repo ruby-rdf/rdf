@@ -173,7 +173,7 @@ class RDF::Query
 
     ##
     # Compatible Mappings
-    # Two solution mappings μ1 and μ2 are compatible if, for every variable v in dom(μ1) and in dom(μ2), μ1(v) = μ2(v).
+    # Two solution mappings u1 and u2 are compatible if, for every variable v in dom(u1) and in dom(u2), u1(v) = u2(v).
     #
     # @param [RDF::Query::Solution, #to_hash] other
     #   another query solution or hash bindings
@@ -186,8 +186,8 @@ class RDF::Query
     
     ##
     # Isomorphic Mappings
-    # Two solution mappings μ1 and μ2 are isomorphic if,
-    # for every variable v in dom(μ1) and in dom(μ2), μ1(v) = μ2(v).
+    # Two solution mappings u1 and u2 are isomorphic if,
+    # for every variable v in dom(u1) and in dom(u2), u1(v) = u2(v).
     #
     # @param [RDF::Query::Solution, #to_hash] other
     #   another query solution or hash bindings
