@@ -1,8 +1,8 @@
 module RDF
   module VERSION
-    VERSION_FILE = File.expand_path("../../../VERSION", __FILE__)
-    MAJOR, MINOR, TINY, EXTRA = File.read(VERSION_FILE).chop.split(".")
-    STRING = [MAJOR, MINOR, TINY, EXTRA].compact.join('.')
+    FILE = File.expand_path('../../../VERSION', __FILE__)
+    MAJOR, MINOR, TINY, EXTRA = File.read(FILE).chomp.split('.')
+    STRING = [MAJOR, MINOR, TINY, EXTRA].compact.join('.').freeze
 
     ##
     # @return [String]
