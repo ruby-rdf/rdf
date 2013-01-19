@@ -24,7 +24,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.
+* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.7+.
 * Compatible with older Ruby versions with the help of the [Backports][] gem.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
