@@ -346,7 +346,7 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Turtle doc]:       http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/frames
 [SPARQL doc]:       http://rubydoc.info/github/ruby-rdf/sparql/frames
 [SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/
-[RDF.rb]:           http://ruby-rdf.github.com/rdf
+[RDF.rb]:           http://ruby-rdf.github.com/
 [RDF::DO]:          http://ruby-rdf.github.com/rdf-do
 [RDF::Mongo]:       http://ruby-rdf.github.com/rdf-mongo
 [RDF::Sesame]:      http://ruby-rdf.github.com/rdf-sesame
