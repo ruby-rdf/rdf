@@ -16,7 +16,7 @@ end
 
 module RDF
   class CLI
-    
+
     COMMANDS = {
       "count"       => lambda do |argv, opts|
         start = Time.new
@@ -69,7 +69,7 @@ module RDF
         end
       end
     }
-    
+
     ##
     # @return [String]
     def self.basename() File.basename($0) end
@@ -137,13 +137,13 @@ module RDF
         $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
         exit
       end
-      
+
       begin
         options.parse!
       rescue OptionParser::InvalidOption => e
         abort e
       end
-      
+
       options
     end
 
@@ -155,10 +155,10 @@ module RDF
       unless COMMANDS.has_key?(command)
         abort "#{File.basename($0)}: unknown command `#{command}'"
       end
-      
+
       COMMANDS[command].call(args, options)
     end
-    
+
     ##
     # @return [Array<String>] list of executable commands
     def self.commands
@@ -173,7 +173,7 @@ module RDF
     # @yield  [reader]
     # @yieldparam [RDF::Reader]
     # @return [nil]
-    def self.parse(files, options = {}, &block)      
+    def self.parse(files, options = {}, &block)
       if files.empty?
         # If files are empty, either use options[:execute]
         input = options[:evaluate] ? StringIO.new(options[:evaluate]) : STDIN
@@ -189,7 +189,7 @@ module RDF
         end
       end
     end
-    
+
     ##
     # @param  [String] msg
     # @return [void]
