@@ -224,7 +224,7 @@ module RDF
     # Returns the base URI used for this writer.
     #
     # @example
-    #   reader.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
+    #   writer.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
     #
     # @return [Hash{Symbol => RDF::URI}]
     # @since  0.3.4
