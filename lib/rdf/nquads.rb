@@ -4,7 +4,7 @@ module RDF
   #
   # This has not yet been implemented as of RDF.rb 0.3.x.
   module NQuads
-    include NTriples
+    include RDF::NTriples
 
     ##
     # N-Quads format specification.
