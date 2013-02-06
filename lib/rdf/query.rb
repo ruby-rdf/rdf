@@ -242,6 +242,9 @@ module RDF
     #   any additional keyword options
     # @option options [Hash{Symbol => RDF::Term}] bindings
     #   optional variable bindings to use
+    # @option options [RDF::Term, RDF::Query::Variable, Boolean] :context (nil)
+    #   Specific context for matching against queryable;
+    #   overrides default context defined on query.
     # @option options [Hash{Symbol => RDF::Term}] solutions
     #   optional initial solutions for chained queries
     # @return [RDF::Query::Solutions]
@@ -259,13 +262,14 @@ module RDF
       @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
 
       patterns = @patterns
+      context = options.fetch(:context, self.context)
 
       # Add context to pattern, if necessary
-      unless self.context.nil?
+      unless context.nil?
         if patterns.empty?
-          patterns = [Pattern.new(nil, nil, nil, :context => self.context)]
+          patterns = [Pattern.new(nil, nil, nil, :context => context)]
         elsif patterns.first.context.nil?
-          patterns.first.context = self.context
+          patterns.first.context = context
         end
       end
       
