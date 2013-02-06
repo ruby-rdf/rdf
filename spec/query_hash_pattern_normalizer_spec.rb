@@ -7,14 +7,14 @@ describe RDF::Query::HashPatternNormalizer do
     end
   end
   
-  context ".normalize" do
+  context ".normalize!" do
     before :each do
       @hash_pattern_normalizer = RDF::Query::HashPatternNormalizer.new
     end
     
-    it "should raise error if outer-most object is not a hash-pattern" do
-      expect { @hash_pattern_normalizer.normalize(42) }.to raise_error(ArgumentError)
-      expect { @hash_pattern_normalizer.normalize({}) }.to_not raise_error(ArgumentError)
+    it "should raise an error if outer-most object is not a hash-pattern" do
+      expect { @hash_pattern_normalizer.normalize!(42) }.to raise_error(ArgumentError)
+      expect { @hash_pattern_normalizer.normalize!({}) }.to_not raise_error(ArgumentError)
     end
     
     it "should be idempotent" do
@@ -24,11 +24,11 @@ describe RDF::Query::HashPatternNormalizer do
         }
       }
       
-      @hash_pattern_normalizer.normalize(hash_pattern).should == hash_pattern
-      @hash_pattern_normalizer.normalize(@hash_pattern_normalizer.normalize(hash_pattern)).should == hash_pattern
+      @hash_pattern_normalizer.normalize!(hash_pattern).should == hash_pattern
+      @hash_pattern_normalizer.normalize!(@hash_pattern_normalizer.normalize!(hash_pattern)).should == hash_pattern
     end
     
-    it "should affect nested hash-patterns" do
+    it "should normalize nested hash-patterns" do
       hash_pattern = {
         :foo => {
           :bar => {
@@ -46,10 +46,10 @@ describe RDF::Query::HashPatternNormalizer do
         }
       }
       
-      @hash_pattern_normalizer.normalize(hash_pattern).should == expected_hash_pattern
+      @hash_pattern_normalizer.normalize!(hash_pattern).should == expected_hash_pattern
     end
     
-    it "should affect nested array-patterns" do
+    it "should normalize nested array-patterns" do
       hash_pattern = {
         :foo => {
           :bar => [
@@ -75,7 +75,7 @@ describe RDF::Query::HashPatternNormalizer do
         }
       }
       
-      @hash_pattern_normalizer.normalize(hash_pattern).should == expected_hash_pattern
+      @hash_pattern_normalizer.normalize!(hash_pattern).should == expected_hash_pattern
     end
   end
 end

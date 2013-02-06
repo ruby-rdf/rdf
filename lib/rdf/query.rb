@@ -160,7 +160,7 @@ module RDF
       context = @options.delete(:context)
 
       @patterns  = case patterns.first
-        when Hash  then compile_hash_patterns(HashPatternNormalizer.normalize(patterns.first.dup, @options))
+        when Hash  then compile_hash_patterns(HashPatternNormalizer.normalize!(patterns.first.dup, @options))
         when Array then patterns.first
         else patterns
       end
