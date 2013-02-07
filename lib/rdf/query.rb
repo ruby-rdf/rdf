@@ -3,7 +3,7 @@ module RDF
   # An RDF basic graph pattern (BGP) query.
   #
   # Named queries either match against a specifically named
-  # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+  # contexts if the name is an RDF::Resource or bound RDF::Query::Variable.
   # Names that are against unbound variables match either default
   # or named contexts.
   # The name of `false` will only match against the default context.
@@ -125,10 +125,10 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
     #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
-    #   @option options [RDF::Term, RDF::Query::Variable, Boolean] :context (nil)
+    #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
     #     Default context for matching against queryable.
     #     Named queries either match against a specifically named
-    #     contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+    #     contexts if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
     #     Names that are against unbound variables match either detault
     #     or named contexts.
     #     The name of `false` will only match against the default context.
@@ -142,11 +142,11 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
     #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
-    #   @option options [RDF::Term, RDF::Query::Variable, Boolean] :context (nil)
+    #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
     #     Default context for matching against queryable.
     #     Named queries either match against a specifically named
-    #     contexts if the name is an RDF::Term or bound RDF::Query::Variable.
-    #     Names that are against unbound variables match either default
+    #     contexts if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
+    #     Names that are against unbound variables match either detault
     #     or named contexts.
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
@@ -231,7 +231,7 @@ module RDF
     # Executes this query on the given `queryable` graph or repository.
     #
     # Named queries either match against a specifically named
-    # contexts if the name is an RDF::Term or bound RDF::Query::Variable.
+    # contexts if the name is an RDF::Resource or bound RDF::Query::Variable.
     # Names that are against unbound variables match either detault
     # or named contexts.
     # The name of `false` will only match against the default context.
@@ -242,7 +242,7 @@ module RDF
     #   any additional keyword options
     # @option options [Hash{Symbol => RDF::Term}] bindings
     #   optional variable bindings to use
-    # @option options [RDF::Term, RDF::Query::Variable, Boolean] :context (nil)
+    # @option options [RDF::Resource, RDF::Query::Variable, false] context (nil)
     #   Specific context for matching against queryable;
     #   overrides default context defined on query.
     # @option options [Hash{Symbol => RDF::Term}] solutions
