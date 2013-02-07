@@ -382,6 +382,15 @@ module RDF
     end
     alias_method :each, :each_solution
 
+    ##
+    # Duplicate query, including patterns and solutions
+    # @return [RDF::Query]
+    def dup
+      patterns = @patterns.map {|p| p.dup}
+      solutions = @solutions.dup
+      Query.new(*patterns, @options.merge(:solutions => solutions))
+    end
+
   protected
 
     ##

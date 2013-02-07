@@ -172,6 +172,13 @@ class RDF::Query
     end
 
     ##
+    # Duplicate solution, preserving patterns
+    # @return [RDF::Statement]
+    def dup
+      merge({})
+    end
+
+    ##
     # Compatible Mappings
     # Two solution mappings u1 and u2 are compatible if, for every variable v in dom(u1) and in dom(u2), u1(v) = u2(v).
     #

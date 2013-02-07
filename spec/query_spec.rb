@@ -36,6 +36,14 @@ describe RDF::Query do
     end
   end
 
+  describe "#dup" do
+    let(:orig) {RDF::Query.new { pattern [RDF::URI("a"), RDF::URI("b"), "c"] }}
+    subject {orig.dup}
+    it {should_not be_equal orig}
+    its(:patterns) {should_not be_equal orig.patterns}
+    its(:patterns) {should == orig.patterns}
+  end
+
   context "BGPs" do
     context "querying for a specific statement" do
 
