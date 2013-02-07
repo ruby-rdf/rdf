@@ -227,6 +227,7 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 ### RDF Querying
 
 * {RDF::Query}
+  * {RDF::Query::HashPatternNormalizer}
   * {RDF::Query::Pattern}
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
@@ -302,6 +303,7 @@ follows:
 ## Contributors
 
 * [Călin Ardelean](http://github.com/clnx) - <http://github.com/clnx>
+* [Mark Borkum](http://github.com/markborkum) - <http://github.com/markborkum>
 * [Danny Gagne](http://github.com/danny) - <http://www.dannygagne.com/>
 * [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
 * [Fumihiro Kato](http://github.com/fumi) - <http://fumi.me/>

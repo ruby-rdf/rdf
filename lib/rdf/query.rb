@@ -72,6 +72,7 @@ module RDF
     autoload :Solution,  'rdf/query/solution'
     autoload :Solutions, 'rdf/query/solutions'
     autoload :Variable,  'rdf/query/variable'
+    autoload :HashPatternNormalizer, 'rdf/query/hash_pattern_normalizer'
 
     ##
     # Executes a query on the given `queryable` graph or repository.
@@ -159,7 +160,7 @@ module RDF
       context = @options.delete(:context)
 
       @patterns  = case patterns.first
-        when Hash  then compile_hash_patterns(patterns.first.dup)
+        when Hash  then compile_hash_patterns(HashPatternNormalizer.normalize!(patterns.first.dup, @options))
         when Array then patterns.first
         else patterns
       end
