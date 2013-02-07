@@ -210,6 +210,8 @@ describe RDF::Query do
         query.execute(@graph).should have_result_set [ { :s => EX.x5 } ]
       end
 
+      it "?s p ?o with duplicates"
+
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
         query = RDF::Query.new do |query|
           query << [:s, EX.pchain, :o]
@@ -524,6 +526,50 @@ describe RDF::Query do
       end
     end
     
+    context "with an optional pattern" do
+      before :each do
+        @graph = RDF::Graph.new do |graph|
+          graph << [EX.s1, EX.p, EX.o]
+          graph << [EX.s2, EX.p, EX.o]
+          graph << [EX.s2, EX.p2, EX.o2]
+        end
+      end
+
+      it "should match graphs with and without the optional pattern" do
+        query = RDF::Query.new do |query|
+          query.pattern [:s, EX.p, EX.o]
+          query.pattern [:s, EX.p2, :o], :optional => true
+        end
+        query.execute(@graph).map(&:to_hash).to_set.should == [
+          {:s => EX.s1},
+          {:s => EX.s2, :o => EX.o2}
+        ].to_set
+      end
+
+      it "should raise an error unless all optional patterns follow regular patterns" do
+        # SPARQL requires optional patterns to follow the regular patterns.
+        # In the interest of compatibility, we enforce similar
+        # restrictions, because the semantics of leading optional patterns
+        # are hard to get right.
+        lambda do
+          query = RDF::Query.new do |query|
+            query.pattern [:s, EX.p2, :o], :optional => true
+            query.pattern [:s, EX.p, EX.o]
+          end
+          query.execute(@graph)
+        end.should raise_error(ArgumentError)
+
+        lambda do
+          query = RDF::Query.new do |query|
+            query.pattern [:s, EX.p, EX.o]
+            query.pattern [:s, EX.p2, :o], :optional => true
+            query.pattern [:s, EX.x, EX.x]
+          end
+          query.execute(@graph)
+        end.should raise_error(ArgumentError)
+      end
+    end
+
     context "with preliminary bindings" do
       before :each do
         @graph = RDF::Graph.new do |graph|
