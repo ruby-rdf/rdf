@@ -396,8 +396,8 @@ module RDF
     # @return [RDF::Query]
     def dup
       patterns = @patterns.map {|p| p.dup}
-      solutions = @solutions.dup
-      Query.new(*patterns, @options.merge(:solutions => solutions))
+      patterns << @options.merge(:solutions => @solutions.dup)
+      Query.new(*patterns)
     end
 
     ##
