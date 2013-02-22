@@ -394,6 +394,8 @@ describe RDF::NTriples do
         "newline:\n"     => '<http://subj> <http://pred> "newline:\n" .',
         "return\r"       => '<http://subj> <http://pred> "return\r" .',
         "tab:\t"         => '<http://subj> <http://pred> "tab:\t" .',
+        "form feed:\f"   => '<http://subj> <http://pred> "form feed:\u000C" .',
+        "backspace:\b"   => '<http://subj> <http://pred> "backspace:\u0008" .',
         "é"              => '<http://subj> <http://pred> "\u00E9" .',
         "€"              => '<http://subj> <http://pred> "\u20AC" .',
       }.each_pair do |contents, triple|

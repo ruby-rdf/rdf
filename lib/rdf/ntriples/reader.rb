@@ -43,7 +43,7 @@ module RDF::NTriples
     OBJECT                = Regexp.union(URIREF, NODEID, LITERAL).freeze
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    ESCAPE_CHARS          = ["\t", "\n", "\r", "\"", "\\"].freeze
+    ESCAPE_CHARS          = ["\b", "\f", "\t", "\n", "\r", "\"", "\\"].freeze
     ESCAPE_CHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
     ESCAPE_CHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
     ESCAPE_CHAR           = Regexp.union(ESCAPE_CHAR4, ESCAPE_CHAR8).freeze
