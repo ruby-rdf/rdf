@@ -63,11 +63,11 @@ or
 ### Reading RDF data in the N-Triples format
 
     require 'rdf/ntriples'
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
+    graph = RDF::Graph.load("https://raw.github.com/ruby-rdf/rdf/master/etc/doap.nt")
     
 or
 
-    RDF::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
+    RDF::Reader.open("https://raw.github.com/ruby-rdf/rdf/master/etc/doap.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -81,13 +81,13 @@ MimeType or file extension, where available.
 
     require 'linkeddata'
     
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", :format => :nquads)
+    graph = RDF::Graph.load("https://raw.github.com/ruby-rdf/rdf/master/etc/doap.nq", :format => :nquads)
 
 A specific sub-type of Reader can also be invoked directly:
 
     require 'rdf/nquads'
     
-    RDF::NQuads::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nq") do |reader|
+    RDF::NQuads::Reader.open("https://raw.github.com/ruby-rdf/rdf/master/etc/doap.nq") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -119,7 +119,7 @@ A specific sub-type of Writer can also be invoked directly:
 
     require 'rdf/ntriples'
     
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
+    graph = RDF::Graph.load("https://raw.github.com/ruby-rdf/rdf/master/etc/doap.nt")
     query = RDF::Query.new({
       :person => {
         RDF.type  => FOAF.Person,
