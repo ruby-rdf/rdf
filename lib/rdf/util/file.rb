@@ -32,12 +32,16 @@ module RDF; module Util
     #   HTTP Request headers, passed to Kernel.open.
     # @return [IO] File stream
     # @yield [IO] File stream
+    # @note HTTP headers not passed to `Kernel.open` for Ruby versions < 1.9.
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       options[:headers] ||= {}
       options[:headers]['Accept'] ||= RDF::Reader.map {|r| r.format.content_type}.uniq.join(", ")
-      options[:headers] = nil if RUBY_VERSION < "1.9"
-      Kernel.open(filename_or_url.to_s, options[:headers], &block)
+      if RUBY_VERSION < "1.9"
+        Kernel.open(filename_or_url.to_s, &block)
+      else
+        Kernel.open(filename_or_url.to_s, options[:headers], &block)
+      end
     end
   end # File
 end; end # RDF::Util
