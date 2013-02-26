@@ -176,48 +176,40 @@ describe RDF::URI do
     {
       "syntax-based normalization" => [
         "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros&#xE9;",
-        true
+        "example://a/b/c/%7Bfoo%7D/ros&#xE9;"
       ],
       "syntax-based normalization (addressable)" => [
         "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros%C3%A9",
-        true
+        "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
       ],
       "case normalization(1)" => [
         "http://example.com/%e1%cf",
-        "http://example.com/%E1%CF",
-        true
+        "http://example.com/%E1%CF"
       ],
       "case normalization(2)" => [
         "http://eXaMpLe.com/",
-        "http://example.com/",
-        true
+        "http://example.com/"
       ],
       "percent-encoding normalization(1)" => [
         "http://example.com/%7euser",
-        "http://example.com/~user",
-        true
+        "http://example.com/~user"
       ],
       "percent-encoding normalization(2)" => [
         "http://example.com/%7Euser",
-        "http://example.com/~user",
-        true
+        "http://example.com/~user"
       ],
       "path-segment normalization(1)" => [
         "http://example.com/./foo",
-        "http://example.com/foo/",
-        true
+        "http://example.com/foo/"
       ],
       "path-segment normalization(1)" => [
         "http://example.com/foo/bar/..",
-        "http://example.com/foo/",
-        true
+        "http://example.com/foo/"
       ],
-    }.each do |name, (input, output, pending)|
+    }.each do |name, (input, output)|
       let(:u1) {RDF::URI(input)}
       let(:u2) {RDF::URI(output)}
-      it "#canonicalize #{name}" do
+      it "#canonicalize #{name}", :pending => ("1.8 difference" if RUBY_VERSION < "1.9") do
         u1.canonicalize.to_s.should == u2.to_s
         u1.should == u1
       end
