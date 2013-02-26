@@ -35,7 +35,7 @@ module RDF; module Util
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       options[:headers] ||= {}
-      options[:headers]['Accept'] ||= RDF::Reader.map {|r| r.format.content_type.keys}.uniq.join(", ")
+      options[:headers]['Accept'] ||= RDF::Reader.map {|r| r.format.content_type}.uniq.join(", ")
       Kernel.open(filename_or_url.to_s, options[:headers], &block)
     end
   end # File

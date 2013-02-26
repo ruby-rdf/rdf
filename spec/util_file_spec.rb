@@ -4,7 +4,7 @@ describe RDF::Util::File do
   before(:each) do
     @opened = mock("opened")
     @opened.should_receive(:opened)
-    @uri = "http://ruby-rdf.github.com/etc/doap.nt"
+    @uri = "http://ruby-rdf.github.com/rdf/etc/doap.nt"
   end
 
   describe ".open_file" do
