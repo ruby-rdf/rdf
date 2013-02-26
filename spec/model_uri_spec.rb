@@ -217,7 +217,7 @@ describe RDF::URI do
     }.each do |name, (input, output, pending)|
       let(:u1) {RDF::URI(input)}
       let(:u2) {RDF::URI(output)}
-      it "#canonicalize #{name}", :pending => (pending ? "Addressable" : false) do
+      it "#canonicalize #{name}" do
         u1.canonicalize.to_s.should == u2.to_s
         u1.should == u1
       end
