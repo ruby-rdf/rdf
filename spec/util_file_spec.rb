@@ -15,7 +15,7 @@ describe RDF::Util::File do
       end
     end
     
-    it "yields an http URL" do
+    it "yields an http URL", :pending => ("1.8 difference" if RUBY_VERSION < "1.9") do
       OpenURI.should_receive(:open_uri).with(URI(@uri), an_instance_of(Hash)).and_yield(StringIO.new("data"))
       RDF::Util::File.open_file(@uri) do |f|
         f.should respond_to(:read)
