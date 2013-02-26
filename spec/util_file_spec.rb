@@ -31,7 +31,7 @@ describe RDF::Util::File do
     end
 
     it "adds Accept header using defined readers" do
-      content_types = RDF::Reader.map {|r| r.format.content_type.keys}.uniq
+      content_types = RDF::Reader.map {|r| r.format.content_type}.uniq
       Kernel.should_receive(:open) do |file_name, headers|
         headers.should be_a(Hash)
         headers.keys.should include("Accept")
@@ -46,7 +46,7 @@ describe RDF::Util::File do
 
 
     it "used provided Accept header" do
-      content_types = RDF::Reader.map {|r| r.format.content_type.keys}.uniq
+      content_types = RDF::Reader.map {|r| r.format.content_type}.uniq
       Kernel.should_receive(:open) do |file_name, headers|
         headers.should be_a(Hash)
         headers.keys.should include("Accept")
