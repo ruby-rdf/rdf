@@ -48,4 +48,18 @@ describe RDF::Format do
       end
     end
   end
+
+  RDF::Format.each do |format|
+    context format.name do
+      subject {format}
+      let(:content_types) {
+        RDF::Format.content_types.map {|ct, f| ct if f.include?(format)}.compact
+      }
+      let(:file_extensions) {
+        RDF::Format.file_extensions.map {|ext, f| ext if f.include?(format)}.compact
+      }
+      its(:content_type) {should =~ content_types}
+      its(:file_extension) {should =~ file_extensions}
+    end
+  end
 end

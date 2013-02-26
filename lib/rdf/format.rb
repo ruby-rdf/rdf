@@ -387,6 +387,17 @@ module RDF
       end
     end
 
+    ##
+    # Retrieves or defines file extensions for this RDF serialization format.
+    #
+    # The return is an array where the first element is the cannonical
+    # file extension for the format and following elements are alias file extensions.
+    #
+    # @return [Array<String>]
+    def self.file_extension
+      @@file_extensions.map {|ext, formats| ext if formats.include?(self)}.compact
+    end
+
   protected
 
     ##
