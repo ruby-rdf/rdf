@@ -36,6 +36,7 @@ module RDF; module Util
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       options[:headers] ||= {}
       options[:headers]['Accept'] ||= RDF::Reader.map {|r| r.format.content_type}.uniq.join(", ")
+      options[:headers] = nil if RUBY_VERSION < "1.9"
       Kernel.open(filename_or_url.to_s, options[:headers], &block)
     end
   end # File
