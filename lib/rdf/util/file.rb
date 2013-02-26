@@ -20,6 +20,8 @@ module RDF; module Util
     
     ##
     # Open the file, returning or yielding an IO stream and mime_type.
+    # Adds Accept header based on available reader content types to allow
+    # for content negotiation based on available readers.
     #
     # @param [String] filename_or_url to open
     # @param  [Hash{Symbol => Object}] options
@@ -27,12 +29,14 @@ module RDF; module Util
     #   to override this implementation to provide more control over HTTP
     #   headers and redirect following.
     # @option options [Array, String] :headers
-    #   HTTP Request headers.
+    #   HTTP Request headers, passed to Kernel.open.
     # @return [IO] File stream
     # @yield [IO] File stream
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
-      Kernel.open(filename_or_url.to_s, &block)
+      options[:headers] ||= {}
+      options[:headers]['Accept'] ||= RDF::Reader.map {|r| r.format.content_type.keys}.uniq.join(", ")
+      Kernel.open(filename_or_url.to_s, options[:headers], &block)
     end
   end # File
 end; end # RDF::Util
