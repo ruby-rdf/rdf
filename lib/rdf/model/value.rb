@@ -4,7 +4,8 @@ module RDF
   #
   # This is the basis for the RDF.rb class hierarchy. Anything that can be a
   # term of {RDF::Statement RDF statements} should directly or indirectly
-  # include this module.
+  # include this module, but it does not define classes that can be included
+  # within a {RDF::Statement}, for this see {RDF::Term}.
   #
   # @example Checking if a value is a resource (blank node or URI reference)
   #   value.resource?
@@ -19,15 +20,16 @@ module RDF
   # @example Checking if a value is a literal
   #   value.literal?
   #
-  # @see RDF::Graph
   # @see RDF::Literal
   # @see RDF::Node
   # @see RDF::Resource
-  # @see RDF::Statement
   # @see RDF::URI
+  # @see RDF::Graph
+  # @see RDF::List
+  # @see RDF::Statement
   module Value
     ##
-    # Returns `true` if `self` is a graph.
+    # Returns `true` if `self` is a {RDF::Graph}.
     #
     # @return [Boolean]
     def graph?
@@ -35,7 +37,23 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a literal.
+    # Returns `true` if `self` is a {RDF::Statement}.
+    #
+    # @return [Boolean]
+    def statement?
+      false
+    end
+
+    ##
+    # Returns `true` if `self` is a {RDF::List}.
+    #
+    # @return [Boolean]
+    def list?
+      false
+    end
+
+    ##
+    # Returns `true` if `self` is a {RDF::Literal}.
     #
     # @return [Boolean]
     def literal?
@@ -43,7 +61,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a blank node.
+    # Returns `true` if `self` is a {RDF::Node}.
     #
     # @return [Boolean]
     def node?
@@ -51,18 +69,10 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a resource.
+    # Returns `true` if `self` is a {RDF::Resource}.
     #
     # @return [Boolean]
     def resource?
-      false
-    end
-
-    ##
-    # Returns `true` if `self` is a statement.
-    #
-    # @return [Boolean]
-    def statement?
       false
     end
 
@@ -77,7 +87,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a URI reference.
+    # Returns `true` if `self` is a {RDF::URI}.
     #
     # @return [Boolean]
     def uri?
@@ -85,11 +95,19 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a query variable.
+    # Returns `true` if `self` is a {RDF::Query::Variable}.
     #
     # @return [Boolean]
     # @since  0.1.7
     def variable?
+      false
+    end
+
+    ##
+    # Is this an anonymous value?
+    #
+    # @return [Boolean] `true` or `false`
+    def anonymous?
       false
     end
 
