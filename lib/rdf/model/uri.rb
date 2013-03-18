@@ -19,6 +19,7 @@ module RDF
   # @example Getting the string representation of a URI
   #   uri.to_s #=> "http://rdf.rubyforge.org/"
   #
+  # http://en.wikipedia.org/wiki/Internationalized_Resource_Identifier
   # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
   # @see http://www.ietf.org/rfc/rfc3986.txt
   # @see http://www.ietf.org/rfc/rfc3987.txt
@@ -146,14 +147,6 @@ module RDF
         else
           @uri = Addressable::URI.parse(uri_or_options.to_s)
       end
-    end
-
-    ##
-    # Returns `false`.
-    #
-    # @return [Boolean] `true` or `false`
-    def anonymous?
-      false
     end
 
     ##
@@ -641,4 +634,7 @@ module RDF
       end
     end
   end # URI
+
+  # RDF::IRI is a synonym for RDF::URI
+  IRI = URI
 end # RDF
