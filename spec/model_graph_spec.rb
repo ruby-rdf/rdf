@@ -28,30 +28,58 @@ describe RDF::Graph do
   end
 
   context "named graphs" do
+    subject {
+      @new.call("http://ruby-rdf.github.com/rdf/etc/doap.nt", :data => RDF::Repository.new)
+    }
     it "should be instantiable" do
-      lambda { @new.call }.should_not raise_error
+      lambda { subject }.should_not raise_error
     end
 
-    it "should be named" do
-      graph = @new.call("http://rdf.rubyforge.org/")
-      graph.unnamed?.should be_false
-      graph.named?.should be_true
+    it "should not be instantiable by default" do
+      lambda { @new.call("http://rdf.rubyforge.org/") }.should raise_error
     end
 
-    it "should have a context" do
-      graph = @new.call("http://rdf.rubyforge.org/")
-      graph.context.should_not be_nil
-      graph.contexts.size.should == 1
+    its(:named?) {should be_true}
+    its(:unnamed?) {should be_false}
+    its(:name) {should_not be_nil}
+    its(:context) {should_not be_nil}
+    its(:context) {subject.contexts.size.should == 1}
+    it {should_not be_anonymous}
+
+    context "with anonymous context" do
+      subject {@new.call(RDF::Node.new, :data => RDF::Repository.new)}
+      it {should be_anonymous}
+    end
+  end
+
+  context "with Repository as data" do
+    let(:repo) {
+      r = RDF::Repository.new
+      r << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')]
+      r << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'), RDF::URI('c')]
+      r
+    }
+    it "should access default graph" do
+      graph = @new.call(nil, :data => repo)
+      graph.count.should == 1
+      graph.statements.first.object.should == RDF::URI('o1')
     end
 
-    it "should be #anonymous? with a Node context" do
-      graph = @new.call(RDF::Node.new)
-      graph.should be_anonymous
+    it "should access named graph" do
+      graph = @new.call(RDF::URI('c'), :data => repo)
+      graph.count.should == 1
+      graph.statements.first.object.should == RDF::URI('o2')
     end
 
-    it "should not be #anonymous? with a URI context" do
-      graph = @new.call("http://rdf.rubyforge.org/")
-      graph.should_not be_anonymous
+    it "should not load! default graph" do
+      graph = @new.call(nil, :data => repo)
+      lambda {graph.load!}.should raise_error(ArgumentError)
+    end
+
+    it "should reload named graph" do
+      graph = @new.call(RDF::URI("http://example/doc.nt"), :data => repo)
+      graph.should_receive(:load).with("http://example/doc.nt", :base_uri => "http://example/doc.nt")
+      graph.load!
     end
   end
 
