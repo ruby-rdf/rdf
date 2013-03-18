@@ -492,7 +492,7 @@ module RDF
     alias_method :enum_objects, :enum_object
 
     ##
-    # Returns all unique RDF contexts.
+    # Returns all unique RDF contexts, other than the default context.
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
@@ -510,14 +510,15 @@ module RDF
     ##
     # Returns `true` if `self` contains the given RDF context.
     #
-    # @param  [RDF::Resource] value
+    # @param  [RDF::Resource, false] value
+    #   Use value `false` to query for the default context
     # @return [Boolean]
     def has_context?(value)
       enum_context.include?(value)
     end
 
     ##
-    # Iterates the given block for each unique RDF context.
+    # Iterates the given block for each unique RDF context, other than the default context.
     #
     # If no block was given, returns an enumerator.
     #
