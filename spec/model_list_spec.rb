@@ -549,8 +549,8 @@ describe RDF::List do
     end
 
     it "yields the correct number of times" do
-      @abc.each_statement.count.should == 3 * 3
-      @ten.each_statement.count.should == 10 * 3
+      @abc.each_statement.count.should == 3 * 2
+      @ten.each_statement.count.should == 10 * 2
     end
 
     it "yields statements" do
