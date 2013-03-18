@@ -57,6 +57,7 @@ module RDF
     #   @option options [RDF::URI]       :predicate (nil)
     #   @option options [RDF::Term]      :object    (nil)
     #   @option options [RDF::Resource]  :context   (nil)
+    #     Note, in RDF 1.1, a context MUST be an IRI.
     #
     # @overload initialize(subject, predicate, object, options = {})
     #   @param  [RDF::Resource]          subject
