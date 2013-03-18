@@ -96,10 +96,13 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     # @option options [URI, #to_s]    :uri (nil)
     # @option options [String, #to_s] :title (nil)
+    # @option options [Boolean] :with_context (true)
+    #   Indicates that the repository supports named graphs, otherwise,
+    #   only the default graph is supported.
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(options = {}, &block)
-      @options = options.dup
+      @options = {:with_context => true}.merge(options)
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
 
@@ -141,6 +144,8 @@ module RDF
     #   end
     #
     # @param  [RDF::Resource] context
+    #   Context on which to run the transaction, use `false` for the default
+    #   context and `nil` the entire Repository
     # @yield  [tx]
     # @yieldparam  [RDF::Transaction] tx
     # @yieldreturn [void] ignored
@@ -176,7 +181,7 @@ module RDF
     # @return [RDF::Transaction]
     # @since  0.3.0
     def begin_transaction(context)
-      RDF::Transaction.new(:context => context)
+      RDF::Transaction.new(:graph => context)
     end
 
     ##
@@ -221,10 +226,11 @@ module RDF
 
       ##
       # @private
-      # @see RDF::Readable#supports?
+      # @see RDF::Enumerable#supports?
       def supports?(feature)
         case feature.to_sym
-          when :context   then true   # statement contexts / named graphs
+          # statement contexts / named graphs
+          when :context   then @options[:with_context]
           when :inference then false  # forward-chaining inference
           else false
         end
@@ -351,6 +357,7 @@ module RDF
       def insert_statement(statement)
         unless has_statement?(statement)
           s, p, o, c = statement.to_quad
+          c = DEFAULT_CONTEXT unless supports?(:context)
           c ||= DEFAULT_CONTEXT
           @data[c] ||= {}
           @data[c][s] ||= {}
@@ -365,6 +372,7 @@ module RDF
       def delete_statement(statement)
         if has_statement?(statement)
           s, p, o, c = statement.to_quad
+          c = DEFAULT_CONTEXT unless supports?(:context)
           c ||= DEFAULT_CONTEXT
           @data[c][s][p].delete(o)
           @data[c][s].delete(p) if @data[c][s][p].empty?
@@ -386,4 +394,7 @@ module RDF
       protected :clear_statements
     end # Implementation
   end # Repository
+
+  # RDF::Dataset is a synonym for RDF::Repository
+  Dataset = Repository
 end # RDF
