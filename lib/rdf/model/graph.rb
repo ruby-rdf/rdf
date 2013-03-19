@@ -68,8 +68,8 @@ module RDF
     # @return [Graph]
     # @since  0.1.7
     def self.load(url, options = {}, &block)
-      self.new(url, options) do |graph|
-        graph.load! if graph.named?
+      self.new(options) do |graph|
+        graph.load(url, options)
 
         if block_given?
           case block.arity

@@ -9,6 +9,18 @@ describe RDF::Graph do
     @new = method(:new)
   end
 
+  describe ".load" do
+    it "creates an unnamed graph" do
+      RDF::Graph.should_receive(:new).with(:base_uri => "http://example/")
+      RDF::Graph.load("http://example/", :base_uri => "http://example/")
+    end
+
+    it "loads into an unnamed graph" do
+      RDF::Graph.any_instance.should_receive(:load).with("http://example/", :base_uri => "http://example/")
+      RDF::Graph.load("http://example/", :base_uri => "http://example/")
+    end
+  end
+
   context "unnamed graphs" do
     it "should be instantiable" do
       lambda { @new.call }.should_not raise_error
