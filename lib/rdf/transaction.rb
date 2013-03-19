@@ -5,6 +5,10 @@ module RDF
   # Transactions consist of a sequence of RDF statements to delete from and
   # a sequence of RDF statements to insert into a given named graph.
   #
+  # Repository implementations may choose to sub-class this class
+  # to provide transactional support for repository updates, when
+  # accessed through {RDF::Repository#begin_transaction}.
+  #
   # @example Executing a transaction against a repository
   #   repository = ...
   #   RDF::Transaction.execute(repository) do |tx|
@@ -30,10 +34,14 @@ module RDF
     end
 
     ##
-    # RDF graph to modify when executed.
-    #
+    # Name of this graph, if it is part of an {RDF::Repository}
+    # @!attribute [rw] context
     # @return [RDF::Resource]
-    attr_reader :graph
+    # @since 1.1.0
+    attr_accessor :context
+
+    alias_method :graph, :context
+    alias_method :graph=, :context=
 
     ##
     # RDF statements to delete when executed.
@@ -57,14 +65,18 @@ module RDF
     # Initializes this transaction.
     #
     # @param  [Hash{Symbol => Object}]  options
+    # @option options [RDF::Resource]   :context  (nil)
+    #   Name of named graph to be affected if `inserts` or `deletes`
+    #   do not have a `context`.
     # @option options [RDF::Resource]   :graph  (nil)
+    #   Alias for `:context`.
     # @option options [RDF::Enumerable] :insert (RDF::Graph.new)
     # @option options [RDF::Enumerable] :delete (RDF::Graph.new)
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
     def initialize(options = {}, &block)
       @options = options.dup
-      @graph   = @options.delete(:graph)  || @options.delete(:context)
+      @context = @options.delete(:graph)  || @options.delete(:context)
       @inserts = @options.delete(:insert) || RDF::Graph.new
       @deletes = @options.delete(:delete) || RDF::Graph.new
       @inserts.extend(RDF::Enumerable) unless @inserts.kind_of?(RDF::Enumerable)
@@ -102,13 +114,13 @@ module RDF
 
       deletes.each_statement do |statement|
         statement = statement.dup
-        statement.context = graph
+        statement.context ||= graph
         repository.delete(statement)
       end
 
       inserts.each_statement do |statement|
         statement = statement.dup
-        statement.context = graph
+        statement.context ||= graph
         repository.insert(statement)
       end
 
@@ -134,6 +146,7 @@ module RDF
       warn(inspect)
     end
 
+    protected
     ##
     # Appends an RDF statement to the sequence to insert when executed.
     #
@@ -155,7 +168,5 @@ module RDF
     end
 
     undef_method :load, :update, :clear
-    protected :insert_statement
-    protected :delete_statement
   end # Transaction
 end # RDF
