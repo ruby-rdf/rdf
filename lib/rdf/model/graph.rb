@@ -240,7 +240,7 @@ module RDF
     # @see    RDF::Enumerable#each_statement
     def each(&block)
       if @data.respond_to?(:query)
-        @data.query(:context => context || false).each(&block)
+        @data.query(:context => context || false, &block)
       elsif @data.respond_to?(:each)
         @data.each(&block)
       else
@@ -259,7 +259,7 @@ module RDF
     def ==(other)
       other.is_a?(RDF::Graph) &&
       context == other.context &&
-      each.to_a == other.each.to_a
+      statements.to_a == other.statements.to_a
     end
 
     ##
