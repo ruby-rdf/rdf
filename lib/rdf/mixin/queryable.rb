@@ -147,10 +147,14 @@ module RDF
         query(pattern) do |statement|
           return statement
         end
-        return nil
+      elsif respond_to?(:each_statement)
+        each_statement do |statement|
+          return statement
+        end
       else
-        super()
+        return super()
       end
+      nil
     end
 
     ##
