@@ -288,10 +288,17 @@ describe RDF::Literal do
    end
 
    describe "#datatype" do
-     literals(:all_plain).each do |args|
-       it "returns nil for #{args.inspect}" do
+     literals(:all_plain_no_lang).each do |args|
+       it "returns xsd:string for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
-         literal.datatype.should be_nil
+         literal.datatype.should == RDF::XSD.string
+       end
+     end
+
+     literals(:all_plain_lang).each do |args|
+       it "returns xsd:string for #{args.inspect}" do
+         literal = RDF::Literal.new(*args)
+         literal.datatype.should == RDF.langString
        end
      end
 
@@ -830,6 +837,8 @@ describe RDF::Literal do
         "open-eq-07 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
         "open-eq-07 'xyz'^^xsd:integer='xyz'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("xyz")],
         "open-eq-07 'xyz'^^xsd:string='xyz'xsd:string" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :datatype => XSD.string)],
+        "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
+        "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
         "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
       }.each do |label, (left, right)|
         it "returns true for #{label}" do
@@ -850,8 +859,6 @@ describe RDF::Literal do
         "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
         "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
         "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
-        "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
-        "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
         "term-6 '456.'^^xsd:decimal='456.0'^^xsd:decimal" => [RDF::Literal::Decimal.new("456."), RDF::Literal::Decimal.new("456.0")],
       }.each do |label, (left, right)|
         it "returns false for #{label}" do

@@ -2,18 +2,13 @@ module RDF
   ##
   # An RDF literal.
   #
-  # Subclasses of {RDF::Literal} should define DATATYPE and GRAMMAR constants, which are used
-  # for identifying the appropriate class to use for a datatype URI and to perform lexical
-  # matching on the value.
+  # Subclasses of {RDF::Literal} should define DATATYPE and GRAMMAR constants, which are used for identifying the appropriate class to use for a datatype URI and to perform lexical matching on the value.
   #
-  # Literal comparison with other {RDF::Value} instances call {RDF::Value#type_error},
-  # which, returns false. Implementations wishing to have {RDF::TypeError} raised
-  # should mix-in {RDF::TypeCheck}. This is required for strict SPARQL conformance.
+  # Literal comparison with other {RDF::Value} instances call {RDF::Value#type_error}, which, returns false. Implementations wishing to have {RDF::TypeError} raised should mix-in {RDF::TypeCheck}. This is required for strict SPARQL conformance.
   #
-  # Specific typed literals may have behavior different from the default implementation. See
-  # the following defined sub-classes for specific documentation. Additional sub-classes may
-  # be defined, and will interoperate by defining `DATATYPE` and `GRAMMAR` constants, in addition
-  # other required overrides of RDF::Literal behavior.
+  # Specific typed literals may have behavior different from the default implementation. See the following defined sub-classes for specific documentation. Additional sub-classes may be defined, and will interoperate by defining `DATATYPE` and `GRAMMAR` constants, in addition other required overrides of RDF::Literal behavior.
+  #
+  # In RDF 1.1, all literals are typed, including plain literals and language tagged literals. Internally, plain literals are given the `xsd:string` datatype and language tagged literals are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language tagged literals. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
   #
   # * {RDF::Literal::Boolean}
   # * {RDF::Literal::Date}
@@ -57,8 +52,8 @@ module RDF
   #   RDF::Literal.new(Date.new(2010)).datatype      #=> XSD.date
   #   RDF::Literal.new(DateTime.new(2010)).datatype  #=> XSD.dateTime
   #
-  # @see http://www.w3.org/TR/rdf-concepts/#section-Literals
-  # @see http://www.w3.org/TR/rdf-concepts/#section-Datatypes-intro
+  # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
+  # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
   class Literal
 
   private
@@ -133,9 +128,16 @@ module RDF
     attr_accessor :datatype
 
     ##
+    # Literals without a datatype are given either xsd:string or rdf:langString
+    # depending on if there is language
+    #
     # @param  [Object] value
     # @option options [Symbol] :language (nil)
     # @option options [URI]    :datatype (nil)
+    # @raise [ArgumentError]
+    #   if there is a language and datatype is no rdf:langString
+    # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
+    # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
     def initialize(value, options = {})
       @object   = value
       @string   = options[:lexical] if options[:lexical]
@@ -143,6 +145,9 @@ module RDF
       @language = options[:language].to_s.to_sym if options[:language]
       @datatype = RDF::URI(options[:datatype]) if options[:datatype]
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
+      @datatype ||= @language ? RDF.langString : RDF::XSD.string
+      raise ArgumentError, "datatype with language must be rdf:langString" if @language && @datatype != RDF::langString
+      raise ArgumentError, "datatype of rdf:langString requires a language" if !@language && @datatype == RDF::langString
     end
 
     ##
@@ -219,10 +224,10 @@ module RDF
         when self.has_language? && self.language.to_s.downcase == other.language.to_s.downcase
           # Literals with languages can compare if languages are identical
           self.value == other.value
-        when (self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)
+        when self.simple? && other.simple?
           self.value == other.value
         when other.comperable_datatype?(self) || self.comperable_datatype?(other)
-          # Comoparing plain with undefined datatypes does not generate an error, but returns false
+          # Comparing plain with undefined datatypes does not generate an error, but returns false
           # From data-r2/expr-equal/eq-2-2.
           false
         else
@@ -241,7 +246,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def plain?
-      language.nil? && datatype.nil?
+      datatype == RDF::XSD.string
     end
     alias_method :simple?, :plain?
 
@@ -251,17 +256,19 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def has_language?
-      !language.nil?
+      datatype == RDF.langString
     end
     alias_method :language?, :has_language?
 
     ##
     # Returns `true` if this is a datatyped literal.
     #
+    # For historical reasons, this excludes xsd:string and rdf:langString
+    #
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
     def has_datatype?
-      !datatype.nil?
+      !plain? && !language?
     end
     alias_method :datatype?,  :has_datatype?
     alias_method :typed?,     :has_datatype?
@@ -305,16 +312,8 @@ module RDF
         # Invald types can be compared without raising a TypeError if literal has a language (open-eq-08)
         !other.valid? && self.has_language?
       else
-        case other.datatype
-        when XSD.string
-          true
-        when nil
-          # A different language will not generate a type error
-          other.has_language?
-        else
-          # An unknown datatype may not be used for comparison, unless it has a language? (open-eq-8)
-          self.has_language?
-        end
+        # An unknown datatype may not be used for comparison, unless it has a language? (open-eq-8)
+        self.has_language?
       end
     end
 
