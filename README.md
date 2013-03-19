@@ -48,9 +48,9 @@ the 1.1 release of RDF.rb:
   The notion of `context` in RDF.rb is treated equivalently to [Named
   Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF
   Dataset, and graphs on their own are not named.
-* {RDF::Value} is now only used for things that might be an element of an {RDF::Statement},
-  therefore, {RDF::Graph} no longer includes this, and {RDF::Value#graph?} has been removed.
 * {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}.
+  Made it clear that using {RDF::Graph} does not mean that it may be used within an
+  {RDF::Statement}, for this see {RDF::Term}.
 * {RDF::Dataset} is introduced as a class alias of {RDF::Repository}.
   This allows closer alignment to the RDF concept
   of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
