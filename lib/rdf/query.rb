@@ -129,10 +129,12 @@ module RDF
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
     #     Default context for matching against queryable.
     #     Named queries either match against a specifically named
-    #     contexts if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
-    #     Names that are against unbound variables match either detault
-    #     or named contexts.
+    #     graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
+    #     Names that are against unbound variables match either default
+    #     or named graphs.
     #     The name of `false` will only match against the default context.
+    #   @option options [RDF::Resource, RDF::Query::Variable, false] :name (nil)
+    #     Alias for `:context`.
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
@@ -146,9 +148,11 @@ module RDF
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
     #     Default context for matching against queryable.
     #     Named queries either match against a specifically named
-    #     contexts if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
-    #     Names that are against unbound variables match either detault
-    #     or named contexts.
+    #     graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
+    #     Names that are against unbound variables match either default
+    #     or named graphs.
+    #   @option options [RDF::Resource, RDF::Query::Variable, false] :name (nil)
+    #     Alias for `:context`.
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
@@ -157,7 +161,7 @@ module RDF
       patterns << @options if patterns.empty?
       @variables = {}
       @solutions = @options.delete(:solutions) || Solutions.new
-      context = @options.delete(:context)
+      context = @options.delete(:context) || @options.delete(:name)
 
       @patterns  = case patterns.first
         when Hash  then compile_hash_patterns(HashPatternNormalizer.normalize!(patterns.first.dup, @options))
@@ -246,6 +250,8 @@ module RDF
     # @option options [RDF::Resource, RDF::Query::Variable, false] context (nil)
     #   Specific context for matching against queryable;
     #   overrides default context defined on query.
+    # @option options [RDF::Resource, RDF::Query::Variable, false] name (nil)
+    #   Alias for `:context`.
     # @option options [Hash{Symbol => RDF::Term}] solutions
     #   optional initial solutions for chained queries
     # @return [RDF::Query::Solutions]
@@ -264,7 +270,7 @@ module RDF
       @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
 
       patterns = @patterns
-      context = options.fetch(:context, self.context)
+      context = options.fetch(:context, options.fetch(:name, self.context))
 
       # Add context to pattern, if necessary
       unless context.nil?
@@ -349,27 +355,34 @@ module RDF
       Query.new(self.patterns + other.patterns)
     end
     
-    # Is this is a named query?
+    # Is this query scoped to a named graph?
     # @return [Boolean]
     def named?
       !!options[:context]
     end
     
-    # Is this is an unamed query?
+    # Is this query scoped to the default graph?
     # @return [Boolean]
-    def unnamed?
-      !named?
+    def default?
+      options[:context] == false
     end
     
-    # Add name to query
-    # @param [RDF::Value] value
-    # @return [RDF::Value]
+    # Is this query unscoped? This indicates that it can return results from
+    # either a named graph or the default graph.
+    # @return [Boolean]
+    def unnamed?
+      options[:context].nil?
+    end
+    
+    # Scope the query to named graphs matching value
+    # @param [RDF::IRI, RDF::Query::Variable] value
+    # @return [RDF::IRI, RDF::Query::Variable]
     def context=(value)
       options[:context] = value
     end
     
-    # Name of this query, if any
-    # @return [RDF::Value]
+    # Scope of this query, if any
+    # @return [RDF::IRI, RDF::Query::Variable]
     def context
       options[:context]
     end
