@@ -39,6 +39,7 @@ module RDF
 
   # RDF objects
   autoload :Graph,       'rdf/model/graph'
+  autoload :IRI,         'rdf/model/uri'
   autoload :Literal,     'rdf/model/literal'
   autoload :Node,        'rdf/model/node'
   autoload :Resource,    'rdf/model/resource'
@@ -62,6 +63,7 @@ module RDF
   autoload :NQuads,      'rdf/nquads'
 
   # RDF storage
+  autoload :Dataset,     'rdf/model/dataset'
   autoload :Repository,  'rdf/repository'
   autoload :Transaction, 'rdf/transaction'
 
@@ -189,5 +191,8 @@ module RDF
   class << self
     # For compatibility with `RDF::Vocabulary.__name__`:
     alias_method :__name__, :name
+    
+    # For IRI compatibility
+    alias_method :to_iri, :to_uri
   end
 end
