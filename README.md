@@ -13,6 +13,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 ## Features
 
 * 100% pure Ruby with minimal dependencies and no bloat.
+* Fully compatible with [RDF 1.1][] specifications.
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing N-Triples out of the box, with more
@@ -28,6 +29,43 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * Compatible with older Ruby versions with the help of the [Backports][] gem.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
+
+## Differences between RDF 1.0 and RDF 1.1
+
+This version of RDF.rb is fully compatible with [RDF 1.1][], but it creates some
+marginal incompatibilities with [RDF 1.0][], as implemented in versions prior to
+the 1.1 release of RDF.rb:
+
+* Introduces {RDF::IRI}, as a synonym for {RDF::URI} either {RDF::IRI} or {RDF::URI} can be used interchangeably.
+  Versions of RDF.rb prior to the 1.1 release were already compatible with IRIs.
+  Internationalized Resource Identifiers (see [RFC3987][]) are a super-set of URIs (see [RFC3986][])
+  which allow for characters other than standard US-ASCII.
+* {RDF::List} no longer emits a `rdf:List` type. However, it will now recognize
+  any subjects that are {RDF::Node} instances as being list elements, as long
+  as they have both `rdf:first` and `rdf:rest` predicates.
+* {RDF::Graph} adding a `context` to a graph may only be done when the underlying
+  storage model supports contexts (the default {RDF::Repository} does).
+  The notion of `context` in RDF.rb is treated equivalently to [Named
+  Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF
+  Dataset, and graphs on their own are not named.
+* {RDF::Value} is now only used for things that might be an element of an {RDF::Statement},
+  therefore, {RDF::Graph} no longer includes this, and {RDF::Value#graph?} has been removed.
+* {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}.
+* {RDF::Dataset} is introduced as a class alias of {RDF::Repository}.
+  This allows closer alignment to the RDF concept
+  of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
+* The `context` (or `name`) of a named graph within a Dataset or Repository may be
+  either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict
+  this to being only {RDF::IRI}.
+* There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][],
+  all literals are typed, including plain literals and language tagged literals.
+  Internally, plain literals are given the `xsd:string` datatype and language tagged
+  literals are given the `rdf:langString` datatype. Creating a plain literal, without
+  a datatype or language, will automatically provide the `xsd:string` datatype; similar
+  for language tagged literals. Note that most serialization formats will remove this
+  datatype. Code which depends on a literal having the `xsd:string` datatype being different
+  from a plain literal (formally, without a datatype) may break. However note that the
+  `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
 
 ## Tutorials
 
@@ -206,6 +244,23 @@ other gems:
 
 The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 
+### RDF Datatypes
+
+RDF.rb only implements core datatypes from the
+[RDF Datatype Map](http://www.w3.org/TR/rdf11-concepts/#datatype-maps). Most other
+XSD and RDF datatype implementations can be find in the following:
+
+* {RDF::XSD}
+
+### Graph Isomorphism
+
+Two graphs may be compared with each other to determine if they are _isomorphic_.
+As BNodes within two different graphs are no equal, graphs may not be directly compared.
+The {RDF::Isomorphic} gem may be used to determine if they make the same statements, aside
+from BNode identity (i.e., they each entail the other)
+
+* {RDF::Isomorphic}
+
 ### RDF Storage
 
 <http://blog.datagraph.org/2010/04/rdf-repository-howto>
@@ -347,6 +402,8 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDFXML doc]:       http://rubydoc.info/github/ruby-rdf/rdf-rdfxml/master/frames
 [Turtle doc]:       http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/frames
 [SPARQL doc]:       http://rubydoc.info/github/ruby-rdf/sparql/frames
+[RDF 1.0]:          http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
+[RDF 1.1]:          http://www.w3.org/TR/rdf11-concepts/
 [SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/
 [RDF.rb]:           http://ruby-rdf.github.com/
 [RDF::DO]:          http://ruby-rdf.github.com/rdf-do
