@@ -161,7 +161,9 @@ module RDF
       patterns << @options if patterns.empty?
       @variables = {}
       @solutions = @options.delete(:solutions) || Solutions.new
-      context = @options.delete(:context) || @options.delete(:name)
+      context = @options.fetch(:context, @options.fetch(:name, nil))
+      @options.delete(:context)
+      @options.delete(:name)
 
       @patterns  = case patterns.first
         when Hash  then compile_hash_patterns(HashPatternNormalizer.normalize!(patterns.first.dup, @options))
