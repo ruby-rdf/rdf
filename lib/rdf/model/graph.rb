@@ -31,16 +31,24 @@ module RDF
     ##
     # Returns the options passed to this graph when it was constructed.
     #
+    # @!attribute [r] options
     # @return [Hash{Symbol => Object}]
     attr_reader :options
 
     ##
+    # Name of this graph, if it is part of an {RDF::Repository}
+    # @!attribute [rw] context
     # @return [RDF::Resource]
     # @note In the next release, only projections from an
     # {RDF::Enumerable} supporting contexts will have a context.
     attr_accessor :context
 
+    alias_method :name, :context
+    alias_method :name=, :context=
+
     ##
+    # {RDF::Queryable} backing this graph.
+    # @!attribute [rw] data
     # @return [RDF::Queryable]
     attr_accessor :data
 
@@ -141,12 +149,12 @@ module RDF
     end
 
     ##
-    # Returns `false` to indicate that this graph is not durable
+    # A graph is durable if it's underlying data model is durable
     #
     # @return [Boolean]
     # @see    RDF::Durable#durable?
     def durable?
-      false
+      @data.durable?
     end
 
     ##
@@ -158,10 +166,9 @@ module RDF
     end
 
     ##
-    # Returns the URI representation of this graph.
+    # Returns the {RDF::Resource} representation of this graph.
     #
-    # @return [RDF::URI]
-    # @note The next release, graphs will not be named, this will return nil
+    # @return [RDF::Resource]
     def to_uri
       context
     end
@@ -171,7 +178,7 @@ module RDF
     #
     # @return [String]
     def to_s
-      named? ? context.to_s : "<>"
+      named? ? context.to_s : "default"
     end
 
     ##
@@ -180,7 +187,7 @@ module RDF
     # @return [Boolean]
     # @see    RDF::Enumerable#empty?
     def empty?
-      @data.empty?
+      !@data.has_context?(context || false)
     end
 
     ##
@@ -198,7 +205,7 @@ module RDF
     # @return [Integer]
     # @see    RDF::Enumerable#count
     def count
-      @data.query(:context => context).count
+      @data.query(:context => context || false).count
     end
 
     ##
@@ -209,7 +216,7 @@ module RDF
     # @see    RDF::Enumerable#has_statement?
     def has_statement?(statement)
       statement = statement.dup
-      statement.context = context # TODO: going away
+      statement.context = context
       @data.has_statement?(statement)
     end
 
@@ -221,7 +228,27 @@ module RDF
     # @return [Enumerator]
     # @see    RDF::Enumerable#each_statement
     def each(&block)
-      @data.query(:context => context).each(&block)
+      if @data.respond_to?(:query)
+        @data.query(:context => context || false, &block)
+      elsif @data.respond_to?(:each)
+        @data.each(&block)
+      else
+        @data.to_a.each(&block)
+      end
+    end
+
+    ##
+    # Graph equivalence based on the contents of each graph being _exactly_
+    # the same. To determine if the have the same _meaning_, consider
+    # [rdf-isomorphic](http://rubygems.org/gems/rdf-isomorphic).
+    #
+    # @param [RDF::Graph] other
+    # @return [Boolean]
+    # @see http://rubygems.org/gems/rdf-isomorphic
+    def ==(other)
+      other.is_a?(RDF::Graph) &&
+      context == other.context &&
+      statements.to_a == other.statements.to_a
     end
 
     ##
@@ -229,7 +256,7 @@ module RDF
     # @see RDF::Queryable#query
     def query_pattern(pattern, &block)
       pattern = pattern.dup
-      pattern.context = context
+      pattern.context = context || false
       @data.query(pattern, &block)
     end
 
@@ -255,7 +282,7 @@ module RDF
     # @private
     # @see RDF::Mutable#clear
     def clear_statements
-      @data.delete(:context => context)
+      @data.delete(:context => context || false)
     end
 
     protected :query_pattern
