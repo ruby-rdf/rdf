@@ -129,7 +129,11 @@ module RDF
     end
 
     # Undefine all superfluous instance methods:
-    undef_method(*(instance_methods.map(&:to_sym) - [:__id__, :__send__, :__class__, :__eval__, :object_id, :instance_eval, :inspect, :class, :is_a?]))
+    undef_method(*instance_methods.
+                  map(&:to_s).
+                  select {|m| m =~ /^\w+$/}.
+                  reject {|m| %w(object_id dup instance_eval inspect to_s class).include?(m) || m[0,2] == '__'}.
+                  map(&:to_sym))
 
     ##
     # @param  [RDF::URI, String, #to_s] uri
