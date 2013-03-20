@@ -36,7 +36,8 @@ module RDF
 
     ##
     # @return [RDF::Resource]
-    # @deprecated In the next release, graphs will have no name
+    # @note In the next release, only projections from an
+    # {RDF::Enumerable} supporting contexts will have a context.
     attr_accessor :context
 
     ##
@@ -72,9 +73,10 @@ module RDF
     #   @param  [RDF::Resource]          context
     #     The context only provides a context for loading relative documents
     #   @param  [Hash{Symbol => Object}] options
-    #   @deprecated Graph context will be removed in the next release.
-    #     This is because context relates to a Named Graph in RDF 1.1
-    #     and a default graph has no context/name.
+    #   @note contexts are only useful when used as a projection
+    #   on a `:data` which supports contexts. Otherwise, there is no
+    #   such thing as a named graph in RDF 1.1, a repository may have
+    #   graphs which are named, but the name is not a property of the graph.
     # @overload initialize(options)
     #   @param  [Hash{Symbol => Object}] options
     # @yield  [graph]
