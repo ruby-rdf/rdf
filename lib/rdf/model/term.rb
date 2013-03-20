@@ -66,12 +66,11 @@ module RDF
     end
 
     ##
-    # Returns `true` if this term is variable.
+    # Returns `true` if `self` is a {RDF::Term}.
     #
-    # @return [Boolean] `true` or `false`
-    # @see    #constant?
-    def variable?
-      false
+    # @return [Boolean]
+    def term?
+      true
     end
   end # Term
 end # RDF
