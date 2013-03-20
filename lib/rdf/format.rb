@@ -181,29 +181,55 @@ module RDF
     end
 
     ##
-    # Returns the set of format symbols for loaded RDF::Reader subclasses.
+    # Returns the set of format symbols for available RDF::Reader subclasses.
     #
     # @example
     #
-    #     formats = RDF::Format.reader_symbols
-    #     format = RDF::Format.for(formats.first)
+    #     symbols = RDF::Format.reader_symbols
+    #     format = RDF::Format.for(symbols.first)
     #
     # @return [Array<Symbol>]
     def self.reader_symbols
-      RDF::Format.each.to_a.map(&:reader).compact.map(&:to_sym).uniq
+      @@readers.keys.compact.map(&:to_sym).uniq
     end
 
     ##
-    # Returns the set of format symbols for loaded RDF::Writer subclasses.
+    # Returns the set of content types for available RDF::Reader subclasses.
     #
     # @example
     #
-    #     formats = RDF::Format.writer_symbols
-    #     format = RDF::Format.for(formats.first)
+    #     content_types = RDF::Format.reader_types
+    #     format = RDF::Format.for(:content_type => content_types.first)
+    #
+    # @return [Array<String>]
+    def self.reader_types
+      reader_symbols.map {|s| RDF::Format.for(s).content_type}.flatten.uniq
+    end
+
+    ##
+    # Returns the set of format symbols for available RDF::Writer subclasses.
+    #
+    # @example
+    #
+    #     symbols = RDF::Format.writer_symbols
+    #     format = RDF::Format.for(symbols.first)
     #
     # @return [Array<Symbol>]
     def self.writer_symbols
-      RDF::Format.each.to_a.map(&:writer).compact.map(&:to_sym).uniq
+      @@writers.keys.compact.map(&:to_sym).uniq
+    end
+
+    ##
+    # Returns the set of content types for available RDF::Writer subclasses.
+    #
+    # @example
+    #
+    #     content_types = RDF::Format.writer_types
+    #     format = RDF::Format.for(:content_type => content_types.first)
+    #
+    # @return [Array<String>]
+    def self.writer_types
+      writer_symbols.map {|s| RDF::Format.for(s).content_type}.flatten.uniq
     end
 
     ##

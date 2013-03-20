@@ -19,6 +19,7 @@ describe RDF::NQuads::Format do
       'etc/doap.nq',
       {:file_name      => 'etc/doap.nq'},
       {:file_extension => 'nq'},
+      {:content_type   => 'application/n-quads'},
       {:content_type   => 'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
