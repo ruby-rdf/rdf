@@ -79,6 +79,9 @@ module RDF
               predicate = read_uriref(:intern => true) || fail_predicate
               object    = read_uriref || read_node || read_literal || fail_object
               context    = read_uriref || read_node || read_literal
+              if validate? && !read_eos
+                raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+              end
               return [subject, predicate, object, {:context => context}]
             end
           rescue RDF::ReaderError => e

@@ -126,6 +126,7 @@ module RDF::NTriples
     SUBJECT               = Regexp.union(URIREF, NODEID).freeze
     PREDICATE             = Regexp.union(URIREF).freeze
     OBJECT                = Regexp.union(URIREF, NODEID, LITERAL).freeze
+    END_OF_STATEMENT      = /^\s*\.\s*$/.freeze
 
     ##
     # Reconstructs an RDF value from its serialized N-Triples
@@ -255,6 +256,9 @@ module RDF::NTriples
             subject   = read_uriref || read_node || fail_subject
             predicate = read_uriref(:intern => true) || fail_predicate
             object    = read_uriref || read_node || read_literal || fail_object
+            if validate? && !read_eos
+              raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+            end
             return [subject, predicate, object]
           end
         rescue RDF::ReaderError => e
@@ -279,6 +283,7 @@ module RDF::NTriples
         uri_str = self.class.unescape(uri_str)
         uri = RDF::URI.send(intern? && options[:intern] ? :intern : :new, uri_str)
         uri.validate!     if validate?
+        raise RDF::ReaderError, "uri not absolute" if validate? && !uri.absolute?
         uri.canonicalize! if canonicalize?
         uri
       end
@@ -312,6 +317,13 @@ module RDF::NTriples
         literal.canonicalize! if canonicalize?
         literal
       end
+    end
+
+    ##
+    # @return [Boolean]
+    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (triple)
+    def read_eos
+      match(END_OF_STATEMENT)
     end
   end # Reader
 end # RDF::NTriples

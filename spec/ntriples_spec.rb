@@ -467,6 +467,22 @@ describe RDF::NTriples do
         end
       end
     end
+
+    context "with invalid input" do
+      {
+        "nt-syntax-bad-struct-01" => %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
+        "nt-syntax-bad-struct-02" => %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
+        "nt-syntax-bad-lang-01" => %q(<http://example/s> <http://example/p> "string"@1 .),
+        "nt-syntax-bad-string-05" => %q(<http://example/s> <http://example/p> """abc""" .),
+        "nt-syntax-bad-num-01" => %q(<http://example/s> <http://example/p> 1 .),
+        "nt-syntax-bad-num-02" => %q(<http://example/s> <http://example/p> 1.0 .),
+        "nt-syntax-bad-num-03" => %q(<http://example/s> <http://example/p> 1.0e0 .),
+      }.each do |name, nt|
+        it name do
+          lambda {@reader.new(nt, :validate => true).to_a}.should raise_error(RDF::ReaderError)
+        end
+      end
+    end
   end
 
   context "when writing" do
