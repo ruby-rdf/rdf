@@ -145,9 +145,7 @@ describe RDF::NTriples::Writer do
 end
 
 describe RDF::NTriples do
-  before :all do
-    @testfile = fixture_path('test.nt')
-  end
+  let(:testfile) {fixture_path('test.nt')}
 
   before :each do
     @reader = RDF::NTriples::Reader
@@ -156,7 +154,7 @@ describe RDF::NTriples do
 
   context "when created" do
     it "should accept files" do
-      lambda { @reader.new(File.open(@testfile)) }.should_not raise_error
+      lambda { @reader.new(File.open(testfile)) }.should_not raise_error
     end
 
     it "should accept IO streams" do
@@ -346,7 +344,7 @@ describe RDF::NTriples do
     end
 
     it "should parse W3C's test data" do
-      @reader.new(File.open(@testfile)).to_a.size.should == 30
+      @reader.new(File.open(testfile)).to_a.size.should == 30
     end
 
     it "should parse terms" do

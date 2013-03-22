@@ -12,8 +12,8 @@ describe RDF::CLI do
   end
   
   TEST_FILES = {
-    :nt => File.expand_path(File.join(File.dirname(__FILE__), 'data', 'test.nt')),
-    :nq => File.expand_path(File.join(File.dirname(__FILE__), 'data', 'test.nq')),
+    :nt => fixture_path('test.nt'),
+    :nq => fixture_path('test.nq'),
   }
 
   describe "#serialize" do
