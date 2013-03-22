@@ -61,11 +61,10 @@ module RDF
     end
 
     ##
-    # Returns `true` if this term is variable.
+    # Returns `true` if `self` is a {RDF::Resource}.
     #
-    # @return [Boolean] `true` or `false`
-    # @see    #constant?
-    def variable?
+    # @return [Boolean]
+    def resource?
       false
     end
 
@@ -74,14 +73,6 @@ module RDF
     #
     # @return [Boolean]
     def literal?
-      false
-    end
-
-    ##
-    # Returns `true` if `self` is a {RDF::Resource}.
-    #
-    # @return [Boolean]
-    def resource?
       false
     end
 

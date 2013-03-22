@@ -201,6 +201,7 @@ module RDF::NTriples
     # @see    http://blog.grayproductions.net/articles/understanding_m17n
     # @see    http://yehudakatz.com/2010/05/17/encodings-unabridged/
     def self.unescape(string)
+      string = string.to_s
       string = string.dup.force_encoding(Encoding::ASCII_8BIT) if string.respond_to?(:force_encoding)
 
       # Decode \t|\n|\r|\"|\\ character escapes:
