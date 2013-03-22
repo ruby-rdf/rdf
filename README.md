@@ -153,6 +153,23 @@ A specific sub-type of Writer can also be invoked directly:
 
     graph.dump(:nquads)
 
+## Reader/Writer convenience methods
+{RDF::Enumerable} implements `to_{format}` for each available instance of {RDF::Reader}.
+For example, if `rdf/turtle` is loaded, this allows the following:
+
+    graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
+    graph.to_ttl
+
+Similarly, {RDF::Mutable} implements `from_{format}` for each available instance
+of {RDF::Writer}. For example:
+
+    graph = RDF::Graph.new
+    graph.from_ttl("[ a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Resource>]")
+
+Note that no prefixes are loaded automatically, however they can be provided as arguments:
+
+    graph.from_ttl("[ a rdf:Resource]", :prefixes => {:rdf => RDF.to_uri})
+
 ### Querying RDF data using basic graph patterns (BGPs)
 
     require 'rdf/ntriples'

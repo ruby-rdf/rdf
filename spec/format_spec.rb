@@ -49,6 +49,49 @@ describe RDF::Format do
     end
   end
 
+  describe ".reader_symbols" do
+    it "returns symbols of available readers" do
+      [:ntriples, :nquads, :fooformat, :barformat].each do |sym|
+        RDF::Format.reader_symbols.should include(sym)
+      end
+    end
+  end
+
+  describe ".reader_types" do
+    it "returns content-types of available readers" do
+      %w(
+        application/n-triples text/plain
+        application/n-quads text/x-nquads
+        application/test
+      ).each do |ct|
+        RDF::Format.reader_types.should include(ct)
+      end
+    end
+  end
+
+  describe ".writer_symbols" do
+    it "returns symbols of available writers" do
+      [:ntriples, :nquads].each do |sym|
+        RDF::Format.writer_symbols.should include(sym)
+      end
+      [:fooformat, :barformat].each do |sym|
+        RDF::Format.writer_symbols.should_not include(sym)
+      end
+    end
+  end
+
+  describe ".writer_types" do
+    it "returns content-types of available writers" do
+      %w(
+        application/n-triples text/plain
+        application/n-quads text/x-nquads
+      ).each do |ct|
+        RDF::Format.writer_types.should include(ct)
+      end
+      RDF::Format.writer_types.should_not include("application/test")
+    end
+  end
+
   RDF::Format.each do |format|
     context format.name do
       subject {format}

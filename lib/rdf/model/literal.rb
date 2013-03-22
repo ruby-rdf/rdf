@@ -343,6 +343,17 @@ module RDF
     end
 
     ##
+    # Returns the base representation of this URI.
+    #
+    # @return [Sring]
+    def to_base
+      text = %("#{escape(value)}")
+      text << "@#{language}" if has_language?
+      text << "^^#{datatype.to_base}" if has_datatype?
+      text
+    end
+
+    ##
     # Returns the value as a string.
     #
     # @return [String]

@@ -665,5 +665,21 @@ module RDF
       raise RDF::WriterError, "No writer found using #{args.inspect}" unless writer
       writer.dump(self, nil, options)
     end
+
+    ##
+    # @overload #to_{writer}
+    #   Implements #to_{writer} for each available instance of {RDF::Writer},
+    #   based on the writer symbol.
+    #  
+    #   @return [String]
+    #   @see {RDF::Writer.sym}
+    def method_missing(meth, *args)
+      writer = RDF::Writer.for(meth.to_s[3..-1].to_sym) if meth.to_s[0,3] == "to_"
+      if writer
+        writer.buffer(:standard_prefixes => true) {|w| w << self}
+      else
+        super
+      end
+    end
   end # Enumerable
 end # RDF

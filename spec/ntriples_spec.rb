@@ -145,9 +145,7 @@ describe RDF::NTriples::Writer do
 end
 
 describe RDF::NTriples do
-  before :all do
-    @testfile = fixture_path('test.nt')
-  end
+  let(:testfile) {fixture_path('test.nt')}
 
   before :each do
     @reader = RDF::NTriples::Reader
@@ -156,7 +154,7 @@ describe RDF::NTriples do
 
   context "when created" do
     it "should accept files" do
-      lambda { @reader.new(File.open(@testfile)) }.should_not raise_error
+      lambda { @reader.new(File.open(testfile)) }.should_not raise_error
     end
 
     it "should accept IO streams" do
@@ -346,7 +344,7 @@ describe RDF::NTriples do
     end
 
     it "should parse W3C's test data" do
-      @reader.new(File.open(@testfile)).to_a.size.should == 30
+      @reader.new(File.open(testfile)).to_a.size.should == 30
     end
 
     it "should parse terms" do
@@ -466,6 +464,22 @@ describe RDF::NTriples do
               pending("Unicode URIs not supported on Ruby 1.8") { raise }
             end
           end
+        end
+      end
+    end
+
+    context "with invalid input" do
+      {
+        "nt-syntax-bad-struct-01" => %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
+        "nt-syntax-bad-struct-02" => %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
+        "nt-syntax-bad-lang-01" => %q(<http://example/s> <http://example/p> "string"@1 .),
+        "nt-syntax-bad-string-05" => %q(<http://example/s> <http://example/p> """abc""" .),
+        "nt-syntax-bad-num-01" => %q(<http://example/s> <http://example/p> 1 .),
+        "nt-syntax-bad-num-02" => %q(<http://example/s> <http://example/p> 1.0 .),
+        "nt-syntax-bad-num-03" => %q(<http://example/s> <http://example/p> 1.0e0 .),
+      }.each do |name, nt|
+        it name do
+          lambda {@reader.new(nt, :validate => true).to_a}.should raise_error(RDF::ReaderError)
         end
       end
     end

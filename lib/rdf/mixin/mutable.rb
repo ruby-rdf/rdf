@@ -152,6 +152,23 @@ module RDF
 
     alias_method :clear!, :clear
 
+    ##
+    # @overload #from_{reader}
+    #   Implements #to_{reader} for each available instance of {RDF::Reader},
+    #   based on the reader symbol.
+    #
+    #   Arguments are passed to Reader.new.
+    #  
+    #   @return [String]
+    #   @see {RDF::Reader.sym}
+    def method_missing(meth, *args)
+      reader = RDF::Reader.for(meth.to_s[5..-1].to_sym) if meth.to_s[0,5] == "from_"
+      if reader
+        self << reader.new(*args)
+      else
+        super
+      end
+    end
   protected
 
     ##
@@ -184,8 +201,5 @@ module RDF
     def delete_statement(statement)
       raise NotImplementedError.new("#{self.class}#delete_statement")
     end
-
-    protected :delete_statements
-    protected :delete_statement
   end
 end

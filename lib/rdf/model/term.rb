@@ -66,12 +66,36 @@ module RDF
     end
 
     ##
-    # Returns `true` if this term is variable.
+    # Returns a base representation of `self`.
     #
-    # @return [Boolean] `true` or `false`
-    # @see    #constant?
-    def variable?
-      false
+    # @return [RDF::Value]
+    def to_base
+      self
     end
+
+    ##
+    # Returns `true` if `self` is a {RDF::Term}.
+    #
+    # @return [Boolean]
+    def term?
+      true
+    end
+
+    protected
+    ##
+    # Escape a term using standard character escapes
+    #
+    # @param  [String] string
+    # @return [String]
+    def escape(string)
+      string.gsub('\\', '\\\\').
+             gsub("\b", '\\b').
+             gsub("\f", '\\f').
+             gsub("\t", '\\t').
+             gsub("\n", '\\n').
+             gsub("\r", '\\r').
+             gsub('"', '\\"')
+    end
+
   end # Term
 end # RDF

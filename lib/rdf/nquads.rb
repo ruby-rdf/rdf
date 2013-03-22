@@ -14,12 +14,13 @@ module RDF
     #   RDF::Format.for("etc/doap.nq")
     #   RDF::Format.for(:file_name      => "etc/doap.nq")
     #   RDF::Format.for(:file_extension => "nq")
+    #   RDF::Format.for(:content_type   => "application/n-quads")
     #   RDF::Format.for(:content_type   => "text/x-nquads")
     #
     # @see http://sw.deri.org/2008/07/n-quads/#mediatype
     # @since  0.4.0
     class Format < RDF::Format
-      content_type     'text/x-nquads', :extension => :nq
+      content_type     'application/n-quads', :extension => :nq, :alias => ['text/x-nquads']
       content_encoding 'utf-8'
 
       reader { RDF::NQuads::Reader }
@@ -78,6 +79,9 @@ module RDF
               predicate = read_uriref(:intern => true) || fail_predicate
               object    = read_uriref || read_node || read_literal || fail_object
               context    = read_uriref || read_node || read_literal
+              if validate? && !read_eos
+                raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+              end
               return [subject, predicate, object, {:context => context}]
             end
           rescue RDF::ReaderError => e

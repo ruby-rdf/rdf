@@ -19,6 +19,7 @@ describe RDF::NQuads::Format do
       'etc/doap.nq',
       {:file_name      => 'etc/doap.nq'},
       {:file_extension => 'nq'},
+      {:content_type   => 'application/n-quads'},
       {:content_type   => 'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
@@ -84,6 +85,8 @@ describe RDF::NQuads::Format do
 end
 
 describe RDF::NQuads::Reader do
+  let(:testfile) {fixture_path('test.nq')}
+
   before(:each) do
     @reader_class = RDF::NQuads::Reader
     @reader = RDF::NQuads::Reader.new
@@ -103,6 +106,20 @@ describe RDF::NQuads::Reader do
       it "discovers with #{arg.inspect}" do
         RDF::Reader.for(arg).should == RDF::NQuads::Reader
       end
+    end
+  end
+
+  context "when created" do
+    it "should accept files" do
+      lambda { @reader_class.new(File.open(testfile)) }.should_not raise_error
+    end
+
+    it "should accept IO streams" do
+      lambda { @reader_class.new(StringIO.new('')) }.should_not raise_error
+    end
+
+    it "should accept strings" do
+      lambda { @reader_class.new('') }.should_not raise_error
     end
   end
 
@@ -159,6 +176,10 @@ describe RDF::NQuads::Reader do
         RDF::NQuads.unserialize(str).should == statement
       end
     end
+  end
+
+  it "should parse W3C's test data" do
+    @reader_class.new(File.open(testfile)).to_a.size.should == 10
   end
 end
 

@@ -209,7 +209,7 @@ module RDF::NTriples
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_node(node, options = {})
-      "_:%s" % node.id
+      node.to_base
     end
 
     ##
@@ -219,7 +219,7 @@ module RDF::NTriples
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_uri(uri, options = {})
-      "<%s>" % escaped(uri_for(uri))
+      uri.to_base
     end
 
     ##
@@ -231,6 +231,7 @@ module RDF::NTriples
     def format_literal(literal, options = {})
       case literal
         when RDF::Literal
+          # Note, escaping here is more robust than in Term
           text = quoted(escaped(literal.value))
           text << "@#{literal.language}" if literal.has_language?
           text << "^^<#{uri_for(literal.datatype)}>" if literal.has_datatype?
