@@ -138,6 +138,14 @@ module RDF
     alias_method :===, :==
 
     ##
+    # Returns the base representation of this URI.
+    #
+    # @return [Sring]
+    def to_base
+      to_s
+    end
+
+    ##
     # Returns a string representation of this blank node.
     #
     # @return [String]

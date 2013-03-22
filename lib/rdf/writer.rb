@@ -466,8 +466,13 @@ module RDF
     # @param  [String] string
     # @return [String]
     def escaped(string)
-      string.gsub('\\', '\\\\').gsub("\t", '\\t').
-        gsub("\n", '\\n').gsub("\r", '\\r').gsub('"', '\\"')
+      string.gsub('\\', '\\\\').
+             gsub("\b", '\\b').
+             gsub("\f", '\\f').
+             gsub("\t", '\\t').
+             gsub("\n", '\\n').
+             gsub("\r", '\\r').
+             gsub('"', '\\"')
     end
 
     ##

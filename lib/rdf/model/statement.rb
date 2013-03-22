@@ -260,25 +260,7 @@ module RDF
     #
     # @return [String]
     def to_s
-      StringIO.open do |buffer|
-        buffer << case subject
-          when RDF::Node    then subject.to_s
-          when RDF::URI     then "<#{subject}>"
-          else subject.inspect
-        end
-        buffer << " <#{predicate}> "
-        buffer << case object
-          when RDF::Literal then object.to_s
-          when RDF::Node    then object.to_s
-          when RDF::URI     then "<#{object}>"
-          else object.inspect
-        end
-        buffer << case context
-          when nil then " ."
-          else " <#{context}> ."
-        end
-        buffer.string
-      end
+      (context ? to_quad : to_triple).map(&:to_base).join(" ") + " ."
     end
 
     ##

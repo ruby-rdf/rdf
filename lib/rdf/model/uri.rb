@@ -586,6 +586,14 @@ module RDF
     end
 
     ##
+    # Returns the base representation of this URI.
+    #
+    # @return [Sring]
+    def to_base
+      "<#{escape(@uri.to_s)}>"
+    end
+
+    ##
     # Returns the string representation of this URI.
     #
     # @example
