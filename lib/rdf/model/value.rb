@@ -61,18 +61,18 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Literal}.
-    #
-    # @return [Boolean]
-    def literal?
-      false
-    end
-
-    ##
     # Returns `true` if `self` is a {RDF::Resource}.
     #
     # @return [Boolean]
     def resource?
+      false
+    end
+
+    ##
+    # Returns `true` if `self` is a {RDF::Literal}.
+    #
+    # @return [Boolean]
+    def literal?
       false
     end
 
