@@ -168,7 +168,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
     # @option options [Encoding] :encoding     (Encoding::UTF_8)
-    #   the encoding of the input stream (Ruby 1.9+)
+    #   the encoding of the input stream
     # @option options [Boolean]  :validate     (false)
     #   whether to validate the parsed statements and values
     # @option options [Boolean]  :canonicalize (false)
@@ -414,8 +414,6 @@ module RDF
     ##
     # Returns the encoding of the input stream.
     #
-    # _Note: this method requires Ruby 1.9 or newer._
-    #
     # @return [Encoding]
     def encoding
       case @options[:encoding]
@@ -486,7 +484,7 @@ module RDF
       @line = @line_rest || @input.readline
       @line, @line_rest = @line.split("\r", 2)
       @line = @line.to_s.chomp
-      @line.force_encoding(encoding) if @line.respond_to?(:force_encoding)
+      @line.force_encoding(encoding)
       @line
     end
 

@@ -17,7 +17,7 @@ module RDF; class Literal
       @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(::DateTime)         then value
-        when value.respond_to?(:to_datetime) then value.to_datetime # Ruby 1.9+
+        when value.respond_to?(:to_datetime) then value.to_datetime
         else ::DateTime.parse(value.to_s)
       end rescue nil
     end

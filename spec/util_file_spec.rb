@@ -15,7 +15,7 @@ describe RDF::Util::File do
       end
     end
     
-    it "yields an http URL", :pending => ("1.8 difference" if RUBY_VERSION < "1.9") do
+    it "yields an http URL" do
       OpenURI.should_receive(:open_uri).with(URI(@uri), an_instance_of(Hash)).and_yield(StringIO.new("data"))
       RDF::Util::File.open_file(@uri) do |f|
         f.should respond_to(:read)
@@ -54,7 +54,7 @@ describe RDF::Util::File do
       end
     end
 
-    it "used provided Accept header", :ruby => "1.9" do
+    it "used provided Accept header" do
       content_types = RDF::Reader.map {|r| r.format.content_type}.uniq
       Kernel.should_receive(:open) do |file_name, headers|
         headers.should be_a(Hash)

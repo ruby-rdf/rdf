@@ -33,17 +33,15 @@ module RDF
     CACHE_SIZE = -1 # unlimited by default
     
     # IRI components
-    if RUBY_VERSION >= '1.9'
-      UCSCHAR = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
-        [\\u00A0-\\uD7FF]|[\\uF900-\\uFDCF]|[\\uFDF0-\\uFFEF]|
-        [\\u{10000}-\\u{1FFFD}]|[\\u{20000}-\\u{2FFFD}]|[\\u{30000}-\\u{3FFFD}]|
-        [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
-        [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
-        [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
-        [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
-      EOS
-      IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]")
-    end
+    UCSCHAR = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
+      [\\u00A0-\\uD7FF]|[\\uF900-\\uFDCF]|[\\uFDF0-\\uFFEF]|
+      [\\u{10000}-\\u{1FFFD}]|[\\u{20000}-\\u{2FFFD}]|[\\u{30000}-\\u{3FFFD}]|
+      [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
+      [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
+      [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
+      [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
+    EOS
+    IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]")
 
     SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*")
     PORT = Regexp.compile("[0-9]*")
@@ -54,19 +52,11 @@ module RDF
     RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})")
     UNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
 
-    if RUBY_VERSION >= '1.9'
-      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~|#{UCSCHAR}")
-    else
-      IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~")
-    end
+    IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~|#{UCSCHAR}")
 
     IPCHAR = Regexp.compile("(?:#{IUNRESERVED}|#{PCT_ENCODED}|#{SUB_DELIMS}|:|@)")
 
-    if RUBY_VERSION >= '1.9'
-      IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*")
-    else
-      IQUERY = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
-    end
+    IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*")
 
     IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*")
 
@@ -199,8 +189,6 @@ module RDF
 
     ##
     # Determine if the URI is avalid according to RFC3987
-    #
-    # Note, for Ruby versions < 1.9, this always returns true.
     #
     # @return [Boolean] `true` or `false`
     # @since 0.3.9

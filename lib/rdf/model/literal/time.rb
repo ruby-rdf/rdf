@@ -22,7 +22,7 @@ module RDF; class Literal
       @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(::Time)         then value
-        when value.respond_to?(:to_time) then value.to_time # Ruby 1.9+
+        when value.respond_to?(:to_time) then value.to_time
         else ::Time.parse(value.to_s)
       end rescue nil
     end
@@ -63,11 +63,12 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || if RUBY_VERSION >= '1.9' && RUBY_PLATFORM != 'java'
+      @string || if RUBY_PLATFORM != 'java'
         @object.strftime('%H:%M:%S%:z').
         sub(/\+00:00|UTC|GMT/, 'Z')
       else
-        # Ruby 1.8 doesn't do timezone's properly, use utc_offset
+        # FIXME: verify
+        # JRuby doesn't do timezone's properly, use utc_offset
         off = @object.utc_offset == 0 ? "Z" : ("%0.2d:00" % (@object.utc_offset/3600))
         @object.strftime("%H:%M:%S#{off}")
       end

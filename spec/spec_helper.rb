@@ -16,7 +16,5 @@ def fixture_path(filename)
   File.join(File.dirname(__FILE__), 'data', filename)
 end
 
-if "".respond_to?(:encoding)
-  Encoding.default_external = Encoding::UTF_8
-  Encoding.default_internal = Encoding::UTF_8
-end
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8

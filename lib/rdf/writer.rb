@@ -187,7 +187,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
     # @option options [Encoding, String, Symbol] :encoding
-    #   the encoding to use on the output stream (Ruby 1.9+).
+    #   the encoding to use on the output stream.
     #   Defaults to the format associated with `content_encoding`.
     # @option options [Boolean]  :canonicalize (false)
     #   whether to canonicalize literals when serializing
@@ -285,11 +285,8 @@ module RDF
     ##
     # Returns the encoding of the output stream.
     #
-    # _Note: this method requires Ruby 1.9 or newer._
-    #
     # @return [Encoding]
     def encoding
-      return nil unless "".respond_to?(:force_encoding)
       case @options[:encoding]
       when String, Symbol
         Encoding.find(@options[:encoding].to_s)

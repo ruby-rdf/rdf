@@ -29,19 +29,14 @@ module RDF; module Util
     #   to override this implementation to provide more control over HTTP
     #   headers and redirect following.
     # @option options [Array, String] :headers
-    #   HTTP Request headers, passed to Kernel.open. (Ruby >= 1.9 only)
+    #   HTTP Request headers, passed to Kernel.open.
     # @return [IO] File stream
     # @yield [IO] File stream
-    # @note HTTP headers not passed to `Kernel.open` for Ruby versions < 1.9.
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
-      if RUBY_VERSION < "1.9"
-        Kernel.open(filename_or_url.to_s, &block)
-      else
-        options[:headers] ||= {}
-        options[:headers]['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
-        Kernel.open(filename_or_url.to_s, options[:headers], &block)
-      end
+      options[:headers] ||= {}
+      options[:headers]['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
+      Kernel.open(filename_or_url.to_s, options[:headers], &block)
     end
   end # File
 end; end # RDF::Util

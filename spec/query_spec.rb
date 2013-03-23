@@ -389,6 +389,7 @@ describe RDF::Query do
           query << [:s1, EX.p, :o1]
           query << [:s2, EX.p, :o2]
         end
+        # FIXME: so?
         # Use set comparison for unordered compare on 1.8.7
         query.execute(graph).map(&:to_hash).to_set.should == [
           {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x1, :o2 => RDF::Literal(1)},

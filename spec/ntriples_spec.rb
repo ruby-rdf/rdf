@@ -173,7 +173,7 @@ describe RDF::NTriples do
     end
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+    it "should correctly unescape Unicode characters (#x80-#x10FFFF)" do
       (0x7F..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
@@ -190,7 +190,7 @@ describe RDF::NTriples do
       end
     end
 
-    context "unescape Unicode strings", :ruby => 1.9 do
+    context "unescape Unicode strings" do
       strings = {
         "\u677E\u672C \u540E\u5B50" => "松本 后子",
         "D\u00FCrst"                => "Dürst",
@@ -198,7 +198,7 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8)
           @reader.unescape(string.dup).should == unescaped
         end
       end
@@ -213,7 +213,7 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8)
           @reader.unescape(string.dup).should == unescaped
         end
       end
@@ -239,7 +239,7 @@ describe RDF::NTriples do
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
-    it "should correctly escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+    it "should correctly escape Unicode characters (#x80-#x10FFFF)" do
       (0x80..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
@@ -262,7 +262,7 @@ describe RDF::NTriples do
         "_\xE6\xB0\xB4_" => "_\\u6C34_", # U+6C34, 'water' in Chinese
       }
       strings.each do |string, escaped|
-        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        string = string.dup.force_encoding(Encoding::UTF_8)
         @writer.escape(string).should == escaped
       end
     end
@@ -295,7 +295,7 @@ describe RDF::NTriples do
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
-    it "should not escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+    it "should not escape Unicode characters (#x80-#x10FFFF)" do
       (0x80..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
@@ -312,13 +312,13 @@ describe RDF::NTriples do
       end
     end
 
-    it "should not escape Unicode strings", :ruby => 1.9 do
+    it "should not escape Unicode strings" do
       strings = [
         "_\u221E_", # U+221E, infinity symbol
         "_\u6C34_", # U+6C34, 'water' in Chinese
       ]
       strings.each do |string|
-        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        string = string.dup.force_encoding(Encoding::UTF_8)
         @writer.escape(string, Encoding::UTF_8).should == string
       end
     end
@@ -405,12 +405,8 @@ describe RDF::NTriples do
 
       it "should parse long literal with escape" do
         nt = %(<http://subj> <http://pred> "\\U00015678another" .)
-        if defined?(::Encoding)
           statement = @reader.unserialize(nt)
           statement.object.value.should == "\u{15678}another"
-        else
-          pending("Not supported on Ruby 1.8")
-        end
       end
 
       {
@@ -453,17 +449,9 @@ describe RDF::NTriples do
         %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |src, res|
         specify src do
-          begin
-            stmt1 = @reader.unserialize(src)
-            stmt2 = @reader.unserialize(res)
-            stmt1.should == stmt2
-          rescue
-            if defined?(::Encoding)
-              raise
-            else
-              pending("Unicode URIs not supported on Ruby 1.8") { raise }
-            end
-          end
+          stmt1 = @reader.unserialize(src)
+          stmt2 = @reader.unserialize(res)
+          stmt1.should == stmt2
         end
       end
     end

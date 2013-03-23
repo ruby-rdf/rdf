@@ -5,26 +5,9 @@ require 'bigdecimal'
 require 'date'
 require 'time'
 
-if RUBY_VERSION < '1.8.7'
-  # @see http://rubygems.org/gems/backports
-  begin
-    require 'backports/1.8.7'
-  rescue LoadError
-    begin
-      require 'rubygems'
-      require 'backports/1.8.7'
-    rescue LoadError
-      abort "RDF.rb requires Ruby 1.8.7 or the Backports gem (hint: `gem install backports')."
-    end
-  end
-end
-
 require 'rdf/version'
 
 module RDF
-  # For compatibility with both Ruby 1.8.x and Ruby 1.9.x:
-  Enumerator = defined?(::Enumerator) ? ::Enumerator : ::Enumerable::Enumerator
-
   # RDF mixins
   autoload :Countable,   'rdf/mixin/countable'
   autoload :Durable,     'rdf/mixin/durable'
