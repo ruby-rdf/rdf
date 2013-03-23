@@ -260,7 +260,9 @@ module RDF
     #
     # @return [String]
     def to_s
-      (context ? to_quad : to_triple).map(&:to_base).join(" ") + " ."
+      (context ? to_quad : to_triple).map do |term|
+        term.respond_to?(:to_base) ? term.to_base : term.inspect
+      end.join(" ") + " ."
     end
 
     ##
