@@ -667,8 +667,8 @@ module RDF
     end
 
     ##
-    # @overload #to_{writer}
-    #   Implements #to_{writer} for each available instance of {RDF::Writer},
+    # @overload #to_writer
+    #   Implements #to_writer for each available instance of {RDF::Writer},
     #   based on the writer symbol.
     #  
     #   @return [String]
