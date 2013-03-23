@@ -153,8 +153,8 @@ module RDF
     alias_method :clear!, :clear
 
     ##
-    # @overload #from_{reader}
-    #   Implements #to_{reader} for each available instance of {RDF::Reader},
+    # @overload #from_reader
+    #   Implements #from_reader for each available instance of {RDF::Reader},
     #   based on the reader symbol.
     #
     #   Arguments are passed to Reader.new.

@@ -273,10 +273,10 @@ XSD and RDF datatype implementations can be find in the following:
 
 Two graphs may be compared with each other to determine if they are _isomorphic_.
 As BNodes within two different graphs are no equal, graphs may not be directly compared.
-The {RDF::Isomorphic} gem may be used to determine if they make the same statements, aside
+The `RDF::Isomorphic` gem may be used to determine if they make the same statements, aside
 from BNode identity (i.e., they each entail the other)
 
-* {RDF::Isomorphic}
+* `RDF::Isomorphic`
 
 ### RDF Storage
 
