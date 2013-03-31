@@ -122,11 +122,11 @@ module RDF::NTriples
     def self.escape_ascii(u, encoding)
       case (u = u.ord)
         when (0x00..0x07) then escape_utf16(u)
-        when (0x08)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\b")
+        when (0x08)       then (encoding.nil? || encoding == Encoding::ASCII ? escape_utf16(u) : "\\b")
         when (0x09)       then "\\t"
         when (0x0A)       then "\\n"
         when (0x0B)       then escape_utf16(u)
-        when (0x0C)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\f")
+        when (0x0C)       then (encoding.nil? || encoding == Encoding::ASCII ? escape_utf16(u) : "\\f")
         when (0x0D)       then "\\r"
         when (0x0E..0x1F) then escape_utf16(u)
         when (0x22)       then "\\\""
