@@ -112,33 +112,33 @@ describe RDF::URI do
           end
         end
 
-        it "validates irelative-ref with authority #{mod}" do
+        it "invalidates irelative-ref with authority #{mod}" do
           refs.each do |c|
-            RDF::URI("//auth/#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("//auth/#{fmt}" % [c, c, c]).should_not be_valid
           end
         end
-        it "validates irelative-ref with authority and port #{mod}" do
+        it "invalidates irelative-ref with authority and port #{mod}" do
           refs.each do |c|
-            RDF::URI("//auth:123/#{fmt}" % [c, c, c]).should be_valid
+            RDF::URI("//auth:123/#{fmt}" % [c, c, c]).should_not be_valid
           end
         end
-        it "validates irelative-ref with ipath-absolute #{mod}" do
+        it "invalidates irelative-ref with ipath-absolute #{mod}" do
           refs.each do |c|
-            RDF::URI("/#{fmt}" % [c, c, c]).should be_valid
-            RDF::URI("/#{fmt}" % ["#{c}/", c, c]).should be_valid
-            RDF::URI("/#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+            RDF::URI("/#{fmt}" % [c, c, c]).should_not be_valid
+            RDF::URI("/#{fmt}" % ["#{c}/", c, c]).should_not be_valid
+            RDF::URI("/#{fmt}" % ["#{c}/#{c}", c, c]).should_not be_valid
           end
         end
-        it "validates irelative-ref with ipath-noscheme #{mod}" do
+        it "invalidates irelative-ref with ipath-noscheme #{mod}" do
           refs.each do |c|
-            RDF::URI("#{fmt}" % [c, c, c]).should be_valid
-            RDF::URI("#{fmt}" % ["#{c}/", c, c]).should be_valid
-            RDF::URI("#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+            RDF::URI("#{fmt}" % [c, c, c]).should_not be_valid
+            RDF::URI("#{fmt}" % ["#{c}/", c, c]).should_not be_valid
+            RDF::URI("#{fmt}" % ["#{c}/#{c}", c, c]).should_not be_valid
           end
         end
-        it "validates irelative-ref with ipath-empty #{mod}" do
+        it "invalidates irelative-ref with ipath-empty #{mod}" do
           refs.each do |c|
-            RDF::URI("#{fmt}" % ["", c, c]).should be_valid
+            RDF::URI("#{fmt}" % ["", c, c]).should_not be_valid
           end
         end
       end
