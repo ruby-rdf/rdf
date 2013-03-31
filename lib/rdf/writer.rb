@@ -105,13 +105,18 @@ module RDF
     ##
     # @param  [RDF::Enumerable, #each] data
     #   the graph or repository to dump
-    # @param  [IO, File] io
+    # @param  [IO, File, String] io
     #   the output stream or file to write to
     # @param  [Hash{Symbol => Object}] options
     #   passed to {RDF::Writer#initialize} or {RDF::Writer.buffer}
     # @return [void]
     def self.dump(data, io = nil, options = {})
-      io = File.open(io, 'w') if io.is_a?(String)
+      if io.is_a?(String)
+        io = File.open(io, 'w')
+      elsif io.respond_to?(:external_encoding) && io.external_encoding
+        options = {:encoding => io.external_encoding}.merge(options)
+      end
+      io.set_encoding(options[:encoding]) if io.respond_to?(:set_encoding) && options[:encoding]
       method = data.respond_to?(:each_statement) ? :each_statement : :each
       if io
         new(io, options) do |writer|
@@ -138,9 +143,11 @@ module RDF
     # @return [String]
     # @raise [ArgumentError] if no block is provided
     def self.buffer(*args, &block)
+      options = args.last.is_a?(Hash) ? args.last : {}
       raise ArgumentError, "block expected" unless block_given?
 
       StringIO.open do |buffer|
+        buffer.set_encoding(options[:encoding]) if buffer.respond_to?(:set_encoding) && options[:encoding]
         self.new(buffer, *args) { |writer| block.call(writer) }
         buffer.string
       end
@@ -156,6 +163,7 @@ module RDF
     # @return [RDF::Writer]
     def self.open(filename, options = {}, &block)
       File.open(filename, 'wb') do |file|
+        file.set_encoding(options[:encoding]) if file.respond_to?(:set_encoding) && options[:encoding]
         format_options = options.dup
         format_options[:file_name] ||= filename
         self.for(options[:format] || format_options).new(file, options, &block)
@@ -439,7 +447,7 @@ module RDF
     ##
     # @return [void]
     def puts(*args)
-      @output.puts(*args)
+      @output.puts(*args.map {|s| s.respond_to?(:force_encoding) ? s.force_encoding(encoding) : s})
     end
 
     ##
