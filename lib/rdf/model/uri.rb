@@ -187,14 +187,14 @@ module RDF
     alias_method :size, :length
 
     ##
-    # Determine if the URI is avalid according to RFC3987
+    # Determine if the URI is a valid according to RFC3987
     #
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
       # As Addressable::URI does not perform adequate validation, validate
       # relative to RFC3987
-      to_s.match(RDF::URI::IRI) || to_s.match(RDF::URI::IRELATIVE_REF) || false
+      to_s.match(RDF::URI::IRI) || false
     end
 
     ##
@@ -250,12 +250,15 @@ module RDF
     # @see RDF::URI#+
     # @param  [Array<String, RDF::URI, #to_s>] uris
     # @return [RDF::URI]
+    # @raise  [ArgumentError] if the resulting URI is invalid
     def join(*uris)
       result = @uri.dup
       uris.each do |uri|
         result = result.join(uri)
       end
       self.class.new(result)
+    rescue Addressable::URI::InvalidURIError => e
+      raise ArgumentError, e.message
     end
 
     ##
@@ -281,6 +284,7 @@ module RDF
     #
     # @param [Any] fragment A URI fragment to be appended to this URI
     # @return [RDF::URI]
+    # @raise  [ArgumentError] if the URI is invalid
     # @see RDF::URI#+
     # @see RDF::URI#join
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
