@@ -221,20 +221,22 @@ describe RDF::NTriples do
   end
 
   context "when encoding text to ASCII" do
+    let(:encoding) { "".respond_to?(:encoding) ? ::Encoding::ASCII : nil}
+
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     it "should correctly escape ASCII characters (#x0-#x7F)" do
-      (0x00..0x08).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      @writer.escape(0x09.chr).should == "\\t"
-      @writer.escape(0x0A.chr).should == "\\n"
-      (0x0B..0x0C).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      @writer.escape(0x0D.chr).should == "\\r"
-      (0x0E..0x1F).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      (0x20..0x21).each { |u| @writer.escape(u.chr).should == u.chr }
-      @writer.escape(0x22.chr).should == "\\\""
-      (0x23..0x5B).each { |u| @writer.escape(u.chr).should == u.chr }
-      @writer.escape(0x5C.chr).should == "\\\\"
-      (0x5D..0x7E).each { |u| @writer.escape(u.chr).should == u.chr }
-      @writer.escape(0x7F.chr).should == "\\u007F"
+      (0x00..0x08).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      @writer.escape(0x09.chr, encoding).should == "\\t"
+      @writer.escape(0x0A.chr, encoding).should == "\\n"
+      (0x0B..0x0C).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      @writer.escape(0x0D.chr, encoding).should == "\\r"
+      (0x0E..0x1F).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      (0x20..0x21).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
+      @writer.escape(0x22.chr, encoding).should == "\\\""
+      (0x23..0x5B).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
+      @writer.escape(0x5C.chr, encoding).should == "\\\\"
+      (0x5D..0x7E).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
+      @writer.escape(0x7F.chr, encoding).should == "\\u007F"
     end
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
@@ -243,14 +245,14 @@ describe RDF::NTriples do
       (0x80..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @writer.escape(c).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
+          @writer.escape(c, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}"
         rescue RangeError
         end
       end
       (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @writer.escape(c).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
+          @writer.escape(c, encoding).should == "\\U#{u.to_s(16).upcase.rjust(8, '0')}"
         rescue RangeError
         end
       end
@@ -277,20 +279,24 @@ describe RDF::NTriples do
   end
 
   context "when encoding text to UTF-8" do
+    let(:encoding) { "".respond_to?(:encoding) ? ::Encoding::UTF_8 : nil}
+
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     it "should correctly escape ASCII characters (#x0-#x7F)" do
-      (0x00..0x08).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      @writer.escape(0x09.chr).should == "\\t"
-      @writer.escape(0x0A.chr).should == "\\n"
-      (0x0B..0x0C).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      @writer.escape(0x0D.chr).should == "\\r"
-      (0x0E..0x1F).each { |u| @writer.escape(u.chr).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      (0x20..0x21).each { |u| @writer.escape(u.chr).should == u.chr }
-      @writer.escape(0x22.chr).should == "\\\""
-      (0x23..0x5B).each { |u| @writer.escape(u.chr).should == u.chr }
-      @writer.escape(0x5C.chr).should == "\\\\"
-      (0x5D..0x7E).each { |u| @writer.escape(u.chr).should == u.chr }
-      @writer.escape(0x7F.chr).should == "\\u007F"
+      (0x00..0x07).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      @writer.escape(0x08.chr, encoding).should == "\\b"
+      @writer.escape(0x09.chr, encoding).should == "\\t"
+      @writer.escape(0x0A.chr, encoding).should == "\\n"
+      (0x0B..0x0B).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      @writer.escape(0x0C.chr, encoding).should == "\\f"
+      @writer.escape(0x0D.chr, encoding).should == "\\r"
+      (0x0E..0x1F).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+      (0x20..0x21).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
+      @writer.escape(0x22.chr, encoding).should == "\\\""
+      (0x23..0x5B).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
+      @writer.escape(0x5C.chr, encoding).should == "\\\\"
+      (0x5D..0x7E).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
+      @writer.escape(0x7F.chr, encoding).should == "\\u007F"
     end
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
@@ -299,14 +305,14 @@ describe RDF::NTriples do
       (0x80..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @writer.escape(c, Encoding::UTF_8).should == c
+          @writer.escape(c, encoding).should == c
         rescue RangeError
         end
       end
       (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          @writer.escape(c, Encoding::UTF_8).should == c
+          @writer.escape(c, encoding).should == c
         rescue RangeError
         end
       end
@@ -319,7 +325,7 @@ describe RDF::NTriples do
       ]
       strings.each do |string|
         string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
-        @writer.escape(string, Encoding::UTF_8).should == string
+        @writer.escape(string, encoding).should == string
       end
     end
   end
@@ -486,18 +492,21 @@ describe RDF::NTriples do
   end
 
   context "when writing" do
-    before :all do
+    let!(:stmt) {
       s = RDF::URI("http://rubygems.org/gems/rdf")
       p = RDF::DC.creator
       o = RDF::URI("http://ar.to/#self")
-      @stmt = RDF::Statement.new(s, p, o)
-      @stmt_string = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
-      @graph = RDF::Graph.new
-      @graph << @stmt
-    end
+      RDF::Statement.new(s, p, o)
+    }
+    let!(:stmt_string) {
+      "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
+    }
+    let!(:graph) {
+      RDF::Graph.new << stmt
+    }
 
     it "should correctly format statements" do
-      @writer.new.format_statement(@stmt).should == @stmt_string
+      @writer.new.format_statement(stmt).should == stmt_string
     end
 
     context "should correctly format blank nodes" do
@@ -522,27 +531,50 @@ describe RDF::NTriples do
     end
 
     it "should output statements to a string buffer" do
-      output = @writer.buffer { |writer| writer << @stmt }
-      output.should == "#{@stmt_string}\n"
+      output = @writer.buffer { |writer| writer << stmt }
+      output.should == "#{stmt_string}\n"
     end
 
     it "should dump statements to a string buffer" do
       output = StringIO.new
-      @writer.dump(@graph, output)
-      output.string.should == "#{@stmt_string}\n"
+      @writer.dump(graph, output)
+      output.string.should == "#{stmt_string}\n"
     end
 
     it "should dump arrays of statements to a string buffer" do
       output = StringIO.new
-      @writer.dump(@graph.to_a, output)
-      output.string.should == "#{@stmt_string}\n"
+      @writer.dump(graph.to_a, output)
+      output.string.should == "#{stmt_string}\n"
     end
 
     it "should dump statements to a file" do
       require 'tmpdir' # for Dir.tmpdir
-      @writer.dump(@graph, filename = File.join(Dir.tmpdir, "test.nt"))
-      File.read(filename).should == "#{@stmt_string}\n"
+      @writer.dump(graph, filename = File.join(Dir.tmpdir, "test.nt"))
+      File.read(filename).should == "#{stmt_string}\n"
       File.unlink(filename)
+    end
+
+    context ":encoding", :pending => (RUBY_VERSION < "1.9") do
+      [Encoding::ASCII, Encoding::UTF_8].each do |encoding|
+        it "dumps as #{encoding}" do
+          s = @writer.dump(graph, nil, :encoding => encoding)
+          s.should be_a(String)
+          s.encoding.should == encoding
+        end
+
+        it "dumps to file as #{encoding}" do
+          output = StringIO.new
+          s = @writer.dump(graph, output, :encoding => encoding)
+          output.external_encoding.should == encoding
+        end
+
+        it "takes encoding from file external_encoding" do
+          output = StringIO.new
+          output.set_encoding encoding
+          s = @writer.dump(graph, output)
+          output.external_encoding.should == encoding
+        end
+      end
     end
   end
 end

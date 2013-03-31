@@ -15,6 +15,7 @@ module RDF::NTriples
   #   RDF::Format.for(:content_type   => "text/plain")
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
+  # @see http://www.w3.org/TR/n-triples/
   class Format < RDF::Format
     content_type     'application/n-triples', :extension => :nt, :alias => ['text/plain']
     content_encoding 'utf-8'

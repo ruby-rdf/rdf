@@ -35,6 +35,7 @@ module RDF::NTriples
   #   end
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
+  # @see http://www.w3.org/TR/n-triples/
   class Writer < RDF::Writer
     format RDF::NTriples::Format
 
@@ -43,6 +44,10 @@ module RDF::NTriples
     ESCAPE_ASCII = /\A[\x00-\x7F]*\z/m.freeze
 
     ##
+    # Escape Literal and URI content. If encoding is ASCII, all unicode
+    # is escaped, otherwise only ASCII characters that must be escaped are
+    # escaped.
+    #
     # @param  [String] string
     # @param  [Encoding] encoding Ruby 1.9 only
     # @return [String]
@@ -53,7 +58,7 @@ module RDF::NTriples
           string
         when string.respond_to?(:ascii_only?) && string.ascii_only?
           StringIO.open do |buffer|
-            string.each_byte { |u| buffer << escape_ascii(u) }
+            string.each_byte { |u| buffer << escape_ascii(u, encoding) }
             buffer.string
           end
         when string.respond_to?(:each_char) && encoding && encoding != Encoding::ASCII
@@ -62,7 +67,7 @@ module RDF::NTriples
             string.each_char do |u|
               buffer << case u.ord
               when (0x00..0x7F)
-                escape_ascii(u)
+                escape_ascii(u, encoding)
               else
                 u
               end
@@ -70,11 +75,13 @@ module RDF::NTriples
             buffer.string
           end
         when string.respond_to?(:each_codepoint)
+          # Encode ASCII && UTF-8 characters
           StringIO.open do |buffer|
             string.each_codepoint { |u| buffer << escape_unicode(u, encoding) }
             buffer.string
           end
         else # works in Ruby 1.8.x, too
+          # Encode ASCII && UTF-8 characters
           StringIO.open do |buffer|
             string.scan(/./mu) { |c| buffer << escape_unicode(u = c.unpack('U*').first, encoding) }
             buffer.string
@@ -85,7 +92,6 @@ module RDF::NTriples
 
     ##
     # Escape ascii and unicode characters.
-    # If encoding is UTF_8, only ascii characters are escaped.
     #
     # @param  [Integer, #ord] u
     # @param  [Encoding] encoding Ruby 1.9 only
@@ -94,7 +100,7 @@ module RDF::NTriples
     def self.escape_unicode(u, encoding)
       case (u = u.ord)
         when (0x00..0x7F)        # ASCII 7-bit
-          escape_ascii(u)
+          escape_ascii(u, encoding)
         when (0x80..0xFFFF)      # Unicode BMP
           escape_utf16(u)
         when (0x10000..0x10FFFF) # Unicode
@@ -105,15 +111,22 @@ module RDF::NTriples
     end
 
     ##
+    # Standard ASCII escape sequences. If encoding is ASCII, use Test-Cases
+    # sequences, otherwise, assume the test-cases escape sequences. Otherwise,
+    # the N-Triples recommendation includes `\b` and `\f` escape sequences.
+    #
     # @param  [Integer, #ord] u
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    def self.escape_ascii(u)
+    # @see    http://www.w3.org/TR/n-triples/
+    def self.escape_ascii(u, encoding)
       case (u = u.ord)
-        when (0x00..0x08) then escape_utf16(u)
+        when (0x00..0x07) then escape_utf16(u)
+        when (0x08)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\b")
         when (0x09)       then "\\t"
         when (0x0A)       then "\\n"
-        when (0x0B..0x0C) then escape_utf16(u)
+        when (0x0B)       then escape_utf16(u)
+        when (0x0C)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\f")
         when (0x0D)       then "\\r"
         when (0x0E..0x1F) then escape_utf16(u)
         when (0x22)       then "\\\""

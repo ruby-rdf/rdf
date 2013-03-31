@@ -25,6 +25,7 @@ module RDF::NTriples
   #   end
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
+  # @see http://www.w3.org/TR/n-triples/
   class Reader < RDF::Reader
     format RDF::NTriples::Format
 
