@@ -455,6 +455,13 @@ module RDF
       @options[:intern]
     end
 
+    ##
+    # Current line number being processed. For formats that can associate generated {Statement} with a particular line number from input, this value reflects that line number.
+    # @return [Integer]
+    def lineno
+      @input.lineno
+    end
+
   private
 
     @@subclasses = [] # @private
@@ -465,12 +472,6 @@ module RDF
     def self.inherited(child)
       @@subclasses << child
       super
-    end
-
-    ##
-    # @return [Integer]
-    def lineno
-      @input.lineno
     end
 
     ##
