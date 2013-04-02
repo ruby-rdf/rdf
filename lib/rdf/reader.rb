@@ -362,6 +362,13 @@ module RDF
     end
     alias_method :close!, :close
 
+    ##
+    # Current line number being processed. For formats that can associate generated {Statement} with a particular line number from input, this value reflects that line number.
+    # @return [Integer]
+    def lineno
+      @input.lineno
+    end
+
   protected
 
     ##
