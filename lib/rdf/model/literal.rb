@@ -134,8 +134,14 @@ module RDF
 
     ##
     # @param  [Object] value
-    # @option options [Symbol] :language (nil)
-    # @option options [URI]    :datatype (nil)
+    # @option options [Symbol]  :language (nil)
+    # @option options [String]  :lexical (nil)
+    #   Supplied lexical representation of this literal,
+    #   otherwise it comes from transforming `value` to a string form
+    #   See {#to_s}.
+    # @option options [URI]     :datatype (nil)
+    # @option options [Boolean] :validate (false)
+    # @option options [Boolean] :canonicalize (false)
     def initialize(value, options = {})
       @object   = value
       @string   = options[:lexical] if options[:lexical]
