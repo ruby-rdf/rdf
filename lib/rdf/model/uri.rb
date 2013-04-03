@@ -138,6 +138,7 @@ module RDF
     #
     # @overload URI.new(options = {})
     #   @param  [Hash{Symbol => Object}] options
+    # @raise [ArgumentError] on seriously invalid URI
     def initialize(uri_or_options)
       case uri_or_options
         when Hash
@@ -147,6 +148,8 @@ module RDF
         else
           @uri = Addressable::URI.parse(uri_or_options.to_s)
       end
+    rescue Addressable::URI::InvalidURIError => e
+      raise ArgumentError, e.message
     end
 
     ##
@@ -357,8 +360,11 @@ module RDF
     # @see RDF::URI#join
     # @param [Any] other
     # @return [RDF::URI]
+    # @raise [ArgumentError] on seriously invalid URI
     def +(other)
       RDF::URI.intern(self.to_s + other.to_s)
+    rescue Addressable::URI::InvalidURIError => e
+      raise ArgumentError, e.message
     end
 
     ##
