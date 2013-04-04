@@ -79,7 +79,7 @@ to use when loading a file. The specific format to use can be forced using, e.g.
 option where the specific format symbol is determined by the available readers. Both also use
 MimeType or file extension, where available.
 
-    require 'linkeddata'
+    require 'rdf/nquads'
     
     graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", :format => :nquads)
 
@@ -113,7 +113,10 @@ appropriate writer to use.
 
 A specific sub-type of Writer can also be invoked directly:
 
-    graph.dump(:nquads)
+    require 'rdf/nquads'
+
+    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+    File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods
 {RDF::Enumerable} implements `to_{format}` for each available instance of {RDF::Reader}.
