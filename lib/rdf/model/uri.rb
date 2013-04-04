@@ -1,4 +1,4 @@
-require 'addressable/uri'
+require 'uri'
 
 module RDF
   ##
@@ -90,7 +90,35 @@ module RDF
 
     IHIER_PART = Regexp.compile("(?:(?://#{IAUTHORITY}#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY}))").freeze
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
-    
+
+    # Split an IRI into it's component parts
+    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/
+
+    # Remove dot expressions regular expressions
+    RDS_2A = /^\.?\.\/(.*)$/.freeze
+    RDS_2B1 = /^\/\.$/.freeze
+    RDS_2B2 = /^(?:\/\.\/)(.*)$/.freeze
+    RDS_2C1 = /^\/\.\.$/.freeze
+    RDS_2C2 = /^(?:\/\.\.\/)(.*)$/.freeze
+    RDS_2E = /^(\/?[^\/]*)(\/?.*)?$/.freeze
+
+    # Remove port, if it is standard for the scheme when normalizing
+    PORT_MAPPING = {
+      "http"     => 80,
+      "https"    => 443,
+      "ftp"      => 21,
+      "tftp"     => 69,
+      "sftp"     => 22,
+      "ssh"      => 22,
+      "svn+ssh"  => 22,
+      "telnet"   => 23,
+      "nntp"     => 119,
+      "gopher"   => 70,
+      "wais"     => 210,
+      "ldap"     => 389,
+      "prospero" => 1525
+    }
+
     ##
     # @return [RDF::Util::Cache]
     # @private
@@ -114,7 +142,7 @@ module RDF
     # object can't be returned for some reason, this method will fall back
     # to returning a freshly-allocated one.
     #
-    # @param  [String, #to_s] str
+    # @param (see #initialize)
     # @return [RDF::URI] an immutable, frozen URI object
     def self.intern(str)
       (cache[str = str.to_s] ||= self.new(str)).freeze
@@ -124,7 +152,8 @@ module RDF
     # Creates a new `RDF::URI` instance based on the given `uri` string.
     #
     # This is just an alias for {RDF::URI#initialize} for compatibity
-    # with `Addressable::URI.parse`.
+    # with `Addressable::URI.parse`. Actual parsing is defered
+    # until {#object} is accessed.
     #
     # @param  [String, #to_s] str
     # @return [RDF::URI]
@@ -133,23 +162,83 @@ module RDF
     end
 
     ##
-    # @overload URI.new(uri)
-    #   @param  [RDF::URI, String, #to_s] uri
+    # Resolve paths to their simplest form
     #
-    # @overload URI.new(options = {})
-    #   @param  [Hash{Symbol => Object}] options
-    # @raise [ArgumentError] on seriously invalid URI
-    def initialize(uri_or_options)
-      case uri_or_options
-        when Hash
-          @uri = Addressable::URI.new(uri_or_options)
-        when Addressable::URI
-          @uri = uri_or_options
+    # @param [String] path
+    # @return [String] normalized path
+    # @see http://tools.ietf.org/html/rfc3986#section-5.2.4
+    def self.normalize_path(path)
+      output, input = "", path.to_s
+      until input.empty?
+        if input.match(RDS_2A)
+          # If the input buffer begins with a prefix of "../" or "./", then remove that prefix from the input buffer; otherwise,
+          input = $1
+        elsif input.match(RDS_2B1) || input.match(RDS_2B2)
+          # if the input buffer begins with a prefix of "/./" or "/.", where "." is a complete path segment, then replace that prefix with "/" in the input buffer; otherwise,
+          input = "/#{$1}"
+        elsif input.match(RDS_2C1) || input.match(RDS_2C2)
+          # if the input buffer begins with a prefix of "/./" or "/.", where "." is a complete path segment, then replace that prefix with "/" in the input buffer; otherwise,
+          input = "/#{$1}"
+        elsif input.match(RDS_2C)
+          # if the input buffer begins with a prefix of "/../" or "/..", where ".." is a complete path segment, then replace that prefix with "/" in the input buffer
+          input = "/#{$1}"
+
+          #  and remove the last segment and its preceding "/" (if any) from the output buffer; otherwise,
+          output.sub(/\/?[^\/]*$/, '')
+        elsif input.match(RDS_2D)
+          # if the input buffer consists only of "." or "..", then remove that from the input buffer; otherwise,
+          input = ""
         else
-          @uri = Addressable::URI.parse(uri_or_options.to_s)
+          # move the first path segment in the input buffer to the end of the output buffer, including the initial "/" character (if any) and any subsequent characters up to, but not including, the next "/" character or the end of the input buffer.end
+          seg, input = input.match(RDS_2E)
+          output << seg
+        end
       end
-    rescue Addressable::URI::InvalidURIError => e
-      raise ArgumentError, e.message
+
+      output
+    end
+
+    ##
+    # @overload URI(uri, options = {})
+    #   @param  [URI, String, #to_s]    uri
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [Boolean] :validate (false)
+    #   @option options [Boolean] :canonicalize (false)
+    #
+    # @overload URI(options = {})
+    #   @param  [Hash{Symbol => Object}] options
+    #   @option options [Boolean] :validate (false)
+    #   @option options [Boolean] :canonicalize (false)
+    #   @option [String, #to_s] :scheme The scheme component.
+    #   @option [String, #to_s] :user The user component.
+    #   @option [String, #to_s] :password The password component.
+    #   @option [String, #to_s] :userinfo
+    #     The userinfo component. If this is supplied, the user and password
+    #     components must be omitted.
+    #   @option [String, #to_s] :host The host component.
+    #   @option [String, #to_s] :port The port component.
+    #   @option [String, #to_s] :authority
+    #     The authority component. If this is supplied, the user, password,
+    #     userinfo, host, and port components must be omitted.
+    #   @option [String, #to_s] :path The path component.
+    #   @option [String, #to_s] :query The query component.
+    #   @option [String, #to_s] :fragment The fragment component.
+    def initialize(*args)
+      options = args.last.is_a?(Hash) ? args.last : {}
+      uri = args.first
+      case uri
+      when Hash
+        @object = options.dup.keep_if {|k|
+          %w(
+            scheme user password userinfo host port authority
+            path query fragment
+          ).include?(k.to_s)}
+      else
+        @value = uri.to_s
+      end
+
+      validate!     if options[:validate]
+      canonicalize! if options[:canonicalize]
     end
 
     ##
@@ -171,7 +260,7 @@ module RDF
     # @see    http://en.wikipedia.org/wiki/Uniform_Resource_Name
     # @since  0.2.0
     def urn?
-      self.start_with?('urn:')
+      @object ? @object[:scheme] == 'urn' : start_with?('urn:')
     end
 
     ##
@@ -186,6 +275,11 @@ module RDF
     def url?
       !urn?
     end
+
+    ##
+    # A URI is absolute when it has a scheme
+    # @return [Boolean] `true` or `false`
+    def absolute?; !scheme.nil?; end
 
     ##
     # Returns the string length of this URI.
@@ -208,8 +302,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      # As Addressable::URI does not perform adequate validation, validate
-      # relative to RFC3987
+      # Validate relative to RFC3987
       to_s.match(RDF::URI::IRI) || false
     end
 
@@ -233,6 +326,7 @@ module RDF
     def canonicalize
       self.dup.canonicalize!
     end
+    alias_method :normalize, :canonicalize
 
     ##
     # Converts this URI into its canonical lexical representation.
@@ -240,9 +334,17 @@ module RDF
     # @return [RDF::URI] `self`
     # @since  0.3.0
     def canonicalize!
-      @uri.normalize!
+      @value = nil
+      @object = {
+        :scheme => normalized_scheme,
+        :authority => normalized_authority,
+        :path => normalized_path,
+        :query => normalized_query,
+        :fragment => normalized_fragment
+      }
       self
     end
+    alias_method :normalize!, :canonicalize!
 
     ##
     # Joins several URIs together.
@@ -266,15 +368,39 @@ module RDF
     # @see RDF::URI#+
     # @param  [Array<String, RDF::URI, #to_s>] uris
     # @return [RDF::URI]
-    # @raise  [ArgumentError] if the resulting URI is invalid
+    # @see http://tools.ietf.org/html/rfc3986#section-5.2.2
+    # @see http://tools.ietf.org/html/rfc3986#section-5.2.3
     def join(*uris)
-      result = @uri.dup
+      joined_parts = object.dup.delete_if {|k| [:user, :password, :host, :port].include?(k)}
+
       uris.each do |uri|
-        result = result.join(uri)
+        uri = RDF::URI.new(uri) unless uri.is_a?(RDF::URI)
+
+        case
+        when uri.scheme
+          joined_parts = uri.object.merge(:path => self.class.normalize_path(uri.path))
+        when uri.authority
+          joined_parts[:authority] = uri.authority
+          joined_parts[:path] = self.class.normalize_path(uri.path)
+          joined_parts[:query] = uri.query
+        when uri.path.to_s.empty?
+          joined_parts[:query] = uri.query if uri.query
+        when uri.path[0,1] == '/'
+          joined_parts[:path] = self.class.normalize_path(uri.path)
+          joined_parts[:query] = uri.query
+        else
+          base_path = self.class.normalize_path(path.to_s)
+
+          # Merge path segments from section 5.2.3
+          base_path.sub!(/\/[^\/]+$/, '/')
+          joined_parts[:path] = self.class.normalize_path(base_path + uri.path)
+          joined_parts[:query] = uri.query
+        end
+        joined_parts[:fragment] = uri.fragment
       end
-      self.class.new(result)
-    rescue Addressable::URI::InvalidURIError => e
-      raise ArgumentError, e.message
+
+      # Return joined URI
+      RDF::URI.new(joined_parts)
     end
 
     ##
@@ -323,22 +449,28 @@ module RDF
       if urn?
         RDF::URI.intern(to_s.sub(/:+$/,'') + ':' + fragment.to_s.sub(/^:+/,''))
       else # !urn?
-        case to_s[-1].chr
-        when '#'
-          case fragment.to_s[0].chr
-          when '/' then # Base ending with '#', fragment beginning with '/'.  The fragment wins, we use '/'.
-            RDF::URI.intern(to_s.sub(/#+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
+        parts = object.dup.delete_if {|k| k == :query}
+        if parts.has_key?(:fragment)
+          case fragment.to_s[0,1]
+          when '/'
+            parts.delete(:fragment)
+            parts.path = "#{parts.path}#{fragment.to_s.sub(/^\/+/,'')}"
           else
-            RDF::URI.intern(to_s.sub(/#+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
+            # Replace fragment
+            parts[:fragment] = fragment.to_s.sub(/^#+/,'')
           end
-        else # includes '/'.  Results from bases ending in '/' are the same as if there were no trailing slash.
-          case fragment.to_s[0].chr
-          when '#' then # Base ending with '/', fragment beginning with '#'.  The fragment wins, we use '#'.
-            RDF::URI.intern(to_s.sub(/\/+$/,'') + '#' + fragment.to_s.sub(/^#+/,''))
+        else
+          # No fragment
+          case fragment.to_s[0,1]
+          when '#'
+            # Add fragment
+            parts[:fragment] = fragment.to_s.sub(/^#+/,'')
           else
-            RDF::URI.intern(to_s.sub(/\/+$/,'') + '/' + fragment.to_s.sub(/^\/+/,''))
+            # Add fragment as path component
+            parts[:path] = parts[:path].sub(/\/+$/,'') + '/' + fragment.to_s.sub(/^\/+/,'')
           end
         end
+        RDF::URI.intern(parts)
       end
     end
 
@@ -360,11 +492,8 @@ module RDF
     # @see RDF::URI#join
     # @param [Any] other
     # @return [RDF::URI]
-    # @raise [ArgumentError] on seriously invalid URI
     def +(other)
       RDF::URI.intern(self.to_s + other.to_s)
-    rescue Addressable::URI::InvalidURIError => e
-      raise ArgumentError, e.message
     end
 
     ##
@@ -376,7 +505,7 @@ module RDF
     #
     # @return [Boolean] `true` or `false`
     def root?
-      self.path == '/' || self.path.empty?
+      self.path == '/' || self.path.to_s.empty?
     end
 
     ##
@@ -391,9 +520,9 @@ module RDF
       if root?
         self
       else
-        uri = self.dup
-        uri.path = '/'
-        uri
+        RDF::URI.new(
+          object.merge(:path => '/').
+          keep_if {|k| [:scheme, :authority, :path].include?(k)})
       end
     end
 
@@ -433,7 +562,7 @@ module RDF
     end
 
     ##
-    # Returns a qualified name (QName) for this URI, if possible.
+    # Returns a qualified name (QName) for this URI based on available vocabularies, if possible.
     #
     # @example
     #   RDF::URI('http://purl.org/dc/terms/').qname             #=> [:dc, nil]
@@ -469,13 +598,14 @@ module RDF
     #
     # @return [RDF::URI]
     def dup
-      self.class.new(@uri.dup)
+      self.class.new(@value || @object)
     end
 
     ##
     # @private
     def freeze
-      @uri.freeze
+      @value  = value.freeze
+      @object = object.freeze
       super
     end
 
@@ -600,7 +730,7 @@ module RDF
     #
     # @return [Sring]
     def to_base
-      "<#{escape(@uri.to_s)}>"
+      "<#{escape(to_s)}>"
     end
 
     ##
@@ -610,48 +740,412 @@ module RDF
     #   RDF::URI('http://example.org/').to_str                  #=> 'http://example.org/'
     #
     # @return [String]
-    def to_str
-      @uri.to_s
-    end
+    def to_str; value; end
     alias_method :to_s, :to_str
+
+    ##
+    # Returns a <code>String</code> representation of the URI object's state.
+    #
+    # @return [String] The URI object's state, as a <code>String</code>.
+    def inspect
+      sprintf("#<%s:%#0x URI:%s>", URI.to_s, self.object_id, self.to_s)
+    end
+
+    ##
+    # lexical representation of URI, either absolute or relative
+    # @return [String] 
+    def value
+      @value ||= [
+        ("#{scheme}:" if absolute?),
+        ("//#{authority}" if authority),
+        path,
+        ("?#{query}" if query),
+        ("##{fragment}" if fragment)
+      ].compact.join("")
+    end
 
     ##
     # Returns a hash code for this URI.
     #
     # @return [Fixnum]
     def hash
-      @uri.hash
+      return @hash ||= (to_s.hash * -1)
     end
 
     ##
-    # Returns `true` if this URI instance supports the `symbol` method.
+    # Returns object representation of this URI, broken into components
     #
-    # @param  [Symbol, String, #to_s] symbol
-    # @return [Boolean] `true` or `false`
-    def respond_to?(symbol)
-      @uri.respond_to?(symbol) || super
-    end
-
-  protected
-
-    ##
-    # @param  [Symbol, String, #to_s] symbol
-    # @param  [Array<Object>] args
-    # @yield
-    # @return [Object]
-    # @private
-    def method_missing(symbol, *args, &block)
-      if @uri.respond_to?(symbol)
-        case result = @uri.send(symbol, *args, &block)
-          when Addressable::URI
-            self.class.new(result)
-          else result
-        end
-      else
-        super
+    # @return [Hash{Symbol => String}]
+    def object
+      @object ||= begin
+        parse @value
       end
     end
-  end # URI
+    alias_method :to_hash, :object
+
+    ##{
+    # Parse a URI into it's components
+    #
+    # @param [String, to_s] value
+    # @return [Object{Symbol => String}]
+    def parse(value)
+      parts = {}
+
+      if matchdata = value.to_s.match(IRI_PARTS)
+        scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
+        parts[:scheme] = scheme if scheme
+
+        if authority
+          parts[:authority] = authority
+        else
+          # Use empty host to make things hang together
+          parts[:authority] = ""
+        end
+
+        parts[:path] = path.to_s
+        parts[:query] = query[1..-1] if query
+        parts[:fragment] = fragment[1..-1] if fragment
+      end
+      
+      parts
+    end
+
+    ##
+    # @return [String]
+    def scheme; object.fetch(:scheme, nil); end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def scheme=(value)
+      if value
+        object[:scheme] = value.to_s
+      else
+        object.delete(:scheme)
+      end
+      @value = nil
+      self
+    end
+
+    ##
+    # Return normalized version of scheme, if any
+    # @return [String]
+    def normalized_scheme
+      scheme.strip.downcase if scheme
+    end
+
+    ##
+    # @return [String]
+    def user
+      object.fetch(:user) do
+        userinfo.split(':', 2)[0] if userinfo
+      end
+    end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def user=(value)
+      if value
+        object[:user] = value.to_s
+      else
+        object.delete(:user)
+      end
+      @object[:userinfo] = format_userinfo("")
+      @object[:authority] = format_authority
+      @value = nil
+      self
+    end
+    
+    ##
+    # Normalized version of user
+    # @return [String]
+    def normalized_user
+      ::URI.escape(::URI.unescape(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
+    end
+
+    ##
+    # @return [String]
+    def password
+      object.fetch(:password) do
+        userinfo.split(':', 2)[1] if userinfo
+      end
+    end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def password=(value)
+      if value
+        object[:password] = value.to_s
+      else
+        object.delete(:password)
+      end
+      @object[:userinfo] = format_userinfo("")
+      @object[:authority] = format_authority
+      @value = nil
+      self
+    end
+    
+    ##
+    # Normalized version of password
+    # @return [String]
+    def normalized_password
+      ::URI.escape(::URI.unescape(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
+    end
+
+    ##
+    # @return [String]
+    def host
+      object.fetch(:host) do
+        $1 if @object[:authority].to_s.match(/(?:[^@]+@)?([^:]+)(?::.*)?$/)
+      end
+    end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def host=(value)
+      if value
+        object[:host] = value.to_s
+      else
+        object.delete(:host)
+      end
+      @object[:authority] = format_authority
+      @value = nil
+      self
+    end
+    
+    ##
+    # Normalized version of host
+    # @return [String]
+    def normalized_host
+      normalize_segment(host, IHOST) if host
+    end
+
+    ##
+    # @return [String]
+    def port
+      object.fetch(:port) do
+        $1 if @object[:authority].to_s.match(/:(\d+)$/)
+      end
+    end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def port=(value)
+      if value
+        object[:port] = value.to_s
+      else
+        object.delete(:port)
+      end
+      @object[:authority] = format_authority
+      @value = nil
+      self
+    end
+    
+    ##
+    # Normalized version of port
+    # @return [String]
+    def normalized_port
+      port.to_s.to_i.to_s
+      if PORT_MAPPING[normalized_scheme] == port
+        nil
+      else
+        port
+      end
+    end
+
+    ##
+    # @return [String]
+    def path; object.fetch(:path, nil); end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def path=(value)
+      if value
+        object[:path] = value.to_s
+      else
+        object.delete(:path)
+      end
+      @value = nil
+      self
+    end
+    
+    ##
+    # Normalized version of path
+    # @return [String]
+    def normalized_path
+      segments = path.to_s.split('/', -1) # preserve null segments
+
+      norm_segs = case
+      when authority
+        # ipath-abempty
+        segments.map {|s| normalize_segment(s, ISEGMENT)}
+      when segments.first.nil?
+        # ipath-absolute
+        res = [nil]
+        res << normalize_segment(segments[1], ISEGMENT_NZ) if segments.length > 1
+        res += segments[2..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 2
+        res
+      when segments.first.to_s.index(':')
+        # ipath-noscheme
+        res = []
+        res << normalize_segment(segments[1], ISEGMENT_NZ_NC)
+        res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
+      when segments.first
+        # ipath-rootless
+        # ipath-noscheme
+        res = []
+        res << normalize_segment(segments[1], ISEGMENT_NZ)
+        res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
+      else
+        # Should be empty
+        segments
+      end
+
+      res = self.class.normalize_path(norm_segs.join("/"))
+      # Special rules for specific protocols having empty paths
+      res.empty? ? (%w(http https ftp tftp).include?(normalized_scheme) ? '/' : "") : res
+    end
+
+    ##
+    # @return [String]
+    def query; object.fetch(:query, nil); end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def query=(value)
+      if value
+        object[:query] = value.to_s
+      else
+        object.delete(:query)
+      end
+      @value = nil
+      self
+    end
+
+    ##
+    # Normalized version of query
+    # @return [String]
+    def normalized_query
+      normalize_segment(query, IQUERY) if query
+    end
+
+    ##
+    # @return [String]
+    def fragment; object.fetch(:fragment, nil); end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def fragment=(value)
+      if value
+        object[:fragment] = value.to_s
+      else
+        object.delete(:fragment)
+      end
+      @value = nil
+      self
+    end
+
+    ##
+    # Normalized version of fragment
+    # @return [String]
+    def normalized_fragment
+      normalize_segment(fragment, IFRAGMENT) if fragment
+    end
+
+    ##
+    # Authority is a combination of user, password, host and port
+    def authority
+      object[:authority] ||= (format_authority if @object[:host])
+    end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def authority=(value)
+      object.delete_if {|k| [:user, :password, :host, :port, :userinfo].include?(k)}
+      if value
+        object[:authority] = value.to_s
+      else
+        object.delete(:authority)
+      end
+      @value = nil
+      self
+    end
+
+    ##
+    # Return normalized version of authority, if any
+    # @return [String]
+    def normalized_authority
+      if authority
+        (userinfo ? "#{normalized_userinfo}@" : "") +
+        normalized_host +
+        (port ? ":#{normalized_host}" : "")
+      end
+    end
+
+    ##
+    # Userinfo is a combination of user and password
+    def userinfo
+      object[:userinfo] ||= (format_userinfo("") if @object[:user])
+    end
+
+    ##
+    # @param [String, #to_s] value
+    # @return [RDF::URI] self
+    def userinfo=(value)
+      object.delete_if {|k| [:user, :password, :authority].include?(k)}
+      if value
+        object[:userinfo] = value.to_s
+      else
+        object.delete(:userinfo)
+      end
+      @object[:authority] = format_authority
+      @value = nil
+      self
+    end
+    
+    ##
+    # Normalized version of userinfo
+    # @return [String]
+    def normalized_userinfo
+      normalized_user + (passsword ? ":#{normalized_passsword}" : "") if userinfo
+    end
+
+  private
+
+    ##
+    # Normalize a segment using a character range
+    #
+    # @param [String] segment
+    # @param [Regexp] expr
+    # @result [String]
+    def normalize_segment(value, expr)
+      ::URI.escape(::URI.unescape(value), /[^#{expr}]/) if value
+    end
+
+    def format_userinfo(append = "")
+      if @object[:user]
+        @object[:user] + (@object[:password] ? ":#{@object[:password]}" : "") + append
+      else
+        ""
+      end
+    end
+
+    def format_authorty
+      if @object[:host]
+        format_userinfo("@") + @object[:host] + (object[:port] ? ":#{object[:port]}" : "")
+      else
+        ""
+      end
+    end
+  end
 
   # RDF::IRI is a synonym for RDF::URI
   IRI = URI

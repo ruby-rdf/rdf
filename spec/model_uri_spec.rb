@@ -55,14 +55,13 @@ describe RDF::URI do
   end
 
   it "should be duplicable" do
-    url  = Addressable::URI.parse('http://rdf.rubyforge.org/')
-    uri2 = (uri1 = @new.call(url)).dup
+    uri2 = (uri1 = @new.call('http://rdf.rubyforge.org/')).dup
 
     uri1.should_not be_equal(uri2)
     uri1.should be_eql(uri2)
     uri1.should == uri2
 
-    url.path = '/rdf/'
+    uri1.path = '/rdf/'
     uri1.should_not be_equal(uri2)
     uri1.should_not be_eql(uri2)
     uri1.should_not == uri2
@@ -106,7 +105,7 @@ describe RDF::URI do
             RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
           end
         end
-        it "validates IRI with ipath-empty #{mod}", :pending => "Addressable bug" do
+        it "validates IRI with ipath-empty #{mod}" do
           refs.each do |c|
             RDF::URI("scheme:#{fmt}" % ["", c, c]).should be_valid
           end
