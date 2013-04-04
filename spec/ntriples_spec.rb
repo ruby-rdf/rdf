@@ -74,6 +74,8 @@ describe RDF::NTriples::Format do
 end
 
 describe RDF::NTriples::Reader do
+  let!(:doap) {File.expand_path("../../etc/doap.nt", __FILE__)}
+  let!(:doap_count) {File.open(doap).each_line.to_a.length}
   before(:each) do
     @reader = RDF::NTriples::Reader.new
   end
@@ -112,6 +114,30 @@ describe RDF::NTriples::Reader do
   it "should return :ntriples for to_sym" do
     @reader.class.to_sym.should == :ntriples
     @reader.to_sym.should == :ntriples
+  end
+
+  describe ".initialize" do
+    it "reads doap string" do
+      g = RDF::Graph.new << RDF::NTriples::Reader.new(File.read(doap))
+      g.count.should == doap_count
+    end
+    it "reads doap IO" do
+      g = RDF::Graph.new
+      RDF::NTriples::Reader.new(File.open(doap)) do |r|
+        g << r
+      end
+      g.count.should == doap_count
+    end
+  end
+
+  describe ".open" do
+    it "reads doap string" do
+      g = RDF::Graph.new
+      RDF::NTriples::Reader.open(doap) do |r|
+        g << r
+      end
+      g.count.should == doap_count
+    end
   end
 end
 
