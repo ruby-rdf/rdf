@@ -55,14 +55,13 @@ describe RDF::URI do
   end
 
   it "should be duplicable" do
-    url  = Addressable::URI.parse('http://rdf.rubyforge.org/')
-    uri2 = (uri1 = @new.call(url)).dup
+    uri2 = (uri1 = @new.call('http://rdf.rubyforge.org/')).dup
 
     uri1.should_not be_equal(uri2)
     uri1.should be_eql(uri2)
     uri1.should == uri2
 
-    url.path = '/rdf/'
+    uri1.path = '/rdf/'
     uri1.should_not be_equal(uri2)
     uri1.should_not be_eql(uri2)
     uri1.should_not == uri2
@@ -106,7 +105,7 @@ describe RDF::URI do
             RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
           end
         end
-        it "validates IRI with ipath-empty #{mod}", :pending => "Addressable bug" do
+        it "validates IRI with ipath-empty #{mod}" do
           refs.each do |c|
             RDF::URI("scheme:#{fmt}" % ["", c, c]).should be_valid
           end
@@ -230,11 +229,11 @@ describe RDF::URI do
 
       %w(http://foo a) => "http://foo/a",
       %w(http://foo /a) => "http://foo/a",
-      %w(http://foo #a) => "http://foo#a",
+      %w(http://foo #a) => "http://foo/#a",
 
       %w(http://foo/ a) => "http://foo/a",
       %w(http://foo/ /a) => "http://foo/a",
-      %w(http://foo/ #a) => "http://foo#a", #!!
+      %w(http://foo/ #a) => "http://foo/#a", #!!
 
       %w(http://foo# a) => "http://foo#a",
       %w(http://foo# /a) => "http://foo/a", #!!
@@ -288,28 +287,14 @@ describe RDF::URI do
   end
 
   context "using normalized merging (#join)" do
-
-    before :all do
-      @writer = RDF::Writer.for(:ntriples)
-    end
-
-    before :each do
-      @subject = RDF::URI.new("http://example.org")
-    end
-
-    it "appends fragment to uri" do
-      @subject.join("foo").to_s.should == "http://example.org/foo"
-    end
-
-    it "appends another fragment" do
-      @subject.join("foo#bar").to_s.should == "http://example.org/foo#bar"
-    end
-
+    subject {RDF::URI.new("http://example.org")}
     it "appends another URI" do
-      @subject.join(RDF::URI.new("foo#bar")).to_s.should == "http://example.org/foo#bar"
+      subject.join(RDF::URI.new("foo#bar")).to_s.should == "http://example.org/foo#bar"
     end
 
     {
+      %w(http://example.org foo) => "<http://example.org/foo>",
+      %w(http://example.org foo#bar) => "<http://example.org/foo#bar>",
       %w(http://foo ) =>  "<http://foo>",
       %w(http://foo a) => "<http://foo/a>",
       %w(http://foo /a) => "<http://foo/a>",
@@ -320,7 +305,7 @@ describe RDF::URI do
       %w(http://foo/ /a) => "<http://foo/a>",
       %w(http://foo/ #a) => "<http://foo/#a>",
 
-      %w(http://foo# ) =>  "<http://foo#>",
+      %w(http://foo# ) =>  "<http://foo>",
       %w(http://foo# a) => "<http://foo/a>",
       %w(http://foo# /a) => "<http://foo/a>",
       %w(http://foo# #a) => "<http://foo#a>",
@@ -335,14 +320,14 @@ describe RDF::URI do
       %w(http://foo/bar/ /a) => "<http://foo/a>",
       %w(http://foo/bar/ #a) => "<http://foo/bar/#a>",
 
-      %w(http://foo/bar# ) =>  "<http://foo/bar#>",
+      %w(http://foo/bar# ) =>  "<http://foo/bar>",
       %w(http://foo/bar# a) => "<http://foo/a>",
       %w(http://foo/bar# /a) => "<http://foo/a>",
       %w(http://foo/bar# #a) => "<http://foo/bar#a>",
 
-    }.each_pair do |input, result|
-      it "creates #{result} from <#{input[0]}> and '#{input[1]}'" do
-        @writer.serialize(RDF::URI.new(input[0]).join(input[1].to_s)).should == result
+    }.each_pair do |(lhs, rhs), result|
+      it "creates #{result} from <#{lhs}> and '#{rhs}'" do
+        RDF::URI.new(lhs).join(rhs.to_s).to_base.should == result
       end
     end
   end

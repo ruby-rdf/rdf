@@ -280,7 +280,6 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 ## Dependencies
 
 * [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
-* [Addressable](http://rubygems.org/gems/addressable) (>= 2.2.0)
 
 ## Installation
 

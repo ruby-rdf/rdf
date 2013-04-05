@@ -79,6 +79,7 @@ module RDF
   ##
   # Alias for `RDF::Resource.new`.
   #
+  # @param (see RDF::Resource#initialize)
   # @return [RDF::Resource]
   def self.Resource(*args, &block)
     Resource.new(*args, &block)
@@ -87,6 +88,7 @@ module RDF
   ##
   # Alias for `RDF::Node.new`.
   #
+  # @param (see RDF::Node#initialize)
   # @return [RDF::Node]
   def self.Node(*args, &block)
     Node.new(*args, &block)
@@ -95,13 +97,7 @@ module RDF
   ##
   # Alias for `RDF::URI.new`.
   #
-  # @overload URI(uri)
-  #   @param  [URI, String, #to_s]    uri
-  #
-  # @overload URI(options = {})
-  #   @param  [Hash{Symbol => Object}] options
-  #     passed to `Addressable::URI.new`
-  #
+  # @param (see RDF::URI#initialize)
   # @return [RDF::URI]
   def self.URI(*args, &block)
     case uri = args.first
@@ -116,6 +112,7 @@ module RDF
   ##
   # Alias for `RDF::Literal.new`.
   #
+  # @param (see RDF::Literal#initialize)
   # @return [RDF::Literal]
   def self.Literal(*args, &block)
     case literal = args.first
@@ -127,6 +124,7 @@ module RDF
   ##
   # Alias for `RDF::Graph.new`.
   #
+  # @param (see RDF::Graph#initialize)
   # @return [RDF::Graph]
   def self.Graph(*args, &block)
     Graph.new(*args, &block)
@@ -135,6 +133,7 @@ module RDF
   ##
   # Alias for `RDF::Statement.new`.
   #
+  # @param (see RDF::Statement#initialize)
   # @return [RDF::Statement]
   def self.Statement(*args, &block)
     Statement.new(*args, &block)
@@ -143,7 +142,7 @@ module RDF
   ##
   # Alias for `RDF::Vocabulary.create`.
   #
-  # @param  [String] uri
+  # @param (see RDF::Vocabulary#initialize)
   # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
