@@ -5,8 +5,6 @@ module RDF
   # A Uniform Resource Identifier (URI).
   # Also compatible with International Resource Identifier (IRI)
   #
-  # `RDF::URI` supports all the instance methods of `Addressable::URI`.
-  #
   # @example Creating a URI reference (1)
   #   uri = RDF::URI.new("http://rdf.rubyforge.org/")
   #
@@ -92,7 +90,7 @@ module RDF
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
 
     # Split an IRI into it's component parts
-    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/
+    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/
 
     # Remove dot expressions regular expressions
     RDS_2A = /^\.?\.\/(.*)$/.freeze
@@ -100,6 +98,7 @@ module RDF
     RDS_2B2 = /^(?:\/\.\/)(.*)$/.freeze
     RDS_2C1 = /^\/\.\.$/.freeze
     RDS_2C2 = /^(?:\/\.\.\/)(.*)$/.freeze
+    RDS_2D  = /^\.\.?$/.freeze
     RDS_2E = /^(\/?[^\/]*)(\/?.*)?$/.freeze
 
     # Remove port, if it is standard for the scheme when normalizing
@@ -177,20 +176,17 @@ module RDF
           # if the input buffer begins with a prefix of "/./" or "/.", where "." is a complete path segment, then replace that prefix with "/" in the input buffer; otherwise,
           input = "/#{$1}"
         elsif input.match(RDS_2C1) || input.match(RDS_2C2)
-          # if the input buffer begins with a prefix of "/./" or "/.", where "." is a complete path segment, then replace that prefix with "/" in the input buffer; otherwise,
-          input = "/#{$1}"
-        elsif input.match(RDS_2C)
           # if the input buffer begins with a prefix of "/../" or "/..", where ".." is a complete path segment, then replace that prefix with "/" in the input buffer
           input = "/#{$1}"
 
           #  and remove the last segment and its preceding "/" (if any) from the output buffer; otherwise,
-          output.sub(/\/?[^\/]*$/, '')
+          output.sub!(/\/?[^\/]*$/, '')
         elsif input.match(RDS_2D)
           # if the input buffer consists only of "." or "..", then remove that from the input buffer; otherwise,
           input = ""
-        else
+        elsif input.match(RDS_2E)
           # move the first path segment in the input buffer to the end of the output buffer, including the initial "/" character (if any) and any subsequent characters up to, but not including, the next "/" character or the end of the input buffer.end
-          seg, input = input.match(RDS_2E)
+          seg, input = $1, $2
           output << seg
         end
       end
@@ -282,6 +278,11 @@ module RDF
     def absolute?; !scheme.nil?; end
 
     ##
+    # A URI is relative when it does not have a scheme
+    # @return [Boolean] `true` or `false`
+    def relative?; !absolute?; end
+
+    ##
     # Returns the string length of this URI.
     #
     # @example
@@ -334,7 +335,6 @@ module RDF
     # @return [RDF::URI] `self`
     # @since  0.3.0
     def canonicalize!
-      @value = nil
       @object = {
         :scheme => normalized_scheme,
         :authority => normalized_authority,
@@ -342,6 +342,7 @@ module RDF
         :query => normalized_query,
         :fragment => normalized_fragment
       }
+      @value = nil
       self
     end
     alias_method :normalize!, :canonicalize!
@@ -392,7 +393,7 @@ module RDF
           base_path = self.class.normalize_path(path.to_s)
 
           # Merge path segments from section 5.2.3
-          base_path.sub!(/\/[^\/]+$/, '/')
+          base_path.sub!(/(\/[^\/]*)?$/, '/')
           joined_parts[:path] = self.class.normalize_path(base_path + uri.path)
           joined_parts[:query] = uri.query
         end
@@ -449,28 +450,34 @@ module RDF
       if urn?
         RDF::URI.intern(to_s.sub(/:+$/,'') + ':' + fragment.to_s.sub(/^:+/,''))
       else # !urn?
-        parts = object.dup.delete_if {|k| k == :query}
-        if parts.has_key?(:fragment)
+        res = self.dup
+        if res.fragment
           case fragment.to_s[0,1]
           when '/'
-            parts.delete(:fragment)
-            parts.path = "#{parts.path}#{fragment.to_s.sub(/^\/+/,'')}"
+            # Base with a fragment, fragment beginning with '/'. The fragment wins, we use '/'.
+            path, frag = fragment.to_s.split('#', 2)
+            res.path = "#{res.path}/#{path.sub(/^\/*/,'')}"
+            res.fragment = frag
           else
             # Replace fragment
-            parts[:fragment] = fragment.to_s.sub(/^#+/,'')
+            res.fragment = fragment.to_s.sub(/^#+/,'')
           end
         else
-          # No fragment
+          # Not a fragment. includes '/'. Results from bases ending in '/' are the same as if there were no trailing slash.
           case fragment.to_s[0,1]
           when '#'
+            # Base ending with '/', fragment beginning with '#'. The fragment wins, we use '#'.
+            res.path = res.path.to_s.sub!(/\/*$/, '')
             # Add fragment
-            parts[:fragment] = fragment.to_s.sub(/^#+/,'')
+            res.fragment = fragment.to_s.sub(/^#+/,'')
           else
             # Add fragment as path component
-            parts[:path] = parts[:path].sub(/\/+$/,'') + '/' + fragment.to_s.sub(/^\/+/,'')
+            path, frag = fragment.to_s.split('#', 2)
+            res.path = res.path.to_s.sub(/\/*$/,'/') + path.sub(/^\/*/,'')
+            res.fragment = frag
           end
         end
-        RDF::URI.intern(parts)
+        RDF::URI.intern(res.to_s)
       end
     end
 
@@ -604,9 +611,13 @@ module RDF
     ##
     # @private
     def freeze
-      @value  = value.freeze
-      @object = object.freeze
-      super
+      unless frozen?
+        @value  = value.freeze
+        @object = object.freeze
+        @hash = hash.freeze
+        super
+      end
+      self
     end
 
     ##
@@ -674,7 +685,7 @@ module RDF
         # If other is a Literal, reverse test to consolodate complex type checking logic
         other == self
       when String then to_s == other
-      when URI, Addressable::URI then to_s == other.to_s
+      when URI then to_s == other.to_s
       else other.respond_to?(:to_uri) && to_s == other.to_uri.to_s
       end
     end
@@ -795,13 +806,7 @@ module RDF
         scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
         parts[:scheme] = scheme if scheme
 
-        if authority
-          parts[:authority] = authority
-        else
-          # Use empty host to make things hang together
-          parts[:authority] = ""
-        end
-
+        parts[:authority] = authority if authority
         parts[:path] = path.to_s
         parts[:query] = query[1..-1] if query
         parts[:fragment] = fragment[1..-1] if fragment
@@ -966,6 +971,8 @@ module RDF
     # @return [RDF::URI] self
     def path=(value)
       if value
+        # Always lead with a slash
+        value = "/#{value}" if authority && value.to_s[0,1] != '/'
         object[:path] = value.to_s
       else
         object.delete(:path)
@@ -999,7 +1006,7 @@ module RDF
         # ipath-rootless
         # ipath-noscheme
         res = []
-        res << normalize_segment(segments[1], ISEGMENT_NZ)
+        res << normalize_segment(segments[0], ISEGMENT_NZ)
         res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
       else
         # Should be empty
