@@ -213,7 +213,7 @@ describe RDF::URI do
         u1.should == u1
       end
     end
-    it "#canonicalize! alters resource" do
+    it "#canonicalize! alters resource", :ruby => "1.9" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")
       u1.canonicalize!.to_s.should == u2.to_s

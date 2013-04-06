@@ -224,7 +224,7 @@ module RDF
       uri = args.first
       case uri
       when Hash
-        @object = options.dup.keep_if {|k|
+        @object = options.dup.keep_if {|k, v|
           %w(
             scheme user password userinfo host port authority
             path query fragment
@@ -372,7 +372,7 @@ module RDF
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.2
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.3
     def join(*uris)
-      joined_parts = object.dup.delete_if {|k| [:user, :password, :host, :port].include?(k)}
+      joined_parts = object.dup.delete_if {|k, v| [:user, :password, :host, :port].include?(k)}
 
       uris.each do |uri|
         uri = RDF::URI.new(uri) unless uri.is_a?(RDF::URI)
@@ -529,7 +529,7 @@ module RDF
       else
         RDF::URI.new(
           object.merge(:path => '/').
-          keep_if {|k| [:scheme, :authority, :path].include?(k)})
+          keep_if {|k, v| [:scheme, :authority, :path].include?(k)})
       end
     end
 
@@ -1076,7 +1076,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def authority=(value)
-      object.delete_if {|k| [:user, :password, :host, :port, :userinfo].include?(k)}
+      object.delete_if {|k, v| [:user, :password, :host, :port, :userinfo].include?(k)}
       if value
         object[:authority] = value.to_s
       else
@@ -1107,7 +1107,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def userinfo=(value)
-      object.delete_if {|k| [:user, :password, :authority].include?(k)}
+      object.delete_if {|k, v| [:user, :password, :authority].include?(k)}
       if value
         object[:userinfo] = value.to_s
       else
