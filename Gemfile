@@ -8,10 +8,11 @@ group :development do
   gem "wirble"
   gem "redcarpet", :platforms => :ruby
   gem "debugger", :platforms => :ruby_19
-  gem "ruby-debug", :platforms => :jruby
+  gem "ruby-debug", :platforms => [:jruby, :ruby_18]
 end
 
 group :test do
   gem "rake"
+  gem "backports", :platforms => :ruby_18
 end
 

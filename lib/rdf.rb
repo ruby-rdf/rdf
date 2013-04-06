@@ -5,16 +5,16 @@ require 'bigdecimal'
 require 'date'
 require 'time'
 
-if RUBY_VERSION < '1.8.7'
+if RUBY_VERSION < '1.9'
   # @see http://rubygems.org/gems/backports
   begin
-    require 'backports/1.8.7'
+    require 'backports'
   rescue LoadError
     begin
       require 'rubygems'
-      require 'backports/1.8.7'
+      require 'backports'
     rescue LoadError
-      abort "RDF.rb requires Ruby 1.8.7 or the Backports gem (hint: `gem install backports')."
+      abort "RDF.rb requires Ruby > 1.9.0 or the Backports gem (hint: `gem install backports')."
     end
   end
 end
