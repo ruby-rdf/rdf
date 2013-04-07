@@ -106,6 +106,9 @@ module RDF
 
     ##
     # Deletes RDF statements from `self`.
+    # If any statement contains a {Query::Variable}, it is
+    # considered to be a pattern, and used to query
+    # self to find matching statements to delete.
     #
     # @param  [Enumerable<RDF::Statement>] statements
     # @raise  [TypeError] if `self` is immutable
@@ -118,7 +121,7 @@ module RDF
           when value.respond_to?(:each_statement)
             delete_statements(value)
             nil
-          when (statement = Statement.from(value)).valid?
+          when (statement = Statement.from(value)).constant?
             statement
           else
             delete_statements(query(value))

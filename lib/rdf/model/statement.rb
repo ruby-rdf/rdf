@@ -106,6 +106,18 @@ module RDF
     end
 
     ##
+    # Returns `true` if any element of the statement is not a
+    # URI, Node or Literal.
+    #
+    # @return [Boolean]
+    def variable?
+      !(has_subject?    && subject.resource? && 
+        has_predicate?  && predicate.resource? &&
+        has_object?     && (object.resource? || object.literal?) &&
+        (has_context?    ? context.resource? : true ))
+    end
+
+    ##
     # @return [Boolean]
     def invalid?
       !valid?
