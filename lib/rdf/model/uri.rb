@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'uri'
 
 module RDF
@@ -46,7 +47,7 @@ module RDF
     SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*").freeze
     PORT = Regexp.compile("[0-9]*").freeze
     IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]").freeze  # Simplified, no IPvFuture
-    PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f]{2}").freeze
+    PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f][0-9A-Fa-f]").freeze
     GEN_DELIMS = Regexp.compile("[:/\\?\\#\\[\\]@]").freeze
     SUB_DELIMS = Regexp.compile("[!\\$&'\\(\\)\\*\\+,;=]").freeze
     RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})").freeze
@@ -168,6 +169,10 @@ module RDF
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.4
     def self.normalize_path(path)
       output, input = "", path.to_s
+      if input.respond_to?(:encoding) && input.encoding != Encoding::UTF_8
+        input = input.dup if input.frozen?
+        input = input.force_encoding(Encoding::UTF_8)
+      end
       until input.empty?
         if input.match(RDS_2A)
           # If the input buffer begins with a prefix of "../" or "./", then remove that prefix from the input buffer; otherwise,
@@ -191,7 +196,7 @@ module RDF
         end
       end
 
-      output
+      output.sub(/\/+/, '/')
     end
 
     ##
@@ -224,13 +229,21 @@ module RDF
       uri = args.first
       case uri
       when Hash
-        @object = options.dup.keep_if {|k, v|
-          %w(
-            scheme user password userinfo host port authority
-            path query fragment
-          ).include?(k.to_s)}
+        %w(
+          scheme
+          user password userinfo
+          host port authority
+          path query fragment
+        ).map(&:to_sym).each do |meth|
+          if uri.has_key?(meth)
+            self.send("#{meth}=".to_sym, uri[meth])
+          else
+            self.send(meth)
+          end
+        end
       else
         @value = uri.to_s
+        @value.force_encoding(Encoding::UTF_8) if @value.respond_to?(:encoding)
       end
 
       validate!     if options[:validate]
@@ -605,13 +618,15 @@ module RDF
     #
     # @return [RDF::URI]
     def dup
-      self.class.new(@value || @object)
+      self.class.new((@value || @object).dup)
     end
 
     ##
     # @private
     def freeze
       unless frozen?
+        # Create derived components
+        authority; userinfo; user; password; host; port
         @value  = value.freeze
         @object = object.freeze
         @hash = hash.freeze
@@ -801,15 +816,31 @@ module RDF
     # @return [Object{Symbol => String}]
     def parse(value)
       parts = {}
-
+      if value.respond_to?(:encoding) && value.encoding != Encoding::ASCII_8BIT
+        value = value.dup if value.frozen?
+        value = value.force_encoding(Encoding::ASCII_8BIT)
+      end
       if matchdata = value.to_s.match(IRI_PARTS)
         scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
-        parts[:scheme] = scheme if scheme
+        userinfo, hostport = authority.to_s.split('@', 2)
+        hostport, userinfo = userinfo, nil unless hostport
+        user, password = userinfo.to_s.split(':', 2)
+        host, port = hostport.to_s.split(':', 2)
 
-        parts[:authority] = authority if authority
+        parts[:scheme] = scheme
+        parts[:authority] = authority
+        parts[:userinfo] = userinfo
+        parts[:user] = user
+        parts[:password] = password
+        parts[:host] = host
+        parts[:port] = (::URI.decode(port).to_i if port)
         parts[:path] = path.to_s
         parts[:query] = query[1..-1] if query
         parts[:fragment] = fragment[1..-1] if fragment
+
+        parts.each_key do |k|
+          parts[k].force_encoding(Encoding::UTF_8) if parts[k].respond_to?(:encoding)
+        end
       end
       
       parts
@@ -843,7 +874,7 @@ module RDF
     # @return [String]
     def user
       object.fetch(:user) do
-        userinfo.split(':', 2)[0] if userinfo
+        @object[:user] = (userinfo.split(':', 2)[0] if userinfo)
       end
     end
 
@@ -866,14 +897,14 @@ module RDF
     # Normalized version of user
     # @return [String]
     def normalized_user
-      ::URI.escape(::URI.unescape(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
+      ::URI.encode(::URI.decode(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
     end
 
     ##
     # @return [String]
     def password
       object.fetch(:password) do
-        userinfo.split(':', 2)[1] if userinfo
+        @object[:password] = (userinfo.split(':', 2)[1] if userinfo)
       end
     end
 
@@ -896,14 +927,14 @@ module RDF
     # Normalized version of password
     # @return [String]
     def normalized_password
-      ::URI.escape(::URI.unescape(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
+      ::URI.encode(::URI.decode(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
     end
 
     ##
     # @return [String]
     def host
       object.fetch(:host) do
-        $1 if @object[:authority].to_s.match(/(?:[^@]+@)?([^:]+)(?::.*)?$/)
+        @object[:host] = ($1 if @object[:authority].to_s.match(/(?:[^@]+@)?([^:]+)(?::.*)?$/))
       end
     end
 
@@ -925,14 +956,15 @@ module RDF
     # Normalized version of host
     # @return [String]
     def normalized_host
-      normalize_segment(host, IHOST) if host
+      # Remove trailing '.' characters
+      normalize_segment(host, IHOST, true).sub(/\.*$/, '') if host
     end
 
     ##
     # @return [String]
     def port
       object.fetch(:port) do
-        $1 if @object[:authority].to_s.match(/:(\d+)$/)
+        @object[:port] = ($1 if @object[:authority].to_s.match(/:(\d+)$/))
       end
     end
 
@@ -941,7 +973,7 @@ module RDF
     # @return [RDF::URI] self
     def port=(value)
       if value
-        object[:port] = value.to_s
+        object[:port] = value.to_s.to_i
       else
         object.delete(:port)
       end
@@ -954,11 +986,13 @@ module RDF
     # Normalized version of port
     # @return [String]
     def normalized_port
-      port.to_s.to_i.to_s
-      if PORT_MAPPING[normalized_scheme] == port
-        nil
-      else
-        port
+      if port
+        np = normalize_segment(port.to_s, PORT)
+        if PORT_MAPPING[normalized_scheme] == np.to_i
+          nil
+        else
+          np.to_i
+        end
       end
     end
 
@@ -1069,7 +1103,9 @@ module RDF
     ##
     # Authority is a combination of user, password, host and port
     def authority
-      object[:authority] ||= (format_authority if @object[:host])
+      object.fetch(:authority) {
+        @object[:authority] = (format_authority if @object[:host])
+      }
     end
 
     ##
@@ -1082,6 +1118,7 @@ module RDF
       else
         object.delete(:authority)
       end
+      user; password; userinfo; host; port
       @value = nil
       self
     end
@@ -1093,14 +1130,16 @@ module RDF
       if authority
         (userinfo ? "#{normalized_userinfo}@" : "") +
         normalized_host +
-        (port ? ":#{normalized_host}" : "")
+        (normalized_port ? ":#{normalized_port}" : "")
       end
     end
 
     ##
     # Userinfo is a combination of user and password
     def userinfo
-      object[:userinfo] ||= (format_userinfo("") if @object[:user])
+      object.fetch(:userinfo) {
+        @object[:userinfo] = (format_userinfo("") if @object[:user])
+      }
     end
 
     ##
@@ -1113,7 +1152,7 @@ module RDF
       else
         object.delete(:userinfo)
       end
-      @object[:authority] = format_authority
+      user; password; authority
       @value = nil
       self
     end
@@ -1122,7 +1161,7 @@ module RDF
     # Normalized version of userinfo
     # @return [String]
     def normalized_userinfo
-      normalized_user + (passsword ? ":#{normalized_passsword}" : "") if userinfo
+      normalized_user + (password ? ":#{normalized_password}" : "") if userinfo
     end
 
   private
@@ -1132,9 +1171,18 @@ module RDF
     #
     # @param [String] segment
     # @param [Regexp] expr
+    # @param [Boolean] downcase
     # @result [String]
-    def normalize_segment(value, expr)
-      ::URI.escape(::URI.unescape(value), /[^#{expr}]/) if value
+    def normalize_segment(value, expr, downcase = false)
+      if value
+        if value.respond_to?(:encoding)
+          value = value.dup if value.frozen?
+          value = value.force_encoding(Encoding::UTF_8)
+        end
+        decoded = ::URI.decode(value)
+        decoded.downcase! if downcase
+        ::URI.encode(decoded, /[^#{expr}]/)
+      end
     end
 
     def format_userinfo(append = "")
@@ -1145,7 +1193,7 @@ module RDF
       end
     end
 
-    def format_authorty
+    def format_authority
       if @object[:host]
         format_userinfo("@") + @object[:host] + (object[:port] ? ":#{object[:port]}" : "")
       else

@@ -10,65 +10,242 @@ describe RDF::URI do
     lambda { @new.call('http://rdf.rubyforge.org/') }.should_not raise_error
   end
 
-  it "should recognize URNs" do
-    urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
-    urns.each do |urn|
-      uri = @new.call(urn)
-      uri.should be_a_uri
-      uri.should respond_to(:urn?)
-      uri.should be_a_urn
-      uri.should_not be_a_url
+  describe ".intern" do
+    before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
+    it "caches URI instance" do
+      RDF::URI.intern("a")
+      RDF::URI.instance_variable_get(:@cache)["a"].should == RDF::URI("a")
+    end
+
+    it "freezes instance" do
+      RDF::URI.intern("a").should be_frozen
     end
   end
 
-  it "should recognize URLs" do
-    urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
-    urls.each do |url|
-      uri = @new.call(url)
-      uri.should be_a_uri
-      uri.should respond_to(:url?)
-      uri.should be_a_url
-      uri.should_not be_a_urn
+  describe ".parse" do
+    it "creates a URI" do
+      RDF::URI.parse("a").should be_a(RDF::URI)
     end
   end
 
-  it "should return the root URI" do
-    uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
-    uri.should respond_to(:root)
-    uri.root.should be_a_uri
-    uri.root.should == @new.call('http://rdf.rubyforge.org/')
+  describe "#instantiate" do
+    it "should recognize URNs" do
+      urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
+      urns.each do |urn|
+        uri = @new.call(urn)
+        uri.should be_a_uri
+        uri.should respond_to(:urn?)
+        uri.should be_a_urn
+        uri.should_not be_a_url
+      end
+    end
+
+    it "should recognize URLs" do
+      urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
+      urls.each do |url|
+        uri = @new.call(url)
+        uri.should be_a_uri
+        uri.should respond_to(:url?)
+        uri.should be_a_url
+        uri.should_not be_a_urn
+      end
+    end
+
+    it "should canonicalize input with :canonicalize" do
+      RDF::URI.any_instance.should_receive(:canonicalize!).and_raise(ArgumentError)
+      lambda { RDF::URI("foo", :canonicalize => true) }.should raise_error(ArgumentError)
+    end
+
+    it "should validate input with :validate" do
+      RDF::URI.any_instance.should_receive(:valid?).and_return(false)
+      lambda { RDF::URI("foo", :validate => true) }.should raise_error(ArgumentError)
+    end
+
+    context "with hash" do
+      context "simple" do
+        subject {
+          RDF::URI.new({
+            :scheme => "http",
+            :user => "user",
+            :password => "password",
+            :host => "example.com",
+            :port => 8080,
+            :path => "/path",
+            :query => "query=value",
+            :fragment => "fragment"
+          })
+        }
+
+        {
+          :scheme => "http",
+          :user => "user",
+          :password => "password",
+          :userinfo => "user:password",
+          :host => "example.com",
+          :port => 8080,
+          :authority => "user:password@example.com:8080",
+          :path => "/path",
+          :query => "query=value",
+          :fragment => "fragment"
+        }.each do |method, value|
+          its(method) {should == value}
+          its("normalized_#{method}".to_sym) {should == value}
+        end
+
+        its(:value) {should == "http://user:password@example.com:8080/path?query=value#fragment"}
+      end
+
+      {
+        "//user@example.com" => {:authority => "user@example.com"},
+        "http://example.com/path" => {:scheme => "http", :host => "example.com", :path => "path"},
+        "http:path" => {:scheme => "http", :path => "path"},
+        
+      }.each do |value, object|
+        it "creates #{value}" do
+          RDF::URI(object).to_s.should == value
+        end
+      end
+    end
   end
 
-  it "should find the parent URI" do
-    uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
-    uri.should respond_to(:parent)
-    uri.parent.should be_a_uri
-    uri.parent.should == @new.call('http://rdf.rubyforge.org/RDF/')
-    uri.parent.parent.should == @new.call('http://rdf.rubyforge.org/')
-    uri.parent.parent.parent.should be_nil
+  context "when frozen" do
+    subject {RDF::URI("HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323").freeze}
+    {
+      :scheme => "HTTP",
+      :user => nil,
+      :password => nil,
+      :userinfo => nil,
+      :host => "example.com.",
+      :port => 80,
+      :authority => "example.com.:%38%30",
+      :path => "/%70a%74%68",
+      :query => "a=%31",
+      :fragment => "1%323"
+    }.each do |method, value|
+      its(method) {should == value}
+    end
+
+    {
+      :scheme => "http",
+      :user => nil,
+      :password => nil,
+      :userinfo => nil,
+      :host => "example.com",
+      :port => nil,
+      :authority => "example.com",
+      :path => "/path",
+      :query => "a=1",
+      :fragment => "123"
+    }.each do |method, value|
+      its("normalized_#{method}".to_sym) {should == value}
+    end
   end
 
-  it "should have a consistent hash code" do
-    hash1 = @new.call('http://rdf.rubyforge.org/').hash
-    hash2 = @new.call('http://rdf.rubyforge.org/').hash
-    hash1.should == hash2
+  describe "#parse" do
+    {
+      "http://user:password@example.com:8080/path?query=value#fragment" => {
+        :scheme => "http",
+        :user => "user",
+        :password => "password",
+        :userinfo => "user:password",
+        :host => "example.com",
+        :port => 8080,
+        :authority => "user:password@example.com:8080",
+        :path => "/path",
+        :query => "query=value",
+        :fragment => "fragment"
+      },
+      #"ldap://[2001:db8::7]/c=GB?objectClass?one" => {
+      #  :scheme => "ldap",
+      #  :host => "[2001:db8::7]",
+      #  :path => "/c=GB",
+      #  :query => "objectClass?one",
+      #},
+      "mailto:John.Doe@example.com" => {
+        :scheme => "mailto",
+        :host => nil,
+        :authority => nil,
+        :path => "John.Doe@example.com"
+      },
+      "news:comp.infosystems.www.servers.unix" => {
+        :scheme => "news",
+        :host => nil,
+        :authority => nil,
+        :path => "comp.infosystems.www.servers.unix"
+      },
+      "tel:+1-816-555-1212" => {
+        :scheme => "tel",
+        :path => "+1-816-555-1212"
+      },
+      "urn:oasis:names:specification:docbook:dtd:xml:4.1.2" => {
+        :scheme => "urn",
+        :path => "oasis:names:specification:docbook:dtd:xml:4.1.2",
+      }
+    }.each do |uri, object|
+      context uri do
+        subject {RDF::URI.new.parse(uri)}
+        object.each do |key, value|
+          it "#{key} should == #{value.inspect}" do
+            subject[key].should == value
+          end
+        end
+      end
+    end
   end
 
-  it "should be duplicable" do
-    uri2 = (uri1 = @new.call('http://rdf.rubyforge.org/')).dup
-
-    uri1.should_not be_equal(uri2)
-    uri1.should be_eql(uri2)
-    uri1.should == uri2
-
-    uri1.path = '/rdf/'
-    uri1.should_not be_equal(uri2)
-    uri1.should_not be_eql(uri2)
-    uri1.should_not == uri2
+  describe "#root" do
+    it "should return the root URI" do
+      uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
+      uri.should respond_to(:root)
+      uri.root.should be_a_uri
+      uri.root.should == @new.call('http://rdf.rubyforge.org/')
+    end
   end
 
-  it "should not be #anonymous?" do
-    @new.call('http://example.org').should_not be_anonymous
+  describe "#parent" do
+    it "should find the parent URI" do
+      uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
+      uri.should respond_to(:parent)
+      uri.parent.should be_a_uri
+      uri.parent.should == @new.call('http://rdf.rubyforge.org/RDF/')
+      uri.parent.parent.should == @new.call('http://rdf.rubyforge.org/')
+      uri.parent.parent.parent.should be_nil
+    end
+  end
+
+  describe "#hash" do
+    it "should have a consistent hash code" do
+      hash1 = @new.call('http://rdf.rubyforge.org/').hash
+      hash2 = @new.call('http://rdf.rubyforge.org/').hash
+      hash1.should == hash2
+    end
+  end
+
+  describe "#dup" do
+    let!(:uri1) {@new.call('http://rdf.rubyforge.org/')}
+    let!(:uri2) {uri1.dup}
+    
+    describe "original" do
+      subject {uri1}
+      its(:path) {should == uri2.path}
+      it {should_not be_equal(uri2)}
+      it {should be_eql(uri2)}
+      it {should == uri2}
+    end
+
+    describe "with altered path" do
+      subject {uri1.path = '/rdf/'; uri1}
+      its(:path) {should_not == uri2.path}
+      it {should_not be_equal(uri2)}
+      it {should_not be_eql(uri2)}
+      it {should_not == uri2}
+    end
+  end
+
+  describe "#anonymous?" do
+    it "should not be #anonymous?" do
+      @new.call('http://example.org').should_not be_anonymous
+    end
   end
 
   context "validation" do
@@ -173,18 +350,18 @@ describe RDF::URI do
 
   context "normalization" do
     {
-      "syntax-based normalization" => [
-        "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros&#xE9;"
-      ],
-      "syntax-based normalization (addressable)" => [
-        "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
-      ],
-      "case normalization(1)" => [
-        "http://example.com/%e1%cf",
-        "http://example.com/%E1%CF"
-      ],
+      #"syntax-based normalization" => [
+      #  "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
+      #  "example://a/b/c/%7Bfoo%7D/ros&#xE9;"
+      #],
+      #"syntax-based normalization (addressable)" => [
+      #  "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
+      #  "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
+      #],
+      #"case normalization(1)" => [
+      #  "http://example.com/%e1%cf",
+      #  "http://example.com/%E1%CF"
+      #],
       "case normalization(2)" => [
         "http://eXaMpLe.com/",
         "http://example.com/"
@@ -205,10 +382,42 @@ describe RDF::URI do
         "http://example.com/foo/bar/..",
         "http://example.com/foo/"
       ],
+      "parent of root" => [
+        "http://example.com/..",
+        "http://example.com/"
+      ],
+      "parent of parent of root" => [
+        "http://example.com/../..",
+        "http://example.com/"
+      ],
+      "parent of odd path" => [
+        "http://example.com/path(/..",
+        "http://example.com/"
+      ],
+      "parent of odd path (2)" => [
+        "http://example.com/(path)/..",
+        "http://example.com/"
+      ],
+      "parent of odd path (3)" => [
+        "http://example.com/path(/../",
+        "http://example.com/"
+      ],
+      "path with dot segments" => [
+        "/a/b/c/./../../g",
+        "/a/g"
+      ],
+      "mid/content=5/../6" => [
+        "mid/content=5/../6",
+        "mid/6"
+      ],
+      "multiple slashes" => [
+        "http://www.example.com///../",
+        "http://www.example.com/"
+      ],
     }.each do |name, (input, output)|
-      let(:u1) {RDF::URI(input)}
-      let(:u2) {RDF::URI(output)}
       it "#canonicalize #{name}", :pending => ("1.8 difference" if RUBY_VERSION < "1.9") do
+        u1 = RDF::URI(input)
+        u2 = RDF::URI(output)
         u1.canonicalize.to_s.should == u2.to_s
         u1.should == u1
       end
@@ -221,8 +430,7 @@ describe RDF::URI do
     end
   end
 
-
-  context "using the smart separator (/)" do
+  describe "#/" do
     {
       # #!! means that I'm not sure I like the semantics, but they are cases for
       # arguably invalid input, probably without 'correct' answers.
@@ -268,7 +476,7 @@ describe RDF::URI do
     end
   end
 
-  context "using concatenation (#+)" do
+  describe "#+" do
     {
       %w(http://foo/ a) => "http://foo/a",
       %w(http://foo/ /a) => "http://foo//a",
@@ -286,7 +494,7 @@ describe RDF::URI do
     end
   end
 
-  context "using normalized merging (#join)" do
+  describe "#join" do
     subject {RDF::URI.new("http://example.org")}
     it "appends another URI" do
       subject.join(RDF::URI.new("foo#bar")).to_s.should == "http://example.org/foo#bar"
@@ -295,20 +503,20 @@ describe RDF::URI do
     {
       %w(http://example.org foo) => "<http://example.org/foo>",
       %w(http://example.org foo#bar) => "<http://example.org/foo#bar>",
-      %w(http://foo ) =>  "<http://foo>",
+      %w(http://foo ) =>  "<http://foo/>",
       %w(http://foo a) => "<http://foo/a>",
       %w(http://foo /a) => "<http://foo/a>",
-      %w(http://foo #a) => "<http://foo#a>",
+      %w(http://foo #a) => "<http://foo/#a>",
 
       %w(http://foo/ ) =>  "<http://foo/>",
       %w(http://foo/ a) => "<http://foo/a>",
       %w(http://foo/ /a) => "<http://foo/a>",
       %w(http://foo/ #a) => "<http://foo/#a>",
 
-      %w(http://foo# ) =>  "<http://foo>",
+      %w(http://foo# ) =>  "<http://foo/>",
       %w(http://foo# a) => "<http://foo/a>",
       %w(http://foo# /a) => "<http://foo/a>",
-      %w(http://foo# #a) => "<http://foo#a>",
+      %w(http://foo# #a) => "<http://foo/#a>",
 
       %w(http://foo/bar ) =>  "<http://foo/bar>",
       %w(http://foo/bar a) => "<http://foo/a>",
