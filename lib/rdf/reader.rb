@@ -189,6 +189,7 @@ module RDF
       @options[:canonicalize] ||= false
       @options[:intern]       ||= true
       @options[:prefixes]     ||= Hash.new
+      @options[:base_uri]     ||= input.base_uri if input.respond_to?(:base_uri)
 
       @input = case input
         when String then StringIO.new(input)
