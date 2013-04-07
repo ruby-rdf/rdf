@@ -30,8 +30,8 @@ describe RDF::Util::File do
       end
     end
 
-    it "adds Accept header using defined readers" do
-      content_types = RDF::Reader.map {|r| r.format.content_type}.uniq
+    it "adds Accept header using defined readers", :ruby => "1.9" do
+      content_types = RDF::Reader.map {|r| r.format.content_type}.flatten.uniq
       Kernel.should_receive(:open) do |file_name, headers|
         headers.should be_a(Hash)
         headers.keys.should include("Accept")
@@ -44,7 +44,7 @@ describe RDF::Util::File do
       end
     end
 
-    it "adds Accept header with low-priority */*" do
+    it "adds Accept header with low-priority */*", :ruby => "1.9" do
       Kernel.should_receive(:open) do |file_name, headers|
         headers.should be_a(Hash)
         headers['Accept'].should include('*/*;q=0.1')
@@ -55,7 +55,7 @@ describe RDF::Util::File do
     end
 
     it "used provided Accept header" do
-      content_types = RDF::Reader.map {|r| r.format.content_type}.uniq
+      content_types = RDF::Reader.map {|r| r.format.content_type}.flatten.uniq
       Kernel.should_receive(:open) do |file_name, headers|
         headers.should be_a(Hash)
         headers.keys.should include("Accept")

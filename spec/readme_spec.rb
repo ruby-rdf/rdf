@@ -18,122 +18,144 @@ describe 'README' do
   context "the 'Writing RDF data using the N-Triples format' example" do
     after(:each) { File.delete('hello.nt') }
 
-    def example1
-      require 'rdf/ntriples'
+    {
+      :example1 => lambda {
+        require 'rdf/ntriples'
 
-      RDF::Writer.open("hello.nt") do |writer|
-        writer << RDF::Graph.new do |graph|
-          graph << [:hello, RDF::DC.title, "Hello, world!"]
+        RDF::Writer.open("hello.nt") do |writer|
+          writer << RDF::Graph.new do |graph|
+            graph << [:hello, RDF::DC.title, "Hello, world!"]
+          end
+        end
+      },
+      :example2 => lambda {
+        require 'rdf/ntriples'
+        graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
+        File.open("hello.nt", "w") {|f| f << graph.dump(:ntriples)}
+      }
+    }.each do |example, code|
+      context example do
+        before(:each) {code.call}
+        it {lambda {code.call}.should_not raise_error}
+        it "should not have output" do
+          $stdout.string.lines.to_a.should be_empty
+        end
+        it "should produce a hello.nt file" do
+          File.should exist('hello.nt')
+          File.stat('hello.nt').should be_file
+        end
+
+        it "should produce the expected data" do
+          File.read('hello.nt').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" .\n)
         end
       end
-    end
-
-    it "should not raise errors" do
-      lambda { example1 }.should_not raise_error
-    end
-
-    before(:each) { example1 }
-
-    it "should not have output" do
-      $stdout.string.lines.to_a.should be_empty
-    end
-
-    it "should produce a hello.nt file" do
-      File.should exist('hello.nt')
-      File.stat('hello.nt').should be_file
-    end
-
-    it "should produce the expected data" do
-      File.read('hello.nt').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" .\n)
     end
   end
 
   context "the 'Reading RDF data in the N-Triples format' example" do
-    def example2
-      require 'rdf/ntriples'
+    {
+      :example0 => lambda {
+        require 'rdf/ntriples'
 
-      RDF::NTriples::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
-        reader.each_statement do |statement|
-          puts statement.inspect
+        RDF::NTriples::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
+          reader.each_statement do |statement|
+            puts statement.inspect
+          end
         end
-      end
-    end
+      },
+      :example1 => lambda {
+        require 'rdf/ntriples'
 
-    it "should not raise errors" do
-      lambda { example2 }.should_not raise_error
-    end
-
-    before(:each) { example2 }
-
-    it "should have output" do
-      $stdout.string.lines.to_a.should_not be_empty
-    end
-
-    it "should output inspected statements" do
-      $stdout.string.each_line do |line|
-        line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+        RDF::NTriples::Reader.open(File.expand_path("../../etc/doap.nt", __FILE__)) do |reader|
+          reader.each_statement do |statement|
+            puts statement.inspect
+          end
+        end
+      }
+    }.each do |example, code|
+      context example do
+        before(:each) {code.call}
+        it {lambda {code.call}.should_not raise_error}
+        it "should have output" do
+          $stdout.string.lines.to_a.should_not be_empty
+        end
+        it "should output inspected statements" do
+          $stdout.string.each_line do |line|
+            line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+          end
+        end
       end
     end
   end
 
-  context "the 'Writing RDF data using the N-Quads format' example" do
+  context "the 'Reading RDF data in other formats' example" do
+    {
+      :example0 => lambda {
+        require 'rdf/nquads'
+
+        graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", :format => :nquads)
+        graph.each_statement do |statement|
+          puts statement.inspect
+        end
+      },
+      :example1 => lambda {
+        require 'rdf/nquads'
+
+        RDF::NQuads::Reader.open(File.expand_path("../../etc/doap.nq", __FILE__)) do |reader|
+          reader.each_statement do |statement|
+            puts statement.inspect
+          end
+        end
+      }
+    }.each do |example, code|
+      context example do
+        before(:each) {code.call}
+        it {lambda {code.call}.should_not raise_error}
+        it "should have output" do
+          $stdout.string.lines.to_a.should_not be_empty
+        end
+        it "should output inspected statements" do
+          $stdout.string.each_line do |line|
+            line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+          end
+        end
+      end
+    end
+  end
+
+  context "the 'Writing RDF data using other formats' example" do
     after(:each) { File.delete('hello.nq') }
 
-    def example3
-      require 'rdf/nquads'
+    {
+      :example1 => lambda {
+        require 'rdf/nquads'
 
-      RDF::Writer.open("hello.nq") do |writer|
-        writer << RDF::Repository.new do |repo|
-          repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+        RDF::Writer.open("hello.nq") do |writer|
+          writer << RDF::Repository.new do |repo|
+            repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+          end
         end
-      end
-    end
-
-    it "should not raise errors" do
-      lambda { example3 }.should_not raise_error
-    end
-
-    before(:each) { example3 }
-
-    it "should not have output" do
-      $stdout.string.lines.to_a.should be_empty
-    end
-
-    it "should produce a hello.nq file" do
-      File.should exist('hello.nq')
-      File.stat('hello.nq').should be_file
-    end
-
-    it "should produce the expected data" do
-      File.read('hello.nq').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
-    end
-  end
-
-  context "the 'Reading RDF data in the N-Quads format' example" do
-    def example4
-      require 'rdf/nquads'
-
-      # FIXME: replace with "http://rdf.rubyforge.org/doap.nq"
-      RDF::NQuads::Reader.open(File.join(File.dirname(__FILE__), "..", "etc", "doap.nq")) do |reader|
-        reader.each_statement do |statement|
-          puts statement.inspect
+      },
+      :example2 => lambda {
+        require 'rdf/nquads'
+        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+        File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
+      },
+    }.each do |example, code|
+      context example do
+        before(:each) {code.call}
+        it {lambda {code.call}.should_not raise_error}
+        it "should not have output" do
+          $stdout.string.lines.to_a.should be_empty
         end
-      end
-    end
+        it "should produce a hello.nq file" do
+          File.should exist('hello.nq')
+          File.stat('hello.nq').should be_file
+        end
 
-    it "should not raise errors" do
-      lambda { example4 }.should_not raise_error
-    end
-
-    before(:each) { example4 }
-
-    it "should have output" do
-      $stdout.string.lines.to_a.should_not be_empty
-    end
-
-    it "should output inspected statements" do
-      $stdout.string.each_line do |line|
-        line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+        it "should produce the expected data" do
+          File.read('hello.nq').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
+        end
       end
     end
   end
@@ -158,20 +180,42 @@ describe 'README' do
     # TODO
   end
 
+  context "the 'Querying RDF data using basic graph patterns (BGPs)' example" do
+    before(:each) do
+      require 'rdf/ntriples'
+    
+      graph = RDF::Graph.load(File.expand_path("../../etc/doap.nt", __FILE__))
+      query = RDF::Query.new({
+        :person => {
+          RDF.type  => RDF::FOAF.Person,
+          RDF::FOAF.name => :name,
+          RDF::FOAF.mbox => :email,
+        }
+      })
+    
+      query.execute(graph).each do |solution|
+        puts "name=#{solution.name} email=#{solution.email}"
+      end
+    end
+    
+    subject {$stdout.string}
+
+    it {should =~ /name=Arto Bendiken/}
+    it {should =~ /name=Ben Lavender/}
+    it {should =~ /name=Gregg Kellogg/}
+    it {should =~ /email=/}
+  end
+
   context "the 'Using ad-hoc RDF vocabularies' example" do
-    def example4
-      foaf = RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")
-      foaf.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
-      foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
-      foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
+    {
+      :method => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/").knows},
+      :symbol => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")[:knows]},
+      :string => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")['knows']}
+    }.each do |example, code|
+      context example do
+        it {lambda {code.call}.should_not raise_error}
+        it {code.call.should == RDF::FOAF.knows}
+      end
     end
-
-    it "should not raise errors" do
-      lambda { example4 }.should_not raise_error
-    end
-
-    before(:each) { example4 }
-
-    # TODO
   end
 end

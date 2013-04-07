@@ -74,6 +74,8 @@ describe RDF::NTriples::Format do
 end
 
 describe RDF::NTriples::Reader do
+  let!(:doap) {File.expand_path("../../etc/doap.nt", __FILE__)}
+  let!(:doap_count) {File.open(doap).each_line.to_a.length}
   before(:each) do
     @reader = RDF::NTriples::Reader.new
   end
@@ -112,6 +114,30 @@ describe RDF::NTriples::Reader do
   it "should return :ntriples for to_sym" do
     @reader.class.to_sym.should == :ntriples
     @reader.to_sym.should == :ntriples
+  end
+
+  describe ".initialize" do
+    it "reads doap string" do
+      g = RDF::Graph.new << RDF::NTriples::Reader.new(File.read(doap))
+      g.count.should == doap_count
+    end
+    it "reads doap IO" do
+      g = RDF::Graph.new
+      RDF::NTriples::Reader.new(File.open(doap)) do |r|
+        g << r
+      end
+      g.count.should == doap_count
+    end
+  end
+
+  describe ".open" do
+    it "reads doap string" do
+      g = RDF::Graph.new
+      RDF::NTriples::Reader.open(doap) do |r|
+        g << r
+      end
+      g.count.should == doap_count
+    end
   end
 end
 
@@ -284,11 +310,11 @@ describe RDF::NTriples do
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     it "should correctly escape ASCII characters (#x0-#x7F)" do
       (0x00..0x07).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      @writer.escape(0x08.chr, encoding).should == "\\b"
+      @writer.escape(0x08.chr, encoding).should == (encoding ? "\\b" : "\\u0008")
       @writer.escape(0x09.chr, encoding).should == "\\t"
       @writer.escape(0x0A.chr, encoding).should == "\\n"
       (0x0B..0x0B).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-      @writer.escape(0x0C.chr, encoding).should == "\\f"
+      @writer.escape(0x0C.chr, encoding).should == (encoding ? "\\f" : "\\u000C")
       @writer.escape(0x0D.chr, encoding).should == "\\r"
       (0x0E..0x1F).each { |u| @writer.escape(u.chr, encoding).should == "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
       (0x20..0x21).each { |u| @writer.escape(u.chr, encoding).should == u.chr }
@@ -543,24 +569,27 @@ describe RDF::NTriples do
     end
 
     context ":encoding" do
-      [Encoding::ASCII, Encoding::UTF_8].each do |encoding|
-        it "dumps as #{encoding}" do
-          s = @writer.dump(graph, nil, :encoding => encoding)
-          s.should be_a(String)
-          s.encoding.should == encoding
-        end
+      %w(US-ASCII UTF-8).each do |encoding_name|
+        context encoding_name do
+          let(:encoding) { ::Encoding.find(encoding_name)}
+          it "dumps to String" do
+            s = @writer.dump(graph, nil, :encoding => encoding)
+            s.should be_a(String)
+            s.encoding.should == encoding
+          end
 
-        it "dumps to file as #{encoding}" do
-          output = StringIO.new
-          s = @writer.dump(graph, output, :encoding => encoding)
-          output.external_encoding.should == encoding
-        end
+          it "dumps to file" do
+            output = StringIO.new
+            s = @writer.dump(graph, output, :encoding => encoding)
+            output.external_encoding.should == encoding
+          end
 
-        it "takes encoding from file external_encoding" do
-          output = StringIO.new
-          output.set_encoding encoding
-          s = @writer.dump(graph, output)
-          output.external_encoding.should == encoding
+          it "takes encoding from file external_encoding" do
+            output = StringIO.new
+            output.set_encoding encoding
+            s = @writer.dump(graph, output)
+            output.external_encoding.should == encoding
+          end
         end
       end
     end

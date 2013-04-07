@@ -240,6 +240,8 @@ module RDF::NTriples
         uri.canonicalize! if canonicalize?
         uri
       end
+    rescue ArgumentError => e
+      raise RDF::ReaderError, "invalid URI"
     end
 
     ##
