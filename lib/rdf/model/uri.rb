@@ -243,7 +243,10 @@ module RDF
         end
       else
         @value = uri.to_s
-        @value.force_encoding(Encoding::UTF_8) if @value.respond_to?(:encoding)
+        if @value.respond_to?(:encoding) && @value.encoding != Encoding::UTF_8
+          @value = @value.dup if @value.frozen?
+          @value.force_encoding(Encoding::UTF_8)
+        end
       end
 
       validate!     if options[:validate]
