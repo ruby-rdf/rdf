@@ -103,12 +103,21 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Query::Variable}.
+    # Returns `true` this value is a {RDF::Query::Variable}, or is contains a variable.
     #
     # @return [Boolean]
     # @since  0.1.7
     def variable?
       false
+    end
+
+    ##
+    # Returns `true` if this value is constant.
+    #
+    # @return [Boolean] `true` or `false`
+    # @see    #variable?
+    def constant?
+      !(variable?)
     end
 
     ##

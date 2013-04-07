@@ -121,7 +121,7 @@ module RDF
           when value.respond_to?(:each_statement)
             delete_statements(value)
             nil
-          when !(statement = Statement.from(value)).pattern?
+          when (statement = Statement.from(value)).constant?
             statement
           else
             delete_statements(query(value))

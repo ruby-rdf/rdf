@@ -110,7 +110,7 @@ module RDF
     # URI, Node or Literal.
     #
     # @return [Boolean]
-    def pattern?
+    def variable?
       !(has_subject?    && subject.resource? && 
         has_predicate?  && predicate.resource? &&
         has_object?     && (object.resource? || object.literal?) &&
