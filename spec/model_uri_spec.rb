@@ -437,11 +437,11 @@ describe RDF::URI do
 
       %w(http://foo a) => "http://foo/a",
       %w(http://foo /a) => "http://foo/a",
-      %w(http://foo #a) => "http://foo#a",
+      %w(http://foo #a) => "http://foo/#a",
 
       %w(http://foo/ a) => "http://foo/a",
       %w(http://foo/ /a) => "http://foo/a",
-      %w(http://foo/ #a) => "http://foo#a", #!!
+      %w(http://foo/ #a) => "http://foo/#a", #!!
 
       %w(http://foo# a) => "http://foo#a",
       %w(http://foo# /a) => "http://foo/a", #!!
@@ -501,6 +501,8 @@ describe RDF::URI do
     end
 
     {
+      ['', 'a'] => "<a>",
+
       %w(http://example.org foo) => "<http://example.org/foo>",
       %w(http://example.org foo#bar) => "<http://example.org/foo#bar>",
       %w(http://foo ) =>  "<http://foo/>",

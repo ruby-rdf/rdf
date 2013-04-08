@@ -151,7 +151,9 @@ module RDF
     end
 
     ##
-    # Resolve paths to their simplest form
+    # Resolve paths to their simplest form.
+    #
+    # TODO: This process is correct, but overly iterative. It could be better done with a single regexp which handled most of the segment collapses all at once. Parent segments would still require iteration.
     #
     # @param [String] path
     # @return [String] normalized path
@@ -396,7 +398,7 @@ module RDF
           base_path = self.class.normalize_path(path.to_s)
 
           # Merge path segments from section 5.2.3
-          base_path.sub!(/(\/[^\/]*)?$/, '/')
+          base_path.sub!(/\/[^\/]*$/, '/')
           joined_parts[:path] = self.class.normalize_path(base_path + uri.path)
           joined_parts[:query] = uri.query
         end
