@@ -57,15 +57,6 @@ module RDF
     end
 
     ##
-    # Returns `true` if this term is constant.
-    #
-    # @return [Boolean] `true` or `false`
-    # @see    #variable?
-    def constant?
-      !(variable?)
-    end
-
-    ##
     # Returns a base representation of `self`.
     #
     # @return [RDF::Value]

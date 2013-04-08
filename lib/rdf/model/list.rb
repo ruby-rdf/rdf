@@ -8,7 +8,8 @@ module RDF
   # @since 0.2.3
   class RDF::List
     include RDF::Enumerable
-    include RDF::Resource
+    include RDF::Value
+    include Comparable
 
     ##
     # Constructs a new list from the given `values`.
@@ -59,9 +60,10 @@ module RDF
     ##
     # Validate the list ensuring that
     # * rdf:rest values are all BNodes are nil
-    # * rdf:type, if it exists, is rdf:List
-    # * each subject has no properties other than single-valued rdf:first, rdf:rest
-    #   other than for the first node in the list
+    # * each subject has exactly one value for `rdf:first` and
+    #   `rdf:rest`.
+    # * The value of `rdf:rest` must be either a BNode or `rdf:nil`.
+    # * All other properties are ignored.
     # @return [Boolean]
     def valid?
       li = subject
@@ -70,17 +72,12 @@ module RDF
         firsts = rests = 0
         @graph.query(:subject => li) do |st|
           case st.predicate
-          when RDF.type
-            # Be tollerant about rdf:type entries, as some OWL vocabularies use it excessively
           when RDF.first
             firsts += 1
           when RDF.rest
             rest = st.object
             return false unless rest.node? || rest == RDF.nil
             rests += 1
-          else
-            # First node may have other properties
-            return false unless li == subject
           end
         end
         return false unless firsts == 1 && rests == 1
@@ -230,7 +227,6 @@ module RDF
         graph.insert([old_subject, RDF.rest, new_subject])
       end
 
-      graph.insert([new_subject, RDF.type, RDF.List])
       graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
       graph.insert([new_subject, RDF.rest, RDF.nil])
 

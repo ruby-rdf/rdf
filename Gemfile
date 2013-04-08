@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gemspec :name => ""
 
-gem "rdf-spec", :git => "git://github.com/ruby-rdf/rdf-spec.git"
+gem "rdf-spec", :git => "git://github.com/ruby-rdf/rdf-spec.git", :branch => "1.1"
 
 group :development do
   gem "wirble"

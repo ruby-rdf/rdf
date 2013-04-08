@@ -254,7 +254,7 @@ describe RDF::URI do
     describe "#valid?" do
       let(:refs) {
         %W(a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 foo %20) +
-        (RUBY_VERSION >= "1.9" ? %W(\U00000053 Dürst) : [])
+        %W(\U00000053 Dürst)
       }
       {
         ""  => "%s",
@@ -415,7 +415,7 @@ describe RDF::URI do
         "http://www.example.com/"
       ],
     }.each do |name, (input, output)|
-      it "#canonicalize #{name}", :pending => ("1.8 difference" if RUBY_VERSION < "1.9") do
+      it "#canonicalize #{name}" do
         u1 = RDF::URI(input)
         u2 = RDF::URI(output)
         u1.canonicalize.to_s.should == u2.to_s
@@ -437,11 +437,11 @@ describe RDF::URI do
 
       %w(http://foo a) => "http://foo/a",
       %w(http://foo /a) => "http://foo/a",
-      %w(http://foo #a) => "http://foo/#a",
+      %w(http://foo #a) => "http://foo#a",
 
       %w(http://foo/ a) => "http://foo/a",
       %w(http://foo/ /a) => "http://foo/a",
-      %w(http://foo/ #a) => "http://foo/#a", #!!
+      %w(http://foo/ #a) => "http://foo#a", #!!
 
       %w(http://foo# a) => "http://foo#a",
       %w(http://foo# /a) => "http://foo/a", #!!

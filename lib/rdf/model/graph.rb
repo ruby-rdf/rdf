@@ -2,26 +2,31 @@ module RDF
   ##
   # An RDF graph.
   #
-  # @example Creating an empty unnamed graph
+  # An {RDF::Graph} contains a unique set of {RDF::Statement}. It is
+  # based on an underlying data object, which may be specified when the
+  # graph is initialized, and will default to a {RDF::Repository} without
+  # support for contexts otherwise.
+  #
+  # Note that in RDF 1.1, graphs are not named, but are associated with
+  # a name in the context of a Dataset, as a pair of <name, graph>.
+  # This class allows a name to be associated with a graph when it is
+  # a projection of an underlying {RDF::Repository} supporting contexts.
+  #
+  # @example Creating an empty graph
   #   graph = Graph.new
   #
-  # @example Creating an empty named graph
-  #   graph = Graph.new("http://rubygems.org/")
-  #
-  # @example Loading graph data from a URL (1)
-  #   require 'rdf/raptor'  # for RDF/XML support
-  #   
-  #   graph = RDF::Graph.new("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
-  #   graph.load!
-  #
-  # @example Loading graph data from a URL (2)
-  #   require 'rdf/raptor'  # for RDF/XML support
+  # @example Loading graph data from a URL
+  #   require 'rdf/rdfxml'  # for RDF/XML support
   #   
   #   graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
   #
+  # @example Accessing a specific named graph within a {RDF::Repository}
+  #   require 'rdf/trig'  # for TriG support
+  #
+  #   repository = RDF::Repository.load("https://raw.github.com/ruby-rdf/rdf-trig/master/etc/doap.trig")
+  #   graph = RDF::Graph.new(:data => repository, :context => RDF::URI("http://greggkellogg.net/foaf#me"))
   class Graph
-    include RDF::Resource
-
+    include RDF::Value
     include RDF::Countable
     include RDF::Durable
     include RDF::Enumerable
@@ -39,8 +44,7 @@ module RDF
     # Name of this graph, if it is part of an {RDF::Repository}
     # @!attribute [rw] context
     # @return [RDF::Resource]
-    # @note In the next release, only projections from an
-    # {RDF::Enumerable} supporting contexts will have a context.
+    # @since 1.1.0
     attr_accessor :context
 
     alias_method :name, :context
@@ -64,8 +68,8 @@ module RDF
     # @return [Graph]
     # @since  0.1.7
     def self.load(url, options = {}, &block)
-      self.new(url, options) do |graph|
-        graph.load! unless graph.unnamed?
+      self.new(options) do |graph|
+        graph.load(url, options)
 
         if block_given?
           case block.arity
@@ -79,18 +83,24 @@ module RDF
     ##
     # @overload initialize(context, options)
     #   @param  [RDF::Resource]          context
-    #     The context only provides a context for loading relative documents
+    #     The context from the associated {RDF::Queryable} associated
+    #     with this graph as provided with the `:data` option
+    #     (only for {RDF::Queryable} instances supporting
+    #     named contexts).
     #   @param  [Hash{Symbol => Object}] options
+    #   @option options [RDF::Queryable] :data (RDF::Repository.new)
+    #     Storage behind this graph.
+    #   @raise [ArgumentError] if a `data` does not support contexts.
     #   @note contexts are only useful when used as a projection
     #   on a `:data` which supports contexts. Otherwise, there is no
     #   such thing as a named graph in RDF 1.1, a repository may have
     #   graphs which are named, but the name is not a property of the graph.
     # @overload initialize(options)
     #   @param  [Hash{Symbol => Object}] options
+    #   @option options [RDF::Queryable] :data (RDF::Repository.new)
+    #     Storage behind this graph.
     # @yield  [graph]
     # @yieldparam [Graph]
-    # @note Currently, context makes this a named garph;
-    # in the next release it will not
     def initialize(*args, &block)
       context = args.shift unless args.first.is_a?(Hash)
       options = args.first || {}
@@ -101,7 +111,10 @@ module RDF
       end
 
       @options = options.dup
-      @data    = @options.delete(:data) || RDF::Repository.new
+      @data    = @options.delete(:data) || RDF::Repository.new(:with_context => false)
+
+      raise ArgumentError, "Can't apply context unless initialized with `data` supporting contexts" if
+        @context && !@data.supports?(:context)
 
       if block_given?
         case block.arity
@@ -112,12 +125,14 @@ module RDF
     end
 
     ##
+    # (re)loads the graph from the specified location, or from the location associated with the graph context, if any
     # @return [void]
-    # @note The next release, graphs will not be named
+    # @see    RDF::Mutable#load
     def load!(*args)
       case
         when args.empty?
-          load(context.to_s, context ? {:base_uri => context}.merge(@options) : @options)
+          raise ArgumentError, "Can't reload graph with no context" unless context.is_a?(RDF::URI)
+          load(context.to_s, {:base_uri => context}.merge(@options))
         else super
       end
     end
