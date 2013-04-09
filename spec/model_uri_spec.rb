@@ -99,7 +99,7 @@ describe RDF::URI do
         "//user@example.com" => {:authority => "user@example.com"},
         "http://example.com/path" => {:scheme => "http", :host => "example.com", :path => "path"},
         "http:path" => {:scheme => "http", :path => "path"},
-        
+        "http://resource1" => {:scheme => "http", :host => "resource1", :path => ""}
       }.each do |value, object|
         it "creates #{value}" do
           RDF::URI(object).to_s.should == value
@@ -442,11 +442,11 @@ describe RDF::URI do
 
       %w(http://foo a) => "http://foo/a",
       %w(http://foo /a) => "http://foo/a",
-      %w(http://foo #a) => "http://foo/#a",
+      %w(http://foo #a) => "http://foo#a",
 
       %w(http://foo/ a) => "http://foo/a",
       %w(http://foo/ /a) => "http://foo/a",
-      %w(http://foo/ #a) => "http://foo/#a", #!!
+      %w(http://foo/ #a) => "http://foo#a", #!!
 
       %w(http://foo# a) => "http://foo#a",
       %w(http://foo# /a) => "http://foo/a", #!!
@@ -507,23 +507,25 @@ describe RDF::URI do
 
     {
       ['', 'a'] => "<a>",
-
+      ['', 'http://foo/bar#'] => "<http://foo/bar#>",
+      ['', 'http://resource1'] => "<http://resource1>",
+      
       %w(http://example.org foo) => "<http://example.org/foo>",
       %w(http://example.org foo#bar) => "<http://example.org/foo#bar>",
-      %w(http://foo ) =>  "<http://foo/>",
+      %w(http://foo ) =>  "<http://foo>",
       %w(http://foo a) => "<http://foo/a>",
       %w(http://foo /a) => "<http://foo/a>",
-      %w(http://foo #a) => "<http://foo/#a>",
-
+      %w(http://foo #a) => "<http://foo#a>",
+      
       %w(http://foo/ ) =>  "<http://foo/>",
       %w(http://foo/ a) => "<http://foo/a>",
       %w(http://foo/ /a) => "<http://foo/a>",
       %w(http://foo/ #a) => "<http://foo/#a>",
 
-      %w(http://foo# ) =>  "<http://foo/>",
+      %w(http://foo# ) =>  "<http://foo#>",
       %w(http://foo# a) => "<http://foo/a>",
       %w(http://foo# /a) => "<http://foo/a>",
-      %w(http://foo# #a) => "<http://foo/#a>",
+      %w(http://foo# #a) => "<http://foo#a>",
 
       %w(http://foo/bar ) =>  "<http://foo/bar>",
       %w(http://foo/bar a) => "<http://foo/a>",
@@ -535,7 +537,7 @@ describe RDF::URI do
       %w(http://foo/bar/ /a) => "<http://foo/a>",
       %w(http://foo/bar/ #a) => "<http://foo/bar/#a>",
 
-      %w(http://foo/bar# ) =>  "<http://foo/bar>",
+      %w(http://foo/bar# ) =>  "<http://foo/bar#>",
       %w(http://foo/bar# a) => "<http://foo/a>",
       %w(http://foo/bar# /a) => "<http://foo/a>",
       %w(http://foo/bar# #a) => "<http://foo/bar#a>",

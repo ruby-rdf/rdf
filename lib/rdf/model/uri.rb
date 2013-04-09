@@ -381,6 +381,7 @@ module RDF
 
       uris.each do |uri|
         uri = RDF::URI.new(uri) unless uri.is_a?(RDF::URI)
+        next if uri.to_s.empty? # Don't mess with base URI
 
         case
         when uri.scheme
@@ -823,7 +824,7 @@ module RDF
         parts[:password] = (password.force_encoding(Encoding::UTF_8) if password)
         parts[:host] = (host.force_encoding(Encoding::UTF_8) if host)
         parts[:port] = (::URI.decode(port).to_i if port)
-        parts[:path] = path.to_s.force_encoding(Encoding::UTF_8)
+        parts[:path] = (path.to_s.force_encoding(Encoding::UTF_8) unless path.empty?)
         parts[:query] = (query[1..-1].force_encoding(Encoding::UTF_8) if query)
         parts[:fragment] = (fragment[1..-1].force_encoding(Encoding::UTF_8) if fragment)
 
@@ -843,11 +844,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def scheme=(value)
-      if value
-        object[:scheme] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:scheme)
-      end
+      object[:scheme] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       @value = nil
       self
     end
@@ -871,11 +868,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def user=(value)
-      if value
-        object[:user] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:user)
-      end
+      object[:user] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       @object[:userinfo] = format_userinfo("")
       @object[:authority] = format_authority
       @value = nil
@@ -901,11 +894,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def password=(value)
-      if value
-        object[:password] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:password)
-      end
+      object[:password] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       @object[:userinfo] = format_userinfo("")
       @object[:authority] = format_authority
       @value = nil
@@ -931,11 +920,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def host=(value)
-      if value
-        object[:host] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:host)
-      end
+      object[:host] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       @object[:authority] = format_authority
       @value = nil
       self
@@ -961,11 +946,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def port=(value)
-      if value
-        object[:port] = value.to_s.to_i
-      else
-        object.delete(:port)
-      end
+      object[:port] = (value.to_s.to_i if value)
       @object[:authority] = format_authority
       @value = nil
       self
@@ -995,10 +976,10 @@ module RDF
     def path=(value)
       if value
         # Always lead with a slash
-        value = "/#{value}" if authority && value.to_s[0,1] != '/'
+        value = "/#{value}" if host && value.to_s =~ /^[^\/]/
         object[:path] = value.to_s.force_encoding(Encoding::UTF_8)
       else
-        object.delete(:path)
+        object[:path] = nil
       end
       @value = nil
       self
@@ -1031,6 +1012,7 @@ module RDF
         res = []
         res << normalize_segment(segments[0], ISEGMENT_NZ)
         res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
+        res
       else
         # Should be empty
         segments
@@ -1049,11 +1031,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def query=(value)
-      if value
-        object[:query] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:query)
-      end
+      object[:query] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       @value = nil
       self
     end
@@ -1073,11 +1051,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def fragment=(value)
-      if value
-        object[:fragment] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:fragment)
-      end
+      object[:fragment] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       @value = nil
       self
     end
@@ -1102,11 +1076,7 @@ module RDF
     # @return [RDF::URI] self
     def authority=(value)
       object.delete_if {|k, v| [:user, :password, :host, :port, :userinfo].include?(k)}
-      if value
-        object[:authority] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:authority)
-      end
+      object[:authority] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       user; password; userinfo; host; port
       @value = nil
       self
@@ -1136,11 +1106,7 @@ module RDF
     # @return [RDF::URI] self
     def userinfo=(value)
       object.delete_if {|k, v| [:user, :password, :authority].include?(k)}
-      if value
-        object[:userinfo] = value.to_s.force_encoding(Encoding::UTF_8)
-      else
-        object.delete(:userinfo)
-      end
+      object[:userinfo] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
       user; password; authority
       @value = nil
       self
