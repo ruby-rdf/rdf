@@ -108,7 +108,7 @@ describe RDF::URI do
     end
   end
 
-  context "when frozen" do
+  describe "#freeze" do
     subject {RDF::URI("HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323").freeze}
     {
       :scheme => "HTTP",
@@ -138,6 +138,11 @@ describe RDF::URI do
       :fragment => "123"
     }.each do |method, value|
       its("normalized_#{method}".to_sym) {should == value}
+    end
+
+    its(:value) {should == "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323"}
+    it "encoding should be UTF-8" do
+      subject.value.encoding.should == Encoding::UTF_8
     end
   end
 

@@ -160,9 +160,9 @@ module RDF
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.4
     def self.normalize_path(path)
       output, input = "", path.to_s
-      if input.respond_to?(:encoding) && input.encoding != Encoding::UTF_8
+      if input.encoding != Encoding::ASCII_8BIT
         input = input.dup if input.frozen?
-        input = input.force_encoding(Encoding::UTF_8)
+        input = input.force_encoding(Encoding::ASCII_8BIT)
       end
       until input.empty?
         if input.match(RDS_2A)
@@ -187,7 +187,7 @@ module RDF
         end
       end
 
-      output.sub(/\/+/, '/')
+      output.sub(/\/+/, '/').force_encoding(Encoding::UTF_8)
     end
 
     ##
@@ -234,7 +234,7 @@ module RDF
         end
       else
         @value = uri.to_s
-        if @value.respond_to?(:encoding) && @value.encoding != Encoding::UTF_8
+        if @value.encoding != Encoding::UTF_8
           @value = @value.dup if @value.frozen?
           @value.force_encoding(Encoding::UTF_8)
         end
@@ -807,11 +807,8 @@ module RDF
     # @param [String, to_s] value
     # @return [Object{Symbol => String}]
     def parse(value)
+      value = value.to_s.dup.force_encoding(Encoding::ASCII_8BIT)
       parts = {}
-      if value.respond_to?(:encoding) && value.encoding != Encoding::ASCII_8BIT
-        value = value.dup if value.frozen?
-        value = value.force_encoding(Encoding::ASCII_8BIT)
-      end
       if matchdata = value.to_s.match(IRI_PARTS)
         scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
         userinfo, hostport = authority.to_s.split('@', 2)
@@ -819,16 +816,16 @@ module RDF
         user, password = userinfo.to_s.split(':', 2)
         host, port = hostport.to_s.split(':', 2)
 
-        parts[:scheme] = scheme
-        parts[:authority] = authority
-        parts[:userinfo] = userinfo
-        parts[:user] = user
-        parts[:password] = password
-        parts[:host] = host
+        parts[:scheme] = (scheme.force_encoding(Encoding::UTF_8) if scheme)
+        parts[:authority] = (authority.force_encoding(Encoding::UTF_8) if authority)
+        parts[:userinfo] = (userinfo.force_encoding(Encoding::UTF_8) if userinfo)
+        parts[:user] = (user.force_encoding(Encoding::UTF_8) if user)
+        parts[:password] = (password.force_encoding(Encoding::UTF_8) if password)
+        parts[:host] = (host.force_encoding(Encoding::UTF_8) if host)
         parts[:port] = (::URI.decode(port).to_i if port)
-        parts[:path] = path.to_s
-        parts[:query] = query[1..-1] if query
-        parts[:fragment] = fragment[1..-1] if fragment
+        parts[:path] = path.to_s.force_encoding(Encoding::UTF_8)
+        parts[:query] = (query[1..-1].force_encoding(Encoding::UTF_8) if query)
+        parts[:fragment] = (fragment[1..-1].force_encoding(Encoding::UTF_8) if fragment)
 
         parts.each_key do |k|
           parts[k].force_encoding(Encoding::UTF_8) if parts[k].respond_to?(:encoding)
@@ -847,7 +844,7 @@ module RDF
     # @return [RDF::URI] self
     def scheme=(value)
       if value
-        object[:scheme] = value.to_s
+        object[:scheme] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:scheme)
       end
@@ -875,7 +872,7 @@ module RDF
     # @return [RDF::URI] self
     def user=(value)
       if value
-        object[:user] = value.to_s
+        object[:user] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:user)
       end
@@ -905,7 +902,7 @@ module RDF
     # @return [RDF::URI] self
     def password=(value)
       if value
-        object[:password] = value.to_s
+        object[:password] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:password)
       end
@@ -935,7 +932,7 @@ module RDF
     # @return [RDF::URI] self
     def host=(value)
       if value
-        object[:host] = value.to_s
+        object[:host] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:host)
       end
@@ -999,7 +996,7 @@ module RDF
       if value
         # Always lead with a slash
         value = "/#{value}" if authority && value.to_s[0,1] != '/'
-        object[:path] = value.to_s
+        object[:path] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:path)
       end
@@ -1053,7 +1050,7 @@ module RDF
     # @return [RDF::URI] self
     def query=(value)
       if value
-        object[:query] = value.to_s
+        object[:query] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:query)
       end
@@ -1077,7 +1074,7 @@ module RDF
     # @return [RDF::URI] self
     def fragment=(value)
       if value
-        object[:fragment] = value.to_s
+        object[:fragment] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:fragment)
       end
@@ -1106,7 +1103,7 @@ module RDF
     def authority=(value)
       object.delete_if {|k, v| [:user, :password, :host, :port, :userinfo].include?(k)}
       if value
-        object[:authority] = value.to_s
+        object[:authority] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:authority)
       end
@@ -1140,7 +1137,7 @@ module RDF
     def userinfo=(value)
       object.delete_if {|k, v| [:user, :password, :authority].include?(k)}
       if value
-        object[:userinfo] = value.to_s
+        object[:userinfo] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object.delete(:userinfo)
       end
@@ -1167,10 +1164,8 @@ module RDF
     # @result [String]
     def normalize_segment(value, expr, downcase = false)
       if value
-        if value.respond_to?(:encoding)
-          value = value.dup if value.frozen?
-          value = value.force_encoding(Encoding::UTF_8)
-        end
+        value = value.dup if value.frozen?
+        value = value.force_encoding(Encoding::UTF_8)
         decoded = ::URI.decode(value)
         decoded.downcase! if downcase
         ::URI.encode(decoded, /[^#{expr}]/)

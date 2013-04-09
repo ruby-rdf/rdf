@@ -568,6 +568,66 @@ describe RDF::NTriples do
       File.unlink(filename)
     end
 
+    describe "IRIs" do
+      {
+        %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .) =>
+          %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .),
+        %(<http://example/#D%C3%BCrst>  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI percent ^encoded as C3, BC".) =>
+          %(<http://example/#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
+        %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .) =>
+          %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
+      }.each_pair do |input, output|
+        it "for '#{input}'" do
+          parse(input, :validate => true).dump(:ntriples).should == parse(output).dump(:ntriples)
+        end
+      end
+
+      {
+        %(<#Dürst> <knows> <jane>.) => '<#D\u00FCrst> <knows> <jane> .',
+        %(<Dürst> <knows> <jane>.) => '<D\u00FCrst> <knows> <jane> .',
+        %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
+        %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
+        }.each_pair do |input, output|
+          it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+            parse(input).dump(:ntriples).should == parse(output).dump(:ntriples)
+          end
+        end
+
+      {
+        %(<#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
+        %(<a> <related> <ひらがな> .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
+      }.each_pair do |input, output|
+        it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+          parse(input).dump(:ntriples).should == parse(output).dump(:ntriples)
+        end
+      end
+
+      [
+        %(\x00),
+        %(\x01),
+        %(\x0f),
+        %(\x10),
+        %(\x1f),
+        %(\x20),
+        %(<),
+        %(>),
+        %("),
+        %({),
+        %(}),
+        %(|),
+        %(\\),
+        %(^),
+        %(``),
+        %(http://example.com/\u0020),
+        %(http://example.com/\u003C),
+        %(http://example.com/\u003E),
+      ].each do |uri|
+        it "rejects #{('<' + uri + '>').inspect}" do
+          lambda {parse(%(<s> <p> <#{uri}>), :validate => true)}.should raise_error RDF::ReaderError
+        end
+      end
+    end
+
     context ":encoding" do
       %w(US-ASCII UTF-8).each do |encoding_name|
         context encoding_name do
@@ -593,5 +653,17 @@ describe RDF::NTriples do
         end
       end
     end
+  end
+
+  def parse(input, options = {})
+    options = {
+      :validate => false,
+      :canonicalize => false,
+    }.merge(options)
+    graph = options[:graph] || RDF::Graph.new
+    @reader.new(input, options).each do |statement|
+      graph << statement
+    end
+    graph
   end
 end
