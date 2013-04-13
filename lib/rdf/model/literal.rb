@@ -78,7 +78,6 @@ module RDF
     require 'rdf/model/literal/datetime'
     require 'rdf/model/literal/time'
     require 'rdf/model/literal/token'
-    require 'rdf/model/literal/xml'
 
     include RDF::Term
 
