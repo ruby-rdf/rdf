@@ -25,7 +25,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby Ruby 1.9.x, Ruby 2.0, Rubinius and JRuby 1.7+.
+* Compatible with Ruby Ruby 1.9.2, Ruby 2.0, Rubinius and JRuby 1.7+.
 * Compatible with older Ruby versions with the help of the [Backports][] gem.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
@@ -334,14 +334,14 @@ from BNode identity (i.e., they each entail the other)
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 1.9.x)
+* [Ruby](http://ruby-lang.org/) (>= 1.9.2)
 
 ## Installation
 
 The recommended installation method is via [RubyGems](http://rubygems.org/).
 To install the latest official release of RDF.rb, do:
 
-    % [sudo] gem install rdf             # Ruby 1.9.x+
+    % [sudo] gem install rdf             # Ruby 1.9.2+
 
 ## Download
 
