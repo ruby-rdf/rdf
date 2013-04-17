@@ -544,6 +544,11 @@ describe RDF::NTriples do
       @writer.new.format_literal(RDF::Literal.new(3.1415)).should == '"3.1415"^^<http://www.w3.org/2001/XMLSchema#double>'
     end
 
+    it "should correctly format language-tagged literals with rdf:langString" do
+      l = RDF::Literal.new('Hello, world!', :language => :en, :datatype => RDF.langString)
+      @writer.new.format_literal(l).should == '"Hello, world!"@en'
+    end
+
     it "should output statements to a string buffer" do
       output = @writer.buffer { |writer| writer << stmt }
       output.should == "#{stmt_string}\n"
