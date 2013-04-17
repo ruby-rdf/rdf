@@ -91,6 +91,8 @@ module RDF
     ##
     # @private
     def self.new(value, options = {})
+      raise ArgumentError, "datatype with language must be rdf:langString" if options[:language] && options.fetch(:datatype, RDF.langString.to_s) != RDF.langString.to_s
+
       klass = case
         when !self.equal?(RDF::Literal)
           self # subclasses can be directly constructed without type dispatch
@@ -141,6 +143,7 @@ module RDF
     # @option options [Boolean] :canonicalize (false)
     # @raise [ArgumentError]
     #   if there is a language and datatype is no rdf:langString
+    #   or datatype is rdf:langString and there is no language
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
     def initialize(value, options = {})
@@ -151,7 +154,6 @@ module RDF
       @datatype = RDF::URI(options[:datatype]) if options[:datatype]
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= @language ? RDF.langString : RDF::XSD.string
-      raise ArgumentError, "datatype with language must be rdf:langString" if @language && @datatype != RDF::langString
       raise ArgumentError, "datatype of rdf:langString requires a language" if !@language && @datatype == RDF::langString
     end
 
