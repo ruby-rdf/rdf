@@ -765,7 +765,29 @@ describe RDF::Literal do
         end
       end
     end
-    
+
+    context ArgumentError do
+      {
+        "language with xsd:string" => {:value => "foo", :language => "en", :datatype => RDF::XSD.string},
+        "language with xsd:date" => {:value => "foo", :language => "en", :datatype => RDF::XSD.date},
+        "no language with rdf:langString" => {:value => "foo", :datatype => RDF::langString},
+      }.each do |name, opts|
+        it "raises error for #{name}" do
+          lambda {RDF::Literal.new(opts.delete(:value), opts)}.should raise_error(ArgumentError)
+        end
+      end
+
+      {
+        "no language with xsd:string" => {:value => "foo", :datatype => RDF::XSD.string},
+        "no language with xsd:date" => {:value => "foo", :datatype => RDF::XSD.date},
+        "language with rdf:langString" => {:value => "foo", :language => "en", :datatype => RDF::langString},
+      }.each do |name, opts|
+        it "should not raise error for #{name}" do
+          lambda {RDF::Literal.new(opts.delete(value), opts)}.should_not raise_error(ArgumentError)
+        end
+      end
+    end
+
     context TypeError do
       {
         "boolean 'true'=true" => [RDF::Literal("true"), RDF::Literal::Boolean.new("true")],
