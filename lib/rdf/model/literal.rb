@@ -91,7 +91,7 @@ module RDF
     ##
     # @private
     def self.new(value, options = {})
-      raise ArgumentError, "datatype with language must be rdf:langString" if options[:language] && options.fetch(:datatype, RDF.langString.to_s) != RDF.langString.to_s
+      raise ArgumentError, "datatype with language must be rdf:langString" if options[:language] && (options[:datatype] || RDF.langString).to_s != RDF.langString.to_s
 
       klass = case
         when !self.equal?(RDF::Literal)
