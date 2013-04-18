@@ -9,7 +9,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 * <http://blog.datagraph.org/2010/04/rdf-repository-howto>
 
-[![Gem Version](https://badge.fury.io/rb/rdf.png)][gem]
+[![Gem Version](https://badge.fury.io/rb/rdf.png)](http://badge.fury.io/rb/rdf)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf)
 
 ## Features
