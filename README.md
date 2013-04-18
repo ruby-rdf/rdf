@@ -1,5 +1,4 @@
 # RDF.rb: Linked Data for Ruby
-[![Build Status](https://secure.travis-ci.org/ruby-rdf/rdf.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf)
 
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
@@ -9,6 +8,9 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <http://blog.datagraph.org/2010/03/rdf-for-ruby>
 * <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 * <http://blog.datagraph.org/2010/04/rdf-repository-howto>
+
+[![Gem Version](https://badge.fury.io/rb/rdf.png)][gem]
+[![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf)
 
 ## Features
 
