@@ -48,9 +48,9 @@ module RDF
     GEN_DELIMS = Regexp.compile("[:/\\?\\#\\[\\]@]").freeze
     SUB_DELIMS = Regexp.compile("[!\\$&'\\(\\)\\*\\+,;=]").freeze
     RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})").freeze
-    UNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~").freeze
+    UNRESERVED = Regexp.compile("[A-Za-z0-9\._~-]").freeze
 
-    IUNRESERVED = Regexp.compile("[A-Za-z0-9]|-|\\.|_|~|#{UCSCHAR}").freeze
+    IUNRESERVED = Regexp.compile("[A-Za-z0-9\._~-]|#{UCSCHAR}").freeze
 
     IPCHAR = Regexp.compile("(?:#{IUNRESERVED}|#{PCT_ENCODED}|#{SUB_DELIMS}|:|@)").freeze
 
@@ -1134,7 +1134,7 @@ module RDF
         value = value.force_encoding(Encoding::UTF_8)
         decoded = ::URI.decode(value)
         decoded.downcase! if downcase
-        ::URI.encode(decoded, /[^#{expr}]/)
+        ::URI.encode(decoded, /[^(?:#{expr})]/)
       end
     end
 

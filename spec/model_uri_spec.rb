@@ -419,6 +419,10 @@ describe RDF::URI do
         "http://www.example.com///../",
         "http://www.example.com/"
       ],
+      "preserve -.~" => [
+        "http://www.example.com/foo-bar.baz~",
+        "http://www.example.com/foo-bar.baz~",
+      ]
     }.each do |name, (input, output)|
       it "#canonicalize #{name}" do
         u1 = RDF::URI(input)
