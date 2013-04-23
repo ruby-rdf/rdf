@@ -83,7 +83,15 @@ module RDF; class Literal
     # @return [RDF::Literal]
     # @since  0.2.3
     def abs
-      (n = to_i) && n > 0 ? self : RDF::Literal(n.abs)
+      (n = to_i) && n > 0 ? self : self.class.new(n.abs)
+    end
+
+    ##
+    # Returns `self`.
+    #
+    # @return [RDF::Literal]
+    def round
+      self
     end
 
     ##

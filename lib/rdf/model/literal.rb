@@ -246,21 +246,35 @@ module RDF
           type_error("unable to determine whether #{self.inspect} and #{other.inspect} are equivalent")
         end
       when String
-        self.plain? && self.value.eql?(other)
+        self.simple? && self.value.eql?(other)
       else false
       end
     end
     alias_method :===, :==
 
     ##
-    # Returns `true` if this is a plain literal.
+    # Returns `true` if this is a plain literal. A plain literal
+    # may have a language, but may not have a datatype. For
+    # all practical purposes, this includes xsd:string literals
+    # too.
     #
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def plain?
-      language.nil? && datatype.nil?
+      has_language? ?
+        (datatype || RDF.langString) == RDF.langString :
+        (datatype || XSD.string) == XSD.string
     end
-    alias_method :simple?, :plain?
+
+    ##
+    # Returns `true` if this is a simple literal.
+    # A simple literal has no datatype or language.
+    #
+    # @return [Boolean] `true` or `false`
+    # @see http://www.w3.org/TR/sparql11-query/#simple_literal
+    def simple?
+      !has_language? && !has_datatype?
+    end
 
     ##
     # Returns `true` if this is a language-tagged literal.
