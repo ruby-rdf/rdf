@@ -776,6 +776,34 @@ describe RDF::Literal do
      end
    end
 
+   describe RDF::Literal::DateTime do
+     describe "#tz" do
+       {
+         "2010-06-21T11:28:01Z"      => "Z",
+         "2010-12-21T15:38:02-08:00" => "-08:00",
+         "2008-06-20T23:59:00Z"      => "Z",
+         "2011-02-01T01:02:03"       => "",
+       }.each do |l, r|
+         it "#{l} => #{r}" do
+           RDF::Literal::DateTime.new(l).tz.should == RDF::Literal(r)
+         end
+       end
+     end
+
+     describe "#timezone" do
+       {
+         "2010-06-21T11:28:01Z"      => RDF::Literal("PT0S", :datatype => RDF::XSD.dayTimeDuration),
+         "2010-12-21T15:38:02-08:00" => RDF::Literal("-PT8H", :datatype => RDF::XSD.dayTimeDuration),
+         "2008-06-20T23:59:00Z"      => RDF::Literal("PT0S", :datatype => RDF::XSD.dayTimeDuration),
+         "2011-02-01T01:02:03"       => nil,
+       }.each do |l, r|
+         it "#{l} => #{r.inspect}" do
+           RDF::Literal::DateTime.new(l).timezone.should == r
+         end
+       end
+     end
+   end
+
    describe "SPARQL tests" do
      context "#==" do
        {

@@ -15,6 +15,9 @@ module RDF; class Literal
       @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   ||= value if value.is_a?(String)
+      @has_timezone = @string.nil? || if md = @string.match(GRAMMAR)
+        !!md[2] # If lexical value contains timezone
+      end
       @object   = case
         when value.is_a?(::DateTime)         then value
         when value.respond_to?(:to_datetime) then value.to_datetime # Ruby 1.9+
@@ -34,6 +37,35 @@ module RDF; class Literal
     end
 
     ##
+    # Returns the timezone part of arg as a simple literal. Returns the empty string if there is no timezone.
+    #
+    # @return [RDF::Literal]
+    # @see http://www.w3.org/TR/sparql11-query/#func-tz
+    def tz
+      zone =  @has_timezone ? object.zone : ""
+      zone = "Z" if zone == "+00:00"
+      RDF::Literal(zone)
+    end
+
+    ##
+    # Returns the timezone part of arg as an xsd:dayTimeDuration, or `nil`
+    # if lexical form of literal does not include a timezone.
+    #
+    # @return [RDF::Literal]
+    def timezone
+      if tz == 'Z'
+        RDF::Literal("PT0S", :datatype => RDF::XSD.dayTimeDuration)
+      elsif md = tz.to_s.match(/^([+-])?(\d+):(\d+)?$/)
+        plus_minus, hour, min = md[1,3]
+        plus_minus = nil unless plus_minus == "-"
+        hour = hour.to_i
+        min = min.to_i
+        res = "#{plus_minus}PT#{hour}H#{"#{min}M" if min > 0}"
+        RDF::Literal(res, :datatype => RDF::XSD.dayTimeDuration)
+      end
+    end
+
+    ##
     # Returns `true` if the value adheres to the defined grammar of the
     # datatype.
     #
@@ -45,6 +77,8 @@ module RDF; class Literal
       super && object && value !~ %r(\A0000)
     end
 
+    ##
+    # Returns the `timezone` of the literal. If the
     ##
     # Returns the value as a string.
     #
