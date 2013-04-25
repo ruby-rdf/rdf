@@ -243,6 +243,9 @@ module RDF
     # or named contexts.
     # The name of `false` will only match against the default context.
     #
+    # If the query nas no patterns, it returns a single empty solution as
+    # per SPARQL 1.1 _Empty Group Pattern_.
+    #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
     # @param  [Hash{Symbol => Object}] options
@@ -259,6 +262,7 @@ module RDF
     # @return [RDF::Query::Solutions]
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
+    # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
     def execute(queryable, options = {})
       validate!
       options = options.dup
@@ -270,6 +274,9 @@ module RDF
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
       @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
+
+      # If there are no patterns, just return the empty solution
+      return @solutions if empty?
 
       patterns = @patterns
       context = options.fetch(:context, options.fetch(:name, self.context))
