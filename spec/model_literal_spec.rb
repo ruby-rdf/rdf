@@ -9,6 +9,7 @@ describe RDF::Literal do
      when :plain       then ['Hello']
      when :empty_lang  then ['', {:language => :en}]
      when :plain_lang  then ['Hello', {:language => :en}]
+     when :string      then ['String', {:datatype => RDF::XSD.string}]
      when :false       then [false]
      when :true        then [true]
      when :int         then [123]
@@ -26,10 +27,10 @@ describe RDF::Literal do
    def self.literals(*selector)
      selector.inject([]) do |ary, sel|
        ary += case sel
-       when :all_plain_no_lang then [:empty, :plain].map {|sel| literal(sel)}
+       when :all_simple        then [:empty, :plain, :string].map {|sel| literal(sel)}
        when :all_plain_lang    then [:empty_lang, :plain_lang].map {|sel| literal(sel)}
        when :all_native        then [:false, :true, :int, :long, :double, :time, :date, :datetime].map {|sel| literal(sel)}
-       when :all_plain         then literals(:all_plain_no_lang, :all_plain_lang)
+       when :all_plain         then literals(:all_simple, :all_plain_lang)
        else                         literals(:all_plain, :all_native)
        end
      end
@@ -174,7 +175,7 @@ describe RDF::Literal do
            RDF::Literal(v, :canonicalize => true).should be_valid
          end
        end
-       
+
        # DateTime
        {
          "2010-01-01T00:00:00Z"      => "2010-01-01T00:00:00Z",
@@ -256,49 +257,58 @@ describe RDF::Literal do
    end
 
    describe "#plain?" do
-     literals(:all_plain_no_lang).each do |args|
+     literals(:all_plain).each do |args|
        it "returns true for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
-         literal.plain?.should be_true
+         literal.should be_plain
        end
      end
 
-     literals(:all_plain_lang, :all_native).each do |args|
+     (literals(:all) - literals(:all_plain)).each do |args|
        it "returns false for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
-         literal.plain?.should be_false
+         literal.should_not be_plain
+       end
+     end
+   end
+
+   describe "#simple?" do
+     literals(:all_simple).each do |args|
+       it "returns true for #{args.inspect}" do
+         literal = RDF::Literal.new(*args)
+         literal.should be_simple
+       end
+     end
+
+     (literals(:all) - literals(:all_simple)).each do |args|
+       it "returns false for #{args.inspect}" do
+         literal = RDF::Literal.new(*args)
+         literal.should_not be_simple
        end
      end
    end
 
    describe "#language" do
-     literals(:all_plain_no_lang, :all_native).each do |args|
-       it "returns nil for #{args.inspect}" do
-         literal = RDF::Literal.new(*args)
-         literal.language.should be_nil
-       end
-     end
-
      literals(:all_plain_lang).each do |args|
        it "returns language for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
          literal.language.should == :en
        end
      end
+
+     (literals(:all) - literals(:all_plain_lang)).each do |args|
+       it "returns nil for #{args.inspect}" do
+         literal = RDF::Literal.new(*args)
+         literal.language.should be_nil
+       end
+     end
    end
 
    describe "#datatype" do
-     literals(:all_plain_no_lang).each do |args|
+     literals(:all_simple).each do |args|
        it "returns xsd:string for #{args.inspect}" do
          literal = RDF::Literal.new(*args)
          literal.datatype.should == RDF::XSD.string
-       end
-     end
-
-     literals(:all_plain_lang).each do |args|
-       it "returns xsd:string for #{args.inspect}" do
-         literal = RDF::Literal.new(*args)
-         literal.datatype.should == RDF.langString
        end
      end
 
@@ -319,10 +329,17 @@ describe RDF::Literal do
    end
 
   describe "#typed?" do
-    literals(:all_plain).each do |args|
+    literals(:all_simple, :all_plain_lang).each do |args|
       it "returns false for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
-        literal.typed?.should be_false
+        literal.should_not be_typed
+      end
+    end
+
+    (literals(:all) - literals(:all_simple, :all_plain_lang)).each do |args|
+      it "returns true for #{args.inspect}" do
+        literal = RDF::Literal.new(*args)
+        literal.should be_typed
       end
     end
   end
@@ -335,7 +352,7 @@ describe RDF::Literal do
        end
      end
 
-     literals(:all_plain_no_lang).each do |args|
+     literals(:all_simple).each do |args|
        it "returns true for value of #{args.inspect}" do
          literal = RDF::Literal.new(*args)
          literal.should == literal.value
@@ -360,7 +377,7 @@ describe RDF::Literal do
          #literal.should == literal.value # FIXME: fails on xsd:date, xsd:time, and xsd:dateTime
        end
      end
-     it "returns true for languaged taged literals differring in case" do
+     it "returns true for language taged literals differring in case" do
        l1 = RDF::Literal.new("foo", :language => :en)
        l2 = RDF::Literal.new("foo", :language => :EN)
        l1.should == l2
@@ -584,309 +601,397 @@ describe RDF::Literal do
        end
      end
    end
-  
-  describe RDF::Literal::Double do
-    before(:each) do
-      @nan = RDF::Literal::Double.new("NaN")
-      @inf = RDF::Literal::Double.new("INF")
-    end
 
-    it "recognizes INF" do
-      @inf.should be_infinite
-      RDF::Literal.new('INF', :datatype => RDF::Literal::Double::DATATYPE).should == @inf
-    end
+   describe RDF::Literal::Numeric do
+     describe "#abs" do
+       {
+         1                  => 1,
+         -1                 => 1,
+         0                  => 0,
+         BigDecimal("1.1")  => BigDecimal("1.1"),
+         BigDecimal("-1.1") => BigDecimal("1.1"),
+         +0.0               => +0.0,
+         -0.0               => +0.0,
+         1.2e3              => 1.2e3,
+         -1.2e3             => 1.2e3,
+         Float::INFINITY    => Float::INFINITY,
+         -Float::INFINITY   => Float::INFINITY,
+       }.each do |value, result|
+         it "#{value} => #{result}" do
+           RDF::Literal(value).abs.should == RDF::Literal(result)
+         end
+       end
+     end
 
-    it "recognizes -INF" do
-      @inf.should be_infinite
-      RDF::Literal.new('-INF', :datatype => RDF::Literal::Double::DATATYPE).should == -@inf
-    end
+     describe "#round" do
+       {
+         1                  => 1,
+         -1                 => -1,
+         0                  => 0,
+         BigDecimal("1.1")  => BigDecimal("1"),
+         BigDecimal("-1.1") => BigDecimal("-1"),
+         BigDecimal("1.5")  => BigDecimal("2"),
+         BigDecimal("-1.5") => BigDecimal("-2"),
+         +0.0               => 0,
+         -0.0               => 0,
+         1.5                => 2,
+         -1.5               => -2,
+         1.2e0              => 1.0e0,
+         -1.2e0             => -1.0e0
+       }.each do |value, result|
+         it "#{value} => #{result}" do
+           RDF::Literal(value).round.should == RDF::Literal(result)
+         end
+       end
+     end
 
-    it "recognizes NaN" do
-      @nan.should be_nan
-      RDF::Literal.new('NaN', :datatype => RDF::Literal::Double::DATATYPE).should be_nan
-    end
+     describe "#ceil" do
+       {
+         1                  => 1,
+         -1                 => -1,
+         0                  => 0,
+         BigDecimal("1.1")  => BigDecimal("2"),
+         BigDecimal("-1.1") => BigDecimal("-1"),
+         BigDecimal("1.5")  => BigDecimal("2"),
+         BigDecimal("-1.5") => BigDecimal("-1"),
+         +0.0               => 0,
+         -0.0               => 0,
+         1.5                => 2,
+         -1.5               => -1,
+         1.2e0              => 2.0e0,
+         -1.2e0             => -1.0e0
+       }.each do |value, result|
+         it "#{value} => #{result}" do
+           RDF::Literal(value).ceil.should == RDF::Literal(result)
+         end
+       end
 
-    [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|
-      {
-        :"+" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
-        :"-" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("INF")],
-      }.each do |op, (lp, rp, lm, rm)|
-        it "returns #{lp} for INF #{op} #{n}" do
-          @inf.send(op, n).should == lp
-        end
-        
-        it "returns #{rp} for #{n} #{op} INF" do
-          n.send(op, @inf).should == rp
-        end
+       describe "#floor" do
+         {
+           1                  => 1,
+           -1                 => -1,
+           0                  => 0,
+           BigDecimal("1.1")  => BigDecimal("1"),
+           BigDecimal("-1.1") => BigDecimal("-2"),
+           BigDecimal("1.5")  => BigDecimal("1"),
+           BigDecimal("-1.5") => BigDecimal("-2"),
+           +0.0               => 0,
+           -0.0               => 0,
+           1.5                => 1,
+           -1.5               => -2,
+           1.2e0              => 1.0e0,
+           -1.2e0             => -2.0e0
+         }.each do |value, result|
+           it "#{value} => #{result}" do
+             RDF::Literal(value).floor.should == RDF::Literal(result)
+           end
+         end
+       end
+     end
+   end
 
-        it "returns #{lm} for -INF #{op} #{n}" do
-          (-@inf).send(op, n).should == lm
-        end
-        
-        it "returns #{rm} for #{n} #{op} -INF" do
-          n.send(op, -@inf).should == rm
-        end
-      end
-      
-      it "#{n} + NaN" do
-        (n + -@nan).should be_nan
-        (-@nan + n).should be_nan
-      end
-    end
+   describe RDF::Literal::Double do
+     before(:each) do
+       @nan = RDF::Literal::Double.new("NaN")
+       @inf = RDF::Literal::Double.new("INF")
+     end
 
-    # Multiplication
-    {
-      -1 => [RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
-      0  => [:nan, :nan],
-      1  => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
-    }.each do |n, (p, m)|
-      it "returns #{p} for #{n} * INF" do
-        if p == :nan
-          (RDF::Literal::Double.new(n) * @inf).should be_nan
-        else
-          (RDF::Literal::Double.new(n) * @inf).should == p
-        end
-      end
+     it "recognizes INF" do
+       @inf.should be_infinite
+       RDF::Literal.new('INF', :datatype => RDF::Literal::Double::DATATYPE).should == @inf
+     end
 
-      it "returns #{p} for INF * #{n}" do
-        if p == :nan
-          (@inf * RDF::Literal::Double.new(n)).should be_nan
-        else
-          (@inf * RDF::Literal::Double.new(n)).should == p
-        end
-      end
-    end
+     it "recognizes -INF" do
+       @inf.should be_infinite
+       RDF::Literal.new('-INF', :datatype => RDF::Literal::Double::DATATYPE).should == -@inf
+     end
 
-    it "adds infinities" do
-      (@inf + @inf).should == @inf
-      (@inf + -@inf).should be_nan
-      (-@inf + -@inf).should == -@inf
-      (-@inf + @inf).should be_nan
-    end
+     it "recognizes NaN" do
+       @nan.should be_nan
+       RDF::Literal.new('NaN', :datatype => RDF::Literal::Double::DATATYPE).should be_nan
+     end
 
-    it "adds NaN" do
-      (@inf + @nan).should be_nan
-      (@nan + @nan).should be_nan
-    end
-  end
-  
-  describe "SPARQL tests" do
-    context "#==" do
-      {
-        "boolean false=false" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("false")],
-        "boolean true=true" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("true")],
-        "date-1 1" => [RDF::Literal::Date.new("2006-08-23"), RDF::Literal::Date.new("2006-08-23")],
-        "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-01:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00+04:00")],
-        "datetime 2" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T23:00:00+06:00")],
-        "datetime 3" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00")],
-        "datetime 4" => [RDF::Literal::DateTime.new("2002-04-02T23:00:00-04:00"), RDF::Literal::DateTime.new("2002-04-03T02:00:00-01:00")],
-        "datetime 5" => [RDF::Literal::DateTime.new("1999-12-31T24:00:00-05:00"), RDF::Literal::DateTime.new("2000-01-01T00:00:00-05:00")],
-        "eq-1 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
-        "eq-1 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
-        "eq-1 1=1" => [RDF::Literal(1), RDF::Literal(1)],
-        "eq-1 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
-        "eq-2-1 1.0=1.0" => [RDF::Literal(1.0), RDF::Literal(1.0)],
-        "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
-        "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
-        "eq-2-1 1^^xsd:decimal=1^^xsd:decimal" => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1)],
-        "eq-3 '1'='1'" => [RDF::Literal("1"), RDF::Literal("1")],
-        "eq-4 'zzz'='zzz'" => [RDF::Literal("zzz"), RDF::Literal("zzz")],
-        "numeric -INF=-INF" => [-RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
-        "numeric INF=INF" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
-        "open-eq-02 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
-        "open-eq-03 '1'^xsd:integer=1" => [RDF::Literal::Integer.new("1"), RDF::Literal(1)],
-        "open-eq-07 'xyz'='xyz'" => [RDF::Literal("xyz"), RDF::Literal("xyz")],
-        "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
-        "open-eq-07 'xyz'@EN='xyz'@EN" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :EN)],
-        "open-eq-07 'xyz'@EN='xyz'@en" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :en)],
-        "open-eq-07 'xyz'@en='xyz'@EN" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :EN)],
-        "open-eq-07 'xyz'@en='xyz'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :en)],
-        "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
-        "open-eq-07 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-07 'xyz'^^xsd:integer='xyz'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("xyz")],
-        "open-eq-07 'xyz'^^xsd:string='xyz'xsd:string" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :datatype => XSD.string)],
-        "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
-      }.each do |label, (left, right)|
-        it "returns true for #{label}" do
-          left.extend(RDF::TypeCheck)
-          right.extend(RDF::TypeCheck)
-          left.should == right
-        end
-      end
-    end
-    
-    context "#!=" do
-      {
-        "boolean false=true" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("true")],
-        "boolean true=false" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("false")],
-        "date-2 1" => [RDF::Literal::Date.new("2001-01-01Z"), RDF::Literal::Date.new("2006-08-23")],
-        "date-2 2" => [RDF::Literal::Date.new("2001-01-01"), RDF::Literal::Date.new("2006-08-23")],
-        "date-2 3" => [RDF::Literal::DateTime.new("2006-08-23T09:00:00+01:00"), RDF::Literal::Date.new("2006-08-23")],
-        "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00-05:00")],
-        "datetime 2" => [RDF::Literal::DateTime.new("2005-04-04T24:00:00-05:00"), RDF::Literal::DateTime.new("2005-04-04T00:00:00-05:00")],
-        "language 'xyz'@en='xyz'@dr" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"dr")],
-        "language 'xyz'@en='xyz'@en-us" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"en-us")],
-        "numeric +INF=-INF" => [RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
-        "numeric -INF=INF" => [-RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
-        "numeric 1.0=2.0" => [RDF::Literal(1.0), RDF::Literal(2.0)],
-        "numeric 1=2" => [RDF::Literal(1), RDF::Literal(2)],
-        "numeric NaN=NaN" => [-RDF::Literal::Double.new("NaN"), RDF::Literal::Double.new("NaN")],
-        "open-eq-04 '02'^xsd:integer=1" => [RDF::Literal::Integer.new("02"), RDF::Literal(1)],
-        "open-eq-04 '2'^xsd:integer=1" => [RDF::Literal::Integer.new("2"), RDF::Literal(1)],
-        "open-eq-08 '<xyz>=xyz'@en" => [RDF::URI("xyz"), RDF::Literal("xyz", :language => :en)],
-        "open-eq-08 'xyz'='xyz'@EN" => [RDF::Literal("xyz"), RDF::Literal("xyz", :language => :EN)],
-        "open-eq-08 'xyz'='xyz'@en" => [RDF::Literal("xyz"), RDF::Literal("xyz", :language => :en)],
-        "open-eq-08 'xyz'=<xyz>" => [RDF::Literal("xyz"), RDF::URI("xyz")],
-        "open-eq-08 'xyz'=_:xyz" => [RDF::Literal("xyz"), RDF::Node.new("xyz")],
-        "open-eq-08 'xyz'@EN='xyz'" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz")],
-        "open-eq-08 'xyz'@en='xyz'" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz")],
-        "open-eq-08 'xyz'@en='xyz'^^<unknown>" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-08 'xyz'@en='xyz'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.integer)],
-        "open-eq-08 'xyz'@en='xyz'^^xsd:string" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.string)],
-        "open-eq-08 'xyz'@en=<xyz>" => [RDF::Literal("xyz", :language => :en), RDF::URI("xyz")],
-        "open-eq-08 'xyz'@en==_:xyz" => [RDF::Literal("xyz"), RDF::Node.new("xyz")],
-        "open-eq-08 'xyz'^^<unknown>='xyz'@en" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :language => :en)],
-        "open-eq-08 'xyz'^^xsd:integer='xyz'@en" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::Literal("xyz", :language => :en)],
-        "open-eq-08 'xyz'^^xsd:integer=<xyz>" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::URI("xyz")],
-        "open-eq-08 'xyz'^^xsd:string='xyz'@en" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :language => :en)],
-        "open-eq-08 <xyz>='xyz'" => [RDF::URI("xyz"), RDF::Literal("xyz")],
-        "open-eq-08 <xyz>='xyz'@en" => [RDF::URI("xyz"), RDF::Literal("xyz", :language => :en)],
-        "open-eq-08 <xyz>='xyz'^^xsd:integer" => [RDF::URI("xyz"), RDF::Literal("xyz", :datatype => XSD.integer)],
-        "open-eq-08 _:xyz='abc'" => [RDF::Node.new("xyz"), RDF::Literal("abc")],
-        "open-eq-08 _:xyz='xyz'" => [RDF::Node.new("xyz"), RDF::Literal("xyz")],
-        "open-eq-08 _:xyz='xyz'@en=" => [RDF::Node.new("xyz"), RDF::Literal("xyz")],
-        "open-eq-10 'xyz'='abc'" => [RDF::Literal("xyz"), RDF::Literal("abc")],
-        "open-eq-10 'xyz'='abc'@EN" => [RDF::Literal("xyz"), RDF::Literal("abc", :language => :EN)],
-        "open-eq-10 'xyz'='abc'@en" => [RDF::Literal("xyz"), RDF::Literal("abc", :language => :en)],
-        "open-eq-10 'xyz'='abc'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("abc", :datatype => XSD.string)],
-        "open-eq-10 'xyz'=<abc>" => [RDF::Literal("xyz"), RDF::URI("abc")],
-        "open-eq-10 'xyz'=_:abc" => [RDF::Literal("xyz"), RDF::Node.new("abc")],
-        "open-eq-10 'xyz'@en='abc'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :language => :en)],
-        "open-eq-10 'xyz'@en='abc'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :datatype => XSD.integer)],
-      }.each do |label, (left, right)|
-        it "returns false for #{label}" do
-          left.extend(RDF::TypeCheck)
-          right.extend(RDF::TypeCheck)
-          left.should_not == right
-        end
-      end
-    end
+     [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|
+       {
+         :"+" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
+         :"-" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("INF")],
+       }.each do |op, (lp, rp, lm, rm)|
+         it "returns #{lp} for INF #{op} #{n}" do
+           @inf.send(op, n).should == lp
+         end
 
-    context ArgumentError do
-      {
-        "language with xsd:string" => {:value => "foo", :language => "en", :datatype => RDF::XSD.string},
-        "language with xsd:date" => {:value => "foo", :language => "en", :datatype => RDF::XSD.date},
-        "no language with rdf:langString" => {:value => "foo", :datatype => RDF::langString},
-      }.each do |name, opts|
-        it "raises error for #{name}" do
-          lambda {RDF::Literal.new(opts.delete(:value), opts)}.should raise_error(ArgumentError)
-        end
-      end
+         it "returns #{rp} for #{n} #{op} INF" do
+           n.send(op, @inf).should == rp
+         end
 
-      {
-        "no language with xsd:string" => {:value => "foo", :datatype => RDF::XSD.string},
-        "no language with xsd:date" => {:value => "foo", :datatype => RDF::XSD.date},
-        "language with rdf:langString" => {:value => "foo", :language => "en", :datatype => RDF::langString},
-      }.each do |name, opts|
-        it "should not raise error for #{name}" do
-          lambda {RDF::Literal.new(opts.delete(value), opts)}.should_not raise_error(ArgumentError)
-        end
-      end
-    end
+         it "returns #{lm} for -INF #{op} #{n}" do
+           (-@inf).send(op, n).should == lm
+         end
 
-    context TypeError do
-      {
-        "boolean 'true'=true" => [RDF::Literal("true"), RDF::Literal::Boolean.new("true")],
-        "boolean true='true'" => [RDF::Literal::Boolean.new("true"), RDF::Literal("true")],
-        "eq-2-2(bug) 'zzz'^^<unknown>='1'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("1")],
-        "eq-2-2(bug) '1'='zzz'^^<unknown>" => [RDF::Literal("1"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
-        "eq-2-2(bug) 'zzz'^^<unknown>='zzz'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("zzz")],
-        "eq-2-2(bug) 'zzz'='zzz'^^<unknown>" => [RDF::Literal("zzz"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
-        "numeric '1'=1" => [RDF::Literal("1"), RDF::Literal(1)],
-        "numeric 1='1'" => [RDF::Literal(1), RDF::Literal("1")],
-        "numeric 1=<xyz>" => [RDF::Literal(1), RDF::URI("xyz")],  # From expr-equal/expr-2-2
-        "numeric 1=_:xyz" => [RDF::Literal(1), RDF::Node.new("xyz")],  # From expr-equal/expr-2-2
-        "numeric <xyz>=1" => [RDF::URI("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
-        "numeric _:xyz=1" => [RDF::Node.new("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
-        "open-eq-04 'a'^^<unknown>=1" => [RDF::Literal.new("a", :datatype => RDF::URI("unknown")), RDF::Literal(1)],
-        "open-eq-06 'b'^^<unknown>='a'^^<unknown>" => [RDF::Literal.new("b", :datatype => RDF::URI("unknown")), RDF::Literal.new("a", :datatype => RDF::URI("unknown"))],
-        "open-eq-06 1='a'^^<unknown>" => [RDF::Literal(1), RDF::Literal.new("a", :datatype => RDF::URI("unknown"))],
-        "open-eq-08 'xyz'='xyz'^^<unknown>" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-08 'xyz'='xyz'^^<unknown>" => [RDF::Literal("xyz"), RDF::Literal.new("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-08 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.integer)],
-        "open-eq-08 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal::Integer.new("xyz")],
-        "open-eq-08 'xyz'^^<unknown>='xyz'" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz")],
-        "open-eq-08 'xyz'^^<unknown>='xyz'" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal.new("xyz")],
-        "open-eq-08 'xyz'^^xsd:integer='xyz'" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::Literal("xyz")],
-        "open-eq-08 'xyz'^^xsd:integer='xyz'" => [RDF::Literal::Integer.new("xyz"), RDF::Literal.new("xyz")],
-        "open-eq-10 'xyz'='abc'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("abc", :datatype => XSD.integer)],
-        "open-eq-10 'xyz'^^<unknown>='abc'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("abc", :datatype => RDF::URI("unknown"))],
-        "open-eq-10 'xyz'^^xsd:integer='abc'" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::Literal("abc")],
-        "open-eq-10 'xyz'^^xsd:integer='abc'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("abc")],
-        "token 'xyz'^^xsd:token=abc'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:abc)],
-      }.each do |label, (left, right)|
-        it "raises TypeError for #{label}" do
-          left.extend(RDF::TypeCheck)
-          right.extend(RDF::TypeCheck)
-          lambda {left == right}.should raise_error(TypeError)
-        end
-      end
-    end
+         it "returns #{rm} for #{n} #{op} -INF" do
+           n.send(op, -@inf).should == rm
+         end
+       end
 
-    # Term equivalence
-    # @see http://www.w3.org/TR/rdf-sparql-query/#func-sameTerm
-    context "#eql?" do
-      {
-        "boolean false=false" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("false")],
-        "boolean true=true" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("true")],
-        "date-1 1" => [RDF::Literal::Date.new("2006-08-23"), RDF::Literal::Date.new("2006-08-23")],
-        "datetime 3" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00")],
-        "eq-1 1=1" => [RDF::Literal(1), RDF::Literal(1)],
-        "eq-2-1 1.0=1.0" => [RDF::Literal(1.0), RDF::Literal(1.0)],
-        "eq-2-1 1^^xsd:decimal=1^^xsd:decimal" => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1)],
-        "eq-3 '1'='1'" => [RDF::Literal("1"), RDF::Literal("1")],
-        "eq-4 'zzz'='zzz'" => [RDF::Literal("zzz"), RDF::Literal("zzz")],
-        "numeric -INF=-INF" => [-RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
-        "numeric INF=INF" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
-        "open-eq-02 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-03 '1'^xsd:integer=1" => [RDF::Literal::Integer.new("1"), RDF::Literal(1)],
-        "open-eq-07 'xyz'='xyz'" => [RDF::Literal("xyz"), RDF::Literal("xyz")],
-        "open-eq-07 'xyz'@EN='xyz'@EN" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :EN)],
-        "open-eq-07 'xyz'@EN='xyz'@en" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :en)],
-        "open-eq-07 'xyz'@en='xyz'@EN" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :EN)],
-        "open-eq-07 'xyz'@en='xyz'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :en)],
-        "open-eq-07 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
-        "open-eq-07 'xyz'^^xsd:integer='xyz'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("xyz")],
-        "open-eq-07 'xyz'^^xsd:string='xyz'xsd:string" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :datatype => XSD.string)],
-        "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
-        "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
-        "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
-      }.each do |label, (left, right)|
-        it "returns true for #{label}" do
-          left.should eql right
-        end
-      end
-    end
+       it "#{n} + NaN" do
+         (n + -@nan).should be_nan
+         (-@nan + n).should be_nan
+       end
+     end
 
-    context "not #eql?" do
-      {
-        "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-01:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00+04:00")],
-        "datetime 2" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T23:00:00+06:00")],
-        "datetime 4" => [RDF::Literal::DateTime.new("2002-04-02T23:00:00-04:00"), RDF::Literal::DateTime.new("2002-04-03T02:00:00-01:00")],
-        "datetime 5" => [RDF::Literal::DateTime.new("1999-12-31T24:00:00-05:00"), RDF::Literal::DateTime.new("2000-01-01T00:00:00-05:00")],
-        "eq-1 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
-        "eq-1 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
-        "eq-1 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
-        "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
-        "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
-        "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
-        "term-6 '456.'^^xsd:decimal='456.0'^^xsd:decimal" => [RDF::Literal::Decimal.new("456."), RDF::Literal::Decimal.new("456.0")],
-      }.each do |label, (left, right)|
-        it "returns false for #{label}" do
-          left.should_not eql right
-        end
-      end
-    end
-  end
+     # Multiplication
+     {
+       -1 => [RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
+       0  => [:nan, :nan],
+       1  => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+     }.each do |n, (p, m)|
+       it "returns #{p} for #{n} * INF" do
+         if p == :nan
+           (RDF::Literal::Double.new(n) * @inf).should be_nan
+         else
+           (RDF::Literal::Double.new(n) * @inf).should == p
+         end
+       end
+
+       it "returns #{p} for INF * #{n}" do
+         if p == :nan
+           (@inf * RDF::Literal::Double.new(n)).should be_nan
+         else
+           (@inf * RDF::Literal::Double.new(n)).should == p
+         end
+       end
+     end
+
+     it "adds infinities" do
+       (@inf + @inf).should == @inf
+       (@inf + -@inf).should be_nan
+       (-@inf + -@inf).should == -@inf
+       (-@inf + @inf).should be_nan
+     end
+
+     it "adds NaN" do
+       (@inf + @nan).should be_nan
+       (@nan + @nan).should be_nan
+     end
+   end
+
+   describe "SPARQL tests" do
+     context "#==" do
+       {
+         "boolean false=false" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("false")],
+         "boolean true=true" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("true")],
+         "date-1 1" => [RDF::Literal::Date.new("2006-08-23"), RDF::Literal::Date.new("2006-08-23")],
+         "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-01:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00+04:00")],
+         "datetime 2" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T23:00:00+06:00")],
+         "datetime 3" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00")],
+         "datetime 4" => [RDF::Literal::DateTime.new("2002-04-02T23:00:00-04:00"), RDF::Literal::DateTime.new("2002-04-03T02:00:00-01:00")],
+         "datetime 5" => [RDF::Literal::DateTime.new("1999-12-31T24:00:00-05:00"), RDF::Literal::DateTime.new("2000-01-01T00:00:00-05:00")],
+         "eq-1 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
+         "eq-1 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
+         "eq-1 1=1" => [RDF::Literal(1), RDF::Literal(1)],
+         "eq-1 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
+         "eq-2-1 1.0=1.0" => [RDF::Literal(1.0), RDF::Literal(1.0)],
+         "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
+         "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
+         "eq-2-1 1^^xsd:decimal=1^^xsd:decimal" => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1)],
+         "eq-3 '1'='1'" => [RDF::Literal("1"), RDF::Literal("1")],
+         "eq-4 'zzz'='zzz'" => [RDF::Literal("zzz"), RDF::Literal("zzz")],
+         "numeric -INF=-INF" => [-RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
+         "numeric INF=INF" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+         "open-eq-02 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
+         "open-eq-03 '1'^xsd:integer=1" => [RDF::Literal::Integer.new("1"), RDF::Literal(1)],
+         "open-eq-07 'xyz'='xyz'" => [RDF::Literal("xyz"), RDF::Literal("xyz")],
+         "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
+         "open-eq-07 'xyz'@EN='xyz'@EN" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :EN)],
+         "open-eq-07 'xyz'@EN='xyz'@en" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :en)],
+         "open-eq-07 'xyz'@en='xyz'@EN" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :EN)],
+         "open-eq-07 'xyz'@en='xyz'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :en)],
+         "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
+         "open-eq-07 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-07 'xyz'^^xsd:integer='xyz'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("xyz")],
+         "open-eq-07 'xyz'^^xsd:string='xyz'xsd:string" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :datatype => XSD.string)],
+         "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
+       }.each do |label, (left, right)|
+         it "returns true for #{label}" do
+           left.extend(RDF::TypeCheck)
+           right.extend(RDF::TypeCheck)
+           left.should == right
+         end
+       end
+     end
+
+     context "#!=" do
+       {
+         "boolean false=true" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("true")],
+         "boolean true=false" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("false")],
+         "date-2 1" => [RDF::Literal::Date.new("2001-01-01Z"), RDF::Literal::Date.new("2006-08-23")],
+         "date-2 2" => [RDF::Literal::Date.new("2001-01-01"), RDF::Literal::Date.new("2006-08-23")],
+         "date-2 3" => [RDF::Literal::DateTime.new("2006-08-23T09:00:00+01:00"), RDF::Literal::Date.new("2006-08-23")],
+         "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00-05:00")],
+         "datetime 2" => [RDF::Literal::DateTime.new("2005-04-04T24:00:00-05:00"), RDF::Literal::DateTime.new("2005-04-04T00:00:00-05:00")],
+         "language 'xyz'@en='xyz'@dr" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"dr")],
+         "language 'xyz'@en='xyz'@en-us" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :"en-us")],
+         "numeric +INF=-INF" => [RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
+         "numeric -INF=INF" => [-RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+         "numeric 1.0=2.0" => [RDF::Literal(1.0), RDF::Literal(2.0)],
+         "numeric 1=2" => [RDF::Literal(1), RDF::Literal(2)],
+         "numeric NaN=NaN" => [-RDF::Literal::Double.new("NaN"), RDF::Literal::Double.new("NaN")],
+         "open-eq-04 '02'^xsd:integer=1" => [RDF::Literal::Integer.new("02"), RDF::Literal(1)],
+         "open-eq-04 '2'^xsd:integer=1" => [RDF::Literal::Integer.new("2"), RDF::Literal(1)],
+         "open-eq-08 '<xyz>=xyz'@en" => [RDF::URI("xyz"), RDF::Literal("xyz", :language => :en)],
+         "open-eq-08 'xyz'='xyz'@EN" => [RDF::Literal("xyz"), RDF::Literal("xyz", :language => :EN)],
+         "open-eq-08 'xyz'='xyz'@en" => [RDF::Literal("xyz"), RDF::Literal("xyz", :language => :en)],
+         "open-eq-08 'xyz'=<xyz>" => [RDF::Literal("xyz"), RDF::URI("xyz")],
+         "open-eq-08 'xyz'=_:xyz" => [RDF::Literal("xyz"), RDF::Node.new("xyz")],
+         "open-eq-08 'xyz'@EN='xyz'" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz")],
+         "open-eq-08 'xyz'@en='xyz'" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz")],
+         "open-eq-08 'xyz'@en='xyz'^^<unknown>" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-08 'xyz'@en='xyz'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.integer)],
+         "open-eq-08 'xyz'@en='xyz'^^xsd:string" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :datatype => XSD.string)],
+         "open-eq-08 'xyz'@en=<xyz>" => [RDF::Literal("xyz", :language => :en), RDF::URI("xyz")],
+         "open-eq-08 'xyz'@en==_:xyz" => [RDF::Literal("xyz"), RDF::Node.new("xyz")],
+         "open-eq-08 'xyz'^^<unknown>='xyz'@en" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :language => :en)],
+         "open-eq-08 'xyz'^^xsd:integer='xyz'@en" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::Literal("xyz", :language => :en)],
+         "open-eq-08 'xyz'^^xsd:integer=<xyz>" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::URI("xyz")],
+         "open-eq-08 'xyz'^^xsd:string='xyz'@en" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :language => :en)],
+         "open-eq-08 <xyz>='xyz'" => [RDF::URI("xyz"), RDF::Literal("xyz")],
+         "open-eq-08 <xyz>='xyz'@en" => [RDF::URI("xyz"), RDF::Literal("xyz", :language => :en)],
+         "open-eq-08 <xyz>='xyz'^^xsd:integer" => [RDF::URI("xyz"), RDF::Literal("xyz", :datatype => XSD.integer)],
+         "open-eq-08 _:xyz='abc'" => [RDF::Node.new("xyz"), RDF::Literal("abc")],
+         "open-eq-08 _:xyz='xyz'" => [RDF::Node.new("xyz"), RDF::Literal("xyz")],
+         "open-eq-08 _:xyz='xyz'@en=" => [RDF::Node.new("xyz"), RDF::Literal("xyz")],
+         "open-eq-10 'xyz'='abc'" => [RDF::Literal("xyz"), RDF::Literal("abc")],
+         "open-eq-10 'xyz'='abc'@EN" => [RDF::Literal("xyz"), RDF::Literal("abc", :language => :EN)],
+         "open-eq-10 'xyz'='abc'@en" => [RDF::Literal("xyz"), RDF::Literal("abc", :language => :en)],
+         "open-eq-10 'xyz'='abc'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("abc", :datatype => XSD.string)],
+         "open-eq-10 'xyz'=<abc>" => [RDF::Literal("xyz"), RDF::URI("abc")],
+         "open-eq-10 'xyz'=_:abc" => [RDF::Literal("xyz"), RDF::Node.new("abc")],
+         "open-eq-10 'xyz'@en='abc'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :language => :en)],
+         "open-eq-10 'xyz'@en='abc'^^xsd:integer" => [RDF::Literal("xyz", :language => :en), RDF::Literal("abc", :datatype => XSD.integer)],
+       }.each do |label, (left, right)|
+         it "returns false for #{label}" do
+           left.extend(RDF::TypeCheck)
+           right.extend(RDF::TypeCheck)
+           left.should_not == right
+         end
+       end
+     end
+
+     context ArgumentError do
+       {
+         "language with xsd:string" => {:value => "foo", :language => "en", :datatype => RDF::XSD.string},
+         "language with xsd:date" => {:value => "foo", :language => "en", :datatype => RDF::XSD.date},
+         "no language with rdf:langString" => {:value => "foo", :datatype => RDF::langString},
+       }.each do |name, opts|
+         it "raises error for #{name}" do
+           lambda {RDF::Literal.new(opts.delete(:value), opts)}.should raise_error(ArgumentError)
+         end
+       end
+
+       {
+         "no language with xsd:string" => {:value => "foo", :datatype => RDF::XSD.string},
+         "no language with xsd:date" => {:value => "foo", :datatype => RDF::XSD.date},
+         "language with rdf:langString" => {:value => "foo", :language => "en", :datatype => RDF::langString},
+       }.each do |name, opts|
+         it "should not raise error for #{name}" do
+           lambda {RDF::Literal.new(opts.delete(value), opts)}.should_not raise_error(ArgumentError)
+         end
+       end
+     end
+
+     context TypeError do
+       {
+         "boolean 'true'=true" => [RDF::Literal("true"), RDF::Literal::Boolean.new("true")],
+         "boolean true='true'" => [RDF::Literal::Boolean.new("true"), RDF::Literal("true")],
+         "eq-2-2(bug) 'zzz'^^<unknown>='1'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("1")],
+         "eq-2-2(bug) '1'='zzz'^^<unknown>" => [RDF::Literal("1"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
+         "eq-2-2(bug) 'zzz'^^<unknown>='zzz'" => [RDF::Literal("zzz", :datatype => RDF::URI("unknown")), RDF::Literal("zzz")],
+         "eq-2-2(bug) 'zzz'='zzz'^^<unknown>" => [RDF::Literal("zzz"), RDF::Literal("zzz", :datatype => RDF::URI("unknown"))],
+         "numeric '1'=1" => [RDF::Literal("1"), RDF::Literal(1)],
+         "numeric 1='1'" => [RDF::Literal(1), RDF::Literal("1")],
+         "numeric 1=<xyz>" => [RDF::Literal(1), RDF::URI("xyz")],  # From expr-equal/expr-2-2
+         "numeric 1=_:xyz" => [RDF::Literal(1), RDF::Node.new("xyz")],  # From expr-equal/expr-2-2
+         "numeric <xyz>=1" => [RDF::URI("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
+         "numeric _:xyz=1" => [RDF::Node.new("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
+         "open-eq-04 'a'^^<unknown>=1" => [RDF::Literal.new("a", :datatype => RDF::URI("unknown")), RDF::Literal(1)],
+         "open-eq-06 'b'^^<unknown>='a'^^<unknown>" => [RDF::Literal.new("b", :datatype => RDF::URI("unknown")), RDF::Literal.new("a", :datatype => RDF::URI("unknown"))],
+         "open-eq-06 1='a'^^<unknown>" => [RDF::Literal(1), RDF::Literal.new("a", :datatype => RDF::URI("unknown"))],
+         "open-eq-08 'xyz'='xyz'^^<unknown>" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-08 'xyz'='xyz'^^<unknown>" => [RDF::Literal("xyz"), RDF::Literal.new("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-08 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.integer)],
+         "open-eq-08 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal::Integer.new("xyz")],
+         "open-eq-08 'xyz'^^<unknown>='xyz'" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz")],
+         "open-eq-08 'xyz'^^<unknown>='xyz'" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal.new("xyz")],
+         "open-eq-08 'xyz'^^xsd:integer='xyz'" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::Literal("xyz")],
+         "open-eq-08 'xyz'^^xsd:integer='xyz'" => [RDF::Literal::Integer.new("xyz"), RDF::Literal.new("xyz")],
+         "open-eq-10 'xyz'='abc'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("abc", :datatype => XSD.integer)],
+         "open-eq-10 'xyz'^^<unknown>='abc'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("abc", :datatype => RDF::URI("unknown"))],
+         "open-eq-10 'xyz'^^xsd:integer='abc'" => [RDF::Literal("xyz", :datatype => XSD.integer), RDF::Literal("abc")],
+         "open-eq-10 'xyz'^^xsd:integer='abc'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("abc")],
+         "token 'xyz'^^xsd:token=abc'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:abc)],
+       }.each do |label, (left, right)|
+         it "raises TypeError for #{label}" do
+           left.extend(RDF::TypeCheck)
+           right.extend(RDF::TypeCheck)
+           lambda {left == right}.should raise_error(TypeError)
+         end
+       end
+     end
+
+     # Term equivalence
+     # @see http://www.w3.org/TR/rdf-sparql-query/#func-sameTerm
+     context "#eql?" do
+       {
+         "boolean false=false" => [RDF::Literal::Boolean.new("false"), RDF::Literal::Boolean.new("false")],
+         "boolean true=true" => [RDF::Literal::Boolean.new("true"), RDF::Literal::Boolean.new("true")],
+         "date-1 1" => [RDF::Literal::Date.new("2006-08-23"), RDF::Literal::Date.new("2006-08-23")],
+         "datetime 3" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00")],
+         "eq-1 1=1" => [RDF::Literal(1), RDF::Literal(1)],
+         "eq-2-1 1.0=1.0" => [RDF::Literal(1.0), RDF::Literal(1.0)],
+         "eq-2-1 1^^xsd:decimal=1^^xsd:decimal" => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1)],
+         "eq-3 '1'='1'" => [RDF::Literal("1"), RDF::Literal("1")],
+         "eq-4 'zzz'='zzz'" => [RDF::Literal("zzz"), RDF::Literal("zzz")],
+         "numeric -INF=-INF" => [-RDF::Literal::Double.new("INF"), -RDF::Literal::Double.new("INF")],
+         "numeric INF=INF" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+         "open-eq-02 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-03 '1'^xsd:integer=1" => [RDF::Literal::Integer.new("1"), RDF::Literal(1)],
+         "open-eq-07 'xyz'='xyz'" => [RDF::Literal("xyz"), RDF::Literal("xyz")],
+         "open-eq-07 'xyz'@EN='xyz'@EN" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :EN)],
+         "open-eq-07 'xyz'@EN='xyz'@en" => [RDF::Literal("xyz", :language => :EN), RDF::Literal("xyz", :language => :en)],
+         "open-eq-07 'xyz'@en='xyz'@EN" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :EN)],
+         "open-eq-07 'xyz'@en='xyz'@en" => [RDF::Literal("xyz", :language => :en), RDF::Literal("xyz", :language => :en)],
+         "open-eq-07 'xyz'^^<unknown>='xyz'^^<unknown>" => [RDF::Literal("xyz", :datatype => RDF::URI("unknown")), RDF::Literal("xyz", :datatype => RDF::URI("unknown"))],
+         "open-eq-07 'xyz'^^xsd:integer='xyz'^^xsd:integer" => [RDF::Literal::Integer.new("xyz"), RDF::Literal::Integer.new("xyz")],
+         "open-eq-07 'xyz'^^xsd:string='xyz'xsd:string" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz", :datatype => XSD.string)],
+         "open-eq-07 'xyz'='xyz'^^xsd:string" => [RDF::Literal("xyz"), RDF::Literal("xyz", :datatype => XSD.string)],
+         "open-eq-07 'xyz'xsd:string='xyz'" => [RDF::Literal("xyz", :datatype => XSD.string), RDF::Literal("xyz")],
+         "token 'xyz'^^xsd:token=xyz'^^xsd:token" => [RDF::Literal(:xyz), RDF::Literal(:xyz)],
+       }.each do |label, (left, right)|
+         it "returns true for #{label}" do
+           left.should eql right
+         end
+       end
+     end
+
+     context "not #eql?" do
+       {
+         "datetime 1" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-01:00"), RDF::Literal::DateTime.new("2002-04-02T17:00:00+04:00")],
+         "datetime 2" => [RDF::Literal::DateTime.new("2002-04-02T12:00:00-05:00"), RDF::Literal::DateTime.new("2002-04-02T23:00:00+06:00")],
+         "datetime 4" => [RDF::Literal::DateTime.new("2002-04-02T23:00:00-04:00"), RDF::Literal::DateTime.new("2002-04-03T02:00:00-01:00")],
+         "datetime 5" => [RDF::Literal::DateTime.new("1999-12-31T24:00:00-05:00"), RDF::Literal::DateTime.new("2000-01-01T00:00:00-05:00")],
+         "eq-1 1='01'^xsd:integer" => [RDF::Literal(1), RDF::Literal::Integer.new("01")],
+         "eq-1 1='1.0e0'^xsd:double" => [RDF::Literal(1), RDF::Literal::Double.new("1.0e0")],
+         "eq-1 1=1.0" => [RDF::Literal(1), RDF::Literal(1.0)],
+         "eq-2-1 1.0e0=1.0" => [RDF::Literal::Double.new("1.0e0"), RDF::Literal::Double.new("1.0")],
+         "eq-2-1 1='1'^xsd:decimal" => [RDF::Literal(1), RDF::Literal::Decimal.new("1")],
+         "open-eq-03 '01'^xsd:integer=1" => [RDF::Literal::Integer.new("01"), RDF::Literal(1)],
+         "term-6 '456.'^^xsd:decimal='456.0'^^xsd:decimal" => [RDF::Literal::Decimal.new("456."), RDF::Literal::Decimal.new("456.0")],
+       }.each do |label, (left, right)|
+         it "returns false for #{label}" do
+           left.should_not eql right
+         end
+       end
+     end
+   end
 end

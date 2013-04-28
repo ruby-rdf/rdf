@@ -145,6 +145,46 @@ module RDF; class Literal
     end
 
     ##
+    # Returns the absolute value of `self`.
+    #
+    # @return [RDF::Literal]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    def abs
+      raise NotImplementedError
+    end
+
+    ##
+    # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
+    #
+    # @return [RDF::Literal]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    def round
+      raise NotImplementedError
+    end
+
+    ##
+    # Returns the smallest integer greater than or equal to `self`.
+    #
+    # @example
+    #   RDF::Literal(1).ceil            #=> RDF::Literal(1)
+    #
+    # @return [RDF::Literal]
+    def ceil
+      self
+    end
+
+    ##
+    # Returns the largest integer less than or equal to `self`.
+    #
+    # @example
+    #   RDF::Literal(1).floor            #=> RDF::Literal(1)
+    #
+    # @return [RDF::Literal]
+    def floor
+      self
+    end
+
+    ##
     # Returns the value as an integer.
     #
     # @return [Integer]
