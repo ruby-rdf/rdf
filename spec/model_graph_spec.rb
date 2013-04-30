@@ -61,56 +61,12 @@ describe RDF::Graph do
     @graph.options[:foo].should == :bar
   end
 
-  context "when counting statements" do
-    require 'rdf/spec/countable'
-
+  context "as repository" do
+    require 'rdf/spec/repository'
     before :each do
-      @countable = @new.call
+      @repository = @new.call
     end
 
-    include RDF_Countable
-  end
-
-  context "when enumerating statements" do
-    require 'rdf/spec/enumerable'
-
-    before :each do
-      @enumerable = @new.call
-    end
-
-    include RDF_Enumerable
-  end
-
-  context "when querying statements" do
-    require 'rdf/spec/queryable'
-
-    before :each do
-      @queryable = @new.call
-      @subject   = RDF::URI.new('http://rubygems.org/gems/rdf')
-    end
-
-    include RDF_Queryable
-  end
-
-  context "when updating" do
-    require 'rdf/spec/mutable'
-
-    before :each do
-      @mutable = @new.call
-      @subject = RDF::URI.new('http://rubygems.org/gems/rdf')
-      @context = RDF::URI.new('http://example.org/context')
-    end
-
-    include RDF_Mutable
-  end
-
-  context "as a durable repository" do
-    require 'rdf/spec/durable'
-
-    before :each do
-      @load_durable ||= lambda { @new.call }
-    end
-
-    include RDF_Durable
+    include RDF_Repository
   end
 end
