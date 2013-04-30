@@ -239,13 +239,6 @@ module RDF
 
       ##
       # @private
-      # @see RDF::Countable#empty?
-      def empty?
-        @data.empty?
-      end
-
-      ##
-      # @private
       # @see RDF::Countable#count
       def count
         count = 0
