@@ -29,6 +29,7 @@ Gem::Specification.new do |gem|
   gem.requirements               = []
   gem.add_runtime_dependency     'addressable', '>= 2.2'
   gem.add_development_dependency 'rdf-spec',    '~> 1.0'
+  gem.add_development_dependency 'rdf-rdfxml'
   gem.add_development_dependency 'rspec',       '>= 2.12'
   gem.add_development_dependency 'yard',        '>= 0.8'
   gem.post_install_message       = nil

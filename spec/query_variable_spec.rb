@@ -167,4 +167,62 @@ describe RDF::Query::Variable do
       @var.bound?.should be_false
     end
   end
+
+  context "Examples" do
+    subject {RDF::Query::Variable.new(:y, 123)}
+    it "Creating a named unbound variable" do
+      var = RDF::Query::Variable.new(:x)
+      var.should be_unbound
+      var.value.should be_nil
+    end
+
+    it "Creating an anonymous unbound variable" do
+      RDF::Query::Variable.new.name.should be_a(Symbol)
+    end
+
+    it "Unbound variables match any value" do
+      RDF::Query::Variable.new.should === RDF::Literal(42)
+    end
+
+    it "Creating a bound variable" do
+      subject.should be_bound
+      subject.value.should == 123
+    end
+
+    it "Bound variables match only their actual value" do
+      subject.should_not === 42
+      subject.should === 123
+    end
+
+    it "Getting the variable name" do
+      subject.should be_named
+      subject.name.should == :y
+      subject.to_sym.should == :y
+    end
+
+    it "Rebinding a variable returns the previous value" do
+      subject.bind!(456).should == 123
+      subject.value.should == 456
+    end
+
+    it "Unbinding a previously bound variable" do
+      subject.unbind!
+      subject.should be_unbound
+    end
+
+    it "Getting the string representation of a variable" do
+      var = RDF::Query::Variable.new(:x)
+      var.to_s.should == "?x"
+      subject.to_s.should == "?y=123"
+    end
+
+    describe "#to_s" do
+      it "can be undistinguished" do
+        var = RDF::Query::Variable.new("a")
+        var.to_s.should == "?a"
+        var.distinguished = false
+        var.to_s.should == "??a"
+      end
+    end
+  end
 end

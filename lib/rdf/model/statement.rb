@@ -9,6 +9,7 @@ module RDF
   #   RDF::Statement.new(s, p, o)
   #
   # @example Creating an RDF statement with a context
+  #   uri = RDF::URI("http://example/")
   #   RDF::Statement.new(s, p, o, :context => uri)
   #
   # @example Creating an RDF statement from a `Hash`

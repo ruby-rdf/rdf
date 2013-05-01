@@ -10,6 +10,7 @@ end
 
 describe RDF::Query do
   EX = RDF::Vocabulary.new('http://example.org/')
+  FOAF = RDF::FOAF
 
   context "when created" do
     let(:pattern) {RDF::Query::Pattern.new(RDF::URI("a"), RDF::URI("b"), "c")}
@@ -770,6 +771,59 @@ describe RDF::Query do
       subject.pattern [RDF.a, RDF.b, RDF.c]
       q = subject + rhs
       q.patterns.should == [[RDF.first, RDF.second, RDF.third], [RDF.a, RDF.b, RDF.c]]
+    end
+  end
+
+  context "Examples" do
+    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    subject {
+      query = RDF::Query.new do
+        pattern [:person, RDF.type,  FOAF.Person]
+        pattern [:person, FOAF.name, :name]
+        pattern [:person, FOAF.mbox, :email]
+      end
+    }
+    it "Constructing a basic graph pattern query (1)" do
+      subject.should be_a(RDF::Query)
+      subject.patterns.size.should == 3
+      subject.patterns[0].should == RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
+      subject.patterns[1].should == RDF::Query::Pattern.new(:person, FOAF.name, :name)
+      subject.patterns[2].should == RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
+    end
+
+    it "Constructing a basic graph pattern query (2)" do
+      query = RDF::Query.new({
+        :person => {
+          RDF.type  => FOAF.Person,
+          FOAF.name => :name,
+          FOAF.mbox => :email,
+        }
+      })
+      query.should be_a(RDF::Query)
+      query.patterns.size.should == 3
+      query.patterns[0].should == RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
+      query.patterns[1].should == RDF::Query::Pattern.new(:person, FOAF.name, :name)
+      query.patterns[2].should == RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
+    end
+
+    it "Executing a basic graph pattern query" do
+      subject.execute(graph).each.to_a.should have_at_least(3).items
+    end
+
+    it "Constructing and executing a query in one go (1)" do
+      solutions = RDF::Query.execute(graph) do
+        pattern [:person, RDF.type, FOAF.Person]
+      end
+      solutions.to_a.should have_at_least(3).items
+    end
+
+    it "Constructing and executing a query in one go (2)" do
+      solutions = RDF::Query.execute(graph, {
+        :person => {
+          RDF.type => FOAF.Person,
+        }
+      })
+      solutions.to_a.should have_at_least(3).items
     end
   end
 end

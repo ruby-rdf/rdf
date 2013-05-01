@@ -104,7 +104,7 @@ module RDF; class Query
     # To match triples only in the default context, set context to `false`.
     #
     # @example
-    #   Pattern.new(:s, :p, :o).execute(RDF::Repository.load('data.nt'))
+    #   Pattern.new(:s, :p, :o).execute(RDF::Repository.load('etc/doap.nt'))
     #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
@@ -156,7 +156,12 @@ module RDF; class Query
     # pattern with the corresponding terms in the given `statement`.
     #
     # @example
-    #   pattern.solution(statement)
+    #   pattern = Pattern.new(:s, :p, :o)
+    #   solution = pattern.solution(statement)
+    #
+    #   pattern[:s] #=> statement.subject
+    #   pattern[:p] #=> statement.predicate
+    #   pattern[:o] #=> statement.object
     #
     # @param  [RDF::Statement] statement
     #   an RDF statement to bind terms from

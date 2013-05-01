@@ -9,13 +9,13 @@ module RDF
   #   graph = Graph.new("http://rubygems.org/")
   #
   # @example Loading graph data from a URL (1)
-  #   require 'rdf/raptor'  # for RDF/XML support
+  #   require 'rdf/rdfxml'  # for RDF/XML support
   #   
   #   graph = RDF::Graph.new("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
   #   graph.load!
   #
   # @example Loading graph data from a URL (2)
-  #   require 'rdf/raptor'  # for RDF/XML support
+  #   require 'rdf/rdfxml'  # for RDF/XML support
   #   
   #   graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
   #

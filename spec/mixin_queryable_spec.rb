@@ -12,4 +12,19 @@ describe RDF::Queryable do
 
   # @see lib/rdf/spec/queryable.rb in rdf-spec
   include RDF_Queryable
+
+  context "Examples" do
+    before(:each) {@queryable.insert(*RDF::Spec.quads); $stdout = StringIO.new}
+    after(:each) {$stdout = STDOUT}
+    subject {@queryable}
+
+    context "Querying for statements having a given predicate" do
+      it "with array" do
+        subject.query([nil, RDF::DOAP.developer, nil]).to_a.should_not be_empty
+      end
+      it "with hash" do
+        subject.query(:predicate => RDF::DOAP.developer).to_a.should_not be_empty
+      end
+    end
+  end
 end

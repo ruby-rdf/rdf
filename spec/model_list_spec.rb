@@ -241,16 +241,22 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#shift" do
-    it "needs work"
+  describe RDF::List, "#shift", :pending => "not implemented" do
+    it "adds element to beginning of list" do
+      ten.unshift(0).should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    end
   end
 
-  describe RDF::List, "#unshift" do
-    it "needs work"
+  describe RDF::List, "#unshift", :pending => "not implemented" do
+    it "adds element to beginning of list" do
+      ten.unshift(0).should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    end
   end
 
-  describe RDF::List, "#clear" do
-    it "needs work"
+  describe RDF::List, "#clear", :pending => "not implemented" do
+    it "empties list" do
+      ten.clear.should == RDF::List[]
+    end
   end
 
   describe RDF::List, "#eql?" do
@@ -273,8 +279,6 @@ describe RDF::List do
     it "returns 0 when given the same list" do
       ten.should == ten
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#==" do
@@ -285,8 +289,6 @@ describe RDF::List do
     it "returns true when given the same list" do
       ten.should == ten
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#===" do
@@ -358,7 +360,7 @@ describe RDF::List do
     end
 
     it "returns a value" do
-      ten.slice(0).should be_a_value
+      ten.slice(0, 9).should be_a_value
     end
   end
 
@@ -440,24 +442,18 @@ describe RDF::List do
     it "requires no arguments" do
       lambda { ten.last }.should_not raise_error(ArgumentError)
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#rest" do
     it "requires no arguments" do
       lambda { ten.rest }.should_not raise_error(ArgumentError)
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#tail" do
     it "requires no arguments" do
       lambda { ten.tail }.should_not raise_error(ArgumentError)
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#first_subject" do
@@ -470,16 +466,12 @@ describe RDF::List do
     it "requires no arguments" do
       lambda { ten.rest_subject }.should_not raise_error(ArgumentError)
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#last_subject" do
     it "requires no arguments" do
       lambda { ten.last_subject }.should_not raise_error(ArgumentError)
     end
-
-    it "needs work"
   end
 
   describe RDF::List, "#each_subject without a block" do
@@ -704,6 +696,324 @@ describe RDF::List do
 
     it "#inspect returns the constant name" do
       RDF::List::NIL.inspect.should == 'RDF::List::NIL'
+    end
+  end
+
+  context "Examples" do
+    subject {RDF::List[1, 2, 3]}
+    it "Constructing a new list" do
+      subject.should be_a_list
+      RDF::List[].should be_a_list
+      RDF::List[*(1..10)].should be_a_list
+      subject.should be_a_list
+      RDF::List["foo", "bar"].should be_a_list
+      RDF::List["a", 1, "b", 2, "c", 3].should be_a_list
+    end
+    
+    describe(:&) do
+      it "conjunction of lists" do
+        {
+          (RDF::List[1, 2] & RDF::List[1, 2])       => RDF::List[1, 2],
+          (RDF::List[1, 2] & RDF::List[2, 3])       => RDF::List[2],
+          (RDF::List[1, 2] & RDF::List[3, 4])       => RDF::List[],
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    describe(:|) do
+      it "union of lists" do
+        {
+          (RDF::List[1, 2] | RDF::List[1, 2])       => RDF::List[1, 2],
+          (RDF::List[1, 2] | RDF::List[2, 3])       => RDF::List[1, 2, 3],
+          (RDF::List[1, 2] | RDF::List[3, 4])       => RDF::List[1, 2, 3, 4],
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    describe(:+) do
+      it "sum of lists" do
+        {
+          (RDF::List[1, 2] + RDF::List[3, 4])       => RDF::List[1, 2, 3, 4],
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    describe(:-) do
+      it "difference of lists" do
+        {
+          (RDF::List[1, 2, 2, 3] - RDF::List[2])       => RDF::List[1, 3],
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    context(:*) do
+      it "multiplicity of lists" do
+        {
+          (subject * 2)       => RDF::List[1, 2, 3, 1, 2, 3],
+          (subject * "," )    => "1,2,3",
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    context(:[]) do
+      it "index of lists" do
+        {
+          subject[0] => RDF::Literal(1)
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    context(:<<) do
+      it "append to list" do
+        {
+          (RDF::List[] << 1 << 2 << 3) => subject
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+    
+    context(:<=>) do
+      it "compare lists" do
+        {
+          (RDF::List[1] <=> RDF::List[1]) => 0,
+          (RDF::List[1] <=> RDF::List[2]) => -1,
+          (RDF::List[2] <=> RDF::List[1]) => 1,
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+  
+    context(:empty?) do
+      it "is empty" do
+        {
+          RDF::List[].empty?        => true,
+          subject.empty? => false,
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+  
+    context(:length) do
+      it "is what it is" do
+        {
+          RDF::List[].length        => 0,
+          subject.length => 3,
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+  
+    context(:index) do
+      it "is what it is" do
+        {
+          RDF::List['a', 'b', 'c'].index('a') => 0,
+          RDF::List['a', 'b', 'c'].index('d') => nil,
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+  
+    context(:slice) do
+      it "slices lists" do
+        {
+          subject.slice(0)    => RDF::Literal(1),
+          subject.slice(0, 2) => RDF::List[1, 2],
+          subject.slice(0..2) => RDF::List[1, 2, 3]
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+  
+    context(:fetch) do
+      it "fetches lists" do
+        {
+          subject.fetch(0)             => RDF::Literal(1),
+          subject.fetch(4, nil)        => nil,
+          subject.fetch(4) { |n| n*n } => 16,
+        }.each do |input, output|
+          input.should == output
+        end
+        lambda {subject.fetch(4).should raise_error(IndexError)}
+      end
+    end
+  
+    context(:at) do
+      it "returns element" do
+        {
+          subject.at(0)             => RDF::Literal(1),
+          subject.at(4)             => nil,
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context "offsets" do
+      {
+        :first => 1,
+        :second => 2,
+        :third => 3,
+        :fourth => 4,
+        :fifth => 5,
+        :sixth => 6,
+        :seventh => 7,
+        :eighth => 8,
+        :ninth => 9,
+        :tenth => 10,
+        :last => 10,
+        :rest => RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10],
+        :tail => RDF::List[10],
+      }.each do |method, value|
+        context "##{method}" do
+          it do
+            v = value.is_a?(RDF::Value) ? value : RDF::Literal(value)
+            ten.send(method).should == v
+          end
+        end
+      end
+    end
+
+    context(:first_subject) do
+      it "BNode of first subject" do
+        r = subject.first_subject
+        r.should be_a_node
+        subject.graph.first_object(:subject => r, :predicate => RDF.first).should == RDF::Literal(1)
+      end
+    end
+
+    context(:rest_subject) do
+      it "BNode of rest subject" do
+        r = subject.rest_subject
+        r.should be_a_node
+        subject.graph.first_object(:subject => r, :predicate => RDF.first).should == RDF::Literal(2)
+      end
+    end
+
+    context(:last_subject) do
+      it "BNode of last subject" do
+        r = subject.last_subject
+        r.should be_a_node
+        subject.graph.first_object(:subject => r, :predicate => RDF.rest).should == RDF.nil
+      end
+    end
+
+    context(:each_subject) do
+      it "yields nodes" do
+        expect {|b| subject.each_subject(&b)}.to yield_successive_args(RDF::Node, RDF::Node, RDF::Node)
+      end
+    end
+
+    context(:each) do
+      it "yields values" do
+        expect {|b| subject.each(&b)}.to yield_successive_args(*subject.to_a)
+      end
+    end
+
+    context(:each_statement) do
+      it "yields statements" do
+        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 9))
+      end
+    end
+
+    context(:join) do
+      it "joins elements" do
+        {
+          subject.join       => subject.to_a.join,
+          subject.join(", ") => subject.to_a.join(", "),
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:reverse) do
+      it "reverses elements" do
+        {
+          subject.reverse       => RDF::List[*subject.to_a.reverse],
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:sort) do
+      it "sorts elements" do
+        {
+          RDF::List[2, 3, 1].sort => RDF::List[1, 2, 3]
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:sort_by) do
+      it "sorts elements" do
+        {
+          RDF::List[2, 3, 1].sort_by(&:to_i) => RDF::List[1, 2, 3]
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:uniq) do
+      it "uniquifies elements" do
+        {
+          RDF::List[1, 2, 2, 3].uniq => RDF::List[1, 2, 3]
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:to_a) do
+      it "de-lists elements" do
+        {
+          RDF::List[].to_a        => [],
+          RDF::List[1, 2, 3].to_a => [RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)],
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:to_set) do
+      it "de-lists elements" do
+        {
+          RDF::List[1, 2, 3].to_set               => Set[RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)]
+        }.each do |input, output|
+          input.should == output
+        end
+      end
+    end
+
+    context(:to_s) do
+      it "serializes elements" do
+        {
+          RDF::List[].to_s        => "RDF::List[]",
+          RDF::List[1, 2, 3].to_s => "RDF::List[1, 2, 3]",
+        }.each do |input, output|
+          input.should == output
+        end
+      end
     end
   end
 end

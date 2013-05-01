@@ -196,7 +196,7 @@ module RDF
     # Returns the element at `index`.
     #
     # @example
-    #   RDF::List[1, 2, 3][0]                   #=> 1
+    #   RDF::List[1, 2, 3][0]                   #=> RDF::Literal(1)
     #
     # @param  [Integer] index
     # @return [RDF::Term]
@@ -299,10 +299,12 @@ module RDF
     end
 
     ##
-    # Returns the element at `index`.
+    # Returns a slice of a list.
     #
     # @example
-    #   RDF::List[1, 2, 3].at(0)                #=> 1
+    #     RDF::List[1, 2, 3].slice(0)    #=> RDF::Literal(1),
+    #     RDF::List[1, 2, 3].slice(0, 2) #=> RDF::List[1, 2],
+    #     RDF::List[1, 2, 3].slice(0..2) #=> RDF::List[1, 2, 3]
     #
     # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000462
@@ -331,10 +333,10 @@ module RDF
     protected :slice_with_range
 
     ##
-    # Returns the element at `index`.
+    # Returns element at `index` with default.
     #
     # @example
-    #   RDF::List[1, 2, 3].fetch(0)             #=> 1
+    #   RDF::List[1, 2, 3].fetch(0)             #=> RDF::Literal(1)
     #   RDF::List[1, 2, 3].fetch(4)             #=> IndexError
     #   RDF::List[1, 2, 3].fetch(4, nil)        #=> nil
     #   RDF::List[1, 2, 3].fetch(4) { |n| n*n } #=> 16
@@ -358,6 +360,7 @@ module RDF
     #
     # @example
     #   RDF::List[1, 2, 3].at(0)                #=> 1
+    #   RDF::List[1, 2, 3].at(4)                #=> nil
     #
     # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000419
@@ -374,7 +377,7 @@ module RDF
     # Returns the first element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].first               #=> 1
+    #   RDF::List[*(1..10)].first               #=> RDF::Literal(1)
     #
     # @return [RDF::Term]
     def first
@@ -385,7 +388,7 @@ module RDF
     # Returns the second element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].second              #=> 2
+    #   RDF::List[*(1..10)].second              #=> RDF::Literal(2)
     #
     # @return [RDF::Term]
     def second
@@ -396,7 +399,7 @@ module RDF
     # Returns the third element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].third               #=> 3
+    #   RDF::List[*(1..10)].third               #=> RDF::Literal(4)
     #
     # @return [RDF::Term]
     def third
@@ -407,7 +410,7 @@ module RDF
     # Returns the fourth element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].fourth              #=> 4
+    #   RDF::List[*(1..10)].fourth              #=> RDF::Literal(4)
     #
     # @return [RDF::Term]
     def fourth
@@ -418,7 +421,7 @@ module RDF
     # Returns the fifth element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].fifth               #=> 5
+    #   RDF::List[*(1..10)].fifth               #=> RDF::Literal(5)
     #
     # @return [RDF::Term]
     def fifth
@@ -429,7 +432,7 @@ module RDF
     # Returns the sixth element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].sixth               #=> 6
+    #   RDF::List[*(1..10)].sixth               #=> RDF::Literal(6)
     #
     # @return [RDF::Term]
     def sixth
@@ -440,7 +443,7 @@ module RDF
     # Returns the seventh element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].seventh             #=> 7
+    #   RDF::List[*(1..10)].seventh             #=> RDF::Literal(7)
     #
     # @return [RDF::Term]
     def seventh
@@ -451,7 +454,7 @@ module RDF
     # Returns the eighth element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].eighth              #=> 8
+    #   RDF::List[*(1..10)].eighth              #=> RDF::Literal(8)
     #
     # @return [RDF::Term]
     def eighth
@@ -462,7 +465,7 @@ module RDF
     # Returns the ninth element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].ninth               #=> 9
+    #   RDF::List[*(1..10)].ninth               #=> RDF::Literal(9)
     #
     # @return [RDF::Term]
     def ninth
@@ -473,7 +476,7 @@ module RDF
     # Returns the tenth element in this list.
     #
     # @example
-    #   RDF::List[*(1..10)].tenth               #=> 10
+    #   RDF::List[*(1..10)].tenth               #=> RDF::Literal(10)
     #
     # @return [RDF::Term]
     def tenth
@@ -484,7 +487,7 @@ module RDF
     # Returns the last element in this list.
     #
     # @example
-    #   RDF::List[1, 2, 3].last                 #=> 3
+    #   RDF::List[*(1..10)].last                 #=> RDF::Literal(10)
     #
     # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000422
@@ -676,7 +679,7 @@ module RDF
     #
     # @example
     #   RDF::List[].to_a                        #=> []
-    #   RDF::List[1, 2, 3].to_a                 #=> [1, 2, 3]
+    #   RDF::List[1, 2, 3].to_a                 #=> [RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)]
     #
     # @return [Array]
     def to_a
@@ -687,7 +690,7 @@ module RDF
     # Returns the elements in this list as a set.
     #
     # @example
-    #   RDF::List[1, 2, 3].to_set               #=> Set[1, 2, 3]
+    #   RDF::List[1, 2, 3].to_set               #=> Set[RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)]
     #
     # @return [Set]
     def to_set

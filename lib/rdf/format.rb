@@ -13,18 +13,18 @@ module RDF
   #   RDF::Format.for("etc/doap.nt")
   #   RDF::Format.for(:file_name => "etc/doap.nt")
   #   RDF::Format.for(:file_extension => "nt")
-  #   RDF::Format.for(:content_type => "text/plain")
+  #   RDF::Format.for(:content_type => "application/n-triples")
   #
   # @example Obtaining serialization format MIME types
-  #   RDF::Format.content_types      #=> {"text/plain" => [RDF::NTriples::Format]}
+  #   RDF::Format.content_types      #=> {"application/n-triples" => [RDF::NTriples::Format]}
   #
   # @example Obtaining serialization format file extension mappings
   #   RDF::Format.file_extensions    #=> {:nt => [RDF::NTriples::Format]}
   #
   # @example Defining a new RDF serialization format class
   #   class RDF::NTriples::Format < RDF::Format
-  #     content_type     'text/plain', :extension => :nt
-  #     content_encoding 'ascii'
+  #     content_type     'application/n-triples', :extension => :nt
+  #     content_encoding 'utf-8'
   #     
   #     reader RDF::NTriples::Reader
   #     writer RDF::NTriples::Writer
@@ -249,7 +249,7 @@ module RDF
     #
     # @example
     #
-    #     RDF::NTriples::Format.name => "NTriples"
+    #     RDF::NTriples::Format.name => "N-Triples"
     #
     # @return [Symbol]
     def self.name
@@ -355,7 +355,7 @@ module RDF
     # match cannot be unambigiously found otherwise.
     #
     # @example
-    #     RDF::NTriples::Format.detect("<a> <b> <c> .") => true
+    #     RDF::NTriples::Format.detect("<a> <b> <c> .") #=> true
     #
     # @param [String] sample Beginning several bytes (~ 1K) of input.
     # @return [Boolean]
@@ -401,14 +401,21 @@ module RDF
           |ct, cl| (cl.include?(self) && ct != @@content_type[self]) ?  ct : nil }].flatten.compact
       else
         @@content_type[self] = type
-        (@@content_types[type] ||= []) << self
+        @@content_types[type] ||= []
+        @@content_types[type] << self unless @@content_types[type].include?(self)
 
         if extensions = (options[:extension] || options[:extensions])
           extensions = [extensions].flatten.map(&:to_sym)
-          extensions.each { |ext| (@@file_extensions[ext] ||= []) << self }
+          extensions.each do |ext|
+            @@file_extensions[ext] ||= []
+            @@file_extensions[ext] << self unless @@file_extensions[ext].include?(self)
+          end
         end
         if aliases = (options[:alias] || options[:aliases])
-          aliases = [aliases].flatten.each { |a| (@@content_types[a] ||= []) << self }
+          aliases = [aliases].flatten.each do |a|
+            @@content_types[a] ||= []
+            @@content_types[a] << self unless @@content_types[a].include?(self)
+          end
         end
       end
     end

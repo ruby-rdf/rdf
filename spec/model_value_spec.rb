@@ -8,4 +8,8 @@ describe RDF::Value do
   it "should not be instantiable" do
     lambda { @value.call }.should raise_error(NoMethodError)
   end
+
+  context "Examples" do
+    it "needs specs for documentation examples"
+  end
 end

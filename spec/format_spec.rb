@@ -105,4 +105,66 @@ describe RDF::Format do
       its(:file_extension) {should =~ file_extensions}
     end
   end
+
+  context "Examples" do
+    require 'rdf/ntriples'
+    before(:each) {$stdout = StringIO.new}
+    after(:each) {$stdout = STDOUT}
+    subject {RDF::Format}
+
+    its(:each) do
+      RDF::Format.each {|klass| $stdout.puts klass.name}
+      $stdout.rewind
+      $stdout.read.should_not be_empty
+    end
+
+    its(:"for") do
+      [
+        :ntriples,
+        "etc/doap.nt",
+        {:file_name => "etc/doap.nt"},
+        {:file_extension => "nt"},
+        {:content_type => "application/n-triples"}
+      ].each do |arg|
+        subject.for(arg).should == RDF::NTriples::Format
+      end
+    end
+
+    its(:content_types) {should include({"application/n-triples" => [RDF::NTriples::Format]})}
+    its(:file_extensions) {should include({:nt => [RDF::NTriples::Format]})}
+
+    it "Defining a new RDF serialization format class" do
+      lambda {
+        class RDF::NTriples::Format < RDF::Format
+          content_type     'application/n-triples', :extension => :nt
+          content_encoding 'utf-8'
+          
+          reader RDF::NTriples::Reader
+          writer RDF::NTriples::Writer
+        end
+      }.should_not raise_error
+    end
+
+    it "Instantiating an RDF reader or writer class (1)" do
+      lambda {
+        subject.for(:ntriples).reader.new($stdin)  { |reader|}
+        subject.for(:ntriples).writer.new($stdout) { |writer|}
+      }.should_not raise_error
+    end
+
+    it "Instantiating an RDF reader or writer class (2)" do
+      lambda {
+        RDF::Reader.for(:ntriples).new($stdin)  { |reader|}
+        RDF::Writer.for(:ntriples).new($stdout) { |writer|}
+      }.should_not raise_error
+    end
+
+    describe ".name" do
+      specify {RDF::NTriples::Format.name.should == "N-Triples"}
+    end
+
+    describe ".detect" do
+      specify {RDF::NTriples::Format.detect("<a> <b> <c> .").should be_true}
+    end
+  end
 end

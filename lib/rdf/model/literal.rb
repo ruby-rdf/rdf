@@ -53,7 +53,7 @@ module RDF
   #   RDF::Literal.new(123).datatype                 #=> XSD.integer
   #   RDF::Literal.new(9223372036854775807).datatype #=> XSD.integer
   #   RDF::Literal.new(3.1415).datatype              #=> XSD.double
-  #   RDF::Literal.new(Time.now).datatype            #=> XSD.dateTime
+  #   RDF::Literal.new(Time.now).datatype            #=> XSD.time
   #   RDF::Literal.new(Date.new(2010)).datatype      #=> XSD.date
   #   RDF::Literal.new(DateTime.new(2010)).datatype  #=> XSD.dateTime
   #
