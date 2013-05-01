@@ -133,6 +133,38 @@ describe RDF::Query::Pattern do
   end
   
   context "with one bound and one unbound variable" do
-    # TODO
+    it "needs a spec" # TODO
+  end
+
+  context "Examples" do
+    let!(:repo) {RDF::Repository.new {|r| r.insert(*RDF::Spec.triples)}}
+    let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}
+    let(:pattern) {RDF::Query::Pattern.new(:s, :p, :o)}
+    subject {pattern}
+    describe "#execute" do
+      it "executes query against repo" do
+        subject.execute(repo).to_a.should have(repo.count).items
+      end
+    end
+
+    describe "#solution" do
+      subject {pattern.solution(statement)}
+      it("pattern[:s] #=> statement.subject") { subject[:s].should == statement.subject}
+      it("pattern[:p] #=> statement.predicate") { subject[:p].should == statement.predicate}
+      it("pattern[:o] #=> statement.object") { subject[:o].should == statement.object}
+    end
+
+    describe "#variable_terms" do
+      it "has term" do
+        RDF::Query::Pattern.new(RDF::Node.new, :p, 123).variable_terms.should ==[:predicate]
+      end
+    end
+
+    describe "#optional" do
+      specify {
+        RDF::Query::Pattern.new(:s, :p, :o).should_not be_optional
+        RDF::Query::Pattern.new(:s, :p, :o, :optional => true).should be_optional
+      }
+    end
   end
 end

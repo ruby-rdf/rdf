@@ -12,10 +12,19 @@ module RDF
   # This class allows a name to be associated with a graph when it is
   # a projection of an underlying {RDF::Repository} supporting contexts.
   #
-  # @example Creating an empty graph
+  # @example Creating an empty unnamed graph
   #   graph = Graph.new
   #
   # @example Loading graph data from a URL
+  #   graph = Graph.new("http://rubygems.org/")
+  #
+  # @example Loading graph data from a URL (1)
+  #   require 'rdf/rdfxml'  # for RDF/XML support
+  #   
+  #   graph = RDF::Graph.new("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
+  #   graph.load!
+  #
+  # @example Loading graph data from a URL (2)
   #   require 'rdf/rdfxml'  # for RDF/XML support
   #   
   #   graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")

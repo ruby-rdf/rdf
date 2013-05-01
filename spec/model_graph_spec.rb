@@ -109,4 +109,37 @@ describe RDF::Graph do
 
     include RDF_Repository
   end
+
+  context "Examples" do
+    require 'rdf/rdfxml'
+
+    let(:graph) {@new.call}
+
+    it "Creating an empty unnamed graph" do
+      lambda {@new.call}.should_not raise_error
+    end
+
+    it "Creating an empty named graph" do
+      lambda {@new.call("http://rubygems.org/", :data => RDF::Repository.new)}.should_not raise_error
+    end
+
+    it "Loading graph data from a URL (1)" do
+      RDF::Util::File.
+        should_receive(:open_file).
+        with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
+        and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
+      graph = @new.call("http://www.bbc.co.uk/programmes/b0081dq5.rdf", :data => RDF::Repository.new)
+      graph.load!
+      graph.should_not be_empty
+    end
+
+    it "Loading graph data from a URL (2)" do
+      RDF::Util::File.
+        should_receive(:open_file).
+        with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
+        and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
+      graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
+      graph.should_not be_empty
+    end
+  end
 end

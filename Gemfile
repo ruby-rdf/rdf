@@ -14,5 +14,6 @@ end
 group :test do
   gem "rake"
   gem "backports", :platforms => :ruby_18
+  gem "equivalent-xml"
 end
 

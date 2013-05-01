@@ -234,4 +234,8 @@ describe RDF::NQuads::Writer do
       end
     end
   end
+
+  context "Examples" do
+    it "needs specs for documentation examples"
+  end
 end

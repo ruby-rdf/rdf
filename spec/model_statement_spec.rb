@@ -248,4 +248,27 @@ describe RDF::Statement do
       @stmt.should equal(@stmt)
     end
   end
+
+  context "Examples" do
+    let(:s) {RDF::URI.new("http://rubygems.org/gems/rdf")}
+    let(:p) {RDF::DC.creator}
+    let(:o) {RDF::URI.new("http://ar.to/#self")}
+    let(:uri) {RDF::URI("http://example/")}
+
+    it "Creating an RDF statement" do
+      RDF::Statement.new(s, p, o).should be_a(RDF::Statement)
+    end
+
+    it "Creating an RDF statement with a context" do
+      RDF::Statement.new(s, p, o, :context => uri).context.should == uri
+    end
+
+    it "Creating an RDF statement from a Hash" do
+      RDF::Statement.new({
+        :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
+        :predicate => RDF::DC.creator,
+        :object    => RDF::URI.new("http://ar.to/#self"),
+      }).should be_a(RDF::Statement)
+    end
+  end
 end

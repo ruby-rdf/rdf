@@ -17,7 +17,7 @@ module RDF
     # This method delegates to the protected {RDF::Queryable#query_pattern} method for the
     # actual lower-level query pattern matching implementation.
     #
-    # @example
+    # @example Querying for statements having a given predicate
     #     queryable.query([nil, RDF::DOAP.developer, nil])
     #     queryable.query(:predicate => RDF::DOAP.developer)
     #

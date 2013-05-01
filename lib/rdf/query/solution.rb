@@ -25,7 +25,7 @@ class RDF::Query
     undef_method(*instance_methods.
                   map(&:to_s).
                   select {|m| m =~ /^\w+$/}.
-                  reject {|m| %w(object_id dup instance_eval inspect to_s class).include?(m) || m[0,2] == '__'}.
+                  reject {|m| %w(object_id dup instance_eval inspect to_s class should should_not pretty_print).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 
     include Enumerable
@@ -145,7 +145,7 @@ class RDF::Query
     # @return [RDF::Term]
     # @since  0.3.0
     def []=(name, value)
-      @bindings[name.to_sym] = value
+      @bindings[name.to_sym] = value.is_a?(RDF::Term) ? value : RDF::Literal(value)
     end
 
     ##

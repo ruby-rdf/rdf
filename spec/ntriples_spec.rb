@@ -660,6 +660,10 @@ describe RDF::NTriples do
     end
   end
 
+  context "Examples" do
+    it "needs specs for documentation examples"
+  end
+
   def parse(input, options = {})
     options = {
       :validate => false,

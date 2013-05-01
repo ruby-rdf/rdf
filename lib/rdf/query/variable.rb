@@ -12,7 +12,7 @@ class RDF::Query
   #   var.name       #=> :g2166151240
   #
   # @example Unbound variables match any value
-  #   var === 42     #=> true
+  #   var === RDF::Literal(42)     #=> true
   #
   # @example Creating a bound variable
   #   var = RDF::Query::Variable.new(:y, 123)
@@ -20,10 +20,12 @@ class RDF::Query
   #   var.value      #=> 123
   #
   # @example Bound variables match only their actual value
+  #   var = RDF::Query::Variable.new(:y, 123)
   #   var === 42     #=> false
   #   var === 123    #=> true
   #
   # @example Getting the variable name
+  #   var = RDF::Query::Variable.new(:y, 123)
   #   var.named?     #=> true
   #   var.name       #=> :y
   #   var.to_sym     #=> :y

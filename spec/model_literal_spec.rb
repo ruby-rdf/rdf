@@ -1,3 +1,4 @@
+# coding: utf-8
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Literal do
@@ -1020,6 +1021,62 @@ describe RDF::Literal do
            left.should_not eql right
          end
        end
+    end
+  end
+
+  context "Examples" do
+    it "Creating a plain literal" do
+      value = RDF::Literal.new("Hello, world!")
+      value.should be_plain
+    end      
+
+    it "Creating a language-tagged literal (1)" do
+      value = RDF::Literal.new("Hello, world!", :language => :en)
+      value.should have_language
+      value.language.should == :en
+    end      
+
+    it "Creating a language-tagged literal (2)" do
+      lambda {
+        RDF::Literal.new("Wazup?", :language => :"en-US")
+        RDF::Literal.new("Hej!",   :language => :sv)
+        RDF::Literal.new("¡Hola!", :language => :es)
+      }.should_not raise_error
+    end      
+
+    it "Creating an explicitly datatyped literal" do
+      value = RDF::Literal.new("2009-12-31", :datatype => RDF::XSD.date)
+      value.should have_datatype
+      value.datatype.should == XSD.date
+    end      
+
+    it "Creating an implicitly datatyped literal" do
+      value = RDF::Literal.new(Date.today)
+      value.should have_datatype
+      value.datatype.should == XSD.date
+    end      
+
+    it "Creating an implicitly datatyped literals" do
+      {
+        RDF::Literal.new(false).datatype               => XSD.boolean,
+        RDF::Literal.new(true).datatype                => XSD.boolean,
+        RDF::Literal.new(123).datatype                 => XSD.integer,
+        RDF::Literal.new(9223372036854775807).datatype => XSD.integer,
+        RDF::Literal.new(3.1415).datatype              => XSD.double,
+        RDF::Literal.new(Time.now).datatype            => XSD.time,
+        RDF::Literal.new(Date.new(2010)).datatype      => XSD.date,
+        RDF::Literal.new(DateTime.new(2010)).datatype  => XSD.dateTime,
+      }.each do |input, output|
+        input.should == output
+      end
+    end
+
+    it(:eql?) do
+      RDF::Literal(1).should_not eql(RDF::Literal(1.0))
+    end
+
+    it(:==) do
+      RDF::Literal(1).should == RDF::Literal(1.0)
      end
    end
 end
