@@ -197,15 +197,6 @@ module RDF
     end
 
     ##
-    # Returns `true` if this graph contains no RDF statements.
-    #
-    # @return [Boolean]
-    # @see    RDF::Enumerable#empty?
-    def empty?
-      !@data.has_context?(context || false)
-    end
-
-    ##
     # Returns `true` if this graph has an anonymous context, `false` otherwise.
     #
     # @return [Boolean]

@@ -9,9 +9,8 @@ module RDF
     #
     # @return [Boolean]
     def empty?
-      empty = true
-      each { empty = false; break }
-      empty
+      each {return false}
+      true
     end
 
     ##
