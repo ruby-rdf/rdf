@@ -89,7 +89,7 @@ module RDF
     # @return [RDF::Query::Solutions]
     #   the resulting solution sequence
     # @see    RDF::Query#execute
-    def self.execute(queryable, patterns = nil, options = {}, &block)
+    def self.execute(queryable, patterns = {}, options = {}, &block)
       self.new(patterns, options, &block).execute(queryable, options)
     end
 
