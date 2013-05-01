@@ -4,13 +4,13 @@ module RDF; class Query
   #
   # @example Filtering solutions using a hash
   #   solutions.filter(:author  => RDF::URI("http://ar.to/#self"))
-  #   solutions.filter(:author  => "Arto Bendiken")
-  #   solutions.filter(:author  => [RDF::URI("http://ar.to/#self"), "Arto Bendiken"])
+  #   solutions.filter(:author  => "Gregg Kellogg")
+  #   solutions.filter(:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"])
   #   solutions.filter(:updated => RDF::Literal(Date.today))
   #
   # @example Filtering solutions using a block
   #   solutions.filter { |solution| solution.author.literal? }
-  #   solutions.filter { |solution| solution.title =~ /^SPARQL/ }
+  #   solutions.filter { |solution| solution.title.to_s =~ /^SPARQL/ }
   #   solutions.filter { |solution| solution.price < 30.5 }
   #   solutions.filter { |solution| solution.bound?(:date) }
   #   solutions.filter { |solution| solution.age.datatype == RDF::XSD.integer }
@@ -93,7 +93,11 @@ module RDF; class Query
         self.reject! do |solution|
           solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
           results = criteria.map do |name, value|
-            solution[name] == value
+            case value
+            when Array then value.any? {|v| solution[name] == v}
+            when Regexp then solution[name].to_s.match(value)
+            else solution[name] == value
+            end
           end
           !results.all?
         end
