@@ -13,5 +13,6 @@ end
 
 group :test do
   gem "rake"
+  gem "rdf-rdfxml"
 end
 
