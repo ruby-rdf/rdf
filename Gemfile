@@ -4,7 +4,7 @@ gemspec :name => ""
 
 gem "rdf-spec", :git => "git://github.com/ruby-rdf/rdf-spec.git"
 
-group :development do
+group :debug do
   gem "wirble"
   gem "redcarpet", :platforms => :ruby
   gem "debugger", :platforms => :mri_19
@@ -13,6 +13,6 @@ end
 
 group :test do
   gem "rake"
-  gem "rdf-rdfxml"
+  gem "equivalent-xml"
 end
 

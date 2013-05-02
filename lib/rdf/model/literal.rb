@@ -197,7 +197,16 @@ module RDF
     #
     # @return [Fixnum]
     def hash
-      to_s.hash
+      @hash ||= to_s.hash
+    end
+
+
+    ##
+    # Returns a hash code for the value.
+    #
+    # @return [Fixnum]
+    def value_hash
+      @value_hash ||= value.hash
     end
 
     ##
@@ -235,9 +244,9 @@ module RDF
           true
         when self.has_language? && self.language.to_s.downcase == other.language.to_s.downcase
           # Literals with languages can compare if languages are identical
-          self.value == other.value
+          self.value_hash == other.value_hash && self.value == other.value
         when (self.simple? || self.datatype == XSD.string) && (other.simple? || other.datatype == XSD.string)
-          self.value == other.value
+          self.value_hash == other.value_hash && self.value == other.value
         when other.comperable_datatype?(self) || self.comperable_datatype?(other)
           # Comoparing plain with undefined datatypes does not generate an error, but returns false
           # From data-r2/expr-equal/eq-2-2.
