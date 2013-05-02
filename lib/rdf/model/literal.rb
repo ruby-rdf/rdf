@@ -124,9 +124,9 @@ module RDF
       literal
     end
 
-    TRUE  = RDF::Literal.new(true).freeze
-    FALSE = RDF::Literal.new(false).freeze
-    ZERO  = RDF::Literal.new(0).freeze
+    TRUE  = RDF::Literal.new(true)
+    FALSE = RDF::Literal.new(false)
+    ZERO  = RDF::Literal.new(0)
 
     # @return [Symbol] The language tag (optional).
     attr_accessor :language
@@ -207,6 +207,14 @@ module RDF
     # @return [Fixnum]
     def value_hash
       @value_hash ||= value.hash
+    end
+
+    ##
+    # @private
+    def freeze
+      hash.freeze
+      value_hash.freeze
+      super
     end
 
     ##
