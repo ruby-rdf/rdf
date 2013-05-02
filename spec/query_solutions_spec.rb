@@ -107,7 +107,7 @@ describe RDF::Query::Solutions do
   end
 
   describe "#offset" do
-    it "Eliminating duplicate solutions" do
+    it "Eliminating duplicate solutions", :pending => ("rubinius index problem" if RUBY_ENGINE == "rbx") do
       solutions.offset(20).limit(20).should be_empty
     end
   end
