@@ -132,7 +132,9 @@ module RDF
         # If other is a Literal, reverse test to consolodate complex type checking logic
         other == self
       else 
-        other.respond_to?(:node?) && other.node? && other.respond_to?(:id) && @id == other.id
+        other.respond_to?(:node?) && other.node? &&
+          self.hash == other.hash &&
+          other.respond_to?(:id) && @id == other.id
       end
     end
     alias_method :===, :==
