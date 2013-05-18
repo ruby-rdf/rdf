@@ -206,6 +206,71 @@ module RDF
     end
 
     ##
+    # Appends an element to the head of this list.
+    #
+    # @example
+    #   RDF::List[[.unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
+    #
+    # @param  [RDF::Term] value
+    # @return [RDF::List]
+    # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
+    #
+    def unshift(value)
+      value = case value
+        when nil         then RDF.nil
+        when RDF::Value  then value
+        when Array       then RDF::List.new(nil, graph, value)
+        else value
+      end
+
+      old_subject, new_subject = subject, RDF::Node.new
+
+      graph.insert([new_subject, RDF.type, RDF.List])
+      graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
+      graph.insert([new_subject, RDF.rest, old_subject])
+
+      @subject = new_subject
+
+      return self
+    end
+
+    ##
+    # Removes and returns the element at the head of this list.
+    #
+    # @example
+    #   RDF::List[1,2,3].shift              #=> 1
+    #
+    # @return [RDF::Term]
+    # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-shift
+    def shift
+      return nil if empty?
+
+      value = first
+      old_subject, new_subject = subject, rest_subject
+      graph.delete([old_subject, RDF.type, RDF.List])
+      graph.delete([old_subject, RDF.first, value])
+      graph.delete([old_subject, RDF.rest, new_subject])
+
+      @subject = new_subject
+      return value
+    end
+
+    ##
+    # Empties this list
+    #
+    # @example
+    #   RDF::List[1, 2, 2, 3].clear    #=> RDF::List[]
+    #
+    # @return [RDF::List]
+    # @see    http://ruby-doc.org/core-1.9.3/classes/Array.html#method-i-clear
+    def clear
+      until empty?
+        shift
+      end
+      return self
+    end
+
+    ##
     # Appends an element to the tail of this list.
     #
     # @example

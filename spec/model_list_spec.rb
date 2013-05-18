@@ -243,12 +243,16 @@ describe RDF::List do
 
   describe RDF::List, "#shift" do
     it "returns the first element from the list" do
-      ten.shift.should == 1
+      ten.shift.should == RDF::Literal.new(1)
     end
 
     it "removes the first element from the list" do
       ten.shift
       ten.should == RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10]
+    end
+
+    it "should return nil from an empty list" do
+      empty.shift.should be_nil
     end
   end
 
@@ -263,7 +267,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#clear", :pending => "not implemented" do
+  describe RDF::List, "#clear" do
     it "empties list" do
       ten.clear.should == RDF::List[]
     end
