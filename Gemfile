@@ -14,5 +14,5 @@ end
 group :test do
   gem "rake"
   gem "equivalent-xml"
+  gem "fuubar"
 end
-

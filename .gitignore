@@ -7,4 +7,5 @@ tmp
 /.rbx/
 /doc/
 Gemfile.lock
-
+.bundle/
+*.sw?
