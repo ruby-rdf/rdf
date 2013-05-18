@@ -38,10 +38,18 @@ module RDF
     # @yield  [list]
     # @yieldparam [RDF::List] list
     def initialize(subject = nil, graph = nil, values = nil, &block)
-      @subject = subject || RDF::Node.new
       @graph   = graph   || RDF::Graph.new
+      @subject = RDF.nil
 
-      values.each { |value| self << value } unless values.nil? || values.empty?
+      unless values.nil? or values.empty?
+        first_value = values.shift
+        values.reverse_each do|value|
+          self.unshift value
+        end
+        self.unshift(first_value, subject)
+      else
+        @subject = subject
+      end
 
       if block_given?
         case block.arity
@@ -212,10 +220,11 @@ module RDF
     #   RDF::List[[.unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
     #
     # @param  [RDF::Term] value
+    # @param  [RDF::, nil] subject for position
     # @return [RDF::List]
     # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
     #
-    def unshift(value)
+    def unshift(value, shift_subject=nil)
       value = case value
         when nil         then RDF.nil
         when RDF::Value  then value
@@ -223,7 +232,8 @@ module RDF
         else value
       end
 
-      old_subject, new_subject = subject, RDF::Node.new
+      new_subject = shift_subject || RDF::Node.new
+      old_subject = subject
 
       graph.insert([new_subject, RDF.type, RDF.List])
       graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
