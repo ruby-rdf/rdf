@@ -241,19 +241,33 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#shift", :pending => "not implemented" do
+  describe RDF::List, "#shift" do
+    it "returns the first element from the list" do
+      ten.shift.should == RDF::Literal.new(1)
+    end
+
+    it "removes the first element from the list" do
+      ten.shift
+      ten.should == RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10]
+    end
+
+    it "should return nil from an empty list" do
+      empty.shift.should be_nil
+    end
+  end
+
+  describe RDF::List, "#unshift" do
     it "adds element to beginning of list" do
+      ten.unshift(0)
+      ten.should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    end
+
+    it "should return the new list" do
       ten.unshift(0).should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     end
   end
 
-  describe RDF::List, "#unshift", :pending => "not implemented" do
-    it "adds element to beginning of list" do
-      ten.unshift(0).should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    end
-  end
-
-  describe RDF::List, "#clear", :pending => "not implemented" do
+  describe RDF::List, "#clear" do
     it "empties list" do
       ten.clear.should == RDF::List[]
     end
@@ -709,7 +723,7 @@ describe RDF::List do
       RDF::List["foo", "bar"].should be_a_list
       RDF::List["a", 1, "b", 2, "c", 3].should be_a_list
     end
-    
+
     describe(:&) do
       it "conjunction of lists" do
         {
@@ -721,7 +735,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     describe(:|) do
       it "union of lists" do
         {
@@ -733,7 +747,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     describe(:+) do
       it "sum of lists" do
         {
@@ -743,7 +757,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     describe(:-) do
       it "difference of lists" do
         {
@@ -753,7 +767,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     context(:*) do
       it "multiplicity of lists" do
         {
@@ -764,7 +778,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     context(:[]) do
       it "index of lists" do
         {
@@ -774,7 +788,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     context(:<<) do
       it "append to list" do
         {
@@ -784,7 +798,7 @@ describe RDF::List do
         end
       end
     end
-    
+
     context(:<=>) do
       it "compare lists" do
         {
@@ -796,7 +810,7 @@ describe RDF::List do
         end
       end
     end
-  
+
     context(:empty?) do
       it "is empty" do
         {
@@ -807,7 +821,7 @@ describe RDF::List do
         end
       end
     end
-  
+
     context(:length) do
       it "is what it is" do
         {
@@ -818,7 +832,7 @@ describe RDF::List do
         end
       end
     end
-  
+
     context(:index) do
       it "is what it is" do
         {
@@ -829,7 +843,7 @@ describe RDF::List do
         end
       end
     end
-  
+
     context(:slice) do
       it "slices lists" do
         {
@@ -841,7 +855,7 @@ describe RDF::List do
         end
       end
     end
-  
+
     context(:fetch) do
       it "fetches lists" do
         {
@@ -854,7 +868,7 @@ describe RDF::List do
         lambda {subject.fetch(4).should raise_error(IndexError)}
       end
     end
-  
+
     context(:at) do
       it "returns element" do
         {
