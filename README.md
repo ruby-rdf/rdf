@@ -334,6 +334,7 @@ follows:
 * [John Fieber](http://github.com/jfieber) - <http://github.com/jfieber>
 * [Keita Urashima](http://github.com/ursm) - <http://ursm.jp/>
 * [Pius Uzamere](http://github.com/pius) - <http://pius.me/>
+* [Judson Lester](https://github.com/nyarly) - <https://github.com/nyarly>
 
 ## Contributing
 
