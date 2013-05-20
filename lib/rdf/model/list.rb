@@ -220,7 +220,7 @@ module RDF
     #   RDF::List[[.unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
     #
     # @param  [RDF::Term] value
-    # @param  [RDF::, nil] subject for position
+    # @param  [RDF::Node] subject (nil) for position
     # @return [RDF::List]
     # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
     #
