@@ -39,17 +39,15 @@ module RDF
     # @yield  [list]
     # @yieldparam [RDF::List] list
     def initialize(subject = nil, graph = nil, values = nil, &block)
+      @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
-      @subject = RDF.nil
 
-      unless values.nil? or values.empty?
+      unless values.to_a.empty?
         first_value = values.shift
         values.reverse_each do|value|
           self.unshift value
         end
         self.unshift(first_value, subject)
-      else
-        @subject = subject
       end
 
       if block_given?
@@ -214,10 +212,10 @@ module RDF
     # Appends an element to the head of this list.
     #
     # @example
-    #   RDF::List[[.unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
+    #   RDF::List[].unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
     #
     # @param  [RDF::Term] value
-    # @param  [RDF::, nil] subject for position
+    # @param  [RDF::Node] subject (nil) for position
     # @return [RDF::List]
     # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
     #
