@@ -721,7 +721,10 @@ describe RDF::List do
       end
       subject {list}
       its(:statements) do
-        list.each_statement {|s| s.should be_valid}
+        list.each_statement do |s|
+          s.subject.should be_a_node
+          s.should be_valid
+        end
       end
     end
   end

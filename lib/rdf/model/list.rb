@@ -77,6 +77,7 @@ module RDF
         rest = nil
         firsts = rests = 0
         @graph.query(:subject => li) do |st|
+          return false unless st.subject.node?
           case st.predicate
           when RDF.first
             firsts += 1
@@ -292,7 +293,7 @@ module RDF
       end
 
       if empty?
-        new_subject = subject
+        @subject = new_subject = RDF::Node.new
       else
         old_subject, new_subject = last_subject, RDF::Node.new
         graph.delete([old_subject, RDF.rest, RDF.nil])
