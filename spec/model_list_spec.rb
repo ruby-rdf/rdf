@@ -713,6 +713,19 @@ describe RDF::List do
     end
   end
 
+  context "Error cases" do
+    context "RDFa List construction" do
+      let(:list) {RDF::List.new}
+      before(:each) do
+        list << RDF::Literal("Foo")
+      end
+      subject {list}
+      its(:statements) do
+        list.each_statement {|s| s.should be_valid}
+      end
+    end
+  end
+
   context "Examples" do
     subject {RDF::List[1, 2, 3]}
     it "Constructing a new list" do
@@ -768,7 +781,7 @@ describe RDF::List do
       end
     end
 
-    context(:*) do
+    describe(:*) do
       it "multiplicity of lists" do
         {
           (subject * 2)       => RDF::List[1, 2, 3, 1, 2, 3],
@@ -779,7 +792,7 @@ describe RDF::List do
       end
     end
 
-    context(:[]) do
+    describe(:[]) do
       it "index of lists" do
         {
           subject[0] => RDF::Literal(1)
@@ -789,7 +802,7 @@ describe RDF::List do
       end
     end
 
-    context(:<<) do
+    describe(:<<) do
       it "append to list" do
         {
           (RDF::List[] << 1 << 2 << 3) => subject
@@ -799,7 +812,7 @@ describe RDF::List do
       end
     end
 
-    context(:<=>) do
+    describe(:<=>) do
       it "compare lists" do
         {
           (RDF::List[1] <=> RDF::List[1]) => 0,
@@ -811,7 +824,7 @@ describe RDF::List do
       end
     end
 
-    context(:empty?) do
+    describe(:empty?) do
       it "is empty" do
         {
           RDF::List[].empty?        => true,
@@ -822,7 +835,7 @@ describe RDF::List do
       end
     end
 
-    context(:length) do
+    describe(:length) do
       it "is what it is" do
         {
           RDF::List[].length        => 0,
@@ -833,7 +846,7 @@ describe RDF::List do
       end
     end
 
-    context(:index) do
+    describe(:index) do
       it "is what it is" do
         {
           RDF::List['a', 'b', 'c'].index('a') => 0,
@@ -844,7 +857,7 @@ describe RDF::List do
       end
     end
 
-    context(:slice) do
+    describe(:slice) do
       it "slices lists" do
         {
           subject.slice(0)    => RDF::Literal(1),
@@ -856,7 +869,7 @@ describe RDF::List do
       end
     end
 
-    context(:fetch) do
+    describe(:fetch) do
       it "fetches lists" do
         {
           subject.fetch(0)             => RDF::Literal(1),
@@ -869,7 +882,7 @@ describe RDF::List do
       end
     end
 
-    context(:at) do
+    describe(:at) do
       it "returns element" do
         {
           subject.at(0)             => RDF::Literal(1),
@@ -896,7 +909,7 @@ describe RDF::List do
         :rest => RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10],
         :tail => RDF::List[10],
       }.each do |method, value|
-        context "##{method}" do
+        describe "##{method}" do
           it do
             v = value.is_a?(RDF::Value) ? value : RDF::Literal(value)
             ten.send(method).should == v
@@ -905,7 +918,7 @@ describe RDF::List do
       end
     end
 
-    context(:first_subject) do
+    describe(:first_subject) do
       it "BNode of first subject" do
         r = subject.first_subject
         r.should be_a_node
@@ -913,7 +926,7 @@ describe RDF::List do
       end
     end
 
-    context(:rest_subject) do
+    describe(:rest_subject) do
       it "BNode of rest subject" do
         r = subject.rest_subject
         r.should be_a_node
@@ -921,7 +934,7 @@ describe RDF::List do
       end
     end
 
-    context(:last_subject) do
+    describe(:last_subject) do
       it "BNode of last subject" do
         r = subject.last_subject
         r.should be_a_node
@@ -929,25 +942,25 @@ describe RDF::List do
       end
     end
 
-    context(:each_subject) do
+    describe(:each_subject) do
       it "yields nodes" do
         expect {|b| subject.each_subject(&b)}.to yield_successive_args(RDF::Node, RDF::Node, RDF::Node)
       end
     end
 
-    context(:each) do
+    describe(:each) do
       it "yields values" do
         expect {|b| subject.each(&b)}.to yield_successive_args(*subject.to_a)
       end
     end
 
-    context(:each_statement) do
+    describe(:each_statement) do
       it "yields statements" do
         expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 9))
       end
     end
 
-    context(:join) do
+    describe(:join) do
       it "joins elements" do
         {
           subject.join       => subject.to_a.join,
@@ -958,7 +971,7 @@ describe RDF::List do
       end
     end
 
-    context(:reverse) do
+    describe(:reverse) do
       it "reverses elements" do
         {
           subject.reverse       => RDF::List[*subject.to_a.reverse],
@@ -968,7 +981,7 @@ describe RDF::List do
       end
     end
 
-    context(:sort) do
+    describe(:sort) do
       it "sorts elements" do
         {
           RDF::List[2, 3, 1].sort => RDF::List[1, 2, 3]
@@ -978,7 +991,7 @@ describe RDF::List do
       end
     end
 
-    context(:sort_by) do
+    describe(:sort_by) do
       it "sorts elements" do
         {
           RDF::List[2, 3, 1].sort_by(&:to_i) => RDF::List[1, 2, 3]
@@ -988,7 +1001,7 @@ describe RDF::List do
       end
     end
 
-    context(:uniq) do
+    describe(:uniq) do
       it "uniquifies elements" do
         {
           RDF::List[1, 2, 2, 3].uniq => RDF::List[1, 2, 3]
@@ -998,7 +1011,7 @@ describe RDF::List do
       end
     end
 
-    context(:to_a) do
+    describe(:to_a) do
       it "de-lists elements" do
         {
           RDF::List[].to_a        => [],
@@ -1009,7 +1022,7 @@ describe RDF::List do
       end
     end
 
-    context(:to_set) do
+    describe(:to_set) do
       it "de-lists elements" do
         {
           RDF::List[1, 2, 3].to_set               => Set[RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)]
@@ -1019,7 +1032,7 @@ describe RDF::List do
       end
     end
 
-    context(:to_s) do
+    describe(:to_s) do
       it "serializes elements" do
         {
           RDF::List[].to_s        => "RDF::List[]",
