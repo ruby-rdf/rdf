@@ -727,6 +727,11 @@ describe RDF::List do
         end
       end
     end
+
+    context "Turtle List construction" do
+      subject {RDF::List.new(RDF::Node("n"), nil, %w(a))}
+      its(:length) {should == 1}
+    end
   end
 
   context "Examples" do
