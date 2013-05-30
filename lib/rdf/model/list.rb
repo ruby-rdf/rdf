@@ -43,11 +43,7 @@ module RDF
       @graph   = graph   || RDF::Graph.new
 
       unless values.to_a.empty?
-        first_value = values.shift
-        values.reverse_each do|value|
-          self.unshift value
-        end
-        self.unshift(first_value, subject)
+        values.reverse_each {|value| self.unshift(value)}
       end
 
       if block_given?
@@ -210,17 +206,16 @@ module RDF
     end
 
     ##
-    # Appends an element to the head of this list.
+    # Appends an element to the head of this list. Existing references are not updated, as the list subject changes as a side-effect.
     #
     # @example
     #   RDF::List[].unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
     #
     # @param  [RDF::Term] value
-    # @param  [RDF::Node] subject (nil) for position
     # @return [RDF::List]
     # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
     #
-    def unshift(value, shift_subject=nil)
+    def unshift(value)
       value = case value
         when nil         then RDF.nil
         when RDF::Value  then value
@@ -228,8 +223,7 @@ module RDF
         else value
       end
 
-      new_subject = shift_subject || RDF::Node.new
-      old_subject = subject
+      new_subject, old_subject = RDF::Node.new, subject
 
       graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
       graph.insert([new_subject, RDF.rest, old_subject])
