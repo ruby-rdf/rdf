@@ -182,12 +182,11 @@ module RDF
     end
 
     ##
-    # Returns `true` if the subject or object of this statement is a blank
-    # node.
+    # Returns `true` if any resource of this statement is a blank node.
     #
     # @return [Boolean]
     def has_blank_nodes?
-      (has_object? && object.node?) || (has_subject? && subject.node?)
+      to_quad.compact.any?(&:node?)
     end
 
     ##
