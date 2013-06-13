@@ -40,7 +40,7 @@ module RDF::NTriples
         \s*
         (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
         \s*\.
-      )mx) && !(
+      )x) && !(
         sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
         sample.match(%r(<(html|rdf))i)                          # Not HTML or XML
       ) && !RDF::NQuads::Format.detect(sample)

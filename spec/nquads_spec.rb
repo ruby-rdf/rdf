@@ -60,6 +60,7 @@ describe RDF::NQuads::Format do
     {
       :nquads => "<a> <b> <c> <d> . ",
       :literal => '<a> <b> "literal" <d> .',
+      :bnode => '<a> <b> "literal" _:graph .',
       :multi_line => %(<a>\n  <b>\n  "literal"\n <d> .),
     }.each do |sym, str|
       it "detects #{sym}" do

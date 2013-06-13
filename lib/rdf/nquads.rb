@@ -38,12 +38,14 @@ module RDF
       def self.detect(sample)
         !!sample.match(%r(
           (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Subject
+          \s*
           (?:\s*<[^>]*>)                                          # Predicate
           \s*
           (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
-          (?:\s*<[^>]*>)                                          # Context
+          \s*
+          (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Context
           \s*\.
-        )mx) && !(
+        )x) && !(
           sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
           sample.match(%r(<(html|rdf))i)                          # Not HTML or XML
         )
