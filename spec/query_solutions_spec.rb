@@ -67,6 +67,67 @@ describe RDF::Query::Solutions do
     end
   end
 
+  describe "#-" do
+    {
+      "subsetByExcl01" => [
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
+          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                   :type => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                   :type => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+        ])
+      ],
+      "exists-02" => [
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a0"), :b => RDF::URI("http://example/b0"), :c => RDF::URI("http://example/c0")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a1"), :b => RDF::URI("http://example/b1"), :c => RDF::URI("http://example/c1")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2"), :c => RDF::URI("http://example/c2")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d0")),
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d1"), :b => RDF::URI("http://example/b1"), :c => RDF::URI("http://example/c1")),
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d2"), :b => RDF::URI("http://example/b2")),
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/cx")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a0"), :b => RDF::URI("http://example/b0"), :c => RDF::URI("http://example/c0")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
+        ])
+      ],
+      "full-minuend" => [
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a1"), :b => RDF::URI("http://example/b1")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a4")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d1"), :b => RDF::URI("http://example/b1")),
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d4"), :b => RDF::URI("http://example/b4"), :c => RDF::URI("http://example/c4")),
+          RDF::Query::Solution.new(:d => RDF::URI("http://example/d5")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2")),
+          RDF::Query::Solution.new(:a => RDF::URI("http://example/a4")),
+        ])
+      ],
+    }.each do |name, (left, right, result)|
+      it name do
+        (left - right).should =~ result
+      end
+    end
+  end
+
   describe "#order_by" do
     it "Reordering solutions based on a variable or proc" do
       solutions.dup.order_by(:updated, lambda {|a, b| b <=> a}).should == [lit, uri]

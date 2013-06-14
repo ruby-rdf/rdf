@@ -182,17 +182,33 @@ class RDF::Query
 
     ##
     # Compatible Mappings
+    #
     # Two solution mappings u1 and u2 are compatible if, for every variable v in dom(u1) and in dom(u2), u1(v) = u2(v).
     #
     # @param [RDF::Query::Solution, #to_hash] other
     #   another query solution or hash bindings
     # @return [Boolean]
+    # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algCompatibleMapping
     def compatible?(other)
       @bindings.all? do |k, v|
         !other.to_hash.has_key?(k) || other[k].eql?(v)
       end
     end
-    
+
+    ##
+    # Disjoint mapping
+    #
+    # A solution is disjoint with another solution if it shares no common variables in their domains.
+    #
+    # @param [RDF::Query::Solution] other
+    # @return [Boolean]
+    # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
+    def disjoint?(other)
+      @bindings.none? do |k, v|
+        v && other.to_hash.has_key?(k) && other[k].eql?(v)
+      end
+    end
+
     ##
     # Isomorphic Mappings
     # Two solution mappings u1 and u2 are isomorphic if,
