@@ -107,6 +107,20 @@ module RDF; class Query
     alias_method :filter!, :filter
 
     ##
+    # Difference between solution sets, from SPARQL 1.1.
+    #
+    # The `minus` operation on solutions returns those solutions which either have no compatible solution in `other`, or the solution domains are disjoint.
+    #
+    # @param [RDF::Query::Solutions] other
+    # @return [RDF::Query::Solutions] a new solution set
+    # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
+    def -(other)
+      self.dup.filter! do |soln|
+        !other.any? {|soln2| soln.compatible?(soln2) && !soln.disjoint?(soln2)}
+      end
+    end
+
+    ##
     # Reorders this solution sequence by the given `variables`.
     #
     # Variables may be symbols or {Query::Variable} instances.
