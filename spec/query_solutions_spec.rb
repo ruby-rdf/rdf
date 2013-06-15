@@ -123,7 +123,7 @@ describe RDF::Query::Solutions do
       ],
     }.each do |name, (left, right, result)|
       it name do
-        (left - right).should =~ result
+        left.minus(right).should =~ result
       end
     end
   end
