@@ -7,5 +7,5 @@ rvm:
   - 1.9.3
   - 2.0.0
   - ruby-head
-  - jruby-19mode # JRuby in 1.9 mode
+  - jruby-19mode-1.7.4
   - rbx-19mode
