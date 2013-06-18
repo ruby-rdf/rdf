@@ -149,16 +149,28 @@ module RDF
     Vocabulary.create(uri)
   end
 
-  ##
-  # @return [URI]
-  def self.type
-    self[:type]
-  end
-
-  ##
-  # @return [URI]
-  def self.value
-    self[:value]
+  # RDF Vocabulary terms
+  %w(
+    Alt
+    Bag
+    first
+    HTML
+    langString
+    List
+    nil
+    object
+    predicate
+    Property
+    rest
+    Seq
+    Statement
+    subject
+    type
+    value
+    XMLLiteral
+  ).each do |term|
+    define_method(term) {self[term.to_sym]}
+    module_function term.to_sym
   end
 
   ##
