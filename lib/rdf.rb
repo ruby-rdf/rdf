@@ -156,6 +156,12 @@ module RDF
   end
 
   ##
+  # @return [URI]
+  def self.value
+    self[:value]
+  end
+
+  ##
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
