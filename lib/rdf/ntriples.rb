@@ -32,9 +32,8 @@ module RDF
   # @example Requiring the `RDF::NTriples` module explicitly
   #   require 'rdf/ntriples'
   #
-  # @see http://www.w3.org/TR/rdf-testcases/#ntriples
+  # @see http://www.w3.org/TR/n-triples/
   # @see http://en.wikipedia.org/wiki/N-Triples
-  # @see http://librdf.org/ntriples/
   #
   # @author [Arto Bendiken](http://ar.to/)
   module NTriples

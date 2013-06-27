@@ -17,7 +17,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * 100% pure Ruby with minimal dependencies and no bloat.
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
-* Supports parsing and serializing N-Triples out of the box, with more
+* Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
   serialization format support available through add-on plugins.
 * Includes in-memory graph and repository implementations, with more storage
   adapter support available through add-on plugins.
@@ -41,7 +41,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 When installed, RDF.rb includes a `rdf` shell script which acts as a wrapper to perform a number of different
 operations on RDF files using available readers and writers.
 
-* `serialize`: Parse an RDF input and re-serializing to N-Triples or another available format using `--output-format` option.
+* `serialize`: Parse an RDF input and re-serializing to [N-Triples][] or another available format using `--output-format` option.
 * `count`: Parse and RDF input and count the number of statements.
 * `subjects`: Returns unique subjects from parsed input.
 * `objects`: Returns unique objects from parsed input.
@@ -52,7 +52,7 @@ operations on RDF files using available readers and writers.
     require 'rdf'
     include RDF
 
-### Writing RDF data using the N-Triples format
+### Writing RDF data using the [N-Triples][] format
 
     require 'rdf/ntriples'
     graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
@@ -62,7 +62,7 @@ or
 
     RDF::Writer.open("hello.nt") { |writer| writer << graph }
 
-### Reading RDF data in the N-Triples format
+### Reading RDF data in the [N-Triples][] format
 
     require 'rdf/ntriples'
     graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
@@ -359,6 +359,8 @@ This is free and unencumbered public domain software. For more information,
 see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
 [RDF]:              http://www.w3.org/RDF/
+[N-Triples]:        http://www.w3.org/TR/n-triples/
+[N-Quads]:          http://www.w3.org/TR/n-quads/
 [YARD]:             http://yardoc.org/
 [YARD-GS]:          http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html

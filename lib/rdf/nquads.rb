@@ -17,7 +17,7 @@ module RDF
     #   RDF::Format.for(:content_type   => "application/n-quads")
     #   RDF::Format.for(:content_type   => "text/x-nquads")
     #
-    # @see http://sw.deri.org/2008/07/n-quads/#mediatype
+    # @see http://www.w3.org/TR/n-quads/
     # @since  0.4.0
     class Format < RDF::Format
       content_type     'application/n-quads', :extension => :nq, :alias => ['text/x-nquads']

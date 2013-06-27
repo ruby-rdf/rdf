@@ -30,5 +30,5 @@ end
 
 desc "Generate etc/doap.nt from etc/doap.ttl."
 task :doap do
-  sh "rdf serialize etc/doap.ttl --output etc/doap.nt"
+  sh "bin/rdf serialize etc/doap.ttl --output etc/doap.nt"
 end
