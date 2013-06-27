@@ -102,6 +102,7 @@ describe RDF::NQuads::Reader do
       'etc/doap.nq',
       {:file_name      => 'etc/doap.nq'},
       {:file_extension => 'nq'},
+      {:content_type   => 'application/n-quads'},
       {:content_type   => 'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
@@ -112,15 +113,15 @@ describe RDF::NQuads::Reader do
 
   context "when created" do
     it "should accept files" do
-      lambda { @reader_class.new(File.open(testfile)) }.should_not raise_error
+      expect { @reader_class.new(File.open(testfile)) }.to_not raise_error
     end
 
     it "should accept IO streams" do
-      lambda { @reader_class.new(StringIO.new('')) }.should_not raise_error
+      expect { @reader_class.new(StringIO.new('')) }.to_not raise_error
     end
 
     it "should accept strings" do
-      lambda { @reader_class.new('') }.should_not raise_error
+      expect { @reader_class.new('') }.to_not raise_error
     end
   end
 
@@ -130,15 +131,15 @@ describe RDF::NQuads::Reader do
     end
 
     it "should accept files" do
-      lambda { @reader_class.new(File.open(@testfile)) }.should_not raise_error
+      expect { @reader_class.new(File.open(@testfile)) }.to_not raise_error
     end
 
     it "should accept IO streams" do
-      lambda { @reader_class.new(StringIO.new('')) }.should_not raise_error
+      expect { @reader_class.new(StringIO.new('')) }.to_not raise_error
     end
 
     it "should accept strings" do
-      lambda { @reader_class.new('') }.should_not raise_error
+      expect { @reader_class.new('') }.to_not raise_error
     end
   end
 
