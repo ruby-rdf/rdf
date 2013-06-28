@@ -405,14 +405,14 @@ module RDF
         @@content_types[type] << self unless @@content_types[type].include?(self)
 
         if extensions = (options[:extension] || options[:extensions])
-          extensions = [extensions].flatten.map(&:to_sym)
+          extensions = Array(extensions).map(&:to_sym)
           extensions.each do |ext|
             @@file_extensions[ext] ||= []
             @@file_extensions[ext] << self unless @@file_extensions[ext].include?(self)
           end
         end
         if aliases = (options[:alias] || options[:aliases])
-          aliases = [aliases].flatten.each do |a|
+          aliases = Array(aliases).each do |a|
             @@content_types[a] ||= []
             @@content_types[a] << self unless @@content_types[a].include?(self)
           end
