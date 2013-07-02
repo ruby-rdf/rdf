@@ -41,7 +41,7 @@ module RDF; class Literal
     end
 
     ##
-    # Returns the successor value of `self`.
+    # Returns the predecessor value of `self`.
     #
     # @return [RDF::Literal]
     # @since  0.2.3
@@ -50,7 +50,7 @@ module RDF; class Literal
     end
 
     ##
-    # Returns the predecessor value of `self`.
+    # Returns the successor value of `self`.
     #
     # @return [RDF::Literal]
     # @since  0.2.3
