@@ -5,16 +5,16 @@ describe RDF::Vocabulary do
 
   context "when created" do
     it "should require one argument" do
-      lambda { RDF::Vocabulary.new }.should raise_error(ArgumentError)
-      lambda { RDF::Vocabulary.new("http://purl.org/dc/terms/") }.should_not raise_error
-      lambda { RDF::Vocabulary.new("http://purl.org/dc/terms/", "http://purl.org/dc/terms/") }.should raise_error(ArgumentError)
+      expect { RDF::Vocabulary.new }.to raise_error(ArgumentError)
+      expect { RDF::Vocabulary.new("http://purl.org/dc/terms/") }.not_to raise_error
+      expect { RDF::Vocabulary.new("http://purl.org/dc/terms/", "http://purl.org/dc/terms/") }.to raise_error(ArgumentError)
     end
   end
 
   context "pre-defined vocabularies" do
     it "should support pre-defined vocabularies" do
       VOCABS.map { |s| s.to_s.upcase.to_sym }.each do |vocab|
-        lambda { RDF.const_get(vocab) }.should_not raise_error(NameError)
+        expect { RDF.const_get(vocab) }.not_to raise_error
       end
     end
 

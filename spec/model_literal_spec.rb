@@ -39,15 +39,15 @@ describe RDF::Literal do
 
    describe "new" do
      it "instantiates empty string" do
-       lambda { RDF::Literal.new('') }.should_not raise_error
+       expect { RDF::Literal.new('') }.not_to raise_error
      end
 
      it "instantiates empty string with language" do
-       lambda { RDF::Literal.new('', :language => :en) }.should_not raise_error
+       expect { RDF::Literal.new('', :language => :en) }.not_to raise_error
      end
 
      it "instantiates from native datatype" do
-       lambda { RDF::Literal.new(123) }.should_not raise_error
+       expect { RDF::Literal.new(123) }.not_to raise_error
      end
 
      describe "c18n" do
@@ -914,7 +914,7 @@ describe RDF::Literal do
          "no language with rdf:langString" => {:value => "foo", :datatype => RDF::langString},
        }.each do |name, opts|
          it "raises error for #{name}" do
-           lambda {RDF::Literal.new(opts.delete(:value), opts)}.should raise_error(ArgumentError)
+           expect {RDF::Literal.new(opts.delete(:value), opts)}.to raise_error(ArgumentError)
          end
        end
 
@@ -924,7 +924,7 @@ describe RDF::Literal do
          "language with rdf:langString" => {:value => "foo", :language => "en", :datatype => RDF::langString},
        }.each do |name, opts|
          it "should not raise error for #{name}" do
-           lambda {RDF::Literal.new(opts.delete(value), opts)}.should_not raise_error(ArgumentError)
+           expect {RDF::Literal.new(opts.delete(:value), opts)}.not_to raise_error
          end
        end
      end
@@ -963,7 +963,7 @@ describe RDF::Literal do
          it "raises TypeError for #{label}" do
            left.extend(RDF::TypeCheck)
            right.extend(RDF::TypeCheck)
-           lambda {left == right}.should raise_error(TypeError)
+           expect {left == right}.to raise_error(TypeError)
          end
        end
      end
@@ -1037,11 +1037,11 @@ describe RDF::Literal do
     end      
 
     it "Creating a language-tagged literal (2)" do
-      lambda {
+      expect {
         RDF::Literal.new("Wazup?", :language => :"en-US")
         RDF::Literal.new("Hej!",   :language => :sv)
         RDF::Literal.new("¡Hola!", :language => :es)
-      }.should_not raise_error
+      }.not_to raise_error
     end      
 
     it "Creating an explicitly datatyped literal" do

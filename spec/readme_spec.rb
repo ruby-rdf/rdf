@@ -36,7 +36,7 @@ describe 'README' do
     }.each do |example, code|
       context example do
         before(:each) {code.call}
-        it {lambda {code.call}.should_not raise_error}
+        it {expect {code.call}.not_to raise_error}
         it "should not have output" do
           $stdout.string.lines.to_a.should be_empty
         end
@@ -75,7 +75,7 @@ describe 'README' do
     }.each do |example, code|
       context example do
         before(:each) {code.call}
-        it {lambda {code.call}.should_not raise_error}
+        it {expect {code.call}.not_to raise_error}
         it "should have output" do
           $stdout.string.lines.to_a.should_not be_empty
         end
@@ -110,7 +110,7 @@ describe 'README' do
     }.each do |example, code|
       context example do
         before(:each) {code.call}
-        it {lambda {code.call}.should_not raise_error}
+        it {expect {code.call}.not_to raise_error}
         it "should have output" do
           $stdout.string.lines.to_a.should_not be_empty
         end
@@ -144,7 +144,7 @@ describe 'README' do
     }.each do |example, code|
       context example do
         before(:each) {code.call}
-        it {lambda {code.call}.should_not raise_error}
+        it {expect {code.call}.not_to raise_error}
         it "should not have output" do
           $stdout.string.lines.to_a.should be_empty
         end
@@ -172,7 +172,7 @@ describe 'README' do
     end
 
     it "should not raise errors" do
-      lambda { example3 }.should_not raise_error
+      expect { example3 }.not_to raise_error
     end
 
     before(:each) { example3 }
@@ -213,7 +213,7 @@ describe 'README' do
       :string => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")['knows']}
     }.each do |example, code|
       context example do
-        it {lambda {code.call}.should_not raise_error}
+        it {expect {code.call}.not_to raise_error}
         it {code.call.should == RDF::FOAF.knows}
       end
     end

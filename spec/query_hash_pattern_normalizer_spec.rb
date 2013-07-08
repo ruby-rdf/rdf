@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe RDF::Query::HashPatternNormalizer do
   context "new" do
     it "is instantiable" do
-      lambda { RDF::Query::HashPatternNormalizer.new }.should_not raise_error
+      expect { RDF::Query::HashPatternNormalizer.new }.not_to raise_error
     end
   end
   
@@ -14,7 +14,7 @@ describe RDF::Query::HashPatternNormalizer do
     
     it "should raise an error if outer-most object is not a hash-pattern" do
       expect { @hash_pattern_normalizer.normalize!(42) }.to raise_error(ArgumentError)
-      expect { @hash_pattern_normalizer.normalize!({}) }.to_not raise_error(ArgumentError)
+      expect { @hash_pattern_normalizer.normalize!({}) }.to_not raise_error
     end
     
     it "should be idempotent" do

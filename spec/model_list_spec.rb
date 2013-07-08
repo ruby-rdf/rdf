@@ -30,71 +30,71 @@ describe RDF::List do
     end
 
     it "accepts list arguments" do
-      lambda { RDF::List[RDF::List[]] }.should_not raise_error
+      expect { RDF::List[RDF::List[]] }.not_to raise_error
     end
 
     it "accepts array arguments" do
-      lambda { RDF::List[[1]] }.should_not raise_error
+      expect { RDF::List[[1]] }.not_to raise_error
       l1 = RDF::List[[1]]
       l1.size.should == 1
       l1.first.should be_a(RDF::Node)
-      lambda { RDF::List.new(l1.first, l1.graph) }.should_not raise_error
+      expect { RDF::List.new(l1.first, l1.graph) }.not_to raise_error
       l2 = RDF::List.new(l1.first, l1.graph)
       l2.first.should == RDF::Literal(1)
     end
 
     it "accepts blank node arguments" do
-      lambda { RDF::List[RDF::Node.new] }.should_not raise_error
+      expect { RDF::List[RDF::Node.new] }.not_to raise_error
     end
 
     it "accepts URI arguments" do
-      lambda { RDF::List[RDF.nil] }.should_not raise_error
+      expect { RDF::List[RDF.nil] }.not_to raise_error
     end
 
     it "accepts nil arguments" do
-      lambda { RDF::List[nil] }.should_not raise_error
+      expect { RDF::List[nil] }.not_to raise_error
     end
 
     it "accepts literal arguments" do
-      lambda { RDF::List[RDF::Literal.new("Hello, world!", :language => :en)] }.should_not raise_error
+      expect { RDF::List[RDF::Literal.new("Hello, world!", :language => :en)] }.not_to raise_error
     end
 
     it "accepts boolean arguments" do
-      lambda { RDF::List[true, false] }.should_not raise_error
+      expect { RDF::List[true, false] }.not_to raise_error
     end
 
     it "accepts string arguments" do
-      lambda { RDF::List["foo", "bar"] }.should_not raise_error
+      expect { RDF::List["foo", "bar"] }.not_to raise_error
     end
 
     it "accepts integer arguments" do
-      lambda { RDF::List[1, 2, 3] }.should_not raise_error
+      expect { RDF::List[1, 2, 3] }.not_to raise_error
     end
 
     it "accepts float arguments" do
-      lambda { RDF::List[3.1415] }.should_not raise_error
+      expect { RDF::List[3.1415] }.not_to raise_error
     end
 
     it "accepts decimal arguments" do
-      lambda { RDF::List[BigDecimal("3.1415")] }.should_not raise_error
+      expect { RDF::List[BigDecimal("3.1415")] }.not_to raise_error
     end
 
     it "accepts time arguments" do
-      lambda { RDF::List[Time.now] }.should_not raise_error
+      expect { RDF::List[Time.now] }.not_to raise_error
     end
 
     it "accepts date arguments" do
-      lambda { RDF::List[Date.new(2010)] }.should_not raise_error
+      expect { RDF::List[Date.new(2010)] }.not_to raise_error
     end
 
     it "accepts datetime arguments" do
-      lambda { RDF::List[DateTime.new(2010)] }.should_not raise_error
+      expect { RDF::List[DateTime.new(2010)] }.not_to raise_error
     end
   end
 
   describe RDF::List, "#subject" do
     it "requires no arguments" do
-      lambda { empty.subject }.should_not raise_error(ArgumentError)
+      expect { empty.subject }.not_to raise_error
     end
 
     it "returns a resource" do
@@ -104,7 +104,7 @@ describe RDF::List do
 
   describe RDF::List, "#graph" do
     it "requires no arguments" do
-      lambda { empty.graph }.should_not raise_error(ArgumentError)
+      expect { empty.graph }.not_to raise_error
     end
 
     it "returns a graph" do
@@ -114,11 +114,11 @@ describe RDF::List do
 
   describe RDF::List, "#&" do
     it "accepts one argument" do
-      lambda { empty & empty }.should_not raise_error(ArgumentError)
+      expect { empty & empty }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { empty.__send__(:&) }.should raise_error(ArgumentError)
+      expect { empty.__send__(:&) }.to raise_error(ArgumentError)
     end
 
     it "returns the set intersection of self and the given argument" do
@@ -130,11 +130,11 @@ describe RDF::List do
 
   describe RDF::List, "#|" do
     it "accepts one argument" do
-      lambda { empty | empty }.should_not raise_error(ArgumentError)
+      expect { empty | empty }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { empty.__send__(:|) }.should raise_error(ArgumentError)
+      expect { empty.__send__(:|) }.to raise_error(ArgumentError)
     end
 
     it "returns the set union of self and the given argument" do
@@ -146,11 +146,11 @@ describe RDF::List do
 
   describe RDF::List, "#+" do
     it "accepts one argument" do
-      lambda { empty + empty }.should_not raise_error(ArgumentError)
+      expect { empty + empty }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { empty.__send__(:+) }.should raise_error(ArgumentError)
+      expect { empty.__send__(:+) }.to raise_error(ArgumentError)
     end
 
     it "returns the concatenation of self and the given argument" do
@@ -160,11 +160,11 @@ describe RDF::List do
 
   describe RDF::List, "#-" do
     it "accepts one argument" do
-      lambda { @nil - empty }.should_not raise_error(ArgumentError)
+      expect { RDF::List::NIL - empty }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { empty.__send__(:-) }.should raise_error(ArgumentError)
+      expect { empty.__send__(:-) }.to raise_error(ArgumentError)
     end
 
     it "returns the difference between self and the given argument" do
@@ -174,11 +174,11 @@ describe RDF::List do
 
   describe RDF::List, "#*" do
     it "accepts one argument" do
-      lambda { empty * 1 }.should_not raise_error(ArgumentError)
+      expect { empty * 1 }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { empty.__send__(:*) }.should raise_error(ArgumentError)
+      expect { empty.__send__(:*) }.to raise_error(ArgumentError)
     end
   end
 
@@ -196,11 +196,11 @@ describe RDF::List do
 
   describe RDF::List, "#[]" do
     it "accepts one argument" do
-      lambda { empty[0] }.should_not raise_error(ArgumentError)
+      expect { empty[0] }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { empty.__send__(:[]) }.should raise_error(ArgumentError)
+      expect { empty.__send__(:[]) }.to raise_error(ArgumentError)
     end
 
     it "returns a value for valid indexes" do
@@ -219,11 +219,11 @@ describe RDF::List do
 
   describe RDF::List, "#<<" do
     it "accepts one argument" do
-      lambda { ten << 11 }.should_not raise_error(ArgumentError)
+      expect { ten << 11 }.not_to raise_error
     end
 
     it "rejects fewer arguments" do
-      lambda { ten.__send__(:<<) }.should raise_error(ArgumentError)
+      expect { ten.__send__(:<<) }.to raise_error(ArgumentError)
     end
 
     it "appends the new value at the tail of the list" do
@@ -275,7 +275,7 @@ describe RDF::List do
 
   describe RDF::List, "#eql?" do
     it "requires an argument" do
-      lambda { empty.send(:eql?) }.should raise_error(ArgumentError)
+      expect { empty.send(:eql?) }.to raise_error(ArgumentError)
     end
 
     it "returns true when given the same list" do
@@ -287,7 +287,7 @@ describe RDF::List do
 
   describe RDF::List, "#<=>" do
     it "requires an argument" do
-      lambda { empty.send(:<=>) }.should raise_error(ArgumentError)
+      expect { empty.send(:<=>) }.to raise_error(ArgumentError)
     end
 
     it "returns 0 when given the same list" do
@@ -297,7 +297,7 @@ describe RDF::List do
 
   describe RDF::List, "#==" do
     it "requires an argument" do
-      lambda { empty.send(:==) }.should raise_error(ArgumentError)
+      expect { empty.send(:==) }.to raise_error(ArgumentError)
     end
 
     it "returns true when given the same list" do
@@ -307,7 +307,7 @@ describe RDF::List do
 
   describe RDF::List, "#===" do
     it "requires an argument" do
-      lambda { empty.send(:===) }.should raise_error(ArgumentError)
+      expect { empty.send(:===) }.to raise_error(ArgumentError)
     end
 
     it "returns true when given the same list" do
@@ -319,7 +319,7 @@ describe RDF::List do
 
   describe RDF::List, "#empty?" do
     it "requires no arguments" do
-      lambda { empty.empty? }.should_not raise_error(ArgumentError)
+      expect { empty.empty? }.not_to raise_error
     end
 
     it "returns a boolean" do
@@ -331,7 +331,7 @@ describe RDF::List do
 
   describe RDF::List, "#length" do
     it "requires no arguments" do
-      lambda { empty.length }.should_not raise_error(ArgumentError)
+      expect { empty.length }.not_to raise_error
     end
 
     it "returns an integer" do
@@ -354,13 +354,13 @@ describe RDF::List do
 
   describe RDF::List, "#index" do
     it "accepts one argument" do
-      lambda { ten.index(nil) }.should_not raise_error(ArgumentError)
+      expect { ten.index(nil) }.not_to raise_error
     end
   end
 
   describe RDF::List, "#slice using an element index" do
     it "accepts one argument" do
-      lambda { ten.slice(0) }.should_not raise_error(ArgumentError)
+      expect { ten.slice(0) }.not_to raise_error
     end
 
     it "returns a value" do
@@ -370,7 +370,7 @@ describe RDF::List do
 
   describe RDF::List, "#slice using a start index and a length" do
     it "accepts two arguments" do
-      lambda { ten.slice(0, 9) }.should_not raise_error(ArgumentError)
+      expect { ten.slice(0, 9) }.not_to raise_error
     end
 
     it "returns a value" do
@@ -380,14 +380,14 @@ describe RDF::List do
 
   describe RDF::List, "#slice using a range" do
     it "accepts one argument" do
-      lambda { ten.slice(0..9) }.should_not raise_error(ArgumentError)
+      expect { ten.slice(0..9) }.not_to raise_error
     end
   end
 
   describe RDF::List, "#fetch" do
     it "requires one argument" do
-      lambda { ten.fetch }.should raise_error(ArgumentError)
-      lambda { ten.fetch(0) }.should_not raise_error(ArgumentError)
+      expect { ten.fetch }.to raise_error(ArgumentError)
+      expect { ten.fetch(0) }.not_to raise_error
     end
 
     it "returns a value" do
@@ -400,31 +400,31 @@ describe RDF::List do
     end
 
     it "raises IndexError for invalid indexes" do
-      lambda { ten.fetch(20) }.should raise_error(IndexError)
+      expect { ten.fetch(20) }.to raise_error(IndexError)
     end
   end
 
   describe RDF::List, "#fetch with a default value" do
     it "accepts two arguments" do
-      lambda { ten.fetch(0, nil) }.should_not raise_error(ArgumentError)
+      expect { ten.fetch(0, nil) }.not_to raise_error
     end
 
     it "returns the second argument for invalid indexes" do
-      lambda { ten.fetch(20, nil) }.should_not raise_error(IndexError)
+      expect { ten.fetch(20, nil) }.not_to raise_error
       ten.fetch(20, true).should == true
     end
   end
 
   describe RDF::List, "#fetch with a block" do
     it "yields to the given block for invalid indexes" do
-      lambda { ten.fetch(20) { |index| } }.should_not raise_error(IndexError)
+      expect { ten.fetch(20) { |index| } }.not_to raise_error
       ten.fetch(20) { |index| true }.should == true
     end
   end
 
   describe RDF::List, "#at" do
     it "accepts one argument" do
-      lambda { ten.at(0) }.should_not raise_error(ArgumentError)
+      expect { ten.at(0) }.not_to raise_error
     end
   end
 
@@ -439,7 +439,7 @@ describe RDF::List do
   ORDINALS.each_with_index do |ordinal, index|
     describe RDF::List, "##{ordinal}" do
       it "requires no arguments" do
-        lambda { ten.__send__(ordinal.to_sym) }.should_not raise_error(ArgumentError)
+        expect { ten.__send__(ordinal.to_sym) }.not_to raise_error
       end
 
       it "returns a value" do
@@ -454,43 +454,43 @@ describe RDF::List do
 
   describe RDF::List, "#last" do
     it "requires no arguments" do
-      lambda { ten.last }.should_not raise_error(ArgumentError)
+      expect { ten.last }.not_to raise_error
     end
   end
 
   describe RDF::List, "#rest" do
     it "requires no arguments" do
-      lambda { ten.rest }.should_not raise_error(ArgumentError)
+      expect { ten.rest }.not_to raise_error
     end
   end
 
   describe RDF::List, "#tail" do
     it "requires no arguments" do
-      lambda { ten.tail }.should_not raise_error(ArgumentError)
+      expect { ten.tail }.not_to raise_error
     end
   end
 
   describe RDF::List, "#first_subject" do
     it "requires no arguments" do
-      lambda { ten.first_subject }.should_not raise_error(ArgumentError)
+      expect { ten.first_subject }.not_to raise_error
     end
   end
 
   describe RDF::List, "#rest_subject" do
     it "requires no arguments" do
-      lambda { ten.rest_subject }.should_not raise_error(ArgumentError)
+      expect { ten.rest_subject }.not_to raise_error
     end
   end
 
   describe RDF::List, "#last_subject" do
     it "requires no arguments" do
-      lambda { ten.last_subject }.should_not raise_error(ArgumentError)
+      expect { ten.last_subject }.not_to raise_error
     end
   end
 
   describe RDF::List, "#each_subject without a block" do
     it "requires no arguments" do
-      lambda { ten.each_subject }.should_not raise_error(ArgumentError)
+      expect { ten.each_subject }.not_to raise_error
     end
 
     it "returns an enumerator" do
@@ -500,7 +500,7 @@ describe RDF::List do
 
   describe RDF::List, "#each_subject with a block" do
     it "requires no arguments" do
-      lambda { ten.each_subject { |subject| } }.should_not raise_error(ArgumentError)
+      expect { ten.each_subject { |subject| } }.not_to raise_error
     end
 
     it "yields all subject terms in the list" do
@@ -512,7 +512,7 @@ describe RDF::List do
 
   describe RDF::List, "#each without a block" do
     it "requires no arguments" do
-      lambda { ten.each }.should_not raise_error(ArgumentError)
+      expect { ten.each }.not_to raise_error
     end
 
     it "returns an enumerator" do
@@ -522,7 +522,7 @@ describe RDF::List do
 
   describe RDF::List, "#each with a block" do
     it "requires no arguments" do
-      lambda { ten.each { |value| } }.should_not raise_error(ArgumentError)
+      expect { ten.each { |value| } }.not_to raise_error
     end
 
     it "yields the correct number of times" do
@@ -533,7 +533,7 @@ describe RDF::List do
 
   describe RDF::List, "#each_statement without a block" do
     it "requires no arguments" do
-      lambda { ten.each_statement }.should_not raise_error(ArgumentError)
+      expect { ten.each_statement }.not_to raise_error
     end
 
     it "returns an enumerator" do
@@ -543,7 +543,7 @@ describe RDF::List do
 
   describe RDF::List, "#each_statement with a block" do
     it "requires no arguments" do
-      lambda { ten.each_statement { |statement| } }.should_not raise_error(ArgumentError)
+      expect { ten.each_statement { |statement| } }.not_to raise_error
     end
 
     it "yields the correct number of times" do
@@ -560,11 +560,11 @@ describe RDF::List do
 
   describe RDF::List, "#join" do
     it "requires no arguments" do
-      lambda { empty.join }.should_not raise_error(ArgumentError)
+      expect { empty.join }.not_to raise_error
     end
 
     it "accepts one argument" do
-      lambda { empty.join(', ') }.should_not raise_error(ArgumentError)
+      expect { empty.join(', ') }.not_to raise_error
     end
 
     it "returns a string" do
@@ -579,7 +579,7 @@ describe RDF::List do
 
   describe RDF::List, "#reverse" do
     it "requires no arguments" do
-      lambda { empty.reverse }.should_not raise_error(ArgumentError)
+      expect { empty.reverse }.not_to raise_error
     end
 
     it "returns a list" do
@@ -593,7 +593,7 @@ describe RDF::List do
 
   describe RDF::List, "#sort without a block" do
     it "requires no arguments" do
-      lambda { empty.sort }.should_not raise_error(ArgumentError)
+      expect { empty.sort }.not_to raise_error
     end
 
     it "returns a list" do
@@ -603,7 +603,7 @@ describe RDF::List do
 
   describe RDF::List, "#sort with a block" do
     it "requires no arguments" do
-      lambda { empty.sort { |a, b| } }.should_not raise_error(ArgumentError)
+      expect { empty.sort { |a, b| } }.not_to raise_error
     end
 
     it "returns a list" do
@@ -613,7 +613,7 @@ describe RDF::List do
 
   describe RDF::List, "#sort_by with a block" do
     it "requires no arguments" do
-      lambda { empty.sort_by { |value| } }.should_not raise_error(ArgumentError)
+      expect { empty.sort_by { |value| } }.not_to raise_error
     end
 
     it "returns a list" do
@@ -623,7 +623,7 @@ describe RDF::List do
 
   describe RDF::List, "#uniq" do
     it "requires no arguments" do
-      lambda { empty.uniq }.should_not raise_error(ArgumentError)
+      expect { empty.uniq }.not_to raise_error
     end
 
     it "returns a list" do
@@ -637,7 +637,7 @@ describe RDF::List do
 
   describe RDF::List, "#to_a" do
     it "requires no arguments" do
-      lambda { empty.to_a }.should_not raise_error(ArgumentError)
+      expect { empty.to_a }.not_to raise_error
     end
 
     it "returns an array" do
@@ -653,7 +653,7 @@ describe RDF::List do
 
   describe RDF::List, "#to_set" do
     it "requires no arguments" do
-      lambda { empty.to_set }.should_not raise_error(ArgumentError)
+      expect { empty.to_set }.not_to raise_error
     end
 
     it "returns a set" do
@@ -673,7 +673,7 @@ describe RDF::List do
 
   describe RDF::List, "#to_s" do
     it "requires no arguments" do
-      lambda { empty.to_s }.should_not raise_error(ArgumentError)
+      expect { empty.to_s }.not_to raise_error
     end
 
     it "returns a string" do
@@ -683,7 +683,7 @@ describe RDF::List do
 
   describe RDF::List, "#inspect" do
     it "requires no arguments" do
-      lambda { empty.inspect }.should_not raise_error(ArgumentError)
+      expect { empty.inspect }.not_to raise_error
     end
 
     it "returns a string" do
@@ -886,7 +886,7 @@ describe RDF::List do
         }.each do |input, output|
           input.should == output
         end
-        lambda {subject.fetch(4).should raise_error(IndexError)}
+        expect {subject.fetch(4).to raise_error(IndexError)}
       end
     end
 

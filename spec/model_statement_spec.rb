@@ -11,9 +11,9 @@ describe RDF::Statement do
 
   context "when initializing" do
     it "should be instantiable with a hash argument" do
-      lambda { RDF::Statement.new(:subject => @s,
+      expect { RDF::Statement.new(:subject => @s,
                                   :predicate => @p,
-                                  :object => @o) }.should_not raise_error(ArgumentError)
+                                  :object => @o) }.not_to raise_error
 
     end
 
@@ -34,7 +34,7 @@ describe RDF::Statement do
 
   context "when created" do
     it "should not require arguments" do
-      lambda { RDF::Statement.new }.should_not raise_error(ArgumentError)
+      expect { RDF::Statement.new }.not_to raise_error
     end
 
     it "should have a subject" do

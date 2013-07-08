@@ -16,7 +16,7 @@ describe RDF::Query do
     let(:pattern) {RDF::Query::Pattern.new(RDF::URI("a"), RDF::URI("b"), "c")}
 
     it "should be instantiable" do
-      lambda { RDF::Query.new }.should_not raise_error
+      expect { RDF::Query.new }.not_to raise_error
     end
 
     it "adds patterns from closure" do
@@ -577,22 +577,22 @@ describe RDF::Query do
         # In the interest of compatibility, we enforce similar
         # restrictions, because the semantics of leading optional patterns
         # are hard to get right.
-        lambda do
+        expect do
           query = RDF::Query.new do |query|
             query.pattern [:s, EX.p2, :o], :optional => true
             query.pattern [:s, EX.p, EX.o]
           end
           query.execute(@graph)
-        end.should raise_error(ArgumentError)
+        end.to raise_error(ArgumentError)
 
-        lambda do
+        expect do
           query = RDF::Query.new do |query|
             query.pattern [:s, EX.p, EX.o]
             query.pattern [:s, EX.p2, :o], :optional => true
             query.pattern [:s, EX.x, EX.x]
           end
           query.execute(@graph)
-        end.should raise_error(ArgumentError)
+        end.to raise_error(ArgumentError)
       end
     end
 

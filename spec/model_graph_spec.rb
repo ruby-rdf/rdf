@@ -23,7 +23,7 @@ describe RDF::Graph do
 
   context "unnamed graphs" do
     it "should be instantiable" do
-      lambda { @new.call }.should_not raise_error
+      expect { @new.call }.not_to raise_error
     end
 
     it "should be unnamed" do
@@ -44,11 +44,11 @@ describe RDF::Graph do
       @new.call("http://ruby-rdf.github.com/rdf/etc/doap.nt", :data => RDF::Repository.new)
     }
     it "should be instantiable" do
-      lambda { subject }.should_not raise_error
+      expect { subject }.to_not raise_error
     end
 
     it "should not be instantiable by default" do
-      lambda { @new.call("http://rdf.rubyforge.org/") }.should raise_error
+      expect { @new.call("http://rdf.rubyforge.org/") }.to raise_error
     end
 
     its(:named?) {should be_true}
@@ -85,7 +85,7 @@ describe RDF::Graph do
 
     it "should not load! default graph" do
       graph = @new.call(nil, :data => repo)
-      lambda {graph.load!}.should raise_error(ArgumentError)
+      expect {graph.load!}.to raise_error(ArgumentError)
     end
 
     it "should reload named graph" do
@@ -116,11 +116,11 @@ describe RDF::Graph do
     let(:graph) {@new.call}
 
     it "Creating an empty unnamed graph" do
-      lambda {@new.call}.should_not raise_error
+      expect {@new.call}.not_to raise_error
     end
 
     it "Creating an empty named graph" do
-      lambda {@new.call("http://rubygems.org/", :data => RDF::Repository.new)}.should_not raise_error
+      expect {@new.call("http://rubygems.org/", :data => RDF::Repository.new)}.not_to raise_error
     end
 
     it "Loading graph data from a URL (1)" do

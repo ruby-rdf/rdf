@@ -6,7 +6,7 @@ describe RDF::Value do
   end
 
   it "should not be instantiable" do
-    lambda { @value.call }.should raise_error(NoMethodError)
+    expect { @value.call }.to raise_error(NoMethodError)
   end
 
   context "Examples" do
