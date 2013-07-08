@@ -6,7 +6,7 @@ describe RDF::Node do
   end
 
   it "should be instantiable" do
-    lambda { @new.call }.should_not raise_error
+    expect { @new.call }.not_to raise_error
   end
   
   it "== a node with the same identifier" do

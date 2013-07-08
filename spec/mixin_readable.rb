@@ -3,7 +3,7 @@ require 'rdf/spec/readable'
 
 describe RDF::Readable do
   before :each do
-    @readable = mock("Readable")
+    @readable = double("Readable")
     @readable.extend(RDF::Readable)
   end
 

@@ -28,13 +28,13 @@ describe RDF::Util::Aliasing do
 
   context "the aliased method" do
     it "should accept any arguments" do
-      lambda { @alias.aliased }.should_not raise_error
-      lambda { @alias.aliased(1) }.should_not raise_error
-      lambda { @alias.aliased(1, 2) }.should_not raise_error
+      expect { @alias.aliased }.not_to raise_error
+      expect { @alias.aliased(1) }.not_to raise_error
+      expect { @alias.aliased(1, 2) }.not_to raise_error
     end
 
     it "should accept a block" do
-      lambda { @alias.aliased(1, 2) do 3 end }.should_not raise_error
+      expect { @alias.aliased(1, 2) do 3 end }.not_to raise_error
     end
 
     it "should invoke the original method with the given arguments" do

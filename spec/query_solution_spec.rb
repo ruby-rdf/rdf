@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe RDF::Query::Solution do
   describe "new" do
     it "is instantiable" do
-      lambda { RDF::Query::Solution.new }.should_not raise_error
+      expect { RDF::Query::Solution.new }.not_to raise_error
     end
   end
   

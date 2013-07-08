@@ -11,7 +11,7 @@ describe RDF::Graph do
 
   context "unnamed graphs" do
     it "should be instantiable" do
-      lambda { @new.call }.should_not raise_error
+      expect { @new.call }.not_to raise_error
     end
 
     it "should be unnamed" do
@@ -29,7 +29,7 @@ describe RDF::Graph do
 
   context "named graphs" do
     it "should be instantiable" do
-      lambda { @new.call }.should_not raise_error
+      expect { @new.call }.not_to raise_error
     end
 
     it "should be named" do
@@ -76,11 +76,11 @@ describe RDF::Graph do
     let(:graph) {@new.call}
 
     it "Creating an empty unnamed graph" do
-      lambda {@new.call}.should_not raise_error
+      expect {@new.call}.not_to raise_error
     end
 
     it "Creating an empty named graph" do
-      lambda {@new.call("http://rubygems.org/")}.should_not raise_error
+      expect {@new.call("http://rubygems.org/")}.not_to raise_error
     end
 
     it "Loading graph data from a URL (1)" do

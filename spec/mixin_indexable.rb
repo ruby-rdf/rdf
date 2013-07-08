@@ -3,7 +3,7 @@ require 'rdf/spec/indexable'
 
 describe RDF::Indexable do
   before :each do
-    @indexable = mock("Indexable")
+    @indexable = double("Indexable")
     @indexable.extend(RDF::Indexable)
   end
 

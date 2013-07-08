@@ -134,7 +134,7 @@ describe RDF::Format do
     its(:file_extensions) {should include({:nt => [RDF::NTriples::Format]})}
 
     it "Defining a new RDF serialization format class" do
-      lambda {
+      expect {
         class RDF::NTriples::Format < RDF::Format
           content_type     'application/n-triples', :extension => :nt
           content_encoding 'utf-8'
@@ -142,21 +142,21 @@ describe RDF::Format do
           reader RDF::NTriples::Reader
           writer RDF::NTriples::Writer
         end
-      }.should_not raise_error
+      }.not_to raise_error
     end
 
     it "Instantiating an RDF reader or writer class (1)" do
-      lambda {
+      expect {
         subject.for(:ntriples).reader.new($stdin)  { |reader|}
         subject.for(:ntriples).writer.new($stdout) { |writer|}
-      }.should_not raise_error
+      }.not_to raise_error
     end
 
     it "Instantiating an RDF reader or writer class (2)" do
-      lambda {
+      expect {
         RDF::Reader.for(:ntriples).new($stdin)  { |reader|}
         RDF::Writer.for(:ntriples).new($stdout) { |writer|}
-      }.should_not raise_error
+      }.not_to raise_error
     end
 
     describe ".name" do

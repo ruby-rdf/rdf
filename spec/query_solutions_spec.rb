@@ -36,7 +36,7 @@ describe RDF::Query::Solutions do
 
   describe "new" do
     it "is instantiable" do
-      lambda { RDF::Query::Solutions.new }.should_not raise_error
+      expect { RDF::Query::Solutions.new }.not_to raise_error
       RDF::Query::Solutions.new.should be_a(Array)
     end
   end

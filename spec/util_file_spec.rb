@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Util::File do
   before(:each) do
-    @opened = mock("opened")
+    @opened = double("opened")
     @opened.should_receive(:opened)
     @uri = "http://ruby-rdf.github.com/rdf/etc/doap.nt"
   end

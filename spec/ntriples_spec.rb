@@ -180,15 +180,15 @@ describe RDF::NTriples do
 
   context "when created" do
     it "should accept files" do
-      lambda { @reader.new(File.open(testfile)) }.should_not raise_error
+      expect { @reader.new(File.open(testfile)) }.not_to raise_error
     end
 
     it "should accept IO streams" do
-      lambda { @reader.new(StringIO.new('')) }.should_not raise_error
+      expect { @reader.new(StringIO.new('')) }.not_to raise_error
     end
 
     it "should accept strings" do
-      lambda { @reader.new('') }.should_not raise_error
+      expect { @reader.new('') }.not_to raise_error
     end
   end
 
@@ -359,19 +359,19 @@ describe RDF::NTriples do
   context "when reading" do
     it "should parse empty lines" do
       ["\n", "\r\n", "\r"].each do |input|
-        lambda { @reader.new(input).to_a.should be_empty }.should_not raise_error
+        expect { @reader.new(input).to_a.should be_empty }.not_to raise_error
       end
     end
 
     it "should parse comment lines" do
       ["#\n", "# \n"].each do |input|
-        lambda { @reader.new(input).to_a.should be_empty }.should_not raise_error
+        expect { @reader.new(input).to_a.should be_empty }.not_to raise_error
       end
     end
 
     it "should parse comment lines preceded by whitespace" do
       ["\t#\n", " #\n"].each do |input|
-        lambda { @reader.new(input).to_a.should be_empty }.should_not raise_error
+        expect { @reader.new(input).to_a.should be_empty }.not_to raise_error
       end
     end
 
@@ -511,7 +511,7 @@ describe RDF::NTriples do
         "nt-syntax-bad-num-03" => %q(<http://example/s> <http://example/p> 1.0e0 .),
       }.each do |name, nt|
         it name do
-          lambda {@reader.new(nt, :validate => true).to_a}.should raise_error(RDF::ReaderError)
+          expect {@reader.new(nt, :validate => true).to_a}.to raise_error(RDF::ReaderError)
         end
       end
     end

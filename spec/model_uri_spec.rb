@@ -7,7 +7,7 @@ describe RDF::URI do
   end
 
   it "should be instantiable" do
-    lambda { @new.call('http://rdf.rubyforge.org/') }.should_not raise_error
+    expect { @new.call('http://rdf.rubyforge.org/') }.not_to raise_error
   end
 
   it "should recognize URNs" do
@@ -160,14 +160,14 @@ describe RDF::URI do
     describe "#validate" do
       it "raises ArgumentError if not valid" do
         subject.should_receive(:valid?).and_return(false)
-        lambda { subject.validate }.should raise_error(ArgumentError)
+        expect { subject.validate }.to raise_error(ArgumentError)
       end
     end
 
     describe "#validate!" do
       it "raises ArgumentError if not valid" do
         subject.should_receive(:valid?).and_return(false)
-        lambda { subject.validate! }.should raise_error(ArgumentError)
+        expect { subject.validate! }.to raise_error(ArgumentError)
       end
     end
   end
@@ -265,7 +265,7 @@ describe RDF::URI do
     end
 
     it "should raise an ArgumentError when receiving an absolute URI as a fragment" do
-      lambda { RDF::URI.new('http://example.org') / RDF::URI.new('http://example.com') }.should raise_error ArgumentError
+      expect { RDF::URI.new('http://example.org') / RDF::URI.new('http://example.com') }.to raise_error ArgumentError
     end
   end
 
