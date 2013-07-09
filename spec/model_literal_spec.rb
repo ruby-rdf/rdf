@@ -805,6 +805,17 @@ describe RDF::Literal do
     end
   end
 
+  describe RDF::Literal::Time do
+    subject {
+      double("time", :to_s => "05:50:00")
+    }
+    it "parses as string if #to_time raises an error" do
+      expect(subject).to receive(:to_time).at_least(:once).and_raise(StandardError)
+      expect {RDF::Literal::Time.new(subject)}.not_to raise_error
+      RDF::Literal::Time.new(subject).object.should == ::Time.parse(subject.to_s)
+    end
+  end
+
   describe "SPARQL tests" do
     context "#==" do
       {

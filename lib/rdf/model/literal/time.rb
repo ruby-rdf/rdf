@@ -22,7 +22,7 @@ module RDF; class Literal
       @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(::Time)         then value
-        when value.respond_to?(:to_time) then value.to_time # Ruby 1.9+
+        when value.respond_to?(:to_time) then value.to_time rescue ::Time.parse(value.to_s)
         else ::Time.parse(value.to_s)
       end rescue nil
     end
