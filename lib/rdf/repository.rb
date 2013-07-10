@@ -77,7 +77,7 @@ module RDF
     # @return [void]
     def self.load(filenames, options = {}, &block)
       self.new(options) do |repository|
-        [filenames].flatten.each do |filename|
+        Array(filenames).each do |filename|
           repository.load(filename, options)
         end
 

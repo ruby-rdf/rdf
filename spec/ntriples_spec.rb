@@ -469,8 +469,8 @@ describe RDF::NTriples do
         "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
       }.each_pair do |name, nt|
         specify "test #{name}" do
-          statement = @reader.unserialize([nt].flatten.first)
-          @writer.serialize(statement).chomp.should == [nt].flatten.last.gsub(/\s+/, " ").strip
+          statement = @reader.unserialize(Array(nt).first)
+          @writer.serialize(statement).chomp.should == Array(nt).last.gsub(/\s+/, " ").strip
         end
       end
     end
