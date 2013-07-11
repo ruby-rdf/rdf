@@ -19,12 +19,21 @@ module RDF
     #
     # @example Querying for statements having a given predicate
     #     queryable.query([nil, RDF::DOAP.developer, nil])
-    #     queryable.query(:predicate => RDF::DOAP.developer)
+    #     queryable.query(:predicate => RDF::DOAP.developer) do |statement|
+    #       puts statement.inspect
+    #     end
+    #
+    # @example Querying for solutions from a BGP
+    #     query = RDF::Query.new {pattern [:s, :p, :o]}
+    #     queryable.query(query) do |solution|
+    #       puts solution.inspect
+    #     end
     #
     # @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
     # @yield  [statement]
     #   each matching statement
-    # @yieldparam  [RDF::Statement] statement
+    # @yieldparam  [RDF::Statement, RDF::Query::Solution] statement
+    #   Statement or Solution
     # @yieldreturn [void] ignored
     # @return [Enumerator]
     # @see    RDF::Queryable#query_pattern

@@ -64,8 +64,11 @@ describe RDF::Query do
         "full graph" => RDF::Graph.load(fixture_path('test.nt'))
       }.each do |which, graph|
         context which do
-          it "returns a single empty solution" do
+          it "returns a single empty solution (query execute)" do
             subject.execute(graph).map(&:to_hash).should == [{}]
+          end
+          it "returns a single empty solution (graph execute)" do
+            graph.query(subject).map(&:to_hash).should == [{}]
           end
         end
       end
@@ -110,6 +113,7 @@ describe RDF::Query do
           query << [:s, EX.p1, 123.0]
         end
         query.execute(graph).map(&:to_hash).should == [{:s => EX.x1}]
+        graph.query(query).map(&:to_hash).should == [{:s => EX.x1}]
       end
     end
 
@@ -123,8 +127,13 @@ describe RDF::Query do
       subject {RDF::Query.new {pattern [:s, :p, :o]}}
 
        context "with no context" do
-         it "returns statements differing in context" do
+         it "returns statements differing in context (direct execute)" do
            subject.execute(repo).map(&:to_hash).should == [
+             {:s => EX.s1, :p => EX.p1, :o => EX.o1},
+             {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
+         end
+         it "returns statements differing in context (graph execute)" do
+           repo.query(subject).map(&:to_hash).should == [
              {:s => EX.s1, :p => EX.p1, :o => EX.o1},
              {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
          end
@@ -234,8 +243,6 @@ describe RDF::Query do
         end
         query.execute(graph).should have_result_set [ { :s => EX.x5 } ]
       end
-
-      it "?s p ?o with duplicates"
 
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
         query = RDF::Query.new do |query|
