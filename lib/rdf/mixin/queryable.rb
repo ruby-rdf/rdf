@@ -30,6 +30,8 @@ module RDF
     #     end
     #
     # @param  [RDF::Query, RDF::Statement, Array(RDF::Term), Hash] pattern
+    # @param  [Hash{Symbol => Object}] options ({})
+    #   Any other options passed to {#query_pattern} or {#query_execute}
     # @yield  [statement]
     #   each matching statement
     # @yieldparam  [RDF::Statement, RDF::Query::Solution] statement
@@ -37,7 +39,7 @@ module RDF
     # @yieldreturn [void] ignored
     # @return [Enumerator]
     # @see    RDF::Queryable#query_pattern
-    def query(pattern, &block)
+    def query(pattern, options = {}, &block)
       raise TypeError, "#{self} is not readable" if respond_to?(:readable?) && !readable?
 
       case pattern
@@ -45,7 +47,11 @@ module RDF
         when Query
           if block_given?
             before_query(pattern) if respond_to?(:before_query)
-            query_execute(pattern, &block)
+            if method(:query_execute).arity == 1
+              query_execute(pattern, &block)
+            else
+              query_execute(pattern, options, &block)
+            end
             after_query(pattern) if respond_to?(:after_query)
           end
           enum_for(:query_execute, pattern)
@@ -72,7 +78,13 @@ module RDF
 
             # Otherwise, we delegate to `#query_pattern`:
             else # pattern.variable?
-              query_pattern(pattern, &block) if block_given?
+              if block_given?
+                if self.method(:query_pattern).arity == 1
+                  query_pattern(pattern, &block)
+                else
+                  query_pattern(pattern, options, &block)
+                end
+              end
               enum_for(:query_pattern, pattern)
           end
           after_query(pattern) if block_given? && respond_to?(:after_query)
@@ -94,6 +106,8 @@ module RDF
     #
     # @param  [RDF::Query] query
     #   the query to execute
+    # @param  [Hash{Symbol => Object}] options ({})
+    #   Any other options passed to `query.execute`
     # @yield  [solution]
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [void] ignored
@@ -101,12 +115,12 @@ module RDF
     # @see    RDF::Queryable#query
     # @see    RDF::Query#execute
     # @since  0.3.0
-    def query_execute(query, &block)
+    def query_execute(query, options = {}, &block)
       # By default, we let RDF.rb's built-in `RDF::Query#execute` handle BGP
       # query execution by breaking down the query into its constituent
       # triple patterns and invoking `RDF::Query::Pattern#execute` on each
       # pattern.
-      query.execute(self).each(&block)
+      query.execute(self, options).each(&block)
     end
     protected :query_execute
 
@@ -120,6 +134,8 @@ module RDF
     #
     # @param  [RDF::Query::Pattern] pattern
     #   the query pattern to match
+    # @param  [Hash{Symbol => Object}] options ({})
+    #   Any other options
     # @yield  [statement]
     # @yieldparam  [RDF::Statement] statement
     # @yieldreturn [void] ignored
@@ -127,7 +143,7 @@ module RDF
     # @see    RDF::Queryable#query
     # @see    RDF::Query::Pattern#execute
     # @since  0.2.0
-    def query_pattern(pattern, &block)
+    def query_pattern(pattern, options = {}, &block)
       # By default, we let Ruby's built-in `Enumerable#grep` handle the
       # matching of statements by iterating over all statements and calling
       # `RDF::Query::Pattern#===` on each statement.
