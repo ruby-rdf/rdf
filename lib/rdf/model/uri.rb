@@ -225,16 +225,6 @@ module RDF
     end
 
     ##
-    # Returns a copy of this URI converted into its canonical lexical
-    # representation.
-    #
-    # @return [RDF::URI]
-    # @since  0.3.0
-    def canonicalize
-      self.dup.canonicalize!
-    end
-
-    ##
     # Converts this URI into its canonical lexical representation.
     #
     # @return [RDF::URI] `self`

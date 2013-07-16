@@ -157,6 +157,27 @@ module RDF
     alias_method :validate, :validate!
 
     ##
+    # Returns a copy of this value converted into its canonical
+    # representation.
+    #
+    # @return [RDF::Value]
+    # @since  1.0.8
+    def canonicalize
+      self.dup.canonicalize!
+    end
+
+    ##
+    # Converts this value into its canonical representation.
+    #
+    # Should be overridden by concrete classes.
+    #
+    # @return [RDF::Value] `self`
+    # @since  1.0.8
+    def canonicalize!
+      self
+    end
+
+    ##
     # Returns an `RDF::Value` representation of `self`.
     #
     # @return [RDF::Value]
