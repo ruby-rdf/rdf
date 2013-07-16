@@ -176,6 +176,23 @@ module RDF::NTriples
     end
 
     ##
+    # Initializes the writer.
+    #
+    # @param  [IO, File] output
+    #   the output stream
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional options. See {RDF::Writer#initialize}
+    # @option options [Boolean]  :validate (true)
+    #   whether to validate terms when serializing
+    # @yield  [writer] `self`
+    # @yieldparam  [RDF::Writer] writer
+    # @yieldreturn [void]
+    def initialize(output = $stdout, options = {}, &block)
+      options = {:validate => true}.merge(options)
+      super
+    end
+
+    ##
     # Outputs an N-Triples comment line.
     #
     # @param  [String] text

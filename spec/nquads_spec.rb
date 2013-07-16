@@ -239,6 +239,10 @@ describe RDF::NQuads::Writer do
 
 
   context "validataion" do
+    it "defaults validation to true" do
+      expect(subject).to be_validate
+    end
+
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
         let(:graph) {RDF::Repository.new << statement}
