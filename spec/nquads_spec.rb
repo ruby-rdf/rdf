@@ -237,6 +237,68 @@ describe RDF::NQuads::Writer do
     end
   end
 
+
+  context "validataion" do
+    shared_examples "validation" do |statement, valid|
+      context "given #{statement}" do
+        let(:graph) {RDF::Repository.new << statement}
+        subject {RDF::NTriples::Writer.buffer(:validate => true) {|w| w << graph}}
+        if valid
+          specify {expect {subject}.not_to raise_error}
+        else
+          specify {expect {subject}.to raise_error(RDF::WriterError)}
+        end
+      end
+    end
+    {
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF::Node("node")) => true,
+      RDF::Statement.new(RDF::Node("node"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Node("node"), :context => RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal"), :context => RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
+      RDF::Statement.new(nil, RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil, :context => RDF.to_uri) => false,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF::Literal("literal")) => false,
+    }.each do |st, valid|
+      include_examples "validation", st, valid
+    end
+  end
+
+  # Fixme, these should go in rdf/spec/writer.rb
+  context "c14n" do
+    shared_examples "c14n" do |statement, result|
+      context "given #{statement}" do
+        let(:graph) {RDF::Graph.new << statement}
+        subject {RDF::NTriples::Writer.buffer(:validate => false, :canonicalize => true) {|w| w << graph}}
+        if result
+          specify {expect(subject).to eq "#{result}\n"}
+        else
+          specify {expect {subject}.to raise_error(RDF::WriterError)}
+        end
+      end
+    end
+    {
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")),
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::Literal("literal")) =>
+        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::Literal("literal")),
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")),
+      RDF::Statement.new(nil, RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, nil) => nil,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
+    }.each do |st, result|
+      include_examples "c14n", st, result
+    end
+  end
+
   context "Examples" do
     it "needs specs for documentation examples"
   end
