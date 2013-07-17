@@ -1,6 +1,7 @@
 module RDF; class Query
   ##
   # An RDF basic graph pattern (BGP) query solution sequence.
+  # This mixin extends `Enumerator`.
   #
   # @example Filtering solutions using a hash
   #   solutions.filter(:author  => RDF::URI("http://ar.to/#self"))
@@ -40,8 +41,8 @@ module RDF; class Query
   #   solutions.each { |solution| puts solution.inspect }
   #
   # @since 0.3.0
-  class Solutions < Array
-    alias_method :each_solution, :each
+  module Solutions
+    extend RDF::Util::Aliasing::LateBound
 
     ##
     # Returns the number of matching query solutions.
@@ -77,20 +78,21 @@ module RDF; class Query
     end
     
     ##
-    # Filters this solution sequence by the given `criteria`.
+    # Filters this solution sequence by the given `criteria`, returning
+    # an Enumerator extended with Solutions
     #
     # @param  [Hash{Symbol => Object}] criteria
     # @yield  [solution]
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [Boolean]
-    # @return [void] `self`
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     def filter(criteria = {}, &block)
       if block_given?
-        self.reject! do |solution|
+        self.reject do |solution|
           !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
-        end
+        end.to_enum.extend(RDF::Query::Solutions)
       else
-        self.reject! do |solution|
+        self.reject do |solution|
           solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
           results = criteria.map do |name, value|
             case value
@@ -100,11 +102,9 @@ module RDF; class Query
             end
           end
           !results.all?
-        end
+        end.to_enum.extend(RDF::Query::Solutions)
       end
-      self
     end
-    alias_method :filter!, :filter
 
     ##
     # Difference between solution sets, from SPARQL 1.1.
@@ -112,16 +112,17 @@ module RDF; class Query
     # The `minus` operation on solutions returns those solutions which either have no compatible solution in `other`, or the solution domains are disjoint.
     #
     # @param [RDF::Query::Solutions] other
-    # @return [RDF::Query::Solutions] a new solution set
+    # @return [Enumerator] a new solution set
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
     def minus(other)
-      self.dup.filter! do |soln|
+      self.filter do |soln|
         !other.any? {|soln2| soln.compatible?(soln2) && !soln.disjoint?(soln2)}
       end
     end
 
     ##
-    # Reorders this solution sequence by the given `variables`.
+    # Reorders this solution sequence by the given `variables`
+    # returning a new Enumerator.
     #
     # Variables may be symbols or {Query::Variable} instances.
     # A variable may also be a Procedure/Lambda, compatible with `::Enumerable#sort`.
@@ -135,12 +136,12 @@ module RDF; class Query
     # @yieldparam  [RDF::Query::Solution] q
     # @yieldparam  [RDF::Query::Solution] b
     # @yieldreturn [Integer] -1, 0, or 1 depending on value of comparator
-    # @return [void] `self`
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     def order(*variables, &block)
       if variables.empty? && !block_given?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
       else
-        self.sort! do |a, b|
+        self.sort do |a, b|
           if block_given?
             block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
           else
@@ -153,40 +154,44 @@ module RDF; class Query
             end || 0
           end
         end
-      end
-      self
+      end.to_enum.extend(RDF::Query::Solutions)
     end
     alias_method :order_by, :order
 
     ##
-    # Restricts this solution sequence to the given `variables` only.
+    # Duplicate the object, re-applying this module
+    #
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    def dup
+      super.extend(RDF::Query::Solutions)
+    end
+
+    ##
+    # Returns a new solution sequence restricted to the given `variables` only.
     #
     # @param  [Array<Symbol, #to_sym>] variables
-    # @return [void] `self`
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     def project(*variables)
       if variables.empty?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
       else
         variables.map!(&:to_sym)
-        self.each do |solution|
-          solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
-        end
+        self.map do |solution|
+          bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
+          RDF::Query::Solution.new(bindings)
+        end.to_enum.extend(RDF::Query::Solutions)
       end
-      self
     end
     alias_method :select, :project
 
     ##
-    # Ensures that the solutions in this solution sequence are unique.
+    # Returns a new solution sequence with unique solutions
     #
-    # @return [void] `self`
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     def distinct
-      self.uniq!
-      self
+      self.to_a.uniq.to_enum.extend(RDF::Query::Solutions)
     end
-    alias_method :distinct!, :distinct
     alias_method :reduced,   :distinct
-    alias_method :reduced!,  :distinct
 
     ##
     # Limits this solution sequence to bindings starting from the `start`
@@ -194,15 +199,13 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] start
     #   zero or a positive or negative integer
-    # @return [void] `self`
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     def offset(start)
       case start = start.to_i
         when 0 then nil
-        else self.slice!(0...start)
+        else Array(self.to_a[start, -1]).to_enum.extend(RDF::Query::Solutions)
       end
-      self
     end
-    alias_method :offset!, :offset
 
     ##
     # Limits the number of solutions in this solution sequence to a maximum
@@ -210,18 +213,26 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] length
     #   zero or a positive integer
-    # @return [void] `self`
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     # @raise  [ArgumentError] if `length` is negative
     def limit(length)
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
-      case length
-        when 0 then self.clear
-        else self.slice!(length..-1) if length < self.size
+      if length == 0
+        [].to_enum.extend(RDF::Query::Solutions)
+      elsif length < self.count
+        self.to_a[0, length].to_enum.extend(RDF::Query::Solutions)
+      else
+        dup
       end
-      self
     end
-    alias_method :limit!, :limit
+
+    ##
+    # Determines if these solutions are empty
+    # @return [Integer]
+    def empty?
+      self.count == 0
+    end
 
     ##
     # Returns an array of the distinct variable names used in this solution

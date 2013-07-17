@@ -86,7 +86,7 @@ module RDF
     # @yield  [query]
     # @yieldparam  [RDF::Query] query
     # @yieldreturn [void] ignored
-    # @return [RDF::Query::Solutions]
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     #   the resulting solution sequence
     # @see    RDF::Query#execute
     def self.execute(queryable, patterns = {}, options = {}, &block)
@@ -160,7 +160,7 @@ module RDF
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
       patterns << @options if patterns.empty?
       @variables = {}
-      @solutions = @options.delete(:solutions) || Solutions.new
+      @solutions = Array(@options.delete(:solutions)).extend(Solutions)
       context = @options.fetch(:context, @options.fetch(:name, nil))
       @options.delete(:context)
       @options.delete(:name)
@@ -259,13 +259,23 @@ module RDF
     #   Alias for `:context`.
     # @option options [Hash{Symbol => RDF::Term}] solutions
     #   optional initial solutions for chained queries
-    # @return [RDF::Query::Solutions]
+    # @yield  [solution]
+    #   each matching solution
+    # @yieldparam  [RDF::Query::Solution] solution
+    # @yieldreturn [void] ignored
+    # @return [Enumerator] extended with {RDF::Query::Solutions}
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
-    def execute(queryable, options = {})
+    def execute(queryable, options = {}, &block)
       validate!
       options = options.dup
+
+      unless block_given?
+        enum = enum_for(:execute, queryable, options)
+        enum.extend(Solutions)
+        return enum
+      end
 
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}
@@ -273,10 +283,10 @@ module RDF
       # Use provided solutions to allow for query chaining
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
+      @solutions = options[:solutions] || [RDF::Query::Solution.new({})].extend(Solutions)
 
       # If there are no patterns, just return the empty solution
-      return @solutions if empty?
+      return @solutions.each(&block) if empty?
 
       patterns = @patterns
       context = options.fetch(:context, options.fetch(:name, self.context))
@@ -292,11 +302,11 @@ module RDF
       
       patterns.each do |pattern|
 
-        old_solutions, @solutions = @solutions, Solutions.new
+        old_solutions, @solutions = @solutions, [].extend(Solutions)
 
         options[:bindings].keys.each do |variable|
           if pattern.variables.include?(variable)
-            unbound_solutions, old_solutions = old_solutions, Solutions.new
+            unbound_solutions, old_solutions = old_solutions, [].extend(Solutions)
             options[:bindings][variable].each do |binding|
               unbound_solutions.each do |solution|
                 old_solutions << solution.merge(variable => binding)
@@ -324,13 +334,11 @@ module RDF
         # It's important to abort failed queries quickly because later patterns
         # that can have constraints are often broad without them.
         # We have no solutions at all:
-        return @solutions if @solutions.empty?
+        return @solutions.each(&block) if empty?
         # We have no solutions for variables we should have solutions for:
-        if !pattern.optional? && pattern.variables.keys.any? { |variable| !@solutions.variable_names.include?(variable) }
-          return Solutions.new
-        end
+        return if !pattern.optional? && pattern.variables.keys.any? { |variable| !@solutions.variable_names.include?(variable) }
       end
-      @solutions
+      @solutions.each(&block)
     end
 
     ##
@@ -354,7 +362,7 @@ module RDF
     # @return [Boolean]
     # @see    #failed?
     def matched?
-      !@failed
+      !failed?
     end
 
     # Add patterns from another query to form a new Query

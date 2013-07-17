@@ -85,7 +85,7 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
         end
-        query.execute(graph).should == []
+        expect(query.execute(graph)).to be_empty
       end
 
       it "returns an empty solution sequence if the statement does not exist as part of a multi-pattern bgp" do
@@ -93,7 +93,7 @@ describe RDF::Query do
           query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
           query << [:s, :p, :o]
         end
-        query.execute(graph).should == []
+        expect(query.execute(graph)).to be_empty
       end
 
       it "should return a solution sequence with a single empty set if the statement exists" do
@@ -665,33 +665,36 @@ describe RDF::Query do
 
       context "filter" do
         it "returns matching solutions" do
-          subject.filter(:s => RDF::URI("http://example.org/resource1"))
-          subject.count.should == 1
+          expect(
+            subject.
+              filter(:s => RDF::URI("http://example.org/resource1")).
+              count
+          ).to eq 1
         end
         
         it "accepts a block" do
-          subject.filter {|s| s[:s] == RDF::URI("http://example.org/resource1")}
-          subject.count.should == 1
+          expect(
+            subject.
+              filter {|s| s[:s] == RDF::URI("http://example.org/resource1")}.
+              count
+          ).to eq 1
         end
       end
       
       context "order" do
         it "returns ordered solutions using a symbol" do
           orig = subject.dup
-          subject.order(:o)
-          subject.map(&:o).should == orig.map(&:o).sort
+          expect(subject.order(:o).map(&:o)).to eq orig.map(&:o).sort
         end
 
         it "returns ordered solutions using a variable" do
           orig = subject.dup
-          subject.order(RDF::Query::Variable.new("o"))
-          subject.map(&:o).should == orig.map(&:o).sort
+          expect(subject.order(RDF::Query::Variable.new("o")).map(&:o)).to eq orig.map(&:o).sort
         end
 
         it "returns ordered solutions using a lambda" do
           orig = subject.dup
-          subject.order(lambda {|a, b| a[:o] <=> b[:o]})
-          subject.map(&:o).should == orig.map(&:o).sort
+          expect(subject.order(lambda {|a, b| a[:o] <=> b[:o]}).map(&:o)).to eq orig.map(&:o).sort
         end
 
         it "returns ordered solutions using a lambda symbols" do
@@ -705,7 +708,7 @@ describe RDF::Query do
       
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
-          solutions = subject * 2
+          solutions = (subject.to_a * 2).extend(RDF::Query::Solutions)
           solutions.count == graph.size * 2
           solutions.send(op)
           solutions.count == graph.size
