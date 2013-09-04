@@ -355,19 +355,6 @@ module RDF
     end
 
     ##
-    # Returns a copy of this literal converted into its canonical lexical
-    # representation.
-    #
-    # Subclasses should override `#canonicalize!` as needed and appropriate,
-    # not this method.
-    #
-    # @return [RDF::Literal]
-    # @since  0.2.1
-    def canonicalize
-      self.dup.canonicalize!
-    end
-
-    ##
     # Converts this literal into its canonical lexical representation.
     #
     # Subclasses should override this as needed and appropriate.

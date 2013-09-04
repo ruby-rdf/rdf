@@ -812,6 +812,7 @@ module RDF
       parts = {}
       if matchdata = value.to_s.match(IRI_PARTS)
         scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
+        authority = nil if authority.to_s.empty?
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)

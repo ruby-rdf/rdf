@@ -14,17 +14,17 @@ describe RDF::URI do
     before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
     it "caches URI instance" do
       RDF::URI.intern("a")
-      RDF::URI.instance_variable_get(:@cache)["a"].should == RDF::URI("a")
+      expect(RDF::URI.instance_variable_get(:@cache)["a"]).to eq RDF::URI("a")
     end
 
     it "freezes instance" do
-      RDF::URI.intern("a").should be_frozen
+      expect(RDF::URI.intern("a")).to be_frozen
     end
   end
 
   describe ".parse" do
     it "creates a URI" do
-      RDF::URI.parse("a").should be_a(RDF::URI)
+      expect(RDF::URI.parse("a")).to be_a(RDF::URI)
     end
   end
 
@@ -33,10 +33,10 @@ describe RDF::URI do
       urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
       urns.each do |urn|
         uri = @new.call(urn)
-        uri.should be_a_uri
-        uri.should respond_to(:urn?)
-        uri.should be_a_urn
-        uri.should_not be_a_url
+        expect(uri).to be_a_uri
+        expect(uri).to respond_to(:urn?)
+        expect(uri).to be_a_urn
+        expect(uri).not_to be_a_url
       end
     end
 
@@ -44,21 +44,21 @@ describe RDF::URI do
       urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
       urls.each do |url|
         uri = @new.call(url)
-        uri.should be_a_uri
-        uri.should respond_to(:url?)
-        uri.should be_a_url
-        uri.should_not be_a_urn
-      end
+        expect(uri).to be_a_uri
+        expect(uri).to respond_to(:url?)
+        expect(uri).to be_a_url
+        expect(uri).not_to be_a_urn
+       end
     end
 
     it "should canonicalize input with :canonicalize" do
-      RDF::URI.any_instance.should_receive(:canonicalize!).and_raise(ArgumentError)
-      lambda { RDF::URI("foo", :canonicalize => true) }.should raise_error(ArgumentError)
+      allow_any_instance_of(RDF::URI).to receive(:canonicalize!).and_raise(ArgumentError)
+      expect { RDF::URI("foo", :canonicalize => true) }.to raise_error(ArgumentError)
     end
 
     it "should validate input with :validate" do
-      RDF::URI.any_instance.should_receive(:valid?).and_return(false)
-      lambda { RDF::URI("foo", :validate => true) }.should raise_error(ArgumentError)
+      allow_any_instance_of(RDF::URI).to receive(:valid?).and_return(false)
+      expect { RDF::URI("foo", :validate => true) }.to raise_error(ArgumentError)
     end
 
     context "with hash" do
@@ -102,7 +102,7 @@ describe RDF::URI do
         "http://resource1" => {:scheme => "http", :host => "resource1", :path => ""}
       }.each do |value, object|
         it "creates #{value}" do
-          RDF::URI(object).to_s.should == value
+          expect(RDF::URI(object).to_s).to eq value
         end
       end
     end
@@ -142,7 +142,7 @@ describe RDF::URI do
 
     its(:value) {should == "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323"}
     it "encoding should be UTF-8" do
-      subject.value.encoding.should == Encoding::UTF_8
+      expect(subject.value.encoding).to eq Encoding::UTF_8
     end
   end
 
@@ -191,7 +191,7 @@ describe RDF::URI do
         subject {RDF::URI.new.parse(uri)}
         object.each do |key, value|
           it "#{key} should == #{value.inspect}" do
-            subject[key].should == value
+            expect(subject[key]).to eq value
           end
         end
       end
@@ -201,20 +201,20 @@ describe RDF::URI do
   describe "#root" do
     it "should return the root URI" do
       uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
-      uri.should respond_to(:root)
-      uri.root.should be_a_uri
-      uri.root.should == @new.call('http://rdf.rubyforge.org/')
+      expect(uri).to respond_to(:root)
+      expect(uri.root).to be_a_uri
+      expect(uri.root).to eq(@new.call('http://rdf.rubyforge.org/'))
     end
   end
 
   describe "#parent" do
     it "should find the parent URI" do
       uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
-      uri.should respond_to(:parent)
-      uri.parent.should be_a_uri
-      uri.parent.should == @new.call('http://rdf.rubyforge.org/RDF/')
-      uri.parent.parent.should == @new.call('http://rdf.rubyforge.org/')
-      uri.parent.parent.parent.should be_nil
+      expect(uri).to respond_to(:parent)
+      expect(uri.parent).to be_a_uri
+      expect(uri.parent).to eq @new.call('http://rdf.rubyforge.org/RDF/')
+      expect(uri.parent.parent).to eq @new.call('http://rdf.rubyforge.org/')
+      expect(uri.parent.parent.parent).to be_nil
     end
   end
 
@@ -222,7 +222,7 @@ describe RDF::URI do
     it "should have a consistent hash code" do
       hash1 = @new.call('http://rdf.rubyforge.org/').hash
       hash2 = @new.call('http://rdf.rubyforge.org/').hash
-      hash1.should == hash2
+      expect(hash1).to eq hash2
     end
   end
 
@@ -269,91 +269,91 @@ describe RDF::URI do
       }.each do |mod, fmt|
         it "validates IRI with authority and ipath-abempty #{mod}" do
           refs.each do |c|
-            RDF::URI("scheme://auth/#{fmt}" % ["", c, c]).should be_valid
-            RDF::URI("scheme://auth/#{fmt}" % [c, c, c]).should be_valid
-            RDF::URI("scheme://auth/#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+            expect(RDF::URI("scheme://auth/#{fmt}" % ["", c, c])).to be_valid
+            expect(RDF::URI("scheme://auth/#{fmt}" % [c, c, c])).to be_valid
+            expect(RDF::URI("scheme://auth/#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
           end
         end
         it "validates IRI with path-absolute #{mod}" do
           refs.each do |c|
-            RDF::URI("scheme:/#{fmt}" % ["", c, c]).should be_valid
-            RDF::URI("scheme:/#{fmt}" % [c, c, c]).should be_valid
-            RDF::URI("scheme:/#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+            expect(RDF::URI("scheme:/#{fmt}" % ["", c, c])).to be_valid
+            expect(RDF::URI("scheme:/#{fmt}" % [c, c, c])).to be_valid
+            expect(RDF::URI("scheme:/#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
           end
         end
         it "validates IRI with ipath-rootless #{mod}" do
           refs.each do |c|
-            RDF::URI("scheme:#{fmt}" % [c, c, c]).should be_valid
-            RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c]).should be_valid
+            expect(RDF::URI("scheme:#{fmt}" % [c, c, c])).to be_valid
+            expect(RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
           end
         end
         it "validates IRI with ipath-empty #{mod}" do
           refs.each do |c|
-            RDF::URI("scheme:#{fmt}" % ["", c, c]).should be_valid
+            expect(RDF::URI("scheme:#{fmt}" % ["", c, c])).to be_valid
           end
         end
 
         it "invalidates irelative-ref with authority #{mod}" do
           refs.each do |c|
-            RDF::URI("//auth/#{fmt}" % [c, c, c]).should_not be_valid
+            expect(RDF::URI("//auth/#{fmt}" % [c, c, c])).not_to be_valid
           end
         end
         it "invalidates irelative-ref with authority and port #{mod}" do
           refs.each do |c|
-            RDF::URI("//auth:123/#{fmt}" % [c, c, c]).should_not be_valid
+            expect(RDF::URI("//auth:123/#{fmt}" % [c, c, c])).not_to be_valid
           end
         end
         it "invalidates irelative-ref with ipath-absolute #{mod}" do
           refs.each do |c|
-            RDF::URI("/#{fmt}" % [c, c, c]).should_not be_valid
-            RDF::URI("/#{fmt}" % ["#{c}/", c, c]).should_not be_valid
-            RDF::URI("/#{fmt}" % ["#{c}/#{c}", c, c]).should_not be_valid
+            expect(RDF::URI("/#{fmt}" % [c, c, c])).not_to be_valid
+            expect(RDF::URI("/#{fmt}" % ["#{c}/", c, c])).not_to be_valid
+            expect(RDF::URI("/#{fmt}" % ["#{c}/#{c}", c, c])).not_to be_valid
           end
         end
         it "invalidates irelative-ref with ipath-noscheme #{mod}" do
           refs.each do |c|
-            RDF::URI("#{fmt}" % [c, c, c]).should_not be_valid
-            RDF::URI("#{fmt}" % ["#{c}/", c, c]).should_not be_valid
-            RDF::URI("#{fmt}" % ["#{c}/#{c}", c, c]).should_not be_valid
+            expect(RDF::URI("#{fmt}" % [c, c, c])).not_to be_valid
+            expect(RDF::URI("#{fmt}" % ["#{c}/", c, c])).not_to be_valid
+            expect(RDF::URI("#{fmt}" % ["#{c}/#{c}", c, c])).not_to be_valid
           end
         end
         it "invalidates irelative-ref with ipath-empty #{mod}" do
           refs.each do |c|
-            RDF::URI("#{fmt}" % ["", c, c]).should_not be_valid
+            expect(RDF::URI("#{fmt}" % ["", c, c])).not_to be_valid
           end
         end
       end
       
       [" ", "<", ">", "'" '"'].each do |c|
         it "does not validate <http://example/#{c}>" do
-          RDF::URI("http://example/#{c}").should_not be_valid
+          expect(RDF::URI("http://example/#{c}")).not_to be_valid
         end
       end
     end
 
     describe "#invalid?" do
       it "is invalid if not valid" do
-        subject.should_receive(:valid?).and_return(false)
-        subject.should be_invalid
+        expect(subject).to receive(:valid?).and_return(false)
+        expect(subject).to be_invalid
       end
     end
 
     describe "#validate" do
       it "raises ArgumentError if not valid" do
-        subject.should_receive(:valid?).and_return(false)
+        expect(subject).to receive(:valid?).and_return(false)
         expect { subject.validate }.to raise_error(ArgumentError)
       end
     end
 
     describe "#validate!" do
       it "raises ArgumentError if not valid" do
-        subject.should_receive(:valid?).and_return(false)
+        expect(subject).to receive(:valid?).and_return(false)
         expect { subject.validate! }.to raise_error(ArgumentError)
       end
     end
   end
 
-  context "normalization" do
+  context "c14n" do
     {
       #"syntax-based normalization" => [
       #  "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
@@ -422,20 +422,28 @@ describe RDF::URI do
       "preserve -.~" => [
         "http://www.example.com/foo-bar.baz~",
         "http://www.example.com/foo-bar.baz~",
-      ]
+      ],
+      "embedded spaces" => [
+        "http://www.example.com/path with spaces",
+        "http://www.example.com/path%20with%20spaces"
+      ],
+      "file with embedded spaces" => [
+        "file:///path/to/file with spaces.txt",
+        "file:/path/to/file%20with%20spaces.txt"
+      ],
     }.each do |name, (input, output)|
       it "#canonicalize #{name}" do
         u1 = RDF::URI(input)
         u2 = RDF::URI(output)
-        u1.canonicalize.to_s.should == u2.to_s
-        u1.should == u1
+        expect(u1.canonicalize.to_s).to eq u2.to_s
+        expect(u1).to eq u1
       end
     end
     it "#canonicalize! alters resource", :ruby => "1.9" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")
-      u1.canonicalize!.to_s.should == u2.to_s
-      u1.should == u2
+      expect(u1.canonicalize!.to_s).to eq u2.to_s
+      expect(u1).to eq u2
     end
   end
 
@@ -475,8 +483,8 @@ describe RDF::URI do
       %w(urn:isbn :0451450523) => "urn:isbn:0451450523",
     }.each_pair do |input, result|
       it "should create <#{result}> from <#{input[0]}> and '#{input[1]}'" do
-        (RDF::URI.new(input[0]) / input[1]).to_s.should == result
-        (RDF::URI.new(input[0]) / RDF::URI.new(input[1])).to_s.should == result unless input[1][0,1] == ':'
+        expect((RDF::URI.new(input[0]) / input[1]).to_s).to eq result
+        expect((RDF::URI.new(input[0]) / RDF::URI.new(input[1])).to_s).to eq result unless input[1][0,1] == ':'
       end
     end
 
@@ -497,8 +505,8 @@ describe RDF::URI do
       %w(http://example.org/test test) => "http://example.org/testtest",
     }.each_pair do |input, result|
       it "should create <#{result}> from <#{input[0]}> and '#{input[1]}'" do
-        (RDF::URI.new(input[0]) + input[1]).to_s.should == result
-        (RDF::URI.new(input[0]) + RDF::URI.new(input[1])).to_s.should == result unless input[1][0,1] == ':'
+        expect((RDF::URI.new(input[0]) + input[1]).to_s).to eq result
+        expect((RDF::URI.new(input[0]) + RDF::URI.new(input[1])).to_s).to eq result unless input[1][0,1] == ':'
       end
     end
   end
@@ -548,7 +556,7 @@ describe RDF::URI do
 
     }.each_pair do |(lhs, rhs), result|
       it "creates #{result} from <#{lhs}> and '#{rhs}'" do
-        RDF::URI.new(lhs).join(rhs.to_s).to_base.should == result
+        expect(RDF::URI.new(lhs).join(rhs.to_s).to_base).to eq result
       end
     end
   end

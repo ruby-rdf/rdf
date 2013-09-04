@@ -127,10 +127,10 @@ module RDF
     ##
     # @return [Boolean]
     def valid?
-      has_subject?    && subject.valid? && 
-      has_predicate?  && predicate.valid? &&
-      has_object?     && object.valid? &&
-      (has_context?    ? context.valid? : true )
+      has_subject?    && subject.resource? && subject.valid? && 
+      has_predicate?  && predicate.uri? && predicate.valid? &&
+      has_object?     && object.term? && object.valid? &&
+      (has_context? ? context.resource? && context.valid? : true )
     end
 
     ##
@@ -255,6 +255,32 @@ module RDF
 
     alias_method :to_a,   :to_triple
     alias_method :to_ary, :to_triple
+
+    ##
+    # Canonicalizes each unfrozen term in the statement
+    #
+    # @return [RDF::Statement] `self`
+    # @since  1.0.8
+    # @raise [ArgumentError] if any element cannot be canonicalized.
+    def canonicalize!
+      self.subject.canonicalize!    if has_subject? && !self.subject.frozen?
+      self.predicate.canonicalize!  if has_predicate? && !self.predicate.frozen?
+      self.object.canonicalize!     if has_object? && !self.object.frozen?
+      self.context.canonicalize!    if has_context? && !self.context.frozen?
+      self.validate!
+      self
+    end
+
+    ##
+    # Returns a version of the statement with each position in canonical form
+    #
+    # @return [RDF::Statement] `self` or nil if statement cannot be canonicalized
+    # @since  1.0.8
+    def canonicalize
+      self.dup.canonicalize!
+    rescue ArgumentError
+      nil
+    end
 
     ##
     # Returns the terms of this statement as a `Hash`.

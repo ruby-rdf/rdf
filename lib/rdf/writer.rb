@@ -198,7 +198,9 @@ module RDF
     #   the encoding to use on the output stream.
     #   Defaults to the format associated with `content_encoding`.
     # @option options [Boolean]  :canonicalize (false)
-    #   whether to canonicalize literals when serializing
+    #   whether to canonicalize terms when serializing
+    # @option options [Boolean]  :validate (false)
+    #   whether to validate terms when serializing
     # @option options [Hash]     :prefixes     (Hash.new)
     #   the prefix mappings to use (not supported by all writers)
     # @option options [#to_s]    :base_uri     (nil)
@@ -306,6 +308,24 @@ module RDF
     end
 
     ##
+    # Returns `true` if statements and terms should be validated.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  1.0.8
+    def validate?
+      @options[:validate]
+    end
+
+    ##
+    # Returns `true` if terms should be canonicalized.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  1.0.8
+    def canonicalize?
+      @options[:canonicalize]
+    end
+
+    ##
     # Flushes the underlying output buffer.
     #
     # @return [void] `self`
@@ -358,15 +378,21 @@ module RDF
     ##
     # @param  [RDF::Statement] statement
     # @return [void] `self`
+    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
+      statement = statement.canonicalize! if canonicalize?
+      raise RDF::WriterError, "Statement #{statement.inspect} is invalid" if validate? && statement.invalid?
       write_triple(*statement.to_triple)
       self
+    rescue ArgumentError => e
+      raise WriterError, e.message
     end
     alias_method :insert_statement, :write_statement # support the RDF::Writable interface
 
     ##
     # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>] triples
     # @return [void] `self`
+    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
       self
@@ -378,6 +404,7 @@ module RDF
     # @param  [RDF::Term]     object
     # @return [void] `self`
     # @raise  [NotImplementedError] unless implemented in subclass
+    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
     # @abstract
     def write_triple(subject, predicate, object)
       raise NotImplementedError.new("#{self.class}#write_triple") # override in subclasses
