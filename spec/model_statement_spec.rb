@@ -1,34 +1,32 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Statement do
-  before :each do
-    @n3   = "<http://rubygems.org/gems/rdf> <http://purl.org/dc/elements/1.1/creator> <http://ar.to/#self> ."
-    @s    = RDF::URI("http://rubygems.org/gems/rdf")
-    @p    = RDF::URI("http://purl.org/dc/elements/1.1/creator")
-    @o    = RDF::URI("http://ar.to/#self")
-    @stmt = RDF::Statement.new(@s, @p, @o)
-  end
+  let(:s) {RDF::URI.new("http://rubygems.org/gems/rdf")}
+  let(:p) {RDF::DC.creator}
+  let(:o) {RDF::URI.new("http://ar.to/#self")}
+  let(:stmt) {RDF::Statement.new(s, p, o)}
+  subject {stmt}
 
   context "when initializing" do
     it "should be instantiable with a hash argument" do
-      expect { RDF::Statement.new(:subject => @s,
-                                  :predicate => @p,
-                                  :object => @o) }.not_to raise_error
+      expect { RDF::Statement.new(:subject => s,
+                                  :predicate => p,
+                                  :object => o) }.not_to raise_error
 
     end
 
     it "should not alter a hash argument" do
-      hash = { :subject => @s, :predicate => @p, :object => @o }
+      hash = { :subject => s, :predicate => p, :object => o }
       original_hash = hash.dup
       stmt = RDF::Statement.new(hash)
-      original_hash.should == hash
+      expect(original_hash).to eq hash
     end
 
     it "should not alter its options argument" do
       options = { :context => RDF::DOAP.name }
       original_options = options.dup
-      stmt = RDF::Statement.new(@s, @p, @o, options)
-      options.should == original_options
+      stmt = RDF::Statement.new(s, p, o, options)
+      expect(options).to eq original_options
     end
   end
 
@@ -37,238 +35,215 @@ describe RDF::Statement do
       expect { RDF::Statement.new }.not_to raise_error
     end
 
-    it "should have a subject" do
-      @stmt.has_subject?.should be_true
-      @stmt.subject.should_not be_nil
-    end
-
-    it "should have a predicate" do
-      @stmt.has_predicate?.should be_true
-      @stmt.predicate.should_not be_nil
-    end
-
-    it "should have an object" do
-      @stmt.has_object?.should be_true
-      @stmt.object.should_not be_nil
-    end
-
-    it "should be asserted" do
-      @stmt.asserted?.should be_true
-    end
-
-    it "should not be quoted" do
-      @stmt.quoted?.should be_false
-    end
-
-    it "should be statement" do
-      @stmt.statement?.should be_true
-    end
+    it {should have_subject}
+    its(:subject) {should_not be_nil}
+    it {expect(subject.has_predicate?).to be_true}
+    its(:predicate) {should_not be_nil}
+    it {should have_object}
+    its(:object) {should_not be_nil}
+    it {should be_asserted}
+    it {should_not be_quoted}
+    it {should be_statement}
   end
 
   context "when created with a blank node subject" do
-    before :each do
-      @stmt = RDF::Statement.new(RDF::Node.new, @p, @o)
-    end
-
-    it "should have a blank node" do
-      @stmt.has_blank_nodes?.should be_true
-    end
+    subject {RDF::Statement.new(RDF::Node.new, p, o)}
+    it {should have_blank_nodes}
   end
 
   context "when created with a blank node object" do
-    before :each do
-      @stmt = RDF::Statement.new(@s, @p, RDF::Node.new)
-    end
-
-    it "should have a blank node" do
-      @stmt.has_blank_nodes?.should be_true
-    end
+    subject {RDF::Statement.new(s, p, RDF::Node.new)}
+    it {should have_blank_nodes}
   end
 
   context "when created without a context" do
-    it "should not have a context" do
-      @stmt = RDF::Statement.new(@s, @p, @o, :context => nil)
-      @stmt.context.should be_nil
-      @stmt.has_context?.should be_false
-    end
+    subject {RDF::Statement.new(s, p, o, :context => nil)}
+    its(:context) {should be_nil}
+    it {should_not have_context}
   end
 
   context "when created with a context" do
-    before :each do
-      @stmtc = RDF::Statement.new(@s, @p, @o, :context => @s)
-    end
-
-    it "should have a context" do
-      @stmtc.has_context?.should be_true
-      @stmtc.context.should_not be_nil
-    end
-    
-    it "== statement without a context" do
-      @stmtc.should == @stmt
-    end
-    
-    it "eql? statement without a context" do
-      @stmtc.should == @stmt
-    end
+    subject {RDF::Statement.new(s, p, o, :context => s)}
+    it {should have_context}
+    its(:context) {should_not be_nil}
+    it {should eq stmt}
+    it {should_not eql stmt}
   end
 
   context "when created with a default context" do
-    before :each do
-      @stmtdc = RDF::Statement.new(@s, @p, @o, :context => false)
-      @stmtc = RDF::Statement.new(@s, @p, @o, :context => @s)
-    end
-
-    it "should not have a context" do
-      @stmtdc.has_context?.should be_false
-      @stmtdc.context.should == false
-    end
-    
-    it "== statement without a context" do
-      @stmtdc.should == @stmt
-    end
-    
-    it "== statement with a context" do
-      @stmtdc.should == @stmtc
-    end
-    
-    it "!eql? statement with a context" do
-      @stmtdc.should_not be_eql @stmtc
-    end
-    
-    it "eql? statement without a context" do
-      @stmtdc.should == @stmt
-    end
+    subject {RDF::Statement.new(s, p, o, :context => false)}
+    let(:stmtc) {RDF::Statement.new(s, p, o, :context => s)}
+    it {should_not have_context}
+    its(:context) {should == false}
+    it {should == stmt}
+    it {should == stmtc}
+    it {should_not eql stmtc}
   end
 
   context "when used like an Array" do
-    it "should respond to #to_a" do
-      @stmt.should respond_to(:to_a)
-    end
-
-    it "should respond to #[]" do
-      @stmt.should respond_to(:[])
-    end
-
-    it "should respond to #[]=" do
-      @stmt.should respond_to(:[]=)
-    end
-
-    it "should support #to_a" do
-      @stmt.to_a.should eql([@stmt.subject, @stmt.predicate, @stmt.object])
-    end
+    it {should respond_to(:to_a)}
+    it {should respond_to(:[])}
+    it {should respond_to(:[]=)}
+    its(:to_a) {should eql([stmt.subject, stmt.predicate, stmt.object])}
 
     it "should support #[] for the subject" do
-      @stmt[0].should equal(@stmt.subject)
+      subject[0].should equal(subject.subject)
     end
 
     it "should support #[] for the predicate" do
-      @stmt[1].should equal(@stmt.predicate)
+      subject[1].should equal(subject.predicate)
     end
 
     it "should support #[] for the object" do
-      @stmt[2].should equal(@stmt.object)
+      subject[2].should equal(subject.object)
     end
 
     it "should support #[] for the context" do
-      @stmt[3].should equal(@stmt.context)
+      subject[3].should equal(subject.context)
     end
 
     it "should support #[]= for the subject" do
-      stmt = @stmt.dup
+      stmt = subject.dup
       stmt[0] = s = RDF::URI("http://example.org/subject")
-      stmt.subject.should == s
+      expect(stmt.subject).to eq s
     end
 
     it "should support #[]= for the predicate" do
-      stmt = @stmt.dup
+      stmt = subject.dup
       stmt[1] = p = RDF::URI("http://example.org/predicate")
-      stmt.predicate.should == p
+      expect(stmt.predicate).to eq p
     end
 
     it "should support #[]= for the object" do
-      stmt = @stmt.dup
+      stmt = subject.dup
       stmt[2] = o = RDF::URI("http://example.org/object")
-      stmt.object.should == o
+      expect(stmt.object).to eq o
     end
 
     it "should support #[]= for the context" do
-      stmt = @stmt.dup
+      stmt = subject.dup
       stmt[3] = c = RDF::URI("http://example.org/context")
-      stmt.context.should == c
+      expect(stmt.context).to eq c
     end
   end
 
-  context "when used like a Hash" do
-    it "should support #to_hash" do
-      @stmt.should respond_to(:to_hash)
-      @stmt.to_hash.should eql({
-        :subject   => @stmt.subject,
-        :predicate => @stmt.predicate,
-        :object    => @stmt.object,
-        :context   => @stmt.context,
-      })
-    end
+  it {should respond_to(:to_hash)}
+  its(:to_hash) do
+    should eql({
+            :subject   => stmt.subject,
+            :predicate => stmt.predicate,
+            :object    => stmt.object,
+            :context   => stmt.context,
+          })
   end
 
-  context "when used like a String" do
-    it "should support #to_s" do
-      @stmt.should respond_to(:to_s)
-    end
-
-    it "should have an N-Triples representation" do
-      @stmt.to_s.should eql(@n3)
-    end
-  end
+  it {should respond_to(:to_s)}
+  its(:to_s) {should eql "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."}
 
   context "when comparing equality" do
-    before :each do
-      @c = RDF::URI.parse("http://example.org/context")
-      @other_stmt = RDF::Statement.new(@s, @p, @o, :context => @c)
-    end
+    let(:c) {RDF::URI.parse("http://example.org/context")}
+    let(:other_stmt) {RDF::Statement.new(s, p, o, :context => c)}
 
     it "should == regardless of context" do
-      @stmt.should == @other_stmt
+      expect(subject).to eq other_stmt
     end
 
     it "should not be eql? with differing contexts" do
-      @stmt.should_not be_eql(@other_stmt)
+      expect(subject).not_to eql other_stmt
     end
 
     it "should match (===) a statement with a missing component to one with that component" do
-      @stmt.should === @other_stmt
+      expect(subject === other_stmt).to be_true
     end
 
     it "should not match (===) a statement with a component to one which is missing that component" do
-      @other_stmt.should_not === @stmt
+      expect(other_stmt === subject).not_to be_true
     end
 
     it "should only equals? with object equality" do
-      @same_stmt = RDF::Statement.new @s, @p, @o
-      @stmt.should_not equal(@same_stmt)
-      @stmt.should equal(@stmt)
+      @same_stmt = RDF::Statement.new s, p, o
+      expect(subject).not_to equal RDF::Statement.new s, p, o
+      expect(subject).to equal subject
+    end
+  end
+
+  context "validataion" do
+    {
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::Node("node"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Node("node")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal")) => true,
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(nil, RDF::DC.creator, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil) => false,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
+    }.each do |st, valid|
+      context "given #{st}" do
+        if valid
+          specify {expect(st).to be_valid}
+          specify {expect(st).not_to be_invalid}
+          describe "#validate!" do
+            specify {expect {st.validate!}.not_to raise_error}
+          end
+        else
+          specify {expect(st).not_to be_valid}
+          specify {expect(st).to be_invalid}
+          describe "#validate!" do
+            specify {expect {st.validate!}.to raise_error(ArgumentError)}
+          end
+        end
+      end
+    end
+  end
+
+  context "c14n" do
+    {
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self")),
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal")) =>
+        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal")),
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self")),
+      RDF::Statement.new(nil, RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil) => nil,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
+    }.each do |st, result|
+      context "given #{st}" do
+        if result
+          specify {expect {st.canonicalize!}.not_to raise_error}
+          specify {expect(st.canonicalize!).to eq result}
+          specify {expect(st.canonicalize).to eq result}
+          specify {expect(st.canonicalize).to be_valid}
+        else
+          specify {expect {st.canonicalize!}.to raise_error(ArgumentError)}
+          specify {expect(st.canonicalize).to be_nil}
+        end
+      end
     end
   end
 
   context "Examples" do
-    let(:s) {RDF::URI.new("http://rubygems.org/gems/rdf")}
-    let(:p) {RDF::DC.creator}
-    let(:o) {RDF::URI.new("http://ar.to/#self")}
     let(:uri) {RDF::URI("http://example/")}
 
     it "Creating an RDF statement" do
-      RDF::Statement.new(s, p, o).should be_a(RDF::Statement)
+      expect(RDF::Statement.new(s, p, o)).to be_a_statement
     end
 
     it "Creating an RDF statement with a context" do
-      RDF::Statement.new(s, p, o, :context => uri).context.should == uri
+      expect(RDF::Statement.new(s, p, o, :context => uri).context).to eq uri
     end
 
     it "Creating an RDF statement from a Hash" do
-      RDF::Statement.new({
+      expect(RDF::Statement.new({
         :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
         :predicate => RDF::DC.creator,
         :object    => RDF::URI.new("http://ar.to/#self"),
-      }).should be_a(RDF::Statement)
+      })).to be_a_statement
     end
   end
 end
