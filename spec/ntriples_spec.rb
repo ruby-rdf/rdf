@@ -147,6 +147,8 @@ describe RDF::NTriples::Writer do
     @writer = RDF::NTriples::Writer.new
   end
 
+  subject {@writer}
+
   describe ".for" do
     formats = [
       :ntriples,
@@ -165,6 +167,10 @@ describe RDF::NTriples::Writer do
   # @see lib/rdf/spec/writer.rb in rdf-spec
   include RDF_Writer
 
+  it "defaults validation to be true" do
+    expect(subject).to be_validate
+  end
+
   it "should return :ntriples for to_sym" do
     RDF::NTriples::Writer.to_sym.should == :ntriples
   end
@@ -174,6 +180,7 @@ describe RDF::NTriples::Writer do
       context "given #{statement}" do
         let(:graph) {RDF::Graph.new << statement}
         subject {RDF::NTriples::Writer.buffer(:validate => true) {|w| w << graph}}
+
         if valid
           specify {expect {subject}.not_to raise_error}
         else
@@ -647,10 +654,10 @@ describe RDF::NTriples do
       end
 
       {
-        %(<#Dürst> <knows> <jane>.) => '<#D\u00FCrst> <knows> <jane> .',
-        %(<Dürst> <knows> <jane>.) => '<D\u00FCrst> <knows> <jane> .',
-        %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
-        %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
+        %(<http://example/#Dürst> <http://example/knows> <http://example/jane>.) => '<http://example/#D\u00FCrst> <http://example/knows> <http://example/jane> .',
+        %(<http://example/Dürst> <http://example/knows> <http://example/jane>.) => '<http://example/D\u00FCrst> <http://example/knows> <http://example/jane> .',
+        %(<http://example/bob> <http://example/resumé> "Bob's non-normalized resumé".) => '<http://example/bob> <http://example/resumé> "Bob\'s non-normalized resumé" .',
+        %(<http://example/alice> <http://example/resumé> "Alice's normalized resumé".) => '<http://example/alice> <http://example/resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |input, output|
           it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
             parse(input).dump(:ntriples).should == parse(output).dump(:ntriples)
@@ -658,8 +665,8 @@ describe RDF::NTriples do
         end
 
       {
-        %(<#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
-        %(<a> <related> <ひらがな> .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
+        %(<http://example/#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI straight in UTF8".) => %(<http://example/#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
+        %(<http://example/a> <http://example/related> <http://example/ひらがな> .) => %(<http://example/a> <http://example/related> <http://example/\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |input, output|
         it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
           parse(input).dump(:ntriples).should == parse(output).dump(:ntriples)

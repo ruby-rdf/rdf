@@ -191,6 +191,8 @@ describe RDF::NQuads::Writer do
     @writer = RDF::NQuads::Writer.new
   end
 
+  subject {@writer}
+
   describe ".for" do
     formats = [
       :nquads,
@@ -239,6 +241,10 @@ describe RDF::NQuads::Writer do
 
 
   context "validataion" do
+    it "defaults validation to be true" do
+      expect(subject).to be_validate
+    end
+
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
         let(:graph) {RDF::Repository.new << statement}
