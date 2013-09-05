@@ -50,7 +50,7 @@ module RDF; class Literal
           i, f, e = ('%.15E' % @object.to_f).split(/[\.E]/)
           f.sub!(/0*$/, '')           # remove any trailing zeroes
           f = '0' if f.empty?         # ...but there must be a digit to the right of the decimal point
-          e.sub!(/^\+?0+(\d)$/, '\1') # remove the optional leading '+' sign and any extra leading zeroes
+          e.sub!(/^(?:\+|(\-))?0+(\d+)$/, '\1\2') # remove the optional leading '+' sign and any extra leading zeroes
           "#{i}.#{f}E#{e}"
       end
       @object = Float(@string) unless @object.nil?

@@ -152,6 +152,7 @@ describe RDF::Literal do
         "1.0e-10"   => "1.0E-10",
         "123.456e4" => "1.23456E6",
         "3E1"       => "3.0E1",
+        "1.1e-01"   => "1.1E-1",
       }.each_pair do |value, str|
         it "does not normalize double '#{value}' by default" do
           expect(RDF::Literal.new(value, :datatype => RDF::XSD.double, :canonicalize => false).to_s).to eq value
