@@ -31,8 +31,15 @@ module RDF
     # @see    Object#enum_for
     def enum_for(method = :each, *args)
       # Ensure that enumerators support the `#empty?` and `#count` methods:
-      super.extend(RDF::Countable)
+      this = self
+      Countable::Enumerator.new do |yielder|
+        this.send(method, *args) {|y| yielder << y}
+      end
     end
     alias_method :to_enum, :enum_for
+
+    class Enumerator < ::Enumerator
+      include Countable
+    end
   end # Countable
 end # RDF
