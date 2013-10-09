@@ -383,6 +383,7 @@ follows:
 * [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
 * [Fumihiro Kato](http://github.com/fumi) - <http://fumi.me/>
 * [Naoki Kawamukai](http://github.com/kna) - <http://github.com/kna>
+* [Tom Nixon](https://github.com/tomjnixon) - <https://github.com/tomjnixon>
 * [Hellekin O. Wolf](http://github.com/hellekin) - <http://hellekin.cepheide.org/>
 * [John Fieber](http://github.com/jfieber) - <http://github.com/jfieber>
 * [Keita Urashima](http://github.com/ursm) - <http://ursm.jp/>
