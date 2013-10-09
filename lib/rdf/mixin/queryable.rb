@@ -290,5 +290,11 @@ module RDF
     def first_value(pattern = nil)
       (literal = first_literal(pattern)) ? literal.value : nil
     end
+
+    # Extends Enumerator with {Queryable}, which is used by {Enumerable#each_statement}
+    class Enumerator < ::Enumerator
+      include Queryable
+      include Enumerable
+    end
   end # Queryable
 end # RDF

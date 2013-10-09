@@ -38,6 +38,7 @@ module RDF
     end
     alias_method :to_enum, :enum_for
 
+    # Extends Enumerator with {Countable}, which is used by {Countable#enum_for}
     class Enumerator < ::Enumerator
       include Countable
     end
