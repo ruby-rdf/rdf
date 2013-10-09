@@ -63,12 +63,14 @@ module RDF
 
   private
     @@subclasses       = [] # @private
+    @@datatype_map     = nil # @private
 
     ##
     # @private
     # @return [void]
     def self.inherited(child)
       @@subclasses << child
+      @@datatype_map = nil
       super
     end
   
@@ -89,9 +91,20 @@ module RDF
 
     ##
     # @private
+    # Return Hash mapping from datatype URI to class
+    def self.datatype_map
+      @@datatype_map ||= Hash[
+        @@subclasses
+          .select {|klass| klass.const_defined?(:DATATYPE)}
+          .map {|klass| [klass.const_get(:DATATYPE).to_s, klass]}
+      ]
+    end
+
+    ##
+    # @private
     # Return datatype class for uri, or nil if none is found
     def self.datatyped_class(uri)
-      @@subclasses.detect {|klass| klass.const_defined?(:DATATYPE) && klass.const_get(:DATATYPE) == uri}
+      datatype_map[uri]
     end
 
     ##
@@ -102,7 +115,7 @@ module RDF
       klass = case
         when !self.equal?(RDF::Literal)
           self # subclasses can be directly constructed without type dispatch
-        when typed_literal = datatyped_class(RDF::URI(options[:datatype]))
+        when typed_literal = datatyped_class(options[:datatype].to_s)
           typed_literal
         else case value
           when ::TrueClass  then RDF::Literal::Boolean
