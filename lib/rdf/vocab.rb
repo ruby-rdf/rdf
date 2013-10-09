@@ -6,25 +6,26 @@ module RDF
   #
   # The following vocabularies are pre-defined for your convenience:
   #
-  # * {RDF}        - Resource Description Framework (RDF)
-  # * {RDF::CC}    - Creative Commons (CC)
-  # * {RDF::CERT}  - W3 Authentication Certificate (CERT)
-  # * {RDF::DC}    - Dublin Core (DC)
-  # * {RDF::DC11}  - Dublin Core 1.1 (DC11) _deprecated_
-  # * {RDF::DOAP}  - Description of a Project (DOAP)
-  # * {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
-  # * {RDF::FOAF}  - Friend of a Friend (FOAF)
-  # * {RDF::GEO}   - WGS84 Geo Positioning (GEO)
-  # * {RDF::HTTP}  - Hypertext Transfer Protocol (HTTP)
-  # * {RDF::OWL}   - Web Ontology Language (OWL)
-  # * {RDF::RDFS}  - RDF Schema (RDFS)
-  # * {RDF::RSA}   - W3 RSA Keys (RSA)
-  # * {RDF::RSS}   - RDF Site Summary (RSS)
-  # * {RDF::SIOC}  - Semantically-Interlinked Online Communities (SIOC)
-  # * {RDF::SKOS}  - Simple Knowledge Organization System (SKOS)
-  # * {RDF::WOT}   - Web of Trust (WOT)
-  # * {RDF::XHTML} - Extensible HyperText Markup Language (XHTML)
-  # * {RDF::XSD}   - XML Schema (XSD)
+  # * {RDF}         - Resource Description Framework (RDF)
+  # * {RDF::CC}     - Creative Commons (CC)
+  # * {RDF::CERT}   - W3 Authentication Certificate (CERT)
+  # * {RDF::DC}     - Dublin Core (DC)
+  # * {RDF::DC11}   - Dublin Core 1.1 (DC11) _deprecated_
+  # * {RDF::DOAP}   - Description of a Project (DOAP)
+  # * {RDF::EXIF}   - Exchangeable Image File Format (EXIF)
+  # * {RDF::FOAF}   - Friend of a Friend (FOAF)
+  # * {RDF::GEO}    - WGS84 Geo Positioning (GEO)
+  # * {RDF::HTTP}   - Hypertext Transfer Protocol (HTTP)
+  # * {RDF::OWL}    - Web Ontology Language (OWL)
+  # * {RDF::RDFS}   - RDF Schema (RDFS)
+  # * {RDF::RSA}    - W3 RSA Keys (RSA)
+  # * {RDF::RSS}    - RDF Site Summary (RSS)
+  # * {RDF::SCHEMA} - Schema.org
+  # * {RDF::SIOC}   - Semantically-Interlinked Online Communities (SIOC)
+  # * {RDF::SKOS}   - Simple Knowledge Organization System (SKOS)
+  # * {RDF::WOT}    - Web of Trust (WOT)
+  # * {RDF::XHTML}  - Extensible HyperText Markup Language (XHTML)
+  # * {RDF::XSD}    - XML Schema (XSD)
   #
   # @example Using pre-defined RDF vocabularies
   #   include RDF
