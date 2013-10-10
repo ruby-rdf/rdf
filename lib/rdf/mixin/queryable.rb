@@ -88,10 +88,6 @@ module RDF
               enum_for(:query_pattern, pattern)
           end
           after_query(pattern) if block_given? && respond_to?(:after_query)
-          enum.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
-          def enum.to_a
-            super.extend(RDF::Queryable, RDF::Enumerable, RDF::Countable)
-          end
           enum
       end
     end
@@ -291,10 +287,30 @@ module RDF
       (literal = first_literal(pattern)) ? literal.value : nil
     end
 
-    # Extends Enumerator with {Queryable}, which is used by {Enumerable#each_statement}
+    ##
+    # @private
+    # @param  [Symbol, #to_sym] method
+    # @return [Enumerator]
+    # @see    Object#enum_for
+    def enum_for(method = :each, *args)
+      # Ensure that enumerators are, themselves, queryable
+      this = self
+      Queryable::Enumerator.new do |yielder|
+        this.send(method, *args) {|y| yielder << y}
+      end
+    end
+    alias_method :to_enum, :enum_for
+
+
+    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
     class Enumerator < ::Enumerator
       include Queryable
       include Enumerable
+
+      # Make sure returned arrays are also queryable
+      def to_a
+        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
+      end
     end
   end # Queryable
 end # RDF
