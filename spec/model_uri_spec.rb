@@ -2,18 +2,16 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::URI do
-  before :each do
-    @new = Proc.new { |*args| RDF::URI.new(*args) }
-  end
+  let(:new) {Proc.new { |*args| RDF::URI.new(*args) }}
 
   it "should be instantiable" do
-    expect { @new.call('http://rdf.rubyforge.org/') }.not_to raise_error
+    expect { new.call('http://rdf.rubyforge.org/') }.not_to raise_error
   end
 
   it "should recognize URNs" do
     urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
     urns.each do |urn|
-      uri = @new.call(urn)
+      uri = new.call(urn)
       expect(uri).to be_a_uri
       expect(uri).to respond_to(:urn?)
       expect(uri).to be_a_urn
@@ -24,7 +22,7 @@ describe RDF::URI do
   it "should recognize URLs" do
     urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
     urls.each do |url|
-      uri = @new.call(url)
+      uri = new.call(url)
       expect(uri).to be_a_uri
       expect(uri).to respond_to(:url?)
       expect(uri).to be_a_url
@@ -33,30 +31,30 @@ describe RDF::URI do
   end
 
   it "should return the root URI" do
-    uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
+    uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
     expect(uri).to respond_to(:root)
     expect(uri.root).to be_a_uri
-    expect(uri.root).to eq(@new.call('http://rdf.rubyforge.org/'))
+    expect(uri.root).to eq(new.call('http://rdf.rubyforge.org/'))
   end
 
   it "should find the parent URI" do
-    uri = @new.call('http://rdf.rubyforge.org/RDF/URI.html')
+    uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
     expect(uri).to respond_to(:parent)
     expect(uri.parent).to be_a_uri
-    expect(uri.parent).to eq @new.call('http://rdf.rubyforge.org/RDF/')
-    expect(uri.parent.parent).to eq @new.call('http://rdf.rubyforge.org/')
+    expect(uri.parent).to eq new.call('http://rdf.rubyforge.org/RDF/')
+    expect(uri.parent.parent).to eq new.call('http://rdf.rubyforge.org/')
     expect(uri.parent.parent.parent).to be_nil
   end
 
   it "should have a consistent hash code" do
-    hash1 = @new.call('http://rdf.rubyforge.org/').hash
-    hash2 = @new.call('http://rdf.rubyforge.org/').hash
+    hash1 = new.call('http://rdf.rubyforge.org/').hash
+    hash2 = new.call('http://rdf.rubyforge.org/').hash
     expect(hash1).to eq hash2
   end
 
   it "should be duplicable" do
     url  = Addressable::URI.parse('http://rdf.rubyforge.org/')
-    uri2 = (uri1 = @new.call(url)).dup
+    uri2 = (uri1 = new.call(url)).dup
 
     expect(uri1).not_to equal(uri2)
     expect(uri1).to eql(uri2)
@@ -69,7 +67,7 @@ describe RDF::URI do
   end
 
   it "should not be #anonymous?" do
-    expect(@new.call('http://example.org')).to_not be_anonymous
+    expect(new.call('http://example.org')).to_not be_anonymous
   end
 
   context "validation" do
@@ -287,25 +285,19 @@ describe RDF::URI do
   end
 
   context "using normalized merging (#join)" do
-
-    before :all do
-      @writer = RDF::Writer.for(:ntriples)
-    end
-
-    before :each do
-      @subject = RDF::URI.new("http://example.org")
-    end
+    let(:writer) {RDF::Writer.for(:ntriples)}
+    subject {RDF::URI.new("http://example.org")}
 
     it "appends fragment to uri" do
-      @subject.join("foo").to_s.should == "http://example.org/foo"
+      expect(subject.join("foo").to_s).to eq "http://example.org/foo"
     end
 
     it "appends another fragment" do
-      @subject.join("foo#bar").to_s.should == "http://example.org/foo#bar"
+      expect(subject.join("foo#bar").to_s).to eq "http://example.org/foo#bar"
     end
 
     it "appends another URI" do
-      @subject.join(RDF::URI.new("foo#bar")).to_s.should == "http://example.org/foo#bar"
+      expect(subject.join(RDF::URI.new("foo#bar")).to_s).to eq "http://example.org/foo#bar"
     end
 
     {
@@ -341,7 +333,7 @@ describe RDF::URI do
 
     }.each_pair do |input, result|
       it "creates #{result} from <#{input[0]}> and '#{input[1]}'" do
-        expect(@writer.serialize(RDF::URI.new(input[0]).join(input[1].to_s))).to eq result
+        expect(writer.serialize(RDF::URI.new(input[0]).join(input[1].to_s))).to eq result
       end
     end
   end

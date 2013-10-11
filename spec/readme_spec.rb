@@ -38,15 +38,15 @@ describe 'README' do
         before(:each) {code.call}
         it {expect {code.call}.not_to raise_error}
         it "should not have output" do
-          $stdout.string.lines.to_a.should be_empty
+          expect($stdout.string.lines.to_a).to be_empty
         end
         it "should produce a hello.nt file" do
-          File.should exist('hello.nt')
-          File.stat('hello.nt').should be_file
+          expect(File).to exist('hello.nt')
+          expect(File.stat('hello.nt')).to be_file
         end
 
         it "should produce the expected data" do
-          File.read('hello.nt').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" .\n)
+          expect(File.read('hello.nt')).to eq %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" .\n)
         end
       end
     end
@@ -77,11 +77,11 @@ describe 'README' do
         before(:each) {code.call}
         it {expect {code.call}.not_to raise_error}
         it "should have output" do
-          $stdout.string.lines.to_a.should_not be_empty
+          expect($stdout.string.lines.to_a).to_not be_empty
         end
         it "should output inspected statements" do
           $stdout.string.each_line do |line|
-            line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+            expect(line).to match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
           end
         end
       end
@@ -112,11 +112,11 @@ describe 'README' do
         before(:each) {code.call}
         it {expect {code.call}.not_to raise_error}
         it "should have output" do
-          $stdout.string.lines.to_a.should_not be_empty
+          expect($stdout.string.lines.to_a).to_not be_empty
         end
         it "should output inspected statements" do
           $stdout.string.each_line do |line|
-            line.should match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
+            expect(line).to match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
           end
         end
       end
@@ -146,15 +146,15 @@ describe 'README' do
         before(:each) {code.call}
         it {expect {code.call}.not_to raise_error}
         it "should not have output" do
-          $stdout.string.lines.to_a.should be_empty
+          expect($stdout.string.lines.to_a).to be_empty
         end
         it "should produce a hello.nq file" do
-          File.should exist('hello.nq')
-          File.stat('hello.nq').should be_file
+          expect(File).to exist('hello.nq')
+          expect(File.stat('hello.nq')).to be_file
         end
 
         it "should produce the expected data" do
-          File.read('hello.nq').should == %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
+          expect(File.read('hello.nq')).to eq %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
         end
       end
     end
@@ -214,7 +214,7 @@ describe 'README' do
     }.each do |example, code|
       context example do
         it {expect {code.call}.not_to raise_error}
-        it {code.call.should == RDF::FOAF.knows}
+        it {expect(code.call).to eq RDF::FOAF.knows}
       end
     end
   end
