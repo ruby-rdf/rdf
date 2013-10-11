@@ -1032,7 +1032,7 @@ describe RDF::Literal do
 
     it "Creating a language-tagged literal (1)" do
       value = RDF::Literal.new("Hello, world!", :language => :en)
-      value.should have_language
+      expect(value).to have_language
       expect(value.language).to eq :en
     end      
 

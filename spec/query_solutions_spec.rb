@@ -37,7 +37,7 @@ describe RDF::Query::Solutions do
   describe "new" do
     it "is instantiable" do
       expect { RDF::Query::Solutions.new }.not_to raise_error
-      RDF::Query::Solutions.new.should be_a(Array)
+      expect(RDF::Query::Solutions.new).to be_a(Array)
     end
   end
 
@@ -49,7 +49,7 @@ describe RDF::Query::Solutions do
         {:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"]} => [uri, lit],
         {:updated => RDF::Literal(Date.today)} => [uri],
       }.each do |arg, result|
-        solutions.dup.filter(arg).should =~ result
+        expect(solutions.dup.filter(arg)).to eq result
       end
     end
 
@@ -62,7 +62,7 @@ describe RDF::Query::Solutions do
         lambda { |solution| solution.age.datatype == RDF::XSD.integer } => [uri, lit],
         lambda { |solution| solution.name.language == :es } => [uri]
       }.each do |block, result|
-        solutions.dup.filter(&block).should =~ result
+        expect(solutions.dup.filter(&block)).to eq result
       end
     end
   end
@@ -123,27 +123,27 @@ describe RDF::Query::Solutions do
       ],
     }.each do |name, (left, right, result)|
       it name do
-        left.minus(right).should =~ result
+        expect(left.minus(right)).to eq result
       end
     end
   end
 
   describe "#order_by" do
     it "Reordering solutions based on a variable or proc" do
-      solutions.dup.order_by(:updated, lambda {|a, b| b <=> a}).should == [lit, uri]
+      expect(solutions.dup.order_by(:updated, lambda {|a, b| b <=> a})).to eq [lit, uri]
     end
   end
 
   describe "#select" do
     it "Selecting/Projecting particular variables only (1)" do
-      solutions.select(:title).should =~ [
+      expect(solutions.select(:title)).to eq [
         RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
         RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query")),
       ]
     end
 
     it "Selecting/Projecting particular variables only (2)" do
-      solutions.select(:title, :description).should =~ [
+      expect(solutions.select(:title, :description)).to eq [
         RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1"), :description => RDF::Literal("Description")),
         RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"), :description => RDF::Literal("Description")),
       ]
@@ -152,7 +152,7 @@ describe RDF::Query::Solutions do
 
   describe "#project" do
     it "Selecting/Projecting particular variables only" do
-      solutions.project(:title).should =~ [
+      expect(solutions.project(:title)).to eq [
         RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
         RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query")),
       ]
@@ -162,21 +162,21 @@ describe RDF::Query::Solutions do
   describe "#distinct" do
     it "Eliminating duplicate solutions" do
       solutions << uri
-      solutions.should =~ [uri, lit, uri]
-      solutions.distinct.should =~ [uri, lit]
+      expect(solutions).to eq [uri, lit, uri]
+      expect(solutions.distinct).to eq [uri, lit]
     end
   end
 
   describe "#offset" do
     it "Eliminating duplicate solutions", :pending => ("rubinius index problem" if RUBY_ENGINE == "rbx") do
-      solutions.offset(20).limit(20).should be_empty
+      expect(solutions.offset(20).limit(20)).to be_empty
     end
   end
 
   describe "#count" do
     it "Counting the number of matching solutions" do
-      solutions.count.should == 2
-      solutions.count { |solution| solution.price < 30.5 }.should == 1
+      expect(solutions.count).to eq 2
+      expect(solutions.count { |solution| solution.price < 30.5 }).to eq 1
     end
   end
 

@@ -20,20 +20,23 @@ describe RDF::Queryable do
 
     context "Querying for statements having a given predicate" do
       it "with array" do
-        subject.query([nil, RDF::DOAP.developer, nil]).to_a.should_not be_empty
-        subject.query([nil, RDF::DOAP.developer, nil]) {|s| s.should be_a_statement}
+        expect(subject.query([nil, RDF::DOAP.developer, nil]).to_a).not_to be_empty
+        subject.query([nil, RDF::DOAP.developer, nil]) {|s| expect(s).to be_a_statement}
+        expect{|b| subject.query([nil, RDF::DOAP.developer, nil], &b)}.to yield_control.at_least(1).times
       end
       it "with hash" do
-        subject.query(:predicate => RDF::DOAP.developer).to_a.should_not be_empty
-        subject.query(:predicate => RDF::DOAP.developer) {|s| s.should be_a_statement}
+        expect(subject.query(:predicate => RDF::DOAP.developer).to_a).not_to be_empty
+        subject.query(:predicate => RDF::DOAP.developer) {|s| expect(s).to be_a_statement}
+        expect{|b| subject.query(:predicate => RDF::DOAP.developer, &b)}.to yield_control.at_least(1).times
       end
     end
 
     context "Querying for solutions from a BGP" do
       it "returns solutions" do
         query = RDF::Query.new {pattern [:s, :p, :o]}
-        subject.query(query).to_a.should_not be_empty
-        subject.query(query) {|s| s.should be_a RDF::Query::Solution}
+        expect(subject.query(query).to_a).not_to be_empty
+        subject.query(query) {|s| expect(s).to be_a RDF::Query::Solution}
+        expect{|b| subject.query(query, &b)}.to yield_control.exactly(subject.count).times
       end
     end
   end

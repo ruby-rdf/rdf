@@ -16,14 +16,14 @@ describe RDF::Graph do
 
     it "should be unnamed" do
       graph = @new.call
-      graph.unnamed?.should be_true
-      graph.named?.should be_false
+      expect(graph).to be_unnamed
+      expect(graph).not_to be_named
     end
 
     it "should not have a context" do
       graph = @new.call
-      graph.context.should be_nil
-      graph.contexts.size.should == 0
+      expect(graph.context).to be_nil
+      expect(graph.contexts.size).to eq 0
     end
   end
 
@@ -34,31 +34,30 @@ describe RDF::Graph do
 
     it "should be named" do
       graph = @new.call("http://rdf.rubyforge.org/")
-      graph.unnamed?.should be_false
-      graph.named?.should be_true
+      expect(graph).not_to be_unnamed
+      expect(graph).to be_named
     end
 
     it "should have a context" do
       graph = @new.call("http://rdf.rubyforge.org/")
-      graph.context.should_not be_nil
-      graph.contexts.size.should == 1
+      expect(graph.context).not_to be_nil
+      expect(graph.contexts.size).to eq 1
     end
 
     it "should be #anonymous? with a Node context" do
       graph = @new.call(RDF::Node.new)
-      graph.should be_anonymous
+      expect(graph).to be_anonymous
     end
 
     it "should not be #anonymous? with a URI context" do
       graph = @new.call("http://rdf.rubyforge.org/")
-      graph.should_not be_anonymous
+      expect(graph).not_to be_anonymous
     end
   end
 
   it "should maintain arbitrary options" do
-    @graph = RDF::Graph.new(nil, :foo => :bar)
-    @graph.options.should have_key(:foo)
-    @graph.options[:foo].should == :bar
+    graph = RDF::Graph.new(nil, :foo => :bar)
+    expect(graph.options).to include(:foo => :bar)
   end
 
   context "as repository" do
@@ -84,22 +83,20 @@ describe RDF::Graph do
     end
 
     it "Loading graph data from a URL (1)" do
-      RDF::Util::File.
-        should_receive(:open_file).
+      expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
       graph = @new.call("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
       graph.load!
-      graph.should_not be_empty
+      expect(graph).not_to be_empty
     end
 
     it "Loading graph data from a URL (2)" do
-      RDF::Util::File.
-        should_receive(:open_file).
+      expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
       graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
-      graph.should_not be_empty
+      expect(graph).not_to be_empty
     end
   end
 end
