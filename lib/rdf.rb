@@ -149,30 +149,6 @@ module RDF
     Vocabulary.create(uri)
   end
 
-  # RDF Vocabulary terms
-  %w(
-    Alt
-    Bag
-    first
-    HTML
-    langString
-    List
-    nil
-    object
-    predicate
-    Property
-    rest
-    Seq
-    Statement
-    subject
-    type
-    value
-    XMLLiteral
-  ).each do |term|
-    define_method(term) {self[term.to_sym]}
-    module_function term.to_sym
-  end
-
   ##
   # @return [#to_s] property
   # @return [URI]
@@ -202,6 +178,31 @@ module RDF
   # @return [URI]
   def self.to_uri
     RDF::URI.intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+  end
+
+  # RDF Vocabulary terms
+  %w(
+    Alt
+    Bag
+    first
+    HTML
+    langString
+    List
+    nil
+    object
+    predicate
+    Property
+    rest
+    Seq
+    Statement
+    subject
+    type
+    value
+    XMLLiteral
+  ).each do |term|
+    term_uri = self[term.to_sym]
+    define_method(term) {term_uri}
+    module_function term.to_sym
   end
 
   class << self

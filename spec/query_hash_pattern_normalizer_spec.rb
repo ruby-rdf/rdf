@@ -8,13 +8,11 @@ describe RDF::Query::HashPatternNormalizer do
   end
   
   context ".normalize!" do
-    before :each do
-      @hash_pattern_normalizer = RDF::Query::HashPatternNormalizer.new
-    end
+    subject {RDF::Query::HashPatternNormalizer.new}
     
     it "should raise an error if outer-most object is not a hash-pattern" do
-      expect { @hash_pattern_normalizer.normalize!(42) }.to raise_error(ArgumentError)
-      expect { @hash_pattern_normalizer.normalize!({}) }.to_not raise_error
+      expect { subject.normalize!(42) }.to raise_error(ArgumentError)
+      expect { subject.normalize!({}) }.to_not raise_error
     end
     
     it "should be idempotent" do
@@ -24,8 +22,8 @@ describe RDF::Query::HashPatternNormalizer do
         }
       }
       
-      @hash_pattern_normalizer.normalize!(hash_pattern).should == hash_pattern
-      @hash_pattern_normalizer.normalize!(@hash_pattern_normalizer.normalize!(hash_pattern)).should == hash_pattern
+      expect(subject.normalize!(hash_pattern)).to eq hash_pattern
+      expect(subject.normalize!(subject.normalize!(hash_pattern))).to eq hash_pattern
     end
     
     it "should normalize nested hash-patterns" do
@@ -46,7 +44,7 @@ describe RDF::Query::HashPatternNormalizer do
         }
       }
       
-      @hash_pattern_normalizer.normalize!(hash_pattern).should == expected_hash_pattern
+      expect(subject.normalize!(hash_pattern)).to eq expected_hash_pattern
     end
     
     it "should normalize nested array-patterns" do
@@ -75,7 +73,7 @@ describe RDF::Query::HashPatternNormalizer do
         }
       }
       
-      @hash_pattern_normalizer.normalize!(hash_pattern).should == expected_hash_pattern
+      expect(subject.normalize!(hash_pattern)).to eq expected_hash_pattern
     end
   end
 end

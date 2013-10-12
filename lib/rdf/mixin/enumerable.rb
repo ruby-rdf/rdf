@@ -162,7 +162,11 @@ module RDF
     # @return [Enumerator]
     # @see    #each_statement
     def enum_statement
-      enum_for(:each_statement).extend(RDF::Queryable, RDF::Enumerable)
+      # Ensure that statements are queryable, countable and enumerable
+      this = self
+      Queryable::Enumerator.new do |yielder|
+        this.send(:each_statement) {|y| yielder << y}
+      end
     end
     alias_method :enum_statements, :enum_statement
 

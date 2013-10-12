@@ -25,10 +25,10 @@ Gem::Specification.new do |gem|
   gem.test_files         = %w()
   gem.has_rdoc           = false
 
-  gem.required_ruby_version      = '>= 1.8.1'
+  gem.required_ruby_version      = '>= 1.8.7'
   gem.requirements               = []
-  gem.add_runtime_dependency     'addressable', '>= 2.2'
-  gem.add_development_dependency 'rdf-spec',    '~> 1.0.7'
+  gem.add_runtime_dependency     'addressable', '>= 2.3'
+  gem.add_development_dependency 'rdf-spec',    '~> 1.0.9'
   gem.add_development_dependency 'rdf-rdfxml'
   gem.add_development_dependency 'rspec',       '>= 2.14'
   gem.add_development_dependency 'yard',        '>= 0.8'
