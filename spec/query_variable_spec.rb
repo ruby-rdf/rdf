@@ -2,169 +2,161 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Query::Variable do
   context ".new(:x)" do
-    before :each do
-      @var = RDF::Query::Variable.new(:x)
-    end
+    let(:var) {RDF::Query::Variable.new(:x)}
+    subject {var}
 
     it "is named" do
-      @var.named?.should be_true
-      @var.name.should == :x
+      expect(subject.named?).to be_true
+      expect(subject.name).to eq :x
     end
 
     it "has no value" do
-      @var.value.should be_nil
+      expect(subject.value).to be_nil
     end
     
     context "distinguished" do
-      subject {@var}
       it "is distinguished" do
-        subject.should be_distinguished
+        expect(subject).to be_distinguished
       end
 
       it "can be made non-distinguished" do
         subject.distinguished = false
-        subject.should_not be_distinguished
+        expect(subject).to_not be_distinguished
       end
 
       it "has a string representation" do
-        subject.to_s.should == "?x"
+        expect(subject.to_s).to eq "?x"
       end
     end
     
     context "non-distinguished" do
-      subject { @var.distinguished = false; @var }
+      subject { var.distinguished = false; var }
       it "is nondistinguished" do
-        subject.should_not be_distinguished
+        expect(subject).to_not be_distinguished
       end
 
       it "can be made distinguished" do
         subject.distinguished = true
-        subject.should be_distinguished
+        expect(subject).to be_distinguished
       end
 
       it "has a string representation" do
-        subject.to_s.should == "??x"
+        expect(subject.to_s).to eq "??x"
       end
     end
     
     it "is convertible to a symbol" do
-      @var.to_sym.should == :x
+      expect(subject.to_sym).to eq :x
     end
 
 
     it "has no value" do
-      @var.value.should be_nil
+      expect(subject.value).to be_nil
     end
 
     it "is unbound" do
-      @var.unbound?.should be_true
-      @var.bound?.should be_false
-      @var.variables.should == {:x => @var}
-      @var.bindings.should == {}
+      expect(subject).to be_unbound
+      expect(subject).not_to be_bound
+      expect(subject.variables).to eq({:x => subject})
+      expect(subject.bindings).to eq({})
     end
 
     describe "#==" do
       it "matches any Term" do
-        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), @var].each do |value|
-          @var.should == value
+        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), subject].each do |value|
+          expect(subject).to eq value
         end
       end
 
       it "does not match non-terms" do
         [nil, true, false, 123].each do |value|
-          @var.should_not == value
+          expect(subject).to_not eq value
         end
       end
     end
 
     describe "#eql?" do
       it "matches any Term" do
-        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), @var].each do |value|
-          @var.should be_eql value
+        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), subject].each do |value|
+          expect(subject).to be_eql value
         end
       end
 
       it "does not match non-terms" do
         [nil, true, false, 123].each do |value|
-          @var.should_not be_eql value
+          expect(subject).to_not be_eql value
         end
       end
     end
 
     describe "#===" do
       it "matches any Term" do
-        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), @var].each do |value|
-          (@var === value).should be_true
+        [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), subject].each do |value|
+          expect((subject === value)).to be_true
         end
       end
 
       it "does not match non-terms" do
         [nil, true, false, 123].each do |value|
-          (@var === value).should be_false
+          expect((subject === value)).to be_false
         end
       end
     end
   end
 
   context ".new(:x, 123)" do
-    before :each do
-      @var = RDF::Query::Variable.new(:x, RDF::Literal(123))
-    end
+    subject {RDF::Query::Variable.new(:x, RDF::Literal(123))}
 
     it "has a value" do
-      @var.value.should == RDF::Literal(123)
+      expect(subject.value).to eq RDF::Literal(123)
     end
 
     it "is bound" do
-      @var.unbound?.should be_false
-      @var.bound?.should be_true
-      @var.variables.should == {:x => @var}
-      @var.bindings.should == {:x => RDF::Literal(123)}
+      expect(subject).not_to be_unbound
+      expect(subject).to be_bound
+      expect(subject.variables).to eq({:x => subject})
+      expect(subject.bindings).to eq({:x => RDF::Literal(123)})
     end
 
     it "matches only its value" do
       [nil, true, false, RDF::Literal(456)].each do |value|
-        (@var === value).should be_false
+        expect((subject === value)).to be_false
       end
-      (@var === RDF::Literal(123)).should be_true
+      expect((subject === RDF::Literal(123))).to be_true
     end
 
     it "has a string representation" do
-      @var.to_s.should == "?x=123"
+      expect(subject.to_s).to eq "?x=123"
     end
   end
 
   context "when rebound" do
-    before :each do
-      @var = RDF::Query::Variable.new(:x, RDF::Literal(123))
-    end
+    subject {RDF::Query::Variable.new(:x, RDF::Literal(123))}
 
     it "returns the previous value" do
-      @var.bind(RDF::Literal(456)).should == RDF::Literal(123)
-      @var.bind(RDF::Literal(789)).should == RDF::Literal(456)
+      expect(subject.bind(RDF::Literal(456))).to eq RDF::Literal(123)
+      expect(subject.bind(RDF::Literal(789))).to eq RDF::Literal(456)
     end
 
     it "is still bound" do
-      @var.bind!(RDF::Literal(456))
-      @var.unbound?.should be_false
-      @var.bound?.should be_true
+      subject.bind!(RDF::Literal(456))
+      expect(subject).not_to be_unbound
+      expect(subject).to be_bound
     end
   end
 
   context "when unbound" do
-    before :each do
-      @var = RDF::Query::Variable.new(:x, RDF::Literal(123))
-    end
+    subject {RDF::Query::Variable.new(:x, RDF::Literal(123))}
 
     it "returns the previous value" do
-      @var.unbind.should == RDF::Literal(123)
-      @var.unbind.should == nil
+      expect(subject.unbind).to eq RDF::Literal(123)
+      expect(subject.unbind).to eq nil
     end
 
     it "is not bound" do
-      @var.unbind!
-      @var.unbound?.should be_true
-      @var.bound?.should be_false
+      subject.unbind!
+      expect(subject).to be_unbound
+      expect(subject).not_to be_bound
     end
   end
 
@@ -172,56 +164,56 @@ describe RDF::Query::Variable do
     subject {RDF::Query::Variable.new(:y, 123)}
     it "Creating a named unbound variable" do
       var = RDF::Query::Variable.new(:x)
-      var.should be_unbound
-      var.value.should be_nil
+      expect(var).to be_unbound
+      expect(var.value).to be_nil
     end
 
     it "Creating an anonymous unbound variable" do
-      RDF::Query::Variable.new.name.should be_a(Symbol)
+      expect(RDF::Query::Variable.new.name).to be_a(Symbol)
     end
 
     it "Unbound variables match any value" do
-      RDF::Query::Variable.new.should === RDF::Literal(42)
+      expect(RDF::Query::Variable.new).to eq RDF::Literal(42)
     end
 
     it "Creating a bound variable" do
-      subject.should be_bound
-      subject.value.should == 123
+      expect(subject).to be_bound
+      expect(subject.value).to eq 123
     end
 
     it "Bound variables match only their actual value" do
-      subject.should_not === 42
-      subject.should === 123
+      expect(subject).to_not eq 42
+      expect(subject).to eq 123
     end
 
     it "Getting the variable name" do
-      subject.should be_named
-      subject.name.should == :y
-      subject.to_sym.should == :y
+      expect(subject).to be_named
+      expect(subject.name).to eq :y
+      expect(subject.to_sym).to eq :y
     end
 
     it "Rebinding a variable returns the previous value" do
-      subject.bind!(456).should == 123
-      subject.value.should == 456
+      expect(subject.bind!(456)).to eq 123
+      expect(subject.value).to eq 456
     end
 
     it "Unbinding a previously bound variable" do
       subject.unbind!
-      subject.should be_unbound
+      expect(subject).to be_unbound
     end
 
     it "Getting the string representation of a variable" do
       var = RDF::Query::Variable.new(:x)
-      var.to_s.should == "?x"
-      subject.to_s.should == "?y=123"
+      expect(var.to_s).to eq "?x"
+      expect(subject.to_s).to eq "?y=123"
     end
 
     describe "#to_s" do
       it "can be undistinguished" do
         var = RDF::Query::Variable.new("a")
-        var.to_s.should == "?a"
+        expect(var.to_s).to eq "?a"
         var.distinguished = false
-        var.to_s.should == "??a"
+        expect(var.to_s).to eq "??a"
       end
     end
   end

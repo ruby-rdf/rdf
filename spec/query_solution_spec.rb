@@ -11,19 +11,19 @@ describe RDF::Query::Solution do
     it "returns true if two solutions have equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1"})
       s2 = RDF::Query::Solution.new({:a => "1"})
-      s1.compatible?(s2).should be_true
+      expect(s1.compatible?(s2)).to be_true
     end
 
     it "returns true if two solutions have overlapping equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "1", :b => "2"})
-      s1.compatible?(s2).should be_true
+      expect(s1.compatible?(s2)).to be_true
     end
     
     it "returns false if two solutions any mappings which are different" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "3", :c => "3"})
-      s1.compatible?(s2).should be_false
+      expect(s1.compatible?(s2)).to be_false
     end
 
     context "subsetByExcl02" do
@@ -67,9 +67,9 @@ describe RDF::Query::Solution do
       }.each do |name, (l, r, expect)|
         context name do
           if expect
-            specify {l.compatible?(r).should be_true}
+            specify {expect(l).to be_compatible(r)}
           else
-            specify {l.compatible?(r).should_not be_true}
+            specify {expect(l).not_to be_compatible(r)}
           end
         end
       end
@@ -80,19 +80,19 @@ describe RDF::Query::Solution do
     it "returns true if two solutions have equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1"})
       s2 = RDF::Query::Solution.new({:a => "1"})
-      s1.eql?(s2).should be_true
+      expect(s1.eql?(s2)).to be_true
     end
 
     it "returns false if two solutions have overlapping equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "1", :b => "2"})
-      s1.eql?(s2).should be_false
+      expect(s1.eql?(s2)).to be_false
     end
     
     it "returns false if two solutions any mappings which are different" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "3", :c => "3"})
-      s1.eql?(s2).should be_false
+      expect(s1.eql?(s2)).to be_false
     end
   end
 
@@ -116,9 +116,9 @@ describe RDF::Query::Solution do
     }.each do |name, (l, r, expect)|
       context name do
         if expect
-          specify {l.disjoint?(r).should be_true}
+          specify {expect(l).to be_disjoint(r)}
         else
-          specify {l.disjoint?(r).should_not be_true}
+          specify {expect(l).not_to be_disjoint(r)}
         end
       end
     end
@@ -164,9 +164,9 @@ describe RDF::Query::Solution do
       }.each do |name, (l, r, expect)|
         context name do
           if expect
-            specify {l.disjoint?(r).should be_true}
+            specify {expect(l).to be_disjoint(r)}
           else
-            specify {l.disjoint?(r).should_not be_true}
+            specify {expect(l).not_to be_disjoint(r)}
           end
         end
       end
@@ -188,17 +188,17 @@ describe RDF::Query::Solution do
     end
 
     it "Checking whether a variable is bound or unbound" do
-      solution.should be_bound(:title)
-      solution.should_not be_unbound(:mbox)
+      expect(solution).to be_bound(:title)
+      expect(solution).not_to be_unbound(:mbox)
     end
 
     it "Retrieving the value of a bound variable" do
-      solution[:mbox].should == "jrhacker@example.org"
-      solution.mbox.should == "jrhacker@example.org"
+      expect(solution[:mbox]).to eq "jrhacker@example.org"
+      expect(solution.mbox).to eq "jrhacker@example.org"
     end
 
     it "Retrieving all bindings in the solution as a Hash" do
-      solution.to_hash.should == {:title => "foo", :mbox => "jrhacker@example.org"}
+      expect(solution.to_hash).to eq({:title => "foo", :mbox => "jrhacker@example.org"})
     end
   end
 end

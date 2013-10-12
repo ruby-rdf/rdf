@@ -11,12 +11,12 @@ describe RDF::Graph do
 
   describe ".load" do
     it "creates an unnamed graph" do
-      RDF::Graph.should_receive(:new).with(:base_uri => "http://example/")
+      expect(RDF::Graph).to receive(:new).with(:base_uri => "http://example/")
       RDF::Graph.load("http://example/", :base_uri => "http://example/")
     end
 
     it "loads into an unnamed graph" do
-      RDF::Graph.any_instance.should_receive(:load).with("http://example/", :base_uri => "http://example/")
+      expect_any_instance_of(RDF::Graph).to receive(:load).with("http://example/", :base_uri => "http://example/")
       RDF::Graph.load("http://example/", :base_uri => "http://example/")
     end
   end
@@ -28,14 +28,14 @@ describe RDF::Graph do
 
     it "should be unnamed" do
       graph = @new.call
-      graph.unnamed?.should be_true
-      graph.named?.should be_false
+      expect(graph).to be_unnamed
+      expect(graph).not_to be_named
     end
 
     it "should not have a context" do
       graph = @new.call
-      graph.context.should be_nil
-      graph.contexts.size.should == 0
+      expect(graph.context).to be_nil
+      expect(graph.contexts.size).to eq 0
     end
   end
 
@@ -55,7 +55,7 @@ describe RDF::Graph do
     its(:unnamed?) {should be_false}
     its(:name) {should_not be_nil}
     its(:context) {should_not be_nil}
-    its(:context) {subject.contexts.size.should == 1}
+    its(:contexts) {expect(subject.contexts.size).to eq 1}
     it {should_not be_anonymous}
 
     context "with anonymous context" do
@@ -73,14 +73,14 @@ describe RDF::Graph do
     }
     it "should access default graph" do
       graph = @new.call(nil, :data => repo)
-      graph.count.should == 1
-      graph.statements.first.object.should == RDF::URI('o1')
+      expect(graph.count).to eq 1
+      expect(graph.statements.first.object).to eq RDF::URI('o1')
     end
 
     it "should access named graph" do
       graph = @new.call(RDF::URI('c'), :data => repo)
-      graph.count.should == 1
-      graph.statements.first.object.should == RDF::URI('o2')
+      expect(graph.count).to eq 1
+      expect(graph.statements.first.object).to eq RDF::URI('o2')
     end
 
     it "should not load! default graph" do
@@ -90,15 +90,14 @@ describe RDF::Graph do
 
     it "should reload named graph" do
       graph = @new.call(RDF::URI("http://example/doc.nt"), :data => repo)
-      graph.should_receive(:load).with("http://example/doc.nt", :base_uri => "http://example/doc.nt")
+      expect(graph).to receive(:load).with("http://example/doc.nt", :base_uri => "http://example/doc.nt")
       graph.load!
     end
   end
 
   it "should maintain arbitrary options" do
-    @graph = RDF::Graph.new(nil, :foo => :bar)
-    @graph.options.should have_key(:foo)
-    @graph.options[:foo].should == :bar
+    graph = RDF::Graph.new(nil, :foo => :bar)
+    expect(graph.options).to include(:foo => :bar)
   end
 
   context "as repository" do
@@ -124,22 +123,20 @@ describe RDF::Graph do
     end
 
     it "Loading graph data from a URL (1)" do
-      RDF::Util::File.
-        should_receive(:open_file).
+      expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
       graph = @new.call("http://www.bbc.co.uk/programmes/b0081dq5.rdf", :data => RDF::Repository.new)
       graph.load!
-      graph.should_not be_empty
+      expect(graph).not_to be_empty
     end
 
     it "Loading graph data from a URL (2)" do
-      RDF::Util::File.
-        should_receive(:open_file).
+      expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
       graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
-      graph.should_not be_empty
+      expect(graph).not_to be_empty
     end
   end
 end

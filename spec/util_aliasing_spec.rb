@@ -16,37 +16,35 @@ describe RDF::Util::Aliasing do
     end
   end
 
-  before :each do
-    @alias = RDF::Util::Aliasing::Aliased.new
-  end
+  subject {RDF::Util::Aliasing::Aliased.new}
 
   context "when aliasing a method" do
     it "should create a new instance method with the given name" do
-      @alias.should respond_to(:aliased)
+      expect(subject).to respond_to(:aliased)
     end
   end
 
   context "the aliased method" do
     it "should accept any arguments" do
-      expect { @alias.aliased }.not_to raise_error
-      expect { @alias.aliased(1) }.not_to raise_error
-      expect { @alias.aliased(1, 2) }.not_to raise_error
+      expect { subject.aliased }.not_to raise_error
+      expect { subject.aliased(1) }.not_to raise_error
+      expect { subject.aliased(1, 2) }.not_to raise_error
     end
 
     it "should accept a block" do
-      expect { @alias.aliased(1, 2) do 3 end }.not_to raise_error
+      expect { subject.aliased(1, 2) do 3 end }.not_to raise_error
     end
 
     it "should invoke the original method with the given arguments" do
-      @alias.aliased.should          == @alias.original
-      @alias.aliased(1, 2).should    == @alias.original(1, 2)
-      @alias.aliased(1, 2, 3).should == @alias.original(1, 2, 3)
+      expect(subject.aliased).to          eq subject.original
+      expect(subject.aliased(1, 2)).to    eq subject.original(1, 2)
+      expect(subject.aliased(1, 2, 3)).to eq subject.original(1, 2, 3)
     end
 
     it "should invoke the original method with the given block" do
-      @alias.aliased { 1 }.should       == @alias.original { 1 }
-      @alias.aliased(1) { 2 }.should    == @alias.original(1) { 2 }
-      @alias.aliased(1, 2) { 3 }.should == @alias.original(1, 2) { 3 }
+      expect(subject.aliased { 1 }).to       eq subject.original { 1 }
+      expect(subject.aliased(1) { 2 }).to    eq subject.original(1) { 2 }
+      expect(subject.aliased(1, 2) { 3 }).to eq subject.original(1, 2) { 3 }
     end
 
     it "should update if the original method is redefined" do
@@ -58,11 +56,11 @@ describe RDF::Util::Aliasing do
         end
       end
 
-      @alias.rebound(1, 2).should_not == @alias.original(1, 2)
-      @alias.aliased(1, 2).should     == @alias.original(1, 2)
+      expect(subject.rebound(1, 2)).not_to eq subject.original(1, 2)
+      expect(subject.aliased(1, 2)).to     eq subject.original(1, 2)
 
-      @alias.rebound(1, 2) { 3 }.should_not == @alias.original(1, 2) { 3 }
-      @alias.aliased(1, 2) { 3 }.should     == @alias.original(1, 2) { 3 }
+      expect(subject.rebound(1, 2) { 3 }).not_to eq subject.original(1, 2) { 3 }
+      expect(subject.aliased(1, 2) { 3 }).to     eq subject.original(1, 2) { 3 }
     end
   end
 end

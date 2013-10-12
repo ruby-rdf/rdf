@@ -11,7 +11,7 @@ describe RDF::Repository do
 
   it "should maintain arbitrary options" do
     @repository = RDF::Repository.new(:foo => :bar)
-    @repository.options.should have_key(:foo)
-    @repository.options[:foo].should == :bar
+    expect(@repository.options).to have_key(:foo)
+    expect(@repository.options[:foo]).to eq :bar
   end
 end

@@ -13,6 +13,8 @@ describe RDF::NQuads::Format do
   # @see lib/rdf/spec/format.rb in rdf-spec
   include RDF_Format
 
+  subject {@format_class}
+
   describe ".for" do
     formats = [
       :nquads,
@@ -23,7 +25,7 @@ describe RDF::NQuads::Format do
       {:content_type   => 'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
-        RDF::Format.for(arg).should == @format_class
+        expect(RDF::Format.for(arg)).to eq subject
       end
     end
 
@@ -33,7 +35,7 @@ describe RDF::NQuads::Format do
       :multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        @format_class.for {str}.should == @format_class
+        expect(subject.for {str}).to eq subject
       end
     end
 
@@ -43,17 +45,17 @@ describe RDF::NQuads::Format do
       :nt_multi_line => %(<a>\n  <b>\n  "literal"\n .),
     }.each do |sym, str|
       it "does not detect #{sym}" do
-        @format_class.for {str}.should_not == @format_class
+        expect(subject.for {str}).not_to eq subject
       end
     end
   end
 
   describe "#to_sym" do
-    specify {@format_class.to_sym.should == :nquads}
+    specify {expect(subject.to_sym).to eq :nquads}
   end
 
   describe "#name" do
-    specify {@format_class.name.should == "N-Quads"}
+    specify {expect(subject.name).to eq "N-Quads"}
   end
 
   describe ".detect" do
@@ -64,7 +66,7 @@ describe RDF::NQuads::Format do
       :multi_line => %(<a>\n  <b>\n  "literal"\n <d> .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        @format_class.detect(str).should be_true
+        expect(subject.detect(str)).to be_true
       end
     end
 
@@ -79,7 +81,7 @@ describe RDF::NQuads::Format do
       :microdata => '<div itemref="bar"></div>',
     }.each do |sym, str|
       it "does not detect #{sym}" do
-        @format_class.detect(str).should be_false
+        expect(subject.detect(str)).to be_false
       end
     end
   end
@@ -106,7 +108,7 @@ describe RDF::NQuads::Reader do
       {:content_type   => 'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
-        RDF::Reader.for(arg).should == RDF::NQuads::Reader
+        expect(RDF::Reader.for(arg)).to eq RDF::NQuads::Reader
       end
     end
   end
@@ -152,8 +154,8 @@ describe RDF::NQuads::Reader do
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
         graph = RDF::Graph.new << @reader_class.new(str)
-        graph.size.should == 1
-        graph.statements.first.should == statement
+        expect(graph.size).to eq 1
+        expect(graph.statements.first).to eq statement
       end
     end
   end
@@ -166,22 +168,22 @@ describe RDF::NQuads::Reader do
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
         graph = RDF::Graph.new << @reader_class.new(str)
-        graph.size.should == 1
-        graph.statements.first.should == statement
+        expect(graph.size).to eq 1
+        expect(graph.statements.first).to eq statement
       end
       
       it "serializes #{statement.inspect}" do
-        RDF::NQuads.serialize(statement).chomp.should == str
+        expect(RDF::NQuads.serialize(statement).chomp).to eq str
       end
       
       it "unserializes #{str.inspect}" do
-        RDF::NQuads.unserialize(str).should == statement
+        expect(RDF::NQuads.unserialize(str)).to eq statement
       end
     end
   end
 
   it "should parse W3C's test data" do
-    @reader_class.new(File.open(testfile)).to_a.size.should == 10
+    expect(@reader_class.new(File.open(testfile)).to_a.size).to eq 10
   end
 end
 
@@ -202,7 +204,7 @@ describe RDF::NQuads::Writer do
       {:content_type   => 'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
-        RDF::Writer.for(arg).should == RDF::NQuads::Writer
+        expect(RDF::Writer.for(arg)).to eq RDF::NQuads::Writer
       end
     end
   end
@@ -220,7 +222,7 @@ describe RDF::NQuads::Writer do
           ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
-            @writer_class.buffer {|w| w << statement}.should == "#{str}\n"
+            expect(@writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
           end
         end
       end
@@ -232,7 +234,7 @@ describe RDF::NQuads::Writer do
           ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Literal("d"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
-            @writer_class.buffer {|w| w << statement}.should == "#{str}\n"
+            expect(@writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
           end
         end
       end
