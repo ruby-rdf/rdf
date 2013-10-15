@@ -40,7 +40,7 @@ module RDF; module Util
       else
         options[:headers] ||= {}
         options[:headers]['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
-        Kernel.open(filename_or_url.to_s, options[:headers], &block)
+        Kernel.open(filename_or_url.to_s, options[:headers], 0, options, &block)
       end
     end
   end # File
