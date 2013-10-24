@@ -196,26 +196,6 @@ describe RDF::URI do
     end
   end
 
-  describe "#root" do
-    it "should return the root URI" do
-      uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
-      expect(uri).to respond_to(:root)
-      expect(uri.root).to be_a_uri
-      expect(uri.root).to eq(new.call('http://rdf.rubyforge.org/'))
-    end
-  end
-
-  describe "#parent" do
-    it "should find the parent URI" do
-      uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
-      expect(uri).to respond_to(:parent)
-      expect(uri.parent).to be_a_uri
-      expect(uri.parent).to eq new.call('http://rdf.rubyforge.org/RDF/')
-      expect(uri.parent.parent).to eq new.call('http://rdf.rubyforge.org/')
-      expect(uri.parent.parent.parent).to be_nil
-    end
-  end
-
   describe "#hash" do
     it "should have a consistent hash code" do
       hash1 = new.call('http://rdf.rubyforge.org/').hash
@@ -555,6 +535,66 @@ describe RDF::URI do
     }.each_pair do |(lhs, rhs), result|
       it "creates #{result} from <#{lhs}> and '#{rhs}'" do
         expect(RDF::URI.new(lhs).join(rhs.to_s).to_base).to eq result
+      end
+    end
+  end
+
+  describe "#hier?" do
+    {
+      "http://example/"               => true,
+      "mailto:gregg@greggkellogg.net" => false,
+      "urn:isbn:12345"                => false
+    }.each do |uri, is_hier|
+      it uri do
+        expect(new.call(uri).hier?).to eq is_hier
+      end
+    end
+  end
+
+  describe "#root?" do
+    {
+      "http://example/"               => true,
+      "http://example/foo"            => false,
+      "mailto:gregg@greggkellogg.net" => true,
+      "urn:isbn:12345"                => true
+    }.each do |uri, is_hier|
+      it uri do
+        expect(new.call(uri).root?).to eq is_hier
+      end
+    end
+  end
+
+  describe "#root" do
+    {
+      "http://example/"                       => "http://example/",
+      "http://example/foo"                    => "http://example/",
+      'http://rdf.rubyforge.org/RDF/URI.html' => 'http://rdf.rubyforge.org/',
+      "mailto:gregg@greggkellogg.net"         => "mailto:gregg@greggkellogg.net",
+      "urn:isbn:12345"                        => "urn:isbn:12345"
+    }.each do |uri, root|
+      it uri do
+        expect(new.call(uri).root).to be_a_uri
+        expect(new.call(uri).root).to eq root
+      end
+    end
+  end
+
+  describe "#parent" do
+    {
+      "http://example/"                       => nil,
+      "http://example/foo"                    => "http://example/",
+      "http://example/foo/bar"                => "http://example/foo/",
+      'http://rdf.rubyforge.org/RDF/URI.html' => 'http://rdf.rubyforge.org/RDF/',
+      "mailto:gregg@greggkellogg.net"         => nil,
+      "urn:isbn:12345"                        => nil
+    }.each do |uri, parent|
+      it uri do
+        if parent
+          expect(new.call(uri).parent).to be_a_uri
+          expect(new.call(uri).parent).to eq parent
+        else
+          expect(new.call(uri).parent).to be_nil
+        end
       end
     end
   end
