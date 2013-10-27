@@ -87,7 +87,7 @@ module RDF::NTriples
             buffer.string
           end
       end
-      ret.respond_to?(:force_encoding) && encoding ? ret.dup.force_encoding(encoding) : ret
+      ret.respond_to?(:encode) && encoding ? ret.encode(encoding) : ret
     end
 
     ##
