@@ -291,7 +291,7 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          unescaped = unescaped.dup.encode!(Encoding::UTF_8) if unescaped.respond_to?(:encode!)
           expect(@reader.unescape(string.dup)).to eq unescaped
         end
       end
@@ -306,7 +306,7 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          unescaped = unescaped.dup.encode!(Encoding::UTF_8) if unescaped.respond_to?(:encode!)
           expect(@reader.unescape(string.dup)).to eq unescaped
         end
       end
@@ -357,7 +357,7 @@ describe RDF::NTriples do
         "_\xE6\xB0\xB4_" => "_\\u6C34_", # U+6C34, 'water' in Chinese
       }
       strings.each do |string, escaped|
-        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        string = string.dup.encode!(Encoding::UTF_8) if string.respond_to?(:encode!)
         expect(@writer.escape(string)).to eq escaped
       end
     end
@@ -417,7 +417,7 @@ describe RDF::NTriples do
         "_\u6C34_", # U+6C34, 'water' in Chinese
       ]
       strings.each do |string|
-        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        string = string.dup.encode!(Encoding::UTF_8) if string.respond_to?(:encode!)
         expect(@writer.escape(string, encoding)).to eq string
       end
     end
