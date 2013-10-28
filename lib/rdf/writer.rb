@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module RDF
   ##
   # The base class for RDF serializers.

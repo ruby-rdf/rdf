@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module RDF
   ##
   # An RDF literal.

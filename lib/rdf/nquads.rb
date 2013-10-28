@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module RDF
   ##
   # **`RDF::NQuads`** provides support for the N-Quads serialization format.
