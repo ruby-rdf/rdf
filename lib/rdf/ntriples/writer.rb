@@ -58,12 +58,14 @@ module RDF::NTriples
           string
         when string.ascii_only?
           StringIO.open do |buffer|
+            buffer.set_encoding(Encoding::ASCII)
             string.each_byte { |u| buffer << escape_ascii(u, encoding) }
             buffer.string
           end
-        when encoding && encoding != Encoding::ASCII
+        when string.respond_to?(:each_char) && encoding && encoding != Encoding::ASCII
           # Not encoding UTF-8 characters
           StringIO.open do |buffer|
+            buffer.set_encoding(encoding)
             string.each_char do |u|
               buffer << case u.ord
               when (0x00..0x7F)
@@ -77,11 +79,12 @@ module RDF::NTriples
         else
           # Encode ASCII && UTF-8 characters
           StringIO.open do |buffer|
+            buffer.set_encoding(Encoding::ASCII)
             string.each_codepoint { |u| buffer << escape_unicode(u, encoding) }
             buffer.string
           end
       end
-      encoding ? ret.dup.force_encoding(encoding) : ret
+      encoding ? ret.encode(encoding) : ret
     end
 
     ##
