@@ -90,7 +90,14 @@ module RDF
 
     IHIER_PART = Regexp.compile("(?:(?://#{IAUTHORITY}#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY}))").freeze
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
-    
+
+    # List of schemes known not to be hierarchical
+    NON_HIER_SCHEMES = %w(
+      about acct bitcoin callto cid data fax geo gtalk h323 iax icon im jabber
+      jms magnet mailto maps news pres proxy session sip sips skype sms spotify stun stuns
+      tag tel turn turns tv urn javascript
+    ).freeze
+
     ##
     # @return [RDF::Util::Cache]
     # @private
@@ -172,6 +179,21 @@ module RDF
     # @since  0.2.0
     def urn?
       self.start_with?('urn:')
+    end
+
+    ##
+    # Returns `true` if the URI scheme is hierarchical.
+    #
+    # @example
+    #   RDF::URI('http://example.org/').hier?                    #=> true
+    #   RDF::URI('urn:isbn:125235111').hier?                     #=> false
+    #
+    # @return [Boolean] `true` or `false`
+    # @see    http://en.wikipedia.org/wiki/URI_scheme
+    # @see    {NON_HIER_SCHEMES}
+    # @since  1.0.10
+    def hier?
+      !NON_HIER_SCHEMES.include?(scheme)
     end
 
     ##
@@ -358,15 +380,19 @@ module RDF
     end
 
     ##
-    # Returns `true` if this URI's path component is equal to `/`.
+    # Returns `true` if this URI's scheme is not hierarchical,
+    # or its path component is equal to `/`.
+    # Protocols not using hierarchical components are always considered
+    # to be at the root.
     #
     # @example
     #   RDF::URI('http://example.org/').root?                   #=> true
     #   RDF::URI('http://example.org/path/').root?              #=> false
+    #   RDF::URI('urn:isbn').root?                              #=> true
     #
     # @return [Boolean] `true` or `false`
     def root?
-      self.path == '/' || self.path.empty?
+      !self.hier?  || self.path == '/' || self.path.empty?
     end
 
     ##
@@ -388,7 +414,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if this URI's path component isn't equal to `/`.
+    # Returns `true` if this URI is hierarchical and it's path component isn't equal to `/`.
     #
     # @example
     #   RDF::URI('http://example.org/').has_parent?             #=> false

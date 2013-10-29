@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module RDF::NTriples
   ##
   # N-Triples serializer.
@@ -58,12 +59,14 @@ module RDF::NTriples
           string
         when string.respond_to?(:ascii_only?) && string.ascii_only?
           StringIO.open do |buffer|
+            buffer.set_encoding(Encoding::ASCII) if buffer.respond_to?(:set_encoding)
             string.each_byte { |u| buffer << escape_ascii(u, encoding) }
             buffer.string
           end
         when string.respond_to?(:each_char) && encoding && encoding != Encoding::ASCII
           # Not encoding UTF-8 characters
           StringIO.open do |buffer|
+            buffer.set_encoding(encoding) if buffer.respond_to?(:set_encoding)
             string.each_char do |u|
               buffer << case u.ord
               when (0x00..0x7F)
@@ -77,17 +80,19 @@ module RDF::NTriples
         when string.respond_to?(:each_codepoint)
           # Encode ASCII && UTF-8 characters
           StringIO.open do |buffer|
+            buffer.set_encoding(Encoding::ASCII) if buffer.respond_to?(:set_encoding)
             string.each_codepoint { |u| buffer << escape_unicode(u, encoding) }
             buffer.string
           end
         else # works in Ruby 1.8.x, too
           # Encode ASCII && UTF-8 characters
           StringIO.open do |buffer|
+            buffer.set_encoding(Encoding::ASCII) if buffer.respond_to?(:set_encoding)
             string.scan(/./mu) { |c| buffer << escape_unicode(u = c.unpack('U*').first, encoding) }
             buffer.string
           end
       end
-      ret.respond_to?(:force_encoding) && encoding ? ret.dup.force_encoding(encoding) : ret
+      ret.respond_to?(:encode) && encoding && ret.encoding != encoding ? ret.encode(encoding) : ret
     end
 
     ##

@@ -27,7 +27,8 @@ module RDF; module Util
     # @param  [Hash{Symbol => Object}] options
     #   options are ignored in this implementation. Applications are encouraged
     #   to override this implementation to provide more control over HTTP
-    #   headers and redirect following.
+    #   headers and redirect following. If opening as a file,
+    #   options are passed to `Kernel.open`.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open. (Ruby >= 1.9 only)
     # @return [IO] File stream
@@ -37,10 +38,14 @@ module RDF; module Util
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       if RUBY_VERSION < "1.9"
         Kernel.open(filename_or_url.to_s, &block)
+      elsif filename_or_url.to_s =~ /^#{RDF::URI::SCHEME}/
+        # Open as a URL
+        headers = options.fetch(:headers, {})
+        headers['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
+        Kernel.open(filename_or_url.to_s, headers, &block)
       else
-        options[:headers] ||= {}
-        options[:headers]['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
-        Kernel.open(filename_or_url.to_s, options[:headers], &block)
+        # Open as a file, passing any options
+        Kernel.open(filename_or_url, "r", options, &block)
       end
     end
   end # File
