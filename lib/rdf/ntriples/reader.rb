@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module RDF::NTriples
   ##
   # N-Triples parser.
