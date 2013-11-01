@@ -42,7 +42,7 @@ describe RDF::Enumerable do
     it "Enumerating all statements" do
       subject.each_statement {|statement| $stdout.puts statement.inspect}
       $stdout.rewind
-      $stdout.read.should_not be_empty
+      expect($stdout.read).not_to be_empty
     end
 
     it "Enumerating all statements in the form of triples" do
@@ -50,7 +50,7 @@ describe RDF::Enumerable do
         $stdout.puts [subject, predicate, object].inspect
       end
       $stdout.rewind
-      $stdout.read.should_not be_empty
+      expect($stdout.read).not_to be_empty
     end
 
     it "Enumerating all statements in the form of quads" do
@@ -58,7 +58,7 @@ describe RDF::Enumerable do
         $stdout.puts [subject, predicate, object, context].inspect
       end
       $stdout.rewind
-      $stdout.read.should_not be_empty
+      expect($stdout.read).not_to be_empty
     end
 
     context "Enumerating all terms" do
@@ -66,7 +66,7 @@ describe RDF::Enumerable do
         it "##{method}" do
           subject.send(method.to_sym) {|term| $stdout.puts term.inspect}
           $stdout.rewind
-          $stdout.read.should_not be_empty
+          expect($stdout.read).not_to be_empty
         end
       end
     end
@@ -74,7 +74,7 @@ describe RDF::Enumerable do
     context "Obtaining all statements" do
       %w(statements triples quads).each do |method|
         it "##{method}" do
-          subject.send(method.to_sym).to_a.should_not be_empty
+          expect(subject.send(method.to_sym).to_a).not_to be_empty
         end
       end
     end
@@ -82,14 +82,14 @@ describe RDF::Enumerable do
     context "Obtaining all unique values" do
       %w(subjects predicates objects contexts).each do |method|
         it "##{method}" do
-          subject.send(method.to_sym).to_a.should_not be_empty
+          expect(subject.send(method.to_sym).to_a).not_to be_empty
         end
       end
     end
 
     describe "#dump" do
       it "Serializing into N-Triples format" do
-        subject.dump(:ntriples).should_not be_empty
+        expect(subject.dump(:ntriples)).not_to be_empty
       end
     end
   end

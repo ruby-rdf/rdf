@@ -4,7 +4,7 @@ require 'set'
 
 ::RSpec::Matchers.define :have_result_set do |expected|
   match do |result|
-    result.map(&:to_hash).to_set.should == expected.to_set
+    expect(result.map(&:to_hash).to_set).to eq expected.to_set
   end
 end
 
@@ -20,19 +20,19 @@ describe RDF::Query do
     end
 
     it "adds patterns from closure" do
-      RDF::Query.new { pattern [RDF::URI("a"), RDF::URI("b"), "c"] }.patterns.should == [pattern]
+      expect(RDF::Query.new { pattern [RDF::URI("a"), RDF::URI("b"), "c"] }.patterns).to eq [pattern]
     end
 
     it "adds patterns from argument" do
-      RDF::Query.new(pattern).patterns.should == [pattern]
+      expect(RDF::Query.new(pattern).patterns).to eq [pattern]
     end
 
     it "adds patterns from array" do
-      RDF::Query.new([pattern]).patterns.should == [pattern]
+      expect(RDF::Query.new([pattern]).patterns).to eq [pattern]
     end
 
     it "adds patterns from hash" do
-      RDF::Query.new(RDF::URI("a") => { RDF::URI("b")  => "c" }).patterns.should == [pattern]
+      expect(RDF::Query.new(RDF::URI("a") => { RDF::URI("b")  => "c" }).patterns).to eq [pattern]
     end
   end
 
@@ -65,10 +65,10 @@ describe RDF::Query do
       }.each do |which, graph|
         context which do
           it "returns a single empty solution (query execute)" do
-            subject.execute(graph).map(&:to_hash).should == [{}]
+            expect(subject.execute(graph).map(&:to_hash)).to eq [{}]
           end
           it "returns a single empty solution (graph execute)" do
-            graph.query(subject).map(&:to_hash).should == [{}]
+            expect(graph.query(subject).map(&:to_hash)).to eq [{}]
           end
         end
       end
@@ -100,7 +100,7 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [EX.x1, EX.p1, EX.x2]
         end
-        query.execute(graph).map(&:to_hash).should == [{}]
+        expect(query.execute(graph).map(&:to_hash)).to eq [{}]
       end
     end
 
@@ -112,8 +112,8 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [:s, EX.p1, 123.0]
         end
-        query.execute(graph).map(&:to_hash).should == [{:s => EX.x1}]
-        graph.query(query).map(&:to_hash).should == [{:s => EX.x1}]
+        expect(query.execute(graph).map(&:to_hash)).to eq [{:s => EX.x1}]
+        expect(graph.query(query).map(&:to_hash)).to eq [{:s => EX.x1}]
       end
     end
 
@@ -128,12 +128,12 @@ describe RDF::Query do
 
        context "with no context" do
          it "returns statements differing in context (direct execute)" do
-           subject.execute(repo).map(&:to_hash).should == [
+           expect(subject.execute(repo).map(&:to_hash)).to eq [
              {:s => EX.s1, :p => EX.p1, :o => EX.o1},
              {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
          end
          it "returns statements differing in context (graph execute)" do
-           repo.query(subject).map(&:to_hash).should == [
+           expect(repo.query(subject).map(&:to_hash)).to eq [
              {:s => EX.s1, :p => EX.p1, :o => EX.o1},
              {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
          end
@@ -142,7 +142,7 @@ describe RDF::Query do
        context "with default context" do
          it "returns statement from default context" do
            subject.context = false
-           subject.execute(repo).map(&:to_hash).should == [
+           expect(subject.execute(repo).map(&:to_hash)).to eq [
              {:s => EX.s1, :p => EX.p1, :o => EX.o1}]
          end
        end
@@ -150,7 +150,7 @@ describe RDF::Query do
        context "with constant context" do
          it "returns statement from specified context" do
            subject.context = EX.c
-           subject.execute(repo).map(&:to_hash).should == [
+           expect(subject.execute(repo).map(&:to_hash)).to eq [
              {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
          end
        end
@@ -158,7 +158,7 @@ describe RDF::Query do
        context "with variable context" do
          it "returns statement having a context" do
            subject.context = RDF::Query::Variable.new(:c)
-           subject.execute(repo).map(&:to_hash).should == [
+           expect(subject.execute(repo).map(&:to_hash)).to eq [
              {:s => EX.s2, :p => EX.p2, :o => EX.o2, :c => EX.c}]
          end
        end
@@ -193,28 +193,28 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [:s, EX.p, 1]
         end
-        query.execute(graph).should have_result_set([{ :s => EX.x1 }])
+        expect(query.execute(graph)).to have_result_set([{ :s => EX.x1 }])
       end
 
       it "s ?p o" do
         query = RDF::Query.new do |query|
           query << [EX.x2, :p, 2]
         end
-        query.execute(graph).should have_result_set [ { :p => EX.p } ]
+        expect(query.execute(graph)).to have_result_set [ { :p => EX.p } ]
       end
 
       it "s p ?o" do
         query = RDF::Query.new do |query|
           query << [EX.x3, EX.p, :o]
         end
-        query.execute(graph).should have_result_set [ { :o => RDF::Literal.new(3) } ]
+        expect(query.execute(graph)).to have_result_set [ { :o => RDF::Literal.new(3) } ]
       end
 
       it "?s p ?o" do
         query = RDF::Query.new do |query|
           query << [:s, EX.p, :o]
         end
-        query.execute(graph).should have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
+        expect(query.execute(graph)).to have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
                                                        { :s => EX.x2, :o => RDF::Literal.new(2) },
                                                        { :s => EX.x3, :o => RDF::Literal.new(3) }]
       end
@@ -223,14 +223,14 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [:s, :p, 3]
         end
-        query.execute(graph).should have_result_set [ { :s => EX.x3, :p => EX.p } ]
+        expect(query.execute(graph)).to have_result_set [ { :s => EX.x3, :p => EX.p } ]
       end
 
       it "s ?p ?o" do
         query = RDF::Query.new do |query|
           query << [ EX.x1, :p, :o]
         end
-        query.execute(graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
+        expect(query.execute(graph)).to have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
 
       it "?s p o / ?s p1 o1" do
@@ -241,7 +241,7 @@ describe RDF::Query do
           query << [:s, EX.p3, EX.x3]
           query << [:s, EX.p2, EX.x3]
         end
-        query.execute(graph).should have_result_set [ { :s => EX.x5 } ]
+        expect(query.execute(graph)).to have_result_set [ { :s => EX.x5 } ]
       end
 
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
@@ -250,14 +250,14 @@ describe RDF::Query do
           query << [:o, EX.pchain2, :o2]
           query << [:o2, EX.pchain3, :o3]
         end
-        query.execute(graph).should have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
+        expect(query.execute(graph)).to have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
       end
 
       it "?same p ?same" do
         query = RDF::Query.new do |query|
           query << [:same, EX.psame, :same]
         end
-        query.execute(graph).should have_result_set [ { :same => EX.x4 } ]
+        expect(query.execute(graph)).to have_result_set [ { :same => EX.x4 } ]
       end
 
       it "chains solutions" do
@@ -267,7 +267,7 @@ describe RDF::Query do
         sol1 = q1.execute(graph)
         sol2 = q2.execute(graph, :solutions => sol1)
         sol3 = q3.execute(graph, :solutions => sol2)
-        sol3.should have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
+        expect(sol3).to have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
       end
       
       it "has bindings" do
@@ -275,9 +275,9 @@ describe RDF::Query do
           query << [:s, EX.p, :o]
         end
         bindings = query.execute(graph).bindings
-        bindings.keys.sort_by(&:to_s).should == [:o, :s]
-        bindings[:o].sort.should == [RDF::Literal.new(1), RDF::Literal.new(2), RDF::Literal.new(3)]
-        bindings[:s].sort.should == [EX.x1, EX.x2, EX.x3]
+        expect(bindings.keys.sort_by(&:to_s)).to eq [:o, :s]
+        expect(bindings[:o].sort).to eq [RDF::Literal.new(1), RDF::Literal.new(2), RDF::Literal.new(3)]
+        expect(bindings[:s].sort).to eq [EX.x1, EX.x2, EX.x3]
       end
 
       # From sp2b benchmark, query 7 bgp 2
@@ -324,7 +324,7 @@ describe RDF::Query do
           query << [:bag3, :member3, :doc]
         end
 
-        query.execute(graph).should have_result_set [
+        expect(query.execute(graph)).to have_result_set [
           { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => @n1, :doc => EX.doc11 },
           { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => @n2, :doc => EX.doc12 },
           { :doc3 => EX.doc1, :class3 => EX.class1, :bag3 => EX.bag1, :member3 => @n3, :doc => EX.doc13 },
@@ -390,7 +390,7 @@ describe RDF::Query do
           query << [:bag, :member, :doc2]
         end
 
-        query.execute(graph).should have_result_set [
+        expect(query.execute(graph)).to have_result_set [
           { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
             :member => @n1, :doc2 => EX.doc11, :title => EX.title1 },
           { :doc => EX.doc1, :class => EX.class1, :bag => EX.bag1,
@@ -421,8 +421,9 @@ describe RDF::Query do
           query << [:s1, EX.p, :o1]
           query << [:s2, EX.p, :o2]
         end
+        # FIXME: so?
         # Use set comparison for unordered compare on 1.8.7
-        query.execute(graph).map(&:to_hash).to_set.should == [
+        expect(query.execute(graph).map(&:to_hash).to_set).to eq [
           {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x1, :o2 => RDF::Literal(1)},
           {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x2, :o2 => RDF::Literal(2)},
           {:s1 => EX.x2, :o1 => RDF::Literal(2), :s2 => EX.x1, :o2 => RDF::Literal(1)},
@@ -459,15 +460,15 @@ describe RDF::Query do
         end
 
         it "has two solutions" do
-          @solutions.count.should == 2
+          expect(@solutions.count).to eq 2
         end
         
         it "has xi1 as a solution" do
-          @solutions.filter(:x => EX.xi1).should_not be_empty
+          expect(@solutions.filter(:x => EX.xi1)).not_to be_empty
         end
         
         it "has xi2 as a solution" do
-          @solutions.filter(:x => EX.xi2).should_not be_empty
+          expect(@solutions.filter(:x => EX.xi2)).not_to be_empty
         end
       end
 
@@ -479,11 +480,11 @@ describe RDF::Query do
         end
 
         it "has one solution" do
-          @solutions.count.should == 1
+          expect(@solutions.count).to eq 1
         end
         
         it "has xd1 as a solution" do
-          @solutions.filter(:x => EX.xd1).should_not be_empty
+          expect(@solutions.filter(:x => EX.xd1)).not_to be_empty
         end
       end
     end
@@ -517,28 +518,28 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [RDF::Query::Variable.new("s"), EX.p, 1]
         end
-        query.execute(graph).should have_result_set([{ :s => EX.x1 }])
+        expect(query.execute(graph)).to have_result_set([{ :s => EX.x1 }])
       end
 
       it "s ?p o" do
         query = RDF::Query.new do |query|
           query << [EX.x2, RDF::Query::Variable.new("p"), 2]
         end
-        query.execute(graph).should have_result_set [ { :p => EX.p } ]
+        expect(query.execute(graph)).to have_result_set [ { :p => EX.p } ]
       end
 
       it "s p ?o" do
         query = RDF::Query.new do |query|
           query << [EX.x3, EX.p, RDF::Query::Variable.new("o")]
         end
-        query.execute(graph).should have_result_set [ { :o => RDF::Literal.new(3) } ]
+        expect(query.execute(graph)).to have_result_set [ { :o => RDF::Literal.new(3) } ]
       end
 
       it "?s p ?o" do
         query = RDF::Query.new do |query|
           query << [RDF::Query::Variable.new("s"), EX.p, RDF::Query::Variable.new("o")]
         end
-        query.execute(graph).should have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
+        expect(query.execute(graph)).to have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
                                                        { :s => EX.x2, :o => RDF::Literal.new(2) },
                                                        { :s => EX.x3, :o => RDF::Literal.new(3) }]
       end
@@ -547,14 +548,14 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [RDF::Query::Variable.new("s"), RDF::Query::Variable.new("p"), 3]
         end
-        query.execute(graph).should have_result_set [ { :s => EX.x3, :p => EX.p } ]
+        expect(query.execute(graph)).to have_result_set [ { :s => EX.x3, :p => EX.p } ]
       end
 
       it "s ?p ?o" do
         query = RDF::Query.new do |query|
           query << [ EX.x1, RDF::Query::Variable.new("p"), RDF::Query::Variable.new("o")]
         end
-        query.execute(graph).should have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
+        expect(query.execute(graph)).to have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
     end
     
@@ -572,7 +573,7 @@ describe RDF::Query do
           query.pattern [:s, EX.p, EX.o]
           query.pattern [:s, EX.p2, :o], :optional => true
         end
-        query.execute(@graph).map(&:to_hash).to_set.should == [
+        expect(query.execute(@graph).map(&:to_hash).to_set).to eq [
           {:s => EX.s1},
           {:s => EX.s2, :o => EX.o2}
         ].to_set
@@ -618,7 +619,7 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [EX.x1, EX.p, :o]
         end
-        query.execute(graph, :bindings => { :o => [EX.o1, EX.o4]}).should have_result_set [
+        expect(query.execute(graph, :bindings => { :o => [EX.o1, EX.o4]})).to have_result_set [
           {:o => EX.o1}, {:o => EX.o4}]
       end
 
@@ -629,7 +630,7 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [:s, EX.p1, :o]
         end
-        query.execute(graph, :bindings => {:o => [EX.o1], :s => [EX.x1]}).should have_result_set [
+        expect(query.execute(graph, :bindings => {:o => [EX.o1], :s => [EX.x1]})).to have_result_set [
           {:s => EX.x1, :o => EX.o1}
         ]
       end
@@ -644,21 +645,21 @@ describe RDF::Query do
         it "projects all variables" do
           subject.project(:s, :p, :o)
           subject.each do |solution|
-            solution.bindings.keys.should include(:s, :p, :o)
+            expect(solution.bindings.keys).to include(:s, :p, :o)
           end
         end
 
         it "projects some variables" do
           subject.project(:s, :p)
           subject.each do |solution|
-            solution.bindings.keys.should include(:s, :p)
+            expect(solution.bindings.keys).to include(:s, :p)
           end
         end
 
         it "projects a variable" do
           subject.project(:s)
           subject.each do |solution|
-            solution.bindings.keys.should include(:s)
+            expect(solution.bindings.keys).to include(:s)
           end
         end
       end
@@ -729,41 +730,41 @@ describe RDF::Query do
 
   context "#context" do
     it "returns nil by default" do
-      subject.context.should be_nil
+      expect(subject.context).to be_nil
     end
     
     it "sets and returns a context" do
       subject.context = RDF.first
-      subject.context.should == RDF.first
+      expect(subject.context).to eq RDF.first
     end
   end
 
   context "#context=" do
     it "returns set context" do
-      (subject.context = RDF::URI("c")).should == RDF::URI("c")
-      (subject.context = :default).should == :default
+      expect((subject.context = RDF::URI("c"))).to eq RDF::URI("c")
+      expect((subject.context = :default)).to eq :default
     end
   end
 
   describe "#named?" do
     it "returns false with no context" do
-      subject.named?.should be_false
+      expect(subject.named?).to be_false
     end
     
     it "returns true with a context" do
       subject.context = RDF.first
-      subject.named?.should be_true
+      expect(subject.named?).to be_true
     end
   end
   
   describe "#unnamed?" do
     it "returns true with no context" do
-      subject.unnamed?.should be_true
+      expect(subject.unnamed?).to be_true
     end
     
     it "returns false with a context" do
       subject.context = RDF.first
-      subject.unnamed?.should be_false
+      expect(subject.unnamed?).to be_false
     end
   end
   
@@ -771,8 +772,8 @@ describe RDF::Query do
     it "returns a new RDF::Query" do
       rhs = RDF::Query.new
       q = subject + rhs
-      q.should_not be_equal(subject)
-      q.should_not be_equal(rhs)
+      expect(q).not_to be_equal(subject)
+      expect(q).not_to be_equal(rhs)
     end
     
     it "contains patterns from each query in order" do
@@ -780,7 +781,7 @@ describe RDF::Query do
       rhs = RDF::Query.new
       subject.pattern [RDF.a, RDF.b, RDF.c]
       q = subject + rhs
-      q.patterns.should == [[RDF.first, RDF.second, RDF.third], [RDF.a, RDF.b, RDF.c]]
+      expect(q.patterns).to eq [[RDF.first, RDF.second, RDF.third], [RDF.a, RDF.b, RDF.c]]
     end
   end
 
@@ -794,11 +795,11 @@ describe RDF::Query do
       end
     }
     it "Constructing a basic graph pattern query (1)" do
-      subject.should be_a(RDF::Query)
-      subject.patterns.size.should == 3
-      subject.patterns[0].should == RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
-      subject.patterns[1].should == RDF::Query::Pattern.new(:person, FOAF.name, :name)
-      subject.patterns[2].should == RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
+      expect(subject).to be_a(RDF::Query)
+      expect(subject.patterns.size).to eq 3
+      expect(subject.patterns[0]).to eq RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
+      expect(subject.patterns[1]).to eq RDF::Query::Pattern.new(:person, FOAF.name, :name)
+      expect(subject.patterns[2]).to eq RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
     end
 
     it "Constructing a basic graph pattern query (2)" do
@@ -809,22 +810,22 @@ describe RDF::Query do
           FOAF.mbox => :email,
         }
       })
-      query.should be_a(RDF::Query)
-      query.patterns.size.should == 3
-      query.patterns[0].should == RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
-      query.patterns[1].should == RDF::Query::Pattern.new(:person, FOAF.name, :name)
-      query.patterns[2].should == RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
+      expect(query).to be_a(RDF::Query)
+      expect(query.patterns.size).to eq 3
+      expect(query.patterns[0]).to eq RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
+      expect(query.patterns[1]).to eq RDF::Query::Pattern.new(:person, FOAF.name, :name)
+      expect(query.patterns[2]).to eq RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
     end
 
     it "Executing a basic graph pattern query" do
-      subject.execute(graph).each.to_a.should have_at_least(3).items
+      expect(subject.execute(graph).each.to_a).to have_at_least(3).items
     end
 
     it "Constructing and executing a query in one go (1)" do
       solutions = RDF::Query.execute(graph) do
         pattern [:person, RDF.type, FOAF.Person]
       end
-      solutions.to_a.should have_at_least(3).items
+      expect(solutions.to_a).to have_at_least(3).items
     end
 
     it "Constructing and executing a query in one go (2)" do
@@ -833,7 +834,7 @@ describe RDF::Query do
           RDF.type => FOAF.Person,
         }
       })
-      solutions.to_a.should have_at_least(3).items
+      expect(solutions.to_a).to have_at_least(3).items
     end
   end
 end

@@ -87,19 +87,19 @@ describe RDF::Statement do
     its(:to_a) {should eql([stmt.subject, stmt.predicate, stmt.object])}
 
     it "should support #[] for the subject" do
-      subject[0].should equal(subject.subject)
+      expect(subject[0]).to equal(subject.subject)
     end
 
     it "should support #[] for the predicate" do
-      subject[1].should equal(subject.predicate)
+      expect(subject[1]).to equal(subject.predicate)
     end
 
     it "should support #[] for the object" do
-      subject[2].should equal(subject.object)
+      expect(subject[2]).to equal(subject.object)
     end
 
     it "should support #[] for the context" do
-      subject[3].should equal(subject.context)
+      expect(subject[3]).to equal(subject.context)
     end
 
     it "should support #[]= for the subject" do
@@ -206,7 +206,7 @@ describe RDF::Statement do
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal")) =>
         RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal")),
       RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self")),
+        RDF::Statement.new(RDF::URI('file:/path/to/file%20with%20spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self")),
       RDF::Statement.new(nil, RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) => nil,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil) => nil,

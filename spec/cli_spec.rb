@@ -21,14 +21,14 @@ describe RDF::CLI do
       out = capture_stdout do
         RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]])
       end
-      out.should_not be_empty
+      expect(out).not_to be_empty
     end
 
     it "serializes to NQuads" do
       out = capture_stdout do
         RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]], :output_format => :nquads)
       end
-      out.should_not be_empty
+      expect(out).not_to be_empty
     end
   end
 
@@ -39,7 +39,7 @@ describe RDF::CLI do
           RDF::CLI.exec_command("count", [file])
         end
         g = RDF::Repository.load(file)
-        out.should =~ /Parsed #{g.count} statements/
+        expect(out).to match /Parsed #{g.count} statements/
       end
     end
   end
@@ -50,7 +50,7 @@ describe RDF::CLI do
         out = capture_stdout do
           RDF::CLI.exec_command("subjects", [file])
         end
-        out.should_not be_empty
+        expect(out).not_to be_empty
       end
     end
   end
@@ -61,7 +61,7 @@ describe RDF::CLI do
         out = capture_stdout do
           RDF::CLI.exec_command("objects", [file])
         end
-        out.should_not be_empty
+        expect(out).not_to be_empty
       end
     end
   end
@@ -72,7 +72,7 @@ describe RDF::CLI do
         out = capture_stdout do
           RDF::CLI.exec_command("predicates", [file])
         end
-        out.should_not be_empty
+        expect(out).not_to be_empty
       end
     end
   end
@@ -83,7 +83,7 @@ describe RDF::CLI do
         out = capture_stdout do
           RDF::CLI.exec_command("lenghts", [file])
         end
-        out.should_not be_empty
+        expect(out).not_to be_empty
       end
     end
   end

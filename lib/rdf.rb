@@ -1,30 +1,12 @@
-require 'enumerator'
 require 'open-uri'
 require 'stringio'
 require 'bigdecimal'
 require 'date'
 require 'time'
 
-if RUBY_VERSION < '1.8.7'
-  # @see http://rubygems.org/gems/backports
-  begin
-    require 'backports/1.8.7'
-  rescue LoadError
-    begin
-      require 'rubygems'
-      require 'backports/1.8.7'
-    rescue LoadError
-      abort "RDF.rb requires Ruby 1.8.7 or the Backports gem (hint: `gem install backports')."
-    end
-  end
-end
-
 require 'rdf/version'
 
 module RDF
-  # For compatibility with both Ruby 1.8.x and Ruby 1.9.x:
-  Enumerator = defined?(::Enumerator) ? ::Enumerator : ::Enumerable::Enumerator
-
   # RDF mixins
   autoload :Countable,   'rdf/mixin/countable'
   autoload :Durable,     'rdf/mixin/durable'
@@ -39,6 +21,7 @@ module RDF
 
   # RDF objects
   autoload :Graph,       'rdf/model/graph'
+  autoload :IRI,         'rdf/model/uri'
   autoload :Literal,     'rdf/model/literal'
   autoload :Node,        'rdf/model/node'
   autoload :Resource,    'rdf/model/resource'
@@ -62,6 +45,7 @@ module RDF
   autoload :NQuads,      'rdf/nquads'
 
   # RDF storage
+  autoload :Dataset,     'rdf/model/dataset'
   autoload :Repository,  'rdf/repository'
   autoload :Transaction, 'rdf/transaction'
 
@@ -79,6 +63,7 @@ module RDF
   ##
   # Alias for `RDF::Resource.new`.
   #
+  # @param (see RDF::Resource#initialize)
   # @return [RDF::Resource]
   def self.Resource(*args, &block)
     Resource.new(*args, &block)
@@ -87,6 +72,7 @@ module RDF
   ##
   # Alias for `RDF::Node.new`.
   #
+  # @param (see RDF::Node#initialize)
   # @return [RDF::Node]
   def self.Node(*args, &block)
     Node.new(*args, &block)
@@ -95,13 +81,7 @@ module RDF
   ##
   # Alias for `RDF::URI.new`.
   #
-  # @overload URI(uri)
-  #   @param  [URI, String, #to_s]    uri
-  #
-  # @overload URI(options = {})
-  #   @param  [Hash{Symbol => Object}] options
-  #     passed to `Addressable::URI.new`
-  #
+  # @param (see RDF::URI#initialize)
   # @return [RDF::URI]
   def self.URI(*args, &block)
     case uri = args.first
@@ -116,6 +96,7 @@ module RDF
   ##
   # Alias for `RDF::Literal.new`.
   #
+  # @param (see RDF::Literal#initialize)
   # @return [RDF::Literal]
   def self.Literal(*args, &block)
     case literal = args.first
@@ -127,6 +108,7 @@ module RDF
   ##
   # Alias for `RDF::Graph.new`.
   #
+  # @param (see RDF::Graph#initialize)
   # @return [RDF::Graph]
   def self.Graph(*args, &block)
     Graph.new(*args, &block)
@@ -135,6 +117,7 @@ module RDF
   ##
   # Alias for `RDF::Statement.new`.
   #
+  # @param (see RDF::Statement#initialize)
   # @return [RDF::Statement]
   def self.Statement(*args, &block)
     Statement.new(*args, &block)
@@ -143,10 +126,16 @@ module RDF
   ##
   # Alias for `RDF::Vocabulary.create`.
   #
-  # @param  [String] uri
+  # @param (see RDF::Vocabulary#initialize)
   # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
+  end
+
+  ##
+  # @return [URI]
+  def self.value
+    self[:value]
   end
 
   ##
@@ -208,5 +197,8 @@ module RDF
   class << self
     # For compatibility with `RDF::Vocabulary.__name__`:
     alias_method :__name__, :name
+    
+    # For IRI compatibility
+    alias_method :to_iri, :to_uri
   end
 end

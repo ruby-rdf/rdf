@@ -142,12 +142,14 @@ module RDF
 
       # If we have a sample, use that for format detection
       if sample = (options[:sample] if options.is_a?(Hash)) || (yield if block_given?)
+        sample = sample.to_s
+        sample.force_encoding(Encoding::UTF_8) if sample.respond_to?(:force_encoding)
         # Given a sample, perform format detection across the appropriate formats, choosing
         # the first that matches
         format ||= @@subclasses
 
         # Return first format that has a positive detection
-        format.detect {|f| f.detect(sample.to_s)} || format.first
+        format.detect {|f| f.detect(sample)} || format.first
       elsif format.is_a?(Array)
         # Otherwise, just return the first matching format
         format.first

@@ -8,25 +8,25 @@ describe RDF::List do
   ORDINALS = %w(first second third fourth fifth sixth seventh eighth ninth tenth)
 
   it "is comparable" do
-    RDF::List.new.should be_a_kind_of(::Comparable)
+    expect(RDF::List.new).to be_a_kind_of(::Comparable)
   end
 
   it "is enumerable" do
-    RDF::List.new.should be_a_kind_of(::Enumerable)
+    expect(RDF::List.new).to be_a_kind_of(::Enumerable)
   end
 
   describe RDF::List, "[] without arguments" do
     it "constructs a new empty list" do
-      RDF::List[].should be_an(RDF::List)
-      RDF::List[].should be_empty
-      RDF::List[].should == RDF::List::NIL
+      expect(RDF::List[]).to be_an(RDF::List)
+      expect(RDF::List[]).to be_empty
+      expect(RDF::List[]).to eq RDF::List::NIL
     end
   end
 
   describe RDF::List, "[] with arguments" do
     it "constructs a new non-empty list" do
-      RDF::List[1, 2, 3].should be_an(RDF::List)
-      RDF::List[1, 2, 3].should_not be_empty
+      expect(RDF::List[1, 2, 3]).to be_an(RDF::List)
+      expect(RDF::List[1, 2, 3]).not_to be_empty
     end
 
     it "accepts list arguments" do
@@ -36,11 +36,11 @@ describe RDF::List do
     it "accepts array arguments" do
       expect { RDF::List[[1]] }.not_to raise_error
       l1 = RDF::List[[1]]
-      l1.size.should == 1
-      l1.first.should be_a(RDF::Node)
+      expect(l1.size).to eq 1
+      expect(l1.first).to be_a(RDF::Node)
       expect { RDF::List.new(l1.first, l1.graph) }.not_to raise_error
       l2 = RDF::List.new(l1.first, l1.graph)
-      l2.first.should == RDF::Literal(1)
+      expect(l2.first).to eq RDF::Literal(1)
     end
 
     it "accepts blank node arguments" do
@@ -98,7 +98,7 @@ describe RDF::List do
     end
 
     it "returns a resource" do
-      empty.subject.should be_a_resource
+      expect(empty.subject).to be_a_resource
     end
   end
 
@@ -108,7 +108,7 @@ describe RDF::List do
     end
 
     it "returns a graph" do
-      empty.graph.should be_a_graph
+      expect(empty.graph).to be_a_graph
     end
   end
 
@@ -122,9 +122,9 @@ describe RDF::List do
     end
 
     it "returns the set intersection of self and the given argument" do
-      (RDF::List[1, 2] & RDF::List[1, 2]).should == RDF::List[1, 2]
-      (RDF::List[1, 2] & RDF::List[2, 3]).should == RDF::List[2]
-      (RDF::List[1, 2] & RDF::List[3, 4]).should == RDF::List[]
+      expect(RDF::List[1, 2] & RDF::List[1, 2]).to eq RDF::List[1, 2]
+      expect(RDF::List[1, 2] & RDF::List[2, 3]).to eq RDF::List[2]
+      expect(RDF::List[1, 2] & RDF::List[3, 4]).to eq RDF::List[]
     end
   end
 
@@ -138,9 +138,9 @@ describe RDF::List do
     end
 
     it "returns the set union of self and the given argument" do
-      (RDF::List[1, 2] | RDF::List[1, 2]).should == RDF::List[1, 2]
-      (RDF::List[1, 2] | RDF::List[2, 3]).should == RDF::List[1, 2, 3]
-      (RDF::List[1, 2] | RDF::List[3, 4]).should == RDF::List[1, 2, 3, 4]
+      expect(RDF::List[1, 2] | RDF::List[1, 2]).to eq RDF::List[1, 2]
+      expect(RDF::List[1, 2] | RDF::List[2, 3]).to eq RDF::List[1, 2, 3]
+      expect(RDF::List[1, 2] | RDF::List[3, 4]).to eq RDF::List[1, 2, 3, 4]
     end
   end
 
@@ -154,7 +154,7 @@ describe RDF::List do
     end
 
     it "returns the concatenation of self and the given argument" do
-      (RDF::List[1, 2] + RDF::List[3, 4]).should == RDF::List[1, 2, 3, 4]
+      expect(RDF::List[1, 2] + RDF::List[3, 4]).to eq RDF::List[1, 2, 3, 4]
     end
   end
 
@@ -168,7 +168,7 @@ describe RDF::List do
     end
 
     it "returns the difference between self and the given argument" do
-      (RDF::List[1, 2, 2, 3] - RDF::List[2]).should == RDF::List[1, 3]
+      expect(RDF::List[1, 2, 2, 3] - RDF::List[2]).to eq RDF::List[1, 3]
     end
   end
 
@@ -184,13 +184,13 @@ describe RDF::List do
 
   describe RDF::List, "#* with an integer argument" do
     it "returns a repetition of self" do
-      (RDF::List[1, 2, 3] * 2).should == RDF::List[1, 2, 3, 1, 2, 3]
+      expect(RDF::List[1, 2, 3] * 2).to eq RDF::List[1, 2, 3, 1, 2, 3]
     end
   end
 
   describe RDF::List, "#* with a string argument" do
     it "returns the string concatenation of all elements" do
-      (RDF::List[1, 2, 3] * ",").should == "1,2,3"
+      expect(RDF::List[1, 2, 3] * ",").to eq "1,2,3"
     end
   end
 
@@ -204,12 +204,12 @@ describe RDF::List do
     end
 
     it "returns a value for valid indexes" do
-      ten[0].should be_a_value
+      expect(ten[0]).to be_a_value
     end
 
     it "returns nil for invalid indexes" do
-      empty[0].should be_nil
-      ten[20].should be_nil
+      expect(empty[0]).to be_nil
+      expect(ten[20]).to be_nil
     end
   end
 
@@ -228,48 +228,48 @@ describe RDF::List do
 
     it "appends the new value at the tail of the list" do
       ten << 11
-      ten.last.should == RDF::Literal.new(11)
+      expect(ten.last).to eq RDF::Literal.new(11)
     end
 
     it "increments the length of the list by one" do
       ten << 11
-      ten.length.should == 11
+      expect(ten.length).to eq 11
     end
 
     it "returns self" do
-      (ten << 11).should equal(ten)
+      expect(ten << 11).to equal(ten)
     end
   end
 
   describe RDF::List, "#shift" do
     it "returns the first element from the list" do
-      ten.shift.should == RDF::Literal.new(1)
+      expect(ten.shift).to eq RDF::Literal.new(1)
     end
 
     it "removes the first element from the list" do
       ten.shift
-      ten.should == RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10]
+      expect(ten).to eq RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10]
     end
 
     it "should return nil from an empty list" do
-      empty.shift.should be_nil
+      expect(empty.shift).to be_nil
     end
   end
 
   describe RDF::List, "#unshift" do
     it "adds element to beginning of list" do
       ten.unshift(0)
-      ten.should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      expect(ten).to eq RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     end
 
     it "should return the new list" do
-      ten.unshift(0).should == RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      expect(ten.unshift(0)).to eq RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     end
   end
 
   describe RDF::List, "#clear" do
     it "empties list" do
-      ten.clear.should == RDF::List[]
+      expect(ten.clear).to eq RDF::List[]
     end
   end
 
@@ -279,7 +279,7 @@ describe RDF::List do
     end
 
     it "returns true when given the same list" do
-      ten.should eql(ten)
+      expect(ten).to eql(ten)
     end
 
     it "needs work"
@@ -291,7 +291,7 @@ describe RDF::List do
     end
 
     it "returns 0 when given the same list" do
-      ten.should == ten
+      expect(ten).to eq ten
     end
   end
 
@@ -301,7 +301,7 @@ describe RDF::List do
     end
 
     it "returns true when given the same list" do
-      ten.should == ten
+      expect(ten).to eq ten
     end
   end
 
@@ -311,7 +311,7 @@ describe RDF::List do
     end
 
     it "returns true when given the same list" do
-      ten.should == ten
+      expect(ten).to eq ten
     end
 
     it "needs work"
@@ -323,9 +323,9 @@ describe RDF::List do
     end
 
     it "returns a boolean" do
-      empty.empty?.should be_true
-      abc.empty?.should be_false
-      ten.empty?.should be_false
+      expect(empty).to be_empty
+      expect(abc).not_to be_empty
+      expect(ten).not_to be_empty
     end
   end
 
@@ -335,20 +335,20 @@ describe RDF::List do
     end
 
     it "returns an integer" do
-      empty.length.should be_an(Integer)
+      expect(empty.length).to be_an(Integer)
     end
 
     it "returns the length of the list" do
-      empty.length.should == 0
-      abc.length.should == 3
-      ten.length.should == 10
+      expect(empty.length).to eq 0
+      expect(abc.length).to eq 3
+      expect(ten.length).to eq 10
     end
   end
 
   describe RDF::List, "#size" do
     it "aliases #length" do
-      empty.size.should == empty.length
-      ten.size.should == ten.length
+      expect(empty.size).to eq empty.length
+      expect(ten.size).to eq ten.length
     end
   end
 
@@ -364,7 +364,7 @@ describe RDF::List do
     end
 
     it "returns a value" do
-      ten.slice(0).should be_a_value
+      expect(ten.slice(0)).to be_a_value
     end
   end
 
@@ -374,7 +374,7 @@ describe RDF::List do
     end
 
     it "returns a value" do
-      ten.slice(0, 9).should be_a_value
+      expect(ten.slice(0, 9)).to be_a_value
     end
   end
 
@@ -391,12 +391,12 @@ describe RDF::List do
     end
 
     it "returns a value" do
-      ten.fetch(0).should be_a_value
+      expect(ten.fetch(0)).to be_a_value
     end
 
     it "returns the value at the given index" do
-      ten.fetch(0).should == RDF::Literal.new(1)
-      ten.fetch(9).should == RDF::Literal.new(10)
+      expect(ten.fetch(0)).to eq RDF::Literal.new(1)
+      expect(ten.fetch(9)).to eq RDF::Literal.new(10)
     end
 
     it "raises IndexError for invalid indexes" do
@@ -411,14 +411,14 @@ describe RDF::List do
 
     it "returns the second argument for invalid indexes" do
       expect { ten.fetch(20, nil) }.not_to raise_error
-      ten.fetch(20, true).should == true
+      expect(ten.fetch(20, true)).to eq true
     end
   end
 
   describe RDF::List, "#fetch with a block" do
     it "yields to the given block for invalid indexes" do
       expect { ten.fetch(20) { |index| } }.not_to raise_error
-      ten.fetch(20) { |index| true }.should == true
+      expect(ten.fetch(20) { |index| true }).to be_true
     end
   end
 
@@ -431,7 +431,7 @@ describe RDF::List do
   describe RDF::List, "#nth" do
     it "aliases #at" do
       (1..10).each do |n|
-        ten.nth(n).should == ten.at(n)
+        expect(ten.nth(n)).to eq ten.at(n)
       end
     end
   end
@@ -443,11 +443,11 @@ describe RDF::List do
       end
 
       it "returns a value" do
-        ten.__send__(ordinal.to_sym).should be_a_value
+        expect(ten.__send__(ordinal.to_sym)).to be_a_value
       end
 
       it "returns the #{ordinal} value in the list" do
-        ten.__send__(ordinal.to_sym).should == RDF::Literal.new(index + 1)
+        expect(ten.__send__(ordinal.to_sym)).to eq RDF::Literal.new(index + 1)
       end
     end
   end
@@ -494,7 +494,7 @@ describe RDF::List do
     end
 
     it "returns an enumerator" do
-      abc.each_subject.should be_an_enumerator
+      expect(abc.each_subject).to be_an_enumerator
     end
   end
 
@@ -504,9 +504,7 @@ describe RDF::List do
     end
 
     it "yields all subject terms in the list" do
-      count = 0
-      ten.each_subject { |subject| count += 1 }
-      count.should == 10
+      expect {|b| ten.each_subject(&b)}.to yield_control.exactly(10).times
     end
   end
 
@@ -516,7 +514,7 @@ describe RDF::List do
     end
 
     it "returns an enumerator" do
-      abc.each_subject.should be_an_enumerator
+      expect(abc.each_subject).to be_an_enumerator
     end
   end
 
@@ -526,8 +524,8 @@ describe RDF::List do
     end
 
     it "yields the correct number of times" do
-      abc.each.count.should == 3
-      ten.each.count.should == 10
+      expect(abc.each.count).to eq 3
+      expect(ten.each.count).to eq 10
     end
   end
 
@@ -537,7 +535,7 @@ describe RDF::List do
     end
 
     it "returns an enumerator" do
-      abc.each_subject.should be_an_enumerator
+      expect(abc.each_subject).to be_an_enumerator
     end
   end
 
@@ -547,13 +545,14 @@ describe RDF::List do
     end
 
     it "yields the correct number of times" do
-      abc.each_statement.count.should == 3 * 3
-      ten.each_statement.count.should == 10 * 3
+      expect(abc.each_statement.count).to eq 3 * 2
+      expect(ten.each_statement.count).to eq 10 * 2
     end
 
     it "yields statements" do
+      expect {|b| ten.each_statement(&b)}.to yield_control.at_least(10).times
       ten.each_statement do |statement|
-        statement.should be_a_statement
+        expect(statement).to be_a_statement
       end
     end
   end
@@ -568,12 +567,12 @@ describe RDF::List do
     end
 
     it "returns a string" do
-      ten.join.should be_a(String)
+      expect(ten.join).to be_a(String)
     end
 
     it "returns a particular string" do
-      ten.join.should == '12345678910'
-      ten.join(',').should == '1,2,3,4,5,6,7,8,9,10'
+      expect(ten.join).to eq '12345678910'
+      expect(ten.join(',')).to eq '1,2,3,4,5,6,7,8,9,10'
     end
   end
 
@@ -583,11 +582,11 @@ describe RDF::List do
     end
 
     it "returns a list" do
-      ten.reverse.should be_a_list
+      expect(ten.reverse).to be_a_list
     end
 
     it "returns the values reversed" do
-      ten.reverse.first.should == RDF::Literal.new(10)
+      expect(ten.reverse.first).to eq RDF::Literal.new(10)
     end
   end
 
@@ -597,7 +596,7 @@ describe RDF::List do
     end
 
     it "returns a list" do
-      ten.sort.should be_a_list
+      expect(ten.sort).to be_a_list
     end
   end
 
@@ -607,7 +606,7 @@ describe RDF::List do
     end
 
     it "returns a list" do
-      ten.sort { |a, b| a <=> b }.should be_a_list
+      expect(ten.sort { |a, b| a <=> b }).to be_a_list
     end
   end
 
@@ -617,7 +616,7 @@ describe RDF::List do
     end
 
     it "returns a list" do
-      ten.sort_by(&:to_i).should be_a_list
+      expect(ten.sort_by(&:to_i)).to be_a_list
     end
   end
 
@@ -627,11 +626,11 @@ describe RDF::List do
     end
 
     it "returns a list" do
-      ten.uniq.should be_a_list
+      expect(ten.uniq).to be_a_list
     end
 
     it "returns a list with duplicate values removed" do
-      RDF::List[1, 2, 2, 3].uniq.should == RDF::List[1, 2, 3]
+      expect(RDF::List[1, 2, 2, 3].uniq).to eq RDF::List[1, 2, 3]
     end
   end
 
@@ -641,13 +640,13 @@ describe RDF::List do
     end
 
     it "returns an array" do
-      empty.to_a.should be_an(Array)
+      expect(empty.to_a).to be_an(Array)
     end
 
     it "returns an array of the correct size" do
-      empty.to_a.size.should == empty.length
-      abc.to_a.size.should == abc.length
-      ten.to_a.size.should == ten.length
+      expect(empty.to_a.size).to eq empty.length
+      expect(abc.to_a.size).to eq abc.length
+      expect(ten.to_a.size).to eq ten.length
     end
   end
 
@@ -657,17 +656,17 @@ describe RDF::List do
     end
 
     it "returns a set" do
-      empty.to_set.should be_a(Set)
+      expect(empty.to_set).to be_a(Set)
     end
 
     it "returns a set of the correct size" do
-      empty.to_set.size.should == empty.length
-      abc.to_set.size.should == abc.length
-      ten.to_set.size.should == ten.length
+      expect(empty.to_set.size).to eq empty.length
+      expect(abc.to_set.size).to eq abc.length
+      expect(ten.to_set.size).to eq ten.length
     end
 
     it "returns a set without duplicates" do
-      RDF::List[1, 2, 2, 3].to_set.map(&:to_i).sort.should == [1, 2, 3]
+      expect(RDF::List[1, 2, 2, 3].to_set.map(&:to_i).sort).to eq [1, 2, 3]
     end
   end
 
@@ -677,7 +676,7 @@ describe RDF::List do
     end
 
     it "returns a string" do
-      empty.to_s.should be_a(String)
+      expect(empty.to_s).to be_a(String)
     end
   end
 
@@ -687,29 +686,29 @@ describe RDF::List do
     end
 
     it "returns a string" do
-      empty.inspect.should be_a(String)
+      expect(empty.inspect).to be_a(String)
     end
   end
 
   describe RDF::List::NIL do
     it "#subject returns rdf:nil" do
-      RDF::List::NIL.subject.should == RDF.nil
+      expect(RDF::List::NIL.subject).to eq RDF.nil
     end
 
     it "#frozen? returns true" do
-      RDF::List::NIL.frozen?.should be_true
+      expect(RDF::List::NIL).to be_frozen
     end
 
     it "#empty? returns true" do
-      RDF::List::NIL.empty?.should be_true
+      expect(RDF::List::NIL).to be_empty
     end
 
     it "#[] returns an empty array" do
-      RDF::List::NIL.to_a.should == []
+      expect(RDF::List::NIL.to_a).to eq []
     end
 
     it "#inspect returns the constant name" do
-      RDF::List::NIL.inspect.should == 'RDF::List::NIL'
+      expect(RDF::List::NIL.inspect).to eq 'RDF::List::NIL'
     end
   end
 
@@ -722,8 +721,8 @@ describe RDF::List do
       subject {list}
       its(:statements) do
         list.each_statement do |s|
-          s.subject.should be_a_node
-          s.should be_valid
+          expect(s.subject).to be_a_node
+          expect(s).to be_valid
         end
       end
     end
@@ -737,12 +736,12 @@ describe RDF::List do
   context "Examples" do
     subject {RDF::List[1, 2, 3]}
     it "Constructing a new list" do
-      subject.should be_a_list
-      RDF::List[].should be_a_list
-      RDF::List[*(1..10)].should be_a_list
-      subject.should be_a_list
-      RDF::List["foo", "bar"].should be_a_list
-      RDF::List["a", 1, "b", 2, "c", 3].should be_a_list
+      expect(subject).to be_a_list
+      expect(RDF::List[]).to be_a_list
+      expect(RDF::List[*(1..10)]).to be_a_list
+      expect(subject).to be_a_list
+      expect(RDF::List["foo", "bar"]).to be_a_list
+      expect(RDF::List["a", 1, "b", 2, "c", 3]).to be_a_list
     end
 
     describe(:&) do
@@ -752,7 +751,7 @@ describe RDF::List do
           (RDF::List[1, 2] & RDF::List[2, 3])       => RDF::List[2],
           (RDF::List[1, 2] & RDF::List[3, 4])       => RDF::List[],
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -764,7 +763,7 @@ describe RDF::List do
           (RDF::List[1, 2] | RDF::List[2, 3])       => RDF::List[1, 2, 3],
           (RDF::List[1, 2] | RDF::List[3, 4])       => RDF::List[1, 2, 3, 4],
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -774,7 +773,7 @@ describe RDF::List do
         {
           (RDF::List[1, 2] + RDF::List[3, 4])       => RDF::List[1, 2, 3, 4],
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -784,7 +783,7 @@ describe RDF::List do
         {
           (RDF::List[1, 2, 2, 3] - RDF::List[2])       => RDF::List[1, 3],
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -795,7 +794,7 @@ describe RDF::List do
           (subject * 2)       => RDF::List[1, 2, 3, 1, 2, 3],
           (subject * "," )    => "1,2,3",
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -805,7 +804,7 @@ describe RDF::List do
         {
           subject[0] => RDF::Literal(1)
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -815,7 +814,7 @@ describe RDF::List do
         {
           (RDF::List[] << 1 << 2 << 3) => subject
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -827,7 +826,7 @@ describe RDF::List do
           (RDF::List[1] <=> RDF::List[2]) => -1,
           (RDF::List[2] <=> RDF::List[1]) => 1,
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -838,7 +837,7 @@ describe RDF::List do
           RDF::List[].empty?        => true,
           subject.empty? => false,
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -849,7 +848,7 @@ describe RDF::List do
           RDF::List[].length        => 0,
           subject.length => 3,
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -860,7 +859,7 @@ describe RDF::List do
           RDF::List['a', 'b', 'c'].index('a') => 0,
           RDF::List['a', 'b', 'c'].index('d') => nil,
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -872,7 +871,7 @@ describe RDF::List do
           subject.slice(0, 2) => RDF::List[1, 2],
           subject.slice(0..2) => RDF::List[1, 2, 3]
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -884,7 +883,7 @@ describe RDF::List do
           subject.fetch(4, nil)        => nil,
           subject.fetch(4) { |n| n*n } => 16,
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
         expect {subject.fetch(4).to raise_error(IndexError)}
       end
@@ -896,7 +895,7 @@ describe RDF::List do
           subject.at(0)             => RDF::Literal(1),
           subject.at(4)             => nil,
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -920,7 +919,7 @@ describe RDF::List do
         describe "##{method}" do
           it do
             v = value.is_a?(RDF::Value) ? value : RDF::Literal(value)
-            ten.send(method).should == v
+            expect(ten.send(method)).to eq v
           end
         end
       end
@@ -929,24 +928,24 @@ describe RDF::List do
     describe(:first_subject) do
       it "BNode of first subject" do
         r = subject.first_subject
-        r.should be_a_node
-        subject.graph.first_object(:subject => r, :predicate => RDF.first).should == RDF::Literal(1)
+        expect(r).to be_a_node
+        expect(subject.graph.first_object(:subject => r, :predicate => RDF.first)).to eq RDF::Literal(1)
       end
     end
 
     describe(:rest_subject) do
       it "BNode of rest subject" do
         r = subject.rest_subject
-        r.should be_a_node
-        subject.graph.first_object(:subject => r, :predicate => RDF.first).should == RDF::Literal(2)
+        expect(r).to be_a_node
+        expect(subject.graph.first_object(:subject => r, :predicate => RDF.first)).to eq RDF::Literal(2)
       end
     end
 
     describe(:last_subject) do
       it "BNode of last subject" do
         r = subject.last_subject
-        r.should be_a_node
-        subject.graph.first_object(:subject => r, :predicate => RDF.rest).should == RDF.nil
+        expect(r).to be_a_node
+        expect(subject.graph.first_object(:subject => r, :predicate => RDF.rest)).to eq RDF.nil
       end
     end
 
@@ -964,7 +963,7 @@ describe RDF::List do
 
     describe(:each_statement) do
       it "yields statements" do
-        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 9))
+        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 6))
       end
     end
 
@@ -974,7 +973,7 @@ describe RDF::List do
           subject.join       => subject.to_a.join,
           subject.join(", ") => subject.to_a.join(", "),
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -984,7 +983,7 @@ describe RDF::List do
         {
           subject.reverse       => RDF::List[*subject.to_a.reverse],
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -994,7 +993,7 @@ describe RDF::List do
         {
           RDF::List[2, 3, 1].sort => RDF::List[1, 2, 3]
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -1004,7 +1003,7 @@ describe RDF::List do
         {
           RDF::List[2, 3, 1].sort_by(&:to_i) => RDF::List[1, 2, 3]
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -1014,7 +1013,7 @@ describe RDF::List do
         {
           RDF::List[1, 2, 2, 3].uniq => RDF::List[1, 2, 3]
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -1025,7 +1024,7 @@ describe RDF::List do
           RDF::List[].to_a        => [],
           RDF::List[1, 2, 3].to_a => [RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)],
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -1035,7 +1034,7 @@ describe RDF::List do
         {
           RDF::List[1, 2, 3].to_set               => Set[RDF::Literal(1), RDF::Literal(2), RDF::Literal(3)]
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end
@@ -1046,7 +1045,7 @@ describe RDF::List do
           RDF::List[].to_s        => "RDF::List[]",
           RDF::List[1, 2, 3].to_s => "RDF::List[1, 2, 3]",
         }.each do |input, output|
-          input.should == output
+          expect(input).to eq output
         end
       end
     end

@@ -37,14 +37,12 @@ describe RDF::Format do
       "content_type"        => {:content_type => "application/test"},
     }.each do |condition, arg|
       it "yields given conflicting #{condition}" do
-        yielded = false
-        RDF::Format.for(arg) { yielded = true }
-        yielded.should be_true
+        expect {|b| RDF::Format.for(arg, &b)}.to yield_control
       end
 
       it "returns detected format given conflicting #{condition}" do
-        RDF::Format.for(arg) { "foo" }.should == RDF::Format::FooFormat
-        RDF::Format.for(arg) { "bar" }.should == RDF::Format::BarFormat
+        expect(RDF::Format.for(arg) { "foo" }).to eq RDF::Format::FooFormat
+        expect(RDF::Format.for(arg) { "bar" }).to eq RDF::Format::BarFormat
       end
     end
   end
@@ -52,7 +50,7 @@ describe RDF::Format do
   describe ".reader_symbols" do
     it "returns symbols of available readers" do
       [:ntriples, :nquads, :fooformat, :barformat].each do |sym|
-        RDF::Format.reader_symbols.should include(sym)
+        expect(RDF::Format.reader_symbols).to include(sym)
       end
     end
   end
@@ -64,7 +62,7 @@ describe RDF::Format do
         application/n-quads text/x-nquads
         application/test
       ).each do |ct|
-        RDF::Format.reader_types.should include(ct)
+        expect(RDF::Format.reader_types).to include(ct)
       end
     end
   end
@@ -72,10 +70,10 @@ describe RDF::Format do
   describe ".writer_symbols" do
     it "returns symbols of available writers" do
       [:ntriples, :nquads].each do |sym|
-        RDF::Format.writer_symbols.should include(sym)
+        expect(RDF::Format.writer_symbols).to include(sym)
       end
       [:fooformat, :barformat].each do |sym|
-        RDF::Format.writer_symbols.should_not include(sym)
+        expect(RDF::Format.writer_symbols).not_to include(sym)
       end
     end
   end
@@ -86,9 +84,9 @@ describe RDF::Format do
         application/n-triples text/plain
         application/n-quads text/x-nquads
       ).each do |ct|
-        RDF::Format.writer_types.should include(ct)
+        expect(RDF::Format.writer_types).to include(ct)
       end
-      RDF::Format.writer_types.should_not include("application/test")
+      expect(RDF::Format.writer_types).not_to include("application/test")
     end
   end
 
@@ -115,7 +113,7 @@ describe RDF::Format do
     its(:each) do
       RDF::Format.each {|klass| $stdout.puts klass.name}
       $stdout.rewind
-      $stdout.read.should_not be_empty
+      expect($stdout.read).not_to be_empty
     end
 
     its(:"for") do
@@ -126,7 +124,7 @@ describe RDF::Format do
         {:file_extension => "nt"},
         {:content_type => "application/n-triples"}
       ].each do |arg|
-        subject.for(arg).should == RDF::NTriples::Format
+        expect(subject.for(arg)).to eq RDF::NTriples::Format
       end
     end
 
@@ -160,11 +158,11 @@ describe RDF::Format do
     end
 
     describe ".name" do
-      specify {RDF::NTriples::Format.name.should == "N-Triples"}
+      specify {expect(RDF::NTriples::Format.name).to eq "N-Triples"}
     end
 
     describe ".detect" do
-      specify {RDF::NTriples::Format.detect("<a> <b> <c> .").should be_true}
+      specify {expect(RDF::NTriples::Format.detect("<a> <b> <c> .")).to be_true}
     end
   end
 end

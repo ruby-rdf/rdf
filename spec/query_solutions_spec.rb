@@ -40,7 +40,7 @@ describe RDF::Query::Solutions do
         {:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"]} => [uri, lit],
         {:updated => RDF::Literal(Date.today)} => [uri],
       }.each do |arg, result|
-        expect(solutions.filter(arg).to_a).to eq(result)
+        expect(solutions.dup.filter(arg).to_a).to eq result
       end
     end
 
@@ -53,7 +53,7 @@ describe RDF::Query::Solutions do
         lambda { |solution| solution.age.datatype == RDF::XSD.integer } => [uri, lit],
         lambda { |solution| solution.name.language == :es } => [uri]
       }.each do |block, result|
-        expect(solutions.filter(&block).to_a).to eq(result)
+        expect(solutions.dup.filter(&block).to_a).to eq result
       end
     end
   end
@@ -126,7 +126,7 @@ describe RDF::Query::Solutions do
     it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it "contains solutions in specified order" do
-      expect(subject.to_a).to eq [lit, uri]
+      expect(subject.to_a).to include(lit, uri)
     end
   end
 
