@@ -37,7 +37,6 @@ module RDF
   #
   # @author [Arto Bendiken](http://ar.to/)
   module NTriples
-    require 'iconv' unless "".respond_to?(:encode )# needed on Ruby 1.8.x
     require 'rdf/ntriples/format'
     autoload :Reader, 'rdf/ntriples/reader'
     autoload :Writer, 'rdf/ntriples/writer'

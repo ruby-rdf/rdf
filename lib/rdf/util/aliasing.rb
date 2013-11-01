@@ -42,19 +42,9 @@ module RDF; module Util
       def alias_method(new_name, old_name)
         new_name, old_name = new_name.to_sym, old_name.to_sym
 
-        class_eval(<<-EOF)
-          def #{new_name}(*args, &block)
-            #{old_name}(*args, &block)
-          end
-        EOF
-
-        # NOTE: the following eval-less (and hence slightly less evil)
-        # implementation only works on Ruby 1.8.7+ due to the |&block|
-        # syntax that was introduced in 1.9 and then backported to 1.8.7;
-        # it is a syntax error in earlier versions of Ruby:
-        #self.__send__(:define_method, new_name) do |*args, &block|
-        #  __send__(old_name, *args, &block)
-        #end
+        self.__send__(:define_method, new_name) do |*args, &block|
+          __send__(old_name, *args, &block)
+        end
 
         return self
       end

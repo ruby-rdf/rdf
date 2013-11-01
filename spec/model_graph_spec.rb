@@ -9,6 +9,18 @@ describe RDF::Graph do
     @new = method(:new)
   end
 
+  describe ".load" do
+    it "creates an unnamed graph" do
+      expect(RDF::Graph).to receive(:new).with(:base_uri => "http://example/")
+      RDF::Graph.load("http://example/", :base_uri => "http://example/")
+    end
+
+    it "loads into an unnamed graph" do
+      expect_any_instance_of(RDF::Graph).to receive(:load).with("http://example/", :base_uri => "http://example/")
+      RDF::Graph.load("http://example/", :base_uri => "http://example/")
+    end
+  end
+
   context "unnamed graphs" do
     it "should be instantiable" do
       expect { @new.call }.not_to raise_error
@@ -28,30 +40,58 @@ describe RDF::Graph do
   end
 
   context "named graphs" do
+    subject {
+      @new.call("http://ruby-rdf.github.com/rdf/etc/doap.nt", :data => RDF::Repository.new)
+    }
     it "should be instantiable" do
-      expect { @new.call }.not_to raise_error
+      expect { subject }.to_not raise_error
     end
 
-    it "should be named" do
-      graph = @new.call("http://rdf.rubyforge.org/")
-      expect(graph).not_to be_unnamed
-      expect(graph).to be_named
+    it "should not be instantiable by default" do
+      expect { @new.call("http://rdf.rubyforge.org/") }.to raise_error
     end
 
-    it "should have a context" do
-      graph = @new.call("http://rdf.rubyforge.org/")
-      expect(graph.context).not_to be_nil
-      expect(graph.contexts.size).to eq 1
+    its(:named?) {should be_true}
+    its(:unnamed?) {should be_false}
+    its(:name) {should_not be_nil}
+    its(:context) {should_not be_nil}
+    its(:contexts) {expect(subject.contexts.size).to eq 1}
+    it {should_not be_anonymous}
+
+    context "with anonymous context" do
+      subject {@new.call(RDF::Node.new, :data => RDF::Repository.new)}
+      it {should be_anonymous}
+    end
+  end
+
+  context "with Repository as data" do
+    let(:repo) {
+      r = RDF::Repository.new
+      r << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')]
+      r << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'), RDF::URI('c')]
+      r
+    }
+    it "should access default graph" do
+      graph = @new.call(nil, :data => repo)
+      expect(graph.count).to eq 1
+      expect(graph.statements.first.object).to eq RDF::URI('o1')
     end
 
-    it "should be #anonymous? with a Node context" do
-      graph = @new.call(RDF::Node.new)
-      expect(graph).to be_anonymous
+    it "should access named graph" do
+      graph = @new.call(RDF::URI('c'), :data => repo)
+      expect(graph.count).to eq 1
+      expect(graph.statements.first.object).to eq RDF::URI('o2')
     end
 
-    it "should not be #anonymous? with a URI context" do
-      graph = @new.call("http://rdf.rubyforge.org/")
-      expect(graph).not_to be_anonymous
+    it "should not load! default graph" do
+      graph = @new.call(nil, :data => repo)
+      expect {graph.load!}.to raise_error(ArgumentError)
+    end
+
+    it "should reload named graph" do
+      graph = @new.call(RDF::URI("http://example/doc.nt"), :data => repo)
+      expect(graph).to receive(:load).with("http://example/doc.nt", :base_uri => "http://example/doc.nt")
+      graph.load!
     end
   end
 
@@ -79,14 +119,14 @@ describe RDF::Graph do
     end
 
     it "Creating an empty named graph" do
-      expect {@new.call("http://rubygems.org/")}.not_to raise_error
+      expect {@new.call("http://rubygems.org/", :data => RDF::Repository.new)}.not_to raise_error
     end
 
     it "Loading graph data from a URL (1)" do
       expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
-      graph = @new.call("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
+      graph = @new.call("http://www.bbc.co.uk/programmes/b0081dq5.rdf", :data => RDF::Repository.new)
       graph.load!
       expect(graph).not_to be_empty
     end

@@ -8,66 +8,247 @@ describe RDF::URI do
     expect { new.call('http://rdf.rubyforge.org/') }.not_to raise_error
   end
 
-  it "should recognize URNs" do
-    urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
-    urns.each do |urn|
-      uri = new.call(urn)
-      expect(uri).to be_a_uri
-      expect(uri).to respond_to(:urn?)
-      expect(uri).to be_a_urn
-      expect(uri).not_to be_a_url
+  describe ".intern" do
+    before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
+    it "caches URI instance" do
+      RDF::URI.intern("a")
+      expect(RDF::URI.instance_variable_get(:@cache)["a"]).to eq RDF::URI("a")
+    end
+
+    it "freezes instance" do
+      expect(RDF::URI.intern("a")).to be_frozen
     end
   end
 
-  it "should recognize URLs" do
-    urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
-    urls.each do |url|
-      uri = new.call(url)
-      expect(uri).to be_a_uri
-      expect(uri).to respond_to(:url?)
-      expect(uri).to be_a_url
-      expect(uri).not_to be_a_urn
+  describe ".parse" do
+    it "creates a URI" do
+      expect(RDF::URI.parse("a")).to be_a(RDF::URI)
     end
   end
 
-  it "should return the root URI" do
-    uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
-    expect(uri).to respond_to(:root)
-    expect(uri.root).to be_a_uri
-    expect(uri.root).to eq(new.call('http://rdf.rubyforge.org/'))
+  describe "#instantiate" do
+    it "should recognize URNs" do
+      urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
+      urns.each do |urn|
+        uri = new.call(urn)
+        expect(uri).to be_a_uri
+        expect(uri).to respond_to(:urn?)
+        expect(uri).to be_a_urn
+        expect(uri).not_to be_a_url
+      end
+    end
+
+    it "should recognize URLs" do
+      urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
+      urls.each do |url|
+        uri = new.call(url)
+        expect(uri).to be_a_uri
+        expect(uri).to respond_to(:url?)
+        expect(uri).to be_a_url
+        expect(uri).not_to be_a_urn
+       end
+    end
+
+    it "should canonicalize input with :canonicalize" do
+      allow_any_instance_of(RDF::URI).to receive(:canonicalize!).and_raise(ArgumentError)
+      expect { RDF::URI("foo", :canonicalize => true) }.to raise_error(ArgumentError)
+    end
+
+    it "should validate input with :validate" do
+      allow_any_instance_of(RDF::URI).to receive(:valid?).and_return(false)
+      expect { RDF::URI("foo", :validate => true) }.to raise_error(ArgumentError)
+    end
+
+    context "with hash" do
+      context "simple" do
+        subject {
+          RDF::URI.new({
+            :scheme => "http",
+            :user => "user",
+            :password => "password",
+            :host => "example.com",
+            :port => 8080,
+            :path => "/path",
+            :query => "query=value",
+            :fragment => "fragment"
+          })
+        }
+
+        {
+          :scheme => "http",
+          :user => "user",
+          :password => "password",
+          :userinfo => "user:password",
+          :host => "example.com",
+          :port => 8080,
+          :authority => "user:password@example.com:8080",
+          :path => "/path",
+          :query => "query=value",
+          :fragment => "fragment"
+        }.each do |method, value|
+          its(method) {should == value}
+          its("normalized_#{method}".to_sym) {should == value}
+        end
+
+        its(:value) {should == "http://user:password@example.com:8080/path?query=value#fragment"}
+      end
+
+      {
+        "//user@example.com" => {:authority => "user@example.com"},
+        "http://example.com/path" => {:scheme => "http", :host => "example.com", :path => "path"},
+        "http:path" => {:scheme => "http", :path => "path"},
+        "http://resource1" => {:scheme => "http", :host => "resource1", :path => ""}
+      }.each do |value, object|
+        it "creates #{value}" do
+          expect(RDF::URI(object).to_s).to eq value
+        end
+      end
+    end
   end
 
-  it "should find the parent URI" do
-    uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
-    expect(uri).to respond_to(:parent)
-    expect(uri.parent).to be_a_uri
-    expect(uri.parent).to eq new.call('http://rdf.rubyforge.org/RDF/')
-    expect(uri.parent.parent).to eq new.call('http://rdf.rubyforge.org/')
-    expect(uri.parent.parent.parent).to be_nil
+  describe "#freeze" do
+    subject {RDF::URI("HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323").freeze}
+    {
+      :scheme => "HTTP",
+      :user => nil,
+      :password => nil,
+      :userinfo => nil,
+      :host => "example.com.",
+      :port => 80,
+      :authority => "example.com.:%38%30",
+      :path => "/%70a%74%68",
+      :query => "a=%31",
+      :fragment => "1%323"
+    }.each do |method, value|
+      its(method) {should == value}
+    end
+
+    {
+      :scheme => "http",
+      :user => nil,
+      :password => nil,
+      :userinfo => nil,
+      :host => "example.com",
+      :port => nil,
+      :authority => "example.com",
+      :path => "/path",
+      :query => "a=1",
+      :fragment => "123"
+    }.each do |method, value|
+      its("normalized_#{method}".to_sym) {should == value}
+    end
+
+    its(:value) {should == "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323"}
+    it "encoding should be UTF-8" do
+      expect(subject.value.encoding).to eq Encoding::UTF_8
+    end
   end
 
-  it "should have a consistent hash code" do
-    hash1 = new.call('http://rdf.rubyforge.org/').hash
-    hash2 = new.call('http://rdf.rubyforge.org/').hash
-    expect(hash1).to eq hash2
+  describe "#parse" do
+    {
+      "http://user:password@example.com:8080/path?query=value#fragment" => {
+        :scheme => "http",
+        :user => "user",
+        :password => "password",
+        :userinfo => "user:password",
+        :host => "example.com",
+        :port => 8080,
+        :authority => "user:password@example.com:8080",
+        :path => "/path",
+        :query => "query=value",
+        :fragment => "fragment"
+      },
+      #"ldap://[2001:db8::7]/c=GB?objectClass?one" => {
+      #  :scheme => "ldap",
+      #  :host => "[2001:db8::7]",
+      #  :path => "/c=GB",
+      #  :query => "objectClass?one",
+      #},
+      "mailto:John.Doe@example.com" => {
+        :scheme => "mailto",
+        :host => nil,
+        :authority => nil,
+        :path => "John.Doe@example.com"
+      },
+      "news:comp.infosystems.www.servers.unix" => {
+        :scheme => "news",
+        :host => nil,
+        :authority => nil,
+        :path => "comp.infosystems.www.servers.unix"
+      },
+      "tel:+1-816-555-1212" => {
+        :scheme => "tel",
+        :path => "+1-816-555-1212"
+      },
+      "urn:oasis:names:specification:docbook:dtd:xml:4.1.2" => {
+        :scheme => "urn",
+        :path => "oasis:names:specification:docbook:dtd:xml:4.1.2",
+      }
+    }.each do |uri, object|
+      context uri do
+        subject {RDF::URI.new.parse(uri)}
+        object.each do |key, value|
+          it "#{key} should == #{value.inspect}" do
+            expect(subject[key]).to eq value
+          end
+        end
+      end
+    end
   end
 
-  it "should be duplicable" do
-    url  = Addressable::URI.parse('http://rdf.rubyforge.org/')
-    uri2 = (uri1 = new.call(url)).dup
-
-    expect(uri1).not_to equal(uri2)
-    expect(uri1).to eql(uri2)
-    expect(uri1).to eq uri2
-
-    url.path = '/rdf/'
-    expect(uri1).not_to equal(uri2)
-    expect(uri1).not_to eql(uri2)
-    expect(uri1).not_to eq uri2
+  describe "#root" do
+    it "should return the root URI" do
+      uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
+      expect(uri).to respond_to(:root)
+      expect(uri.root).to be_a_uri
+      expect(uri.root).to eq(new.call('http://rdf.rubyforge.org/'))
+    end
   end
 
-  it "should not be #anonymous?" do
-    expect(new.call('http://example.org')).to_not be_anonymous
+  describe "#parent" do
+    it "should find the parent URI" do
+      uri = new.call('http://rdf.rubyforge.org/RDF/URI.html')
+      expect(uri).to respond_to(:parent)
+      expect(uri.parent).to be_a_uri
+      expect(uri.parent).to eq new.call('http://rdf.rubyforge.org/RDF/')
+      expect(uri.parent.parent).to eq new.call('http://rdf.rubyforge.org/')
+      expect(uri.parent.parent.parent).to be_nil
+    end
+  end
+
+  describe "#hash" do
+    it "should have a consistent hash code" do
+      hash1 = new.call('http://rdf.rubyforge.org/').hash
+      hash2 = new.call('http://rdf.rubyforge.org/').hash
+      expect(hash1).to eq hash2
+    end
+  end
+
+  describe "#dup" do
+    let!(:uri1) {new.call('http://rdf.rubyforge.org/')}
+    let!(:uri2) {uri1.dup}
+    
+    describe "original" do
+      subject {uri1}
+      its(:path) {should == uri2.path}
+      it {should_not be_equal(uri2)}
+      it {should be_eql(uri2)}
+      it {should == uri2}
+    end
+
+    describe "with altered path" do
+      subject {uri1.path = '/rdf/'; uri1}
+      its(:path) {should_not == uri2.path}
+      it {should_not be_equal(uri2)}
+      it {should_not be_eql(uri2)}
+      it {should_not == uri2}
+    end
+  end
+
+  describe "#anonymous?" do
+    it "should not be #anonymous?" do
+      expect(new.call('http://example.org')).not_to be_anonymous
+    end
   end
 
   context "validation" do
@@ -76,7 +257,7 @@ describe RDF::URI do
     describe "#valid?" do
       let(:refs) {
         %W(a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 foo %20) +
-        (RUBY_VERSION >= "1.9" ? %W(\U00000053 Dürst) : [])
+        %W(\U00000053 Dürst)
       }
       {
         ""  => "%s",
@@ -104,7 +285,7 @@ describe RDF::URI do
             expect(RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
           end
         end
-        it "validates IRI with ipath-empty #{mod}", :pending => "Addressable bug" do
+        it "validates IRI with ipath-empty #{mod}" do
           refs.each do |c|
             expect(RDF::URI("scheme:#{fmt}" % ["", c, c])).to be_valid
           end
@@ -172,18 +353,18 @@ describe RDF::URI do
 
   context "c14n" do
     {
-      "syntax-based normalization" => [
-        "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros&#xE9;"
-      ],
-      "syntax-based normalization (addressable)" => [
-        "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
-        "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
-      ],
-      "case normalization(1)" => [
-        "http://example.com/%e1%cf",
-        "http://example.com/%E1%CF"
-      ],
+      #"syntax-based normalization" => [
+      #  "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
+      #  "example://a/b/c/%7Bfoo%7D/ros&#xE9;"
+      #],
+      #"syntax-based normalization (addressable)" => [
+      #  "eXAMPLE://a/./b/../b/%63/%7bfoo%7d/ros%C3%A9",
+      #  "example://a/b/c/%7Bfoo%7D/ros%C3%A9"
+      #],
+      #"case normalization(1)" => [
+      #  "http://example.com/%e1%cf",
+      #  "http://example.com/%E1%CF"
+      #],
       "case normalization(2)" => [
         "http://eXaMpLe.com/",
         "http://example.com/"
@@ -204,15 +385,59 @@ describe RDF::URI do
         "http://example.com/foo/bar/..",
         "http://example.com/foo/"
       ],
+      "parent of root" => [
+        "http://example.com/..",
+        "http://example.com/"
+      ],
+      "parent of parent of root" => [
+        "http://example.com/../..",
+        "http://example.com/"
+      ],
+      "parent of odd path" => [
+        "http://example.com/path(/..",
+        "http://example.com/"
+      ],
+      "parent of odd path (2)" => [
+        "http://example.com/(path)/..",
+        "http://example.com/"
+      ],
+      "parent of odd path (3)" => [
+        "http://example.com/path(/../",
+        "http://example.com/"
+      ],
+      "path with dot segments" => [
+        "/a/b/c/./../../g",
+        "/a/g"
+      ],
+      "mid/content=5/../6" => [
+        "mid/content=5/../6",
+        "mid/6"
+      ],
+      "multiple slashes" => [
+        "http://www.example.com///../",
+        "http://www.example.com/"
+      ],
+      "preserve -.~" => [
+        "http://www.example.com/foo-bar.baz~",
+        "http://www.example.com/foo-bar.baz~",
+      ],
+      "embedded spaces" => [
+        "http://www.example.com/path with spaces",
+        "http://www.example.com/path%20with%20spaces"
+      ],
+      "file with embedded spaces" => [
+        "file:///path/to/file with spaces.txt",
+        "file:/path/to/file%20with%20spaces.txt"
+      ],
     }.each do |name, (input, output)|
-      let(:u1) {RDF::URI(input)}
-      let(:u2) {RDF::URI(output)}
-      it "#canonicalize #{name}", :pending => ("1.8 difference" if RUBY_VERSION < "1.9") do
+      it "#canonicalize #{name}" do
+        u1 = RDF::URI(input)
+        u2 = RDF::URI(output)
         expect(u1.canonicalize.to_s).to eq u2.to_s
         expect(u1).to eq u1
       end
     end
-    it "#canonicalize! alters resource" do
+    it "#canonicalize! alters resource", :ruby => "1.9" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")
       expect(u1.canonicalize!.to_s).to eq u2.to_s
@@ -220,7 +445,7 @@ describe RDF::URI do
     end
   end
 
-  context "using the smart separator (/)" do
+  describe "#/" do
     {
       # #!! means that I'm not sure I like the semantics, but they are cases for
       # arguably invalid input, probably without 'correct' answers.
@@ -266,7 +491,7 @@ describe RDF::URI do
     end
   end
 
-  context "using concatenation (#+)" do
+  describe "#+" do
     {
       %w(http://foo/ a) => "http://foo/a",
       %w(http://foo/ /a) => "http://foo//a",
@@ -284,28 +509,24 @@ describe RDF::URI do
     end
   end
 
-  context "using normalized merging (#join)" do
-    let(:writer) {RDF::Writer.for(:ntriples)}
+  describe "#join" do
     subject {RDF::URI.new("http://example.org")}
-
-    it "appends fragment to uri" do
-      expect(subject.join("foo").to_s).to eq "http://example.org/foo"
-    end
-
-    it "appends another fragment" do
-      expect(subject.join("foo#bar").to_s).to eq "http://example.org/foo#bar"
-    end
-
     it "appends another URI" do
       expect(subject.join(RDF::URI.new("foo#bar")).to_s).to eq "http://example.org/foo#bar"
     end
 
     {
+      ['', 'a'] => "<a>",
+      ['', 'http://foo/bar#'] => "<http://foo/bar#>",
+      ['', 'http://resource1'] => "<http://resource1>",
+      
+      %w(http://example.org foo) => "<http://example.org/foo>",
+      %w(http://example.org foo#bar) => "<http://example.org/foo#bar>",
       %w(http://foo ) =>  "<http://foo>",
       %w(http://foo a) => "<http://foo/a>",
       %w(http://foo /a) => "<http://foo/a>",
       %w(http://foo #a) => "<http://foo#a>",
-
+      
       %w(http://foo/ ) =>  "<http://foo/>",
       %w(http://foo/ a) => "<http://foo/a>",
       %w(http://foo/ /a) => "<http://foo/a>",
@@ -331,9 +552,9 @@ describe RDF::URI do
       %w(http://foo/bar# /a) => "<http://foo/a>",
       %w(http://foo/bar# #a) => "<http://foo/bar#a>",
 
-    }.each_pair do |input, result|
-      it "creates #{result} from <#{input[0]}> and '#{input[1]}'" do
-        expect(writer.serialize(RDF::URI.new(input[0]).join(input[1].to_s))).to eq result
+    }.each_pair do |(lhs, rhs), result|
+      it "creates #{result} from <#{lhs}> and '#{rhs}'" do
+        expect(RDF::URI.new(lhs).join(rhs.to_s).to_base).to eq result
       end
     end
   end

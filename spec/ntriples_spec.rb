@@ -149,6 +149,8 @@ describe RDF::NTriples::Writer do
     @writer = RDF::NTriples::Writer.new
   end
 
+  subject {@writer}
+
   describe ".for" do
     formats = [
       :ntriples,
@@ -167,19 +169,20 @@ describe RDF::NTriples::Writer do
   # @see lib/rdf/spec/writer.rb in rdf-spec
   include RDF_Writer
 
+  it "defaults validation to be true" do
+    expect(subject).to be_validate
+  end
+
   it "should return :ntriples for to_sym" do
     expect(RDF::NTriples::Writer.to_sym).to eq :ntriples
   end
 
   context "validataion" do
-    it "defaults validation to true" do
-      expect(subject).to be_validate
-    end
-
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
         let(:graph) {RDF::Graph.new << statement}
         subject {RDF::NTriples::Writer.buffer(:validate => true) {|w| w << graph}}
+
         if valid
           specify {expect {subject}.not_to raise_error}
         else
@@ -223,7 +226,7 @@ describe RDF::NTriples::Writer do
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::Literal("literal")) =>
         RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::Literal("literal")),
       RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")),
+        RDF::Statement.new(RDF::URI('file:/path/to/file%20with%20spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")),
       RDF::Statement.new(nil, RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) => nil,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, nil) => nil,
@@ -266,7 +269,7 @@ describe RDF::NTriples do
     end
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+    it "should correctly unescape Unicode characters (#x80-#x10FFFF)" do
       (0x7F..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
@@ -283,7 +286,7 @@ describe RDF::NTriples do
       end
     end
 
-    context "unescape Unicode strings", :ruby => 1.9 do
+    context "unescape Unicode strings" do
       strings = {
         "\u677E\u672C \u540E\u5B50" => "松本 后子",
         "D\u00FCrst"                => "Dürst",
@@ -291,8 +294,9 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8)
           expect(@reader.unescape(string.dup)).to eq unescaped
+
         end
       end
     end
@@ -306,8 +310,9 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8) if unescaped.respond_to?(:force_encoding)
+          unescaped = unescaped.dup.force_encoding(Encoding::UTF_8)
           expect(@reader.unescape(string.dup)).to eq unescaped
+
         end
       end
     end
@@ -334,7 +339,7 @@ describe RDF::NTriples do
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
-    it "should correctly escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+    it "should correctly escape Unicode characters (#x80-#x10FFFF)" do
       (0x80..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
@@ -357,7 +362,7 @@ describe RDF::NTriples do
         "_\xE6\xB0\xB4_" => "_\\u6C34_", # U+6C34, 'water' in Chinese
       }
       strings.each do |string, escaped|
-        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        string = string.dup.force_encoding(Encoding::UTF_8)
         expect(@writer.escape(string)).to eq escaped
       end
     end
@@ -394,7 +399,7 @@ describe RDF::NTriples do
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Planes
-    it "should not escape Unicode characters (#x80-#x10FFFF)", :ruby => 1.9 do
+    it "should not escape Unicode characters (#x80-#x10FFFF)" do
       (0x80..0xFFFF).to_a.sample(100).each do |u|
         begin
           next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
@@ -411,13 +416,13 @@ describe RDF::NTriples do
       end
     end
 
-    it "should not escape Unicode strings", :ruby => 1.9 do
+    it "should not escape Unicode strings" do
       strings = [
         "_\u221E_", # U+221E, infinity symbol
         "_\u6C34_", # U+6C34, 'water' in Chinese
       ]
       strings.each do |string|
-        string = string.dup.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)
+        string = string.dup.force_encoding(Encoding::UTF_8)
         expect(@writer.escape(string, encoding)).to eq string
       end
     end
@@ -504,12 +509,8 @@ describe RDF::NTriples do
 
       it "should parse long literal with escape" do
         nt = %(<http://subj> <http://pred> "\\U00015678another" .)
-        if defined?(::Encoding)
           statement = @reader.unserialize(nt)
           expect(statement.object.value).to eq "\u{15678}another"
-        else
-          pending("Not supported on Ruby 1.8")
-        end
       end
 
       {
@@ -552,17 +553,9 @@ describe RDF::NTriples do
         %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |src, res|
         specify src do
-          begin
-            stmt1 = @reader.unserialize(src)
-            stmt2 = @reader.unserialize(res)
-            expect(stmt1).to eq stmt2
-          rescue
-            if defined?(::Encoding)
-              raise
-            else
-              pending("Unicode URIs not supported on Ruby 1.8") { raise }
-            end
-          end
+          stmt1 = @reader.unserialize(src)
+          stmt2 = @reader.unserialize(res)
+          expect(stmt1).to eq stmt2
         end
       end
     end
@@ -652,7 +645,67 @@ describe RDF::NTriples do
       File.unlink(filename)
     end
 
-    context ":encoding", :ruby => "1.9" do
+    describe "IRIs" do
+      {
+        %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .) =>
+          %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .),
+        %(<http://example/#D%C3%BCrst>  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI percent ^encoded as C3, BC".) =>
+          %(<http://example/#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
+        %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .) =>
+          %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
+      }.each_pair do |input, output|
+        it "for '#{input}'" do
+          expect(parse(input, :validate => true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
+        end
+      end
+
+      {
+        %(<http://example/#Dürst> <http://example/knows> <http://example/jane>.) => '<http://example/#D\u00FCrst> <http://example/knows> <http://example/jane> .',
+        %(<http://example/Dürst> <http://example/knows> <http://example/jane>.) => '<http://example/D\u00FCrst> <http://example/knows> <http://example/jane> .',
+        %(<http://example/bob> <http://example/resumé> "Bob's non-normalized resumé".) => '<http://example/bob> <http://example/resumé> "Bob\'s non-normalized resumé" .',
+        %(<http://example/alice> <http://example/resumé> "Alice's normalized resumé".) => '<http://example/alice> <http://example/resumé> "Alice\'s normalized resumé" .',
+        }.each_pair do |input, output|
+          it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+            expect(parse(input).dump(:ntriples)).to eq parse(output).dump(:ntriples)
+          end
+        end
+
+      {
+        %(<http://example/#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI straight in UTF8".) => %(<http://example/#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
+        %(<http://example/a> <http://example/related> <http://example/ひらがな> .) => %(<http://example/a> <http://example/related> <http://example/\\u3072\\u3089\\u304C\\u306A> .),
+      }.each_pair do |input, output|
+        it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+          expect(parse(input).dump(:ntriples)).to eq parse(output).dump(:ntriples)
+        end
+      end
+
+      [
+        %(\x00),
+        %(\x01),
+        %(\x0f),
+        %(\x10),
+        %(\x1f),
+        %(\x20),
+        %(<),
+        %(>),
+        %("),
+        %({),
+        %(}),
+        %(|),
+        %(\\),
+        %(^),
+        %(``),
+        %(http://example.com/\u0020),
+        %(http://example.com/\u003C),
+        %(http://example.com/\u003E),
+      ].each do |uri|
+        it "rejects #{('<' + uri + '>').inspect}" do
+          expect {parse(%(<s> <p> <#{uri}>), :validate => true)}.to raise_error RDF::ReaderError
+        end
+      end
+    end
+
+    context ":encoding" do
       %w(US-ASCII UTF-8).each do |encoding_name|
         context encoding_name do
           let(:encoding) { ::Encoding.find(encoding_name)}
@@ -681,5 +734,17 @@ describe RDF::NTriples do
 
   context "Examples" do
     it "needs specs for documentation examples"
+  end
+
+  def parse(input, options = {})
+    options = {
+      :validate => false,
+      :canonicalize => false,
+    }.merge(options)
+    graph = options[:graph] || RDF::Graph.new
+    @reader.new(input, options).each do |statement|
+      graph << statement
+    end
+    graph
   end
 end

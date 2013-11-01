@@ -49,19 +49,19 @@ module RDF::NTriples
     # escaped.
     #
     # @param  [String] string
-    # @param  [Encoding] encoding Ruby 1.9 only
+    # @param  [Encoding] encoding
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     def self.escape(string, encoding = nil)
       ret = case
         when string =~ ESCAPE_PLAIN # a shortcut for the simple case
           string
-        when string.respond_to?(:ascii_only?) && string.ascii_only?
+        when string.ascii_only?
           StringIO.open do |buffer|
             string.each_byte { |u| buffer << escape_ascii(u, encoding) }
             buffer.string
           end
-        when string.respond_to?(:each_char) && encoding && encoding != Encoding::ASCII
+        when encoding && encoding != Encoding::ASCII
           # Not encoding UTF-8 characters
           StringIO.open do |buffer|
             string.each_char do |u|
@@ -74,27 +74,22 @@ module RDF::NTriples
             end
             buffer.string
           end
-        when string.respond_to?(:each_codepoint)
+        else
           # Encode ASCII && UTF-8 characters
           StringIO.open do |buffer|
             string.each_codepoint { |u| buffer << escape_unicode(u, encoding) }
             buffer.string
           end
-        else # works in Ruby 1.8.x, too
-          # Encode ASCII && UTF-8 characters
-          StringIO.open do |buffer|
-            string.scan(/./mu) { |c| buffer << escape_unicode(u = c.unpack('U*').first, encoding) }
-            buffer.string
-          end
       end
-      ret.respond_to?(:force_encoding) && encoding ? ret.dup.force_encoding(encoding) : ret
+      encoding ? ret.dup.force_encoding(encoding) : ret
     end
 
     ##
     # Escape ascii and unicode characters.
+    # If encoding is UTF_8, only ascii characters are escaped.
     #
     # @param  [Integer, #ord] u
-    # @param  [Encoding] encoding Ruby 1.9 only
+    # @param  [Encoding] encoding
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     def self.escape_unicode(u, encoding)
@@ -122,11 +117,11 @@ module RDF::NTriples
     def self.escape_ascii(u, encoding)
       case (u = u.ord)
         when (0x00..0x07) then escape_utf16(u)
-        when (0x08)       then (encoding.nil? || encoding == Encoding::ASCII ? escape_utf16(u) : "\\b")
+        when (0x08)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\b")
         when (0x09)       then "\\t"
         when (0x0A)       then "\\n"
         when (0x0B)       then escape_utf16(u)
-        when (0x0C)       then (encoding.nil? || encoding == Encoding::ASCII ? escape_utf16(u) : "\\f")
+        when (0x0C)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\f")
         when (0x0D)       then "\\r"
         when (0x0E..0x1F) then escape_utf16(u)
         when (0x22)       then "\\\""

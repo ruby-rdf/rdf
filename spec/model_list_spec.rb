@@ -545,8 +545,8 @@ describe RDF::List do
     end
 
     it "yields the correct number of times" do
-      expect(abc.each_statement.count).to eq 3 * 3
-      expect(ten.each_statement.count).to eq 10 * 3
+      expect(abc.each_statement.count).to eq 3 * 2
+      expect(ten.each_statement.count).to eq 10 * 2
     end
 
     it "yields statements" do
@@ -963,7 +963,7 @@ describe RDF::List do
 
     describe(:each_statement) do
       it "yields statements" do
-        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 9))
+        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 6))
       end
     end
 
