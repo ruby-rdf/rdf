@@ -294,7 +294,7 @@ describe RDF::NTriples do
       }
       strings.each do |string, unescaped|
         specify string do
-          unescaped = unescaped.dup.encode!(Encoding::UTF_8)
+          unescaped = unescaped.encode(Encoding::UTF_8)
           expect(@reader.unescape(string.dup)).to eq unescaped
 
         end
