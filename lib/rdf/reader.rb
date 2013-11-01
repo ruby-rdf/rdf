@@ -486,7 +486,7 @@ module RDF
       @line = @line_rest || @input.readline
       @line, @line_rest = @line.split("\r", 2)
       @line = @line.to_s.chomp
-      @line.force_encoding(encoding)
+      @line.encode!(encoding)
       @line
     end
 

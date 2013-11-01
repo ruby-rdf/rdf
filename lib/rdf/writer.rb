@@ -472,7 +472,7 @@ module RDF
     ##
     # @return [void]
     def puts(*args)
-      @output.puts(*args.map {|s| s.force_encoding(encoding)})
+      @output.puts(*args.map {|s| s.encode!(encoding)})
     end
 
     ##

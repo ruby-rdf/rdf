@@ -35,9 +35,15 @@ module RDF; module Util
     # @yield [IO] File stream
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
-      options[:headers] ||= {}
-      options[:headers]['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
-      Kernel.open(filename_or_url.to_s, options[:headers], &block)
+      if filename_or_url.to_s =~ /^#{RDF::URI::SCHEME}/
+        # Open as a URL
+        headers = options.fetch(:headers, {})
+        headers['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
+        Kernel.open(filename_or_url.to_s, headers, &block)
+      else
+        # Open as a file, passing any options
+        Kernel.open(filename_or_url, "r", options, &block)
+      end
     end
   end # File
 end; end # RDF::Util
