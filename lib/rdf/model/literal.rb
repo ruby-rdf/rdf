@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module RDF
   ##
   # An RDF literal.
@@ -163,6 +164,7 @@ module RDF
       @object   = value
       @string   = options[:lexical] if options[:lexical]
       @string   = value if !defined?(@string) && value.is_a?(String)
+      @string.encode!(Encoding::UTF_8) if @string && @string.respond_to?(:encode!)
       @language = options[:language].to_s.to_sym if options[:language]
       @datatype = RDF::URI(options[:datatype]) if options[:datatype]
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)

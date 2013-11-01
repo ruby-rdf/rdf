@@ -50,6 +50,11 @@ describe RDF::Literal do
       expect { RDF::Literal.new(123) }.not_to raise_error
     end
 
+    it "encodes as utf-8", :if => "".respond_to?(:encode!) do
+      ascii = "foo".encode(Encoding::ASCII)
+      expect(RDF::Literal.new(ascii).to_s.encoding).to eq Encoding::UTF_8
+    end
+
     describe "c18n" do
       it "normalizes language to lower-case" do
         expect(RDF::Literal.new('Upper', :language => :EN, :canonicalize => true).language).to eq :en

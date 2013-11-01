@@ -27,7 +27,8 @@ module RDF; module Util
     # @param  [Hash{Symbol => Object}] options
     #   options are ignored in this implementation. Applications are encouraged
     #   to override this implementation to provide more control over HTTP
-    #   headers and redirect following.
+    #   headers and redirect following. If opening as a file,
+    #   options are passed to `Kernel.open`.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open.
     # @return [IO] File stream
