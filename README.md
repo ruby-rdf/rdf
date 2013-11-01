@@ -56,9 +56,7 @@ the 1.1 release of RDF.rb:
 * {RDF::Dataset} is introduced as a class alias of {RDF::Repository}.
   This allows closer alignment to the RDF concept
   of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
-* The `context` (or `name`) of a named graph within a Dataset or Repository may be
-  either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict
-  this to being only {RDF::IRI}.
+* The `context` (or `name`) of a named graph within a Dataset or Repository may be either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict this to being only {RDF::IRI}.
 * There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][],
   all literals are typed, including plain literals and language tagged literals.
   Internally, plain literals are given the `xsd:string` datatype and language tagged
@@ -68,6 +66,9 @@ the 1.1 release of RDF.rb:
   datatype. Code which depends on a literal having the `xsd:string` datatype being different
   from a plain literal (formally, without a datatype) may break. However note that the
   `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
+* {RDF::Query::Solutions} is now a Module used to extend `Enumerator`, instead of a sub-class of Array.
+* {RDF::Query.execute} now returns an `Enumerator` extended with {RDF::Query::Solutions} instead of returning the previous Array version. Note that the block passed to {RDF::Query#execute} continues to be used for query construction, rather than as an iterator over the query solutions.
+* {RDF::Query#execute} now accepts a block or returns an `Enumerator` extended with {RDF::Query::Solutions} instead of returning the previous Array version. This allows `enumerable.query(query)` to behave like `query.execute(enumerable)` and either return an enumerable or yield each solution.
 
 ## Tutorials
 
