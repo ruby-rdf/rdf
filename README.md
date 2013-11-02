@@ -38,37 +38,21 @@ This version of RDF.rb is fully compatible with [RDF 1.1][], but it creates some
 marginal incompatibilities with [RDF 1.0][], as implemented in versions prior to
 the 1.1 release of RDF.rb:
 
-* Introduces {RDF::IRI}, as a synonym for {RDF::URI} either {RDF::IRI} or {RDF::URI} can be used interchangeably.
-  Versions of RDF.rb prior to the 1.1 release were already compatible with IRIs.
-  Internationalized Resource Identifiers (see [RFC3987][]) are a super-set of URIs (see [RFC3986][])
-  which allow for characters other than standard US-ASCII.
-* {RDF::List} no longer emits a `rdf:List` type. However, it will now recognize
-  any subjects that are {RDF::Node} instances as being list elements, as long
-  as they have both `rdf:first` and `rdf:rest` predicates.
-* {RDF::Graph} adding a `context` to a graph may only be done when the underlying
-  storage model supports contexts (the default {RDF::Repository} does).
-  The notion of `context` in RDF.rb is treated equivalently to [Named
-  Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF
-  Dataset, and graphs on their own are not named.
-* {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}.
-  Made it clear that using {RDF::Graph} does not mean that it may be used within an
-  {RDF::Statement}, for this see {RDF::Term}.
-* {RDF::Dataset} is introduced as a class alias of {RDF::Repository}.
-  This allows closer alignment to the RDF concept
-  of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
+* Introduces {RDF::IRI}, as a synonym for {RDF::URI} either {RDF::IRI} or {RDF::URI} can be used interchangeably. Versions of RDF.rb prior to the 1.1 release were already compatible with IRIs. Internationalized Resource Identifiers (see [RFC3987][]) are a super-set of URIs (see [RFC3986][]) which allow for characters other than standard US-ASCII.
+* {RDF::URI} no longer uses the `Addressable` gem. As URIs typically don't need to be parsed, this provides a substantial performance improvement when enumerating or querying graphs and repositories.
+* {RDF::List} no longer emits a `rdf:List` type. However, it will now recognize any subjects that are {RDF::Node} instances as being list elements, as long as they have both `rdf:first` and `rdf:rest` predicates.
+* {RDF::Graph} adding a `context` to a graph may only be done when the underlying storage model supports contexts (the default {RDF::Repository} does). The notion of `context` in RDF.rb is treated equivalently to [Named Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF Dataset, and graphs on their own are not named.
+* {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}. Made it clear that using {RDF::Graph} does not mean that it may be used within an {RDF::Statement}, for this see {RDF::Term}.
+* {RDF::Statement} now is stricter about checking that all elements are valid when validating.
+* {RDF::NTriples::Writer} and {RDF::NQuads::Writer} now default to validate output, only allowing valid statements to be emitted. This may disabled by setting the `:validate` option to `false`.
+* {RDF::Dataset} is introduced as a class alias of {RDF::Repository}. This allows closer alignment to the RDF concept of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
 * The `context` (or `name`) of a named graph within a Dataset or Repository may be either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict this to being only {RDF::IRI}.
-* There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][],
-  all literals are typed, including plain literals and language tagged literals.
-  Internally, plain literals are given the `xsd:string` datatype and language tagged
-  literals are given the `rdf:langString` datatype. Creating a plain literal, without
-  a datatype or language, will automatically provide the `xsd:string` datatype; similar
-  for language tagged literals. Note that most serialization formats will remove this
-  datatype. Code which depends on a literal having the `xsd:string` datatype being different
-  from a plain literal (formally, without a datatype) may break. However note that the
-  `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
-* {RDF::Query::Solutions} is now a Module used to extend `Enumerator`, instead of a sub-class of Array.
+* There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][], all literals are typed, including plain literals and language tagged literals. Internally, plain literals are given the `xsd:string` datatype and language tagged literals are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language tagged literals. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
+* {RDF::Query::Solutions} is now a mixin used to extend `Enumerator`, instead of a sub-class of Array.
 * {RDF::Query.execute} now returns an `Enumerator` extended with {RDF::Query::Solutions} instead of returning the previous Array version. Note that the block passed to {RDF::Query#execute} continues to be used for query construction, rather than as an iterator over the query solutions.
 * {RDF::Query#execute} now accepts a block or returns an `Enumerator` extended with {RDF::Query::Solutions} instead of returning the previous Array version. This allows `enumerable.query(query)` to behave like `query.execute(enumerable)` and either return an enumerable or yield each solution.
+
+Notably, `Queryable#query` and `Query#execute` are now completely symetric; this allows an implementation of `Queryable` to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
 
 ## Tutorials
 
@@ -189,9 +173,17 @@ Note that no prefixes are loaded automatically, however they can be provided as 
       }
     })
     
-    query.execute(graph).each do |solution|
+    query.execute(graph) do |solution|
       puts "name=#{solution.name} email=#{solution.email}"
     end
+
+The same query may also be run from the graph:
+
+    graph.query(query) do |solution|
+      puts "name=#{solution.name} email=#{solution.email}"
+    end
+
+In general, querying from using the `queryable` instance allows a specific implementation of `queryable` to perform query optimizations specific to the datastore on which it is based.
 
 A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full support for [SPARQL 1.0](http://www.w3.org/TR/rdf-sparql-query/) queries.
 

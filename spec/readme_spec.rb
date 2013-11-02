@@ -181,29 +181,45 @@ describe 'README' do
   end
 
   context "the 'Querying RDF data using basic graph patterns (BGPs)' example" do
-    before(:each) do
-      require 'rdf/ntriples'
-    
-      graph = RDF::Graph.load(File.expand_path("../../etc/doap.nt", __FILE__))
-      query = RDF::Query.new({
+    require 'rdf/ntriples'
+    let(:graph) {RDF::Graph.load(File.expand_path("../../etc/doap.nt", __FILE__))}
+    let(:query) do
+      RDF::Query.new({
         :person => {
           RDF.type  => RDF::FOAF.Person,
           RDF::FOAF.name => :name,
           RDF::FOAF.mbox => :email,
         }
       })
-    
-      query.execute(graph).each do |solution|
-        puts "name=#{solution.name} email=#{solution.email}"
-      end
     end
-    
-    subject {$stdout.string}
 
-    it {should =~ /name=Arto Bendiken/}
-    it {should =~ /name=Ben Lavender/}
-    it {should =~ /name=Gregg Kellogg/}
-    it {should =~ /email=/}
+    context "using query" do
+      subject {
+        query.execute(graph) do |solution|
+          puts "name=#{solution.name} email=#{solution.email}"
+        end
+        $stdout.string
+      }
+
+      it {should =~ /name=Arto Bendiken/}
+      it {should =~ /name=Ben Lavender/}
+      it {should =~ /name=Gregg Kellogg/}
+      it {should =~ /email=/}
+    end
+
+    context "using graph" do
+      subject {
+        graph.query(query) do |solution|
+          puts "name=#{solution.name} email=#{solution.email}"
+        end
+        $stdout.string
+      }
+
+      it {should =~ /name=Arto Bendiken/}
+      it {should =~ /name=Ben Lavender/}
+      it {should =~ /name=Gregg Kellogg/}
+      it {should =~ /email=/}
+    end
   end
 
   context "the 'Using ad-hoc RDF vocabularies' example" do
