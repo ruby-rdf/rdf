@@ -56,7 +56,6 @@ describe 'README' do
     {
       :example0 => lambda {
         require 'rdf/ntriples'
-
         RDF::NTriples::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
           reader.each_statement do |statement|
             puts statement.inspect
@@ -74,7 +73,15 @@ describe 'README' do
       }
     }.each do |example, code|
       context example do
-        before(:each) {code.call}
+        before(:each) {
+          if example == :example0
+            expect(RDF::Util::File).to receive(:open_file).
+              with("http://ruby-rdf.github.com/rdf/etc/doap.nt", {}).
+              at_least(1).
+              and_yield(Kernel.open(File.expand_path("../../etc/doap.nt", __FILE__)))
+          end
+          code.call
+        }
         it {expect {code.call}.not_to raise_error}
         it "should have output" do
           expect($stdout.string.lines.to_a).to_not be_empty
@@ -109,7 +116,15 @@ describe 'README' do
       }
     }.each do |example, code|
       context example do
-        before(:each) {code.call}
+        before(:each) {
+          if example == :example0
+            expect(RDF::Util::File).to receive(:open_file).
+              with("http://ruby-rdf.github.com/rdf/etc/doap.nq", {:base_uri=>"http://ruby-rdf.github.com/rdf/etc/doap.nq", :format=>:nquads}).
+              at_least(1).
+              and_yield(Kernel.open(File.expand_path("../../etc/doap.nq", __FILE__)))
+          end
+          code.call
+        }
         it {expect {code.call}.not_to raise_error}
         it "should have output" do
           expect($stdout.string.lines.to_a).to_not be_empty
