@@ -81,32 +81,33 @@ module RDF; class Query
     
     ##
     # Filters this solution sequence by the given `criteria`, returning
-    # an Enumerator extended with Solutions
+    # an enumeration of solutions
     #
     # @param  [Hash{Symbol => Object}] criteria
     # @yield  [solution]
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [Boolean]
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Queryable::Enumerator]
     def filter(criteria = {}, &block)
-      res = if block_given?
-        self.reject do |solution|
-          !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
-        end
-      else
-        self.reject do |solution|
-          solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
-          results = criteria.map do |name, value|
-            case value
-            when ::Array then value.any? {|v| solution[name] == v}
-            when Regexp then solution[name].to_s.match(value)
-            else solution[name] == value
+      Queryable::Enumerator.new do |yielder|
+        if block_given?
+          self.each do |solution|
+            solution = Solution.new(solution) unless solution.is_a?(Solution)
+            yielder << solution if block.call(solution)
+          end
+        else
+          self.each do |solution|
+            solution = Solution.new(solution) unless solution.is_a?(Solution)
+            yielder << solution if criteria.all? do |name, value|
+              case value
+              when ::Array then value.any? {|v| solution[name] == v}
+              when Regexp then solution[name].to_s.match(value)
+              else solution[name] == value
+              end
             end
           end
-          !results.all?
         end
       end
-      res.is_a?(Solutions) ? res : Solutions::Array.new(res.to_a)
     end
 
     ##
@@ -115,7 +116,7 @@ module RDF; class Query
     # The `minus` operation on solutions returns those solutions which either have no compatible solution in `other`, or the solution domains are disjoint.
     #
     # @param [RDF::Query::Solutions] other
-    # @return [Enumerator] a new solution set
+    # @return [RDF::Queryable::Enumerator] a new solution set
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
     def minus(other)
       self.filter do |soln|
@@ -131,41 +132,37 @@ module RDF; class Query
     # A variable may also be a Procedure/Lambda, compatible with `::Enumerable#sort`.
     # This takes two arguments (solutions) and returns -1, 0, or 1 equivalently to <=>.
     #
-    # If called with a block, variables are ignored, and the block is invoked with
-    # pairs of solutions. The block is expected to return -1, 0, or 1 equivalently to <=>.
+    # If called with a block, variables are ignored, and the block is invoked with pairs of solutions. The block is expected to return -1, 0, or 1 equivalently to <=>.
     #
     # @param  [Array<Proc, Query::Variable, Symbol, #to_sym>] variables
     # @yield  [solution]
     # @yieldparam  [RDF::Query::Solution] q
     # @yieldparam  [RDF::Query::Solution] b
     # @yieldreturn [Integer] -1, 0, or 1 depending on value of comparator
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Queryable::Enumerator]
     def order(*variables, &block)
-      if variables.empty? && !block_given?
-        raise ArgumentError, "wrong number of arguments (0 for 1)"
-      else
-        res = self.sort do |a, b|
-          if block_given?
-            block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
-          else
-            # Try each variable until a difference is found.
-            variables.inject(nil) do |memo, v|
-              memo || begin
-                comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
-                comp == 0 ? false : comp
-              end
-            end || 0
-          end
+      raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty? && !block_given?
+      sorted = self.to_a.sort do |a, b|
+        if block_given?
+          block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
+        else
+          # Try each variable until a difference is found.
+          variables.inject(nil) do |memo, v|
+            memo || begin
+              comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
+              comp == 0 ? false : comp
+            end
+          end || 0
         end
-        res.is_a?(Solutions) ? res : Solutions::Array.new(res.to_a)
       end
+      Queryable::Enumerator.new(sorted)
     end
     alias_method :order_by, :order
 
     ##
     # Duplicate the object, re-applying this module
     #
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Queryable::Enumerator]
     def dup
       case self
       when Enumerator then super.extend(RDF::Query::Solutions)
@@ -178,20 +175,22 @@ module RDF; class Query
     # Returns a new solution sequence restricted to the given `variables` only.
     #
     # @param  [Array<Symbol, #to_sym>] variables
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Queryable::Enumerator]
     def project(*variables)
       raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty?
       variables.map!(&:to_sym)
-      res = self.map do |solution|
-        bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
-        RDF::Query::Solution.new(bindings)
+      Queryable::Enumerator.new do |yielder|
+        self.each do |solution|
+          bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
+          yielder << RDF::Query::Solution.new(bindings)
+        end
       end
-      res.is_a?(Solutions) ? res : Solutions::Array.new(res.to_a)
     end
 
     ##
     # Either project the solution set or perform select as implemented
     # by a superclass
+    # @return [RDF::Queryable::Enumerator]
     def select(*variables)
       if block_given?
         super
@@ -203,9 +202,9 @@ module RDF; class Query
     ##
     # Returns a new solution sequence with unique solutions
     #
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Queryable::Enumerator]
     def distinct
-      Solutions::Array.new(self.to_a.uniq)
+      Queryable::Enumerator.new(self.to_a.uniq)
     end
     alias_method :reduced,   :distinct
 
@@ -215,11 +214,17 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] start
     #   zero or a positive or negative integer
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Queryable::Enumerator]
     def offset(start)
       case start = start.to_i
-        when 0 then nil
-        else Solutions::Array.new(self.to_a[start, -1])
+      when 0 then self
+      else
+        e = self.dup
+        begin
+          e.next while (start -= 1) >= 0
+        rescue StopIteration
+        end
+        e
       end
     end
 
@@ -234,12 +239,11 @@ module RDF; class Query
     def limit(length)
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
-      if length == 0
-        Solutions::Array.new
-      elsif length < self.count
-        Solutions::Array.new(self.to_a[0, length])
-      else
-        dup
+      Queryable::Enumerator.new do |yielder|
+        while length > 0
+          yielder << self.next
+          length -= 1
+        end
       end
     end
 
@@ -247,7 +251,15 @@ module RDF; class Query
     # Determines if these solutions are empty
     # @return [Integer]
     def empty?
-      self.count == 0
+      case self
+      when Enumerator
+        self.peek
+        false
+      else
+        self.count == 0
+      end
+    rescue StopIteration
+      true
     end
 
     ##
@@ -256,7 +268,7 @@ module RDF; class Query
     #
     # @return [Array<Symbol>]
     def variable_names
-      variables = self.inject({}) do |result, solution|
+      variables = self.to_a.inject({}) do |result, solution|
         solution.each_name do |name|
           result[name] ||= true
         end
