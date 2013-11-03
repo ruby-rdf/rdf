@@ -492,11 +492,9 @@ module RDF
     def enum_for(method = :each, *args)
       # Ensure that enumerators are, themselves, queryable
       this = self
-      Queryable::Enumerator.new do |yielder|
+      Solutions::Enumerator.new do |yielder|
         this.send(method, *args) {|y| yielder << y}
       end
     end
-    alias_method :to_enum, :enum_for
-
   end # Query
 end # RDF

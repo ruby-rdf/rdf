@@ -54,7 +54,11 @@ module RDF
             end
             after_query(pattern) if respond_to?(:after_query)
           end
-          enum_for(:query_execute, pattern)
+
+          # Return a Solutions enumerator for this query
+          Query::Solutions::Enumerator.new do |yielder|
+            self.query(pattern, options) {|solution| yielder << solution}
+          end
 
         # A simple triple/quad pattern query:
         else
@@ -302,15 +306,14 @@ module RDF
     alias_method :to_enum, :enum_for
 
 
-    # Extends Enumerator with {Queryable}, {Enumerable}, and {Query::Solutions}. Used by {Enumerable#each_statement} and {Queryable#enum_for}
+    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
     class Enumerator < ::Enumerator
       include Queryable
       include Enumerable
-      include Query::Solutions
 
       # Make sure returned arrays are also queryable
       def to_a
-        return super.to_a.extend(RDF::Queryable, RDF::Enumerable, RDF::Query::Solutions)
+        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
       end
     end
   end # Queryable
