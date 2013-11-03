@@ -114,7 +114,6 @@ describe RDF::Query::Solutions do
       ],
     }.each do |name, (left, right, result)|
       it name do
-        expect(left.minus(right)).to be_a(Enumerable)
         expect(left.minus(right)).to be_a(RDF::Query::Solutions)
         expect(left.minus(right).to_a).to eq result.to_a
       end
@@ -123,7 +122,6 @@ describe RDF::Query::Solutions do
 
   describe "#order_by" do
     subject {solutions.order_by(:updated, lambda {|a, b| b <=> a})}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it "contains solutions in specified order" do
       expect(subject.to_a).to include(lit, uri)
@@ -133,7 +131,6 @@ describe RDF::Query::Solutions do
   describe "#select" do
     context "one variable" do
       subject {solutions.select(:title)}
-      it {should be_a(Enumerable)}
       it {should be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
@@ -145,7 +142,6 @@ describe RDF::Query::Solutions do
 
     context "two variables" do
       subject {solutions.select(:title, :description)}
-      it {should be_a(Enumerable)}
       it {should be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
@@ -158,7 +154,6 @@ describe RDF::Query::Solutions do
 
   describe "#project" do
     subject {solutions.project(:title)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it "contains particular variables only" do
       expect(subject).to include(
@@ -170,7 +165,6 @@ describe RDF::Query::Solutions do
 
   describe "#distinct" do
     subject {(solutions.to_a << uri).to_enum.extend(RDF::Query::Solutions).distinct}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it "contains distinct solutions" do
       expect(subject).to include(uri, lit)
@@ -179,21 +173,18 @@ describe RDF::Query::Solutions do
 
   describe "#offset" do
     subject {solutions.offset(20)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
   end
 
   describe "#limit" do
     subject {solutions.limit(1)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     its(:count) {should == 1}
   end
 
   describe "#offset+#limit" do
     subject {solutions.offset(20).limit(20)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
   end

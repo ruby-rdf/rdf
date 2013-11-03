@@ -86,7 +86,7 @@ module RDF
     # @yield  [query]
     # @yieldparam  [RDF::Query] query
     # @yieldreturn [void] ignored
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Query::Solutions]
     #   the resulting solution sequence
     # @see    RDF::Query#execute
     def self.execute(queryable, patterns = {}, options = {}, &block)
@@ -160,7 +160,11 @@ module RDF
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
       patterns << @options if patterns.empty?
       @variables = {}
-      @solutions = Array(@options.delete(:solutions)).extend(Solutions)
+      @solutions = if @options[:solutions].is_a?(Solutions)
+        @options.delete(:solutions)
+      else
+        Solutions::Array.new(Array(@options.delete(:solutions)))
+      end
       context = @options.fetch(:context, @options.fetch(:name, nil))
       @options.delete(:context)
       @options.delete(:name)
@@ -257,13 +261,13 @@ module RDF
     #   overrides default context defined on query.
     # @option options [RDF::Resource, RDF::Query::Variable, false] name (nil)
     #   Alias for `:context`.
-    # @option options [Hash{Symbol => RDF::Term}] solutions
+    # @option options [RDF::Query::Solutions] solutions
     #   optional initial solutions for chained queries
     # @yield  [solution]
     #   each matching solution
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [void] ignored
-    # @return [Enumerator] extended with {RDF::Query::Solutions}
+    # @return [RDF::Query::Enumerator]
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
@@ -272,9 +276,7 @@ module RDF
       options = options.dup
 
       unless block_given?
-        enum = enum_for(:execute, queryable, options)
-        enum.extend(Solutions)
-        return enum
+        return enum_for(:execute, queryable, options)
       end
 
       # just so we can call #keys below without worrying
@@ -283,7 +285,7 @@ module RDF
       # Use provided solutions to allow for query chaining
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      @solutions = options[:solutions] || [RDF::Query::Solution.new({})].extend(Solutions)
+      @solutions = options[:solutions] || Solutions::Array.new([RDF::Query::Solution.new({})])
 
       # If there are no patterns, just return the empty solution
       return @solutions.each(&block) if empty?
@@ -302,11 +304,11 @@ module RDF
       
       patterns.each do |pattern|
 
-        old_solutions, @solutions = @solutions, [].extend(Solutions)
+        old_solutions, @solutions = @solutions, Solutions::Array.new
 
         options[:bindings].keys.each do |variable|
           if pattern.variables.include?(variable)
-            unbound_solutions, old_solutions = old_solutions, [].extend(Solutions)
+            unbound_solutions, old_solutions = old_solutions, Solutions::Array.new
             options[:bindings][variable].each do |binding|
               unbound_solutions.each do |solution|
                 old_solutions << solution.merge(variable => binding)
@@ -480,5 +482,21 @@ module RDF
       end
       patterns.map { |pattern| Pattern.from(pattern) }
     end
+
+  private
+    ##
+    # @private
+    # @param  [Symbol, #to_sym] method
+    # @return [Enumerator]
+    # @see    Object#enum_for
+    def enum_for(method = :each, *args)
+      # Ensure that enumerators are, themselves, queryable
+      this = self
+      Queryable::Enumerator.new do |yielder|
+        this.send(method, *args) {|y| yielder << y}
+      end
+    end
+    alias_method :to_enum, :enum_for
+
   end # Query
 end # RDF

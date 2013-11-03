@@ -1,3 +1,5 @@
+require 'delegate'
+
 module RDF; class Query
   ##
   # An RDF basic graph pattern (BGP) query solution sequence.
@@ -87,23 +89,24 @@ module RDF; class Query
     # @yieldreturn [Boolean]
     # @return [Enumerator] extended with {RDF::Query::Solutions}
     def filter(criteria = {}, &block)
-      if block_given?
+      res = if block_given?
         self.reject do |solution|
           !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
-        end.to_enum.extend(RDF::Query::Solutions)
+        end
       else
         self.reject do |solution|
           solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
           results = criteria.map do |name, value|
             case value
-            when Array then value.any? {|v| solution[name] == v}
+            when ::Array then value.any? {|v| solution[name] == v}
             when Regexp then solution[name].to_s.match(value)
             else solution[name] == value
             end
           end
           !results.all?
-        end.to_enum.extend(RDF::Query::Solutions)
+        end
       end
+      res.is_a?(Solutions) ? res : Solutions::Array.new(res.to_a)
     end
 
     ##
@@ -141,7 +144,7 @@ module RDF; class Query
       if variables.empty? && !block_given?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
       else
-        self.sort do |a, b|
+        res = self.sort do |a, b|
           if block_given?
             block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
           else
@@ -154,7 +157,8 @@ module RDF; class Query
             end || 0
           end
         end
-      end.to_enum.extend(RDF::Query::Solutions)
+        res.is_a?(Solutions) ? res : Solutions::Array.new(res.to_a)
+      end
     end
     alias_method :order_by, :order
 
@@ -163,7 +167,11 @@ module RDF; class Query
     #
     # @return [Enumerator] extended with {RDF::Query::Solutions}
     def dup
-      super.extend(RDF::Query::Solutions)
+      case self
+      when Enumerator then super.extend(RDF::Query::Solutions)
+      when Solutions::Array then super
+      else Solutions::Array.new(self.to_a)
+      end
     end
 
     ##
@@ -172,24 +180,32 @@ module RDF; class Query
     # @param  [Array<Symbol, #to_sym>] variables
     # @return [Enumerator] extended with {RDF::Query::Solutions}
     def project(*variables)
-      if variables.empty?
-        raise ArgumentError, "wrong number of arguments (0 for 1)"
+      raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty?
+      variables.map!(&:to_sym)
+      res = self.map do |solution|
+        bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
+        RDF::Query::Solution.new(bindings)
+      end
+      res.is_a?(Solutions) ? res : Solutions::Array.new(res.to_a)
+    end
+
+    ##
+    # Either project the solution set or perform select as implemented
+    # by a superclass
+    def select(*variables)
+      if block_given?
+        super
       else
-        variables.map!(&:to_sym)
-        self.map do |solution|
-          bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
-          RDF::Query::Solution.new(bindings)
-        end.to_enum.extend(RDF::Query::Solutions)
+        project(*variables)
       end
     end
-    alias_method :select, :project
 
     ##
     # Returns a new solution sequence with unique solutions
     #
     # @return [Enumerator] extended with {RDF::Query::Solutions}
     def distinct
-      self.to_a.uniq.to_enum.extend(RDF::Query::Solutions)
+      Solutions::Array.new(self.to_a.uniq)
     end
     alias_method :reduced,   :distinct
 
@@ -203,7 +219,7 @@ module RDF; class Query
     def offset(start)
       case start = start.to_i
         when 0 then nil
-        else Array(self.to_a[start, -1]).to_enum.extend(RDF::Query::Solutions)
+        else Solutions::Array.new(self.to_a[start, -1])
       end
     end
 
@@ -219,9 +235,9 @@ module RDF; class Query
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
       if length == 0
-        [].to_enum.extend(RDF::Query::Solutions)
+        Solutions::Array.new
       elsif length < self.count
-        self.to_a[0, length].to_enum.extend(RDF::Query::Solutions)
+        Solutions::Array.new(self.to_a[0, length])
       else
         dup
       end
@@ -262,5 +278,32 @@ module RDF; class Query
       self.any? { |solution| solution.has_variables?(variables) }
     end
     alias_method :has_variables?, :have_variables?
+
+    # A subclass of Array extended with Solutions
+    class Array < SimpleDelegator
+      include Enumerable
+      include Queryable
+      include Solutions
+
+      def initialize(ary = nil)
+        super(ary || [])
+      end
+
+      def reject(&block)
+        Solutions::Array.new __getobj__.reject(&block)
+      end
+      def sort(&block)
+        Solutions::Array.new __getobj__.sort(&block)
+      end
+      def uniq(&block)
+        Solutions::Array.new __getobj__.uniq(&block)
+      end
+      def select(&block)
+        Solutions::Array.new __getobj__.select(&block)
+      end
+      def map(&block)
+        Solutions::Array.new __getobj__.map(&block)
+      end
+    end
   end # Solutions
 end; end # RDF::Query
