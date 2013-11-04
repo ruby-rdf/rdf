@@ -1146,12 +1146,117 @@ module RDF
       normalized_user + (password ? ":#{normalized_password}" : "") if userinfo
     end
 
+    ##
+    # Converts the query component to a Hash value.
+    #
+    # @example
+    #   RDF::URI.new("?one=1&two=2&three=3").query_values
+    #   #=> {"one" => "1", "two" => "2", "three" => "3"}
+    #   RDF::URI.new("?one=two&one=three").query_values(Array)
+    #   #=> [["one", "two"], ["one", "three"]]
+    #   RDF::URI.new("?one=two&one=three").query_values(Hash)
+    #   #=> {"one" => ["two", "three"]}
+    #
+    # @param [Class] return_type (Hash)
+    #   The return type desired. Value must be either #   `Hash` or `Array`.
+    # @return [Hash, Array] The query string parsed as a Hash or Array object.
+    def query_values(return_type=Hash)
+      raise ArgumentError, "Invalid return type. Must be Hash or Array." unless [Hash, Array].include?(return_type)
+      return nil if query.nil?
+      query.to_s.split('&').
+        inject(return_type == Hash ? {} : []) do |memo,kv|
+          k,v = kv.to_s.split('=', 2)
+          next if k.to_s.empty?
+          k = ::URI.decode(k)
+          v = ::URI.decode(v) if v
+          if return_type == Hash
+            case memo[k]
+            when nil then memo[k] = v
+            when Array then memo[k] << v
+            else memo[k] = [memo[k], v]
+            end
+          else
+            memo << [k, v].compact
+          end
+          memo
+        end
+    end
+
+    ##
+    # Sets the query component for this URI from a Hash object.
+    # An empty Hash or Array will result in an empty query string.
+    #
+    # @example
+    #   uri.query_values = {:a => "a", :b => ["c", "d", "e"]}
+    #   uri.query
+    #   # => "a=a&b=c&b=d&b=e"
+    #   uri.query_values = [['a', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e']]
+    #   uri.query
+    #   # => "a=a&b=c&b=d&b=e"
+    #   uri.query_values = [['a', 'a'], ['b', ['c', 'd', 'e']]]
+    #   uri.query
+    #   # => "a=a&b=c&b=d&b=e"
+    #   uri.query_values = [['flag'], ['key', 'value']]
+    #   uri.query
+    #   # => "flag&key=value"
+    #
+    # @param [Hash, #to_hash, Array] new_query_values The new query values.
+    def query_values=(value)
+      if value.nil?
+        self.query = nil
+        return
+      end
+
+      value = value.to_hash if value.respond_to?(:to_hash)
+      self.query = case value
+      when Array
+        value.map do |(k,v)|
+          k = normalize_segment(k.to_s, UNRESERVED)
+          if v.nil?
+            k
+          else
+            "#{k}=#{normalize_segment(v.to_s, UNRESERVED)}"
+          end
+        end
+      when Hash
+        value.map do |k, v|
+          k = normalize_segment(k.to_s, UNRESERVED)
+          if v.nil?
+            k
+          else
+            Array(v).map do |vv|
+              if vv === TrueClass
+                k
+              else
+                "#{k}=#{normalize_segment(vv.to_s, UNRESERVED)}"
+              end
+            end.join("&")
+          end
+        end
+      else
+        raise TypeError,
+          "Can't convert #{value.class} into Hash."
+      end.join("&")
+    end
+
+    ##
+    # The HTTP request URI for this URI.  This is the path and the
+    # query string.
+    #
+    # @return [String] The request URI required for an HTTP request.
+    def request_uri
+      return nil if absolute? && scheme !~ /^https?$/
+      res = path.to_s.empty? ? "/" : path
+      res += "?#{self.query}" if self.query
+      return res
+    end
+
   private
 
     ##
     # Normalize a segment using a character range
     #
-    # @param [String] segment
+    # @param [String] value
     # @param [Regexp] expr
     # @param [Boolean] downcase
     # @result [String]

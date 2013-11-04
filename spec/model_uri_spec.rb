@@ -599,6 +599,103 @@ describe RDF::URI do
     end
   end
 
+  describe "#query" do
+    {
+      "?one=1&two=2&three=3" => "one=1&two=2&three=3",
+      "?one=two&one=three" => "one=two&one=three",
+      "mailto:?to=addr1@an.example,addr2@an.example" => "to=addr1@an.example,addr2@an.example",
+      "http://example/" => nil,
+      "http://example/?" => "",
+      "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323" => "a=%31"
+    }.each do |uri, result|
+      it uri do
+        if result
+          expect(new.call(uri).query).to eq result
+        else
+          expect(new.call(uri).query).to be_nil
+        end
+      end
+    end
+  end
+
+  describe "#query_values" do
+    {
+      "?one=1&two=2&three=3" => {"one" => "1", "two" => "2", "three" => "3"},
+      "?one=two&one=three" => {"one" => %w(two three)},
+      "mailto:?to=addr1@an.example,addr2@an.example" => {"to" => "addr1@an.example,addr2@an.example"},
+      "http://example/" => nil,
+      "http://example/?" => {},
+      "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323" => {"a" => "1"},
+      "?one[two][three]=four" => {"one[two][three]" => "four"},
+      "?one.two.three=four" => {"one.two.three" => "four"},
+      "?one[two][three]=four&one[two][five]=six" => {"one[two][three]" => "four", "one[two][five]" => "six"},
+      "?one=two&one=three&one=four" => {'one' => ['two', 'three', 'four']},
+    }.each do |uri, result|
+      it uri do
+        if result
+          expect(new.call(uri).query_values).to eq result
+        else
+          expect(new.call(uri).query_values).to be_nil
+        end
+      end
+    end
+
+    context "Array" do
+      {
+        "?one=two&one=three" => [['one', 'two'], ['one', 'three']],
+        "http://example/?" => [],
+        "?one[two][three]=four" => [["one[two][three]", "four"]],
+        "?one.two.three=four" => [["one.two.three", "four"]],
+        "?one[two][three]=four&one[two][five]=six" => [["one[two][three]", "four"], ["one[two][five]", "six"]],
+        "?one=two&one=three&one=four" => [['one', 'two'], ['one', 'three'], ['one', 'four']],
+      }.each do |uri, result|
+        it uri do
+          expect(new.call(uri).query_values(Array)).to eq result
+        end
+      end
+    end
+  end
+
+  describe "#query_values=" do
+    {
+      "" => {},
+      "a=a" => {:a => "a"},
+      "a" => {:a => nil},
+      "a=a&b=c&b=d&b=e" => {:a => "a", :b => ["c", "d", "e"]},
+      nil => nil,
+    }.each do |result, values|
+      it values do
+        u = new.call("")
+        u.query_values = values
+        if result
+          expect(u.query).to eq result
+        else
+          expect(u.query).to be_nil
+        end
+      end
+    end
+  end
+
+  describe "#request_uri" do
+    {
+      "" => "/",
+      "ftp://ftp.is.co.za/rfc/rfc1808.txt" => nil,
+      "http://www.ietf.org/rfc/rfc2396.txt" => "/rfc/rfc2396.txt",
+      "ldap://[2001:db8::7]/c=GB?objectClass?one" => nil,
+      "mailto:John.Doe@example.com" => nil,
+      "http://example.com" => "/",
+      "http://www.w3.org/pub/WWW/TheProject.html" => "/pub/WWW/TheProject.html",
+    }.each do |uri, result|
+      it uri do
+        if result
+          expect(new.call(uri).request_uri).to eq result
+        else
+          expect(new.call(uri).request_uri).to be_nil
+        end
+      end
+    end
+  end
+
   context "Examples" do
     it "needs specs for documentation examples"
   end
