@@ -175,6 +175,18 @@ describe RDF::Query::Solutions do
     it "contains distinct solutions" do
       expect(subject).to include(uri, lit)
     end
+
+    describe "has stable count and size" do
+      subject {solutions.offset(1)}
+      it "should have count 1" do
+        expect(subject.count).to eq 1
+        expect(subject.count).to eq 1
+      end
+      it "should have size 1" do
+        expect(subject.size).to eq 1
+        expect(subject.size).to eq 1
+      end
+    end
   end
 
   describe "#offset" do
@@ -182,13 +194,36 @@ describe RDF::Query::Solutions do
     it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
+
+    describe "has stable count and size" do
+      subject {solutions.offset(1)}
+      it "should have count 1" do
+        expect(subject.count).to eq 1
+        expect(subject.count).to eq 1
+      end
+      it "should have size 1" do
+        expect(subject.size).to eq 1
+        expect(subject.size).to eq 1
+      end
+    end
   end
 
   describe "#limit" do
     subject {solutions.limit(1)}
     it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
-    its(:count) {should == 1}
+
+    describe "has stable count and size" do
+      subject {solutions.offset(1)}
+      it "should have count 1" do
+        expect(subject.count).to eq 1
+        expect(subject.count).to eq 1
+      end
+      it "should have size 1" do
+        expect(subject.size).to eq 1
+        expect(subject.size).to eq 1
+      end
+    end
   end
 
   describe "#offset+#limit" do

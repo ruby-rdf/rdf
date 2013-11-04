@@ -275,9 +275,7 @@ module RDF
       validate!
       options = options.dup
 
-      unless block_given?
-        return enum_for(:execute, queryable, options)
-      end
+      return enum_for(:execute, queryable, options) unless block_given?
 
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}

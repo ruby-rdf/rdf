@@ -61,8 +61,15 @@ module RDF; class Query
     # @return [Integer]
     def count(&block)
       super
+    rescue
+      0
     end
-    alias_method :size, :count
+
+    def size
+      super
+    rescue
+      to_a.size
+    end
 
     ##
     # Determines if these solutions are empty
@@ -70,8 +77,7 @@ module RDF; class Query
     def empty?
       case self
       when ::Enumerator
-        self.peek
-        false
+        count == 0
       else
         each {return false}
         true
@@ -188,20 +194,23 @@ module RDF; class Query
     # @return [RDF::Query::Solutions::Enumerator]
     def order(*variables, &block)
       raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty? && !block_given?
-      sorted = self.to_a.sort do |a, b|
-        if block_given?
-          block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
-        else
-          # Try each variable until a difference is found.
-          variables.inject(nil) do |memo, v|
-            memo || begin
-              comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
-              comp == 0 ? false : comp
-            end
-          end || 0
+      Solutions::Enumerator.new do |yielder|
+        self.to_a.sort do |a, b|
+          if block_given?
+            block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
+          else
+            # Try each variable until a difference is found.
+            variables.inject(nil) do |memo, v|
+              memo || begin
+                comp = v.is_a?(Proc) ? v.call(a, b) : (v = v.to_sym; a[v] <=> b[v])
+                comp == 0 ? false : comp
+              end
+            end || 0
+          end
+        end.each do |solution|
+          yielder << solution
         end
       end
-      Solutions::Enumerator.new(sorted)
     end
     alias_method :order_by, :order
 
@@ -250,7 +259,11 @@ module RDF; class Query
     #
     # @return [RDF::Query::Solutions::Enumerator]
     def distinct
-      Solutions::Enumerator.new(self.to_a.uniq)
+      Solutions::Enumerator.new do |yielder|
+        self.to_a.uniq.each do |solution|
+          yielder << solution
+        end
+      end
     end
     alias_method :reduced,   :distinct
 
@@ -262,15 +275,13 @@ module RDF; class Query
     #   zero or a positive or negative integer
     # @return [RDF::Query::Solutions::Enumerator]
     def offset(start)
-      case start = start.to_i
-      when 0 then self
-      else
-        e = self.dup
-        begin
-          e.next while (start -= 1) >= 0
-        rescue StopIteration
+      start = start.to_i
+      raise ArgumentError, "expected zero or a positive integer, got #{start}" if start < 0
+      # FIXME: tried to do this by creating a new enumerator, but it doesn't work across stack contexts
+      Solutions::Enumerator.new do |yielder|
+        to_a.dup[start..-1].each do |solution|
+          yielder << solution
         end
-        e
       end
     end
 
@@ -286,17 +297,14 @@ module RDF; class Query
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
       Solutions::Enumerator.new do |yielder|
-        while length > 0
-          yielder << self.next
-          length -= 1
+        to_a.dup[0, length].each do |solution|
+          yielder << solution
         end
       end
     end
 
     # A subclass of Array extended with Solutions
     class Array < SimpleDelegator
-      include Enumerable
-      include Queryable
       include Solutions
 
       def initialize(ary = nil)
