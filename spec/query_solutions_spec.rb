@@ -28,9 +28,14 @@ describe RDF::Query::Solutions do
   }
 
   let(:solutions) {
-    [uri, lit].to_enum.extend(RDF::Query::Solutions)
+    RDF::Query::Solutions::Enumerator.new do |y|
+      y << uri
+      y << lit
+    end
   }
   subject {solutions}
+
+  its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
 
   describe "#filter" do
     it "using a hash" do
@@ -54,6 +59,7 @@ describe RDF::Query::Solutions do
         lambda { |solution| solution.name.language == :es } => [uri]
       }.each do |block, result|
         expect(solutions.dup.filter(&block).to_a).to eq result
+        expect(solutions.dup.filter(&block).to_solutions_array).to be_a(RDF::Query::Solutions::Array)
       end
     end
   end
@@ -117,6 +123,7 @@ describe RDF::Query::Solutions do
         expect(left.minus(right)).to be_a(Enumerable)
         expect(left.minus(right)).to be_a(RDF::Query::Solutions)
         expect(left.minus(right).to_a).to eq result.to_a
+        expect(left.minus(right).to_solutions_array).to be_a(RDF::Query::Solutions::Array)
       end
     end
   end
@@ -128,6 +135,7 @@ describe RDF::Query::Solutions do
     it "contains solutions in specified order" do
       expect(subject.to_a).to include(lit, uri)
     end
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#select" do
@@ -141,6 +149,7 @@ describe RDF::Query::Solutions do
           RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
         )
       end
+      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
 
     context "two variables" do
@@ -153,6 +162,7 @@ describe RDF::Query::Solutions do
           RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"), :description => RDF::Literal("Description"))
         )
       end
+      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
@@ -166,6 +176,7 @@ describe RDF::Query::Solutions do
         RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
       )
     end
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#distinct" do
@@ -175,6 +186,7 @@ describe RDF::Query::Solutions do
     it "contains distinct solutions" do
       expect(subject).to include(uri, lit)
     end
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -186,6 +198,7 @@ describe RDF::Query::Solutions do
         expect(subject.size).to eq 1
         expect(subject.size).to eq 1
       end
+      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
@@ -194,6 +207,7 @@ describe RDF::Query::Solutions do
     it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -205,6 +219,7 @@ describe RDF::Query::Solutions do
         expect(subject.size).to eq 1
         expect(subject.size).to eq 1
       end
+      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
@@ -212,6 +227,7 @@ describe RDF::Query::Solutions do
     subject {solutions.limit(1)}
     it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -223,6 +239,7 @@ describe RDF::Query::Solutions do
         expect(subject.size).to eq 1
         expect(subject.size).to eq 1
       end
+      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
@@ -231,6 +248,7 @@ describe RDF::Query::Solutions do
     it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#count" do
@@ -238,6 +256,7 @@ describe RDF::Query::Solutions do
     it "Counting the number of matching solutions" do
       expect(subject.count { |solution| solution.price < 30.5 }).to eq 1
     end
+    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#each" do

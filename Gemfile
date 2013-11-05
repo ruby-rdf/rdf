@@ -9,7 +9,7 @@ gem "rdf-rdfxml", :git => "git://github.com/ruby-rdf/rdf-rdfxml.git", :branch =>
 group :debug do
   gem "wirble"
   gem "redcarpet", :platforms => :ruby
-  gem "debugger", :platforms => :mri_19
+  gem "debugger", :platforms => [:mri_19, :mri_20]
   gem "ruby-debug", :platforms => :jruby
 end
 

@@ -275,9 +275,8 @@ module RDF; class Query
     def offset(start)
       start = start.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{start}" if start < 0
-      # FIXME: tried to do this by creating a new enumerator, but it doesn't work across stack contexts
       Solutions::Enumerator.new do |yielder|
-        Array(self)[start..-1].each do |solution|
+        (Array(self)[start..-1] || []).each do |solution|
           yielder << solution
         end
       end
@@ -295,9 +294,22 @@ module RDF; class Query
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
       Solutions::Enumerator.new do |yielder|
-        Array(self)[0, length].each do |solution|
+        self.dup.each do |solution|
+          break if length == 0
           yielder << solution
+          length -= 1
         end
+      end
+    end
+
+    # Returns a `Solutions::Array` for solutions. If `self` is already a solutions array, it returns self; otherwise, it creates a new `Solutions::Array`
+    #
+    # @return [RDF::Query::Solutions::Array]
+    def to_solutions_array
+      case self
+      when ::Array then Solutions::Array.new(self)
+      when Array then self
+      else Solutions::Array.new(self.to_a)
       end
     end
 
