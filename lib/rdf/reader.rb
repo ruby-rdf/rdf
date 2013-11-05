@@ -488,7 +488,13 @@ module RDF
       @line = @line.to_s.chomp
       begin
         @line.encode!(encoding)
-      rescue Encoding::UndefinedConversionError, Encoding::ConverterNotFoundError
+      rescue Encoding::UndefinedConversionError, Encoding::InvalidByteSequenceError, Encoding::ConverterNotFoundError
+        # It is likely the persisted line was not encoded on initial write
+        # (i.e. persisted via RDF <= 1.0.9 and read via RDF >= 1.0.10)
+        #
+        # Encoding::UndefinedConversionError is raised by MRI.
+        # Encoding::InvalidByteSequenceError is raised by jruby >= 1.7.5
+        # Encoding::ConverterNotFoundError is raised by jruby < 1.7.5
         @line = RDF::NTriples::Reader.unescape(@line).encode!(encoding)
       end
       @line
