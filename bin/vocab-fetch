@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'rdf/cli/vocab-loader'
+
+cli = RDF::VocabularyLoader.new(ARGV)
+cli.go
