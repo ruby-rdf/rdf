@@ -502,6 +502,16 @@ describe RDF::NTriples do
         end
       end
 
+      it 'should parse a value that was written without passing through the writer encoding' do
+        nt = "<http://subj> <http://pred> \"Procreation Metaphors in S\xC3\xA9an \xC3\x93 R\xC3\xADord\xC3\xA1in's Poetry\" .".force_encoding("ASCII-8BIT")
+        if defined?(::Encoding)
+          statement = @reader.unserialize(nt)
+          expect(statement.object.value).to eq("Procreation Metaphors in Séan Ó Ríordáin's Poetry")
+        else
+          pending("Not supported on Ruby 1.8")
+        end
+      end
+
       it "should parse long literal with escape" do
         nt = %(<http://subj> <http://pred> "\\U00015678another" .)
         if defined?(::Encoding)
