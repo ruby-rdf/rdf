@@ -32,6 +32,16 @@ describe RDF::StrictVocabulary do
     end.to raise_error(NoMethodError)
   end
 
+  it "should respond to [] with properties that have been defined" do
+    test_vocab[:prop].should be_a(RDF::URI)
+    test_vocab["prop2"].should be_a(RDF::URI)
+  end
+
+  it "should not respond to [] with properties that have not been defined" do
+    expect{ test_vocab["not_a_prop"] }.to raise_error(KeyError)
+    expect{ test_vocab[:not_a_prop] }.to raise_error(KeyError)
+  end
+
   it "should respond to methods for which a property has been defined explicitly" do
     test_vocab.prop.should be_a(RDF::URI)
   end
