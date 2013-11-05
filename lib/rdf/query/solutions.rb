@@ -66,9 +66,7 @@ module RDF; class Query
     end
 
     def size
-      super
-    rescue
-      to_a.size
+      (super rescue nil) || to_a.size
     end
 
     ##
@@ -92,7 +90,7 @@ module RDF; class Query
     #
     # @return [Array<Symbol>]
     def variable_names
-      variables = self.to_a.inject({}) do |result, solution|
+      variables = Array(self).inject({}) do |result, solution|
         solution.each_name do |name|
           result[name] ||= true
         end
@@ -195,7 +193,7 @@ module RDF; class Query
     def order(*variables, &block)
       raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty? && !block_given?
       Solutions::Enumerator.new do |yielder|
-        self.to_a.sort do |a, b|
+        Array(self).sort do |a, b|
           if block_given?
             block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
           else
@@ -220,9 +218,9 @@ module RDF; class Query
     # @return [RDF::Query::Solutions::Enumerator]
     def dup
       case self
-      when Enumerator, ::Enumerator then Enumerator.new(to_a)
-      when Solutions::Array then super
-      else Solutions::Array.new(self.to_a)
+      when Solutions::Enumerator then self
+      else
+        Solutions::Enumerator.new {|yielder| Array(self).each {|e| yielder << e}}
       end
     end
 
@@ -260,7 +258,7 @@ module RDF; class Query
     # @return [RDF::Query::Solutions::Enumerator]
     def distinct
       Solutions::Enumerator.new do |yielder|
-        self.to_a.uniq.each do |solution|
+        Array(self).uniq.each do |solution|
           yielder << solution
         end
       end
@@ -279,7 +277,7 @@ module RDF; class Query
       raise ArgumentError, "expected zero or a positive integer, got #{start}" if start < 0
       # FIXME: tried to do this by creating a new enumerator, but it doesn't work across stack contexts
       Solutions::Enumerator.new do |yielder|
-        to_a.dup[start..-1].each do |solution|
+        Array(self)[start..-1].each do |solution|
           yielder << solution
         end
       end
@@ -297,7 +295,7 @@ module RDF; class Query
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
       Solutions::Enumerator.new do |yielder|
-        to_a.dup[0, length].each do |solution|
+        Array(self)[0, length].each do |solution|
           yielder << solution
         end
       end
