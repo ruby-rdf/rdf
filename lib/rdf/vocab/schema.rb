@@ -368,6 +368,7 @@ module RDF
     property :model
     property :mpn
     property :musicBy
+    property :musicEvent
     property :musicGroupMember
     property :naics
     property :name
