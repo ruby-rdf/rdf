@@ -33,7 +33,6 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
 # 2 statement lines separated by single CR (ASCII 10)
 <http://example.org/resource5> <http://example.org/property> <http://example.org/resource2> .<http://example.org/resource6> <http://example.org/property> <http://example.org/resource2> .
 
-
 # All literal escapes
 <http://example.org/resource7> <http://example.org/property> "simple literal" .
 <http://example.org/resource8> <http://example.org/property> "backslash:\\" .
@@ -76,3 +75,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
 # Typed Literals
 <http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .
 # resource33 test removed 2003-08-03
+
+# line ending with a comment
+<http://example.org/resource33> <http://example.org/property> <http://example.org/resource33> . # Comment
+

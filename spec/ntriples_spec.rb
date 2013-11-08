@@ -429,26 +429,35 @@ describe RDF::NTriples do
   end
 
   context "when reading" do
-    it "should parse empty lines" do
-      ["\n", "\r\n", "\r"].each do |input|
-        expect { expect(@reader.new(input).to_a).to be_empty }.not_to raise_error
-      end
-    end
-
-    it "should parse comment lines" do
-      ["#\n", "# \n"].each do |input|
-        expect { expect(@reader.new(input).to_a).to be_empty }.not_to raise_error
-      end
-    end
-
-    it "should parse comment lines preceded by whitespace" do
-      ["\t#\n", " #\n"].each do |input|
-        expect { expect(@reader.new(input).to_a).to be_empty }.not_to raise_error
+    context "comments" do
+      {
+        %(\n) =>
+          %(),
+        %(\r\n) =>
+          %(),
+        %(\r) =>
+          %q(),
+        %(#\n) =>
+          %q(),
+        %(# \n) =>
+          %q(),
+        %(# <http://example/a> <http://example/b> <http://example/c> .\n) =>
+          %q(),
+        %(\t#\n) =>
+          %q(),
+        %( #\n) =>
+          %q(),
+        %(<http://example/a> <http://example/b> <http://example/c> . # comment\n) =>
+          %q(<http://example/a> <http://example/b> <http://example/c> .)
+      }.each_pair do |input, output|
+        it "for #{input.inspect}" do
+          expect(parse(input, :validate => true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
+        end
       end
     end
 
     it "should parse W3C's test data" do
-      expect(@reader.new(File.open(testfile)).to_a.size).to eq 30
+      expect(@reader.new(File.open(testfile)).to_a.size).to eq 31
     end
 
     it "should parse terms" do
