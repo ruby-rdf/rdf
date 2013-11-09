@@ -106,7 +106,7 @@ describe RDF::NTriples::Reader do
         :nq_multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
       }.each do |sym, str|
         it "does not detect #{sym}" do
-          f = RDF::Reader.for(:content_type => "text/plain", :sample => str)
+          f = RDF::Reader.for(:content_type => "text/plain", :sample => str.freeze)
           expect(f).not_to eq RDF::NTriples::Reader
         end
       end
@@ -290,28 +290,29 @@ describe RDF::NTriples do
       strings = {
         "\u677E\u672C \u540E\u5B50" => "松本 后子",
         "D\u00FCrst"                => "Dürst",
-        "\\U00015678another"         => "\u{15678}another",
+        "\\U00015678another"        => "\u{15678}another",
       }
       strings.each do |string, unescaped|
         specify string do
           unescaped = unescaped.encode(Encoding::UTF_8)
-          expect(@reader.unescape(string.dup)).to eq unescaped
-
+          expect(@reader.unescape(string)).to eq unescaped
         end
       end
     end
 
     context "unescape escaped Unicode strings" do
       strings = {
-        "_\\u221E_"                 => "_\xE2\x88\x9E_", # U+221E, infinity symbol
-        "_\\u6C34_"                 => "_\xE6\xB0\xB4_", # U+6C34, 'water' in Chinese
-        "\\u677E\\u672C \\u540E\\u5B50" => "松本 后子",
-        "D\\u00FCrst"                => "Dürst",
+        # U+221E, infinity symbol
+        "_\\u221E_"                    => "_\xE2\x88\x9E_",
+        # U+6C34, 'water' in Chinese
+        "_\\u6C34_"                    => "_\xE6\xB0\xB4_",
+        "\\u677E\\u672C \\u540E\\u5B50"=> "松本 后子",
+        "D\\u00FCrst"                  => "Dürst",
       }
       strings.each do |string, unescaped|
         specify string do
           unescaped = unescaped.encode(Encoding::UTF_8)
-          expect(@reader.unescape(string.dup)).to eq unescaped
+          expect(@reader.unescape(string.freeze)).to eq unescaped
 
         end
       end
@@ -457,7 +458,7 @@ describe RDF::NTriples do
       expect(bnode).to be_a_node
       expect(bnode.id).to eq 'foobar'
 
-      uri = @reader.unserialize('<http://ar.to/#self>')
+      uri = @reader.unserialize('<http://ar.to/#self>'.freeze)
       expect(uri).not_to be_nil
       expect(uri).to be_a_uri
       expect(uri.to_s).to eq 'http://ar.to/#self'
@@ -467,21 +468,21 @@ describe RDF::NTriples do
       expect(hello).to be_a_literal
       expect(hello.value).to eq 'Hello'
 
-      stmt = @reader.unserialize("<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .")
+      stmt = @reader.unserialize("<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .".freeze)
       expect(stmt).not_to be_nil
       expect(stmt).to be_a_statement
     end
 
     describe "with nodes" do
       it "should read two named nodes as the same node" do
-        stmt = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze)
         expect(stmt.subject).to eq stmt.object
         expect(stmt.subject).to be_eql(stmt.object)
       end
       
       it "should read two named nodes in different instances as different nodes" do
-        stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
-        stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .")
+        stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze)
+        stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze)
         expect(stmt1.subject).to eq stmt2.subject
         expect(stmt1.subject).not_to be_eql(stmt2.subject)
       end
@@ -502,7 +503,7 @@ describe RDF::NTriples do
         "€"              => '<http://subj> <http://pred> "\u20AC" .',
       }.each_pair do |contents, triple|
         specify "test #{contents}" do
-          stmt = @reader.unserialize(triple)
+          stmt = @reader.unserialize(triple.freeze)
           expect(stmt.object.value).to eq contents
         end
       end
@@ -581,7 +582,7 @@ describe RDF::NTriples do
         "nt-syntax-bad-num-03" => %q(<http://example/s> <http://example/p> 1.0e0 .),
       }.each do |name, nt|
         it name do
-          expect {@reader.new(nt, :validate => true).to_a}.to raise_error(RDF::ReaderError)
+          expect {@reader.new(nt.freeze, :validate => true).to_a}.to raise_error(RDF::ReaderError)
         end
       end
     end
