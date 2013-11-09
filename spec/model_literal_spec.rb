@@ -6,11 +6,11 @@ describe RDF::Literal do
 
   def self.literal(selector)
     case selector
-    when :empty       then ['']
-    when :plain       then ['Hello']
-    when :empty_lang  then ['', {:language => :en}]
-    when :plain_lang  then ['Hello', {:language => :en}]
-    when :string      then ['String', {:datatype => RDF::XSD.string}]
+    when :empty       then [''.freeze]
+    when :plain       then ['Hello'.freeze]
+    when :empty_lang  then [''.freeze, {:language => :en}]
+    when :plain_lang  then ['Hello'.freeze, {:language => :en}]
+    when :string      then ['String.freeze', {:datatype => RDF::XSD.string}]
     when :false       then [false]
     when :true        then [true]
     when :int         then [123]

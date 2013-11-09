@@ -115,12 +115,30 @@ module RDF
   end
 
   ##
-  # Alias for `RDF::Statement.new`.
+  # @overload Statement()
   #
-  # @param (see RDF::Statement#initialize)
-  # @return [RDF::Statement]
-  def self.Statement(*args, &block)
-    Statement.new(*args, &block)
+  # @overload Statement(options = {})
+  #   @param  [Hash{Symbol => Object}] options
+  #   @option options [RDF::Resource]  :subject   (nil)
+  #   @option options [RDF::URI]       :predicate (nil)
+  #   @option options [RDF::Term]      :object    (nil)
+  #   @option options [RDF::Resource]  :context   (nil)
+  #     Note, in RDF 1.1, a context MUST be an IRI.
+  #
+  # @overload Statement(subject, predicate, object, options = {})
+  #   @param  [RDF::Resource]          subject
+  #   @param  [RDF::URI]               predicate
+  #   @param  [RDF::Term]              object
+  #   @param  [Hash{Symbol => Object}] options
+  #   @option options [RDF::Resource]  :context   (nil)
+  #   @return [RDF::Statement]
+  #
+  def self.Statement(*args)
+    if args.empty?
+      RDF[:Statement]
+    else
+      Statement.new(*args)
+    end
   end
 
   ##
@@ -130,12 +148,6 @@ module RDF
   # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
-  end
-
-  ##
-  # @return [URI]
-  def self.value
-    self[:value]
   end
 
   ##
@@ -183,7 +195,6 @@ module RDF
     Property
     rest
     Seq
-    Statement
     subject
     type
     value
