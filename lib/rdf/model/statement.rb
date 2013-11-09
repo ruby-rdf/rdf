@@ -59,6 +59,7 @@ module RDF
     #   @option options [RDF::Term]      :object    (nil)
     #   @option options [RDF::Resource]  :context   (nil)
     #     Note, in RDF 1.1, a context MUST be an IRI.
+    #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, options = {})
     #   @param  [RDF::Resource]          subject
@@ -66,6 +67,7 @@ module RDF
     #   @param  [RDF::Term]              object
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Resource]  :context   (nil)
+    #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       case subject
         when Hash
