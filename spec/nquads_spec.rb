@@ -183,7 +183,7 @@ describe RDF::NQuads::Reader do
   end
 
   it "should parse W3C's test data" do
-    expect(@reader_class.new(File.open(testfile)).to_a.size).to eq 10
+    expect(@reader_class.new(File.open(testfile)).to_a.size).to eq 19
   end
 end
 

@@ -84,7 +84,7 @@ module RDF::NTriples
     SUBJECT               = Regexp.union(URIREF, NODEID).freeze
     PREDICATE             = Regexp.union(URIREF).freeze
     OBJECT                = Regexp.union(URIREF, NODEID, LITERAL).freeze
-    END_OF_STATEMENT      = /^\s*\.\s*$/.freeze
+    END_OF_STATEMENT      = /^\s*\.\s*(?:#.*)?$/.freeze
 
     ##
     # Reconstructs an RDF value from its serialized N-Triples
@@ -210,6 +210,7 @@ module RDF::NTriples
             subject   = read_uriref || read_node || fail_subject
             predicate = read_uriref(:intern => true) || fail_predicate
             object    = read_uriref || read_node || read_literal || fail_object
+
             if validate? && !read_eos
               raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
             end

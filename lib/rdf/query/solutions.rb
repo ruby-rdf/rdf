@@ -295,7 +295,8 @@ module RDF; class Query
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
       Solutions::Enumerator.new do |yielder|
         self.dup.each do |solution|
-          break if length == 0
+          # We would normally break here, but JRuby takes exception to this.
+          next if length == 0
           yielder << solution
           length -= 1
         end
