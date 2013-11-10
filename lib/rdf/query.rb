@@ -144,7 +144,7 @@ module RDF
     #     ...
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
-    #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
+    #   @option options [#to_a] :solutions ([Solution.new])
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
     #     Default context for matching against queryable.
     #     Named queries either match against a specifically named
@@ -163,7 +163,7 @@ module RDF
       @solutions = if @options[:solutions].is_a?(Solutions)
         @options.delete(:solutions)
       else
-        Solutions::Array.new(Array(@options.delete(:solutions)))
+        Solutions::Enumerator.new {|y| Array(@options.delete(:solutions)).each {|s| y << s}}
       end
       context = @options.fetch(:context, @options.fetch(:name, nil))
       @options.delete(:context)
@@ -275,7 +275,10 @@ module RDF
       validate!
       options = options.dup
 
-      return enum_for(:execute, queryable, options) unless block_given?
+      # Return an Enumerator if a block is not given.
+      return @solutions = Solutions::Enumerator.new do |yielder|
+        self.execute(queryable, options) {|y| yielder << y}
+      end unless block_given?
 
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}
@@ -283,10 +286,10 @@ module RDF
       # Use provided solutions to allow for query chaining
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      @solutions = options[:solutions] || Solutions::Array.new([RDF::Query::Solution.new({})])
+      solutions = options[:solutions] ? options[:solutions].to_a : [Solution.new]
 
       # If there are no patterns, just return the empty solution
-      return @solutions.each(&block) if empty?
+      return solutions.each(&block) if empty?
 
       patterns = @patterns
       context = options.fetch(:context, options.fetch(:name, self.context))
@@ -299,14 +302,14 @@ module RDF
           patterns.first.context = context
         end
       end
-      
+
       patterns.each do |pattern|
 
-        old_solutions, @solutions = @solutions, Solutions::Array.new
+        old_solutions, solutions = solutions, []
 
         options[:bindings].keys.each do |variable|
           if pattern.variables.include?(variable)
-            unbound_solutions, old_solutions = old_solutions, Solutions::Array.new
+            unbound_solutions, old_solutions = old_solutions, []
             options[:bindings][variable].each do |binding|
               unbound_solutions.each do |solution|
                 old_solutions << solution.merge(variable => binding)
@@ -320,25 +323,33 @@ module RDF
           found_match = false
           pattern.execute(queryable, solution) do |statement|
             found_match = true
-            @solutions << solution.merge(pattern.solution(statement))
+            solutions << solution.merge(pattern.solution(statement))
           end
           # If this pattern was optional, and we didn't find any matches,
           # just copy it over as-is.
           if !found_match && pattern.optional?
-            @solutions << solution
+            solutions << solution
           end
         end
 
-        #puts "solutions after #{pattern} are #{@solutions.to_a.inspect}"
+        #puts "solutions after #{pattern} are #{solutions.to_a.inspect}"
 
         # It's important to abort failed queries quickly because later patterns
         # that can have constraints are often broad without them.
         # We have no solutions at all:
-        return @solutions.each(&block) if empty?
-        # We have no solutions for variables we should have solutions for:
-        return if !pattern.optional? && pattern.variables.keys.any? { |variable| !@solutions.variable_names.include?(variable) }
+        return solutions.each(&block) if empty?
+
+        if !pattern.optional?
+          # We have no solutions for variables we should have solutions for:
+          need_vars = pattern.variables.keys
+          solutions.each do |solution|
+            break if need_vars.empty?
+            need_vars -= solution.bindings.keys
+          end
+          return unless need_vars.empty?
+        end
       end
-      @solutions.each(&block)
+      solutions.each(&block)
     end
 
     ##
@@ -479,20 +490,6 @@ module RDF
         end
       end
       patterns.map { |pattern| Pattern.from(pattern) }
-    end
-
-  private
-    ##
-    # @private
-    # @param  [Symbol, #to_sym] method
-    # @return [Enumerator]
-    # @see    Object#enum_for
-    def enum_for(method = :each, *args)
-      # Ensure that enumerators are, themselves, queryable
-      this = self
-      Solutions::Enumerator.new do |yielder|
-        this.send(method, *args) {|y| yielder << y}
-      end
     end
   end # Query
 end # RDF
