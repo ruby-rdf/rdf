@@ -73,13 +73,8 @@ module RDF; class Query
     # Determines if these solutions are empty
     # @return [Integer]
     def empty?
-      case self
-      when ::Enumerator
-        count == 0
-      else
-        each {return false}
-        true
-      end
+      each {return false}
+      true
     rescue StopIteration
       true
     end
@@ -231,12 +226,14 @@ module RDF; class Query
     # @return [RDF::Query::Solutions::Enumerator]
     def project(*variables)
       raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty?
+      return Solutions::Enumerator.new do |yielder|
+        self.project(*variables) {|y| yielder << y}
+      end unless block_given?
+
       variables.map!(&:to_sym)
-      Solutions::Enumerator.new do |yielder|
-        self.each do |solution|
-          bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
-          yielder << RDF::Query::Solution.new(bindings)
-        end
+      self.each do |solution|
+        bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
+        yield RDF::Query::Solution.new(bindings)
       end
     end
 
@@ -244,11 +241,11 @@ module RDF; class Query
     # Either project the solution set or perform select as implemented
     # by a superclass
     # @return [RDF::Query::Solutions::Enumerator]
-    def select(*variables)
+    def select(*variables, &block)
       if block_given?
         super
       else
-        project(*variables)
+        project(*variables, &block)
       end
     end
 
