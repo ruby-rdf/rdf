@@ -143,7 +143,7 @@ module RDF
       # If we have a sample, use that for format detection
       if sample = (options[:sample] if options.is_a?(Hash)) || (yield if block_given?)
         sample = sample.dup.to_s
-        sample.force_encoding(Encoding::US_ASCII) if sample.respond_to?(:force_encoding)
+        sample.force_encoding(Encoding::ASCII_8BIT) if sample.respond_to?(:force_encoding)
         # Given a sample, perform format detection across the appropriate formats, choosing
         # the first that matches
         format ||= @@subclasses
