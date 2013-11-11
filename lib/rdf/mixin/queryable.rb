@@ -120,7 +120,7 @@ module RDF
       # query execution by breaking down the query into its constituent
       # triple patterns and invoking `RDF::Query::Pattern#execute` on each
       # pattern.
-      query.execute(self, options).each(&block)
+      query.execute(self, options, &block)
     end
     protected :query_execute
 
