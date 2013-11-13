@@ -114,6 +114,13 @@ describe RDF::Vocabulary do
       expect(RDF::XSD).to have_properties("http://www.w3.org/2001/XMLSchema#", %w(NOTATION QName anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time ENTITIES ENTITY ID IDREF IDREFS NCName NMTOKEN NMTOKENS Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
     end
 
+    it "should support VOID" do
+      expect(RDF::VOID).to be_a_vocabulary("http://rdfs.org/ns/void#")
+      expect(RDF::VOID).to have_properties("http://rdfs.org/ns/void#", %w(Dataset DatasetDescription Linkset TechnicalFeature dataDump objectsTarget subjectsTarget target uriSpace linkPredicate class classPartition classes distinctObjects distinctSubjects exampleResource feature uriRegexPattern sparqlEndpoint uriLookupEndpoint subset inDataset documents entities properties triples openSearchDescription property propertyPartition rootResource vocabulary uriSpace))
+      expect(RDF::VOID.label_for("property")).to eq "property"
+      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a property-based partition.)
+    end
+
     it "should support W3C Media Annotation Ontology" do
       expect(RDF::MA).to be_a_vocabulary("http://www.w3.org/ns/ma-ont#")
       expect(RDF::MA).to have_properties("http://www.w3.org/ns/ma-ont#", %w(isRatingOf alternativeTitle averageBitRate collectionName copyright createdIn creationDate date depictsFictionalLocation description duration editDate features fragmentName frameHeight frameRate frameSizeUnit frameWidth hasAccessConditions hasAudioDescription hasCaptioning hasChapter hasClassification hasClassificationSystem hasCompression hasContributor hasCreator hasFormat hasFragment hasGenre hasKeyword hasLanguage hasLocationCoordinateSystem hasNamedFragment hasPermissions hasPolicy hasPublished hasPublisher hasRating hasRatingSystem hasRelatedImage hasRelatedLocation hasRelatedResource hasSigning hasSource hasSubtitling hasTargetAudience hasTrack isChapterOf isCopyrightedBy isLocationRelatedTo isMemberOf isProvidedBy isRelatedTo isSourceOf isTargetAudienceOf locationAltitude locationLatitude locationLongitude locationName locator mainOriginalTitle numberOfTracks ratingScaleMax ratingScaleMin ratingValue recordDate releaseDate samplingRate title trackName))
@@ -121,16 +128,44 @@ describe RDF::Vocabulary do
   end
 
   context "ad-hoc vocabularies" do
-    it "should support ad-hoc vocabularies" do
-      dc = RDF::Vocabulary.new("http://purl.org/dc/terms/")
+    subject :test_vocab do
+      Class.new(RDF::Vocabulary.create("http://example.com/test#")) do
+        property :Class
+        property :prop
+        property :prop2, :label => "Test property label", :comment => " Test property comment"
+      end
+    end
 
-      expect(dc.creator).to be_kind_of(RDF::URI)
-      expect(dc[:creator]).to be_kind_of(RDF::URI)
-      expect(dc.creator).to eql(RDF::DC.creator)
+    it "should have Vocabulary::method_missing" do
+      expect do
+        test_vocab.a_missing_method
+      end.not_to raise_error
+    end
 
-      expect(dc.title).to be_kind_of(RDF::URI)
-      expect(dc[:title]).to be_kind_of(RDF::URI)
-      expect(dc.title).to eql(RDF::DC.title)
+    it "should respond to [] with properties that have been defined" do
+      test_vocab[:prop].should be_a(RDF::URI)
+      test_vocab["prop2"].should be_a(RDF::URI)
+    end
+
+    it "should respond to [] with properties that have not been defined" do
+      test_vocab[:not_a_prop].should be_a(RDF::URI)
+      test_vocab["not_a_prop"].should be_a(RDF::URI)
+    end
+
+    it "should respond to methods for which a property has been defined explicitly" do
+      test_vocab.prop.should be_a(RDF::URI)
+    end
+
+    it "should respond to methods for which a class has been defined by a graph" do
+      test_vocab.Class.should be_a(RDF::URI)
+    end
+
+    it "should respond to label_for from base RDFS" do
+      test_vocab.label_for("prop2").should == "Test property label"
+    end
+
+    it "should respond to comment_for from base RDFS" do
+      test_vocab.comment_for(:prop2).should == "Test property comment"
     end
   end
 end
