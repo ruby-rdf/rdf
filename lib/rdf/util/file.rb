@@ -43,7 +43,11 @@ module RDF; module Util
       if filename_or_url.to_s =~ /^https?/
         # Open as a URL with Net::HTTP
         headers = options.fetch(:headers, {})
-        headers['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
+        # Receive text/html and text/plain at a lower priority than other formats
+        reader_types = RDF::Format.reader_types.map do |t|
+          t.to_s =~ /text\/(?:plain|html)/  ? "#{t};q=0.5" : t
+        end
+        headers['Accept'] ||= (reader_types + %w(*/*;q=0.1)).join(", ")
 
         redirect_count = 0
         max_redirects = 5

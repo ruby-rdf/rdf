@@ -6,7 +6,13 @@ begin
   gem 'linkeddata'
   require 'linkeddata'
 rescue LoadError
-  # Silently load without linkeddata
+  # Silently load without linkeddata, but try some others
+  %w(rdfa rdfxml turtle).each do |ser|
+    begin
+      require "rdf/#{ser}"
+    rescue LoadError
+    end
+  end
 end
 
 class OptionParser

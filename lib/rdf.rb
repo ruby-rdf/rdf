@@ -54,6 +54,7 @@ module RDF
 
   # RDF vocabularies
   autoload :Vocabulary,  'rdf/vocab'
+  autoload :StrictVocabulary,  'rdf/vocab'
   VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
   VOCABS.each { |v| autoload v.to_s.upcase.to_sym, "rdf/vocab/#{v}" unless v == :rdf }
 
@@ -148,6 +149,15 @@ module RDF
   # @return [Class]
   def self.Vocabulary(uri)
     Vocabulary.create(uri)
+  end
+
+  ##
+  # Alias for `RDF::StrictVocabulary.create`.
+  #
+  # @param (see RDF::Vocabulary#initialize)
+  # @return [Class]
+  def self.StrictVocabulary(prefix)
+    StrictVocabulary.create(prefix)
   end
 
   ##

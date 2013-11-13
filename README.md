@@ -55,6 +55,8 @@ the 1.1 release of RDF.rb:
   * `base_uri` is set to the original URI if a status 303 is provided, otherwise any other redirect will set `base_uri` to the redirected location.
   * `base_uri` is set to the content of the `Location` header if status is _success_.
 * Additionally, {RDF::Util::File.open\_file} sets the result encoding from `charset` if provided, defaulting to `UTF-8`. Other access methods include `last_modified` and `content_type`, 
+* {RDF::StrictVocabulary} added with an easy way to keep vocabulary definitions up to date based on their OWL or RDFS definitions. Most vocabularies are now StrictVocabularies meaning that an attempt to resolve a particular term in that vocabulary will error if the term is not defined in the vocabulary.
+* New vocabulary definitions have been added for [ICal](http://www.w3.org/2002/12/cal/icaltzd#), [Media Annotations (MA)](http://www.w3.org/ns/ma-ont#), [Facebook OpenGraph (OG)](http://ogp.me/ns#), [PROV](http://www.w3.org/ns/prov#), [SKOS-XL (SKOSXL)](http://www.w3.org/2008/05/skos-xl#), [Data Vocabulary (V)](http://rdf.data-vocabulary.org/), [VCard](http://www.w3.org/2006/vcard/ns#), [VOID](http://rdfs.org/ns/void#http://rdfs.org/ns/void#), [Powder-S (WDRS)](http://www.w3.org/2007/05/powder-s#), and [XHV](http://www.w3.org/1999/xhtml/vocab#).
 
 Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symmetric; this allows an implementation of {RDF::Queryable} to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
 

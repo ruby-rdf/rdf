@@ -217,4 +217,64 @@ module RDF
     @@uris       = {}      # @private
     @@uri        = nil     # @private
   end # Vocabulary
+
+  # Represents an RDF Vocabulary. The difference from {RDF::Vocabulary} is that
+  # that every concept in the vocabulary is required to be declared. To assist
+  # in this, an existing RDF representation of the vocabulary can be loaded as
+  # the basis for concepts being available
+  class StrictVocabulary < Vocabulary
+    class << self
+      begin
+        # Redefines method_missing to the original definition
+        # By remaining a subclass of Vocabulary, we remain available to
+        # Vocabulary::each etc.
+        define_method(:method_missing, BasicObject.instance_method(:method_missing))
+      rescue NameError
+        define_method(:method_missing, Kernel.instance_method(:method_missing))
+      end
+
+      ##
+      # Defines a new property or class in the vocabulary.
+      # Optional labels and comments are stripped of unnecessary whitespace.
+      #
+      # @param [String, #to_s] name
+      # @param [Hash{Symbol => Object}] options
+      # @option options [String, #to_s] :label
+      # @option options [String, #to_s] :comment
+      def property(name, options = {})
+        prop = RDF::URI.intern([to_s, name.to_s].join(''))
+        @@properties[prop] = true
+        @@labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
+        @@comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
+        (
+          class << self; self; end).send(:define_method, name) { prop } # class method
+      end
+
+      def [](name)
+        prop = RDF::URI.intern([to_s, name.to_s].join(''))
+        @@properties.fetch(prop) #raises KeyError on missing value
+        return prop
+      end
+
+      @@properties = {}
+      @@labels = {}
+      @@comments = {}
+
+      # @return [String] The label for the named property
+      def label_for(name)
+        @@labels[self[name]]
+      end
+
+      # @return [String] The comment for the named property
+      def comment_for(name)
+        @@comments[self[name]]
+      end
+    end
+
+    begin
+      define_method(:method_missing, BasicObject.instance_method(:method_missing))
+    rescue NameError
+      define_method(:method_missing, Kernel.instance_method(:method_missing))
+    end
+  end # StrictVocabulary
 end # RDF

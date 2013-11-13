@@ -29,6 +29,8 @@ Gem::Specification.new do |gem|
   gem.requirements               = []
   gem.add_development_dependency 'rdf-spec',    '~> 1.1.0'
   gem.add_development_dependency 'rdf-rdfxml',  '>= 1.1.0'
+  gem.add_development_dependency 'rdf-rdfa',    '>= 1.1.0'
+  gem.add_development_dependency 'rdf-turtle',  '>= 1.1.0'
   gem.add_development_dependency 'rdf-xsd',     '>= 1.1.0'
   gem.add_development_dependency 'rspec',       '>= 2.14'
   gem.add_development_dependency 'webmock',     '>= 1.15'
