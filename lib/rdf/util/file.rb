@@ -36,8 +36,8 @@ module RDF; module Util
     #   options are passed to `Kernel.open`.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open.
-    # @return [IO] File stream
-    # @yield [IO] File stream
+    # @return [IO, Reader] File stream with no block, and the block return otherwise
+    # @yield [IO, StringIO] File stream
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       if filename_or_url.to_s =~ /^https?/
@@ -54,6 +54,7 @@ module RDF; module Util
         remote_document = nil
         parsed_url = ::URI.parse(filename_or_url.to_s)
         base_uri = parsed_url.to_s
+        result = nil
         until remote_document do
           Net::HTTP::start(parsed_url.host, parsed_url.port,
                           :open_timeout => 60 * 1000,
@@ -77,9 +78,12 @@ module RDF; module Util
                 remote_document = RemoteDocument.new(response.body, document_options)
 
                 # Yield the result and close, or cause it to be returned
-                if block_given?
-                  yield remote_document
+                result = if block_given?
+                  ret = yield remote_document
                   remote_document.close
+                  ret
+                else
+                  remote_document
                 end
               when Net::HTTPRedirection
                 # Follow redirection
@@ -95,7 +99,7 @@ module RDF; module Util
             end
           end
         end
-        remote_document
+        result
       else
         # Open as a file, passing any options
         Kernel.open(filename_or_url, "r", options, &block)

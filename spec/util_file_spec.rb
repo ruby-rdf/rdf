@@ -10,10 +10,12 @@ describe RDF::Util::File do
 
   describe ".open_file" do
     it "yields a local file" do
-      RDF::Util::File.open_file(fixture_path("test.nt")) do |f|
+      r = RDF::Util::File.open_file(fixture_path("test.nt")) do |f|
         expect(f).to respond_to(:read)
         opened.opened
+        RDF::Reader.new
       end
+      expect(r).to be_a(RDF::Reader)
     end
 
     it "yields an http URL" do
@@ -21,17 +23,21 @@ describe RDF::Util::File do
         to_return(:body => File.read(File.expand_path("../../etc/doap.nt", __FILE__)),
                   :status => 200,
                   :headers => { 'Content-Type' => RDF::NTriples::Format.content_type})
-      RDF::Util::File.open_file(uri) do |f|
+      r = RDF::Util::File.open_file(uri) do |f|
         expect(f).to respond_to(:read)
         opened.opened
+        RDF::Reader.new
       end
+      expect(r).to be_a(RDF::Reader)
     end
     
     it "yields a file URL" do
-      RDF::Util::File.open_file("file:" + fixture_path("test.nt")) do |f|
+      r = RDF::Util::File.open_file("file:" + fixture_path("test.nt")) do |f|
         expect(f).to respond_to(:read)
         opened.opened
+        RDF::Reader.new
       end
+      expect(r).to be_a(RDF::Reader)
     end
 
     it "returns a local file" do
