@@ -232,6 +232,7 @@ module RDF
           # statement contexts / named graphs
           when :context   then @options[:with_context]
           when :inference then false  # forward-chaining inference
+          when :validity  then @options.fetch(:with_validity, true)
           else false
         end
       end
