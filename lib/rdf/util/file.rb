@@ -1,3 +1,6 @@
+require 'net/http'
+require 'time'
+
 module RDF; module Util
   ##
   # Wrapper for Kernel.open. Allows implementations to override to get
@@ -23,6 +26,8 @@ module RDF; module Util
     # Adds Accept header based on available reader content types to allow
     # for content negotiation based on available readers.
     #
+    # When retrieving documents over HTTP(S), use the mechanism described in [Providing and Discovering URI Documentation](http://www.w3.org/2001/tag/awwsw/issue57/latest/) to pass the appropriate `base_uri` to the block or as the return.
+    #
     # @param [String] filename_or_url to open
     # @param  [Hash{Symbol => Object}] options
     #   options are ignored in this implementation. Applications are encouraged
@@ -35,14 +40,79 @@ module RDF; module Util
     # @yield [IO] File stream
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
-      if filename_or_url.to_s =~ /^#{RDF::URI::SCHEME}/
-        # Open as a URL
+      if filename_or_url.to_s =~ /^https?/
+        # Open as a URL with Net::HTTP
         headers = options.fetch(:headers, {})
         headers['Accept'] ||= (RDF::Format.reader_types + %w(*/*;q=0.1)).join(", ")
-        Kernel.open(filename_or_url.to_s, headers, &block)
+
+        redirect_count = 0
+        max_redirects = 5
+        remote_document = nil
+        parsed_url = ::URI.parse(filename_or_url.to_s)
+        base_uri = parsed_url.to_s
+        until remote_document do
+          Net::HTTP::start(parsed_url.host, parsed_url.port,
+                          :open_timeout => 60 * 1000,
+                          :use_ssl => filename_or_url.start_with?("https")
+          ) do |http|
+            request = Net::HTTP::Get.new(parsed_url.request_uri, headers)
+            http.request(request) do |response|
+              case response
+              when Net::HTTPSuccess
+                # found object
+
+                # If a Location is returned, it defines the base resource for this file, not it's actual ending location
+
+                document_options = {
+                  :content_type => response.content_type,
+                  :charset => "utf-8",
+                  :base_uri => RDF::URI(response["Location"] ? response["Location"] : base_uri)
+                }.merge(response.type_params)
+                document_options[:last_modified] = DateTime.parse(response["Last-Modified"]) if response["Last-Modified"]
+
+                remote_document = RemoteDocument.new(response.body, document_options)
+
+                # Yield the result and close, or cause it to be returned
+                if block_given?
+                  yield remote_document
+                  remote_document.close
+                end
+              when Net::HTTPRedirection
+                # Follow redirection
+                raise IOError, "Too many redirects" if (redirect_count += 1) > max_redirects
+
+                parsed_url = ::URI.parse(response["Location"])
+
+                # If response is not a status 303, update base_uri too
+                base_uri = parsed_url.to_s unless response.code == "303"
+              else
+                raise IOError, "<#{parsed_url}>: #{response.msg}(#{response.code})"
+              end
+            end
+          end
+        end
+        remote_document
       else
         # Open as a file, passing any options
         Kernel.open(filename_or_url, "r", options, &block)
+      end
+    end
+
+    class RemoteDocument < StringIO
+      attr_reader :base_uri
+      attr_reader :content_type
+      attr_reader :charset
+      attr_reader :content_encoding
+      attr_reader :last_modified
+
+      ##
+      # Set content
+      def initialize(body, options = {})
+        super(body)
+        options.each do |key, value|
+          instance_variable_set(:"@#{key}", value)
+        end
+        set_encoding @charset if @charset
       end
     end
   end # File

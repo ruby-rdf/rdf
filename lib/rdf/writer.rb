@@ -237,10 +237,10 @@ module RDF
     # @example
     #   writer.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
     #
-    # @return [Hash{Symbol => RDF::URI}]
+    # @return [RDF::URI]
     # @since  0.3.4
     def base_uri
-      @options[:base_uri]
+      RDF::URI(@options[:base_uri]) if @options[:base_uri]
     end
 
     ##

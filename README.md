@@ -51,8 +51,12 @@ the 1.1 release of RDF.rb:
 * {RDF::Query::Solutions} is now a mixin used to extend `Enumerator`, instead of a sub-class of Array.
 * {RDF::Query.execute} now returns an `Enumerator` extended with {RDF::Query::Solutions} instead of returning the previous Array version. Note that the block passed to {RDF::Query#execute} continues to be used for query construction, rather than as an iterator over the query solutions.
 * {RDF::Query#execute} now accepts a block or returns an `Enumerator` extended with {RDF::Query::Solutions} instead of returning the previous Array version. This allows `enumerable.query(query)` to behave like `query.execute(enumerable)` and either return an enumerable or yield each solution.
+* {RDF::Util::File.open\_file} now performs redirects and manages `base_uri` based on W3C recommendations:
+  * `base_uri` is set to the original URI if a status 303 is provided, otherwise any other redirect will set `base_uri` to the redirected location.
+  * `base_uri` is set to the content of the `Location` header if status is _success_.
+* Additionally, {RDF::Util::File.open\_file} sets the result encoding from `charset` if provided, defaulting to `UTF-8`. Other access methods include `last_modified` and `content_type`, 
 
-Notably, `Queryable#query` and `Query#execute` are now completely symetric; this allows an implementation of `Queryable` to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
+Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symmetric; this allows an implementation of {RDF::Queryable} to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
 
 ## Tutorials
 

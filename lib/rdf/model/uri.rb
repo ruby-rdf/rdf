@@ -1259,7 +1259,7 @@ module RDF
     # @param [String] value
     # @param [Regexp] expr
     # @param [Boolean] downcase
-    # @result [String]
+    # @return [String]
     def normalize_segment(value, expr, downcase = false)
       if value
         value = value.dup if value.frozen?
