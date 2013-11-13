@@ -67,7 +67,7 @@ vocab_sources = {
   :wdrs   => {:prefix => "http://www.w3.org/2007/05/powder-s#"},
   :wot    => {:prefix => "http://xmlns.com/wot/0.1/", :source => "http://xmlns.com/wot/0.1/index.rdf"},
   :xhtml  => {:prefix => "http://www.w3.org/1999/xhtml#"},
-  :xhv    => {:prefix => "http://www.w3.org/1999/xhtml/vocab#"},
+  :xhv    => {:prefix => "http://www.w3.org/1999/xhtml/vocab#", :strict => false},
   #:xsd    => {:prefix => "http://www.w3.org/2001/XMLSchema#", :source => "http://groups.csail.mit.edu/mac/projects/tami/amord/xsd.ttl"},
 }
 
@@ -82,6 +82,7 @@ vocab_sources.each do |id, v|
       loader.prefix = v[:prefix]
       loader.source = v[:source] if v[:source]
       loader.extra = v[:extra] if v[:extra]
+      loader.strict = v.fetch(:strict, true)
       loader.output = out
       loader.run
       out.rewind

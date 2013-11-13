@@ -4,8 +4,8 @@ require 'optparse'
 
 module RDF
   # Utility class to load RDF vocabularies from files or their canonical
-  # definitions and emit either a class file for RDF::StrictVocabulary or the
-  # raw RDF vocabulary
+  # definitions and emit either a class file for RDF::StrictVocabulary,
+  # RDF::Vocabulary or the raw RDF vocabulary
   class VocabularyLoader
     def initialize(class_name = nil)
       @class_name = class_name
@@ -13,6 +13,7 @@ module RDF
       @output_class_file = true
       @prefix = nil
       @url = nil
+      @strict = true
       @extra = []
     end
     attr_accessor :class_name, :output, :output_class_file
@@ -39,6 +40,11 @@ module RDF
     # Extra properties to define
     def extra=(extra)
       @extra = extra
+    end
+
+    # Use StrictVocabulary or Vocabulary
+    def strict=(strict)
+      @strict = strict
     end
 
     # Parses arguments, for use in a command line tool
@@ -141,7 +147,7 @@ module RDF
       @output.print %(# This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module RDF
-          class #{class_name} < StrictVocabulary("#{prefix}")
+          class #{class_name} < #{"Strict" if @strict}Vocabulary("#{prefix}")
         ).gsub(/^        /, '') if @output_class_file
 
       classes = RDF::Query.new do

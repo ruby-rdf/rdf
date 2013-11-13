@@ -1,7 +1,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/1999/xhtml/vocab#
 require 'rdf'
 module RDF
-  class XHV < StrictVocabulary("http://www.w3.org/1999/xhtml/vocab#")
+  class XHV < Vocabulary("http://www.w3.org/1999/xhtml/vocab#")
 
     # Property definitions
     property :alert, :comment =>
@@ -9,8 +9,8 @@ module RDF
         information. Also see alertdialog and status.)
     property :alertdialog, :comment =>
       %(A type of dialog that contains an alert message, where initial
-        focus goes an element within the dialog. Also see alert and
-        dialog.)
+        focus goes to the dialog or an element within it. Also see
+        alert and dialog.)
     property :alternate, :comment =>
       %(alternate designates alternate versions for a resource.)
     property :appendix, :comment =>
@@ -20,22 +20,22 @@ module RDF
       %(A region declared as a web application, as opposed to a web
         document.)
     property :article, :comment =>
-      %(A section of a page that consists of a composition that forms
-        an independent part of a document, page, or site.)
+      %(A section of a page consisting of an independent part of a
+        document, page, or site.)
     property :banner, :comment =>
-      %(contains the prime heading or internal title of a page.)
+      %(banner contains the prime heading or internal title of a page.)
     property :bookmark, :comment =>
       %(bookmark refers to a bookmark - a link to a key entry point
         within an extended document.)
     property :button, :comment =>
       %(An input that allows for user-triggered actions when clicked
-        or pressed. Also see link.)
+        or pressed.)
     property :chapter, :comment =>
       %(chapter refers to a resource serving as a chapter in a
-        collection.)
+        collction.)
     property :checkbox, :comment =>
-      %(A checkable input that has three possible values: true, false,
-        or mixed.)
+      %(An checkable input that has three possible values: true,
+        false, or mixed.)
     property :cite, :comment =>
       %(cite refers to a resource that defines a citation.)
     property :columnheader, :comment =>
@@ -43,19 +43,19 @@ module RDF
     property :combobox, :comment =>
       %(A presentation of a select; usually similar to a textbox where
         users can type ahead to select an option, or type to enter
-        arbitrary text as a new item in the list. Also see listbox.)
+        arbitrary text as a new item in the list.)
     property :complementary, :comment =>
-      %(indicates that the section supports but is separable from the
-        main content of resource.)
+      %(secondary indicates that the section supports but is separable
+        from the main content of resource.)
     property :contentinfo, :comment =>
-      %(contains meta information about the content on the page or the
-        page as a whole.)
+      %(contentinfo has meta information about the content on the page
+        or the page as a whole.)
     property :contents, :comment =>
       %(contents refers to a resource serving as a table of contents.)
     property :copyright, :comment =>
       %(copyright refers to a copyright statement for the resource.)
     property :definition, :comment =>
-      %(indicates the definition of a term or concept.)
+      %(definition indicates the definition of a term or concept.)
     property :dialog, :comment =>
       %(A dialog is an application window that is designed to
         interrupt the current processing of an application in order to
@@ -70,21 +70,17 @@ module RDF
     property :first, :comment =>
       %(first refers the first item in a collection \(see also start
         and top\).)
-    property :form, :comment =>
-      %(A landmark region that contains a collection of items and
-        objects that, as a whole, combine to create a form. Also see
-        search.)
     property :glossary, :comment =>
       %(glossary refers to a resource providing a glossary of terms.)
     property :grid, :comment =>
-      %(A grid is an interactive control which contains cells of
-        tabular data arranged in rows and columns, like a table.)
+      %(A grid contains cells of tabular data arranged in rows and
+        columns, like a table.)
     property :gridcell, :comment =>
       %(A cell in a grid or treegrid.)
     property :group, :comment =>
-      %(A set of user interface objects which are not intended to be
-        included in a page summary or table of contents by assistive
-        technologies.)
+      %(A set of user interface objects which would not be included in
+        a page summary or table of contents by an assistive
+        technology.)
     property :heading, :comment =>
       %(A heading for a section of the page.)
     property :help, :comment =>
@@ -104,27 +100,25 @@ module RDF
       %(license refers to a resource that defines the associated
         license.)
     property :link, :comment =>
-      %(An interactive reference to an internal or external resource
-        that, when activated, causes the user agent to navigate to
-        that resource. Also see button.)
+      %(An interactive reference to an internal or external resource.)
     property :list, :comment =>
-      %(A group of non-interactive list items. Also see listbox.)
+      %(A group of non-interactive list items.)
     property :listbox, :comment =>
       %(A widget that allows the user to select one or more items from
-        a list of choices. Also see combobox and list.)
+        a list of choices.)
     property :listitem, :comment =>
-      %(A single item in a list or directory.)
+      %(A single item in a list, listbox, or directory.)
     property :log, :comment =>
       %(A type of live region where new information is added in
         meaningful order and old information may disappear. Also see
         marquee.)
     property :main, :comment =>
-      %(acts as the main content of the document.)
+      %(main acts as the main content of the document.)
     property :marquee, :comment =>
       %(A type of live region where non-essential information changes
         frequently. Also see log.)
     property :math, :comment =>
-      %(Content that represents a mathematical expression.)
+      %(An element that represents a mathematical expression.)
     property :menu, :comment =>
       %(A type of widget that offers a list of choices to the user.)
     property :menubar, :comment =>
@@ -142,21 +136,21 @@ module RDF
     property :meta, :comment =>
       %(meta refers to a resource that provides metadata.)
     property :navigation, :comment =>
-      %(indicates a collection of items suitable for navigating the
-        document or related documents.)
+      %(navigation indicates a collection of items suitable for
+        navigating the document or related documents.)
     property :next, :comment =>
       %(next refers to the next resource \(after the current one\) in
         an ordered collection of resources.)
     property :note, :comment =>
-      %(indicates the content is parenthetic or ancillary to the main
-        content of the resource.)
+      %(note indicates the content is parenthetic or ancillary to the
+        main content of the resource.)
     property :option, :comment =>
       %(A selectable item in a select list.)
     property :p3pv1, :comment =>
       %(p3pv1 refers to a P3P Policy Reference File [P3P].)
     property :presentation, :comment =>
-      %(An element whose implicit native role semantics will not be
-        mapped to the accessibility API.)
+      %(An element whose role is presentational and does not need to
+        be mapped to the accessibility API.)
     property :prev, :comment =>
       %(prev refers to a previous resource \(before the current one\)
         in an ordered collection of resources.)
@@ -170,25 +164,18 @@ module RDF
       %(A group of radio buttons.)
     property :region, :comment =>
       %(A large perceivable section of a web page or document, that
-        the author feels is important enough to be included in a page
-        summary or table of contents, for example, an area of the page
-        containing live sporting event statistics.)
+        the author feels should be included in a summary of page
+        features.)
     property :role, :comment =>
       %(role indicates the purpose of the resource. See the XHTML Role
         Vocabulary for roles in this vocabulary space, and XHTMLROLE
         for information on extending the collection of roles.)
     property :row, :comment =>
       %(A row of cells in a grid.)
-    property :rowgroup, :comment =>
-      %(A group containing one or more row elements in a grid.)
     property :rowheader, :comment =>
       %(A cell containing header information for a row in a grid.)
-    property :scrollbar, :comment =>
-      %(A graphical object that controls the scrolling of content
-        within a viewing area, regardless of whether the content is
-        fully displayed within the viewing area.)
     property :search, :comment =>
-      %(indicates that the section provides a search facility.)
+      %(search indicates that the section provides a search facility.)
     property :section, :comment =>
       %(section refers to a resource serving as a section in a
         collection.)
@@ -215,25 +202,24 @@ module RDF
       %(subsection refers to a resource serving as a subsection in a
         collection.)
     property :tab, :comment =>
-      %(A grouping label providing a mechanism for selecting the tab
-        content that is to be rendered to the user.)
+      %(A header for a tabpanel.)
     property :tablist, :comment =>
       %(A list of tab elements, which are references to tabpanel
         elements.)
     property :tabpanel, :comment =>
-      %(A container for the resources associated with a tab, where
-        each tab is contained in a tablist.)
+      %(A container for the resources associated with a tab.)
     property :textbox, :comment =>
-      %(Input that allows free-form text as its value.)
+      %(Input that allows free-form text as their value.)
     property :timer, :comment =>
-      %(A type of live region containing a numerical counter which
-        indicates an amount of elapsed time from a start point, or the
-        time remaining until an end point.)
+      %(A numerical counter which indicates an amount of elapsed time
+        from a start point, or the time remaining until an end point.)
     property :toolbar, :comment =>
       %(A collection of commonly used function buttons represented in
         compact visual form.)
     property :tooltip, :comment =>
-      %(A contextual popup that displays a description for an element.)
+      %(A contextual popup that displays a description for an element
+        in a mouse hover or keyboard focused state. Supplement to the
+        normal tooltip processing of the user agent.)
     property :top, :comment =>
       %(top is a synonym for start.)
     property :tree, :comment =>
