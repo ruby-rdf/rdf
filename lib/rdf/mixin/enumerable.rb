@@ -230,7 +230,9 @@ module RDF
     # @return [Enumerator]
     # @see    #each_triple
     def enum_triple
-      enum_for(:each_triple)
+      Countable::Enumerator.new do |yielder|
+        each_triple {|s, p, o| yielder << [s, p, o]}
+      end
     end
     alias_method :enum_triples, :enum_triple
 
@@ -291,7 +293,9 @@ module RDF
     # @return [Enumerator]
     # @see    #each_quad
     def enum_quad
-      enum_for(:each_quad)
+      Countable::Enumerator.new do |yielder|
+        each_quad {|s, p, o, c| yielder << [s, p, o, c]}
+      end
     end
     alias_method :enum_quads, :enum_quad
 

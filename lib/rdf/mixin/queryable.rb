@@ -300,7 +300,7 @@ module RDF
       # Ensure that enumerators are, themselves, queryable
       this = self
       Queryable::Enumerator.new do |yielder|
-        this.send(method, *args) {|y| yielder << y}
+        this.send(method, *args) {|*y| yielder << (y.length > 1 ? y : y.first)}
       end
     end
     alias_method :to_enum, :enum_for
