@@ -3,8 +3,7 @@ source "https://rubygems.org"
 gemspec :name => ""
 
 group :develop do
-  #gem "rdf-spec", :git => "git://github.com/ruby-rdf/rdf-spec.git", :branch => "develop"
-  gem "rdf-spec", :path => "../rdf-spec"
+  gem "rdf-spec", :git => "git://github.com/ruby-rdf/rdf-spec.git", :branch => "develop"
   gem 'linkeddata'
   gem "rdf-rdfxml", :git => "git://github.com/ruby-rdf/rdf-rdfxml.git", :branch => "develop"
   gem 'rdf-rdfa', :git => "git://github.com/ruby-rdf/rdf-rdfa.git", :branch => "develop"
