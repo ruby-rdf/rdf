@@ -62,7 +62,7 @@ module RDF::NTriples
     # 166s
     PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/.freeze
     # 159s
-    ECHAR                = /\\[tbnrf\\"']/.freeze
+    ECHAR                = /\\[tbnrf\\"]/.freeze
     # 18
     IRIREF               = /<((?:#{IRI_RANGE}|#{ESCAPE_CHAR})*)>/.freeze
     # 141s
