@@ -1,4 +1,3 @@
-require 'open-uri'
 require 'stringio'
 require 'bigdecimal'
 require 'date'
