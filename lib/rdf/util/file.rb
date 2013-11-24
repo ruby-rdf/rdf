@@ -118,9 +118,11 @@ module RDF; module Util
       def initialize(body, options = {})
         super(body)
         options.each do |key, value|
+          # de-quote charset
+          value = $1 if key == "charset" && value =~ /^["'](.*)["']$/
           instance_variable_set(:"@#{key}", value)
         end
-        set_encoding @charset if @charset
+        set_encoding Encoding.find(@charset) if @charset
       end
     end
   end # File
