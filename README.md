@@ -420,7 +420,7 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD-GS]:          http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
 [Backports]:        http://rubygems.org/gems/backports
-[JSONLD doc]:       http://rubydoc.info/github/gkellogg/json-ld/frames
+[JSONLD doc]:       http://rubydoc.info/github/ruby-rdf/json-ld/frames
 [LinkedData doc]:   http://rubydoc.info/github/datagraph/linkeddata/master/frames
 [Microdata doc]:    http://rubydoc.info/github/ruby-rdf/rdf-microdata/frames
 [N3 doc]:           http://rubydoc.info/github/ruby-rdf/rdf-n3/master/frames

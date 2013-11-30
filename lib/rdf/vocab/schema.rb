@@ -192,12 +192,20 @@ module RDF
         for labeling a product, product group, or similar.)
     property :Brewery, :label => 'Brewery', :comment =>
       %(Brewery.)
+    property :BroadcastEvent, :label => 'BroadcastEvent', :comment =>
+      %(An over the air or online broadcast event.)
+    property :BroadcastService, :label => 'BroadcastService', :comment =>
+      %(A delivery service through which content is provided via
+        broadcast over the air or online.)
     property :BuddhistTemple, :label => 'BuddhistTemple', :comment =>
       %(A Buddhist temple.)
     property :BusStation, :label => 'BusStation', :comment =>
       %(A bus station.)
     property :BusStop, :label => 'BusStop', :comment =>
       %(A bus stop.)
+    property :BusinessAudience, :label => 'BusinessAudience', :comment =>
+      %(A set of characteristics belonging to businesses, e.g. who
+        compose an item's target audience.)
     property :BusinessEntityType, :label => 'BusinessEntityType', :comment =>
       %(A business entity type is a conceptual entity representing the
         legal form, the size, the main line of business, the position
@@ -299,6 +307,8 @@ module RDF
       %(A public structure, such as a town hall or concert hall.)
     property :Class, :label => 'Class', :comment =>
       %(A class, also often called a 'Type'; equivalent to rdfs:Class.)
+    property :Clip, :label => 'Clip', :comment =>
+      %(A short TV or radio program or a segment/part of a program.)
     property :ClothingStore, :label => 'ClothingStore', :comment =>
       %(A clothing store.)
     property :Code, :label => 'Code', :comment =>
@@ -338,6 +348,8 @@ module RDF
     property :ContactPoint, :label => 'ContactPoint', :comment =>
       %(A contact point&#x2014;for example, a Customer Complaints
         department.)
+    property :ContactPointOption, :label => 'ContactPointOption', :comment =>
+      %(Enumerated options related to a ContactPoint)
     property :Continent, :label => 'Continent', :comment =>
       %(One of the continents \(for example, Europe or Africa\).)
     property :ConvenienceStore, :label => 'ConvenienceStore', :comment =>
@@ -547,8 +559,16 @@ module RDF
     property :Enumeration, :label => 'Enumeration', :comment =>
       %(Lists or enumerations&#x2014;for example, a list of cuisines
         or music genres, etc.)
+    property :Episode, :label => 'Episode', :comment =>
+      %(A TV or radio episode which can be part of a series or season.)
     property :Event, :label => 'Event', :comment =>
-      %(An event happening at a certain time at a certain location.)
+      %(An event happening at a certain time and location, such as a
+        concert, lecture, or festival. Ticketing information may be
+        added via the 'offers' property. Repeated events may be
+        structured as separate Event objects.)
+    property :EventStatusType, :label => 'EventStatusType', :comment =>
+      %(EventStatusType is an enumeration type whose instances
+        represent several states that an Event may be in.)
     property :EventVenue, :label => 'EventVenue', :comment =>
       %(An event venue.)
     property :ExerciseAction, :label => 'ExerciseAction', :comment =>
@@ -639,6 +659,11 @@ module RDF
       %(A government office&#x2014;for example, an IRS or DMV office.)
     property :GovernmentOrganization, :label => 'GovernmentOrganization', :comment =>
       %(A governmental organization or agency.)
+    property :GovernmentPermit, :label => 'GovernmentPermit', :comment =>
+      %(A permit issued by a government agency.)
+    property :GovernmentService, :label => 'GovernmentService', :comment =>
+      %(A service provided by a government organization, e.g. food
+        stamps, veterans benefits, etc.)
     property :GroceryStore, :label => 'GroceryStore', :comment =>
       %(A grocery store.)
     property :HVACBusiness, :label => 'HVACBusiness', :comment =>
@@ -1086,6 +1111,9 @@ module RDF
       %(A list of possible conditions for the item for sale.)
     property :OfficeEquipmentStore, :label => 'OfficeEquipmentStore', :comment =>
       %(An office equipment store.)
+    property :OnDemandEvent, :label => 'OnDemandEvent', :comment =>
+      %(A publication event e.g. catch-up TV or radio podcast, during
+        which a program is available on-demand.)
     property :OpeningHoursSpecification, :label => 'OpeningHoursSpecification', :comment =>
       %(A structured value providing information about the opening
         hours of a place or a certain service inside a place.)
@@ -1161,6 +1189,8 @@ module RDF
     property :PerformingGroup, :label => 'PerformingGroup', :comment =>
       %(A performance group, such as a band, an orchestra, or a
         circus.)
+    property :Permit, :label => 'Permit', :comment =>
+      %(A permit issued by an organization, e.g. a parking pass.)
     property :Person, :label => 'Person', :comment =>
       %(A person \(alive, dead, undead, or fictional\).)
     property :PetStore, :label => 'PetStore', :comment =>
@@ -1246,6 +1276,11 @@ module RDF
         health condition.)
     property :PublicSwimmingPool, :label => 'PublicSwimmingPool', :comment =>
       %(A public swimming pool.)
+    property :PublicationEvent, :label => 'PublicationEvent', :comment =>
+      %(A PublicationEvent corresponds indifferently to the event of
+        publication for a CreativeWork of any type e.g. a broadcast
+        event, an on-demand event, a book/journal publication via a
+        variety of delivery media.)
     property :QualitativeValue, :label => 'QualitativeValue', :comment =>
       %(A predefined value for a product characteristic, e.g. the the
         power cord plug type "US" or the garment sizes "S", "M", "L",
@@ -1265,6 +1300,16 @@ module RDF
     property :RadiationTherapy, :label => 'RadiationTherapy', :comment =>
       %(A process of care using radiation aimed at improving a health
         condition.)
+    property :RadioClip, :label => 'RadioClip', :comment =>
+      %(A short radio progam or a segment/part of a radio program.)
+    property :RadioEpisode, :label => 'RadioEpisode', :comment =>
+      %(A radio episode which can be part of a series or season.)
+    property :RadioSeason, :label => 'RadioSeason', :comment =>
+      %(Season dedicated to radio broadcast and associated online
+        delivery.)
+    property :RadioSeries, :label => 'RadioSeries', :comment =>
+      %(Series dedicated to radio broadcast and associated online
+        delivery.)
     property :RadioStation, :label => 'RadioStation', :comment =>
       %(A radio station.)
     property :Rating, :label => 'Rating', :comment =>
@@ -1386,6 +1431,8 @@ module RDF
         necessarily.</li></ul>)
     property :SearchResultsPage, :label => 'SearchResultsPage', :comment =>
       %(Web page type: Search results page.)
+    property :Season, :label => 'Season', :comment =>
+      %(A TV or radio season.)
     property :SelfStorage, :label => 'SelfStorage', :comment =>
       %(Self-storage facility.)
     property :SellAction, :label => 'SellAction', :comment =>
@@ -1402,6 +1449,14 @@ module RDF
         GiveAction, SendAction does not imply the transfer of
         ownership \(e.g. I can send you my laptop, but I'm not
         necessarily giving it to you\).</li></ul>)
+    property :Series, :label => 'Series', :comment =>
+      %(A TV or radio series.)
+    property :Service, :label => 'Service', :comment =>
+      %(A service provided by an organization, e.g. delivery service,
+        print services, etc.)
+    property :ServiceChannel, :label => 'ServiceChannel', :comment =>
+      %(A means for accessing a service, e.g. a government office
+        location, web site, or phone number.)
     property :ShareAction, :label => 'ShareAction', :comment =>
       %(The act of distributing content to people for their amusement
         or edification.)
@@ -1488,12 +1543,16 @@ module RDF
         dislocation of the joint \(the related anatomical structure\).)
     property :Synagogue, :label => 'Synagogue', :comment =>
       %(A synagogue.)
+    property :TVClip, :label => 'TVClip', :comment =>
+      %(A short TV progam or a segment/part of a TV program.)
     property :TVEpisode, :label => 'TVEpisode', :comment =>
-      %(An episode of a TV series or season.)
+      %(A TV episode which can be part of a series or season.)
     property :TVSeason, :label => 'TVSeason', :comment =>
-      %(A TV season.)
+      %(Season dedicated to TV broadcast and associated online
+        delivery.)
     property :TVSeries, :label => 'TVSeries', :comment =>
-      %(A television series.)
+      %(Series dedicated to TV broadcast and associated online
+        delivery.)
     property :Table, :label => 'Table', :comment =>
       %(A table on the page.)
     property :TakeAction, :label => 'TakeAction', :comment =>
@@ -1712,11 +1771,11 @@ module RDF
     property :activityFrequency, :label => 'activityFrequency', :comment =>
       %(How often one should engage in the activity.)
     property :actor, :label => 'actor', :comment =>
-      %(A cast member of the movie, TV series, season, or episode, or
-        video.)
+      %(A cast member of the movie, tv/radio series, season, episode,
+        or video.)
     property :actors, :label => 'actors', :comment =>
-      %(A cast member of the movie, TV series, season, or episode, or
-        video. \(legacy spelling; see singular form, actor\))
+      %(A cast member of the movie, tv/radio series, season, episode,
+        or video. \(legacy spelling; see singular form, actor\))
     property :addOn, :label => 'addOn', :comment =>
       %(An additional offer that can only be obtained in combination
         with the first base offer \(e.g. supplements and extensions
@@ -1787,7 +1846,7 @@ module RDF
         'teaches', 'requires', 'textComplexity', 'readingLevel',
         'educationalSubject', and 'educationLevel'.)
     property :alternateName, :label => 'alternateName', :comment =>
-      %(Any alternate name for this medical entity.)
+      %(An alias for the item.)
     property :alternativeHeadline, :label => 'alternativeHeadline', :comment =>
       %(A secondary title of the CreativeWork.)
     property :alumni, :label => 'alumni', :comment =>
@@ -1813,6 +1872,13 @@ module RDF
     property :appliesToPaymentMethod, :label => 'appliesToPaymentMethod', :comment =>
       %(The payment method\(s\) to which the payment charge
         specification applies.)
+    property :area, :label => 'area', :comment =>
+      %(The area within which users can expect to reach the broadcast
+        service.)
+    property :areaServed, :label => 'areaServed', :comment =>
+      %(The location served by this contact point \(e.g., a phone
+        number intended for Europeans vs. North Americans or only
+        within the United States.\))
     property :arterialBranch, :label => 'arterialBranch', :comment =>
       %(The branches that comprise the arterial structure.)
     property :articleBody, :label => 'articleBody', :comment =>
@@ -1850,6 +1916,10 @@ module RDF
     property :audience, :label => 'audience', :comment =>
       %(The intended audience of the item, i.e. the group for whom the
         item was created.)
+    property :audienceType, :label => 'audienceType', :comment =>
+      %(The target group associated with a given audience \(e.g.
+        veterans, car owners, musicians, etc.\) domain: Audience
+        Range: Text)
     property :audio, :label => 'audio', :comment =>
       %(An embedded audio object.)
     property :author, :label => 'author', :comment =>
@@ -1869,10 +1939,15 @@ module RDF
     property :availableAtOrFrom, :label => 'availableAtOrFrom', :comment =>
       %(The place\(s\) from which the offer can be obtained \(e.g.
         store locations\).)
+    property :availableChannel, :label => 'availableChannel', :comment =>
+      %(A means of accessing the service \(e.g. a phone bank, a web
+        site, a location, etc.\))
     property :availableDeliveryMethod, :label => 'availableDeliveryMethod', :comment =>
       %(The delivery method\(s\) available for this offer.)
     property :availableIn, :label => 'availableIn', :comment =>
       %(The location in which the strength is available.)
+    property :availableLanguage, :label => 'availableLanguage', :comment =>
+      %(A language someone may use with the item.)
     property :availableService, :label => 'availableService', :comment =>
       %(A medical service available from this provider.)
     property :availableStrength, :label => 'availableStrength', :comment =>
@@ -1941,6 +2016,8 @@ module RDF
     property :breastfeedingWarning, :label => 'breastfeedingWarning', :comment =>
       %(Any precaution, guidance, contraindication, etc. related to
         this drug's use by breastfeeding mothers.)
+    property :broadcaster, :label => 'broadcaster', :comment =>
+      %(The organization owning or operating the broadcast service.)
     property :browserRequirements, :label => 'browserRequirements', :comment =>
       %(Specifies browser requirements in human-readable text. For
         example,"requires HTML5 support".)
@@ -1998,6 +2075,8 @@ module RDF
       %(Description of the absorption and elimination of drugs,
         including their concentration \(pharmacokinetics, pK\) and
         biological effects \(pharmacodynamics, pD\).)
+    property :clipNumber, :label => 'clipNumber', :comment =>
+      %(Position of the clip within an ordered group of clips.)
     property :closes, :label => 'closes', :comment =>
       %(The closing hour of the place or service on the given day\(s\)
         of the week.)
@@ -2033,6 +2112,9 @@ module RDF
     property :connectedTo, :label => 'connectedTo', :comment =>
       %(Other anatomical structures to which this structure is
         connected.)
+    property :contactOption, :label => 'contactOption', :comment =>
+      %(An option available on this contact point \(e.g. a toll-free
+        number or support for hearing-impaired callers.\))
     property :contactPoint, :label => 'contactPoint', :comment =>
       %(A contact point for a person or organization.)
     property :contactPoints, :label => 'contactPoints', :comment =>
@@ -2122,6 +2204,11 @@ module RDF
         goods leaving the warehouse.)
     property :deliveryMethod, :label => 'deliveryMethod', :comment =>
       %(A sub property of instrument. The method of delivery)
+    property :department, :label => 'department', :comment =>
+      %(A relationship between an organization and a department of
+        that organization, also described as an organization
+        \(allowing different urls, logos, opening hours\). For
+        example: a store with a pharmacy, or a bakery with a cafe.)
     property :dependencies, :label => 'dependencies', :comment =>
       %(Prerequisites needed to fulfill steps in article.)
     property :depth, :label => 'depth', :comment =>
@@ -2154,7 +2241,10 @@ module RDF
         symptoms to reach the most parsimonious diagnosis or diagnoses
         in a patient.)
     property :director, :label => 'director', :comment =>
-      %(The director of the movie, TV episode, or series.)
+      %(The director of the movie, tv/radio episode or series.)
+    property :directors, :label => 'directors', :comment =>
+      %(The director of the movie, tv/radio episode or series.
+        \(legacy spelling; see singular form, director\))
     property :discusses, :label => 'discusses', :comment =>
       %(Specifies the CreativeWork associated with the UserComment.)
     property :discussionUrl, :label => 'discussionUrl', :comment =>
@@ -2265,7 +2355,7 @@ module RDF
       %(The media objects that encode this creative work \(legacy
         spelling; see singular form, encoding\).)
     property :endDate, :label => 'endDate', :comment =>
-      %(The end date and time of the event \(in <a
+      %(The end date and time of the event or item \(in <a
         href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date
         format</a>\).)
     property :endTime, :label => 'endTime', :comment =>
@@ -2284,12 +2374,12 @@ module RDF
       %(The characteristics of associated patients, such as age,
         gender, race etc.)
     property :episode, :label => 'episode', :comment =>
-      %(An episode of a TV series or season.)
+      %(An episode of a TV/radio series or season)
     property :episodeNumber, :label => 'episodeNumber', :comment =>
-      %(The episode number.)
+      %(Position of the episode within an ordered group of episodes.)
     property :episodes, :label => 'episodes', :comment =>
-      %(The episode of a TV series or season \(legacy spelling; see
-        singular form, episode\).)
+      %(An episode of a TV/radio series or season \(legacy spelling;
+        see singular form, episode\))
     property :equal, :label => 'equal', :comment =>
       %(This ordering relation for qualitative values indicates that
         the subject is equal to the object.)
@@ -2299,6 +2389,9 @@ module RDF
     property :event, :label => 'event', :comment =>
       %(Upcoming or past event associated with this place or
         organization.)
+    property :eventStatus, :label => 'eventStatus', :comment =>
+      %(An eventStatus of an event represents its status; particularly
+        useful when an event is cancelled or rescheduled.)
     property :events, :label => 'events', :comment =>
       %(Upcoming or past events associated with this place or
         organization \(legacy spelling; see singular form, event\).)
@@ -2367,6 +2460,8 @@ module RDF
         singular form, founder\).)
     property :foundingDate, :label => 'foundingDate', :comment =>
       %(The date that this organization was founded.)
+    property :free, :label => 'free', :comment =>
+      %(A flag to signal that the publication is accessible for free.)
     property :frequency, :label => 'frequency', :comment =>
       %(How often the dose is taken, e.g. 'daily'.)
     property :fromLocation, :label => 'fromLocation', :comment =>
@@ -2382,6 +2477,8 @@ module RDF
       %(Genre of the creative work)
     property :geo, :label => 'geo', :comment =>
       %(The geo coordinates of the place.)
+    property :geographicArea, :label => 'geographicArea', :comment =>
+      %(The geographic area associated with the audience.)
     property :givenName, :label => 'givenName', :comment =>
       %(Given name. In the U.S., the first name of a Person. This can
         be used along with familyName instead of the Name property.)
@@ -2437,6 +2534,8 @@ module RDF
         /PhD/MSCSW.)
     property :hospitalAffiliation, :label => 'hospitalAffiliation', :comment =>
       %(A hospital with which the physician or office is affiliated.)
+    property :hoursAvailable, :label => 'hoursAvailable', :comment =>
+      %(The hours during which this contact point is available.)
     property :howPerformed, :label => 'howPerformed', :comment =>
       %(How the procedure is performed.)
     property :identifyingExam, :label => 'identifyingExam', :comment =>
@@ -2550,6 +2649,10 @@ module RDF
       %(The International Standard of Industrial Classification of All
         Economic Activities \(ISIC\), Revision 4 code for a particular
         organization, business person, or place.)
+    property :issuedBy, :label => 'issuedBy', :comment =>
+      %(The organization issuing the permit.)
+    property :issuedThrough, :label => 'issuedThrough', :comment =>
+      %(The service through with the permit was granted.)
     property :itemCondition, :label => 'itemCondition', :comment =>
       %(A predefined value from OfferItemCondition or a textual
         description of the condition of the product or service, or the
@@ -2610,7 +2713,7 @@ module RDF
     property :location, :label => 'location', :comment =>
       %(The location of the event, organization or action.)
     property :logo, :label => 'logo', :comment =>
-      %(URL of an image for the logo of the item.)
+      %(A logo associated with an organization.)
     property :longitude, :label => 'longitude', :comment =>
       %(The longitude of a location. For example
         <code>-122.08585</code>.)
@@ -2674,7 +2777,7 @@ module RDF
       %(The Manufacturer Part Number \(MPN\) of the product, or the
         product to which the offer refers.)
     property :musicBy, :label => 'musicBy', :comment =>
-      %(The composer of the movie or TV soundtrack.)
+      %(The composer of the movie or TV/radio soundtrack.)
     property :musicGroupMember, :label => 'musicGroupMember', :comment =>
       %(A member of the music group&#x2014;for example, John, Paul,
         George, or Ringo.)
@@ -2707,6 +2810,10 @@ module RDF
       %(The number of episodes in this season or series.)
     property :numberOfPages, :label => 'numberOfPages', :comment =>
       %(The number of pages in the book.)
+    property :numberOfSeasons, :label => 'numberOfSeasons', :comment =>
+      %(The number of seasons in this series.)
+    property :numberofEmployees, :label => 'numberofEmployees', :comment =>
+      %(The size of business by number of employees.)
     property :nutrition, :label => 'nutrition', :comment =>
       %(Nutrition information about the recipe.)
     property :object, :label => 'object', :comment =>
@@ -2778,15 +2885,23 @@ module RDF
       %(Products owned by the organization or person.)
     property :parent, :label => 'parent', :comment =>
       %(A parent of this person.)
+    property :parentService, :label => 'parentService', :comment =>
+      %(A broadcast service to which the broadcast service may belong
+        to such as regional variations of a national channel.)
     property :parents, :label => 'parents', :comment =>
       %(A parents of the person \(legacy spelling; see singular form,
         parent\).)
+    property :partOfEpisode, :label => 'partOfEpisode', :comment =>
+      %(The episode to which this clip belongs.)
     property :partOfSeason, :label => 'partOfSeason', :comment =>
       %(The season to which this episode belongs.)
+    property :partOfSeries, :label => 'partOfSeries', :comment =>
+      %(The series to which this episode or season belongs.)
     property :partOfSystem, :label => 'partOfSystem', :comment =>
       %(The anatomical or organ system that this structure is part of.)
     property :partOfTVSeries, :label => 'partOfTVSeries', :comment =>
-      %(The TV series to which this episode or season belongs.)
+      %(The TV series to which this episode or season belongs.
+        \(legacy form; partOfSeries is preferred\))
     property :participant, :label => 'participant', :comment =>
       %(Other co-agents that participated in the action indirectly.
         e.g. John wrote a book with *Steve*.)
@@ -2808,6 +2923,8 @@ module RDF
       %(Permission\(s\) required to run the app \(for example, a
         mobile app may require full internet access or may run only on
         wifi\).)
+    property :permitAudience, :label => 'permitAudience', :comment =>
+      %(The target audience for this permit.)
     property :phase, :label => 'phase', :comment =>
       %(The phase of the trial.)
     property :photo, :label => 'photo', :comment =>
@@ -2827,6 +2944,11 @@ module RDF
     property :population, :label => 'population', :comment =>
       %(Any characteristics of the population used in the study, e.g.
         'males under 65'.)
+    property :position, :label => 'position', :comment =>
+      %(Free text to define other than pure numerical ranking of an
+        episode or a season in an ordered list of items \(further
+        formatting restrictions may apply within particular user
+        groups\).)
     property :possibleComplication, :label => 'possibleComplication', :comment =>
       %(A possible unexpected and unfavorable evolution of a medical
         condition. Complications may include worsening of the signs or
@@ -2865,6 +2987,13 @@ module RDF
     property :prescriptionStatus, :label => 'prescriptionStatus', :comment =>
       %(Indicates whether this drug is available by prescription or
         over-the-counter.)
+    property :previousStartDate, :label => 'previousStartDate', :comment =>
+      %(Used in conjunction with eventStatus for rescheduled or
+        cancelled events. This property contains the previously
+        scheduled start date. For rescheduled events, the startDate
+        property should be used for the newly scheduled start date. In
+        the \(rare\) case of an event that has been postponed and
+        rescheduled multiple times, this field may be repeated.)
     property :price, :label => 'price', :comment =>
       %(The offer price of a product, or of a price component when
         attached to PriceSpecification and its subtypes.)
@@ -2909,19 +3038,30 @@ module RDF
     property :procedureType, :label => 'procedureType', :comment =>
       %(The type of procedure, for example Surgical, Noninvasive, or
         Percutaneous.)
+    property :processingTime, :label => 'processingTime', :comment =>
+      %(Estimated processing time for the service using this channel.)
     property :processorRequirements, :label => 'processorRequirements', :comment =>
       %(Processor architecture required to run the application \(e.g.
         IA64\).)
     property :producer, :label => 'producer', :comment =>
-      %(The producer of the movie, TV series, season, or episode, or
-        video.)
+      %(The producer of the movie, tv/radio series, season, or
+        episode, or video.)
+    property :produces, :label => 'produces', :comment =>
+      %(The tangible thing generated by the service, e.g. a passport,
+        permit, etc.)
     property :productID, :label => 'productID', :comment =>
       %(The product identifier, such as ISBN. For example:
         <code>&lt;meta itemprop='productID'
         content='isbn:123-456-789'/&gt;</code>.)
+    property :productSupported, :label => 'productSupported', :comment =>
+      %(The product or service this support contact point is related
+        to \(such as product support for a particular product line\).
+        This can be a specific product or product line \(e.g.
+        "iPhone"\) or a general category of products or services
+        \(e.g. "smartphones"\).)
     property :productionCompany, :label => 'productionCompany', :comment =>
-      %(The production company or studio that made the movie, TV
-        series, season, or episode, or video.)
+      %(The production company or studio that made the movie, tv/radio
+        series, season, or episode, or media object.)
     property :proficiencyLevel, :label => 'proficiencyLevel', :comment =>
       %(Proficiency needed for this content; expected values:
         'Beginner', 'Expert'.)
@@ -2935,12 +3075,18 @@ module RDF
     property :proteinContent, :label => 'proteinContent', :comment =>
       %(The number of grams of protein.)
     property :provider, :label => 'provider', :comment =>
-      %(Specifies the Person or Organization that distributed the
-        CreativeWork.)
+      %(The organization or agency that is providing the service.)
+    property :providesService, :label => 'providesService', :comment =>
+      %(The service provided by this channel.)
+    property :publication, :label => 'publication', :comment =>
+      %(A publication event associated with the episode, clip or media
+        object.)
     property :publicationType, :label => 'publicationType', :comment =>
       %(The type of the medical article, taken from the US NLM MeSH <a
         href=http://www.nlm.nih.gov/mesh/pubtypes.html>publication
         type catalog.)
+    property :publishedOn, :label => 'publishedOn', :comment =>
+      %(A broadcast service associated with the publication event)
     property :publisher, :label => 'publisher', :comment =>
       %(The publisher of the creative work.)
     property :publishingPrinciples, :label => 'publishingPrinciples', :comment =>
@@ -3037,6 +3183,12 @@ module RDF
     property :representativeOfPage, :label => 'representativeOfPage', :comment =>
       %(Indicates whether this image is representative of the content
         of the page.)
+    property :requiredGender, :label => 'requiredGender', :comment =>
+      %(Audiences defined by a person's gender.)
+    property :requiredMaxAge, :label => 'requiredMaxAge', :comment =>
+      %(Audiences defined by a person's maximum age.)
+    property :requiredMinAge, :label => 'requiredMinAge', :comment =>
+      %(Audiences defined by a person's minimum age.)
     property :requirements, :label => 'requirements', :comment =>
       %(Component dependency requirements for application. This
         includes runtime environments and shared libraries that are
@@ -3109,12 +3261,12 @@ module RDF
     property :screenshot, :label => 'screenshot', :comment =>
       %(A link to a screenshot image of the app.)
     property :season, :label => 'season', :comment =>
-      %(A season of a TV series.)
+      %(A season in a tv/radio series.)
     property :seasonNumber, :label => 'seasonNumber', :comment =>
-      %(The season number.)
+      %(Position of the season within an ordered group of seasons.)
     property :seasons, :label => 'seasons', :comment =>
-      %(The seasons of the TV series \(legacy spelling; see singular
-        form, season\).)
+      %(A season in a tv/radio series. \(legacy spelling; see singular
+        form, season\))
     property :secondaryPrevention, :label => 'secondaryPrevention', :comment =>
       %(A preventative therapy used to prevent reoccurrence of the
         medical condition after an initial episode of the condition.)
@@ -3145,6 +3297,29 @@ module RDF
         definition.)
     property :servesCuisine, :label => 'servesCuisine', :comment =>
       %(The cuisine of the restaurant.)
+    property :serviceArea, :label => 'serviceArea', :comment =>
+      %(The geographic area where the service is provided.)
+    property :serviceAudience, :label => 'serviceAudience', :comment =>
+      %(The audience eligible for this service.)
+    property :serviceLocation, :label => 'serviceLocation', :comment =>
+      %(The location \(e.g. civic structure, local business, etc.\)
+        where a person can go to access the service.)
+    property :serviceOperator, :label => 'serviceOperator', :comment =>
+      %(The operating organization, if different from the provider.
+        This enables the representation of services that are provided
+        by an organization, but operated by another organization like
+        a subcontractor.)
+    property :servicePhone, :label => 'servicePhone', :comment =>
+      %(The phone number to use to access the service.)
+    property :servicePostalAddress, :label => 'servicePostalAddress', :comment =>
+      %(The address for accessing the service by mail.)
+    property :serviceSmsNumber, :label => 'serviceSmsNumber', :comment =>
+      %(The number to access the service by text message.)
+    property :serviceType, :label => 'serviceType', :comment =>
+      %(The type of service being offered, e.g. veterans' benefits,
+        emergency relief, etc.)
+    property :serviceUrl, :label => 'serviceUrl', :comment =>
+      %(The website to access the service.)
     property :servingSize, :label => 'servingSize', :comment =>
       %(The serving size, in terms of the number of volume or mass)
     property :sibling, :label => 'sibling', :comment =>
@@ -3215,7 +3390,7 @@ module RDF
     property :stageAsNumber, :label => 'stageAsNumber', :comment =>
       %(The stage represented as a number, e.g. 3.)
     property :startDate, :label => 'startDate', :comment =>
-      %(The start date and time of the event \(in <a
+      %(The start date and time of the event or item \(in <a
         href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date
         format</a>\).)
     property :startTime, :label => 'startTime', :comment =>
@@ -3252,6 +3427,10 @@ module RDF
         conference event includes many presentations, each are
         subEvents of the conference \(legacy spelling; see singular
         form, subEvent\).)
+    property :subOrganization, :label => 'subOrganization', :comment =>
+      %(A relationship between two organizations where the first
+        includes the second, e.g., as a subsidiary. See also: the more
+        specific 'department' property.)
     property :subStageSuffix, :label => 'subStageSuffix', :comment =>
       %(The substage, e.g. 'a' for Stage IIIa.)
     property :subStructure, :label => 'subStructure', :comment =>
@@ -3340,7 +3519,7 @@ module RDF
       %(A music recording \(track\)&#x2014;usually a single song
         \(legacy spelling; see singular form, track\).)
     property :trailer, :label => 'trailer', :comment =>
-      %(The trailer of the movie or TV series, season, or episode.)
+      %(The trailer of a movie or tv/radio series, season, or episode.)
     property :transFatContent, :label => 'transFatContent', :comment =>
       %(The number of grams of trans fat.)
     property :transcript, :label => 'transcript', :comment =>
@@ -3357,8 +3536,7 @@ module RDF
     property :typeOfGood, :label => 'typeOfGood', :comment =>
       %(The product that this structured value is referring to.)
     property :typicalAgeRange, :label => 'typicalAgeRange', :comment =>
-      %(The typical range of ages the content's intendedEndUser, for
-        example '7-9', '11-'.)
+      %(The typical expected age range, e.g. '7-9', '11-'.)
     property :typicalTest, :label => 'typicalTest', :comment =>
       %(A medical test typically performed given this condition.)
     property :unitCode, :label => 'unitCode', :comment =>
@@ -3374,12 +3552,17 @@ module RDF
       %(A condition the test is used to diagnose.)
     property :usesDevice, :label => 'usesDevice', :comment =>
       %(Device used to perform the test.)
+    property :validFor, :label => 'validFor', :comment =>
+      %(The time validity of the permit.)
     property :validFrom, :label => 'validFrom', :comment =>
-      %(The beginning of the validity of offer, price specification,
-        or opening hours data.)
+      %(The date when the permit becomes valid.)
+    property :validIn, :label => 'validIn', :comment =>
+      %(The geographic area where the permit is valid.)
     property :validThrough, :label => 'validThrough', :comment =>
       %(The end of the validity of offer, price specification, or
         opening hours data.)
+    property :validUntil, :label => 'validUntil', :comment =>
+      %(The date when the permit is no longer valid.)
     property :value, :label => 'value', :comment =>
       %(The value of the product characteristic.)
     property :valueAddedTaxIncluded, :label => 'valueAddedTaxIncluded', :comment =>
@@ -3432,5 +3615,9 @@ module RDF
     property :worstRating, :label => 'worstRating', :comment =>
       %(The lowest value allowed in this rating system. If worstRating
         is omitted, 1 is assumed.)
+    property :yearlyRevenue, :label => 'yearlyRevenue', :comment =>
+      %(The size of the business in annual revenue.)
+    property :yearsInOperation, :label => 'yearsInOperation', :comment =>
+      %(The age of the business.)
   end
 end
