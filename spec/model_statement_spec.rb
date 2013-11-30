@@ -28,6 +28,36 @@ describe RDF::Statement do
       stmt = RDF::Statement.new(s, p, o, options)
       expect(options).to eq original_options
     end
+
+    context "allows arguments to be term or implement #to_term" do
+      [
+        {subject: RDF::List("foo"), predicate: RDF::URI("p"), object: RDF::URI("o")},
+        {subject: RDF::URI("s"), predicate: RDF::URI("p"), object: RDF::List("foo")},
+        [RDF::List("foo"), RDF::URI("p"), RDF::URI("o")],
+        [RDF::URI("s"), RDF::URI("p"), RDF::List("foo")],
+      ].each do |arg|
+        if arg.is_a?(Array)
+          specify {expect{RDF::Statement.new(*arg)}.not_to raise_error}
+        else
+          specify {expect{RDF::Statement.new(arg)}.not_to raise_error}
+        end
+      end
+    end
+
+    context "raises an error if any argument does not a term or does not implement #to_term" do
+      [
+        {subject: RDF::Graph.new, predicate: RDF::URI("p"), object: RDF::URI("o")},
+        {subject: RDF::URI("s"), predicate: RDF::URI("p"), object: RDF::Graph.new},
+        [RDF::Graph.new, RDF::URI("p"), RDF::URI("o")],
+        [RDF::URI("s"), RDF::URI("p"), RDF::Graph.new],
+      ].each do |arg|
+        if arg.is_a?(Array)
+          specify {expect{RDF::Statement.new(*arg)}.to raise_error(NotImplementedError)}
+        else
+          specify {expect{RDF::Statement.new(arg)}.to raise_error(NotImplementedError)}
+        end
+      end
+    end
   end
 
   context "when created" do

@@ -115,7 +115,36 @@ module RDF
   end
 
   ##
+  # @overload List()
+  #   @return [RDF::URI] returns the IRI for `rdf:List`
+  #
+  # @overload List(*args)
+  #   @param (see RDF::List#[])
+  #   @return [RDF::List]
+  #
+  # @overload List(array)
+  #   @param [Array] array
+  #   @return [RDF::List]
+  #
+  # @overload List(list)
+  #   @param [RDF::List] list
+  #   @return [RDF::List] returns itself
+  def self.List(*args)
+    case
+    when args.empty?
+      RDF[:List]
+    when args.length == 1 && args.first.is_a?(RDF::List)
+      args.first
+    when args.length == 1 && args.first.is_a?(Array)
+      List[*args.first]
+    else
+      List[*args]
+    end
+  end
+
+  ##
   # @overload Statement()
+  #   @return [RDF::URI] returns the IRI for `rdf:Statement`
   #
   # @overload Statement(options = {})
   #   @param  [Hash{Symbol => Object}] options
@@ -124,6 +153,7 @@ module RDF
   #   @option options [RDF::Term]      :object    (nil)
   #   @option options [RDF::Resource]  :context   (nil)
   #     Note, in RDF 1.1, a context MUST be an IRI.
+  #   @return [RDF::Statement]
   #
   # @overload Statement(subject, predicate, object, options = {})
   #   @param  [RDF::Resource]          subject
@@ -197,7 +227,6 @@ module RDF
     first
     HTML
     langString
-    List
     nil
     object
     predicate

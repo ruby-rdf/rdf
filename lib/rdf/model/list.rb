@@ -42,8 +42,8 @@ module RDF
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
 
-      unless values.to_a.empty?
-        values.reverse_each {|value| self.unshift(value)}
+      unless Array(values).empty?
+        Array(values).reverse_each {|value| self.unshift(value)}
       end
 
       if block_given?
@@ -762,6 +762,18 @@ module RDF
     end
 
     ##
+    # Returns the subject of the list.
+    #
+    # @example
+    #   RDF::List[].to_term                     #=> "RDF[:nil]"
+    #   RDF::List[1, 2, 3].to_term              #=> "RDF::Node"
+    #
+    # @return [RDF::Resource]
+    def to_term
+      subject
+    end
+
+    ##
     # Returns a string representation of this list.
     #
     # @example
@@ -784,8 +796,7 @@ module RDF
       if self.equal?(NIL)
         'RDF::List::NIL'
       else
-        #sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, subject.to_s)
-        sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, to_s) # FIXME
+        sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, join(', '))
       end
     end
   end
