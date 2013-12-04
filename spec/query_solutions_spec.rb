@@ -28,14 +28,18 @@ describe RDF::Query::Solutions do
   }
 
   let(:solutions) {
-    RDF::Query::Solutions::Enumerator.new do |y|
-      y << uri
-      y << lit
-    end
+    solns = RDF::Query::Solutions()
+    solns.concat [uri, lit]
+    solns
   }
   subject {solutions}
 
-  its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
+  describe "new" do
+    it "is instantiable" do
+      expect { RDF::Query::Solutions.new }.not_to raise_error
+      expect(RDF::Query::Solutions.new).to be_a(Array)
+    end
+  end
 
   describe "#filter" do
     it "using a hash" do
@@ -45,7 +49,7 @@ describe RDF::Query::Solutions do
         {:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"]} => [uri, lit],
         {:updated => RDF::Literal(Date.today)} => [uri],
       }.each do |arg, result|
-        expect(solutions.dup.filter(arg).to_a).to eq result
+        expect(solutions.dup.filter(arg)).to eq result
       end
     end
 
@@ -58,8 +62,7 @@ describe RDF::Query::Solutions do
         lambda { |solution| solution.age.datatype == RDF::XSD.integer } => [uri, lit],
         lambda { |solution| solution.name.language == :es } => [uri]
       }.each do |block, result|
-        expect(solutions.dup.filter(&block).to_a).to eq result
-        expect(solutions.dup.filter(&block).to_solutions_array).to be_a(RDF::Query::Solutions::Array)
+        expect(solutions.dup.filter(&block)).to eq result
       end
     end
   end
@@ -67,81 +70,77 @@ describe RDF::Query::Solutions do
   describe "#-" do
     {
       "subsetByExcl01" => [
-        [
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
           RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
           RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
-        ].to_enum.extend(RDF::Query::Solutions),
-        [
+        ]),
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
                                    :type => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
                                    :type => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
-        ].to_enum.extend(RDF::Query::Solutions),
-        [
+        ]),
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
-        ].to_enum.extend(RDF::Query::Solutions)
+        ])
       ],
       "exists-02" => [
-        [
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a0"), :b => RDF::URI("http://example/b0"), :c => RDF::URI("http://example/c0")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a1"), :b => RDF::URI("http://example/b1"), :c => RDF::URI("http://example/c1")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2"), :c => RDF::URI("http://example/c2")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
-        ].to_enum.extend(RDF::Query::Solutions),
-        [
+        ]),
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d0")),
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d1"), :b => RDF::URI("http://example/b1"), :c => RDF::URI("http://example/c1")),
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d2"), :b => RDF::URI("http://example/b2")),
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/cx")),
-        ].to_enum.extend(RDF::Query::Solutions),
-        [
+        ]),
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a0"), :b => RDF::URI("http://example/b0"), :c => RDF::URI("http://example/c0")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
-        ].to_enum.extend(RDF::Query::Solutions)
+        ])
       ],
       "full-minuend" => [
-        [
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a1"), :b => RDF::URI("http://example/b1")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a4")),
-        ].to_enum.extend(RDF::Query::Solutions),
-        [
+        ]),
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d1"), :b => RDF::URI("http://example/b1")),
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d4"), :b => RDF::URI("http://example/b4"), :c => RDF::URI("http://example/c4")),
           RDF::Query::Solution.new(:d => RDF::URI("http://example/d5")),
-        ].to_enum.extend(RDF::Query::Solutions),
-        [
+        ]),
+        RDF::Query::Solutions.new.concat([
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2")),
           RDF::Query::Solution.new(:a => RDF::URI("http://example/a4")),
-        ].to_enum.extend(RDF::Query::Solutions)
+        ])
       ],
     }.each do |name, (left, right, result)|
       it name do
         expect(left.minus(right)).to be_a(Enumerable)
         expect(left.minus(right)).to be_a(RDF::Query::Solutions)
         expect(left.minus(right).to_a).to eq result.to_a
-        expect(left.minus(right).to_solutions_array).to be_a(RDF::Query::Solutions::Array)
-      end
+       end
     end
   end
 
   describe "#order_by" do
     subject {solutions.order_by(:updated, lambda {|a, b| b <=> a})}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it "contains solutions in specified order" do
-      expect(subject.to_a).to include(lit, uri)
+      expect(subject).to include(lit, uri)
     end
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#select" do
     context "one variable" do
       subject {solutions.select(:title)}
-      it {should be_a(Enumerable)}
       it {should be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
@@ -149,12 +148,10 @@ describe RDF::Query::Solutions do
           RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
         )
       end
-      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
 
     context "two variables" do
       subject {solutions.select(:title, :description)}
-      it {should be_a(Enumerable)}
       it {should be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
@@ -162,13 +159,11 @@ describe RDF::Query::Solutions do
           RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"), :description => RDF::Literal("Description"))
         )
       end
-      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
   describe "#project" do
     subject {solutions.project(:title)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it "contains particular variables only" do
       expect(subject).to include(
@@ -176,18 +171,15 @@ describe RDF::Query::Solutions do
         RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
       )
     end
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#distinct" do
-    subject {(solutions.to_a << uri).to_enum.extend(RDF::Query::Solutions).distinct}
-    it {should be_a(Enumerable)}
+    subject {RDF::Query::Solutions(solutions.to_a << uri).distinct}
     it {should be_a(RDF::Query::Solutions)}
     it "contains distinct solutions" do
       expect(subject).to include(uri, lit)
     end
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
-
+ 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
       it "should have count 1" do
@@ -198,16 +190,13 @@ describe RDF::Query::Solutions do
         expect(subject.size).to eq 1
         expect(subject.size).to eq 1
       end
-      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
   describe "#offset" do
     subject {solutions.offset(20)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -219,15 +208,12 @@ describe RDF::Query::Solutions do
         expect(subject.size).to eq 1
         expect(subject.size).to eq 1
       end
-      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
-    end
+     end
   end
 
   describe "#limit" do
     subject {solutions.limit(1)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -239,16 +225,13 @@ describe RDF::Query::Solutions do
         expect(subject.size).to eq 1
         expect(subject.size).to eq 1
       end
-      its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
     end
   end
 
   describe "#offset+#limit" do
     subject {solutions.offset(20).limit(20)}
-    it {should be_a(Enumerable)}
     it {should be_a(RDF::Query::Solutions)}
     it {should be_empty}
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#count" do
@@ -256,7 +239,6 @@ describe RDF::Query::Solutions do
     it "Counting the number of matching solutions" do
       expect(subject.count { |solution| solution.price < 30.5 }).to eq 1
     end
-    its(:to_solutions_array) {should be_a(RDF::Query::Solutions::Array)}
   end
 
   describe "#each" do

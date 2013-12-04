@@ -94,6 +94,27 @@ module RDF
     end
 
     ##
+    # Cast values as Solutions
+    # @overload Solutions()
+    #   @return [Solutions] returns Solutions.new()
+    #
+    # @overload Solutions(solutions)
+    #   @return [Solutions] returns the argument
+    #
+    # @overload Solutions(array)
+    #   @param [Array] array
+    #   @return [Solutions] returns the array extended with solutions
+    #
+    # @overload Solutions(*args)
+    #   @param [Array<Solution>] args
+    #   @return [Solutions] returns new solutions including the arguments, which must each be a {Solution}
+    def self.Solutions(*args)
+      return args.first if args.length == 1 && args.first.is_a?(Solutions)
+      args = args.first if args.first.is_a?(Array) && args.length == 1
+      return Solutions.new(args)
+    end
+
+    ##
     # The variables used in this query.
     #
     # @return [Hash{Symbol => RDF::Query::Variable}]
@@ -144,7 +165,7 @@ module RDF
     #     ...
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
-    #   @option options [#to_a] :solutions ([Solution.new])
+    #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
     #     Default context for matching against queryable.
     #     Named queries either match against a specifically named
@@ -160,11 +181,7 @@ module RDF
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
       patterns << @options if patterns.empty?
       @variables = {}
-      @solutions = if @options[:solutions].is_a?(Solutions)
-        @options.delete(:solutions)
-      else
-        Solutions::Enumerator.new {|y| Array(@options.delete(:solutions)).each {|s| y << s}}
-      end
+      @solutions = Query::Solutions(@options.delete(:solutions))
       context = @options.fetch(:context, @options.fetch(:name, nil))
       @options.delete(:context)
       @options.delete(:name)
@@ -267,7 +284,7 @@ module RDF
     #   each matching solution
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [void] ignored
-    # @return [RDF::Query::Enumerator]
+    # @return [RDF::Query::Solutions]
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
@@ -275,21 +292,16 @@ module RDF
       validate!
       options = options.dup
 
-      # Return an Enumerator if a block is not given.
-      return @solutions = Solutions::Enumerator.new do |yielder|
-        self.execute(queryable, options) {|y| yielder << y}
-      end unless block_given?
-
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}
 
       # Use provided solutions to allow for query chaining
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      solutions = options[:solutions] ? options[:solutions].to_a : [Solution.new]
+      @solutions = Query::Solutions(options[:solutions] || Solution.new)
 
       # If there are no patterns, just return the empty solution
-      return solutions.each(&block) if empty?
+      return @solutions if empty?
 
       patterns = @patterns
       context = options.fetch(:context, options.fetch(:name, self.context))
@@ -305,11 +317,11 @@ module RDF
 
       patterns.each do |pattern|
 
-        old_solutions, solutions = solutions, []
+        old_solutions, @solutions = @solutions, Query::Solutions()
 
         options[:bindings].keys.each do |variable|
           if pattern.variables.include?(variable)
-            unbound_solutions, old_solutions = old_solutions, []
+            unbound_solutions, old_solutions = old_solutions, Query::Solutions()
             options[:bindings][variable].each do |binding|
               unbound_solutions.each do |solution|
                 old_solutions << solution.merge(variable => binding)
@@ -323,33 +335,34 @@ module RDF
           found_match = false
           pattern.execute(queryable, solution) do |statement|
             found_match = true
-            solutions << solution.merge(pattern.solution(statement))
+            @solutions << solution.merge(pattern.solution(statement))
           end
           # If this pattern was optional, and we didn't find any matches,
           # just copy it over as-is.
           if !found_match && pattern.optional?
-            solutions << solution
+            @solutions << solution
           end
         end
 
-        #puts "solutions after #{pattern} are #{solutions.to_a.inspect}"
+        #puts "solutions after #{pattern} are #{@solutions.to_a.inspect}"
 
         # It's important to abort failed queries quickly because later patterns
         # that can have constraints are often broad without them.
         # We have no solutions at all:
-        return solutions.each(&block) if empty?
+        return @solutions if @solutions.empty?
 
         if !pattern.optional?
           # We have no solutions for variables we should have solutions for:
           need_vars = pattern.variables.keys
-          solutions.each do |solution|
+          @solutions.each do |solution|
             break if need_vars.empty?
             need_vars -= solution.bindings.keys
           end
-          return unless need_vars.empty?
+          return Query::Solutions() unless need_vars.empty?
         end
       end
-      solutions.each(&block)
+      @solutions.each(&block) if block_given?
+      @solutions
     end
 
     ##
