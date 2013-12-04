@@ -729,7 +729,7 @@ describe RDF::Query do
       
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
-          solutions = (subject.to_a * 2).extend(RDF::Query::Solutions)
+          solutions = RDF::Query::Solutions(subject.to_a * 2)
           solutions.count == graph.size * 2
           solutions.send(op)
           solutions.count == graph.size
