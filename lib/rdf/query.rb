@@ -301,7 +301,10 @@ module RDF
       @solutions = Query::Solutions(options[:solutions] || Solution.new)
 
       # If there are no patterns, just return the empty solution
-      return @solutions if empty?
+      if empty?
+        @solutions.each(&block) if block_given?
+        return @solutions
+      end
 
       patterns = @patterns
       context = options.fetch(:context, options.fetch(:name, self.context))
