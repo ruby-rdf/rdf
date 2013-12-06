@@ -67,20 +67,23 @@ module RDF
     # Supported features include:
     #   * `:context` supports statements with a context, allowing multiple contexts
     #   * `:inferrence` supports RDFS inferrence of queryable contents.
+    #   * `:validatable` allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.
     #
     # @param  [Symbol, #to_sym] feature
     # @return [Boolean]
     # @since  0.3.5
     def supports?(feature)
-      false
+      feature == :validity
     end
 
     ##
     # Returns `true` if all statements are valid
     #
     # @return [Boolean] `true` or `false`
+    # @raise  [NotImplementedError] unless enumerable supports validation
     # @since  0.3.11
     def valid?
+      raise NotImplementedError, "#{self.class} does not support validation" unless supports?(:validity)
       each_statement do |s|
         return false if s.invalid?
       end
@@ -91,6 +94,7 @@ module RDF
     # Returns `true` if value is not valid
     #
     # @return [Boolean] `true` or `false`
+    # @raise  [NotImplementedError] unless enumerable supports validation
     # @since  0.2.1
     def invalid?
       !valid?
@@ -102,7 +106,7 @@ module RDF
     # @raise  [ArgumentError] if the value is invalid
     # @since  0.3.9
     def validate!
-      raise ArgumentError if invalid?
+      raise ArgumentError if supports?(:validity) && invalid?
     end
     alias_method :validate, :validate!
 
@@ -226,7 +230,9 @@ module RDF
     # @return [Enumerator]
     # @see    #each_triple
     def enum_triple
-      enum_for(:each_triple)
+      Countable::Enumerator.new do |yielder|
+        each_triple {|s, p, o| yielder << [s, p, o]}
+      end
     end
     alias_method :enum_triples, :enum_triple
 
@@ -287,7 +293,9 @@ module RDF
     # @return [Enumerator]
     # @see    #each_quad
     def enum_quad
-      enum_for(:each_quad)
+      Countable::Enumerator.new do |yielder|
+        each_quad {|s, p, o, c| yielder << [s, p, o, c]}
+      end
     end
     alias_method :enum_quads, :enum_quad
 

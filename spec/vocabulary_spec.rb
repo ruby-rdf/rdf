@@ -25,8 +25,8 @@ describe RDF::Vocabulary do
 
     it "should support W3 Authentication Certificate (CERT)" do
       expect(RDF::CERT).to be_a_vocabulary("http://www.w3.org/ns/auth/cert#")
-      expect(RDF::CERT).to have_properties("http://www.w3.org/ns/auth/cert#", %w(decimal hex identity public_key))
-      expect(RDF::CERT).to have_subclasses("http://www.w3.org/ns/auth/cert#", %w(Certificate Integer Key PGPCertificate PrivateKey PublicKey Signature X509Certificate))
+      expect(RDF::CERT).to have_properties("http://www.w3.org/ns/auth/cert#", %w(hex identity))
+      expect(RDF::CERT).to have_subclasses("http://www.w3.org/ns/auth/cert#", %w(Certificate PGPCertificate PrivateKey PublicKey Signature X509Certificate))
     end
 
     it "should support Dublin Core (DC)" do
@@ -91,7 +91,7 @@ describe RDF::Vocabulary do
 
     it "should support Semantically-Interlinked Online Communities (SIOC)" do
       expect(RDF::SIOC).to be_a_vocabulary("http://rdfs.org/sioc/ns#")
-      expect(RDF::SIOC).to have_properties("http://rdfs.org/sioc/ns#", %w(about account_of administrator_of attachment avatar container_of content content_encoded created_at creator_of description earlier_version email email_sha1 feed first_name follows function_of group_of has_administrator has_container has_creator has_discussion has_function has_group has_host has_member has_moderator has_modifier has_owner has_parent has_part has_reply has_scope has_space has_subscriber has_usergroup host_of id ip_address last_activity_date last_item_date last_name last_reply_date later_version latest_version link links_to member_of moderator_of modified_at modifier_of name next_by_date next_version note num_authors num_items num_replies num_threads num_views owner_of parent_of part_of previous_by_date previous_version reference related_to reply_of scope_of sibling space_of subject subscriber_of title topic usergroup_of))
+      expect(RDF::SIOC).to have_properties("http://rdfs.org/sioc/ns#", %w(about account_of administrator_of attachment avatar container_of content content_encoded created_at creator_of description previous_version email email_sha1 feed first_name follows function_of group_of has_administrator has_container has_creator has_discussion has_function has_group has_host has_member has_moderator has_modifier has_owner has_parent has_part has_reply has_scope has_space has_subscriber has_usergroup host_of id ip_address last_activity_date last_item_date last_name last_reply_date latest_version link links_to member_of moderator_of modified_at modifier_of name next_by_date next_version note num_authors num_items num_replies num_threads num_views owner_of parent_of part_of previous_by_date previous_version reference related_to reply_of scope_of space_of subject subscriber_of title topic usergroup_of))
     end
 
     it "should support Simple Knowledge Organization System (SKOS)" do
@@ -114,23 +114,58 @@ describe RDF::Vocabulary do
       expect(RDF::XSD).to have_properties("http://www.w3.org/2001/XMLSchema#", %w(NOTATION QName anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time ENTITIES ENTITY ID IDREF IDREFS NCName NMTOKEN NMTOKENS Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
     end
 
+    it "should support VOID" do
+      expect(RDF::VOID).to be_a_vocabulary("http://rdfs.org/ns/void#")
+      expect(RDF::VOID).to have_properties("http://rdfs.org/ns/void#", %w(Dataset DatasetDescription Linkset TechnicalFeature dataDump objectsTarget subjectsTarget target uriSpace linkPredicate class classPartition classes distinctObjects distinctSubjects exampleResource feature uriRegexPattern sparqlEndpoint uriLookupEndpoint subset inDataset documents entities properties triples openSearchDescription property propertyPartition rootResource vocabulary uriSpace))
+      expect(RDF::VOID.label_for("property")).to eq "property"
+      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a property-based partition.)
+    end
+
     it "should support W3C Media Annotation Ontology" do
       expect(RDF::MA).to be_a_vocabulary("http://www.w3.org/ns/ma-ont#")
-      expect(RDF::MA).to have_properties("http://www.w3.org/ns/ma-ont#", %w(IsRatingOf alternativeTitle averageBitRate collectionName copyright createdIn creationDate date depictsFictionalLocation description duration editDate features fragmentName frameHeight frameRate frameSizeUnit frameWidth hasAccessConditions hasAudioDescription hasCaptioning hasChapter hasClassification hasClassificationSystem hasCompression hasContributor hasCreator hasFormat hasFragment hasGenre hasKeyword hasLanguage hasLocationCoordinateSystem hasNamedFragment hasPermissions hasPolicy hasPublished hasPublisher hasRating hasRatingSystem hasRelatedImage hasRelatedLocation hasRelatedResource hasSigning hasSource hasSubtitling hasTargetAudience hasTrack isChapterOf isCopyrightedBy isLocationRelatedTo isMemberOf isProvidedBy isRelatedTo isSourceOf isTargetAudienceOf locationAltitude locationLatitude locationLongitude locationName locator mainOriginalTitle numberOfTracks ratingScaleMax ratingScaleMin ratingValue recordDate releaseDate samplingRate title trackName))
+      expect(RDF::MA).to have_properties("http://www.w3.org/ns/ma-ont#", %w(isRatingOf alternativeTitle averageBitRate collectionName copyright createdIn creationDate date depictsFictionalLocation description duration editDate features fragmentName frameHeight frameRate frameSizeUnit frameWidth hasAccessConditions hasAudioDescription hasCaptioning hasChapter hasClassification hasClassificationSystem hasCompression hasContributor hasCreator hasFormat hasFragment hasGenre hasKeyword hasLanguage hasLocationCoordinateSystem hasNamedFragment hasPermissions hasPolicy hasPublished hasPublisher hasRating hasRatingSystem hasRelatedImage hasRelatedLocation hasRelatedResource hasSigning hasSource hasSubtitling hasTargetAudience hasTrack isChapterOf isCopyrightedBy isLocationRelatedTo isMemberOf isProvidedBy isRelatedTo isSourceOf isTargetAudienceOf locationAltitude locationLatitude locationLongitude locationName locator mainOriginalTitle numberOfTracks ratingScaleMax ratingScaleMin ratingValue recordDate releaseDate samplingRate title trackName))
     end
   end
 
   context "ad-hoc vocabularies" do
-    it "should support ad-hoc vocabularies" do
-      dc = RDF::Vocabulary.new("http://purl.org/dc/terms/")
+    subject :test_vocab do
+      Class.new(RDF::Vocabulary.create("http://example.com/test#")) do
+        property :Class
+        property :prop
+        property :prop2, :label => "Test property label", :comment => " Test property comment"
+      end
+    end
 
-      expect(dc.creator).to be_kind_of(RDF::URI)
-      expect(dc[:creator]).to be_kind_of(RDF::URI)
-      expect(dc.creator).to eql(RDF::DC.creator)
+    it "should have Vocabulary::method_missing" do
+      expect do
+        test_vocab.a_missing_method
+      end.not_to raise_error
+    end
 
-      expect(dc.title).to be_kind_of(RDF::URI)
-      expect(dc[:title]).to be_kind_of(RDF::URI)
-      expect(dc.title).to eql(RDF::DC.title)
+    it "should respond to [] with properties that have been defined" do
+      test_vocab[:prop].should be_a(RDF::URI)
+      test_vocab["prop2"].should be_a(RDF::URI)
+    end
+
+    it "should respond to [] with properties that have not been defined" do
+      test_vocab[:not_a_prop].should be_a(RDF::URI)
+      test_vocab["not_a_prop"].should be_a(RDF::URI)
+    end
+
+    it "should respond to methods for which a property has been defined explicitly" do
+      test_vocab.prop.should be_a(RDF::URI)
+    end
+
+    it "should respond to methods for which a class has been defined by a graph" do
+      test_vocab.Class.should be_a(RDF::URI)
+    end
+
+    it "should respond to label_for from base RDFS" do
+      test_vocab.label_for("prop2").should == "Test property label"
+    end
+
+    it "should respond to comment_for from base RDFS" do
+      test_vocab.comment_for(:prop2).should == "Test property comment"
     end
   end
 end

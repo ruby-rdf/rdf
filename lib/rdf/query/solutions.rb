@@ -61,6 +61,35 @@ module RDF; class Query
     end
 
     ##
+    # Returns an array of the distinct variable names used in this solution
+    # sequence.
+    #
+    # @return [Array<Symbol>]
+    def variable_names
+      variables = self.inject({}) do |result, solution|
+        solution.each_name do |name|
+          result[name] ||= true
+        end
+        result
+      end
+      variables.keys
+    end
+
+    ##
+    # Returns `true` if this solution sequence contains bindings for any of
+    # the given `variables`.
+    #
+    # @param  [Array<Symbol, #to_sym>] variables
+    #   an array of variables to check
+    # @return [Boolean] `true` or `false`
+    # @see    RDF::Query::Solution#has_variables?
+    # @see    RDF::Query#execute
+    def have_variables?(variables)
+      self.any? { |solution| solution.has_variables?(variables) }
+    end
+    alias_method :has_variables?, :have_variables?
+
+    ##
     # Returns hash of bindings from each solution. Each bound variable will have
     # an array of bound values representing those from each solution, where a given
     # solution will have just a single value for each bound variable
@@ -222,34 +251,5 @@ module RDF; class Query
       self
     end
     alias_method :limit!, :limit
-
-    ##
-    # Returns an array of the distinct variable names used in this solution
-    # sequence.
-    #
-    # @return [Array<Symbol>]
-    def variable_names
-      variables = self.inject({}) do |result, solution|
-        solution.each_name do |name|
-          result[name] ||= true
-        end
-        result
-      end
-      variables.keys
-    end
-
-    ##
-    # Returns `true` if this solution sequence contains bindings for any of
-    # the given `variables`.
-    #
-    # @param  [Array<Symbol, #to_sym>] variables
-    #   an array of variables to check
-    # @return [Boolean] `true` or `false`
-    # @see    RDF::Query::Solution#has_variables?
-    # @see    RDF::Query#execute
-    def have_variables?(variables)
-      self.any? { |solution| solution.has_variables?(variables) }
-    end
-    alias_method :has_variables?, :have_variables?
   end # Solutions
 end; end # RDF::Query

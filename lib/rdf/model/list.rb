@@ -8,7 +8,8 @@ module RDF
   # @since 0.2.3
   class RDF::List
     include RDF::Enumerable
-    include RDF::Resource
+    include RDF::Value
+    include Comparable
 
     ##
     # Constructs a new list from the given `values`.
@@ -41,8 +42,8 @@ module RDF
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
 
-      unless values.to_a.empty?
-        values.reverse_each {|value| self.unshift(value)}
+      unless Array(values).empty?
+        Array(values).reverse_each {|value| self.unshift(value)}
       end
 
       if block_given?
@@ -61,9 +62,10 @@ module RDF
     ##
     # Validate the list ensuring that
     # * rdf:rest values are all BNodes are nil
-    # * rdf:type, if it exists, is rdf:List
-    # * each subject has no properties other than single-valued rdf:first, rdf:rest
-    #   other than for the first node in the list
+    # * each subject has exactly one value for `rdf:first` and
+    #   `rdf:rest`.
+    # * The value of `rdf:rest` must be either a BNode or `rdf:nil`.
+    # * All other properties are ignored.
     # @return [Boolean]
     def valid?
       li = subject
@@ -73,17 +75,12 @@ module RDF
         @graph.query(:subject => li) do |st|
           return false unless st.subject.node?
           case st.predicate
-          when RDF.type
-            # Be tollerant about rdf:type entries, as some OWL vocabularies use it excessively
           when RDF.first
             firsts += 1
           when RDF.rest
             rest = st.object
             return false unless rest.node? || rest == RDF.nil
             rests += 1
-          else
-            # First node may have other properties
-            return false unless li == subject
           end
         end
         return false unless firsts == 1 && rests == 1
@@ -228,7 +225,6 @@ module RDF
 
       new_subject, old_subject = RDF::Node.new, subject
 
-      graph.insert([new_subject, RDF.type, RDF.List])
       graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
       graph.insert([new_subject, RDF.rest, old_subject])
 
@@ -298,7 +294,6 @@ module RDF
         graph.insert([old_subject, RDF.rest, new_subject])
       end
 
-      graph.insert([new_subject, RDF.type, RDF.List])
       graph.insert([new_subject, RDF.first, value.is_a?(RDF::List) ? value.subject : value])
       graph.insert([new_subject, RDF.rest, RDF.nil])
 
@@ -767,6 +762,18 @@ module RDF
     end
 
     ##
+    # Returns the subject of the list.
+    #
+    # @example
+    #   RDF::List[].to_term                     #=> "RDF[:nil]"
+    #   RDF::List[1, 2, 3].to_term              #=> "RDF::Node"
+    #
+    # @return [RDF::Resource]
+    def to_term
+      subject
+    end
+
+    ##
     # Returns a string representation of this list.
     #
     # @example
@@ -789,8 +796,7 @@ module RDF
       if self.equal?(NIL)
         'RDF::List::NIL'
       else
-        #sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, subject.to_s)
-        sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, to_s) # FIXME
+        sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, join(', '))
       end
     end
   end

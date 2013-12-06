@@ -18,7 +18,7 @@ module RDF; class Literal
       @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(::Date)         then value
-        when value.respond_to?(:to_date) then value.to_date # Ruby 1.9+
+        when value.respond_to?(:to_date) then value.to_date
         else ::Date.parse(value.to_s)
       end rescue nil
     end

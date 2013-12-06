@@ -168,7 +168,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
     # @option options [Encoding] :encoding     (Encoding::UTF_8)
-    #   the encoding of the input stream (Ruby 1.9+)
+    #   the encoding of the input stream
     # @option options [Boolean]  :validate     (false)
     #   whether to validate the parsed statements and values
     # @option options [Boolean]  :canonicalize (false)
@@ -217,10 +217,10 @@ module RDF
     # @example
     #   reader.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
     #
-    # @return [Hash{Symbol => RDF::URI}]
+    # @return [RDF::URI]
     # @since  0.3.0
     def base_uri
-      @options[:base_uri]
+      RDF::URI(@options[:base_uri]) if @options[:base_uri]
     end
 
     ##
@@ -422,8 +422,6 @@ module RDF
     ##
     # Returns the encoding of the input stream.
     #
-    # _Note: this method requires Ruby 1.9 or newer._
-    #
     # @return [Encoding]
     def encoding
       case @options[:encoding]
@@ -488,7 +486,17 @@ module RDF
       @line = @line_rest || @input.readline
       @line, @line_rest = @line.split("\r", 2)
       @line = @line.to_s.chomp
-      @line.encode!(encoding) if @line.respond_to?(:encode!)
+      begin
+        @line.encode!(encoding)
+      rescue Encoding::UndefinedConversionError, Encoding::InvalidByteSequenceError, Encoding::ConverterNotFoundError
+        # It is likely the persisted line was not encoded on initial write
+        # (i.e. persisted via RDF <= 1.0.9 and read via RDF >= 1.0.10)
+        #
+        # Encoding::UndefinedConversionError is raised by MRI.
+        # Encoding::InvalidByteSequenceError is raised by jruby >= 1.7.5
+        # Encoding::ConverterNotFoundError is raised by jruby < 1.7.5
+        @line = RDF::NTriples::Reader.unescape(@line).encode(encoding)
+      end
       @line
     end
 

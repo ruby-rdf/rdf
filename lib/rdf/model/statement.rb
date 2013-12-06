@@ -59,6 +59,7 @@ module RDF
     #   @option options [RDF::Term]      :object    (nil)
     #   @option options [RDF::Resource]  :context   (nil)
     #     Note, in RDF 1.1, a context MUST be an IRI.
+    #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, options = {})
     #   @param  [RDF::Resource]          subject
@@ -66,6 +67,7 @@ module RDF
     #   @param  [RDF::Term]              object
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Resource]  :context   (nil)
+    #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       case subject
         when Hash
@@ -88,12 +90,19 @@ module RDF
     # @private
     def initialize!
       @context   = Node.intern(@context)   if @context.is_a?(Symbol)
-      @subject   = Node.intern(@subject)   if @subject.is_a?(Symbol)
+      @subject   = case @subject
+        when nil      then nil
+        when Symbol   then Node.intern(@subject)
+        when Term     then @subject
+        when Value    then @subject.to_term
+        else          raise_error(ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}")
+      end
       @predicate = Node.intern(@predicate) if @predicate.is_a?(Symbol)
       @object    = case @object
         when nil    then nil
         when Symbol then Node.intern(@object)
         when Term   then @object
+        when Value  then @object.to_term
         else Literal.new(@object)
       end
     end

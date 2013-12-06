@@ -15,16 +15,27 @@ module RDF
   # * {RDF::EXIF}   - Exchangeable Image File Format (EXIF)
   # * {RDF::FOAF}   - Friend of a Friend (FOAF)
   # * {RDF::GEO}    - WGS84 Geo Positioning (GEO)
+  # * {RDF::GR}     - Good Relations
   # * {RDF::HTTP}   - Hypertext Transfer Protocol (HTTP)
+  # * {RDF::ICAL}   - iCal
+  # * {RDF::MA}     - W3C Meda Annotations
+  # * {RDF::OG}     - FaceBook OpenGraph
   # * {RDF::OWL}    - Web Ontology Language (OWL)
+  # * {RDF::PROV}   - W3C Provenance Ontology
   # * {RDF::RDFS}   - RDF Schema (RDFS)
   # * {RDF::RSA}    - W3 RSA Keys (RSA)
   # * {RDF::RSS}    - RDF Site Summary (RSS)
   # * {RDF::SCHEMA} - Schema.org
   # * {RDF::SIOC}   - Semantically-Interlinked Online Communities (SIOC)
   # * {RDF::SKOS}   - Simple Knowledge Organization System (SKOS)
+  # * {RDF::SKOSXL} - SKOS Simple Knowledge Organization System eXtension for Labels (SKOS-XL)
+  # * {RDF::V}      - Data Vocabulary
+  # * {RDF::VCARD}  - vCard vocabulary
+  # * {RDF::VOID}   - Vocabulary of Interlinked Datasets (VoID)
+  # * {RDF::WDRS}   - Protocol for Web Description Resources (POWDER)
   # * {RDF::WOT}    - Web of Trust (WOT)
   # * {RDF::XHTML}  - Extensible HyperText Markup Language (XHTML)
+  # * {RDF::XHV}    - W3C XHTML Vocabulary
   # * {RDF::XSD}    - XML Schema (XSD)
   #
   # @example Using pre-defined RDF vocabularies
@@ -49,72 +60,99 @@ module RDF
   class Vocabulary
     extend ::Enumerable
 
-    ##
-    # Enumerates known RDF vocabulary classes.
-    #
-    # @yield  [klass]
-    # @yieldparam [Class] klass
-    # @return [Enumerator]
-    def self.each(&block)
-      if self.equal?(Vocabulary)
-        # This is needed since all vocabulary classes are defined using
-        # Ruby's autoloading facility, meaning that `@@subclasses` will be
-        # empty until each subclass has been touched or require'd.
-        RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" unless v == :rdf }
-        @@subclasses.each(&block)
-      else
-        # TODO: should enumerate vocabulary-specific defined properties.
-      end
-    end
-
-    ##
-    # Defines a vocabulary term called `property`.
-    #
-    # @param  [Symbol] property
-    # @return [void]
-    def self.property(property)
-      metaclass = class << self; self; end
-      metaclass.send(:define_method, property) { self[property] } # class method
-    end
-
-    ##
-    # Returns the URI for the term `property` in this vocabulary.
-    #
-    # @param  [#to_s] property
-    # @return [RDF::URI]
-    def self.[](property)
-      RDF::URI.intern([to_s, property.to_s].join(''))
-    end
-
-    ##
-    # Returns the base URI for this vocabulary class.
-    #
-    # @return [RDF::URI]
-    def self.to_uri
-      RDF::URI.intern(to_s)
-    end
-
-    ##
-    # Returns a string representation of this vocabulary class.
-    #
-    # @return [String]
-    def self.to_s
-      @@uris.has_key?(self) ? @@uris[self].to_s : super
-    end
-
-    ##
-    # Returns a developer-friendly representation of this vocabulary class.
-    #
-    # @return [String]
-    def self.inspect
-      if self == Vocabulary
-        self.to_s
-      else
-        sprintf("%s(%s)", superclass.to_s, to_s)
-      end
-    end
-
     class << self
+      ##
+      # Enumerates known RDF vocabulary classes.
+      #
+      # @yield  [klass]
+      # @yieldparam [Class] klass
+      # @return [Enumerator]
+      def each(&block)
+        if self.equal?(Vocabulary)
+          # This is needed since all vocabulary classes are defined using
+          # Ruby's autoloading facility, meaning that `@@subclasses` will be
+          # empty until each subclass has been touched or require'd.
+          RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" unless v == :rdf }
+          @@subclasses.each(&block)
+        else
+          # TODO: should enumerate vocabulary-specific defined properties.
+        end
+      end
+
+      ##
+      # @overload property
+      #   Returns `property` in the current vocabulary
+      #   @return [RDF::URI]
+      #
+      # @overload property(name, options)
+      #   Defines a new property or class in the vocabulary.
+      #   Optional labels and comments are stripped of unnecessary whitespace.
+      # 
+      #   @param [String, #to_s] name
+      #   @param [Hash{Symbol => Object}] options
+      #   @option options [String, #to_s] :label
+      #   @option options [String, #to_s] :comment
+      def property(*args)
+        case args.length
+        when 0
+          RDF::URI.intern("#{self}property")
+        else
+          name, options = args
+          options ||= {}
+          prop = RDF::URI.intern([to_s, name.to_s].join(''))
+          @@labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
+          @@comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
+          (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
+        end
+      end
+
+      ##
+      # Returns the URI for the term `property` in this vocabulary.
+      #
+      # @param  [#to_s] property
+      # @return [RDF::URI]
+      def [](property)
+        RDF::URI.intern([to_s, property.to_s].join(''))
+      end
+
+      # @return [String] The label for the named property
+      def label_for(name)
+        @@labels[self[name]]
+      end
+
+      # @return [String] The comment for the named property
+      def comment_for(name)
+        @@comments[self[name]]
+      end
+
+      ##
+      # Returns the base URI for this vocabulary class.
+      #
+      # @return [RDF::URI]
+      def to_uri
+        RDF::URI.intern(to_s)
+      end
+
+      ##
+      # Returns a string representation of this vocabulary class.
+      #
+      # @return [String]
+      def to_s
+        @@uris.has_key?(self) ? @@uris[self].to_s : super
+      end
+
+      ##
+      # Returns a developer-friendly representation of this vocabulary class.
+      #
+      # @return [String]
+      def inspect
+        if self == Vocabulary
+          self.to_s
+        else
+          sprintf("%s(%s)", superclass.to_s, to_s)
+        end
+      end
+
       # Preserve the class name so that it can be obtained even for
       # vocabularies that define a `name` property:
       alias_method :__name__, :name
@@ -216,5 +254,67 @@ module RDF
     @@subclasses = [::RDF] # @private
     @@uris       = {}      # @private
     @@uri        = nil     # @private
+    @@labels     = {}
+    @@comments   = {}
   end # Vocabulary
+
+  # Represents an RDF Vocabulary. The difference from {RDF::Vocabulary} is that
+  # that every concept in the vocabulary is required to be declared. To assist
+  # in this, an existing RDF representation of the vocabulary can be loaded as
+  # the basis for concepts being available
+  class StrictVocabulary < Vocabulary
+    class << self
+      begin
+        # Redefines method_missing to the original definition
+        # By remaining a subclass of Vocabulary, we remain available to
+        # Vocabulary::each etc.
+        define_method(:method_missing, BasicObject.instance_method(:method_missing))
+      rescue NameError
+        define_method(:method_missing, Kernel.instance_method(:method_missing))
+      end
+
+      ##
+      # @overload property
+      #   Returns `property` in the current vocabulary
+      #   @return [RDF::URI]
+      #
+      # @overload property(name, options)
+      #   Defines a new property or class in the vocabulary.
+      #   Optional labels and comments are stripped of unnecessary whitespace.
+      # 
+      #   @param [String, #to_s] name
+      #   @param [Hash{Symbol => Object}] options
+      #   @option options [String, #to_s] :label
+      #   @option options [String, #to_s] :comment
+      def property(*args)
+        case args.length
+        when 0
+          RDF::URI.intern("#{self}property")
+        else
+          name, options = args
+          options ||= {}
+          prop = RDF::URI.intern([to_s, name.to_s].join(''))
+          @@properties[prop] = true
+          @@labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
+          @@comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
+          (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
+        end
+      end
+
+      def [](name)
+        prop = RDF::URI.intern([to_s, name.to_s].join(''))
+        @@properties.fetch(prop) #raises KeyError on missing value
+        return prop
+      end
+    end
+
+    begin
+      define_method(:method_missing, BasicObject.instance_method(:method_missing))
+    rescue NameError
+      define_method(:method_missing, Kernel.instance_method(:method_missing))
+    end
+
+    private
+    @@properties = {}
+  end # StrictVocabulary
 end # RDF

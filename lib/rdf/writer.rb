@@ -148,7 +148,7 @@ module RDF
       raise ArgumentError, "block expected" unless block_given?
 
       StringIO.open do |buffer|
-        buffer.set_encoding(options[:encoding]) if buffer.respond_to?(:set_encoding) && options[:encoding]
+        buffer.set_encoding(options[:encoding]) if options[:encoding]
         self.new(buffer, *args) { |writer| block.call(writer) }
         buffer.string
       end
@@ -164,7 +164,7 @@ module RDF
     # @return [RDF::Writer]
     def self.open(filename, options = {}, &block)
       File.open(filename, 'wb') do |file|
-        file.set_encoding(options[:encoding]) if file.respond_to?(:set_encoding) && options[:encoding]
+        file.set_encoding(options[:encoding]) if options[:encoding]
         format_options = options.dup
         format_options[:file_name] ||= filename
         self.for(options[:format] || format_options).new(file, options, &block)
@@ -196,7 +196,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
     # @option options [Encoding, String, Symbol] :encoding
-    #   the encoding to use on the output stream (Ruby 1.9+).
+    #   the encoding to use on the output stream.
     #   Defaults to the format associated with `content_encoding`.
     # @option options [Boolean]  :canonicalize (false)
     #   whether to canonicalize terms when serializing
@@ -237,10 +237,10 @@ module RDF
     # @example
     #   writer.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
     #
-    # @return [Hash{Symbol => RDF::URI}]
+    # @return [RDF::URI]
     # @since  0.3.4
     def base_uri
-      @options[:base_uri]
+      RDF::URI(@options[:base_uri]) if @options[:base_uri]
     end
 
     ##
@@ -296,11 +296,8 @@ module RDF
     ##
     # Returns the encoding of the output stream.
     #
-    # _Note: this method requires Ruby 1.9 or newer._
-    #
     # @return [Encoding]
     def encoding
-      return nil unless "".respond_to?(:encode!)
       case @options[:encoding]
       when String, Symbol
         Encoding.find(@options[:encoding].to_s)
@@ -475,7 +472,7 @@ module RDF
     ##
     # @return [void]
     def puts(*args)
-      @output.puts(*args.map {|s| s.respond_to?(:encode!) ? s.encode!(encoding) : s})
+      @output.puts(*args.map {|s| s.encode(encoding)})
     end
 
     ##

@@ -37,7 +37,8 @@ module RDF
     # @yieldparam  [RDF::Statement, RDF::Query::Solution] statement
     #   Statement or Solution
     # @yieldreturn [void] ignored
-    # @return [Enumerator]
+    # @return [Enumerator, Query::Solutions]
+    #   Returns an enumerator over statements or query solutions, if passed an {RDF::Query}
     # @see    RDF::Queryable#query_pattern
     def query(pattern, options = {}, &block)
       raise TypeError, "#{self} is not readable" if respond_to?(:readable?) && !readable?
@@ -45,17 +46,16 @@ module RDF
       case pattern
         # A basic graph pattern (BGP) query:
         when Query
-          if block_given?
-            before_query(pattern) if respond_to?(:before_query)
-            if method(:query_execute).arity == 1
-              query_execute(pattern, &block)
-            else
-              query_execute(pattern, options, &block)
-            end
-            after_query(pattern) if respond_to?(:after_query)
+          before_query(pattern) if respond_to?(:before_query)
+          solutions = if method(:query_execute).arity == 1
+            query_execute(pattern, &block)
+          else
+            query_execute(pattern, options, &block)
           end
-          enum_for(:query_execute, pattern)
-
+          after_query(pattern) if respond_to?(:after_query)
+          # Returns the solutions, not an enumerator
+          solutions
+ 
         # A simple triple/quad pattern query:
         else
           pattern = Query::Pattern.from(pattern)
@@ -116,7 +116,7 @@ module RDF
       # query execution by breaking down the query into its constituent
       # triple patterns and invoking `RDF::Query::Pattern#execute` on each
       # pattern.
-      query.execute(self, options).each(&block)
+      query.execute(self, options, &block)
     end
     protected :query_execute
 
@@ -296,7 +296,7 @@ module RDF
       # Ensure that enumerators are, themselves, queryable
       this = self
       Queryable::Enumerator.new do |yielder|
-        this.send(method, *args) {|y| yielder << y}
+        this.send(method, *args) {|*y| yielder << (y.length > 1 ? y : y.first)}
       end
     end
     alias_method :to_enum, :enum_for

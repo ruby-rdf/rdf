@@ -85,7 +85,8 @@ describe RDF::Query do
         query = RDF::Query.new do |query|
           query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
         end
-        expect(query.execute(graph)).to eq []
+        expect(query.execute(graph)).to be_empty
+        expect(graph.query(query)).to be_empty
       end
 
       it "returns an empty solution sequence if the statement does not exist as part of a multi-pattern bgp" do
@@ -93,7 +94,8 @@ describe RDF::Query do
           query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
           query << [:s, :p, :o]
         end
-        expect(query.execute(graph)).to eq []
+        expect(query.execute(graph)).to be_empty
+        expect(graph.query(query)).to be_empty
       end
 
       it "should return a solution sequence with a single empty set if the statement exists" do
@@ -101,6 +103,7 @@ describe RDF::Query do
           query << [EX.x1, EX.p1, EX.x2]
         end
         expect(query.execute(graph).map(&:to_hash)).to eq [{}]
+        expect(graph.query(query).map(&:to_hash)).to eq [{}]
       end
     end
 
@@ -144,6 +147,8 @@ describe RDF::Query do
            subject.context = false
            expect(subject.execute(repo).map(&:to_hash)).to eq [
              {:s => EX.s1, :p => EX.p1, :o => EX.o1}]
+           expect(repo.query(subject).map(&:to_hash)).to eq [
+             {:s => EX.s1, :p => EX.p1, :o => EX.o1}]
          end
        end
 
@@ -152,6 +157,8 @@ describe RDF::Query do
            subject.context = EX.c
            expect(subject.execute(repo).map(&:to_hash)).to eq [
              {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
+           expect(repo.query(subject).map(&:to_hash)).to eq [
+             {:s => EX.s2, :p => EX.p2, :o => EX.o2}]
          end
        end
 
@@ -159,6 +166,8 @@ describe RDF::Query do
          it "returns statement having a context" do
            subject.context = RDF::Query::Variable.new(:c)
            expect(subject.execute(repo).map(&:to_hash)).to eq [
+             {:s => EX.s2, :p => EX.p2, :o => EX.o2, :c => EX.c}]
+           expect(repo.query(subject).map(&:to_hash)).to eq [
              {:s => EX.s2, :p => EX.p2, :o => EX.o2, :c => EX.c}]
          end
        end
@@ -194,6 +203,7 @@ describe RDF::Query do
           query << [:s, EX.p, 1]
         end
         expect(query.execute(graph)).to have_result_set([{ :s => EX.x1 }])
+        expect(graph.query(query)).to have_result_set([{ :s => EX.x1 }])
       end
 
       it "s ?p o" do
@@ -201,6 +211,7 @@ describe RDF::Query do
           query << [EX.x2, :p, 2]
         end
         expect(query.execute(graph)).to have_result_set [ { :p => EX.p } ]
+        expect(graph.query(query)).to have_result_set [ { :p => EX.p } ]
       end
 
       it "s p ?o" do
@@ -208,6 +219,7 @@ describe RDF::Query do
           query << [EX.x3, EX.p, :o]
         end
         expect(query.execute(graph)).to have_result_set [ { :o => RDF::Literal.new(3) } ]
+        expect(graph.query(query)).to have_result_set [ { :o => RDF::Literal.new(3) } ]
       end
 
       it "?s p ?o" do
@@ -217,6 +229,9 @@ describe RDF::Query do
         expect(query.execute(graph)).to have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
                                                        { :s => EX.x2, :o => RDF::Literal.new(2) },
                                                        { :s => EX.x3, :o => RDF::Literal.new(3) }]
+        expect(graph.query(query)).to have_result_set [ { :s => EX.x1, :o => RDF::Literal.new(1) },
+                                                       { :s => EX.x2, :o => RDF::Literal.new(2) },
+                                                       { :s => EX.x3, :o => RDF::Literal.new(3) }]
       end
 
       it "?s ?p o" do
@@ -224,6 +239,7 @@ describe RDF::Query do
           query << [:s, :p, 3]
         end
         expect(query.execute(graph)).to have_result_set [ { :s => EX.x3, :p => EX.p } ]
+        expect(graph.query(query)).to have_result_set [ { :s => EX.x3, :p => EX.p } ]
       end
 
       it "s ?p ?o" do
@@ -231,6 +247,7 @@ describe RDF::Query do
           query << [ EX.x1, :p, :o]
         end
         expect(query.execute(graph)).to have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
+        expect(graph.query(query)).to have_result_set [ { :p => EX.p, :o => RDF::Literal(1) } ]
       end
 
       it "?s p o / ?s p1 o1" do
@@ -242,6 +259,7 @@ describe RDF::Query do
           query << [:s, EX.p2, EX.x3]
         end
         expect(query.execute(graph)).to have_result_set [ { :s => EX.x5 } ]
+        expect(graph.query(query)).to have_result_set [ { :s => EX.x5 } ]
       end
 
       it "?s1 p ?o1 / ?o1 p2 ?o2 / ?o2 p3 ?o3" do
@@ -251,6 +269,7 @@ describe RDF::Query do
           query << [:o2, EX.pchain3, :o3]
         end
         expect(query.execute(graph)).to have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
+        expect(graph.query(query)).to have_result_set [ { :s => EX.x6, :o => EX.target, :o2 => EX.target2, :o3 => EX.target3 } ]
       end
 
       it "?same p ?same" do
@@ -258,6 +277,7 @@ describe RDF::Query do
           query << [:same, EX.psame, :same]
         end
         expect(query.execute(graph)).to have_result_set [ { :same => EX.x4 } ]
+        expect(graph.query(query)).to have_result_set [ { :same => EX.x4 } ]
       end
 
       it "chains solutions" do
@@ -421,6 +441,7 @@ describe RDF::Query do
           query << [:s1, EX.p, :o1]
           query << [:s2, EX.p, :o2]
         end
+        # FIXME: so?
         # Use set comparison for unordered compare on 1.8.7
         expect(query.execute(graph).map(&:to_hash).to_set).to eq [
           {:s1 => EX.x1, :o1 => RDF::Literal(1), :s2 => EX.x1, :o2 => RDF::Literal(1)},
@@ -665,33 +686,36 @@ describe RDF::Query do
 
       context "filter" do
         it "returns matching solutions" do
-          subject.filter(:s => RDF::URI("http://example.org/resource1"))
-          expect(subject.count).to eq 1
+          expect(
+            subject.
+              filter(:s => RDF::URI("http://example.org/resource1")).
+              count
+          ).to eq 1
         end
         
         it "accepts a block" do
-          subject.filter {|s| s[:s] == RDF::URI("http://example.org/resource1")}
-          expect(subject.count).to eq 1
+          expect(
+            subject.
+              filter {|s| s[:s] == RDF::URI("http://example.org/resource1")}.
+              count
+          ).to eq 1
         end
       end
       
       context "order" do
         it "returns ordered solutions using a symbol" do
           orig = subject.dup
-          subject.order(:o)
-          expect(subject.map(&:o)).to eq orig.map(&:o).sort
+          expect(subject.order(:o).map(&:o)).to eq orig.map(&:o).sort
         end
 
         it "returns ordered solutions using a variable" do
           orig = subject.dup
-          subject.order(RDF::Query::Variable.new("o"))
-          expect(subject.map(&:o)).to eq orig.map(&:o).sort
+          expect(subject.order(RDF::Query::Variable.new("o")).map(&:o)).to eq orig.map(&:o).sort
         end
 
         it "returns ordered solutions using a lambda" do
           orig = subject.dup
-          subject.order(lambda {|a, b| a[:o] <=> b[:o]})
-          expect(subject.map(&:o)).to eq orig.map(&:o).sort
+          expect(subject.order(lambda {|a, b| a[:o] <=> b[:o]}).map(&:o)).to eq orig.map(&:o).sort
         end
 
         it "returns ordered solutions using a lambda symbols" do
@@ -705,7 +729,7 @@ describe RDF::Query do
       
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
-          solutions = subject * 2
+          solutions = RDF::Query::Solutions(subject.to_a * 2)
           solutions.count == graph.size * 2
           solutions.send(op)
           solutions.count == graph.size

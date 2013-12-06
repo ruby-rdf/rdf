@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+$:.unshift(File.expand_path("../../lib", __FILE__))
+require 'rubygems'
+require 'rdf/cli/vocab-loader'
+
+cli = RDF::VocabularyLoader.new
+cli.go(ARGV)

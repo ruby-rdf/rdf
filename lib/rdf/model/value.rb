@@ -186,6 +186,14 @@ module RDF
     end
 
     ##
+    # Returns an `RDF::Term` representation of `self`.
+    #
+    # @return [RDF::Value]
+    def to_term
+      raise NotImplementedError, "#{self.class}#read_triple" # override in subclasses
+    end
+
+    ##
     # Returns a developer-friendly representation of `self`.
     #
     # The result will be of the format `#<RDF::Value::0x12345678(...)>`,

@@ -72,6 +72,14 @@ module RDF
       true
     end
 
+    ##
+    # Returns itself.
+    #
+    # @return [RDF::Value]
+    def to_term
+      self
+    end
+
     protected
     ##
     # Escape a term using standard character escapes

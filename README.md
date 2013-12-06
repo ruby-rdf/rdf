@@ -15,6 +15,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 ## Features
 
 * 100% pure Ruby with minimal dependencies and no bloat.
+* Fully compatible with [RDF 1.1][] specifications.
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
@@ -26,10 +27,37 @@ This is a pure-Ruby library for working with [Resource Description Framework
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby 1.8.7+, Ruby 1.9.x, Ruby 2.0, Rubinius and JRuby 1.7+.
+* Compatible with Ruby Ruby 1.9.2, Ruby 2.0, Rubinius and JRuby 1.7+.
 * Compatible with older Ruby versions with the help of the [Backports][] gem.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
+
+## Differences between RDF 1.0 and RDF 1.1
+
+This version of RDF.rb is fully compatible with [RDF 1.1][], but it creates some
+marginal incompatibilities with [RDF 1.0][], as implemented in versions prior to
+the 1.1 release of RDF.rb:
+
+* Introduces {RDF::IRI}, as a synonym for {RDF::URI} either {RDF::IRI} or {RDF::URI} can be used interchangeably. Versions of RDF.rb prior to the 1.1 release were already compatible with IRIs. Internationalized Resource Identifiers (see [RFC3987][]) are a super-set of URIs (see [RFC3986][]) which allow for characters other than standard US-ASCII.
+* {RDF::URI} no longer uses the `Addressable` gem. As URIs typically don't need to be parsed, this provides a substantial performance improvement when enumerating or querying graphs and repositories.
+* {RDF::List} no longer emits a `rdf:List` type. However, it will now recognize any subjects that are {RDF::Node} instances as being list elements, as long as they have both `rdf:first` and `rdf:rest` predicates.
+* {RDF::Graph} adding a `context` to a graph may only be done when the underlying storage model supports contexts (the default {RDF::Repository} does). The notion of `context` in RDF.rb is treated equivalently to [Named Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF Dataset, and graphs on their own are not named.
+* {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}. Made it clear that using {RDF::Graph} does not mean that it may be used within an {RDF::Statement}, for this see {RDF::Term}.
+* {RDF::Statement} now is stricter about checking that all elements are valid when validating.
+* {RDF::NTriples::Writer} and {RDF::NQuads::Writer} now default to validate output, only allowing valid statements to be emitted. This may disabled by setting the `:validate` option to `false`.
+* {RDF::Dataset} is introduced as a class alias of {RDF::Repository}. This allows closer alignment to the RDF concept of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
+* The `context` (or `name`) of a named graph within a Dataset or Repository may be either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict this to being only {RDF::IRI}.
+* There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][], all literals are typed, including plain literals and language tagged literals. Internally, plain literals are given the `xsd:string` datatype and language tagged literals are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language tagged literals. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
+* {RDF::Query#execute} now accepts a block and returns {RDF::Query::Solutions}. This allows `enumerable.query(query)` to behave like `query.execute(enumerable)` and either return an enumerable or yield each solution.
+* {RDF::Queryable#query} now returns {RDF::Query::Solutions} instead of an Enumerator if it's argument is an {RDF::Query}.
+* {RDF::Util::File.open\_file} now performs redirects and manages `base_uri` based on W3C recommendations:
+  * `base_uri` is set to the original URI if a status 303 is provided, otherwise any other redirect will set `base_uri` to the redirected location.
+  * `base_uri` is set to the content of the `Location` header if status is _success_.
+* Additionally, {RDF::Util::File.open\_file} sets the result encoding from `charset` if provided, defaulting to `UTF-8`. Other access methods include `last_modified` and `content_type`, 
+* {RDF::StrictVocabulary} added with an easy way to keep vocabulary definitions up to date based on their OWL or RDFS definitions. Most vocabularies are now StrictVocabularies meaning that an attempt to resolve a particular term in that vocabulary will error if the term is not defined in the vocabulary.
+* New vocabulary definitions have been added for [ICal](http://www.w3.org/2002/12/cal/icaltzd#), [Media Annotations (MA)](http://www.w3.org/ns/ma-ont#), [Facebook OpenGraph (OG)](http://ogp.me/ns#), [PROV](http://www.w3.org/ns/prov#), [SKOS-XL (SKOSXL)](http://www.w3.org/2008/05/skos-xl#), [Data Vocabulary (V)](http://rdf.data-vocabulary.org/), [VCard](http://www.w3.org/2006/vcard/ns#), [VOID](http://rdfs.org/ns/void#http://rdfs.org/ns/void#), [Powder-S (WDRS)](http://www.w3.org/2007/05/powder-s#), and [XHV](http://www.w3.org/1999/xhtml/vocab#).
+
+Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symmetric; this allows an implementation of {RDF::Queryable} to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
 
 ## Tutorials
 
@@ -150,9 +178,17 @@ Note that no prefixes are loaded automatically, however they can be provided as 
       }
     })
     
-    query.execute(graph).each do |solution|
+    query.execute(graph) do |solution|
       puts "name=#{solution.name} email=#{solution.email}"
     end
+
+The same query may also be run from the graph:
+
+    graph.query(query) do |solution|
+      puts "name=#{solution.name} email=#{solution.email}"
+    end
+
+In general, querying from using the `queryable` instance allows a specific implementation of `queryable` to perform query optimizations specific to the datastore on which it is based.
 
 A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full support for [SPARQL 1.0](http://www.w3.org/TR/rdf-sparql-query/) queries.
 
@@ -228,6 +264,23 @@ other gems:
 
 The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 
+### RDF Datatypes
+
+RDF.rb only implements core datatypes from the
+[RDF Datatype Map](http://www.w3.org/TR/rdf11-concepts/#datatype-maps). Most other
+XSD and RDF datatype implementations can be find in the following:
+
+* {RDF::XSD}
+
+### Graph Isomorphism
+
+Two graphs may be compared with each other to determine if they are _isomorphic_.
+As BNodes within two different graphs are no equal, graphs may not be directly compared.
+The `RDF::Isomorphic` gem may be used to determine if they make the same statements, aside
+from BNode identity (i.e., they each entail the other)
+
+* `RDF::Isomorphic`
+
 ### RDF Storage
 
 <http://blog.datagraph.org/2010/04/rdf-repository-howto>
@@ -281,16 +334,14 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
-* [Addressable](http://rubygems.org/gems/addressable) (>= 2.2.0)
+* [Ruby](http://ruby-lang.org/) (>= 1.9.2)
 
 ## Installation
 
 The recommended installation method is via [RubyGems](http://rubygems.org/).
 To install the latest official release of RDF.rb, do:
 
-    % [sudo] gem install rdf             # Ruby 1.8.7+ or 1.9.x
-    % [sudo] gem install backports rdf   # Ruby 1.8.1+
+    % [sudo] gem install rdf             # Ruby 1.9.2+
 
 ## Download
 
@@ -320,7 +371,7 @@ follows:
 
 * [Arto Bendiken](http://github.com/bendiken) - <http://ar.to/>
 * [Ben Lavender](http://github.com/bhuga) - <http://bhuga.net/>
-* [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
+* [Gregg Kellogg](http://github.com/gkellogg) - <http://greggkellogg.net/>
 
 ## Contributors
 
@@ -338,6 +389,8 @@ follows:
 * [Judson Lester](https://github.com/nyarly) - <https://github.com/nyarly>
 
 ## Contributing
+
+This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange development and release activity. All submissions _must_ be on a feature branch based on the _develop_ branch to ease staging and integration.
 
 * Do your best to adhere to the existing coding conventions and idioms.
 * Don't use hard tabs, and don't leave trailing whitespace on any line.
@@ -366,7 +419,7 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD-GS]:          http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
 [Backports]:        http://rubygems.org/gems/backports
-[JSONLD doc]:       http://rubydoc.info/github/gkellogg/json-ld/frames
+[JSONLD doc]:       http://rubydoc.info/github/ruby-rdf/json-ld/frames
 [LinkedData doc]:   http://rubydoc.info/github/datagraph/linkeddata/master/frames
 [Microdata doc]:    http://rubydoc.info/github/ruby-rdf/rdf-microdata/frames
 [N3 doc]:           http://rubydoc.info/github/ruby-rdf/rdf-n3/master/frames
@@ -374,6 +427,8 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDFXML doc]:       http://rubydoc.info/github/ruby-rdf/rdf-rdfxml/master/frames
 [Turtle doc]:       http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/frames
 [SPARQL doc]:       http://rubydoc.info/github/ruby-rdf/sparql/frames
+[RDF 1.0]:          http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
+[RDF 1.1]:          http://www.w3.org/TR/rdf11-concepts/
 [SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/
 [RDF.rb]:           http://ruby-rdf.github.com/
 [RDF::DO]:          http://ruby-rdf.github.com/rdf-do

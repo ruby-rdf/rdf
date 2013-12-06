@@ -183,7 +183,7 @@ describe RDF::NQuads::Reader do
   end
 
   it "should parse W3C's test data" do
-    expect(@reader_class.new(File.open(testfile)).to_a.size).to eq 10
+    expect(@reader_class.new(File.open(testfile)).to_a.size).to eq 19
   end
 end
 
@@ -192,6 +192,8 @@ describe RDF::NQuads::Writer do
     @writer_class = RDF::NQuads::Writer
     @writer = RDF::NQuads::Writer.new
   end
+
+  subject {@writer}
 
   describe ".for" do
     formats = [
@@ -241,7 +243,7 @@ describe RDF::NQuads::Writer do
 
 
   context "validataion" do
-    it "defaults validation to true" do
+    it "defaults validation to be true" do
       expect(subject).to be_validate
     end
 
@@ -294,7 +296,7 @@ describe RDF::NQuads::Writer do
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::Literal("literal")) =>
         RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, RDF::Literal("literal")),
       RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")),
+        RDF::Statement.new(RDF::URI('file:/path/to/file%20with%20spaces.txt'), RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")),
       RDF::Statement.new(nil, RDF::DC.creator.dup, RDF::URI("http://ar.to/#self")) => nil,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator.dup, nil) => nil,

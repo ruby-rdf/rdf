@@ -94,6 +94,27 @@ module RDF
     end
 
     ##
+    # Cast values as Solutions
+    # @overload Solutions()
+    #   @return [Solutions] returns Solutions.new()
+    #
+    # @overload Solutions(solutions)
+    #   @return [Solutions] returns the argument
+    #
+    # @overload Solutions(array)
+    #   @param [Array] array
+    #   @return [Solutions] returns the array extended with solutions
+    #
+    # @overload Solutions(*args)
+    #   @param [Array<Solution>] args
+    #   @return [Solutions] returns new solutions including the arguments, which must each be a {Solution}
+    def self.Solutions(*args)
+      return args.first if args.length == 1 && args.first.is_a?(Solutions)
+      args = args.first if args.first.is_a?(Array) && args.length == 1
+      return Solutions.new(args)
+    end
+
+    ##
     # The variables used in this query.
     #
     # @return [Hash{Symbol => RDF::Query::Variable}]
@@ -160,7 +181,7 @@ module RDF
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
       patterns << @options if patterns.empty?
       @variables = {}
-      @solutions = @options.delete(:solutions) || Solutions.new
+      @solutions = Query::Solutions(@options.delete(:solutions))
       context = @options.fetch(:context, @options.fetch(:name, nil))
       @options.delete(:context)
       @options.delete(:name)
@@ -257,13 +278,17 @@ module RDF
     #   overrides default context defined on query.
     # @option options [RDF::Resource, RDF::Query::Variable, false] name (nil)
     #   Alias for `:context`.
-    # @option options [Hash{Symbol => RDF::Term}] solutions
+    # @option options [RDF::Query::Solutions] solutions
     #   optional initial solutions for chained queries
+    # @yield  [solution]
+    #   each matching solution
+    # @yieldparam  [RDF::Query::Solution] solution
+    # @yieldreturn [void] ignored
     # @return [RDF::Query::Solutions]
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
-    def execute(queryable, options = {})
+    def execute(queryable, options = {}, &block)
       validate!
       options = options.dup
 
@@ -273,10 +298,13 @@ module RDF
       # Use provided solutions to allow for query chaining
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      @solutions = options[:solutions] || (Solutions.new << RDF::Query::Solution.new({}))
+      @solutions = Query::Solutions(options[:solutions] || Solution.new)
 
       # If there are no patterns, just return the empty solution
-      return @solutions if empty?
+      if empty?
+        @solutions.each(&block) if block_given?
+        return @solutions
+      end
 
       patterns = @patterns
       context = options.fetch(:context, options.fetch(:name, self.context))
@@ -289,14 +317,14 @@ module RDF
           patterns.first.context = context
         end
       end
-      
+
       patterns.each do |pattern|
 
-        old_solutions, @solutions = @solutions, Solutions.new
+        old_solutions, @solutions = @solutions, Query::Solutions()
 
         options[:bindings].keys.each do |variable|
           if pattern.variables.include?(variable)
-            unbound_solutions, old_solutions = old_solutions, Solutions.new
+            unbound_solutions, old_solutions = old_solutions, Query::Solutions()
             options[:bindings][variable].each do |binding|
               unbound_solutions.each do |solution|
                 old_solutions << solution.merge(variable => binding)
@@ -325,11 +353,18 @@ module RDF
         # that can have constraints are often broad without them.
         # We have no solutions at all:
         return @solutions if @solutions.empty?
-        # We have no solutions for variables we should have solutions for:
-        if !pattern.optional? && pattern.variables.keys.any? { |variable| !@solutions.variable_names.include?(variable) }
-          return Solutions.new
+
+        if !pattern.optional?
+          # We have no solutions for variables we should have solutions for:
+          need_vars = pattern.variables.keys
+          @solutions.each do |solution|
+            break if need_vars.empty?
+            need_vars -= solution.bindings.keys
+          end
+          return Query::Solutions() unless need_vars.empty?
         end
       end
+      @solutions.each(&block) if block_given?
       @solutions
     end
 
@@ -354,7 +389,7 @@ module RDF
     # @return [Boolean]
     # @see    #failed?
     def matched?
-      !@failed
+      !failed?
     end
 
     # Add patterns from another query to form a new Query

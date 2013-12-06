@@ -14,4 +14,13 @@ describe RDF::Repository do
     expect(@repository.options).to have_key(:foo)
     expect(@repository.options[:foo]).to eq :bar
   end
+
+  context "A non-validatable repository" do
+    before :each do
+      @repository = RDF::Repository.new(:with_validity => false)
+    end
+
+    # @see lib/rdf/spec/repository.rb in rdf-spec
+    include RDF_Repository
+  end
 end

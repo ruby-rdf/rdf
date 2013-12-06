@@ -9,3 +9,4 @@ tmp
 Gemfile.lock
 .bundle/
 *.sw?
+benchmark/

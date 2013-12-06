@@ -28,7 +28,7 @@ describe RDF::Query::Solutions do
   }
 
   let(:solutions) {
-    solns = RDF::Query::Solutions.new
+    solns = RDF::Query::Solutions()
     solns.concat [uri, lit]
     solns
   }
@@ -123,60 +123,121 @@ describe RDF::Query::Solutions do
       ],
     }.each do |name, (left, right, result)|
       it name do
-        expect(left.minus(right)).to eq result
-      end
+        expect(left.minus(right)).to be_a(Enumerable)
+        expect(left.minus(right)).to be_a(RDF::Query::Solutions)
+        expect(left.minus(right).to_a).to eq result.to_a
+       end
     end
   end
 
   describe "#order_by" do
-    it "Reordering solutions based on a variable or proc" do
-      expect(solutions.dup.order_by(:updated, lambda {|a, b| b <=> a})).to eq [lit, uri]
+    subject {solutions.order_by(:updated, lambda {|a, b| b <=> a})}
+    it {should be_a(RDF::Query::Solutions)}
+    it "contains solutions in specified order" do
+      expect(subject).to include(lit, uri)
     end
   end
 
   describe "#select" do
-    it "Selecting/Projecting particular variables only (1)" do
-      expect(solutions.select(:title)).to eq [
-        RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
-        RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query")),
-      ]
+    context "one variable" do
+      subject {solutions.select(:title)}
+      it {should be_a(RDF::Query::Solutions)}
+      it "contains particular variables only" do
+        expect(subject).to include(
+          RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
+          RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
+        )
+      end
     end
 
-    it "Selecting/Projecting particular variables only (2)" do
-      expect(solutions.select(:title, :description)).to eq [
-        RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1"), :description => RDF::Literal("Description")),
-        RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"), :description => RDF::Literal("Description")),
-      ]
+    context "two variables" do
+      subject {solutions.select(:title, :description)}
+      it {should be_a(RDF::Query::Solutions)}
+      it "contains particular variables only" do
+        expect(subject).to include(
+          RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1"), :description => RDF::Literal("Description")),
+          RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"), :description => RDF::Literal("Description"))
+        )
+      end
     end
   end
 
   describe "#project" do
-    it "Selecting/Projecting particular variables only" do
-      expect(solutions.project(:title)).to eq [
+    subject {solutions.project(:title)}
+    it {should be_a(RDF::Query::Solutions)}
+    it "contains particular variables only" do
+      expect(subject).to include(
         RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
-        RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query")),
-      ]
+        RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
+      )
     end
   end
 
   describe "#distinct" do
-    it "Eliminating duplicate solutions" do
-      solutions << uri
-      expect(solutions).to eq [uri, lit, uri]
-      expect(solutions.distinct).to eq [uri, lit]
+    subject {RDF::Query::Solutions(solutions.to_a << uri).distinct}
+    it {should be_a(RDF::Query::Solutions)}
+    it "contains distinct solutions" do
+      expect(subject).to include(uri, lit)
+    end
+ 
+    describe "has stable count and size" do
+      subject {solutions.offset(1)}
+      it "should have count 1" do
+        expect(subject.count).to eq 1
+        expect(subject.count).to eq 1
+      end
+      it "should have size 1" do
+        expect(subject.size).to eq 1
+        expect(subject.size).to eq 1
+      end
     end
   end
 
   describe "#offset" do
-    it "Eliminating duplicate solutions", :pending => ("rubinius index problem" if RUBY_ENGINE == "rbx") do
-      expect(solutions.offset(20).limit(20)).to be_empty
+    subject {solutions.offset(20)}
+    it {should be_a(RDF::Query::Solutions)}
+    it {should be_empty}
+
+    describe "has stable count and size" do
+      subject {solutions.offset(1)}
+      it "should have count 1" do
+        expect(subject.count).to eq 1
+        expect(subject.count).to eq 1
+      end
+      it "should have size 1" do
+        expect(subject.size).to eq 1
+        expect(subject.size).to eq 1
+      end
+     end
+  end
+
+  describe "#limit" do
+    subject {solutions.limit(1)}
+    it {should be_a(RDF::Query::Solutions)}
+
+    describe "has stable count and size" do
+      subject {solutions.offset(1)}
+      it "should have count 1" do
+        expect(subject.count).to eq 1
+        expect(subject.count).to eq 1
+      end
+      it "should have size 1" do
+        expect(subject.size).to eq 1
+        expect(subject.size).to eq 1
+      end
     end
   end
 
+  describe "#offset+#limit" do
+    subject {solutions.offset(20).limit(20)}
+    it {should be_a(RDF::Query::Solutions)}
+    it {should be_empty}
+  end
+
   describe "#count" do
+    its(:count) {should == 2}
     it "Counting the number of matching solutions" do
-      expect(solutions.count).to eq 2
-      expect(solutions.count { |solution| solution.price < 30.5 }).to eq 1
+      expect(subject.count { |solution| solution.price < 30.5 }).to eq 1
     end
   end
 

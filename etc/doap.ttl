@@ -15,7 +15,7 @@
   doap:platform      "Ruby" ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
-  doap:implements    <http://www.w3.org/TR/rdf-concepts/>,
+  doap:implements    <http://www.w3.org/TR/rdf11-concepts/>,
                      <http://www.w3.org/TR/n-quads/>,
                      <http://www.w3.org/TR/n-triples/> ;
   doap:download-page <http://rubyforge.org/projects/rdf/> ;

@@ -15,84 +15,105 @@ describe RDF::List do
     expect(RDF::List.new).to be_a_kind_of(::Enumerable)
   end
 
-  describe RDF::List, "[] without arguments" do
-    it "constructs a new empty list" do
-      expect(RDF::List[]).to be_an(RDF::List)
-      expect(RDF::List[]).to be_empty
-      expect(RDF::List[]).to eq RDF::List::NIL
+  describe "[]" do
+    context "without arguments" do
+      it "constructs a new empty list" do
+        expect(RDF::List[]).to be_an(RDF::List)
+        expect(RDF::List[]).to be_empty
+        expect(RDF::List[]).to eq RDF::List::NIL
+      end
+    end
+
+    context "with arguments" do
+      it "constructs a new non-empty list" do
+        expect(RDF::List[1, 2, 3]).to be_an(RDF::List)
+        expect(RDF::List[1, 2, 3]).not_to be_empty
+      end
+
+      it "accepts list arguments" do
+        expect { RDF::List[RDF::List[]] }.not_to raise_error
+      end
+
+      it "accepts array arguments" do
+        expect { RDF::List[[1]] }.not_to raise_error
+        l1 = RDF::List[[1]]
+        expect(l1.size).to eq 1
+        expect(l1.first).to be_a(RDF::Node)
+        expect { RDF::List.new(l1.first, l1.graph) }.not_to raise_error
+        l2 = RDF::List.new(l1.first, l1.graph)
+        expect(l2.first).to eq RDF::Literal(1)
+      end
+
+      it "accepts blank node arguments" do
+        expect { RDF::List[RDF::Node.new] }.not_to raise_error
+      end
+
+      it "accepts URI arguments" do
+        expect { RDF::List[RDF.nil] }.not_to raise_error
+      end
+
+      it "accepts nil arguments" do
+        expect { RDF::List[nil] }.not_to raise_error
+      end
+
+      it "accepts literal arguments" do
+        expect { RDF::List[RDF::Literal.new("Hello, world!", :language => :en)] }.not_to raise_error
+      end
+
+      it "accepts boolean arguments" do
+        expect { RDF::List[true, false] }.not_to raise_error
+      end
+
+      it "accepts string arguments" do
+        expect { RDF::List["foo", "bar"] }.not_to raise_error
+      end
+
+      it "accepts integer arguments" do
+        expect { RDF::List[1, 2, 3] }.not_to raise_error
+      end
+
+      it "accepts float arguments" do
+        expect { RDF::List[3.1415] }.not_to raise_error
+      end
+
+      it "accepts decimal arguments" do
+        expect { RDF::List[BigDecimal("3.1415")] }.not_to raise_error
+      end
+
+      it "accepts time arguments" do
+        expect { RDF::List[Time.now] }.not_to raise_error
+      end
+
+      it "accepts date arguments" do
+        expect { RDF::List[Date.new(2010)] }.not_to raise_error
+      end
+
+      it "accepts datetime arguments" do
+        expect { RDF::List[DateTime.new(2010)] }.not_to raise_error
+      end
     end
   end
 
-  describe RDF::List, "[] with arguments" do
-    it "constructs a new non-empty list" do
-      expect(RDF::List[1, 2, 3]).to be_an(RDF::List)
-      expect(RDF::List[1, 2, 3]).not_to be_empty
+  describe "()" do
+    it "returns rdf:List without arguments" do
+      expect(RDF::List()).to eq RDF[:List]
     end
 
-    it "accepts list arguments" do
-      expect { RDF::List[RDF::List[]] }.not_to raise_error
+    it "accepts an array of terms" do
+      expect(RDF::List([1, 2])).to eq RDF::List[1, 2]
     end
 
-    it "accepts array arguments" do
-      expect { RDF::List[[1]] }.not_to raise_error
-      l1 = RDF::List[[1]]
-      expect(l1.size).to eq 1
-      expect(l1.first).to be_a(RDF::Node)
-      expect { RDF::List.new(l1.first, l1.graph) }.not_to raise_error
-      l2 = RDF::List.new(l1.first, l1.graph)
-      expect(l2.first).to eq RDF::Literal(1)
+    it "accepts a splat of terms" do
+      expect(RDF::List(1, 2)).to eq RDF::List[1, 2]
     end
 
-    it "accepts blank node arguments" do
-      expect { RDF::List[RDF::Node.new] }.not_to raise_error
-    end
-
-    it "accepts URI arguments" do
-      expect { RDF::List[RDF.nil] }.not_to raise_error
-    end
-
-    it "accepts nil arguments" do
-      expect { RDF::List[nil] }.not_to raise_error
-    end
-
-    it "accepts literal arguments" do
-      expect { RDF::List[RDF::Literal.new("Hello, world!", :language => :en)] }.not_to raise_error
-    end
-
-    it "accepts boolean arguments" do
-      expect { RDF::List[true, false] }.not_to raise_error
-    end
-
-    it "accepts string arguments" do
-      expect { RDF::List["foo", "bar"] }.not_to raise_error
-    end
-
-    it "accepts integer arguments" do
-      expect { RDF::List[1, 2, 3] }.not_to raise_error
-    end
-
-    it "accepts float arguments" do
-      expect { RDF::List[3.1415] }.not_to raise_error
-    end
-
-    it "accepts decimal arguments" do
-      expect { RDF::List[BigDecimal("3.1415")] }.not_to raise_error
-    end
-
-    it "accepts time arguments" do
-      expect { RDF::List[Time.now] }.not_to raise_error
-    end
-
-    it "accepts date arguments" do
-      expect { RDF::List[Date.new(2010)] }.not_to raise_error
-    end
-
-    it "accepts datetime arguments" do
-      expect { RDF::List[DateTime.new(2010)] }.not_to raise_error
+    it "returns its argument if it is a list" do
+      l = RDF::List(1, 2)
+      expect(RDF::List(l)).to equal l
     end
   end
 
-  describe RDF::List, "#subject" do
+  describe "#subject" do
     it "requires no arguments" do
       expect { empty.subject }.not_to raise_error
     end
@@ -102,7 +123,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#graph" do
+  describe "#graph" do
     it "requires no arguments" do
       expect { empty.graph }.not_to raise_error
     end
@@ -112,7 +133,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#&" do
+  describe "#&" do
     it "accepts one argument" do
       expect { empty & empty }.not_to raise_error
     end
@@ -128,7 +149,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#|" do
+  describe "#|" do
     it "accepts one argument" do
       expect { empty | empty }.not_to raise_error
     end
@@ -144,7 +165,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#+" do
+  describe "#+" do
     it "accepts one argument" do
       expect { empty + empty }.not_to raise_error
     end
@@ -158,7 +179,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#-" do
+  describe "#-" do
     it "accepts one argument" do
       expect { RDF::List::NIL - empty }.not_to raise_error
     end
@@ -172,7 +193,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#*" do
+  describe "#*" do
     it "accepts one argument" do
       expect { empty * 1 }.not_to raise_error
     end
@@ -182,19 +203,19 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#* with an integer argument" do
+  describe "#* with an integer argument" do
     it "returns a repetition of self" do
       expect(RDF::List[1, 2, 3] * 2).to eq RDF::List[1, 2, 3, 1, 2, 3]
     end
   end
 
-  describe RDF::List, "#* with a string argument" do
+  describe "#* with a string argument" do
     it "returns the string concatenation of all elements" do
       expect(RDF::List[1, 2, 3] * ",").to eq "1,2,3"
     end
   end
 
-  describe RDF::List, "#[]" do
+  describe "#[]" do
     it "accepts one argument" do
       expect { empty[0] }.not_to raise_error
     end
@@ -213,11 +234,11 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#[]=" do
+  describe "#[]=" do
     it "needs work"
   end
 
-  describe RDF::List, "#<<" do
+  describe "#<<" do
     it "accepts one argument" do
       expect { ten << 11 }.not_to raise_error
     end
@@ -241,7 +262,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#shift" do
+  describe "#shift" do
     it "returns the first element from the list" do
       expect(ten.shift).to eq RDF::Literal.new(1)
     end
@@ -256,7 +277,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#unshift" do
+  describe "#unshift" do
     it "adds element to beginning of list" do
       ten.unshift(0)
       expect(ten).to eq RDF::List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -267,13 +288,13 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#clear" do
+  describe "#clear" do
     it "empties list" do
       expect(ten.clear).to eq RDF::List[]
     end
   end
 
-  describe RDF::List, "#eql?" do
+  describe "#eql?" do
     it "requires an argument" do
       expect { empty.send(:eql?) }.to raise_error(ArgumentError)
     end
@@ -285,7 +306,7 @@ describe RDF::List do
     it "needs work"
   end
 
-  describe RDF::List, "#<=>" do
+  describe "#<=>" do
     it "requires an argument" do
       expect { empty.send(:<=>) }.to raise_error(ArgumentError)
     end
@@ -295,7 +316,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#==" do
+  describe "#==" do
     it "requires an argument" do
       expect { empty.send(:==) }.to raise_error(ArgumentError)
     end
@@ -305,7 +326,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#===" do
+  describe "#===" do
     it "requires an argument" do
       expect { empty.send(:===) }.to raise_error(ArgumentError)
     end
@@ -317,7 +338,7 @@ describe RDF::List do
     it "needs work"
   end
 
-  describe RDF::List, "#empty?" do
+  describe "#empty?" do
     it "requires no arguments" do
       expect { empty.empty? }.not_to raise_error
     end
@@ -329,7 +350,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#length" do
+  describe "#length" do
     it "requires no arguments" do
       expect { empty.length }.not_to raise_error
     end
@@ -345,20 +366,20 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#size" do
+  describe "#size" do
     it "aliases #length" do
       expect(empty.size).to eq empty.length
       expect(ten.size).to eq ten.length
     end
   end
 
-  describe RDF::List, "#index" do
+  describe "#index" do
     it "accepts one argument" do
       expect { ten.index(nil) }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#slice using an element index" do
+  describe "#slice using an element index" do
     it "accepts one argument" do
       expect { ten.slice(0) }.not_to raise_error
     end
@@ -368,7 +389,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#slice using a start index and a length" do
+  describe "#slice using a start index and a length" do
     it "accepts two arguments" do
       expect { ten.slice(0, 9) }.not_to raise_error
     end
@@ -378,13 +399,13 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#slice using a range" do
+  describe "#slice using a range" do
     it "accepts one argument" do
       expect { ten.slice(0..9) }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#fetch" do
+  describe "#fetch" do
     it "requires one argument" do
       expect { ten.fetch }.to raise_error(ArgumentError)
       expect { ten.fetch(0) }.not_to raise_error
@@ -404,7 +425,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#fetch with a default value" do
+  describe "#fetch with a default value" do
     it "accepts two arguments" do
       expect { ten.fetch(0, nil) }.not_to raise_error
     end
@@ -415,20 +436,20 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#fetch with a block" do
+  describe "#fetch with a block" do
     it "yields to the given block for invalid indexes" do
       expect { ten.fetch(20) { |index| } }.not_to raise_error
       expect(ten.fetch(20) { |index| true }).to be_true
     end
   end
 
-  describe RDF::List, "#at" do
+  describe "#at" do
     it "accepts one argument" do
       expect { ten.at(0) }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#nth" do
+  describe "#nth" do
     it "aliases #at" do
       (1..10).each do |n|
         expect(ten.nth(n)).to eq ten.at(n)
@@ -437,7 +458,7 @@ describe RDF::List do
   end
 
   ORDINALS.each_with_index do |ordinal, index|
-    describe RDF::List, "##{ordinal}" do
+    describe "##{ordinal}" do
       it "requires no arguments" do
         expect { ten.__send__(ordinal.to_sym) }.not_to raise_error
       end
@@ -452,43 +473,43 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#last" do
+  describe "#last" do
     it "requires no arguments" do
       expect { ten.last }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#rest" do
+  describe "#rest" do
     it "requires no arguments" do
       expect { ten.rest }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#tail" do
+  describe "#tail" do
     it "requires no arguments" do
       expect { ten.tail }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#first_subject" do
+  describe "#first_subject" do
     it "requires no arguments" do
       expect { ten.first_subject }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#rest_subject" do
+  describe "#rest_subject" do
     it "requires no arguments" do
       expect { ten.rest_subject }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#last_subject" do
+  describe "#last_subject" do
     it "requires no arguments" do
       expect { ten.last_subject }.not_to raise_error
     end
   end
 
-  describe RDF::List, "#each_subject without a block" do
+  describe "#each_subject without a block" do
     it "requires no arguments" do
       expect { ten.each_subject }.not_to raise_error
     end
@@ -498,7 +519,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#each_subject with a block" do
+  describe "#each_subject with a block" do
     it "requires no arguments" do
       expect { ten.each_subject { |subject| } }.not_to raise_error
     end
@@ -508,7 +529,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#each without a block" do
+  describe "#each without a block" do
     it "requires no arguments" do
       expect { ten.each }.not_to raise_error
     end
@@ -518,7 +539,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#each with a block" do
+  describe "#each with a block" do
     it "requires no arguments" do
       expect { ten.each { |value| } }.not_to raise_error
     end
@@ -529,7 +550,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#each_statement without a block" do
+  describe "#each_statement without a block" do
     it "requires no arguments" do
       expect { ten.each_statement }.not_to raise_error
     end
@@ -539,14 +560,14 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#each_statement with a block" do
+  describe "#each_statement with a block" do
     it "requires no arguments" do
       expect { ten.each_statement { |statement| } }.not_to raise_error
     end
 
     it "yields the correct number of times" do
-      expect(abc.each_statement.count).to eq 3 * 3
-      expect(ten.each_statement.count).to eq 10 * 3
+      expect(abc.each_statement.count).to eq 3 * 2
+      expect(ten.each_statement.count).to eq 10 * 2
     end
 
     it "yields statements" do
@@ -557,7 +578,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#join" do
+  describe "#join" do
     it "requires no arguments" do
       expect { empty.join }.not_to raise_error
     end
@@ -576,7 +597,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#reverse" do
+  describe "#reverse" do
     it "requires no arguments" do
       expect { empty.reverse }.not_to raise_error
     end
@@ -590,7 +611,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#sort without a block" do
+  describe "#sort without a block" do
     it "requires no arguments" do
       expect { empty.sort }.not_to raise_error
     end
@@ -600,7 +621,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#sort with a block" do
+  describe "#sort with a block" do
     it "requires no arguments" do
       expect { empty.sort { |a, b| } }.not_to raise_error
     end
@@ -610,7 +631,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#sort_by with a block" do
+  describe "#sort_by with a block" do
     it "requires no arguments" do
       expect { empty.sort_by { |value| } }.not_to raise_error
     end
@@ -620,7 +641,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#uniq" do
+  describe "#uniq" do
     it "requires no arguments" do
       expect { empty.uniq }.not_to raise_error
     end
@@ -634,7 +655,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#to_a" do
+  describe "#to_a" do
     it "requires no arguments" do
       expect { empty.to_a }.not_to raise_error
     end
@@ -650,7 +671,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#to_set" do
+  describe "#to_set" do
     it "requires no arguments" do
       expect { empty.to_set }.not_to raise_error
     end
@@ -670,7 +691,7 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#to_s" do
+  describe "#to_s" do
     it "requires no arguments" do
       expect { empty.to_s }.not_to raise_error
     end
@@ -680,13 +701,23 @@ describe RDF::List do
     end
   end
 
-  describe RDF::List, "#inspect" do
+  describe "#inspect" do
     it "requires no arguments" do
       expect { empty.inspect }.not_to raise_error
     end
 
     it "returns a string" do
       expect(empty.inspect).to be_a(String)
+    end
+  end
+
+  describe "#to_term" do
+    it "returns rdf:nil for an empty list" do
+      expect(RDF::List[].to_term).to eq RDF[:nil]
+    end
+
+    it "returns the list subject for a non-empty list" do
+      expect(RDF::List[1].to_term).to be_a(RDF::Node)
     end
   end
 
@@ -963,7 +994,7 @@ describe RDF::List do
 
     describe(:each_statement) do
       it "yields statements" do
-        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 9))
+        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 6))
       end
     end
 
