@@ -1200,7 +1200,7 @@ module RDF
     #   uri.query
     #   # => "flag&key=value"
     #
-    # @param [Hash, #to_hash, Array] new_query_values The new query values.
+    # @param [Hash, #to_hash, Array] value The new query values.
     def query_values=(value)
       if value.nil?
         self.query = nil

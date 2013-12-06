@@ -425,6 +425,8 @@ module RDF
     property :DeliveryChargeSpecification, :label => 'DeliveryChargeSpecification', :comment =>
       %(The price for the delivery of an offer using a particular
         delivery method.)
+    property :DeliveryEvent, :label => 'DeliveryEvent', :comment =>
+      %(An event involving the delivery of an item.)
     property :DeliveryMethod, :label => 'DeliveryMethod', :comment =>
       %(A delivery method is a standardized procedure for transferring
         the product or service to the destination of fulfilment chosen
@@ -826,6 +828,9 @@ module RDF
         Examples of LocalBusiness include a restaurant, a particular
         branch of a restaurant chain, a branch of a bank, a medical
         practice, a club, a bowling alley, etc.)
+    property :LockerDelivery, :label => 'LockerDelivery', :comment =>
+      %(A DeliveryMethod in which an item is made available via
+        locker.)
     property :Locksmith, :label => 'Locksmith', :comment =>
       %(A locksmith.)
     property :LodgingBusiness, :label => 'LodgingBusiness', :comment =>
@@ -1114,14 +1119,23 @@ module RDF
     property :OnDemandEvent, :label => 'OnDemandEvent', :comment =>
       %(A publication event e.g. catch-up TV or radio podcast, during
         which a program is available on-demand.)
+    property :OnSitePickup, :label => 'OnSitePickup', :comment =>
+      %(A DeliveryMethod in which an item is collected on site, e.g.
+        in a store or at a box office.)
     property :OpeningHoursSpecification, :label => 'OpeningHoursSpecification', :comment =>
       %(A structured value providing information about the opening
         hours of a place or a certain service inside a place.)
     property :Optician, :label => 'Optician', :comment =>
       %(An optician's store.)
+    property :Order, :label => 'Order', :comment =>
+      %(An order is a confirmation of a transaction \(a receipt\),
+        which can contain multiple line items, each represented by an
+        Offer that has been accepted by the customer.)
     property :OrderAction, :label => 'OrderAction', :comment =>
       %(An agent orders an object/product/service to be
         delivered/sent.)
+    property :OrderStatus, :label => 'OrderStatus', :comment =>
+      %(Enumerated status values for Order.)
     property :Organization, :label => 'Organization', :comment =>
       %(An organization such as a school, NGO, corporation, club, etc.)
     property :OrganizeAction, :label => 'OrganizeAction', :comment =>
@@ -1141,6 +1155,9 @@ module RDF
       %(A medical procedure intended primarly for palliative purposes,
         aimed at relieving the symptoms of an underlying health
         condition.)
+    property :ParcelDelivery, :label => 'ParcelDelivery', :comment =>
+      %(The delivery of a parcel either via the postal service or a
+        commercial service.)
     property :ParcelService, :label => 'ParcelService', :comment =>
       %(A private parcel service as the delivery mode available for a
         certain offer. Commonly used values:
@@ -1750,11 +1767,38 @@ module RDF
     # Property definitions
     property :about, :label => 'about', :comment =>
       %(The subject matter of the content.)
+    property :acceptedOffer, :label => 'acceptedOffer', :comment =>
+      %(The offer\(s\) -- e.g., product, quantity and price
+        combinations -- included in the order.)
     property :acceptedPaymentMethod, :label => 'acceptedPaymentMethod', :comment =>
       %(The payment method\(s\) accepted by seller for this offer.)
     property :acceptsReservations, :label => 'acceptsReservations', :comment =>
       %(Either <code>Yes/No</code>, or a URL at which reservations can
         be made.)
+    property :accessCode, :label => 'accessCode', :comment =>
+      %(Password, PIN, or access code needed for delivery \(e.g. from
+        a locker\).)
+    property :accessibilityAPI, :label => 'accessibilityAPI', :comment =>
+      %(Indicates that the resource is compatible with the referenced
+        accessibility API \(<a
+        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
+        wiki lists possible values</a>\).)
+    property :accessibilityControl, :label => 'accessibilityControl', :comment =>
+      %(Identifies input methods that are sufficient to fully control
+        the described resource \(<a
+        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
+        wiki lists possible values</a>\).)
+    property :accessibilityFeature, :label => 'accessibilityFeature', :comment =>
+      %(Content features of the resource, such as accessible media,
+        alternatives and supported enhancements for accessibility \(<a
+        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
+        wiki lists possible values</a>\).)
+    property :accessibilityHazard, :label => 'accessibilityHazard', :comment =>
+      %(A characteristic of the described resource that is
+        physiologically dangerous to some users. Related to WCAG 2.0
+        guideline 2.3. \(<a
+        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
+        wiki lists possible values</a>\))
     property :accountablePerson, :label => 'accountablePerson', :comment =>
       %(Specifies the Person that is legally accountable for the
         CreativeWork.)
@@ -1944,6 +1988,9 @@ module RDF
         site, a location, etc.\))
     property :availableDeliveryMethod, :label => 'availableDeliveryMethod', :comment =>
       %(The delivery method\(s\) available for this offer.)
+    property :availableFrom, :label => 'availableFrom', :comment =>
+      %(When the item is available for pickup from the store, locker,
+        etc.)
     property :availableIn, :label => 'availableIn', :comment =>
       %(The location in which the strength is available.)
     property :availableLanguage, :label => 'availableLanguage', :comment =>
@@ -1954,6 +2001,9 @@ module RDF
       %(An available dosage strength for the drug.)
     property :availableTest, :label => 'availableTest', :comment =>
       %(A diagnostic test or procedure offered by this lab.)
+    property :availableThrough, :label => 'availableThrough', :comment =>
+      %(After this date, the item will no longer be available for
+        pickup.)
     property :award, :label => 'award', :comment =>
       %(An award won by this person or for this creative work.)
     property :awards, :label => 'awards', :comment =>
@@ -1970,6 +2020,8 @@ module RDF
     property :bestRating, :label => 'bestRating', :comment =>
       %(The highest value allowed in this rating system. If bestRating
         is omitted, 5 is assumed.)
+    property :billingAddress, :label => 'billingAddress', :comment =>
+      %(The billing address for the order.)
     property :billingIncrement, :label => 'billingIncrement', :comment =>
       %(This property specifies the minimal quantity and rounding
         increment that will be the basis for the billing. The unit of
@@ -2039,6 +2091,8 @@ module RDF
       %(The caption for this object.)
     property :carbohydrateContent, :label => 'carbohydrateContent', :comment =>
       %(The number of grams of carbohydrates.)
+    property :carrier, :label => 'carrier', :comment =>
+      %(The party responsible for the parcel delivery.)
     property :carrierRequirements, :label => 'carrierRequirements', :comment =>
       %(Specifies specific carrier\(s\) requirements for the
         application \(e.g. an application may only work on a specific
@@ -2109,6 +2163,8 @@ module RDF
     property :comprisedOf, :label => 'comprisedOf', :comment =>
       %(The underlying anatomical structures, such as organs, that
         comprise the anatomical system.)
+    property :confirmationNumber, :label => 'confirmationNumber', :comment =>
+      %(A number that confirms the given order.)
     property :connectedTo, :label => 'connectedTo', :comment =>
       %(Other anatomical structures to which this structure is
         connected.)
@@ -2183,6 +2239,8 @@ module RDF
       %(The currency accepted \(in <a
         href='http://en.wikipedia.org/wiki/ISO_4217'>ISO 4217 currency
         format</a>\).)
+    property :customer, :label => 'customer', :comment =>
+      %(Party placing the order.)
     property :dataset, :label => 'dataset', :comment =>
       %(A dataset contained in a catalog.)
     property :dateCreated, :label => 'dateCreated', :comment =>
@@ -2199,11 +2257,16 @@ module RDF
       %(The day of the week for which these opening hours are valid.)
     property :deathDate, :label => 'deathDate', :comment =>
       %(Date of death.)
+    property :deliveryAddress, :label => 'deliveryAddress', :comment =>
+      %(Destination address.)
     property :deliveryLeadTime, :label => 'deliveryLeadTime', :comment =>
       %(The typical delay between the receipt of the order and the
         goods leaving the warehouse.)
     property :deliveryMethod, :label => 'deliveryMethod', :comment =>
       %(A sub property of instrument. The method of delivery)
+    property :deliveryStatus, :label => 'deliveryStatus', :comment =>
+      %(New entry added as the package passes through each leg of its
+        journey \(from shipment to final delivery\).)
     property :department, :label => 'department', :comment =>
       %(A relationship between an organization and a department of
         that organization, also described as an organization
@@ -2245,6 +2308,12 @@ module RDF
     property :directors, :label => 'directors', :comment =>
       %(The director of the movie, tv/radio episode or series.
         \(legacy spelling; see singular form, director\))
+    property :discount, :label => 'discount', :comment =>
+      %(Any discount applied \(to an Order\).)
+    property :discountCode, :label => 'discountCode', :comment =>
+      %(Code used to redeem a discount.)
+    property :discountCurrency, :label => 'discountCurrency', :comment =>
+      %(The currency \(in 3-letter ISO 4217 format\) of the discount.)
     property :discusses, :label => 'discusses', :comment =>
       %(Specifies the CreativeWork associated with the UserComment.)
     property :discussionUrl, :label => 'discussionUrl', :comment =>
@@ -2262,6 +2331,8 @@ module RDF
     property :domainIncludes, :label => 'domainIncludes', :comment =>
       %(Relates a property to a class that is \(one of\) the type\(s\)
         the property is expected to be used on.)
+    property :doorTime, :label => 'doorTime', :comment =>
+      %(The time admission will commence.)
     property :dosageForm, :label => 'dosageForm', :comment =>
       %(A dosage form in which this drug/supplement is available, e.g.
         'tablet', 'suspension', 'injection'.)
@@ -2409,6 +2480,10 @@ module RDF
         flexibility training, aerobics, cardiac rehabilitation, etc.)
     property :exifData, :label => 'exifData', :comment =>
       %(exif data for this object.)
+    property :expectedArrivalFrom, :label => 'expectedArrivalFrom', :comment =>
+      %(The earliest date the package may arrive.)
+    property :expectedArrivalUntil, :label => 'expectedArrivalUntil', :comment =>
+      %(The latest date the package may arrive.)
     property :expectedPrognosis, :label => 'expectedPrognosis', :comment =>
       %(The likely outcome in either the short term or long term of
         the medical condition.)
@@ -2512,6 +2587,8 @@ module RDF
     property :guidelineSubject, :label => 'guidelineSubject', :comment =>
       %(The medical conditions, treatments, etc. that are the subject
         of the guideline.)
+    property :hasDeliveryMethod, :label => 'hasDeliveryMethod', :comment =>
+      %(Method used for delivery or shipping.)
     property :hasPOS, :label => 'hasPOS', :comment =>
       %(Points-of-Sales operated by the organization or person.)
     property :headline, :label => 'headline', :comment =>
@@ -2627,6 +2704,9 @@ module RDF
         which this product is a consumable.)
     property :isFamilyFriendly, :label => 'isFamilyFriendly', :comment =>
       %(Indicates whether this content is family friendly.)
+    property :isGift, :label => 'isGift', :comment =>
+      %(Was the offer accepted as a gift for someone other than the
+        buyer.)
     property :isPartOf, :label => 'isPartOf', :comment =>
       %(Indicates the collection or gallery to which the item belongs.)
     property :isProprietary, :label => 'isProprietary', :comment =>
@@ -2665,6 +2745,8 @@ module RDF
       %(The item being sold.)
     property :itemReviewed, :label => 'itemReviewed', :comment =>
       %(The item that is being reviewed/rated.)
+    property :itemShipped, :label => 'itemShipped', :comment =>
+      %(Item\(s\) being shipped.)
     property :jobLocation, :label => 'jobLocation', :comment =>
       %(A \(typically single\) geographic location associated with the
         job position.)
@@ -2763,6 +2845,9 @@ module RDF
         is not necessarily about a concept.)
     property :menu, :label => 'menu', :comment =>
       %(Either the actual menu or a URL of the menu.)
+    property :merchant, :label => 'merchant', :comment =>
+      %(The party taking the order \(e.g. Amazon.com is a merchant for
+        many sellers\).)
     property :minPrice, :label => 'minPrice', :comment =>
       %(The lowest price if the price is a range.)
     property :minValue, :label => 'minValue', :comment =>
@@ -2861,8 +2946,18 @@ module RDF
       %(A sub property of participant. The oponent on this action.)
     property :option, :label => 'option', :comment =>
       %(A sub property of object. The options subject to this action.)
+    property :orderDate, :label => 'orderDate', :comment =>
+      %(Date order was placed.)
+    property :orderNumber, :label => 'orderNumber', :comment =>
+      %(The identifier of the transaction.)
+    property :orderStatus, :label => 'orderStatus', :comment =>
+      %(The current status of the order.)
+    property :orderedItem, :label => 'orderedItem', :comment =>
+      %(The item ordered.)
     property :origin, :label => 'origin', :comment =>
       %(The place or point where a muscle arises.)
+    property :originAddress, :label => 'originAddress', :comment =>
+      %(Shipper's address.)
     property :originatesFrom, :label => 'originatesFrom', :comment =>
       %(The vasculature the lymphatic structure originates, or
         afferents, from.)
@@ -2893,6 +2988,8 @@ module RDF
         parent\).)
     property :partOfEpisode, :label => 'partOfEpisode', :comment =>
       %(The episode to which this clip belongs.)
+    property :partOfOrder, :label => 'partOfOrder', :comment =>
+      %(The overall order the items in this delivery were included in.)
     property :partOfSeason, :label => 'partOfSeason', :comment =>
       %(The season to which this episode belongs.)
     property :partOfSeries, :label => 'partOfSeries', :comment =>
@@ -2910,6 +3007,16 @@ module RDF
         functions that are associated with this activity or condition.)
     property :paymentAccepted, :label => 'paymentAccepted', :comment =>
       %(Cash, credit card, etc.)
+    property :paymentDue, :label => 'paymentDue', :comment =>
+      %(The date that payment is due.)
+    property :paymentMethod, :label => 'paymentMethod', :comment =>
+      %(The name of the credit card or other method of payment for the
+        order.)
+    property :paymentMethodId, :label => 'paymentMethodId', :comment =>
+      %(An identifier for the method of payment used \(e.g. the last 4
+        digits of the credit card\).)
+    property :paymentUrl, :label => 'paymentUrl', :comment =>
+      %(The URL for sending a payment.)
     property :performer, :label => 'performer', :comment =>
       %(A performer at the event&#x2014;for example, a presenter,
         musician, musical group or actor.)
@@ -3515,6 +3622,10 @@ module RDF
         format</a>.)
     property :track, :label => 'track', :comment =>
       %(A music recording \(track\)&#x2014;usually a single song.)
+    property :trackingNumber, :label => 'trackingNumber', :comment =>
+      %(Shipper tracking number.)
+    property :trackingUrl, :label => 'trackingUrl', :comment =>
+      %(Tracking url for the parcel delivery.)
     property :tracks, :label => 'tracks', :comment =>
       %(A music recording \(track\)&#x2014;usually a single song
         \(legacy spelling; see singular form, track\).)
@@ -3555,14 +3666,14 @@ module RDF
     property :validFor, :label => 'validFor', :comment =>
       %(The time validity of the permit.)
     property :validFrom, :label => 'validFrom', :comment =>
-      %(The date when the permit becomes valid.)
+      %(The date when the item becomes valid.)
     property :validIn, :label => 'validIn', :comment =>
       %(The geographic area where the permit is valid.)
     property :validThrough, :label => 'validThrough', :comment =>
       %(The end of the validity of offer, price specification, or
         opening hours data.)
     property :validUntil, :label => 'validUntil', :comment =>
-      %(The date when the permit is no longer valid.)
+      %(The date when the item is no longer valid.)
     property :value, :label => 'value', :comment =>
       %(The value of the product characteristic.)
     property :valueAddedTaxIncluded, :label => 'valueAddedTaxIncluded', :comment =>
