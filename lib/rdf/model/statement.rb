@@ -95,7 +95,7 @@ module RDF
         when Symbol   then Node.intern(@subject)
         when Term     then @subject
         when Value    then @subject.to_term
-        else          raise_error(ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}")
+        else          raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
       end
       @predicate = Node.intern(@predicate) if @predicate.is_a?(Symbol)
       @object    = case @object

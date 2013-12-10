@@ -213,7 +213,7 @@ module RDF
     end
     
     ##
-    # Default implementation of raise_error, which returns false.
+    # Default implementation of `type_error`, which returns false.
     # Classes including RDF::TypeCheck will raise TypeError
     # instead.
     #
