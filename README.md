@@ -229,10 +229,10 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
       * {RDF::Literal::Time}
       * [RDF::XSD](http://rubydoc.info/github/gkellogg/rdf-xsd/master/frames) (plugin)
     * {RDF::Resource}
-      * {RDF::List}
       * {RDF::Node}
       * {RDF::URI}
-      * {RDF::Graph}
+  * {RDF::List}
+  * {RDF::Graph}
   * {RDF::Statement}
 
 ### RDF Serialization
