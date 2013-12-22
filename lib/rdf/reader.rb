@@ -398,7 +398,8 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_subject
-      raise RDF::ReaderError, "expected subject in line #{lineno}: #{current_line.inspect}"
+      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected subject (found: #{current_line.inspect})",
+                                 lineno: lineno)
     end
 
     ##
@@ -407,7 +408,8 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_predicate
-      raise RDF::ReaderError, "expected predicate in line #{lineno}: #{current_line.inspect}"
+      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected predicate (found: #{current_line.inspect})",
+                                 lineno: lineno)
     end
 
     ##
@@ -416,7 +418,8 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_object
-      raise RDF::ReaderError, "expected object in line #{lineno}: #{current_line.inspect}"
+      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected object (found: #{current_line.inspect})",
+                                 lineno: lineno)
     end
 
     ##
@@ -526,5 +529,29 @@ module RDF
   ##
   # The base class for RDF parsing errors.
   class ReaderError < IOError
+    ##
+    # The invalid token which triggered the error.
+    #
+    # @return [String]
+    attr_reader :token
+
+    ##
+    # The line number where the error occurred.
+    #
+    # @return [Integer]
+    attr_reader :lineno
+
+    ##
+    # Initializes a new lexer error instance.
+    #
+    # @param  [String, #to_s]          message
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [String]         :token  (nil)
+    # @option options [Integer]        :lineno (nil)
+    def initialize(message, options = {})
+      @token      = options[:token]
+      @lineno     = options[:lineno] || (@token.lineno if @token.respond_to?(:lineno))
+      super(message.to_s)
+    end
   end # ReaderError
 end # RDF
