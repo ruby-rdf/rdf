@@ -83,7 +83,7 @@ module RDF
               object    = read_uriref || read_node || read_literal || fail_object
               context    = read_uriref || read_node
               if validate? && !read_eos
-                raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+                raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})")
               end
               return [subject, predicate, object, {:context => context}]
             end

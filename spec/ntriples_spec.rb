@@ -582,16 +582,49 @@ describe RDF::NTriples do
 
     context "with invalid input" do
       {
-        "nt-syntax-bad-struct-01" => %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
-        "nt-syntax-bad-struct-02" => %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
-        "nt-syntax-bad-lang-01" => %q(<http://example/s> <http://example/p> "string"@1 .),
-        "nt-syntax-bad-string-05" => %q(<http://example/s> <http://example/p> """abc""" .),
-        "nt-syntax-bad-num-01" => %q(<http://example/s> <http://example/p> 1 .),
-        "nt-syntax-bad-num-02" => %q(<http://example/s> <http://example/p> 1.0 .),
-        "nt-syntax-bad-num-03" => %q(<http://example/s> <http://example/p> 1.0e0 .),
-      }.each do |name, nt|
+        "nt-syntax-bad-struct-01" => [
+          %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
+          %r(ERROR \[line 1\] Expected end of statement \(found: ", .* \."\))
+        ],
+        "nt-syntax-bad-struct-02" => [
+          %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
+          %r(ERROR \[line 1\] Expected end of statement \(found: "; .* \."\))
+        ],
+        "nt-syntax-bad-lang-01" => [
+          %q(<http://example/s> <http://example/p> "string"@1 .),
+          %r(ERROR \[line 1\] Expected end of statement \(found: "@1 \."\))
+        ],
+        "nt-syntax-bad-string-05" => [
+          %q(<http://example/s> <http://example/p> """abc""" .),
+          %r(ERROR \[line 1\] Expected end of statement \(found: .* \."\))
+        ],
+        "nt-syntax-bad-num-01" => [
+          %q(<http://example/s> <http://example/p> 1 .),
+          %r(ERROR \[line 1\] Expected object \(found: "1 \."\))
+        ],
+        "nt-syntax-bad-num-02" => [
+          %q(<http://example/s> <http://example/p> 1.0 .),
+          %r(ERROR \[line 1\] Expected object \(found: "1\.0 \."\))
+        ],
+        "nt-syntax-bad-num-03" => [
+          %q(<http://example/s> <http://example/p> 1.0e0 .),
+          %r(ERROR \[line 1\] Expected object \(found: "1\.0e0 \."\))
+        ],
+        "nt-syntax-bad-uri-02" => [
+          %(# Bad IRI : space.\n<http://example/ space> <http://example/p> <http://example/o> .),
+          %r(ERROR \[line 2\] Expected subject)
+        ],
+        "nt-syntax-bad-uri-07" => [
+          %(# No relative IRIs in N-Triples\n<http://example/s> <p> <http://example/o> .),
+          %r(ERROR \[line 2\] Invalid URI)
+        ],
+        "bnode predicate" => [
+          %q(<http://example/s> _:p <http://example/o> .),
+          %r(ERROR \[line 1\] Expected predicate)
+        ]
+      }.each do |name, (nt, error)|
         it name do
-          expect {@reader.new(nt.freeze, :validate => true).to_a}.to raise_error(RDF::ReaderError)
+          expect {@reader.new(nt.freeze, :validate => true).to_a}.to raise_error(error || RDF::ReaderError)
         end
       end
     end
