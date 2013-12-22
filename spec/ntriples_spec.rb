@@ -580,6 +580,22 @@ describe RDF::NTriples do
       end
     end
 
+    context "with ASCII-8BIT input" do
+      {
+        "uris"                    => %q(<http://example/> <http://example/> <http://example/> .),
+        "bnode subject"           => %q(_:s <http://example/> <http://example/> .),
+        "bnode object"            => %q(<http://example/> <http://example/> _:o .),
+        "simple literal"          => %q(<http://example/> <http://example/> "o" .),
+        "language tagged literal" => %q(<http://example/> <http://example/> "o"@en .),
+        "datatyped literal"       => %q(<http://example/> <http://example/> "o"^^<http://example/> .),
+      }.each do |name, src|
+        specify name do
+          g = parse(src.encode("UTF-8"))
+          expect {g.dump(:ntriples)}.not_to raise_error
+        end
+      end
+    end
+
     context "with invalid input" do
       {
         "nt-syntax-bad-struct-01" => [
