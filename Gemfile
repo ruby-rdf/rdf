@@ -28,3 +28,8 @@ group :test do
   gem "rake"
   gem "equivalent-xml"
 end
+
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'rubinius', '~> 2.0'
+end

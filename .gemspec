@@ -36,25 +36,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'webmock',     '>= 1.15'
   gem.add_development_dependency 'yard',        '>= 0.8'
 
-  # Rubinius has it's own dependencies
-  if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
-    gem.add_runtime_dependency     "rubysl-bigdecimal"
-    gem.add_runtime_dependency     "rubysl-date"
-    gem.add_runtime_dependency     "rubysl-enumerator"
-    gem.add_runtime_dependency     "rubysl-readline"
-    gem.add_runtime_dependency     "rubysl-net-http"
-    gem.add_runtime_dependency     "rubysl-pathname"
-    gem.add_runtime_dependency     "rubysl-time"
-    gem.add_runtime_dependency     "rubysl-uri"
-    gem.add_runtime_dependency     "rubysl-weakref"
-
-    gem.add_development_dependency "rubysl-base64"
-    gem.add_development_dependency "rubysl-fileutils"
-    gem.add_development_dependency "rubysl-open-uri"
-    gem.add_development_dependency "rubysl-prettyprint"
-    gem.add_development_dependency "rubysl-rexml"
-    gem.add_development_dependency "racc"
-  end
-
   gem.post_install_message       = nil
 end
