@@ -41,7 +41,6 @@ Gem::Specification.new do |gem|
     gem.add_runtime_dependency     "rubysl-bigdecimal"
     gem.add_runtime_dependency     "rubysl-date"
     gem.add_runtime_dependency     "rubysl-enumerator"
-    gem.add_runtime_dependency     "rubysl-json"
     gem.add_runtime_dependency     "rubysl-readline"
     gem.add_runtime_dependency     "rubysl-net-http"
     gem.add_runtime_dependency     "rubysl-pathname"
