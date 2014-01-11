@@ -27,6 +27,10 @@ describe RDF::StrictVocabulary do
     test_vocab["prop2"].should be_a(RDF::URI)
   end
 
+  it "should list properties that have been defined" do
+    expect([test_vocab.prop, test_vocab.Class, test_vocab.prop2] - test_vocab.properties).to be_empty
+  end
+
   it "should not respond to [] with properties that have not been defined" do
     expect{ test_vocab["not_a_prop"] }.to raise_error(KeyError)
     expect{ test_vocab[:not_a_prop] }.to raise_error(KeyError)
