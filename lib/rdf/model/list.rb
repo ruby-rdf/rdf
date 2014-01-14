@@ -33,14 +33,21 @@ module RDF
     ##
     # Initializes a newly-constructed list.
     #
-    # @param  [RDF::Resource]     subject
+    # If `subject` is present, it **must** identify the start of a valid list
+    # within `graph`.
+    #
+    # @param  [RDF::Node]         subject
     # @param  [RDF::Graph]        graph
     # @param  [Array<RDF::Term>] values
+    #   Any values which are not terms are coerced to `RDF::Literal`.
     # @yield  [list]
     # @yieldparam [RDF::List] list
+    # @raise [ArgumentError] if a `subject` is specified and does already exist in `graph`.
     def initialize(subject = nil, graph = nil, values = nil, &block)
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
+
+      raise ArgumentError, "#{subject} does not identify an existing valid list" if subject && !valid?
 
       unless Array(values).empty?
         Array(values).reverse_each {|value| self.unshift(value)}
@@ -52,6 +59,8 @@ module RDF
           else instance_eval(&block)
         end
       end
+
+      # After initializing, if there is a subject, set it as the subject of this list. If the list is empty, this is an erryr
     end
 
     UNSET = Object.new.freeze # @private
@@ -90,7 +99,7 @@ module RDF
     end
 
     # @!attribute [r] subject
-    # @return [RDF::Resource] the subject term of this list.
+    # @return [RDF::Node] the subject term of this list.
     attr_reader :subject
 
     # @!attribute [r] graph
@@ -211,14 +220,15 @@ module RDF
     # @example
     #   RDF::List[].unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
     #
-    # @param  [RDF::Term] value
+    # @param  [RDF::Term, Array<RDF::Term>] value
+    #   A non-RDF::Term is coerced to a Literal
     # @return [RDF::List]
     # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
     #
     def unshift(value)
       value = case value
         when nil         then RDF.nil
-        when RDF::Value  then value
+        when RDF::Term   then value
         when Array       then RDF::List.new(nil, graph, value)
         else value
       end
@@ -588,7 +598,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].first_subject        #=> RDF::Node(...)
     #
-    # @return [RDF::Resource]
+    # @return [RDF::Node]
     def first_subject
       subject
     end
@@ -597,7 +607,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].rest_subject         #=> RDF::Node(...)
     #
-    # @return [RDF::Resource]
+    # @return [RDF::Node]
     def rest_subject
       graph.first_object(:subject => subject, :predicate => RDF.rest)
     end
@@ -608,7 +618,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].last_subject         #=> RDF::Node(...)
     #
-    # @return [RDF::Resource]
+    # @return [RDF::Node]
     def last_subject
       each_subject.to_a.last # TODO: optimize this
     end
@@ -768,7 +778,7 @@ module RDF
     #   RDF::List[].to_term                     #=> "RDF[:nil]"
     #   RDF::List[1, 2, 3].to_term              #=> "RDF::Node"
     #
-    # @return [RDF::Resource]
+    # @return [RDF::Node]
     def to_term
       subject
     end

@@ -113,6 +113,34 @@ describe RDF::List do
     end
   end
 
+  describe "#initialize" do
+    context "with subject and graph" do
+      it "initializes pre-existing list" do
+        n = RDF::Node.new
+        g = RDF::Graph.new do
+          insert(RDF::Statement(n, RDF.first, "foo"))
+          insert(RDF::Statement(n, RDF.rest, RDF.nil))
+        end
+        l = RDF::List.new(n, g)
+        expect(l).to be_valid
+      end
+
+      it "raises an error if list does not exist" do
+        n = RDF::Node.new
+        g = RDF::Graph.new
+        expect{RDF::List.new(n, g)}.to raise_error(ArgumentError)
+      end
+
+      it "raises an error if list is not valid" do
+        n = RDF::URI("bar")
+        g = RDF::Graph.new do
+          insert(RDF::Statement(n, RDF.value, "foo"))
+        end
+        expect{RDF::List.new(n, g)}.to raise_error(ArgumentError)
+      end
+    end
+  end
+
   describe "#subject" do
     it "requires no arguments" do
       expect { empty.subject }.not_to raise_error
@@ -759,7 +787,7 @@ describe RDF::List do
     end
 
     context "Turtle List construction" do
-      subject {RDF::List.new(RDF::Node("n"), nil, %w(a))}
+      subject {RDF::List.new(nil, nil, %w(a))}
       its(:length) {should == 1}
     end
   end

@@ -57,6 +57,7 @@ module RDF
     #   @option options [RDF::Resource]  :subject   (nil)
     #   @option options [RDF::URI]       :predicate (nil)
     #   @option options [RDF::Term]      :object    (nil)
+    #     if not an `RDF::Term`, it is coerced to `RDF::Literal`.
     #   @option options [RDF::Resource]  :context   (nil)
     #     Note, in RDF 1.1, a context MUST be an IRI.
     #   @return [RDF::Statement]
@@ -65,6 +66,7 @@ module RDF
     #   @param  [RDF::Resource]          subject
     #   @param  [RDF::URI]               predicate
     #   @param  [RDF::Term]              object
+    #     if not an `RDF::Term`, it is coerced to `RDF::Literal`.
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Resource]  :context   (nil)
     #   @return [RDF::Statement]
