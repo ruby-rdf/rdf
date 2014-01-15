@@ -18,20 +18,21 @@ module RDF; class Query
     ##
     # @overload initialize(options = {})
     #   @param  [Hash{Symbol => Object}]     options
-    #   @option options [Variable, Resource] :subject   (nil)
-    #   @option options [Variable, URI]      :predicate (nil)
-    #   @option options [Variable, Term]     :object    (nil)
-    #   @option options [Variable, Resource] :context   (nil)
+    #   @option options [Variable, Resource, nil] :subject   (nil)
+    #   @option options [Variable, URI, nil]      :predicate (nil)
+    #   @option options [Variable, Term, nil]     :object    (nil)
+    #   @option options [Variable, Resource, nil, false] :context   (nil)
     #     A context of nil matches any context, a context of false, matches only the default context.
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
-    #   @param  [Variable, Resource]         subject
-    #   @param  [Variable, URI]              predicate
-    #   @param  [Variable, Term]             object
-    #   @param  [Hash{Symbol => Object}]     options
-    #   @option options [Variable, Resource] :context   (nil)
-    #   @option options [Boolean]            :optional  (false)
+    #   @param  [Variable, Resource, nil]         subject
+    #   @param  [Variable, URI, nil]              predicate
+    #   @param  [Variable, Termm, nil]            object
+    #   @param  [Hash{Symbol => Object}]          options
+    #   @option options [Variable, Resource, nil, false] :context   (nil)
+    #     A context of nil matches any context, a context of false, matches only the default context.
+    #   @option options [Boolean]                 :optional  (false)
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       super
     end

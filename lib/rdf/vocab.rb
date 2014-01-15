@@ -87,7 +87,7 @@ module RDF
       # @overload property(name, options)
       #   Defines a new property or class in the vocabulary.
       #   Optional labels and comments are stripped of unnecessary whitespace.
-      # 
+      #
       #   @param [String, #to_s] name
       #   @param [Hash{Symbol => Object}] options
       #   @option options [String, #to_s] :label
@@ -281,7 +281,7 @@ module RDF
       # @overload property(name, options)
       #   Defines a new property or class in the vocabulary.
       #   Optional labels and comments are stripped of unnecessary whitespace.
-      # 
+      #
       #   @param [String, #to_s] name
       #   @param [Hash{Symbol => Object}] options
       #   @option options [String, #to_s] :label
@@ -299,6 +299,12 @@ module RDF
           @@comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
         end
+      end
+
+      ##
+      #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
+      def properties
+        @@properties.keys
       end
 
       def [](name)

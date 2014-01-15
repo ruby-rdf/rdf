@@ -10,6 +10,9 @@ group :develop do
   gem 'rdf-turtle', :git => "git://github.com/ruby-rdf/rdf-turtle.git", :branch => "develop"
   gem 'rdf-microdata', :git => "git://github.com/ruby-rdf/rdf-microdata.git", :branch => "develop"
   gem "rdf-xsd", :git => "git://github.com/ruby-rdf/rdf-xsd.git", :branch => "develop"
+  gem 'sparql',  :git => "git://github.com/ruby-rdf/sparql.git", :branch => "develop"
+  gem 'sparql-client',  :git => "git://github.com/ruby-rdf/sparql-client.git", :branch => "develop"
+  gem 'sxp',            :git => "git://github.com/gkellogg/sxp-ruby.git"
 end
 
 group :debug do
@@ -24,4 +27,9 @@ end
 group :test do
   gem "rake"
   gem "equivalent-xml"
+end
+
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'rubinius', '~> 2.0'
 end
