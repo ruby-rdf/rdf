@@ -115,28 +115,38 @@ describe RDF::List do
 
   describe "#initialize" do
     context "with subject and graph" do
+      let(:graph) {RDF::Graph.new}
       it "initializes pre-existing list" do
         n = RDF::Node.new
-        g = RDF::Graph.new do
-          insert(RDF::Statement(n, RDF.first, "foo"))
-          insert(RDF::Statement(n, RDF.rest, RDF.nil))
-        end
-        l = RDF::List.new(n, g)
-        expect(l).to be_valid
+        graph.insert(RDF::Statement(n, RDF.first, "foo"))
+        graph.insert(RDF::Statement(n, RDF.rest, RDF.nil))
+        expect(RDF::List.new(n, graph)).to be_valid
       end
 
-      it "raises an error if list does not exist" do
+      it "Uses subject with values" do
+        n = RDF::URI("foo")
+        l = RDF::List.new(n, graph, %w(a b c))
+        expect(l.subject).to eq(n)
+        expect(l.first).to eq(RDF::Literal("a"))
+        expect(l.last).to eq(RDF::Literal("c"))
+      end
+
+      it "Prepends values with new subject if existing list" do
         n = RDF::Node.new
-        g = RDF::Graph.new
-        expect{RDF::List.new(n, g)}.to raise_error(ArgumentError)
+        graph.insert(RDF::Statement(n, RDF.first, "foo"))
+        graph.insert(RDF::Statement(n, RDF.rest, RDF.nil))
+        l = RDF::List.new(n, graph, %w(a b c))
+        expect(l.subject).not_to eq(n)
+        expect(l.first).to eq(RDF::Literal("a"))
+        expect(l.last).to eq(RDF::Literal("foo"))
+        expect(l.last_subject).to eq(n)
       end
 
-      it "raises an error if list is not valid" do
-        n = RDF::URI("bar")
-        g = RDF::Graph.new do
-          insert(RDF::Statement(n, RDF.value, "foo"))
-        end
-        expect{RDF::List.new(n, g)}.to raise_error(ArgumentError)
+      it "Creates an invalid empty list if subject does not identify a list" do
+        n = RDF::Node.new
+        l = RDF::List.new(n, graph)
+        expect(l).not_to be_valid
+        expect(l.subject).to eq(n)
       end
     end
   end
