@@ -33,23 +33,52 @@ module RDF
     ##
     # Initializes a newly-constructed list.
     #
-    # If `subject` is present, it **must** identify the start of a valid list
-    # within `graph`.
+    # Instantiates a new list based at `subject`, which **should** be an RDF::Node. List may be initialized using passed `values`.
     #
-    # @param  [RDF::Node]         subject
-    # @param  [RDF::Graph]        graph
-    # @param  [Array<RDF::Term>] values
-    #   Any values which are not terms are coerced to `RDF::Literal`.
-    # @yield  [list]
-    # @yieldparam [RDF::List] list
-    # @raise [ArgumentError] if a `subject` is specified and does already exist in `graph`.
+    # If a `values` initializer is set with an empty list, `subject`
+    # will be used as the first element in the list. Otherwise,
+    # if the list is not empty, `subject` identifies the first element
+    # of the list to which `values` are prepended yielding a new `subject`.
+    # Otherwise, if there are no initial `values`, and `subject` does
+    # not identify an existing list in `graph`, `subject` is set to {RDF::NIL}.
+    #
+    # @overload initialize(subject = nil, graph = nil, values = nil, &block)
+    #   @param  [RDF::URI]          subject
+    #   @param  [RDF::Graph]        graph
+    #   @param  [Array<RDF::Term>]  values
+    #     Any values which are not terms are coerced to `RDF::Literal`.
+    #   @yield  [list]
+    #   @yieldparam [RDF::List] list
+    #   @deprecated Subject should be an {RDF::Node}, not a {RDF::URI}. A
+    #               future release will remove support for URI subjects
+    # @overload initialize(subject = nil, graph = nil, values = nil, &block)
+    #   @param  [RDF::Node]         subject (RDF.nil)
+    #   @param  [RDF::Graph]        graph (RDF::Graph.new)
+    #   @param  [Array<RDF::Term>]  values
+    #     Any values which are not terms are coerced to `RDF::Literal`.
+    #   @yield  [list]
+    #   @yieldparam [RDF::List] list
     def initialize(subject = nil, graph = nil, values = nil, &block)
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
+      is_empty = @graph.query(:subject => subject, :predicate => RDF.first).empty?
 
-      raise ArgumentError, "#{subject} does not identify an existing valid list" if subject && !valid?
-
-      unless Array(values).empty?
+      if subject && is_empty
+        # An empty list with explicit subject and value initializers
+        @subject = RDF.nil
+        first, *values = Array(values)
+        if first
+          # Intantiate the list from values, and insert the first value using subject.
+          values.reverse_each {|value| self.unshift(value)}
+          graph.insert RDF::Statement(subject, RDF.first, first)
+          graph.insert RDF::Statement(subject, RDF.rest, @subject)
+          @subject = subject
+        else
+          # An empty list with no values and a subject. An empty list can only be RDF.nil, so set it to that
+          @subject = RDF.nil
+        end
+      else
+        # Otherwise, prepend any values, which resets @subject
         Array(values).reverse_each {|value| self.unshift(value)}
       end
 
@@ -59,8 +88,6 @@ module RDF
           else instance_eval(&block)
         end
       end
-
-      # After initializing, if there is a subject, set it as the subject of this list. If the list is empty, this is an erryr
     end
 
     UNSET = Object.new.freeze # @private
@@ -99,7 +126,7 @@ module RDF
     end
 
     # @!attribute [r] subject
-    # @return [RDF::Node] the subject term of this list.
+    # @return [RDF::Resource] the subject term of this list.
     attr_reader :subject
 
     # @!attribute [r] graph
@@ -598,7 +625,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].first_subject        #=> RDF::Node(...)
     #
-    # @return [RDF::Node]
+    # @return [RDF::Resource]
     def first_subject
       subject
     end
@@ -607,7 +634,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].rest_subject         #=> RDF::Node(...)
     #
-    # @return [RDF::Node]
+    # @return [RDF::Resource]
     def rest_subject
       graph.first_object(:subject => subject, :predicate => RDF.rest)
     end
@@ -618,7 +645,7 @@ module RDF
     # @example
     #   RDF::List[1, 2, 3].last_subject         #=> RDF::Node(...)
     #
-    # @return [RDF::Node]
+    # @return [RDF::Resource]
     def last_subject
       each_subject.to_a.last # TODO: optimize this
     end
@@ -778,7 +805,7 @@ module RDF
     #   RDF::List[].to_term                     #=> "RDF[:nil]"
     #   RDF::List[1, 2, 3].to_term              #=> "RDF::Node"
     #
-    # @return [RDF::Node]
+    # @return [RDF::Resource]
     def to_term
       subject
     end
