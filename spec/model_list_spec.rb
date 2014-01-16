@@ -123,11 +123,6 @@ describe RDF::List do
         expect(RDF::List.new(n, graph)).to be_valid
       end
 
-      it "resets subject if no existing list and no initializers" do
-        n = RDF::URI("foo")
-        expect(RDF::List.new(n, graph).subject).to eq(RDF.nil)
-      end
-
       it "Uses subject with values" do
         n = RDF::URI("foo")
         l = RDF::List.new(n, graph, %w(a b c))
@@ -145,6 +140,13 @@ describe RDF::List do
         expect(l.first).to eq(RDF::Literal("a"))
         expect(l.last).to eq(RDF::Literal("foo"))
         expect(l.last_subject).to eq(n)
+      end
+
+      it "Creates an invalid empty list if subject does not identify a list" do
+        n = RDF::Node.new
+        l = RDF::List.new(n, graph)
+        expect(l).not_to be_valid
+        expect(l.subject).to eq(n)
       end
     end
   end

@@ -40,7 +40,8 @@ module RDF
     # if the list is not empty, `subject` identifies the first element
     # of the list to which `values` are prepended yielding a new `subject`.
     # Otherwise, if there are no initial `values`, and `subject` does
-    # not identify an existing list in `graph`, `subject` is set to {RDF::NIL}.
+    # not identify an existing list in `graph`, the list remains
+    # identified by `subject`, but will be invalid.
     #
     # @overload initialize(subject = nil, graph = nil, values = nil, &block)
     #   @param  [RDF::URI]          subject
@@ -72,11 +73,8 @@ module RDF
           values.reverse_each {|value| self.unshift(value)}
           graph.insert RDF::Statement(subject, RDF.first, first)
           graph.insert RDF::Statement(subject, RDF.rest, @subject)
-          @subject = subject
-        else
-          # An empty list with no values and a subject. An empty list can only be RDF.nil, so set it to that
-          @subject = RDF.nil
         end
+        @subject = subject
       else
         # Otherwise, prepend any values, which resets @subject
         Array(values).reverse_each {|value| self.unshift(value)}
