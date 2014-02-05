@@ -34,9 +34,9 @@ module RDF
     property :AdultEntertainment, :label => 'AdultEntertainment', :comment =>
       %(An adult entertainment establishment.)
     property :AggregateOffer, :label => 'AggregateOffer', :comment =>
-      %(When a single product that has different offers \(for example,
-        the same pair of shoes is offered by different merchants\),
-        then AggregateOffer can be used.)
+      %(When a single product is associated with multiple offers \(for
+        example, the same pair of shoes is offered by different
+        merchants\), then AggregateOffer can be used.)
     property :AggregateRating, :label => 'AggregateRating', :comment =>
       %(The average rating based on multiple ratings or reviews.)
     property :AgreeAction, :label => 'AgreeAction', :comment =>
@@ -745,7 +745,7 @@ module RDF
       %(The act of asking someone to attend an event. Reciprocal of
         RsvpAction.)
     property :ItemAvailability, :label => 'ItemAvailability', :comment =>
-      %(A list of possible product availablity options.)
+      %(A list of possible product availability options.)
     property :ItemList, :label => 'ItemList', :comment =>
       %(A list of items of any sort&#x2014;for example, Top 10 Movies
         About Weathermen, or Top 100 Party Songs. Not to be confused
@@ -1110,10 +1110,12 @@ module RDF
     property :OceanBodyOfWater, :label => 'OceanBodyOfWater', :comment =>
       %(An ocean \(for example, the Pacific\).)
     property :Offer, :label => 'Offer', :comment =>
-      %(An offer to sell an item&#x2014;for example, an offer to sell
-        a product, the DVD of a movie, or tickets to an event.)
+      %(An offer to transfer some rights to an item or to provide a
+        service&#x2014;for example, an offer to sell tickets to an
+        event, to rent the DVD of a movie, to stream a TV show over
+        the internet, to repair a motorcycle, or to loan a book.)
     property :OfferItemCondition, :label => 'OfferItemCondition', :comment =>
-      %(A list of possible conditions for the item for sale.)
+      %(A list of possible conditions for the item.)
     property :OfficeEquipmentStore, :label => 'OfficeEquipmentStore', :comment =>
       %(An office equipment store.)
     property :OnDemandEvent, :label => 'OnDemandEvent', :comment =>
@@ -2123,8 +2125,7 @@ module RDF
         as a pair followed by a radius in meters.)
     property :citation, :label => 'citation', :comment =>
       %(A citation or reference to another creative work, such as
-        another publication, web page, scholarly article, etc. NOTE:
-        Candidate for promotion to ScholarlyArticle.)
+        another publication, web page, scholarly article, etc.)
     property :clincalPharmacology, :label => 'clincalPharmacology', :comment =>
       %(Description of the absorption and elimination of drugs,
         including their concentration \(pharmacokinetics, pK\) and
@@ -2742,7 +2743,7 @@ module RDF
     property :itemListOrder, :label => 'itemListOrder', :comment =>
       %(Type of ordering \(e.g. Ascending, Descending, Unordered\).)
     property :itemOffered, :label => 'itemOffered', :comment =>
-      %(The item being sold.)
+      %(The item being offered.)
     property :itemReviewed, :label => 'itemReviewed', :comment =>
       %(The item that is being reviewed/rated.)
     property :itemShipped, :label => 'itemShipped', :comment =>
@@ -2914,8 +2915,10 @@ module RDF
     property :offerCount, :label => 'offerCount', :comment =>
       %(The number of offers for the product.)
     property :offers, :label => 'offers', :comment =>
-      %(An offer to sell this item&#x2014;for example, an offer to
-        sell a product, the DVD of a movie, or tickets to an event.)
+      %(An offer to transfer some rights to an item or to provide a
+        service&#x2014;for example, an offer to sell tickets to an
+        event, to rent the DVD of a movie, to stream a TV show over
+        the internet, to repair a motorcycle, or to loan a book.)
     property :openingHours, :label => 'openingHours', :comment =>
       %(The opening hours for a business. Opening hours can be
         specified as a weekly time range, starting with days, then
@@ -3381,7 +3384,7 @@ module RDF
       %(A pointer to products or services sought by the organization
         or person \(demand\).)
     property :seller, :label => 'seller', :comment =>
-      %(The seller.)
+      %(The organization or person making the offer.)
     property :sender, :label => 'sender', :comment =>
       %(A sub property of participant. The participant who is at the
         sending end of the action.)
