@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), 'lib')))
 require 'rubygems'
+require 'rdf'
 
 namespace :gem do
-  desc "Build the rdf-turtle-#{File.read('VERSION').chomp}.gem file"
+  desc "Build the rdf-#{File.read('VERSION').chomp}.gem file"
   task :build => "lib/rdf/turtle/meta.rb" do
     sh "gem build rdf.gemspec && mv rdf-#{File.read('VERSION').chomp}.gem pkg/"
   end
@@ -13,8 +14,6 @@ namespace :gem do
     sh "gem push pkg/rdf-#{File.read('VERSION').chomp}.gem"
   end
 end
-
-require 'rdf'
 
 desc 'Default: run specs.'
 task :default => :spec
