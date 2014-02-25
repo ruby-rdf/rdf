@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gemspec :name => ""
+gemspec
 
 group :develop do
   gem "rdf-spec", :git => "git://github.com/ruby-rdf/rdf-spec.git", :branch => "develop"
