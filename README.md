@@ -21,7 +21,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
   serialization format support available through add-on plugins.
 * Includes in-memory graph and repository implementations, with more storage
-  adapter support available through add-on plugins.
+  adapter support available through add-on extensions.
 * Implements basic graph pattern (BGP) query evaluation.
 * Plays nice with others: entirely contained in the `RDF` module, and does
   not modify any of Ruby's core classes or standard library.
@@ -250,17 +250,17 @@ other gems:
 
 * {RDF::NTriples}
 * {RDF::NQuads}
-* [JSON::LD][] (plugin)
-* [RDF::JSON][] (plugin)
-* [RDF::Microdata][] (plugin)
-* [RDF::N3][] (plugin)
-* [RDF::Raptor::RDFXML](http://ruby-rdf.github.com/rdf-raptor) (plugin)
-* [RDF::Raptor::Turtle](http://ruby-rdf.github.com/rdf-raptor) (plugin)
-* [RDF::RDFa][] (plugin)
-* [RDF::RDFXML][] (plugin)
-* [RDF::TriG][] (plugin)
-* [RDF::TriX][] (plugin)
-* [RDF::Turtle][] (plugin)
+* [JSON::LD][] (extension)
+* [RDF::JSON][] (extension)
+* [RDF::Microdata][] (extension)
+* [RDF::N3][] (extension)
+* [RDF::Raptor::RDFXML](http://ruby-rdf.github.io/rdf-raptor) (extension)
+* [RDF::Raptor::Turtle](http://ruby-rdf.github.io/rdf-raptor) (extension)
+* [RDF::RDFa][] (extension)
+* [RDF::RDFXML][] (extension)
+* [RDF::TriG][] (extension)
+* [RDF::TriX][] (extension)
+* [RDF::Turtle][] (extension)
 
 The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 
