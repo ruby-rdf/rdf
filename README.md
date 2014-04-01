@@ -19,7 +19,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
-  serialization format support available through add-on plugins.
+  serialization format support available through add-on extensions.
 * Includes in-memory graph and repository implementations, with more storage
   adapter support available through add-on extensions.
 * Implements basic graph pattern (BGP) query evaluation.
@@ -227,7 +227,7 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
       * {RDF::Literal::Double}
       * {RDF::Literal::Integer}
       * {RDF::Literal::Time}
-      * [RDF::XSD](http://rubydoc.info/github/gkellogg/rdf-xsd/master/frames) (plugin)
+      * [RDF::XSD](http://rubydoc.info/github/gkellogg/rdf-xsd/master/frames) (extension)
     * {RDF::Resource}
       * {RDF::Node}
       * {RDF::URI}
@@ -294,10 +294,10 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Mutable}
   * {RDF::Durable}
 * {RDF::Transaction}
-* [RDF::AllegroGraph](http://rubydoc.info/github/emk/rdf-agraph/master/frames) (plugin)
-* [RDF::Mongo](http://rubydoc.info/github/pius/rdf-mongo/master/frames) (plugin)
-* [RDF::DataObjects](http://rubydoc.info/github/ruby-rdf/rdf-do/frames) (plugin)
-* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (plugin)
+* [RDF::AllegroGraph](http://rubydoc.info/github/emk/rdf-agraph/master/frames) (extension)
+* [RDF::Mongo](http://rubydoc.info/github/pius/rdf-mongo/master/frames) (extension)
+* [RDF::DataObjects](http://rubydoc.info/github/ruby-rdf/rdf-do/frames) (extension)
+* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (extension)
 
 ### RDF Querying
 
@@ -307,7 +307,7 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
-* [SPARQL](http://rubydoc.info/github/ruby-rdf/sparql/frames) (plugin)
+* [SPARQL](http://rubydoc.info/github/ruby-rdf/sparql/frames) (extension)
 
 
 ### RDF Vocabularies
