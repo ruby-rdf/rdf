@@ -4,6 +4,17 @@ module RDF
   class SCHEMA < StrictVocabulary("http://schema.org/")
 
     # Class definitions
+    property :TaxiReservation, :label => 'TaxiReservation', :comment =>
+      %(A reservation for a taxi.Note: This type is for information
+        about actual reservations, e.g. in confirmation emails or HTML
+        pages with individual confirmations of reservations. For
+        offers of tickets, use http://schema.org/Offer.)
+    property :TrainReservation, :label => 'TrainReservation', :comment =>
+      %(A reservation for train travel.Note: This type is for
+        information about actual reservations, e.g. in confirmation
+        emails or HTML pages with individual confirmations of
+        reservations. For offers of tickets, use
+        http://schema.org/Offer.)
     property :APIReference, :label => 'APIReference', :comment =>
       %(Reference documentation for application programming interfaces
         \(APIs\).)
@@ -34,15 +45,17 @@ module RDF
     property :AdultEntertainment, :label => 'AdultEntertainment', :comment =>
       %(An adult entertainment establishment.)
     property :AggregateOffer, :label => 'AggregateOffer', :comment =>
-      %(When a single product is associated with multiple offers \(for
-        example, the same pair of shoes is offered by different
-        merchants\), then AggregateOffer can be used.)
+      %(When a single product that has different offers \(for example,
+        the same pair of shoes is offered by different merchants\),
+        then AggregateOffer can be used.)
     property :AggregateRating, :label => 'AggregateRating', :comment =>
       %(The average rating based on multiple ratings or reviews.)
     property :AgreeAction, :label => 'AgreeAction', :comment =>
       %(The act of expressing a consistency of opinion with the
         object. An agent agrees to/about an object \(a proposition,
         topic or theme\) with participants.)
+    property :Airline, :label => 'Airline', :comment =>
+      %(An organization that provides flights for passengers.)
     property :Airport, :label => 'Airport', :comment =>
       %(An airport.)
     property :AlignmentObject, :label => 'AlignmentObject', :comment =>
@@ -67,6 +80,9 @@ module RDF
         other systems.)
     property :AnimalShelter, :label => 'AnimalShelter', :comment =>
       %(Animal shelter.)
+    property :Answer, :label => 'Answer', :comment =>
+      %(An answer offered to a question; perhaps correct, perhaps
+        opinionated or wrong.)
     property :ApartmentComplex, :label => 'ApartmentComplex', :comment =>
       %(Residence type: Apartment complex.)
     property :AppendAction, :label => 'AppendAction', :comment =>
@@ -199,6 +215,14 @@ module RDF
         broadcast over the air or online.)
     property :BuddhistTemple, :label => 'BuddhistTemple', :comment =>
       %(A Buddhist temple.)
+    property :BusTrip, :label => 'Bus Trip', :comment =>
+      %(A trip on a commercial bus line.)
+    property :BusReservation, :label => 'BusReservation', :comment =>
+      %(A reservation for bus travel.Note: This type is for
+        information about actual reservations, e.g. in confirmation
+        emails or HTML pages with individual confirmations of
+        reservations. For offers of tickets, use
+        http://schema.org/Offer.)
     property :BusStation, :label => 'BusStation', :comment =>
       %(A bus station.)
     property :BusStop, :label => 'BusStop', :comment =>
@@ -248,6 +272,8 @@ module RDF
         going to happen.<p>Related actions:</p><ul><li><a
         href="http://schema.org/ConfirmAction">ConfirmAction</a>: The
         antagonym of CancelAction.</li></ul>)
+    property :Car, :label => 'Car', :comment =>
+      %(An automobile.)
     property :Casino, :label => 'Casino', :comment =>
       %(A casino.)
     property :CatholicChurch, :label => 'CatholicChurch', :comment =>
@@ -545,6 +571,8 @@ module RDF
       %(An electronics store.)
     property :ElementarySchool, :label => 'ElementarySchool', :comment =>
       %(An elementary school.)
+    property :EmailMessage, :label => 'EmailMessage', :comment =>
+      %(An email message.)
     property :Embassy, :label => 'Embassy', :comment =>
       %(An embassy.)
     property :EmergencyService, :label => 'EmergencyService', :comment =>
@@ -568,6 +596,12 @@ module RDF
         concert, lecture, or festival. Ticketing information may be
         added via the 'offers' property. Repeated events may be
         structured as separate Event objects.)
+    property :EventReservation, :label => 'EventReservation', :comment =>
+      %(A reservation for an event like a concert, sporting event, or
+        lecture.Note: This type is for information about actual
+        reservations, e.g. in confirmation emails or HTML pages with
+        individual confirmations of reservations. For offers of
+        tickets, use http://schema.org/Offer.)
     property :EventStatusType, :label => 'EventStatusType', :comment =>
       %(EventStatusType is an enumeration type whose instances
         represent several states that an Event may be in.)
@@ -598,6 +632,14 @@ module RDF
         necessarily.</li></ul>)
     property :FireStation, :label => 'FireStation', :comment =>
       %(A fire station. With firemen.)
+    property :Flight, :label => 'Flight', :comment =>
+      %(An airline flight.)
+    property :FlightReservation, :label => 'FlightReservation', :comment =>
+      %(A reservation for air travel.Note: This type is for
+        information about actual reservations, e.g. in confirmation
+        emails or HTML pages with individual confirmations of
+        reservations. For offers of tickets, use
+        http://schema.org/Offer.)
     property :Float, :label => 'Float', :comment =>
       %(Data type: Floating number.)
     property :Florist, :label => 'Florist', :comment =>
@@ -627,6 +669,11 @@ module RDF
         follow it\).</li></ul>)
     property :FoodEstablishment, :label => 'FoodEstablishment', :comment =>
       %(A food-related business.)
+    property :FoodEstablishmentReservation, :label => 'FoodEstablishmentReservation', :comment =>
+      %(A reservation to dine at a food-related business.Note: This
+        type is for information about actual reservations, e.g. in
+        confirmation emails or HTML pages with individual
+        confirmations of reservations.)
     property :FoodEvent, :label => 'FoodEvent', :comment =>
       %(Event type: Food event.)
     property :FurnitureStore, :label => 'FurnitureStore', :comment =>
@@ -745,7 +792,7 @@ module RDF
       %(The act of asking someone to attend an event. Reciprocal of
         RsvpAction.)
     property :ItemAvailability, :label => 'ItemAvailability', :comment =>
-      %(A list of possible product availability options.)
+      %(A list of possible product availablity options.)
     property :ItemList, :label => 'ItemList', :comment =>
       %(A list of items of any sort&#x2014;for example, Top 10 Movies
         About Weathermen, or Top 100 Party Songs. Not to be confused
@@ -835,6 +882,11 @@ module RDF
       %(A locksmith.)
     property :LodgingBusiness, :label => 'LodgingBusiness', :comment =>
       %(A lodging business, such as a motel, hotel, or inn.)
+    property :LodgingReservation, :label => 'LodgingReservation', :comment =>
+      %(A reservation for lodging at a hotel, motel, inn, etc.Note:
+        This type is for information about actual reservations, e.g.
+        in confirmation emails or HTML pages with individual
+        confirmations of reservations.)
     property :LoseAction, :label => 'LoseAction', :comment =>
       %(The act of being defeated in a competitive activity.)
     property :LymphaticVessel, :label => 'LymphaticVessel', :comment =>
@@ -1110,20 +1162,15 @@ module RDF
     property :OceanBodyOfWater, :label => 'OceanBodyOfWater', :comment =>
       %(An ocean \(for example, the Pacific\).)
     property :Offer, :label => 'Offer', :comment =>
-      %(An offer to transfer some rights to an item or to provide a
-        service&#x2014;for example, an offer to sell tickets to an
-        event, to rent the DVD of a movie, to stream a TV show over
-        the internet, to repair a motorcycle, or to loan a book.)
+      %(An offer to sell an item&#x2014;for example, an offer to sell
+        a product, the DVD of a movie, or tickets to an event.)
     property :OfferItemCondition, :label => 'OfferItemCondition', :comment =>
-      %(A list of possible conditions for the item.)
+      %(A list of possible conditions for the item for sale.)
     property :OfficeEquipmentStore, :label => 'OfficeEquipmentStore', :comment =>
       %(An office equipment store.)
     property :OnDemandEvent, :label => 'OnDemandEvent', :comment =>
       %(A publication event e.g. catch-up TV or radio podcast, during
         which a program is available on-demand.)
-    property :OnSitePickup, :label => 'OnSitePickup', :comment =>
-      %(A DeliveryMethod in which an item is collected on site, e.g.
-        in a store or at a box office.)
     property :OpeningHoursSpecification, :label => 'OpeningHoursSpecification', :comment =>
       %(A structured value providing information about the opening
         hours of a place or a certain service inside a place.)
@@ -1286,6 +1333,10 @@ module RDF
       %(Provider of professional services.)
     property :ProfilePage, :label => 'ProfilePage', :comment =>
       %(Web page type: Profile page.)
+    property :ProgramMembership, :label => 'Program Membership', :comment =>
+      %(Used to describe membership in a loyalty programs \(e.g.
+        "StarAliance"\), traveler clubs \(e.g. "AAA"\), purchase clubs
+        \("Safeway Club"\), etc.)
     property :Property, :label => 'Property', :comment =>
       %(A property, used to indicate attributes and relationships of
         some Thing; equivalent to rdf:Property.)
@@ -1300,6 +1351,10 @@ module RDF
         publication for a CreativeWork of any type e.g. a broadcast
         event, an on-demand event, a book/journal publication via a
         variety of delivery media.)
+    property :QAPage, :label => 'QAPage', :comment =>
+      %(A QAPage is a WebPage focussed on a specific Question and its
+        Answer\(s\), e.g. in a question answering site or documenting
+        Frequently Asked Questions \(FAQs\).)
     property :QualitativeValue, :label => 'QualitativeValue', :comment =>
       %(A predefined value for a product characteristic, e.g. the the
         power cord plug type "US" or the garment sizes "S", "M", "L",
@@ -1311,6 +1366,9 @@ module RDF
       %(Quantities such as distance, time, mass, weight, etc.
         Particular instances of say Mass are entities like '3 Kg' or
         '4 milligrams'.)
+    property :Question, :label => 'Question', :comment =>
+      %(A specific question - e.g. from a user seeking answers online,
+        or collected in a Frequently Asked Questions \(FAQ\) document.)
     property :QuoteAction, :label => 'QuoteAction', :comment =>
       %(An agent quotes/estimates/appraises an object/product/service
         with a price at a location/store.)
@@ -1383,6 +1441,11 @@ module RDF
         ownership, of an object such as a vehicle or property. For
         example, an agent rents a property from a landlord in exchange
         for a periodic payment.)
+    property :RentalCarReservation, :label => 'RentalCarReservation', :comment =>
+      %(A reservation for a rental car.Note: This type is for
+        information about actual reservations, e.g. in confirmation
+        emails or HTML pages with individual confirmations of
+        reservations.)
     property :ReplaceAction, :label => 'ReplaceAction', :comment =>
       %(The act of editing a recipient by replacing an old object with
         a new object.)
@@ -1396,6 +1459,18 @@ module RDF
     property :ReportedDoseSchedule, :label => 'ReportedDoseSchedule', :comment =>
       %(A patient-reported or observed dosing schedule for a drug or
         supplement.)
+    property :Reservation, :label => 'Reservation', :comment =>
+      %(Describes a reservation for travel, dining or an event. Some
+        reservations require tickets.Note: This type is for
+        information about actual reservations, e.g. in confirmation
+        emails or HTML pages with individual confirmations of
+        reservations. For offers of tickets, restaurant reservations,
+        flights, or rental cars, use http://schema.org/Offer.)
+    property :ReservationPackage, :label => 'ReservationPackage', :comment =>
+      %(A group of multiple reservations with common values for all
+        sub-reservations.)
+    property :ReservationStatusType, :label => 'ReservationStatusType', :comment =>
+      %(Enumerated status values for Reservation.)
     property :ReserveAction, :label => 'ReserveAction', :comment =>
       %(Reserving a concrete object.<p>Related actions:</p><ul><li><a
         href="http://schema.org/ScheduleAction">ScheduleAction</a>:
@@ -1452,6 +1527,9 @@ module RDF
       %(Web page type: Search results page.)
     property :Season, :label => 'Season', :comment =>
       %(A TV or radio season.)
+    property :Seat, :label => 'Seat', :comment =>
+      %(Used to describe a seat, such as a reserved seat in an event
+        reservation.)
     property :SelfStorage, :label => 'SelfStorage', :comment =>
       %(Self-storage facility.)
     property :SellAction, :label => 'SellAction', :comment =>
@@ -1584,6 +1662,8 @@ module RDF
         been transfered.</li></ul>)
     property :TattooParlor, :label => 'TattooParlor', :comment =>
       %(A tattoo parlor.)
+    property :Taxi, :label => 'Taxi', :comment =>
+      %(A taxi.)
     property :TaxiStand, :label => 'TaxiStand', :comment =>
       %(A taxi stand.)
     property :TechArticle, :label => 'TechArticle', :comment =>
@@ -1605,6 +1685,9 @@ module RDF
         purposes, aimed at improving a health condition.)
     property :Thing, :label => 'Thing', :comment =>
       %(The most generic type of item.)
+    property :Ticket, :label => 'Ticket', :comment =>
+      %(Used to describe a ticket to an event, a flight, a bus ride,
+        etc.)
     property :TieAction, :label => 'TieAction', :comment =>
       %(The act of reaching a draw in a competitive activity.)
     property :Time, :label => 'Time', :comment =>
@@ -1637,6 +1720,8 @@ module RDF
         for monetary compensation. An agent trades an object, product
         or service with a participant in exchange for a one time or
         periodic payment.)
+    property :TrainTrip, :label => 'Train Trip', :comment =>
+      %(A trip on a commercial train line.)
     property :TrainStation, :label => 'TrainStation', :comment =>
       %(A train station.)
     property :TransferAction, :label => 'TransferAction', :comment =>
@@ -1694,6 +1779,8 @@ module RDF
       %(User interaction: +1.)
     property :UserTweets, :label => 'UserTweets', :comment =>
       %(User interaction: Tweets.)
+    property :Vehicle, :label => 'Vehicle', :comment =>
+      %(A vehicle.)
     property :Vein, :label => 'Vein', :comment =>
       %(A type of blood vessel that specifically carries blood to the
         heart.)
@@ -1769,11 +1856,18 @@ module RDF
     # Property definitions
     property :about, :label => 'about', :comment =>
       %(The subject matter of the content.)
+    property :acceptedAnswer, :label => 'acceptedAnswer', :comment =>
+      %(The answer that has been accepted as best, typically on a
+        Question/Answer site. Sites vary in their selection
+        mechanisms, e.g. drawing on community opinion and/or the view
+        of the Question author.)
     property :acceptedOffer, :label => 'acceptedOffer', :comment =>
       %(The offer\(s\) -- e.g., product, quantity and price
         combinations -- included in the order.)
     property :acceptedPaymentMethod, :label => 'acceptedPaymentMethod', :comment =>
       %(The payment method\(s\) accepted by seller for this offer.)
+    property :acceptsReservations, :label => 'acceptsReservations', :comment =>
+      %(Does the establishment accept reservations?)
     property :acceptsReservations, :label => 'acceptsReservations', :comment =>
       %(Either <code>Yes/No</code>, or a URL at which reservations can
         be made.)
@@ -1901,6 +1995,8 @@ module RDF
       %(An educational organizations that the person is an alumni of.)
     property :amountOfThisGood, :label => 'amountOfThisGood', :comment =>
       %(The quantity of the goods included in the offer.)
+    property :answerCount, :label => 'answerCount', :comment =>
+      %(The number of answers this question has received.)
     property :antagonist, :label => 'antagonist', :comment =>
       %(The muscle whose action counteracts the specified muscle.)
     property :applicableLocation, :label => 'applicableLocation', :comment =>
@@ -1925,6 +2021,18 @@ module RDF
       %(The location served by this contact point \(e.g., a phone
         number intended for Europeans vs. North Americans or only
         within the United States.\))
+    property :arrivalBusStop, :label => 'arrivalBusStop', :comment =>
+      %(The stop or station from which the bus arrives.)
+    property :arrivalGate, :label => 'arrivalGate', :comment =>
+      %(Identifier of the flight's arrival gate.)
+    property :arrivalPlatform, :label => 'arrivalPlatform', :comment =>
+      %(The platform where the train arrives.)
+    property :arrivalStation, :label => 'arrivalStation', :comment =>
+      %(The station where the train trip ends.)
+    property :arrivalTerminal, :label => 'arrivalTerminal', :comment =>
+      %(Identifier of the flight's arrival terminal.)
+    property :arrivalTime, :label => 'arrivalTime', :comment =>
+      %(The expected arrival time.)
     property :arterialBranch, :label => 'arterialBranch', :comment =>
       %(The branches that comprise the arterial structure.)
     property :articleBody, :label => 'articleBody', :comment =>
@@ -2042,12 +2150,20 @@ module RDF
     property :bloodSupply, :label => 'bloodSupply', :comment =>
       %(The blood vessel that carries blood from the heart to the
         muscle.)
+    property :boardingGroup, :label => 'boardingGroup', :comment =>
+      %(The airline-specific indicator of boarding order / preference.)
     property :bodyLocation, :label => 'bodyLocation', :comment =>
       %(Location in the body of the anatomical structure.)
     property :bookEdition, :label => 'bookEdition', :comment =>
       %(The edition of the book.)
     property :bookFormat, :label => 'bookFormat', :comment =>
       %(The format of the book.)
+    property :bookingAgent, :label => 'bookingAgent', :comment =>
+      %(If the reservation was not booked directly through the
+        provider, the third-party booking agent can be recorded
+        through this property.)
+    property :bookingTime, :label => 'bookingTime', :comment =>
+      %(The date and time the reservation was booked.)
     property :borrower, :label => 'borrower', :comment =>
       %(A sub property of participant. The person that borrows the
         object being lent.)
@@ -2075,6 +2191,10 @@ module RDF
     property :browserRequirements, :label => 'browserRequirements', :comment =>
       %(Specifies browser requirements in human-readable text. For
         example,"requires HTML5 support".)
+    property :busName, :label => 'busName', :comment =>
+      %(The name of the bus \(e.g. Bolt Express\).)
+    property :busNumber, :label => 'busNumber', :comment =>
+      %(The unique identifier for the trainbus.)
     property :businessFunction, :label => 'businessFunction', :comment =>
       %(The business function \(e.g. sell, lease, repair, dispose\) of
         the offer or component of a bundle \(TypeAndQuantityNode\).
@@ -2094,6 +2214,8 @@ module RDF
     property :carbohydrateContent, :label => 'carbohydrateContent', :comment =>
       %(The number of grams of carbohydrates.)
     property :carrier, :label => 'carrier', :comment =>
+      %(The airline designated as the carrier for the flight.)
+    property :carrier, :label => 'carrier', :comment =>
       %(The party responsible for the parcel delivery.)
     property :carrierRequirements, :label => 'carrierRequirements', :comment =>
       %(Specifies specific carrier\(s\) requirements for the
@@ -2111,6 +2233,10 @@ module RDF
         occurrence.)
     property :causeOf, :label => 'causeOf', :comment =>
       %(The condition, complication, symptom, sign, etc. caused.)
+    property :checkinTime, :label => 'checkinTime', :comment =>
+      %(The earliest someone may check into a lodging establishment.)
+    property :checkoutTime, :label => 'checkoutTime', :comment =>
+      %(The latest someone may check out of a lodging establishment.)
     property :childMaxAge, :label => 'childMaxAge', :comment =>
       %(Maximal age of the child)
     property :childMinAge, :label => 'childMinAge', :comment =>
@@ -2125,7 +2251,8 @@ module RDF
         as a pair followed by a radius in meters.)
     property :citation, :label => 'citation', :comment =>
       %(A citation or reference to another creative work, such as
-        another publication, web page, scholarly article, etc.)
+        another publication, web page, scholarly article, etc. NOTE:
+        Candidate for promotion to ScholarlyArticle.)
     property :clincalPharmacology, :label => 'clincalPharmacology', :comment =>
       %(Description of the absorption and elimination of drugs,
         including their concentration \(pharmacokinetics, pK\) and
@@ -2157,6 +2284,11 @@ module RDF
       %(The color of the product.)
     property :comment, :label => 'comment', :comment =>
       %(Comments, typically from users, on this CreativeWork.)
+    property :commentCount, :label => 'commentCount', :comment =>
+      %(The number of comments this CreativeWork \(e.g. Article,
+        Question or Answer\) has received. This is most applicable to
+        works published in Web sites with commenting system;
+        additional comments may exist elsewhere.)
     property :commentText, :label => 'commentText', :comment =>
       %(The text of the UserComment.)
     property :commentTime, :label => 'commentTime', :comment =>
@@ -2246,6 +2378,8 @@ module RDF
       %(A dataset contained in a catalog.)
     property :dateCreated, :label => 'dateCreated', :comment =>
       %(The date on which the CreativeWork was created.)
+    property :dateIssued, :label => 'dateIssued', :comment =>
+      %(The date the ticket was issued.)
     property :dateModified, :label => 'dateModified', :comment =>
       %(The date on which the CreativeWork was most recently modified.)
     property :datePosted, :label => 'datePosted', :comment =>
@@ -2268,11 +2402,37 @@ module RDF
     property :deliveryStatus, :label => 'deliveryStatus', :comment =>
       %(New entry added as the package passes through each leg of its
         journey \(from shipment to final delivery\).)
+    property :startTime, :label => 'departTime', :comment =>
+      %(When a FoodEstablishmentReservation starts or an Action was
+        performed: start time. This is for actions that span a period
+        of time. e.g. John wrote a book from *January* to December.)
+    property :startTime, :label => 'departTime', :comment =>
+      %(When the Action was performed: start time. This is for actions
+        that span a period of time. e.g. John wrote a book from
+        *January* to December.)
+    property :startTime, :label => 'departTime', :comment =>
+      %(The time a FoodEstablishmentReservation is required to end.)
     property :department, :label => 'department', :comment =>
       %(A relationship between an organization and a department of
         that organization, also described as an organization
         \(allowing different urls, logos, opening hours\). For
         example: a store with a pharmacy, or a bakery with a cafe.)
+    property :arrivalAirport, :label => 'departureAirport', :comment =>
+      %(The airport where the flight terminates.)
+    property :departureAirport, :label => 'departureAirport', :comment =>
+      %(The airport where the flight originates.)
+    property :departureBusStop, :label => 'departureBusStop', :comment =>
+      %(The stop or station from which the bus departs.)
+    property :departureGate, :label => 'departureGate', :comment =>
+      %(Identifier of the flight's departure gate.)
+    property :departurePlatform, :label => 'departurePlatform', :comment =>
+      %(The platform from which the train departs.)
+    property :departureStation, :label => 'departureStation', :comment =>
+      %(The station from which the train departs.)
+    property :departureTerminal, :label => 'departureTerminal', :comment =>
+      %(Identifier of the flight's departure terminal.)
+    property :departureTime, :label => 'departureTime', :comment =>
+      %(The expected departure time.)
     property :dependencies, :label => 'dependencies', :comment =>
       %(Prerequisites needed to fulfill steps in article.)
     property :depth, :label => 'depth', :comment =>
@@ -2346,8 +2506,15 @@ module RDF
       %(The value of the dose, e.g. 500.)
     property :downloadUrl, :label => 'downloadUrl', :comment =>
       %(If the file can be downloaded, URL to download the binary.)
+    property :downvoteCount, :label => 'downvoteCount', :comment =>
+      %(The number of downvotes this question has received from the
+        community.)
     property :drainsTo, :label => 'drainsTo', :comment =>
       %(The vasculature that the vein drains into.)
+    property :dropoffLocation, :label => 'dropoffLocation', :comment =>
+      %(Where a rental car can be dropped off.)
+    property :dropoffTime, :label => 'dropoffTime', :comment =>
+      %(When a rental car can be dropped off.)
     property :drug, :label => 'drug', :comment =>
       %(A drug in this drug class.)
     property :drugClass, :label => 'drugClass', :comment =>
@@ -2455,6 +2622,8 @@ module RDF
     property :equal, :label => 'equal', :comment =>
       %(This ordering relation for qualitative values indicates that
         the subject is equal to the object.)
+    property :estimatedFlightDuration, :label => 'estimatedFlightDuration', :comment =>
+      %(The estimated time the flight will take.)
     property :estimatesRiskOf, :label => 'estimatesRiskOf', :comment =>
       %(The condition, complication, or symptom whose risk is being
         estimated.)
@@ -2512,6 +2681,10 @@ module RDF
     property :fileSize, :label => 'fileSize', :comment =>
       %(Size of the application / package \(e.g. 18MB\). In the
         absence of a unit \(MB, KB etc.\), KB will be assumed.)
+    property :flightDistance, :label => 'flightDistance', :comment =>
+      %(The distance of the flight.)
+    property :flightNumber, :label => 'flightNumber', :comment =>
+      %(The unique identifier for a flight.)
     property :followee, :label => 'followee', :comment =>
       %(A sub property of object. The person or organization being
         followed.)
@@ -2612,10 +2785,15 @@ module RDF
         /PhD/MSCSW.)
     property :hospitalAffiliation, :label => 'hospitalAffiliation', :comment =>
       %(A hospital with which the physician or office is affiliated.)
+    property :hostingOrganization, :label => 'hostingOrganization', :comment =>
+      %(The organization \(airline, travelers' club, etc.\) the
+        membership is made with.)
     property :hoursAvailable, :label => 'hoursAvailable', :comment =>
       %(The hours during which this contact point is available.)
     property :howPerformed, :label => 'howPerformed', :comment =>
       %(How the procedure is performed.)
+    property :iataCode, :label => 'iataCode', :comment =>
+      %(IATA identifier for an airline or airport)
     property :identifyingExam, :label => 'identifyingExam', :comment =>
       %(A physical examination that can identify this sign.)
     property :identifyingTest, :label => 'identifyingTest', :comment =>
@@ -2732,6 +2910,8 @@ module RDF
         organization, business person, or place.)
     property :issuedBy, :label => 'issuedBy', :comment =>
       %(The organization issuing the permit.)
+    property :issuedBy, :label => 'issuedBy', :comment =>
+      %(The organization issuing the ticket or permit.)
     property :issuedThrough, :label => 'issuedThrough', :comment =>
       %(The service through with the permit was granted.)
     property :itemCondition, :label => 'itemCondition', :comment =>
@@ -2743,7 +2923,7 @@ module RDF
     property :itemListOrder, :label => 'itemListOrder', :comment =>
       %(Type of ordering \(e.g. Ascending, Descending, Unordered\).)
     property :itemOffered, :label => 'itemOffered', :comment =>
-      %(The item being offered.)
+      %(The item being sold.)
     property :itemReviewed, :label => 'itemReviewed', :comment =>
       %(The item that is being reviewed/rated.)
     property :itemShipped, :label => 'itemShipped', :comment =>
@@ -2795,6 +2975,11 @@ module RDF
         objects separated by space.)
     property :location, :label => 'location', :comment =>
       %(The location of the event, organization or action.)
+    property :lodgingUnitDescription, :label => 'lodgingUnitDescription', :comment =>
+      %(A full description of the lodging unit.)
+    property :lodgingUnitType, :label => 'lodgingUnitType', :comment =>
+      %(Textual description of the unit type \(including suite vs.
+        room, size of bed, etc.\).)
     property :logo, :label => 'logo', :comment =>
       %(A logo associated with an organization.)
     property :longitude, :label => 'longitude', :comment =>
@@ -2824,6 +3009,9 @@ module RDF
     property :maximumIntake, :label => 'maximumIntake', :comment =>
       %(Recommended intake of this supplement for a given population
         as defined by a specific recommending authority.)
+    property :mealService, :label => 'mealService', :comment =>
+      %(Description of the meals that will be provided or available
+        for purchase.)
     property :mechanismOfAction, :label => 'mechanismOfAction', :comment =>
       %(The specific biochemical interaction through which this drug
         or supplement produces its pharmacological effect.)
@@ -2833,12 +3021,16 @@ module RDF
       %(The system of medicine that includes this MedicalEntity, for
         example 'evidence-based', 'homeopathic', 'chiropractic', etc.)
     property :member, :label => 'member', :comment =>
+      %(The individual with the membership.)
+    property :member, :label => 'member', :comment =>
       %(A member of this organization.)
     property :memberOf, :label => 'memberOf', :comment =>
       %(An organization to which the person belongs.)
     property :members, :label => 'members', :comment =>
       %(A member of this organization \(legacy spelling; see singular
         form, member\).)
+    property :membershipNumber, :label => 'membershipNumber', :comment =>
+      %(A unique identifier for the membership.)
     property :memoryRequirements, :label => 'memoryRequirements', :comment =>
       %(Minimum memory requirements.)
     property :mentions, :label => 'mentions', :comment =>
@@ -2859,6 +3051,8 @@ module RDF
         of the ProductModel can be from an external source. It is
         recommended to additionally provide strong product identifiers
         via the gtin8/gtin13/gtin14 and mpn properties.)
+    property :modifiedTime, :label => 'modifiedTime', :comment =>
+      %(The date and time the reservation was modified.)
     property :mpn, :label => 'mpn', :comment =>
       %(The Manufacturer Part Number \(MPN\) of the product, or the
         product to which the offer refers.)
@@ -2890,6 +3084,10 @@ module RDF
     property :normalRange, :label => 'normalRange', :comment =>
       %(Range of acceptable values for a typical patient, when
         applicable.)
+    property :numAdults, :label => 'numAdults', :comment =>
+      %(The number of adults staying in the unit.)
+    property :numChildren, :label => 'numChildren', :comment =>
+      %(The number of children staying in the unit.)
     property :numTracks, :label => 'numTracks', :comment =>
       %(The number of tracks in this album or playlist.)
     property :numberOfEpisodes, :label => 'numberOfEpisodes', :comment =>
@@ -2915,10 +3113,8 @@ module RDF
     property :offerCount, :label => 'offerCount', :comment =>
       %(The number of offers for the product.)
     property :offers, :label => 'offers', :comment =>
-      %(An offer to transfer some rights to an item or to provide a
-        service&#x2014;for example, an offer to sell tickets to an
-        event, to rent the DVD of a movie, to stream a TV show over
-        the internet, to repair a motorcycle, or to loan a book.)
+      %(An offer to sell this item&#x2014;for example, an offer to
+        sell a product, the DVD of a movie, or tickets to an event.)
     property :openingHours, :label => 'openingHours', :comment =>
       %(The opening hours for a business. Opening hours can be
         specified as a weekly time range, starting with days, then
@@ -2983,6 +3179,8 @@ module RDF
       %(Products owned by the organization or person.)
     property :parent, :label => 'parent', :comment =>
       %(A parent of this person.)
+    property :parentItem, :label => 'parentItem', :comment =>
+      %(The parent of a question, answer or item in general.)
     property :parentService, :label => 'parentService', :comment =>
       %(A broadcast service to which the broadcast service may belong
         to such as regional variations of a national channel.)
@@ -3005,6 +3203,8 @@ module RDF
     property :participant, :label => 'participant', :comment =>
       %(Other co-agents that participated in the action indirectly.
         e.g. John wrote a book with *Steve*.)
+    property :partySize, :label => 'partySize', :comment =>
+      %(Number of people the reservation should accomodate.)
     property :pathophysiology, :label => 'pathophysiology', :comment =>
       %(Changes in the normal mechanical, physical, and biochemical
         functions that are associated with this activity or condition.)
@@ -3044,6 +3244,12 @@ module RDF
         form, photo\).)
     property :physiologicalBenefits, :label => 'physiologicalBenefits', :comment =>
       %(Specific physiologic benefits associated to the plan.)
+    property :pickupLocation, :label => 'pickupLocation', :comment =>
+      %(Where a taxi will pick up a passenger or a rental car can be
+        picked up.)
+    property :pickupTime, :label => 'pickupTime', :comment =>
+      %(When a taxi will pickup a passegner or a rental car can be
+        picked up.)
     property :playerType, :label => 'playerType', :comment =>
       %(Player type required&#x2014;for example, Flash or Silverlight.)
     property :polygon, :label => 'polygon', :comment =>
@@ -3111,6 +3317,10 @@ module RDF
       %(The currency \(in 3-letter ISO 4217 format\) of the offer
         price or a price component, when attached to
         PriceSpecification and its subtypes.)
+    property :priceCurrency, :label => 'priceCurrency', :comment =>
+      %(The currency \(in 3-letter ISO 4217 format\) of the price or a
+        price component, when attached to PriceSpecification and its
+        subtypes.)
     property :priceRange, :label => 'priceRange', :comment =>
       %(The price range of the business, for example <code>$$$</code>.)
     property :priceSpecification, :label => 'priceSpecification', :comment =>
@@ -3175,6 +3385,11 @@ module RDF
     property :proficiencyLevel, :label => 'proficiencyLevel', :comment =>
       %(Proficiency needed for this content; expected values:
         'Beginner', 'Expert'.)
+    property :programMembershipUsed, :label => 'programMembershipUsed', :comment =>
+      %(Any membership in a frequent flyer, hotel loyalty program,
+        etc. being applied to the reservation.)
+    property :programName, :label => 'programName', :comment =>
+      %(The program providing the membership.)
     property :programmingLanguage, :label => 'programmingLanguage', :comment =>
       %(The computer programming language.)
     property :programmingModel, :label => 'programmingModel', :comment =>
@@ -3186,6 +3401,9 @@ module RDF
       %(The number of grams of protein.)
     property :provider, :label => 'provider', :comment =>
       %(The organization or agency that is providing the service.)
+    property :provider, :label => 'provider', :comment =>
+      %(The person or organization providing the service, reservation,
+        or creative work.)
     property :providesService, :label => 'providesService', :comment =>
       %(The service provided by this channel.)
     property :publication, :label => 'publication', :comment =>
@@ -3310,6 +3528,14 @@ module RDF
         paid or free\). Allowed values are <code>true</code> or
         <code>false</code> \(note that an earlier version had 'yes',
         'no'\).)
+    property :reservationFor, :label => 'reservationFor', :comment =>
+      %(The thing -- flight, event, restaurant,etc. being reserved.)
+    property :reservationId, :label => 'reservationId', :comment =>
+      %(A unique identifier for the reservation.)
+    property :reservationStatus, :label => 'reservationStatus', :comment =>
+      %(The current status of the reservation.)
+    property :reservedTicket, :label => 'reservedTicket', :comment =>
+      %(A ticket associated with the reservation.)
     property :responsibilities, :label => 'responsibilities', :comment =>
       %(Responsibilities associated with this role.)
     property :restPeriods, :label => 'restPeriods', :comment =>
@@ -3377,6 +3603,14 @@ module RDF
     property :seasons, :label => 'seasons', :comment =>
       %(A season in a tv/radio series. \(legacy spelling; see singular
         form, season\))
+    property :seatNumber, :label => 'seatNumber', :comment =>
+      %(The location of the reserved seat \(e.g., 27\).)
+    property :seatRow, :label => 'seatRow', :comment =>
+      %(The row location of the reserved seat \(e.g., B\).)
+    property :seatSection, :label => 'seatSection', :comment =>
+      %(The section location of the reserved seat \(e.g. Orchestra\).)
+    property :seatingType, :label => 'seatingType', :comment =>
+      %(The type/class of the seat.)
     property :secondaryPrevention, :label => 'secondaryPrevention', :comment =>
       %(A preventative therapy used to prevent reoccurrence of the
         medical condition after an initial episode of the condition.)
@@ -3384,7 +3618,7 @@ module RDF
       %(A pointer to products or services sought by the organization
         or person \(demand\).)
     property :seller, :label => 'seller', :comment =>
-      %(The organization or person making the offer.)
+      %(The seller.)
     property :sender, :label => 'sender', :comment =>
       %(A sub property of participant. The participant who is at the
         sending end of the action.)
@@ -3507,6 +3741,12 @@ module RDF
       %(When the Action was performed: start time. This is for actions
         that span a period of time. e.g. John wrote a book from
         *January* to December.)
+    property :startTime, :label => 'startTime', :comment =>
+      %(When a FoodEstablishmentReservation starts or an Action was
+        performed: start time. This is for actions that span a period
+        of time. e.g. John wrote a book from *January* to December.)
+    property :startTime, :label => 'startTime', :comment =>
+      %(The time a FoodEstablishmentReservation is required to end.)
     property :status, :label => 'status', :comment =>
       %(The status of the study \(enumerated\).)
     property :storageRequirements, :label => 'storageRequirements', :comment =>
@@ -3541,6 +3781,9 @@ module RDF
       %(A relationship between two organizations where the first
         includes the second, e.g., as a subsidiary. See also: the more
         specific 'department' property.)
+    property :subReservation, :label => 'subReservation', :comment =>
+      %(The individual reservations included in the package. Typically
+        a repeated property.)
     property :subStageSuffix, :label => 'subStageSuffix', :comment =>
       %(The substage, e.g. 'a' for Stage IIIa.)
     property :subStructure, :label => 'subStructure', :comment =>
@@ -3557,6 +3800,10 @@ module RDF
         often discontinued predecessor.)
     property :sugarContent, :label => 'sugarContent', :comment =>
       %(The number of grams of sugar.)
+    property :suggestedAnswer, :label => 'suggestedAnswer', :comment =>
+      %(An answer \(possibly one of several, possibly incorrect\) to a
+        Question, e.g. on a Question/Answer site, often collected in a
+        QAPage.)
     property :suggestedGender, :label => 'suggestedGender', :comment =>
       %(The gender of the person or audience.)
     property :suggestedMaxAge, :label => 'suggestedMaxAge', :comment =>
@@ -3608,6 +3855,13 @@ module RDF
         exchange component of the tickerSymbol attribute, we
         reccommend using the controlled vocaulary of Market Identifier
         Codes \(MIC\) specified in ISO15022.)
+    property :ticketNumber, :label => 'ticketNumber', :comment =>
+      %(The unique identifier for the ticket.)
+    property :ticketToken, :label => 'ticketToken', :comment =>
+      %(Reference to an asset \(e.g., Barcode, QR code image or PDF\)
+        usable for entrance.)
+    property :ticketedSeat, :label => 'ticketedSeat', :comment =>
+      %(The seat associated with the ticket.)
     property :timeRequired, :label => 'timeRequired', :comment =>
       %(Approximate or typical time it takes to work with or through
         this learning resource for the typical intended target
@@ -3619,6 +3873,9 @@ module RDF
     property :toLocation, :label => 'toLocation', :comment =>
       %(A sub property of location. The final location of the object
         or the agent after the action.)
+    property :totalPrice, :label => 'totalPrice', :comment =>
+      %(The total price for the reservation or ticket, including
+        applicable taxes, shipping, etc.)
     property :totalTime, :label => 'totalTime', :comment =>
       %(The total time it takes to prepare and cook the recipe, in <a
         href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration
@@ -3634,6 +3891,10 @@ module RDF
         \(legacy spelling; see singular form, track\).)
     property :trailer, :label => 'trailer', :comment =>
       %(The trailer of a movie or tv/radio series, season, or episode.)
+    property :trainName, :label => 'trainName', :comment =>
+      %(The name of the train \(e.g. The Orient Express\).)
+    property :trainNumber, :label => 'trainNumber', :comment =>
+      %(The unique identifier for the train.)
     property :transFatContent, :label => 'transFatContent', :comment =>
       %(The number of grams of trans fat.)
     property :transcript, :label => 'transcript', :comment =>
@@ -3653,6 +3914,8 @@ module RDF
       %(The typical expected age range, e.g. '7-9', '11-'.)
     property :typicalTest, :label => 'typicalTest', :comment =>
       %(A medical test typically performed given this condition.)
+    property :underName, :label => 'underName', :comment =>
+      %(The person or organization the reservation or ticket is for.)
     property :unitCode, :label => 'unitCode', :comment =>
       %(The unit of measurement given using the UN/CEFACT Common Code
         \(3 characters\).)
@@ -3660,6 +3923,9 @@ module RDF
       %(The number of grams of unsaturated fat.)
     property :uploadDate, :label => 'uploadDate', :comment =>
       %(Date when this media object was uploaded to this site.)
+    property :upvoteCount, :label => 'upvoteCount', :comment =>
+      %(The number of upvotes this question has received from the
+        community.)
     property :url, :label => 'url', :comment =>
       %(URL of the item.)
     property :usedToDiagnose, :label => 'usedToDiagnose', :comment =>
@@ -3708,6 +3974,8 @@ module RDF
       %(The warranty promise\(s\) included in the offer.)
     property :warrantyScope, :label => 'warrantyScope', :comment =>
       %(The scope of the warranty promise.)
+    property :webCheckinTime, :label => 'webCheckinTime', :comment =>
+      %(The time when a passenger can check into the flight online.)
     property :weight, :label => 'weight', :comment =>
       %(The weight of the product.)
     property :width, :label => 'width', :comment =>

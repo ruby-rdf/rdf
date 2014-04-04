@@ -70,7 +70,6 @@ vocab_sources = {
   :v      => {:prefix => "http://rdf.data-vocabulary.org/"},
   :vcard  => {:prefix => "http://www.w3.org/2006/vcard/ns#"},
   :void   => {:prefix => "http://rdfs.org/ns/void#", :source => "http://vocab.deri.ie/void.rdf"},
-  :wdr    => {:prefix => "http://www.w3.org/2007/05/powder#"},
   :wdrs   => {:prefix => "http://www.w3.org/2007/05/powder-s#"},
   :wot    => {:prefix => "http://xmlns.com/wot/0.1/", :source => "http://xmlns.com/wot/0.1/index.rdf"},
   :xhtml  => {:prefix => "http://www.w3.org/1999/xhtml#"},
