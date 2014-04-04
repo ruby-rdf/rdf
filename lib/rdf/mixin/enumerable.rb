@@ -658,7 +658,7 @@ module RDF
     # Returns a serialized string representation of `self`.
     #
     # Before calling this method you may need to explicitly require a
-    # serialization plugin for the specified format.
+    # serialization extension for the specified format.
     #
     # @example Serializing into N-Triples format
     #   require 'rdf/ntriples'
