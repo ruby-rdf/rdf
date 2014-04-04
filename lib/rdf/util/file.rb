@@ -56,7 +56,7 @@ module RDF; module Util
         base_uri = parsed_url.to_s
         result = nil
         until remote_document do
-          Net::HTTP::start(parsed_url.host, parsed_url.port,
+          Net::HTTP::start(parsed_url.host, parsed_url.port,:ENV
                           :open_timeout => 60 * 1000,
                           :use_ssl => filename_or_url.start_with?("https")
           ) do |http|
