@@ -1,12 +1,19 @@
 #!/usr/bin/env ruby
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), 'lib')))
 require 'rubygems'
-begin
-  require 'rakefile' # @see http://github.com/bendiken/rakefile
-rescue LoadError => e
-end
-
 require 'rdf'
+
+namespace :gem do
+  desc "Build the rdf-#{File.read('VERSION').chomp}.gem file"
+  task :build do
+    sh "gem build rdf.gemspec && mv rdf-#{File.read('VERSION').chomp}.gem pkg/"
+  end
+
+  desc "Release the rdf-#{File.read('VERSION').chomp}.gem file"
+  task :release do
+    sh "gem push pkg/rdf-#{File.read('VERSION').chomp}.gem"
+  end
+end
 
 desc 'Default: run specs.'
 task :default => :spec
@@ -21,11 +28,6 @@ end
 desc "Run specifications for continuous integration"
 RSpec::Core::RakeTask.new("spec:ci") do |spec|
   spec.rspec_opts = %w(--options spec/spec.opts) if File.exists?('spec/spec.opts')
-end
-
-desc "Build the rdf-#{File.read('VERSION').chomp}.gem file"
-task :build do
-  sh "gem build .gemspec"
 end
 
 desc "Generate etc/doap.nt from etc/doap.ttl."
@@ -63,7 +65,6 @@ vocab_sources = {
   :v      => {:prefix => "http://rdf.data-vocabulary.org/"},
   :vcard  => {:prefix => "http://www.w3.org/2006/vcard/ns#"},
   :void   => {:prefix => "http://rdfs.org/ns/void#", :source => "http://vocab.deri.ie/void.rdf"},
-  :wdr    => {:prefix => "http://www.w3.org/2007/05/powder#"},
   :wdrs   => {:prefix => "http://www.w3.org/2007/05/powder-s#"},
   :wot    => {:prefix => "http://xmlns.com/wot/0.1/", :source => "http://xmlns.com/wot/0.1/index.rdf"},
   :xhtml  => {:prefix => "http://www.w3.org/1999/xhtml#"},

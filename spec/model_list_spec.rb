@@ -616,6 +616,19 @@ describe RDF::List do
     end
   end
 
+  describe "#to_rdf" do
+    it "returns an #enum_statement enumerator" do
+      expect { ten.to_rdf }.not_to raise_error
+      expect(abc.to_rdf).to be_an_enumerator
+    end
+
+    it "adds statements to separate graph" do
+      g = RDF::Graph.new << ten
+      expect(g.count) == ten.count
+      expect(RDF::List.new(g.subjects.first, g)).to eq ten
+    end
+  end
+
   describe "#join" do
     it "requires no arguments" do
       expect { empty.join }.not_to raise_error

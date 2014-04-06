@@ -18,11 +18,11 @@ module RDF
     # backed by an initially empty in-memory graph.
     #
     # @example
-    #   RDF::List[]
-    #   RDF::List[*(1..10)]
-    #   RDF::List[1, 2, 3]
-    #   RDF::List["foo", "bar"]
-    #   RDF::List["a", 1, "b", 2, "c", 3]
+    #     RDF::List[]
+    #     RDF::List[*(1..10)]
+    #     RDF::List[1, 2, 3]
+    #     RDF::List["foo", "bar"]
+    #     RDF::List["a", 1, "b", 2, "c", 3]
     #
     # @param  [Array<RDF::Term>] values
     # @return [RDF::List]
@@ -42,6 +42,11 @@ module RDF
     # Otherwise, if there are no initial `values`, and `subject` does
     # not identify an existing list in `graph`, the list remains
     # identified by `subject`, but will be invalid.
+    #
+    # @example add constructed list to existing graph
+    #     l = RDF::List(nil, nil (1, 2, 3))
+    #     g = RDF::Graph.new << l
+    #     g.count # => l.count
     #
     # @overload initialize(subject = nil, graph = nil, values = nil, &block)
     #   @param  [RDF::URI]          subject
@@ -708,6 +713,7 @@ module RDF
         graph.query(:subject => subject, &block)
       end
     end
+    alias_method :to_rdf, :each_statement
 
     ##
     # Returns a string created by converting each element of this list into
