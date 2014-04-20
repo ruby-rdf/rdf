@@ -37,6 +37,8 @@ module RDF
         execution of the action may produce a result. Specific action
         sub-type documentation specifies the exact expectation of each
         argument/role.)
+    property :ActionStatusType, :label => 'ActionStatusType', :comment =>
+      %(The status of an Action.)
     property :AddAction, :label => 'AddAction', :comment =>
       %(The act of editing by adding an object to a collection.)
     property :AdministrativeArea, :label => 'AdministrativeArea', :comment =>
@@ -586,6 +588,8 @@ module RDF
         '&lt;Number&gt; &lt;Energy unit of measure&gt;')
     property :EntertainmentBusiness, :label => 'EntertainmentBusiness', :comment =>
       %(A business providing entertainment.)
+    property :EntryPoint, :label => 'EntryPoint', :comment =>
+      %(An entry point, within some Web-based protocol.)
     property :Enumeration, :label => 'Enumeration', :comment =>
       %(Lists or enumerations&#x2014;for example, a list of cuisines
         or music genres, etc.)
@@ -792,7 +796,7 @@ module RDF
       %(The act of asking someone to attend an event. Reciprocal of
         RsvpAction.)
     property :ItemAvailability, :label => 'ItemAvailability', :comment =>
-      %(A list of possible product availablity options.)
+      %(A list of possible product availability options.)
     property :ItemList, :label => 'ItemList', :comment =>
       %(A list of items of any sort&#x2014;for example, Top 10 Movies
         About Weathermen, or Top 100 Party Songs. Not to be confused
@@ -1340,6 +1344,8 @@ module RDF
     property :Property, :label => 'Property', :comment =>
       %(A property, used to indicate attributes and relationships of
         some Thing; equivalent to rdf:Property.)
+    property :PropertyValueSpecification, :label => 'PropertyValueSpecification', :comment =>
+      %(A Property value specification.)
     property :PsychologicalTreatment, :label => 'PsychologicalTreatment', :comment =>
       %(A process of care relying upon counseling, dialogue,
         communication, verbalization aimed at improving a mental
@@ -1903,6 +1909,8 @@ module RDF
         acquired.)
     property :action, :label => 'action', :comment =>
       %(The movement the muscle generates.)
+    property :actionStatus, :label => 'actionStatus', :comment =>
+      %(Indicates the current disposition of the Action.)
     property :activeIngredient, :label => 'activeIngredient', :comment =>
       %(An active ingredient, typically chemical compounds and/or
         biologic substances.)
@@ -2001,6 +2009,8 @@ module RDF
       %(The muscle whose action counteracts the specified muscle.)
     property :applicableLocation, :label => 'applicableLocation', :comment =>
       %(The location in which the status applies.)
+    property :application, :label => 'application', :comment =>
+      %(An application that can complete the request.)
     property :applicationCategory, :label => 'applicationCategory', :comment =>
       %(Type of software application, e.g. "Game, Multimedia".)
     property :applicationSubCategory, :label => 'applicationSubCategory', :comment =>
@@ -2214,9 +2224,9 @@ module RDF
     property :carbohydrateContent, :label => 'carbohydrateContent', :comment =>
       %(The number of grams of carbohydrates.)
     property :carrier, :label => 'carrier', :comment =>
-      %(The airline designated as the carrier for the flight.)
-    property :carrier, :label => 'carrier', :comment =>
       %(The party responsible for the parcel delivery.)
+    property :carrier, :label => 'carrier', :comment =>
+      %(The airline designated as the carrier for the flight.)
     property :carrierRequirements, :label => 'carrierRequirements', :comment =>
       %(Specifies specific carrier\(s\) requirements for the
         application \(e.g. an application may only work on a specific
@@ -2251,8 +2261,7 @@ module RDF
         as a pair followed by a radius in meters.)
     property :citation, :label => 'citation', :comment =>
       %(A citation or reference to another creative work, such as
-        another publication, web page, scholarly article, etc. NOTE:
-        Candidate for promotion to ScholarlyArticle.)
+        another publication, web page, scholarly article, etc.)
     property :clincalPharmacology, :label => 'clincalPharmacology', :comment =>
       %(Description of the absorption and elimination of drugs,
         including their concentration \(pharmacokinetics, pK\) and
@@ -2323,6 +2332,8 @@ module RDF
         PG-13'.)
     property :contentSize, :label => 'contentSize', :comment =>
       %(File size in \(mega/kilo\) bytes.)
+    property :contentType, :label => 'contentType', :comment =>
+      %(The supported content type\(s\) for an EntryPoint response.)
     property :contentUrl, :label => 'contentUrl', :comment =>
       %(Actual bytes of the media object, for example the image file
         or video file. \(previous spelling: contentURL\))
@@ -2392,6 +2403,11 @@ module RDF
       %(The day of the week for which these opening hours are valid.)
     property :deathDate, :label => 'deathDate', :comment =>
       %(Date of death.)
+    property :defaultValue, :label => 'defaultValue', :comment =>
+      %(The default value of the input. For properties that expect a
+        literal, the default is a literal value, for properties that
+        expect an object, it's an ID reference to one of the current
+        values.)
     property :deliveryAddress, :label => 'deliveryAddress', :comment =>
       %(Destination address.)
     property :deliveryLeadTime, :label => 'deliveryLeadTime', :comment =>
@@ -2590,6 +2606,8 @@ module RDF
       %(A media object that encode this CreativeWork.)
     property :encodingFormat, :label => 'encodingFormat', :comment =>
       %(mp3, mpeg4, etc.)
+    property :encodingType, :label => 'encodingType', :comment =>
+      %(The supported encoding type\(s\) for an EntryPoint request.)
     property :encodings, :label => 'encodings', :comment =>
       %(The media objects that encode this creative work \(legacy
         spelling; see singular form, encoding\).)
@@ -2792,6 +2810,10 @@ module RDF
       %(The hours during which this contact point is available.)
     property :howPerformed, :label => 'howPerformed', :comment =>
       %(How the procedure is performed.)
+    property :httpMethod, :label => 'httpMethod', :comment =>
+      %(An HTTP method that specifies the appropriate HTTP method for
+        a request to an HTTP EntryPoint. Values are capitalized
+        strings as used in HTTP.)
     property :iataCode, :label => 'iataCode', :comment =>
       %(IATA identifier for an airline or airport)
     property :identifyingExam, :label => 'identifyingExam', :comment =>
@@ -3006,6 +3028,9 @@ module RDF
       %(The highest price if the price is a range.)
     property :maxValue, :label => 'maxValue', :comment =>
       %(The upper of the product characteristic.)
+    property :maxValue, :label => 'maxValue', :comment =>
+      %(Specifies a regular expression for testing literal values
+        according to the HTML spec.)
     property :maximumIntake, :label => 'maximumIntake', :comment =>
       %(Recommended intake of this supplement for a given population
         as defined by a specific recommending authority.)
@@ -3021,9 +3046,9 @@ module RDF
       %(The system of medicine that includes this MedicalEntity, for
         example 'evidence-based', 'homeopathic', 'chiropractic', etc.)
     property :member, :label => 'member', :comment =>
-      %(The individual with the membership.)
-    property :member, :label => 'member', :comment =>
       %(A member of this organization.)
+    property :member, :label => 'member', :comment =>
+      %(The individual with the membership.)
     property :memberOf, :label => 'memberOf', :comment =>
       %(An organization to which the person belongs.)
     property :members, :label => 'members', :comment =>
@@ -3045,6 +3070,9 @@ module RDF
       %(The lowest price if the price is a range.)
     property :minValue, :label => 'minValue', :comment =>
       %(The lower value of the product characteristic.)
+    property :minValue, :label => 'minValue', :comment =>
+      %(Specifies a regular expression for testing literal values
+        according to the HTML spec.)
     property :model, :label => 'model', :comment =>
       %(The model of the product. Use with the URL of a ProductModel
         or a textual representation of the model identifier. The URL
@@ -3056,6 +3084,11 @@ module RDF
     property :mpn, :label => 'mpn', :comment =>
       %(The Manufacturer Part Number \(MPN\) of the product, or the
         product to which the offer refers.)
+    property :multipleValues, :label => 'multipleValues', :comment =>
+      %(Whether multiple values are allowed for the property. Default
+        is false.)
+    property :muscleAction, :label => 'muscleAction', :comment =>
+      %(The movement the muscle generates.)
     property :musicBy, :label => 'musicBy', :comment =>
       %(The composer of the movie or TV/radio soundtrack.)
     property :musicGroupMember, :label => 'musicGroupMember', :comment =>
@@ -3280,6 +3313,9 @@ module RDF
         followups for this device.)
     property :postalCode, :label => 'postalCode', :comment =>
       %(The postal code. For example, 94043.)
+    property :potentialAction, :label => 'potentialAction', :comment =>
+      %(Indicates a potential Action, which describes an idealized
+        action in which this thing would play an 'object' role.)
     property :preOp, :label => 'preOp', :comment =>
       %(A description of the workup, testing, and other preparations
         required before implanting this device.)
@@ -3400,10 +3436,10 @@ module RDF
     property :proteinContent, :label => 'proteinContent', :comment =>
       %(The number of grams of protein.)
     property :provider, :label => 'provider', :comment =>
-      %(The organization or agency that is providing the service.)
-    property :provider, :label => 'provider', :comment =>
       %(The person or organization providing the service, reservation,
         or creative work.)
+    property :provider, :label => 'provider', :comment =>
+      %(The organization or agency that is providing the service.)
     property :providesService, :label => 'providesService', :comment =>
       %(The service provided by this channel.)
     property :publication, :label => 'publication', :comment =>
@@ -3437,6 +3473,10 @@ module RDF
       %(The count of total number of ratings.)
     property :ratingValue, :label => 'ratingValue', :comment =>
       %(The rating for the content.)
+    property :readonlyValue, :label => 'readonlyValue', :comment =>
+      %(Whether or not a property is mutable. Default is false.
+        Specifying this for a property that also has a value makes it
+        act similar to a "hidden" input in an HTML form.)
     property :realEstateAgent, :label => 'realEstateAgent', :comment =>
       %(A sub property of participant. The real estate agent involved
         in the action.)
@@ -3738,17 +3778,20 @@ module RDF
         href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date
         format</a>\).)
     property :startTime, :label => 'startTime', :comment =>
-      %(When the Action was performed: start time. This is for actions
-        that span a period of time. e.g. John wrote a book from
-        *January* to December.)
-    property :startTime, :label => 'startTime', :comment =>
       %(When a FoodEstablishmentReservation starts or an Action was
         performed: start time. This is for actions that span a period
         of time. e.g. John wrote a book from *January* to December.)
     property :startTime, :label => 'startTime', :comment =>
+      %(When the Action was performed: start time. This is for actions
+        that span a period of time. e.g. John wrote a book from
+        *January* to December.)
+    property :startTime, :label => 'startTime', :comment =>
       %(The time a FoodEstablishmentReservation is required to end.)
     property :status, :label => 'status', :comment =>
       %(The status of the study \(enumerated\).)
+    property :stepValue, :label => 'stepValue', :comment =>
+      %(Specifies a regular expression for testing literal values
+        according to the HTML spec.)
     property :storageRequirements, :label => 'storageRequirements', :comment =>
       %(Storage requirements \(free space required\).)
     property :streetAddress, :label => 'streetAddress', :comment =>
@@ -3816,6 +3859,8 @@ module RDF
         music festival as their superEvent.)
     property :supplyTo, :label => 'supplyTo', :comment =>
       %(The area to which the artery supplies blood to.)
+    property :target, :label => 'target', :comment =>
+      %(Indicates a target EntryPoint for an Action.)
     property :targetDescription, :label => 'targetDescription', :comment =>
       %(The description of a node in an established educational
         framework.)
@@ -3948,10 +3993,22 @@ module RDF
     property :valueAddedTaxIncluded, :label => 'valueAddedTaxIncluded', :comment =>
       %(Specifies whether the applicable value-added tax \(VAT\) is
         included in the price specification or not.)
+    property :valueMaxLength, :label => 'valueMaxLength', :comment =>
+      %(Specifies the allowed range for number of characters in a
+        literal value.)
+    property :valueMinLength, :label => 'valueMinLength', :comment =>
+      %(Specifies the minimum allowed range for number of characters
+        in a literal value.)
+    property :valuePattern, :label => 'valuePattern', :comment =>
+      %(Specifies a regular expression for testing literal values
+        according to the HTML spec.)
     property :valueReference, :label => 'valueReference', :comment =>
       %(A pointer to a secondary value that provides additional
         information on the original value, e.g. a reference
         temperature.)
+    property :valueRequired, :label => 'valueRequired', :comment =>
+      %(Whether the property must be filled in to complete the action.
+        Default is false.)
     property :vatID, :label => 'vatID', :comment =>
       %(The Value-added Tax ID of the organisation or person.)
     property :vendor, :label => 'vendor', :comment =>
