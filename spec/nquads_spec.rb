@@ -89,10 +89,13 @@ end
 
 describe RDF::NQuads::Reader do
   let(:testfile) {fixture_path('test.nq')}
+  let!(:test_count) {File.open(testfile).each_line.to_a.reject {|l| l.sub(/#.*$/, '').strip.empty?}.length}
 
   before(:each) do
     @reader_class = RDF::NQuads::Reader
     @reader = RDF::NQuads::Reader.new
+    @reader_input = File.read(testfile)
+    @reader_count = test_count
   end
   
   # @see lib/rdf/spec/reader.rb in rdf-spec

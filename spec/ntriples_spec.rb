@@ -80,6 +80,8 @@ describe RDF::NTriples::Reader do
   let!(:doap_count) {File.open(doap).each_line.to_a.length}
   before(:each) do
     @reader = RDF::NTriples::Reader.new
+    @reader_input = File.read(doap)
+    @reader_count = doap_count
   end
   
   # @see lib/rdf/spec/reader.rb in rdf-spec
