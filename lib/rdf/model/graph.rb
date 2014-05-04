@@ -71,7 +71,7 @@ module RDF
     #
     # @param  [String, #to_s]          url
     # @param  [Hash{Symbol => Object}] options
-    #   Options from {RDF::Reader#initialize}, {RDF::Format.for} and {RDF::Graph#initialize}
+    #   Options from {RDF::Graph#initialize} and {RDF::Mutable#load}
     # @yield  [graph]
     # @yieldparam [Graph] graph
     # @return [Graph]
