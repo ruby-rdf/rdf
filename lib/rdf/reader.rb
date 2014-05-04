@@ -126,7 +126,7 @@ module RDF
     #
     # @param  [String, #to_s] filename
     # @param  [Hash{Symbol => Object}] options
-    #   any additional options (see {RDF::Reader#initialize} and {RDF::Format.for})
+    #   any additional options (see {RDF::Util::File.open_file}, {RDF::Reader#initialize} and {RDF::Format.for})
     # @option options [Symbol] :format (:ntriples)
     # @yield  [reader]
     # @yieldparam  [RDF::Reader] reader
