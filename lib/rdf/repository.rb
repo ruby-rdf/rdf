@@ -71,7 +71,7 @@ module RDF
     #
     # @param  [String, Array<String>] filenames
     # @param  [Hash{Symbol => Object}] options
-    #   Options from {RDF::Reader#initialize}, {RDF::Format.for} and {RDF::Repository#initialize}
+    #   Options from {RDF::Repository#initialize} and {RDF::Mutable#load}
     # @yield  [repository]
     # @yieldparam [Repository]
     # @return [void]

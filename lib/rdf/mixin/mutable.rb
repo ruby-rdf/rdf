@@ -33,6 +33,9 @@ module RDF
     #
     # @param  [String, #to_s]          filename
     # @param  [Hash{Symbol => Object}] options
+    #   Options from {RDF::Reader.open}
+    # @option options [RDF::Resource] :context
+    #   Set set context of each loaded statement
     # @return [void]
     def load(filename, options = {})
       raise TypeError.new("#{self} is immutable") if immutable?
