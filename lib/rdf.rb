@@ -220,6 +220,46 @@ module RDF
     RDF::URI.intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
   end
 
+  private
+
+  @@labels = {}
+  @@comments = {}
+
+  public
+
+  class << self
+
+    ##
+    # Find the label for an RDF term
+    #
+    # @param [Symbol] the name of a property
+    # @return [String] the label of that property
+    def label_for(term)
+      term_uri = self[term.to_sym]
+      @@labels.fetch(term_uri) { '' }
+    end
+
+    ##
+    # Find the comment for an RDF term
+    #
+    # @param [Symbol] the name of a property
+    # @return [String] the comment of that property
+    def comment_for(term)
+      term_uri = self[term.to_sym]
+      @@comments.fetch(term_uri) { '' }
+    end
+
+    ##
+    # Only capitalize first letter
+    # (default capitalize will lower_case later Camel cased upper case letters)
+    #
+    # @param [String] the term
+    # @return [String] term with first letter upcases
+    def capitalize_first_letter_only(term)
+      term.sub(/\A(.)/) { |l| l.upcase }
+    end
+  end
+
   # RDF Vocabulary terms
   %w(
     Alt
@@ -241,6 +281,8 @@ module RDF
     term_uri = self[term.to_sym]
     define_method(term) {term_uri}
     module_function term.to_sym
+    @@labels[term_uri] = capitalize_first_letter_only(term)
+    @@comments[term_uri] = "A #{term}."
   end
 
   class << self

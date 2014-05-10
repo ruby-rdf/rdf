@@ -797,6 +797,28 @@ module RDF
     end
 
     ##
+    # Find the label for a vocabulary entry
+    #
+    # @return [String] the label of that property
+    def label
+      prefix, name = qname
+      raise 'RDF::URI#label only defined for Vocabulary entries.' unless prefix
+      vocab = RDF::Vocabulary.by_prefix(prefix)
+      vocab.label_for(name)
+    end
+
+    ##
+    # Find the comment for a vocabulary entry
+    #
+    # @return [String] the name of the entry
+    def comment
+      prefix, name = qname
+      raise 'RDF::URI#comment only defined for Vocabulary entries.' unless prefix
+      vocab = RDF::Vocabulary.by_prefix(prefix)
+      vocab.comment_for(name)
+    end
+
+    ##
     # lexical representation of URI, either absolute or relative
     # @return [String] 
     def value

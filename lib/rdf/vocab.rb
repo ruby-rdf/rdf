@@ -153,6 +153,12 @@ module RDF
         end
       end
 
+      ##
+      # Returns the class based on the prefix
+      def by_prefix(prefix)
+        RDF.const_get(prefix.to_s.upcase)
+      end
+
       # Preserve the class name so that it can be obtained even for
       # vocabularies that define a `name` property:
       alias_method :__name__, :name

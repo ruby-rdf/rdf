@@ -699,4 +699,115 @@ describe RDF::URI do
   context "Examples" do
     it "needs specs for documentation examples"
   end
+
+  context "Vocab" do
+    context "URI is NOT a vocab entry" do
+
+      let(:rdf_uri) { described_class.new }
+
+      it '#label raises RuntimeError' do
+        expect{ rdf_uri.label }.to raise_error(
+          RuntimeError,
+          'RDF::URI#label only defined for Vocabulary entries.'
+        )
+      end
+
+      it '#comment raises RuntimeError' do
+        expect{ rdf_uri.comment }.to raise_error(
+          RuntimeError,
+          'RDF::URI#comment only defined for Vocabulary entries.'
+        )
+      end
+    end
+
+    context "URI is a vocab entry" do
+      context "RDF::TEST" do
+
+        let(:test_vocab) do
+          RDF::TEST = Class.new(RDF::StrictVocabulary.create("http://example.com/test#")) do
+            property :Class
+            property :prop
+            property :prop2, :label => "Test property label", :comment => " Test property comment"
+            property :Person, :label => 'RDF::TEST Person', :comment => "An RDF::TEST person."
+          end
+        end
+
+        let(:vocab_entry) do
+          test_vocab.properties.detect{ |p| p.qname == [:test, :prop2] }
+        end
+
+        after do
+          RDF.send(:remove_const, :TEST)
+        end
+
+        it '#label' do
+          expect(vocab_entry.label).to eq "Test property label"
+        end
+
+        it '#comment' do
+          expect(vocab_entry.comment).to eq "Test property comment"
+        end
+
+        context 'also a test:Person entry here, different from foaf:Person' do
+
+          let(:test_person_entry) do
+            test_vocab.properties.detect{ |p| p.qname == [:test, :Person] }
+          end
+
+          it '#label' do
+            expect(test_person_entry.label).to eq "RDF::TEST Person"
+          end
+
+          it '#comment' do
+            expect(test_person_entry.comment).to eq "An RDF::TEST person."
+          end
+        end
+      end
+
+      context "RDF::FOAF" do
+
+        let(:vocab_entry) do
+          RDF::FOAF.properties.detect{ |p| p.qname == [:foaf, :Person] }
+        end
+
+        it '#label' do
+          expect(vocab_entry.label).to eq "Person"
+        end
+
+        it '#comment' do
+          expect(vocab_entry.comment).to eq "A person."
+        end
+      end
+
+      context "RDF.type" do
+
+        let(:vocab_entry) do
+          RDF.type
+        end
+
+        it '#label' do
+          expect(vocab_entry.label).to eq "Type"
+        end
+
+        it '#comment' do
+          expect(vocab_entry.comment).to eq "A type."
+        end
+      end
+
+      context "RDF.type" do
+
+        let(:vocab_entry) do
+          RDF.langString
+        end
+
+        it '#label' do
+          expect(vocab_entry.label).to eq "LangString"
+        end
+
+        it '#comment' do
+          expect(vocab_entry.comment).to eq "A langString."
+        end
+      end
+    end
+  end
 end
