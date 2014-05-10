@@ -75,9 +75,13 @@ module RDF
           RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" unless v == :rdf }
           @@subclasses.each(&block)
         else
-          # TODO: should enumerate vocabulary-specific defined properties.
+          properties.each(&block)
         end
       end
+
+      ##
+      # Is this a strict vocabulary, or a liberal vocabulary allowing arbitrary properties?
+      def strict?; false; end
 
       ##
       # @overload property
@@ -100,10 +104,17 @@ module RDF
           name, options = args
           options ||= {}
           prop = RDF::URI.intern([to_s, name.to_s].join(''))
-          @@labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
-          @@comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
+          props[prop] = true
+          labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
+          comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
         end
+      end
+
+      ##
+      #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
+      def properties
+        props.keys
       end
 
       ##
@@ -117,12 +128,12 @@ module RDF
 
       # @return [String] The label for the named property
       def label_for(name)
-        @@labels[self[name]]
+        labels[self[name]]
       end
 
       # @return [String] The comment for the named property
       def comment_for(name)
-        @@comments[self[name]]
+        comments[self[name]]
       end
 
       ##
@@ -156,15 +167,39 @@ module RDF
       # Preserve the class name so that it can be obtained even for
       # vocabularies that define a `name` property:
       alias_method :__name__, :name
-    end
 
-    ##
-    # Returns a suggested CURIE/QName prefix for this vocabulary class.
-    #
-    # @return [Symbol]
-    # @since  0.3.0
-    def self.__prefix__
-      self.__name__.split('::').last.downcase.to_sym
+      ##
+      # Returns a suggested CURIE/QName prefix for this vocabulary class.
+      #
+      # @return [Symbol]
+      # @since  0.3.0
+      def __prefix__
+        __name__.split('::').last.downcase.to_sym
+      end
+
+    protected
+      def inherited(subclass) # @private
+        unless @@uri.nil?
+          @@subclasses << subclass
+          subclass.send(:private_class_method, :new)
+          @@uris[subclass] = @@uri
+          @@uri = nil
+        end
+        super
+      end
+
+      def method_missing(property, *args, &block)
+        if args.empty? && @@uris.has_key?(self)
+          self[property]
+        else
+          super
+        end
+      end
+
+    private
+    def props; @properties ||= {}; end
+    def labels; @labels ||= {}; end
+    def comments; @comments ||= {}; end
     end
 
     # Undefine all superfluous instance methods:
@@ -223,24 +258,6 @@ module RDF
       self
     end
 
-    def self.inherited(subclass) # @private
-      @@subclasses << subclass
-      unless @@uri.nil?
-        subclass.send(:private_class_method, :new)
-        @@uris[subclass] = @@uri
-        @@uri = nil
-      end
-      super
-    end
-
-    def self.method_missing(property, *args, &block)
-      if args.empty? && @@uris.has_key?(self)
-        self[property]
-      else
-        super
-      end
-    end
-
     def method_missing(property, *args, &block)
       if args.empty?
         self[property]
@@ -254,8 +271,6 @@ module RDF
     @@subclasses = [::RDF] # @private
     @@uris       = {}      # @private
     @@uri        = nil     # @private
-    @@labels     = {}
-    @@comments   = {}
   end # Vocabulary
 
   # Represents an RDF Vocabulary. The difference from {RDF::Vocabulary} is that
@@ -264,63 +279,20 @@ module RDF
   # the basis for concepts being available
   class StrictVocabulary < Vocabulary
     class << self
-      begin
-        # Redefines method_missing to the original definition
-        # By remaining a subclass of Vocabulary, we remain available to
-        # Vocabulary::each etc.
-        define_method(:method_missing, BasicObject.instance_method(:method_missing))
-      rescue NameError
-        define_method(:method_missing, Kernel.instance_method(:method_missing))
-      end
+      # Redefines method_missing to the original definition
+      # By remaining a subclass of Vocabulary, we remain available to
+      # Vocabulary::each etc.
+      define_method(:method_missing, BasicObject.instance_method(:method_missing))
 
       ##
-      # @overload property
-      #   Returns `property` in the current vocabulary
-      #   @return [RDF::URI]
-      #
-      # @overload property(name, options)
-      #   Defines a new property or class in the vocabulary.
-      #   Optional labels and comments are stripped of unnecessary whitespace.
-      #
-      #   @param [String, #to_s] name
-      #   @param [Hash{Symbol => Object}] options
-      #   @option options [String, #to_s] :label
-      #   @option options [String, #to_s] :comment
-      def property(*args)
-        case args.length
-        when 0
-          RDF::URI.intern("#{self}property")
-        else
-          name, options = args
-          options ||= {}
-          prop = RDF::URI.intern([to_s, name.to_s].join(''))
-          @@properties[prop] = true
-          @@labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
-          @@comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
-          (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
-        end
-      end
-
-      ##
-      #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
-      def properties
-        @@properties.keys
-      end
+      # Is this a strict vocabulary, or a liberal vocabulary allowing arbitrary properties?
+      def strict?; true; end
 
       def [](name)
-        prop = RDF::URI.intern([to_s, name.to_s].join(''))
-        @@properties.fetch(prop) #raises KeyError on missing value
+        prop = super
+        props.fetch(prop) #raises KeyError on missing value
         return prop
       end
     end
-
-    begin
-      define_method(:method_missing, BasicObject.instance_method(:method_missing))
-    rescue NameError
-      define_method(:method_missing, Kernel.instance_method(:method_missing))
-    end
-
-    private
-    @@properties = {}
   end # StrictVocabulary
 end # RDF

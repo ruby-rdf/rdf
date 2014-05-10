@@ -2,12 +2,60 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Vocabulary do
   VOCABS = %w(cc cert dc doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml xsd)
+  STRICT_VOCABS = %w(cc cert dc doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml)
 
-  context "when created" do
+  context "#new" do
     it "should require one argument" do
       expect { RDF::Vocabulary.new }.to raise_error(ArgumentError)
       expect { RDF::Vocabulary.new("http://purl.org/dc/terms/") }.not_to raise_error
       expect { RDF::Vocabulary.new("http://purl.org/dc/terms/", "http://purl.org/dc/terms/") }.to raise_error(ArgumentError)
+    end
+
+    subject {RDF::Vocabulary.new('http://example.org/')}
+    it "should allow method_missing" do
+      expect {subject.foo}.not_to raise_error
+    end
+
+    it "should allow []" do
+      expect {subject["foo"]}.not_to raise_error
+    end
+  end
+
+  describe "#each" do
+    it "inumerates pre-defined vocabularies" do
+      expect {|b| RDF::Vocabulary.each(&b)}.to yield_control.at_least(10).times
+      expect(RDF::Vocabulary.each.to_a).to include(RDF, RDF::CC, RDF::DC, RDF::RDFS)
+    end
+
+    it "inumerates properties of a subclass" do
+      expect {|b| RDF::RDFS.each(&b)}.to yield_control.at_least(5).times
+      expect(RDF::RDFS.each.to_a).to include(RDF::RDFS.range, RDF::RDFS.subClassOf, RDF::RDFS.domain)
+    end
+  end
+
+  context "strict vocabularies" do
+    STRICT_VOCABS.map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
+      context vocab do
+        subject {vocab}
+        specify {should be_strict}
+
+        it "raises error on unknown property" do
+          expect {vocab._unknown_}.to raise_error(NoMethodError)
+        end
+      end
+    end
+  end
+
+  context "non-strict vocabularies" do
+    (VOCABS - STRICT_VOCABS).map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
+      context vocab do
+        subject {vocab}
+        specify {should_not be_strict}
+      end
+
+      it "allows unknown property" do
+        expect(vocab._unknown_).to eq "#{vocab.to_uri}_unknown_"
+      end
     end
   end
 
@@ -125,6 +173,18 @@ describe RDF::Vocabulary do
       expect(RDF::MA).to be_a_vocabulary("http://www.w3.org/ns/ma-ont#")
       expect(RDF::MA).to have_properties("http://www.w3.org/ns/ma-ont#", %w(isRatingOf alternativeTitle averageBitRate collectionName copyright createdIn creationDate date depictsFictionalLocation description duration editDate features fragmentName frameHeight frameRate frameSizeUnit frameWidth hasAccessConditions hasAudioDescription hasCaptioning hasChapter hasClassification hasClassificationSystem hasCompression hasContributor hasCreator hasFormat hasFragment hasGenre hasKeyword hasLanguage hasLocationCoordinateSystem hasNamedFragment hasPermissions hasPolicy hasPublished hasPublisher hasRating hasRatingSystem hasRelatedImage hasRelatedLocation hasRelatedResource hasSigning hasSource hasSubtitling hasTargetAudience hasTrack isChapterOf isCopyrightedBy isLocationRelatedTo isMemberOf isProvidedBy isRelatedTo isSourceOf isTargetAudienceOf locationAltitude locationLatitude locationLongitude locationName locator mainOriginalTitle numberOfTracks ratingScaleMax ratingScaleMin ratingValue recordDate releaseDate samplingRate title trackName))
     end
+
+    describe "#properties" do
+      context "when iterating over vocabularies" do
+        it "includes properties only from the selected vocabulary" do
+          [RDF::RDFS, RDF::FOAF].each do |v|
+            v.properties.each do |p|
+              expect(p.to_s).to start_with(v.to_s)
+            end
+          end
+        end
+      end
+    end
   end
 
   context "ad-hoc vocabularies" do
@@ -137,9 +197,7 @@ describe RDF::Vocabulary do
     end
 
     it "should have Vocabulary::method_missing" do
-      expect do
-        test_vocab.a_missing_method
-      end.not_to raise_error
+      expect {test_vocab.a_missing_method}.not_to raise_error
     end
 
     it "should respond to [] with properties that have been defined" do
@@ -151,6 +209,9 @@ describe RDF::Vocabulary do
       test_vocab[:not_a_prop].should be_a(RDF::URI)
       test_vocab["not_a_prop"].should be_a(RDF::URI)
     end
+
+    its(:property) {should eq RDF::URI("http://example.com/test#property")}
+    its(:properties) {should include("http://example.com/test#Class", "http://example.com/test#prop", "http://example.com/test#prop2")}
 
     it "should respond to methods for which a property has been defined explicitly" do
       test_vocab.prop.should be_a(RDF::URI)
