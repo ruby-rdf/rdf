@@ -26,7 +26,7 @@ describe RDF::URI do
     end
   end
 
-  describe "#instantiate" do
+  describe "#initialize" do
     it "should recognize URNs" do
       urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
       urns.each do |urn|

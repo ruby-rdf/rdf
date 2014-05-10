@@ -6,18 +6,24 @@ module RDF
   #   s = RDF::URI.new("http://rubygems.org/gems/rdf")
   #   p = RDF::DC.creator
   #   o = RDF::URI.new("http://ar.to/#self")
-  #   RDF::Statement.new(s, p, o)
+  #   RDF::Statement(s, p, o)
   #
   # @example Creating an RDF statement with a context
   #   uri = RDF::URI("http://example/")
-  #   RDF::Statement.new(s, p, o, :context => uri)
+  #   RDF::Statement(s, p, o, :context => uri)
   #
   # @example Creating an RDF statement from a `Hash`
-  #   RDF::Statement.new({
+  #   RDF::Statement({
   #     :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
   #     :predicate => RDF::DC.creator,
   #     :object    => RDF::URI.new("http://ar.to/#self"),
   #   })
+  #
+  # @example Creating an RDF statement with interned nodes
+  #   RDF::Statement(:s, p, :o)
+  #
+  # @example Creating an RDF statement with a string
+  #   RDF::Statement(s, p, "o")
   #
   class Statement
     include RDF::Value
@@ -54,21 +60,23 @@ module RDF
     ##
     # @overload initialize(options = {})
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [RDF::Resource]  :subject   (nil)
+    #   @option options [RDF::Term]  :subject   (nil)
+    #     A symbol is converted to an interned {Node}.
     #   @option options [RDF::URI]       :predicate (nil)
-    #   @option options [RDF::Term]      :object    (nil)
-    #     if not an `RDF::Term`, it is coerced to `RDF::Literal`.
-    #   @option options [RDF::Resource]  :context   (nil)
-    #     Note, in RDF 1.1, a context MUST be an IRI.
+    #   @option options [RDF::Resource]      :object    (nil)
+    #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
+    #   @option options [RDF::Term]  :context   (nil)
+    #     Note, in RDF 1.1, a context MUST be an {Resource}.
     #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, options = {})
-    #   @param  [RDF::Resource]          subject
+    #   @param  [RDF::Term]          subject
+    #     A symbol is converted to an interned {Node}.
     #   @param  [RDF::URI]               predicate
-    #   @param  [RDF::Term]              object
-    #     if not an `RDF::Term`, it is coerced to `RDF::Literal`.
+    #   @param  [RDF::Resource]              object
+    #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [RDF::Resource]  :context   (nil)
+    #   @option options [RDF::Term]  :context   (nil)
     #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       case subject

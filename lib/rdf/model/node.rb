@@ -13,6 +13,21 @@ module RDF
     include RDF::Resource
 
     ##
+    # Defines the maximum number of interned Node references that can be held
+    # cached in memory at any one time.
+    #
+    # Note that caching interned nodes means that two different invocations using the same symbol will result in the same node, which may not be appropriate depending on the context from which it is used. RDF requires that bnodes with the same label are, in fact, different bnodes, unless they are used wihin the same document.
+    CACHE_SIZE = -1 # unlimited by default
+
+    ##
+    # @return [RDF::Util::Cache]
+    # @private
+    def self.cache
+      require 'rdf/util/cache' unless defined?(::RDF::Util::Cache)
+      @cache ||= RDF::Util::Cache.new(CACHE_SIZE)
+    end
+
+    ##
     # Returns a blank node with a random UUID-based identifier.
     #
     # @param  [Hash{Symbol => Object}] options
@@ -41,7 +56,7 @@ module RDF
     # @return [RDF::Node]
     # @since  0.2.0
     def self.intern(id)
-      self.new(id)
+      (cache[id = id.to_s] ||= self.new(id)).freeze
     end
 
     ##
