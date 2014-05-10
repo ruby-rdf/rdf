@@ -105,7 +105,7 @@ module RDF
           options ||= {}
           prop = RDF::URI.intern([to_s, name.to_s].join(''))
           props[prop] = true
-          labels[prop] = options[:label].to_s.strip.gsub(/\s+/m, ' ') if options[:label]
+          labels[prop] = options.fetch(:label, name).to_s.strip.gsub(/\s+/m, ' ')
           comments[prop] = options[:comment].to_s.strip.gsub(/\s+/m, ' ') if options[:comment]
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
         end
@@ -128,12 +128,12 @@ module RDF
 
       # @return [String] The label for the named property
       def label_for(name)
-        labels[self[name]]
+        labels.fetch(self[name], '')
       end
 
       # @return [String] The comment for the named property
       def comment_for(name)
-        comments[self[name]]
+        comments.fetch(self[name], '')
       end
 
       ##
@@ -143,6 +143,9 @@ module RDF
       def to_uri
         RDF::URI.intern(to_s)
       end
+
+      # For IRI compatibility
+      alias_method :to_iri, :to_uri
 
       ##
       # Returns a string representation of this vocabulary class.
@@ -180,7 +183,8 @@ module RDF
     protected
       def inherited(subclass) # @private
         unless @@uri.nil?
-          @@subclasses << subclass
+          #require 'byebug'; byebug
+          @@subclasses << subclass #unless subclass == ::RDF::RDF
           subclass.send(:private_class_method, :new)
           @@uris[subclass] = @@uri
           @@uri = nil
@@ -197,9 +201,9 @@ module RDF
       end
 
     private
-    def props; @properties ||= {}; end
-    def labels; @labels ||= {}; end
-    def comments; @comments ||= {}; end
+      def props; @properties ||= {}; end
+      def labels; @labels ||= {}; end
+      def comments; @comments ||= {}; end
     end
 
     # Undefine all superfluous instance methods:
@@ -234,6 +238,9 @@ module RDF
     def to_uri
       RDF::URI.intern(to_s)
     end
+
+    # For IRI compatibility
+    alias_method :to_iri, :to_uri
 
     ##
     # Returns a string representation of this vocabulary.

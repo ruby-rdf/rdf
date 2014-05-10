@@ -124,8 +124,5 @@ module RDF
         prefer the literal format below.</p> <pre> [] a
         rsa:RSAPublicKey; rsa:public_exponent "e1 dc d5 ..."^^cert:hex
         . </pre> </span>)
-
-    # Extra definitions
-    property :hex
   end
 end

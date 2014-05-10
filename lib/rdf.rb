@@ -193,61 +193,23 @@ module RDF
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
-    RDF::URI.intern([to_uri.to_s, property.to_s].join)
+    property.to_s =~ %r{_\d+} ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV[property]
   end
 
   ##
-  # @param  [Symbol] property
-  # @return [URI]
-  # @raise  [NoMethodError]
+  # respond to module or RDFV
+  def self.respond_to?(method)
+    super || RDF::RDFV.respond_to?(method)
+  end
+
+  ##
+  # Delegate other methods to RDF::RDF
   def self.method_missing(property, *args, &block)
     if args.empty?
-      self[property]
+      # Special-case rdf:_n for all integers
+      property.to_s =~ %r{_\d+} ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
     else
       super
     end
-  end
-
-  ##
-  # @return [URI]
-  def self.to_rdf
-    to_uri
-  end
-
-  ##
-  # @return [URI]
-  def self.to_uri
-    RDF::URI.intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-  end
-
-  # RDF Vocabulary terms
-  %w(
-    Alt
-    Bag
-    first
-    HTML
-    langString
-    nil
-    object
-    predicate
-    Property
-    rest
-    Seq
-    subject
-    type
-    value
-    XMLLiteral
-  ).each do |term|
-    term_uri = self[term.to_sym]
-    define_method(term) {term_uri}
-    module_function term.to_sym
-  end
-
-  class << self
-    # For compatibility with `RDF::Vocabulary.__name__`:
-    alias_method :__name__, :name
-    
-    # For IRI compatibility
-    alias_method :to_iri, :to_uri
   end
 end

@@ -11,25 +11,24 @@ module RDF
       @class_name = class_name
       @output = $stdout
       @output_class_file = true
-      @prefix = nil
-      @url = nil
+      @uri = nil
       @strict = true
       @extra = []
     end
     attr_accessor :class_name, :output, :output_class_file
-    attr_reader :prefix, :source
+    attr_reader :uri, :source
 
-    # Set the prefix for the loaded RDF file - by default, sets the source as
+    # Set the URI for the loaded RDF file - by default, sets the source as
     # well
-    def prefix=(uri)
-      @prefix = uri
+    def uri=(uri)
+      @uri = uri
       @source ||= uri
     end
 
-    # Set the source for the loaded RDF - by default, sets the prefix as well
+    # Set the source for the loaded RDF - by default, sets the URI as well
     def source=(uri)
       @source = uri
-      @prefix ||= uri
+      @uri ||= uri
     end
 
     # Set output
@@ -50,10 +49,10 @@ module RDF
     # Parses arguments, for use in a command line tool
     def parse_options(argv)
       opti = OptionParser.new
-      opti.banner = "Usage: #{File.basename($0)} [options] [prefix [outfile]]\nFetch an RDFS file and produce an RDF::StrictVocabulary with it.\n\n"
+      opti.banner = "Usage: #{File.basename($0)} [options] [uri [outfile]]\nFetch an RDFS file and produce an RDF::StrictVocabulary with it.\n\n"
 
-      opti.on("--prefix URI", "The prefix for the fetched RDF vocabulary") do |uri|
-        self.prefix = uri
+      opti.on("--uri URI", "The URI for the fetched RDF vocabulary") do |uri|
+        self.uri = uri
       end
 
       opti.on("--source SOURCE", "The source URI or file for the vocabulary") do |uri|
@@ -79,8 +78,8 @@ module RDF
         raise "Class name (--class-name) is required!"
       end
 
-      if prefix.nil?
-        self.prefix, outfile, extra = *others
+      if uri.nil?
+        self.uri, outfile, extra = *others
       else
         outfile, extra = *others
       end
@@ -113,8 +112,8 @@ module RDF
 
     # @private
     def from_solution(solution)
-      prefix_match = %r{\A#{@prefix}(.*)}
-      return if !solution.resource.uri? || (match = prefix_match.match(solution.resource.to_s)).nil?
+      uri_match = %r{\A#{@uri}(.*)}
+      return if !solution.resource.uri? || (match = uri_match.match(solution.resource.to_s)).nil?
       name = match[1]
 
       # If there's a label or comment, the must either have no language, or be en
@@ -147,7 +146,7 @@ module RDF
       @output.print %(# This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module RDF
-          class #{class_name} < #{"Strict" if @strict}Vocabulary("#{prefix}")
+          class #{class_name} < #{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
       classes = RDF::Query.new do
@@ -228,8 +227,15 @@ module RDF
 
       unless @extra.empty?
         @output.puts "\n    # Extra definitions"
-        @extra.each do |extra|
-          @output.puts "    property #{extra.to_sym.inspect}"
+        case @extra
+        when Array
+          @extra.each do |extra|
+            @output.puts "    property #{extra.to_sym.inspect}"
+          end
+        when Hash
+          @extra.each do |n, opts|
+            @output.puts "    property #{n.to_sym.inspect}, #{opts.inspect}"
+          end
         end
       end
 

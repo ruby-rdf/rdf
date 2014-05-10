@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Vocabulary do
-  VOCABS = %w(cc cert dc doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml xsd)
-  STRICT_VOCABS = %w(cc cert dc doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml)
+  VOCABS = %w(cc cert dc doap exif foaf geo http owl rdf rdfs rsa rss sioc skos wot xhtml xsd)
+  STRICT_VOCABS = %w(cc cert dc doap exif foaf geo http owl rdf rdfs rsa rss sioc skos wot xhtml)
 
   context "#new" do
     it "should require one argument" do
@@ -115,6 +115,8 @@ describe RDF::Vocabulary do
 
     it "should support Resource Description Framework (RDF)" do
       expect(RDF).to be_a_vocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+      expect(RDF).to have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(first object predicate rest subject type value))
+      expect(RDF).to have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
       %w(first object predicate rest subject type value).each do |p|
         expect(RDF.send(p)).to eq RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns##{p}")
       end
