@@ -22,6 +22,7 @@ group :debug do
   gem "byebug", :platforms => [:mri_20, :mri_21]
   gem "ruby-debug", :platforms => :jruby
   gem "pry", :platforms => :rbx
+  gem 'guard-rspec'
 end
 
 group :test do
