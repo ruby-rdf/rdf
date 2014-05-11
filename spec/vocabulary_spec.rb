@@ -14,10 +14,12 @@ describe RDF::Vocabulary do
     subject {RDF::Vocabulary.new('http://example.org/')}
     it "should allow method_missing" do
       expect {subject.foo}.not_to raise_error
+      expect(subject.foo).to be_a(RDF::Vocabulary::Term)
     end
 
     it "should allow []" do
       expect {subject["foo"]}.not_to raise_error
+      expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
     end
   end
 
@@ -168,7 +170,7 @@ describe RDF::Vocabulary do
       expect(RDF::VOID).to be_a_vocabulary("http://rdfs.org/ns/void#")
       expect(RDF::VOID).to have_properties("http://rdfs.org/ns/void#", %w(Dataset DatasetDescription Linkset TechnicalFeature dataDump objectsTarget subjectsTarget target uriSpace linkPredicate class classPartition classes distinctObjects distinctSubjects exampleResource feature uriRegexPattern sparqlEndpoint uriLookupEndpoint subset inDataset documents entities properties triples openSearchDescription property propertyPartition rootResource vocabulary uriSpace))
       expect(RDF::VOID.label_for("property")).to eq "property"
-      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a property-based partition.)
+      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a\n        property-based partition.)
     end
 
     it "should support W3C Media Annotation Ontology" do
@@ -228,7 +230,23 @@ describe RDF::Vocabulary do
     end
 
     it "should respond to comment_for from base RDFS" do
-      test_vocab.comment_for(:prop2).should == "Test property comment"
+      test_vocab.comment_for(:prop2).should == " Test property comment"
+    end
+  end
+
+  describe RDF::Vocabulary::Term do
+    subject {RDF::RDFS.comment}
+    specify {should be_uri}
+    its(:label) {should eq RDF::RDFS.label_for("comment")}
+    its(:comment) {should eq RDF::RDFS.comment_for("comment")}
+
+    it {should be_enumerable}
+
+    it "should serialize to RDF" do
+      g = RDF::Graph.new << subject
+      expect(g.count).to eq 2
+      expect(g.statements).to include(RDF::Statement(subject, RDF::RDFS.label, RDF::RDFS.label_for("comment")))
+      expect(g.statements).to include(RDF::Statement(subject, RDF::RDFS.comment, RDF::RDFS.comment_for("comment")))
     end
   end
 end
