@@ -82,7 +82,7 @@ describe RDF::Vocabulary do
     it "should support W3 Authentication Certificate (CERT)" do
       expect(RDF::CERT).to be_a_vocabulary("http://www.w3.org/ns/auth/cert#")
       expect(RDF::CERT).to have_properties("http://www.w3.org/ns/auth/cert#", %w(hex identity))
-      expect(RDF::CERT).to have_subclasses("http://www.w3.org/ns/auth/cert#", %w(Certificate PGPCertificate PrivateKey PublicKey Signature X509Certificate))
+      expect(RDF::CERT).to have_terms("http://www.w3.org/ns/auth/cert#", %w(Certificate PGPCertificate PrivateKey PublicKey Signature X509Certificate))
     end
 
     it "should support Dublin Core (DC)" do
@@ -108,7 +108,7 @@ describe RDF::Vocabulary do
     it "should support WGS84 Geo Positioning (GEO)" do
       expect(RDF::GEO).to be_a_vocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
       expect(RDF::GEO).to have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long lat_long))
-      expect(RDF::GEO).to have_subclasses("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
+      expect(RDF::GEO).to have_terms("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
     end
 
     it "should support Hypertext Transfer Protocol (HTTP)" do
@@ -133,13 +133,13 @@ describe RDF::Vocabulary do
     it "should support RDF Schema (RDFS)" do
       expect(RDF::RDFS).to be_a_vocabulary("http://www.w3.org/2000/01/rdf-schema#")
       expect(RDF::RDFS).to have_properties("http://www.w3.org/2000/01/rdf-schema#", %w(comment domain isDefinedBy label member range seeAlso subClassOf subPropertyOf))
-      expect(RDF::RDFS).to have_subclasses("http://www.w3.org/2000/01/rdf-schema#", %w(Class Container ContainerMembershipProperty Datatype Literal Resource))
+      expect(RDF::RDFS).to have_terms("http://www.w3.org/2000/01/rdf-schema#", %w(Class Container ContainerMembershipProperty Datatype Literal Resource))
     end
 
     it "should support W3 RSA Keys (RSA)" do
       expect(RDF::RSA).to be_a_vocabulary("http://www.w3.org/ns/auth/rsa#")
       expect(RDF::RSA).to have_properties("http://www.w3.org/ns/auth/rsa#", %w(modulus private_exponent public_exponent))
-      expect(RDF::RSA).to have_subclasses("http://www.w3.org/ns/auth/rsa#", %w(RSAKey RSAPrivateKey RSAPublicKey))
+      expect(RDF::RSA).to have_terms("http://www.w3.org/ns/auth/rsa#", %w(RSAKey RSAPrivateKey RSAPublicKey))
     end
 
     it "should support RDF Site Summary (RSS)" do
