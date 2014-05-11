@@ -35,6 +35,12 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe "#to_graph" do
+    subject {RDF::RDFS.to_graph}
+    it {should be_a_graph}
+    its(:count) {should >= 30}
+  end
+
   context "strict vocabularies" do
     STRICT_VOCABS.map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
       context vocab do

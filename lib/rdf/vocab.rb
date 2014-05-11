@@ -2,6 +2,8 @@ module RDF
   ##
   # A {Vocabulary} represents an RDFS or OWL vocabulary.
   #
+  # A {Vocabulary} can also serve as a Domain Specific Language (DSL) for generating an RDF Graph definition for the vocabulary (see {RDF::Vocabulary#to_graph}).
+  #
   # ### Vocabularies:
   #
   # The following vocabularies are pre-defined for your convenience:
@@ -54,6 +56,10 @@ module RDF
   #   foaf.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
   #   foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
   #   foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
+  #
+  # @example Generating RDF from a vocabulary definition
+  #   graph = RDF::RDFS.to_graph
+  #   graph.dump(:ntriples)
   #
   # @see http://www.w3.org/TR/curie/
   # @see http://en.wikipedia.org/wiki/QName
@@ -151,6 +157,14 @@ module RDF
 
       # For IRI compatibility
       alias_method :to_iri, :to_uri
+
+      ##
+      # Return a graph representing this vocabulary
+      #
+      # @return [RDF::Graph]
+      def to_graph
+        RDF::Graph.new {|g| properties.each {|p| g << p}}
+      end
 
       ##
       # Returns a string representation of this vocabulary class.
