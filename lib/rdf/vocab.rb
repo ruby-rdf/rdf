@@ -159,11 +159,38 @@ module RDF
       alias_method :to_iri, :to_uri
 
       ##
-      # Return a graph representing this vocabulary
+      # Return an enumerator over {RDF::Statement} defined for this vocabulary.
+      # @return [RDF::Enumerable::Enumerator]
+      # @see    Object#enum_for
+      def enum_for(method = :each_statement, *args)
+        # Ensure that enumerators are, themselves, queryable
+        this = self
+        Enumerable::Enumerator.new do |yielder|
+          this.send(method, *args) {|*y| yielder << (y.length > 1 ? y : y.first)}
+        end
+      end
+      alias_method :to_enum, :enum_for
+
+      ##
+      # Enumerate each statement constructed from the defined vocabulary terms
       #
-      # @return [RDF::Graph]
-      def to_graph
-        RDF::Graph.new {|g| properties.each {|p| g << p}}
+      # @yield statement
+      # @yieldparam [RDF::Statement]
+      def each_statement(&block)
+        props.each do |subject, attributes|
+          attributes.each do |prop, values|
+            Array(values).each do |value|
+              case prop
+              when :label
+                block.call RDF::Statement(subject, RDFS.label, value)
+              when :comment
+                block.call RDF::Statement(subject, RDFS.comment, value)
+              when RDF::Resource
+                block.call RDF::Statement(subject, prop, value)
+              end
+            end
+          end
+        end
       end
 
       ##
@@ -300,7 +327,6 @@ module RDF
       # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
       # @return [Hash{Symbol,Resource => Term, #to_s}]
       attr_accessor :attributes
-      include RDF::Enumerable
 
       ##
       # @overload URI(uri, options = {})
@@ -357,27 +383,6 @@ module RDF
       # @return [String]
       def comment
         @attributes.fetch(:comment, "")
-      end
-
-      ##
-      # Enumerate {RDF::Statement} defined for this term
-      #
-      # @yield statement
-      # @yieldparam [RDF::Statement] statement
-      # @return [Enumerator]
-      def each(&block)
-        @attributes.each do |prop, values|
-          Array(values).each do |value|
-            case prop
-            when :label
-              yield RDF::Statement(self, RDFS.label, value)
-            when :comment
-              yield RDF::Statement(self, RDFS.comment, value)
-            when RDF::Resource
-              yield RDF::Statement(self, prop, value)
-            end
-          end
-        end
       end
 
       ##

@@ -35,10 +35,21 @@ describe RDF::Vocabulary do
     end
   end
 
-  describe "#to_graph" do
-    subject {RDF::RDFS.to_graph}
-    it {should be_a_graph}
+  describe "#to_enum" do
+    subject {RDF::RDFS.to_enum}
+    it {should be_enumerable}
     its(:count) {should >= 30}
+    it "enumerates statements" do
+      expect {|b| subject.each(&b)}.to yield_control.at_least(30).times
+      subject.each {|s| expect(s).to be_statement}
+    end
+
+    it "yields rdfs:label" do
+      expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.label_for("comment")))
+    end
+    it "yields rdfs:comment" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment_for("comment")))
+    end
   end
 
   context "strict vocabularies" do
@@ -245,14 +256,5 @@ describe RDF::Vocabulary do
     specify {should be_uri}
     its(:label) {should eq RDF::RDFS.label_for("comment")}
     its(:comment) {should eq RDF::RDFS.comment_for("comment")}
-
-    it {should be_enumerable}
-
-    it "should serialize to RDF" do
-      g = RDF::Graph.new << subject
-      expect(g.count).to eq 2
-      expect(g.statements).to include(RDF::Statement(subject, RDF::RDFS.label, RDF::RDFS.label_for("comment")))
-      expect(g.statements).to include(RDF::Statement(subject, RDF::RDFS.comment, RDF::RDFS.comment_for("comment")))
-    end
   end
 end
