@@ -4,4059 +4,8596 @@ module RDF
   class SCHEMA < StrictVocabulary("http://schema.org/")
 
     # Class definitions
-    property :TaxiReservation, :label => 'TaxiReservation', :comment =>
-      %(A reservation for a taxi.Note: This type is for information
-        about actual reservations, e.g. in confirmation emails or HTML
-        pages with individual confirmations of reservations. For
-        offers of tickets, use http://schema.org/Offer.)
-    property :TrainReservation, :label => 'TrainReservation', :comment =>
-      %(A reservation for train travel.Note: This type is for
-        information about actual reservations, e.g. in confirmation
-        emails or HTML pages with individual confirmations of
-        reservations. For offers of tickets, use
-        http://schema.org/Offer.)
-    property :APIReference, :label => 'APIReference', :comment =>
-      %(Reference documentation for application programming interfaces
-        \(APIs\).)
-    property :AboutPage, :label => 'AboutPage', :comment =>
-      %(Web page type: About page.)
-    property :AcceptAction, :label => 'AcceptAction', :comment =>
-      %(The act of committing to/adopting an object.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/RejectAction">RejectAction</a>: The
-        antagonym of AcceptAction.</li></ul>)
-    property :AccountingService, :label => 'AccountingService', :comment =>
-      %(Accountancy business.)
-    property :AchieveAction, :label => 'AchieveAction', :comment =>
-      %(The act of accomplishing something via previous efforts. It is
-        an instantaneous action rather than an ongoing process.)
-    property :Action, :label => 'Action', :comment =>
-      %(An action performed by a direct agent and indirect
-        participants upon a direct object. Optionally happens at a
-        location with the help of an inanimate instrument. The
-        execution of the action may produce a result. Specific action
-        sub-type documentation specifies the exact expectation of each
-        argument/role.)
-    property :ActionStatusType, :label => 'ActionStatusType', :comment =>
-      %(The status of an Action.)
-    property :AddAction, :label => 'AddAction', :comment =>
-      %(The act of editing by adding an object to a collection.)
-    property :AdministrativeArea, :label => 'AdministrativeArea', :comment =>
-      %(A geographical region under the jurisdiction of a particular
-        government.)
-    property :AdultEntertainment, :label => 'AdultEntertainment', :comment =>
-      %(An adult entertainment establishment.)
-    property :AggregateOffer, :label => 'AggregateOffer', :comment =>
-      %(When a single product that has different offers \(for example,
-        the same pair of shoes is offered by different merchants\),
-        then AggregateOffer can be used.)
-    property :AggregateRating, :label => 'AggregateRating', :comment =>
-      %(The average rating based on multiple ratings or reviews.)
-    property :AgreeAction, :label => 'AgreeAction', :comment =>
-      %(The act of expressing a consistency of opinion with the
-        object. An agent agrees to/about an object \(a proposition,
-        topic or theme\) with participants.)
-    property :Airline, :label => 'Airline', :comment =>
-      %(An organization that provides flights for passengers.)
-    property :Airport, :label => 'Airport', :comment =>
-      %(An airport.)
-    property :AlignmentObject, :label => 'AlignmentObject', :comment =>
-      %(An intangible item that describes an alignment between a
-        learning resource and a node in an educational framework.)
-    property :AllocateAction, :label => 'AllocateAction', :comment =>
-      %(The act of organizing tasks/objects/events by associating
-        resources to it.)
-    property :AmusementPark, :label => 'AmusementPark', :comment =>
-      %(An amusement park.)
-    property :AnatomicalStructure, :label => 'AnatomicalStructure', :comment =>
-      %(Any part of the human body, typically a component of an
-        anatomical system. Organs, tissues, and cells are all
-        anatomical structures.)
-    property :AnatomicalSystem, :label => 'AnatomicalSystem', :comment =>
-      %(An anatomical system is a group of anatomical structures that
-        work together to perform a certain task. Anatomical systems,
-        such as organ systems, are one organizing principle of
-        anatomy, and can includes circulatory, digestive, endocrine,
-        integumentary, immune, lymphatic, muscular, nervous,
-        reproductive, respiratory, skeletal, urinary, vestibular, and
-        other systems.)
-    property :AnimalShelter, :label => 'AnimalShelter', :comment =>
-      %(Animal shelter.)
-    property :Answer, :label => 'Answer', :comment =>
-      %(An answer offered to a question; perhaps correct, perhaps
-        opinionated or wrong.)
-    property :ApartmentComplex, :label => 'ApartmentComplex', :comment =>
-      %(Residence type: Apartment complex.)
-    property :AppendAction, :label => 'AppendAction', :comment =>
-      %(The act of inserting at the end if an ordered collection.)
-    property :ApplyAction, :label => 'ApplyAction', :comment =>
-      %(The act of registering to an organization/service without the
-        guarantee to receive it. NOTE\(goto\): should this be under
-        InteractAction instead?<p>Related actions:</p><ul><li><a
-        href="http://schema.org/RegisterAction">RegisterAction</a>:
-        Unlike RegisterAction, ApplyAction has no guarantees that the
-        application will be accepted.</li></ul>)
-    property :ApprovedIndication, :label => 'ApprovedIndication', :comment =>
-      %(An indication for a medical therapy that has been formally
-        specified or approved by a regulatory body that regulates use
-        of the therapy; for example, the US FDA approves indications
-        for most drugs in the US.)
-    property :Aquarium, :label => 'Aquarium', :comment =>
-      %(Aquarium.)
-    property :ArriveAction, :label => 'ArriveAction', :comment =>
-      %(The act of arriving at a place. An agent arrives at a
-        destination from an fromLocation, optionally with
-        participants.)
-    property :ArtGallery, :label => 'ArtGallery', :comment =>
-      %(An art gallery.)
-    property :Artery, :label => 'Artery', :comment =>
-      %(A type of blood vessel that specifically carries blood away
-        from the heart.)
-    property :Article, :label => 'Article', :comment =>
-      %(An article, such as a news article or piece of investigative
-        report. Newspapers and magazines have articles of many
-        different types and this is intended to cover them all.)
-    property :AskAction, :label => 'AskAction', :comment =>
-      %(The act of posing a question / favor to someone.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/ReplyAction">ReplyAction</a>: Appears
-        generally as a response to AskAction.</li></ul>)
-    property :AssessAction, :label => 'AssessAction', :comment =>
-      %(The act of forming one's opinion, reaction or sentiment.)
-    property :AssignAction, :label => 'AssignAction', :comment =>
-      %(The act of allocating an action/event/task to some destination
-        \(someone or something\).)
-    property :Attorney, :label => 'Attorney', :comment =>
-      %(Professional service: Attorney.)
-    property :Audience, :label => 'Audience', :comment =>
-      %(Intended audience for an item, i.e. the group for whom the
-        item was created.)
-    property :AudioObject, :label => 'AudioObject', :comment =>
-      %(An audio file.)
-    property :AuthorizeAction, :label => 'AuthorizeAction', :comment =>
-      %(The act of granting permission to an object.)
-    property :AutoBodyShop, :label => 'AutoBodyShop', :comment =>
-      %(Auto body shop.)
-    property :AutoDealer, :label => 'AutoDealer', :comment =>
-      %(An car dealership.)
-    property :AutoPartsStore, :label => 'AutoPartsStore', :comment =>
-      %(An auto parts store.)
-    property :AutoRental, :label => 'AutoRental', :comment =>
-      %(A car rental business.)
-    property :AutoRepair, :label => 'AutoRepair', :comment =>
-      %(Car repair business.)
-    property :AutoWash, :label => 'AutoWash', :comment =>
-      %(A car wash business.)
-    property :AutomatedTeller, :label => 'AutomatedTeller', :comment =>
-      %(ATM/cash machine.)
-    property :AutomotiveBusiness, :label => 'AutomotiveBusiness', :comment =>
-      %(Car repair, sales, or parts.)
-    property :Bakery, :label => 'Bakery', :comment =>
-      %(A bakery.)
-    property :BankOrCreditUnion, :label => 'BankOrCreditUnion', :comment =>
-      %(Bank or credit union.)
-    property :BarOrPub, :label => 'BarOrPub', :comment =>
-      %(A bar or pub.)
-    property :Beach, :label => 'Beach', :comment =>
-      %(Beach.)
-    property :BeautySalon, :label => 'BeautySalon', :comment =>
-      %(Beauty salon.)
-    property :BedAndBreakfast, :label => 'BedAndBreakfast', :comment =>
-      %(Bed and breakfast.)
-    property :BefriendAction, :label => 'BefriendAction', :comment =>
-      %(The act of forming a personal connection with someone
-        \(object\) mutually/bidirectionally/symmetrically.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/FollowAction">FollowAction</a>: Unlike
-        FollowAction, BefriendAction implies that the connection is
-        reciprocal.</li></ul>)
-    property :BikeStore, :label => 'BikeStore', :comment =>
-      %(A bike store.)
-    property :Blog, :label => 'Blog', :comment =>
-      %(A blog)
-    property :BlogPosting, :label => 'BlogPosting', :comment =>
-      %(A blog post.)
-    property :BloodTest, :label => 'BloodTest', :comment =>
-      %(A medical test performed on a sample of a patient's blood.)
-    property :BodyOfWater, :label => 'BodyOfWater', :comment =>
-      %(A body of water, such as a sea, ocean, or lake.)
-    property :Bone, :label => 'Bone', :comment =>
-      %(Rigid connective tissue that comprises up the skeletal
-        structure of the human body.)
-    property :Book, :label => 'Book', :comment =>
-      %(A book.)
-    property :BookFormatType, :label => 'BookFormatType', :comment =>
-      %(The publication format of the book.)
-    property :BookStore, :label => 'BookStore', :comment =>
-      %(A bookstore.)
-    property :BookmarkAction, :label => 'BookmarkAction', :comment =>
-      %(An agent bookmarks/flags/labels/tags/marks an object.)
-    property :Boolean, :label => 'Boolean', :comment =>
-      %(Boolean: True or False.)
-    property :BorrowAction, :label => 'BorrowAction', :comment =>
-      %(The act of obtaining an object under an agreement to return it
-        at a later date. Reciprocal of LendAction.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/LendAction">LendAction</a>: Reciprocal
-        of BorrowAction.</li></ul>)
-    property :BowlingAlley, :label => 'BowlingAlley', :comment =>
-      %(A bowling alley.)
-    property :BrainStructure, :label => 'BrainStructure', :comment =>
-      %(Any anatomical structure which pertains to the soft nervous
-        tissue functioning as the coordinating center of sensation and
-        intellectual and nervous activity.)
-    property :Brand, :label => 'Brand', :comment =>
-      %(A brand is a name used by an organization or business person
-        for labeling a product, product group, or similar.)
-    property :Brewery, :label => 'Brewery', :comment =>
-      %(Brewery.)
-    property :BroadcastEvent, :label => 'BroadcastEvent', :comment =>
-      %(An over the air or online broadcast event.)
-    property :BroadcastService, :label => 'BroadcastService', :comment =>
-      %(A delivery service through which content is provided via
-        broadcast over the air or online.)
-    property :BuddhistTemple, :label => 'BuddhistTemple', :comment =>
-      %(A Buddhist temple.)
-    property :BusTrip, :label => 'Bus Trip', :comment =>
-      %(A trip on a commercial bus line.)
-    property :BusReservation, :label => 'BusReservation', :comment =>
-      %(A reservation for bus travel.Note: This type is for
-        information about actual reservations, e.g. in confirmation
-        emails or HTML pages with individual confirmations of
-        reservations. For offers of tickets, use
-        http://schema.org/Offer.)
-    property :BusStation, :label => 'BusStation', :comment =>
-      %(A bus station.)
-    property :BusStop, :label => 'BusStop', :comment =>
-      %(A bus stop.)
-    property :BusinessAudience, :label => 'BusinessAudience', :comment =>
-      %(A set of characteristics belonging to businesses, e.g. who
-        compose an item's target audience.)
-    property :BusinessEntityType, :label => 'BusinessEntityType', :comment =>
-      %(A business entity type is a conceptual entity representing the
-        legal form, the size, the main line of business, the position
-        in the value chain, or any combination thereof, of an
-        organization or business person. Commonly used values:
-        http://purl.org/goodrelations/v1#Business
-        http://purl.org/goodrelations/v1#Enduser
-        http://purl.org/goodrelations/v1#PublicInstitution
-        http://purl.org/goodrelations/v1#Reseller)
-    property :BusinessEvent, :label => 'BusinessEvent', :comment =>
-      %(Event type: Business event.)
-    property :BusinessFunction, :label => 'BusinessFunction', :comment =>
-      %(The business function specifies the type of activity or access
-        \(i.e., the bundle of rights\) offered by the organization or
-        business person through the offer. Typical are sell, rental or
-        lease, maintenance or repair, manufacture / produce, recycle /
-        dispose, engineering / construction, or installation.
-        Proprietary specifications of access rights are also instances
-        of this class. Commonly used values:
-        http://purl.org/goodrelations/v1#ConstructionInstallation
-        http://purl.org/goodrelations/v1#Dispose
-        http://purl.org/goodrelations/v1#LeaseOut
-        http://purl.org/goodrelations/v1#Maintain
-        http://purl.org/goodrelations/v1#ProvideService
-        http://purl.org/goodrelations/v1#Repair
-        http://purl.org/goodrelations/v1#Sell
-        http://purl.org/goodrelations/v1#Buy)
-    property :BuyAction, :label => 'BuyAction', :comment =>
-      %(The act of giving money to a seller in exchange for goods or
-        services rendered. An agent buys an object, product, or
-        service from a seller for a price. Reciprocal of SellAction.)
-    property :CafeOrCoffeeShop, :label => 'CafeOrCoffeeShop', :comment =>
-      %(A cafe or coffee shop.)
-    property :Campground, :label => 'Campground', :comment =>
-      %(A campground.)
-    property :Canal, :label => 'Canal', :comment =>
-      %(A canal, like the Panama Canal)
-    property :CancelAction, :label => 'CancelAction', :comment =>
-      %(The act of asserting that a future event/action is no longer
-        going to happen.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/ConfirmAction">ConfirmAction</a>: The
-        antagonym of CancelAction.</li></ul>)
-    property :Car, :label => 'Car', :comment =>
-      %(An automobile.)
-    property :Casino, :label => 'Casino', :comment =>
-      %(A casino.)
-    property :CatholicChurch, :label => 'CatholicChurch', :comment =>
-      %(A Catholic church.)
-    property :Cemetery, :label => 'Cemetery', :comment =>
-      %(A graveyard.)
-    property :CheckAction, :label => 'CheckAction', :comment =>
-      %(An agent inspects/determines/investigates/inquire or examine
-        an object's accuracy/quality/condition or state.)
-    property :CheckInAction, :label => 'CheckInAction', :comment =>
-      %(The act of an agent communicating \(service provider, social
-        media, etc\) their arrival by registering/confirming for a
-        previously reserved service \(e.g. flight check in\) or at a
-        place \(e.g. hotel\), possibly resulting in a result
-        \(boarding pass, etc\).<p>Related actions:</p><ul><li><a
-        href="http://schema.org/CheckOutAction">CheckOutAction</a>:
-        The antagonym of CheckInAction.</li><li><a
-        href="http://schema.org/ArriveAction">ArriveAction</a>: Unlike
-        ArriveAction, CheckInAction implies that the agent is
-        informing/confirming the start of a previously reserved
-        service.</li><li><a
-        href="http://schema.org/ConfirmAction">ConfirmAction</a>:
-        Unlike ConfirmAction, CheckInAction implies that the agent is
-        informing/confirming the *start* of a previously reserved
-        service rather than its validity/existance.</li></ul>)
-    property :CheckOutAction, :label => 'CheckOutAction', :comment =>
-      %(The act of an agent communicating \(service provider, social
-        media, etc\) their departure of a previously reserved service
-        \(e.g. flight check in\) or place \(e.g. hotel\).<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/CheckInAction">CheckInAction</a>: The
-        antagonym of CheckOutAction.</li><li><a
-        href="http://schema.org/DepartAction">DepartAction</a>: Unlike
-        DepartAction, CheckOutAction implies that the agent is
-        informing/confirming the end of a previously reserved
-        service.</li><li><a
-        href="http://schema.org/CancelAction">CancelAction</a>: Unlike
-        CancelAction, CheckOutAction implies that the agent is
-        informing/confirming the end of a previously reserved
-        service.</li></ul>)
-    property :CheckoutPage, :label => 'CheckoutPage', :comment =>
-      %(Web page type: Checkout page.)
-    property :ChildCare, :label => 'ChildCare', :comment =>
-      %(A Childcare center.)
-    property :ChildrensEvent, :label => 'ChildrensEvent', :comment =>
-      %(Event type: Children's event.)
-    property :ChooseAction, :label => 'ChooseAction', :comment =>
-      %(The act of expressing a preference from a set of options or a
-        large or unbounded set of choices/options.)
-    property :Church, :label => 'Church', :comment =>
-      %(A church.)
-    property :City, :label => 'City', :comment =>
-      %(A city or town.)
-    property :CityHall, :label => 'CityHall', :comment =>
-      %(A city hall.)
-    property :CivicStructure, :label => 'CivicStructure', :comment =>
-      %(A public structure, such as a town hall or concert hall.)
-    property :Class, :label => 'Class', :comment =>
-      %(A class, also often called a 'Type'; equivalent to rdfs:Class.)
-    property :Clip, :label => 'Clip', :comment =>
-      %(A short TV or radio program or a segment/part of a program.)
-    property :ClothingStore, :label => 'ClothingStore', :comment =>
-      %(A clothing store.)
-    property :Code, :label => 'Code', :comment =>
-      %(Computer programming source code. Example: Full \(compile
-        ready\) solutions, code snippet samples, scripts, templates.)
-    property :CollectionPage, :label => 'CollectionPage', :comment =>
-      %(Web page type: Collection page.)
-    property :CollegeOrUniversity, :label => 'CollegeOrUniversity', :comment =>
-      %(A college, university, or other third-level educational
-        institution.)
-    property :ComedyClub, :label => 'ComedyClub', :comment =>
-      %(A comedy club.)
-    property :ComedyEvent, :label => 'ComedyEvent', :comment =>
-      %(Event type: Comedy event.)
-    property :Comment, :label => 'Comment', :comment =>
-      %(A comment on an item - for example, a comment on a blog post.
-        The comment's content is expressed via the "text" property,
-        and its topic via "about", properties shared with all
-        CreativeWorks.)
-    property :CommentAction, :label => 'CommentAction', :comment =>
-      %(The act of generating a comment about a subject.)
-    property :CommunicateAction, :label => 'CommunicateAction', :comment =>
-      %(The act of conveying information to another person via a
-        communication medium \(instrument\) such as speech, email, or
-        telephone conversation.)
-    property :ComputerStore, :label => 'ComputerStore', :comment =>
-      %(A computer store.)
-    property :ConfirmAction, :label => 'ConfirmAction', :comment =>
-      %(The act of notifying someone that a future event/action is
-        going to happen as expected.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/CancelAction">CancelAction</a>: The
-        antagonym of ConfirmAction.</li></ul>)
-    property :ConsumeAction, :label => 'ConsumeAction', :comment =>
-      %(The act of ingesting information/resources/food.)
-    property :ContactPage, :label => 'ContactPage', :comment =>
-      %(Web page type: Contact page.)
-    property :ContactPoint, :label => 'ContactPoint', :comment =>
-      %(A contact point&#x2014;for example, a Customer Complaints
-        department.)
-    property :ContactPointOption, :label => 'ContactPointOption', :comment =>
-      %(Enumerated options related to a ContactPoint)
-    property :Continent, :label => 'Continent', :comment =>
-      %(One of the continents \(for example, Europe or Africa\).)
-    property :ConvenienceStore, :label => 'ConvenienceStore', :comment =>
-      %(A convenience store.)
-    property :CookAction, :label => 'CookAction', :comment =>
-      %(The act of producing/preparing food.)
-    property :Corporation, :label => 'Corporation', :comment =>
-      %(Organization: A business corporation.)
-    property :Country, :label => 'Country', :comment =>
-      %(A country.)
-    property :Courthouse, :label => 'Courthouse', :comment =>
-      %(A courthouse.)
-    property :CreateAction, :label => 'CreateAction', :comment =>
-      %(The act of deliberately creating/producing/generating/building
-        a result out of the agent.)
-    property :CreativeWork, :label => 'CreativeWork', :comment =>
-      %(The most generic kind of creative work, including books,
-        movies, photographs, software programs, etc.)
-    property :CreditCard, :label => 'CreditCard', :comment =>
-      %(A credit or debit card type as a standardized procedure for
-        transferring the monetary amount for a purchase. Commonly used
-        values: http://purl.org/goodrelations/v1#AmericanExpress
-        http://purl.org/goodrelations/v1#DinersClub
-        http://purl.org/goodrelations/v1#Discover
-        http://purl.org/goodrelations/v1#JCB
-        http://purl.org/goodrelations/v1#MasterCard
-        http://purl.org/goodrelations/v1#VISA)
-    property :Crematorium, :label => 'Crematorium', :comment =>
-      %(A crematorium.)
-    property :DDxElement, :label => 'DDxElement', :comment =>
-      %(An alternative, closely-related condition typically considered
-        later in the differential diagnosis process along with the
-        signs that are used to distinguish it.)
-    property :DanceEvent, :label => 'DanceEvent', :comment =>
-      %(Event type: A social dance.)
-    property :DanceGroup, :label => 'DanceGroup', :comment =>
-      %(A dance group&#x2014;for example, the Alvin Ailey Dance
-        Theater or Riverdance.)
-    property :DataCatalog, :label => 'DataCatalog', :comment =>
-      %(A collection of datasets.)
-    property :DataDownload, :label => 'DataDownload', :comment =>
-      %(A dataset in downloadable form.)
-    property :DataType, :label => 'DataType', :comment =>
-      %(The basic data types such as Integers, Strings, etc.)
-    property :Dataset, :label => 'Dataset', :comment =>
-      %(A body of structured information describing some topic\(s\) of
-        interest.)
-    property :Date, :label => 'Date', :comment =>
-      %(A date value in <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date
-        format</a>.)
-    property :DateTime, :label => 'DateTime', :comment =>
-      %(A combination of date and time of day in the form
-        [-]CCYY-MM-DDThh:mm:ss[Z|\(+|-\)hh:mm] \(see Chapter 5.4 of
-        ISO 8601\).)
-    property :DayOfWeek, :label => 'DayOfWeek', :comment =>
-      %(The day of the week, e.g. used to specify to which day the
-        opening hours of an OpeningHoursSpecification refer. Commonly
-        used values: http://purl.org/goodrelations/v1#Monday
-        http://purl.org/goodrelations/v1#Tuesday
-        http://purl.org/goodrelations/v1#Wednesday
-        http://purl.org/goodrelations/v1#Thursday
-        http://purl.org/goodrelations/v1#Friday
-        http://purl.org/goodrelations/v1#Saturday
-        http://purl.org/goodrelations/v1#Sunday
-        http://purl.org/goodrelations/v1#PublicHolidays)
-    property :DaySpa, :label => 'DaySpa', :comment =>
-      %(A day spa.)
-    property :DefenceEstablishment, :label => 'DefenceEstablishment', :comment =>
-      %(A defence establishment, such as an army or navy base.)
-    property :DeleteAction, :label => 'DeleteAction', :comment =>
-      %(The act of editing a recipient by removing one of its objects.)
-    property :DeliveryChargeSpecification, :label => 'DeliveryChargeSpecification', :comment =>
-      %(The price for the delivery of an offer using a particular
-        delivery method.)
-    property :DeliveryEvent, :label => 'DeliveryEvent', :comment =>
-      %(An event involving the delivery of an item.)
-    property :DeliveryMethod, :label => 'DeliveryMethod', :comment =>
-      %(A delivery method is a standardized procedure for transferring
-        the product or service to the destination of fulfilment chosen
-        by the customer. Delivery methods are characterized by the
-        means of transportation used, and by the organization or group
-        that is the contracting party for the sending organization or
-        person. Commonly used values:
-        http://purl.org/goodrelations/v1#DeliveryModeDirectDownload
-        http://purl.org/goodrelations/v1#DeliveryModeFreight
-        http://purl.org/goodrelations/v1#DeliveryModeMail
-        http://purl.org/goodrelations/v1#DeliveryModeOwnFleet
-        http://purl.org/goodrelations/v1#DeliveryModePickUp
-        http://purl.org/goodrelations/v1#DHL
-        http://purl.org/goodrelations/v1#FederalExpress
-        http://purl.org/goodrelations/v1#UPS)
-    property :Demand, :label => 'Demand', :comment =>
-      %(A demand entity represents the public, not necessarily
-        binding, not necessarily exclusive, announcement by an
-        organization or person to seek a certain type of goods or
-        services. For describing demand using this type, the very same
-        properties used for Offer apply.)
-    property :Dentist, :label => 'Dentist', :comment =>
-      %(A dentist.)
-    property :DepartAction, :label => 'DepartAction', :comment =>
-      %(The act of departing from a place. An agent departs from an
-        fromLocation for a destination, optionally with participants.)
-    property :DepartmentStore, :label => 'DepartmentStore', :comment =>
-      %(A department store.)
-    property :DiagnosticLab, :label => 'DiagnosticLab', :comment =>
-      %(A medical laboratory that offers on-site or off-site
-        diagnostic services.)
-    property :DiagnosticProcedure, :label => 'DiagnosticProcedure', :comment =>
-      %(A medical procedure intended primarly for diagnostic, as
-        opposed to therapeutic, purposes.)
-    property :Diet, :label => 'Diet', :comment =>
-      %(A strategy of regulating the intake of food to achieve or
-        maintain a specific health-related goal.)
-    property :DietarySupplement, :label => 'DietarySupplement', :comment =>
-      %(A product taken by mouth that contains a dietary ingredient
-        intended to supplement the diet. Dietary ingredients may
-        include vitamins, minerals, herbs or other botanicals, amino
-        acids, and substances such as enzymes, organ tissues,
-        glandulars and metabolites.)
-    property :DisagreeAction, :label => 'DisagreeAction', :comment =>
-      %(The act of expressing a difference of opinion with the object.
-        An agent disagrees to/about an object \(a proposition, topic
-        or theme\) with participants.)
-    property :DiscoverAction, :label => 'DiscoverAction', :comment =>
-      %(The act of discovering/finding an object.)
-    property :DislikeAction, :label => 'DislikeAction', :comment =>
-      %(The act of expressing a negative sentiment about the object.
-        An agent dislikes an object \(a proposition, topic or theme\)
-        with participants.)
-    property :Distance, :label => 'Distance', :comment =>
-      %(Properties that take Distances as values are of the form
-        '&lt;Number&gt; &lt;Length unit of measure&gt;'. E.g., '7 ft')
-    property :DonateAction, :label => 'DonateAction', :comment =>
-      %(The act of providing goods, services, or money without
-        compensation, often for philanthropic reasons.)
-    property :DoseSchedule, :label => 'DoseSchedule', :comment =>
-      %(A specific dosing schedule for a drug or supplement.)
-    property :DownloadAction, :label => 'DownloadAction', :comment =>
-      %(The act of downloading an object.)
-    property :DrawAction, :label => 'DrawAction', :comment =>
-      %(The act of producing a visual/graphical representation of an
-        object, typically with a pen/pencil and paper as instruments.)
-    property :DrinkAction, :label => 'DrinkAction', :comment =>
-      %(The act of swallowing liquids.)
-    property :Drug, :label => 'Drug', :comment =>
-      %(A chemical or biologic substance, used as a medical therapy,
-        that has a physiological effect on an organism.)
-    property :DrugClass, :label => 'DrugClass', :comment =>
-      %(A class of medical drugs, e.g., statins. Classes can represent
-        general pharmacological class, common mechanisms of action,
-        common physiological effects, etc.)
-    property :DrugCost, :label => 'DrugCost', :comment =>
-      %(The cost per unit of a medical drug. Note that this type is
-        not meant to represent the price in an offer of a drug for
-        sale; see the Offer type for that. This type will typically be
-        used to tag wholesale or average retail cost of a drug, or
-        maximum reimbursable cost. Costs of medical drugs vary widely
-        depending on how and where they are paid for, so while this
-        type captures some of the variables, costs should be used with
-        caution by consumers of this schema's markup.)
-    property :DrugCostCategory, :label => 'DrugCostCategory', :comment =>
-      %(Enumerated categories of medical drug costs.)
-    property :DrugLegalStatus, :label => 'DrugLegalStatus', :comment =>
-      %(The legal availability status of a medical drug.)
-    property :DrugPregnancyCategory, :label => 'DrugPregnancyCategory', :comment =>
-      %(Categories that represent an assessment of the risk of fetal
-        injury due to a drug or pharmaceutical used as directed by the
-        mother during pregnancy.)
-    property :DrugPrescriptionStatus, :label => 'DrugPrescriptionStatus', :comment =>
-      %(Indicates whether this drug is available by prescription or
-        over-the-counter.)
-    property :DrugStrength, :label => 'DrugStrength', :comment =>
-      %(A specific strength in which a medical drug is available in a
-        specific country.)
-    property :DryCleaningOrLaundry, :label => 'DryCleaningOrLaundry', :comment =>
-      %(A dry-cleaning business.)
-    property :Duration, :label => 'Duration', :comment =>
-      %(Quantity: Duration \(use <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration
-        format</a>\).)
-    property :EatAction, :label => 'EatAction', :comment =>
-      %(The act of swallowing solid objects.)
-    property :EducationEvent, :label => 'EducationEvent', :comment =>
-      %(Event type: Education event.)
-    property :EducationalAudience, :label => 'EducationalAudience', :comment =>
-      %(An EducationalAudience)
-    property :EducationalOrganization, :label => 'EducationalOrganization', :comment =>
-      %(An educational organization.)
-    property :Electrician, :label => 'Electrician', :comment =>
-      %(An electrician.)
-    property :ElectronicsStore, :label => 'ElectronicsStore', :comment =>
-      %(An electronics store.)
-    property :ElementarySchool, :label => 'ElementarySchool', :comment =>
-      %(An elementary school.)
-    property :EmailMessage, :label => 'EmailMessage', :comment =>
-      %(An email message.)
-    property :Embassy, :label => 'Embassy', :comment =>
-      %(An embassy.)
-    property :EmergencyService, :label => 'EmergencyService', :comment =>
-      %(An emergency service, such as a fire station or ER.)
-    property :EmploymentAgency, :label => 'EmploymentAgency', :comment =>
-      %(An employment agency.)
-    property :EndorseAction, :label => 'EndorseAction', :comment =>
-      %(An agent approves/certifies/likes/supports/sanction an object.)
-    property :Energy, :label => 'Energy', :comment =>
-      %(Properties that take Enerygy as values are of the form
-        '&lt;Number&gt; &lt;Energy unit of measure&gt;')
-    property :EntertainmentBusiness, :label => 'EntertainmentBusiness', :comment =>
-      %(A business providing entertainment.)
-    property :EntryPoint, :label => 'EntryPoint', :comment =>
-      %(An entry point, within some Web-based protocol.)
-    property :Enumeration, :label => 'Enumeration', :comment =>
-      %(Lists or enumerations&#x2014;for example, a list of cuisines
-        or music genres, etc.)
-    property :Episode, :label => 'Episode', :comment =>
-      %(A TV or radio episode which can be part of a series or season.)
-    property :Event, :label => 'Event', :comment =>
-      %(An event happening at a certain time and location, such as a
-        concert, lecture, or festival. Ticketing information may be
-        added via the 'offers' property. Repeated events may be
-        structured as separate Event objects.)
-    property :EventReservation, :label => 'EventReservation', :comment =>
-      %(A reservation for an event like a concert, sporting event, or
-        lecture.Note: This type is for information about actual
-        reservations, e.g. in confirmation emails or HTML pages with
-        individual confirmations of reservations. For offers of
-        tickets, use http://schema.org/Offer.)
-    property :EventStatusType, :label => 'EventStatusType', :comment =>
-      %(EventStatusType is an enumeration type whose instances
-        represent several states that an Event may be in.)
-    property :EventVenue, :label => 'EventVenue', :comment =>
-      %(An event venue.)
-    property :ExerciseAction, :label => 'ExerciseAction', :comment =>
-      %(The act of participating in exertive activity for the purposes
-        of improving health and fitness)
-    property :ExerciseGym, :label => 'ExerciseGym', :comment =>
-      %(A gym.)
-    property :ExercisePlan, :label => 'ExercisePlan', :comment =>
-      %(Fitness-related activity designed for a specific
-        health-related purpose, including defined exercise routines as
-        well as activity prescribed by a clinician.)
-    property :FastFoodRestaurant, :label => 'FastFoodRestaurant', :comment =>
-      %(A fast-food restaurant.)
-    property :Festival, :label => 'Festival', :comment =>
-      %(Event type: Festival.)
-    property :FilmAction, :label => 'FilmAction', :comment =>
-      %(The act of capturing sound and moving images on film, video,
-        or digitally.)
-    property :FinancialService, :label => 'FinancialService', :comment =>
-      %(Financial services business.)
-    property :FindAction, :label => 'FindAction', :comment =>
-      %(The act of finding an object.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/SearchAction">SearchAction</a>:
-        FindAction is generally lead by a SearchAction, but not
-        necessarily.</li></ul>)
-    property :FireStation, :label => 'FireStation', :comment =>
-      %(A fire station. With firemen.)
-    property :Flight, :label => 'Flight', :comment =>
-      %(An airline flight.)
-    property :FlightReservation, :label => 'FlightReservation', :comment =>
-      %(A reservation for air travel.Note: This type is for
-        information about actual reservations, e.g. in confirmation
-        emails or HTML pages with individual confirmations of
-        reservations. For offers of tickets, use
-        http://schema.org/Offer.)
-    property :Float, :label => 'Float', :comment =>
-      %(Data type: Floating number.)
-    property :Florist, :label => 'Florist', :comment =>
-      %(A florist.)
-    property :FollowAction, :label => 'FollowAction', :comment =>
-      %(The act of forming a personal connection with
-        someone/something \(object\) unidirectionally/asymmetrically
-        to get updates polled from.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/BefriendAction">BefriendAction</a>:
-        Unlike BefriendAction, FollowAction implies that the
-        connection is *not* necessarily reciprocal.</li><li><a
-        href="http://schema.org/SubscribeAction">SubscribeAction</a>:
-        Unlike SubscribeAction, FollowAction implies that the follower
-        acts as an active agent constantly/actively polling for
-        updates.</li><li><a
-        href="http://schema.org/RegisterAction">RegisterAction</a>:
-        Unlike RegisterAction, FollowAction implies that the agent is
-        interested in continuing receiving updates from the
-        object.</li><li><a
-        href="http://schema.org/JoinAction">JoinAction</a>: Unlike
-        JoinAction, FollowAction implies that the agent is interested
-        in getting updates from the object.</li><li><a
-        href="http://schema.org/TrackAction">TrackAction</a>: Unlike
-        TrackAction, FollowAction refers to the polling of updates of
-        all aspects of animate objects rather than the location of
-        inanimate objects \(e.g. you track a package, but you don't
-        follow it\).</li></ul>)
-    property :FoodEstablishment, :label => 'FoodEstablishment', :comment =>
-      %(A food-related business.)
-    property :FoodEstablishmentReservation, :label => 'FoodEstablishmentReservation', :comment =>
-      %(A reservation to dine at a food-related business.Note: This
-        type is for information about actual reservations, e.g. in
-        confirmation emails or HTML pages with individual
-        confirmations of reservations.)
-    property :FoodEvent, :label => 'FoodEvent', :comment =>
-      %(Event type: Food event.)
-    property :FurnitureStore, :label => 'FurnitureStore', :comment =>
-      %(A furniture store.)
-    property :GardenStore, :label => 'GardenStore', :comment =>
-      %(A garden store.)
-    property :GasStation, :label => 'GasStation', :comment =>
-      %(A gas station.)
-    property :GatedResidenceCommunity, :label => 'GatedResidenceCommunity', :comment =>
-      %(Residence type: Gated community.)
-    property :GeneralContractor, :label => 'GeneralContractor', :comment =>
-      %(A general contractor.)
-    property :GeoCoordinates, :label => 'GeoCoordinates', :comment =>
-      %(The geographic coordinates of a place or event.)
-    property :GeoShape, :label => 'GeoShape', :comment =>
-      %(The geographic shape of a place.)
-    property :GiveAction, :label => 'GiveAction', :comment =>
-      %(The act of transferring ownership of an object to a
-        destination. Reciprocal of TakeAction.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/TakeAction">TakeAction</a>: Reciprocal
-        of GiveAction.</li><li><a
-        href="http://schema.org/SendAction">SendAction</a>: Unlike
-        SendAction, GiveAction implies that ownership is being
-        transferred \(e.g. I may send my laptop to you, but that
-        doesn't mean I'm giving it to you\).</li></ul>)
-    property :GolfCourse, :label => 'GolfCourse', :comment =>
-      %(A golf course.)
-    property :GovernmentBuilding, :label => 'GovernmentBuilding', :comment =>
-      %(A government building.)
-    property :GovernmentOffice, :label => 'GovernmentOffice', :comment =>
-      %(A government office&#x2014;for example, an IRS or DMV office.)
-    property :GovernmentOrganization, :label => 'GovernmentOrganization', :comment =>
-      %(A governmental organization or agency.)
-    property :GovernmentPermit, :label => 'GovernmentPermit', :comment =>
-      %(A permit issued by a government agency.)
-    property :GovernmentService, :label => 'GovernmentService', :comment =>
-      %(A service provided by a government organization, e.g. food
-        stamps, veterans benefits, etc.)
-    property :GroceryStore, :label => 'GroceryStore', :comment =>
-      %(A grocery store.)
-    property :HVACBusiness, :label => 'HVACBusiness', :comment =>
-      %(An HVAC service.)
-    property :HairSalon, :label => 'HairSalon', :comment =>
-      %(A hair salon.)
-    property :HardwareStore, :label => 'HardwareStore', :comment =>
-      %(A hardware store.)
-    property :HealthAndBeautyBusiness, :label => 'HealthAndBeautyBusiness', :comment =>
-      %(Health and beauty.)
-    property :HealthClub, :label => 'HealthClub', :comment =>
-      %(A health club.)
-    property :HighSchool, :label => 'HighSchool', :comment =>
-      %(A high school.)
-    property :HinduTemple, :label => 'HinduTemple', :comment =>
-      %(A Hindu temple.)
-    property :HobbyShop, :label => 'HobbyShop', :comment =>
-      %(A hobby store.)
-    property :HomeAndConstructionBusiness, :label => 'HomeAndConstructionBusiness', :comment =>
-      %(A construction business.)
-    property :HomeGoodsStore, :label => 'HomeGoodsStore', :comment =>
-      %(A home goods store.)
-    property :Hospital, :label => 'Hospital', :comment =>
-      %(A hospital.)
-    property :Hostel, :label => 'Hostel', :comment =>
-      %(A hostel.)
-    property :Hotel, :label => 'Hotel', :comment =>
-      %(A hotel.)
-    property :HousePainter, :label => 'HousePainter', :comment =>
-      %(A house painting service.)
-    property :IceCreamShop, :label => 'IceCreamShop', :comment =>
-      %(An ice cream shop)
-    property :IgnoreAction, :label => 'IgnoreAction', :comment =>
-      %(The act of intentionally disregarding the object. An agent
-        ignores an object.)
-    property :ImageGallery, :label => 'ImageGallery', :comment =>
-      %(Web page type: Image gallery page.)
-    property :ImageObject, :label => 'ImageObject', :comment =>
-      %(An image file.)
-    property :ImagingTest, :label => 'ImagingTest', :comment =>
-      %(Any medical imaging modality typically used for diagnostic
-        purposes.)
-    property :IndividualProduct, :label => 'IndividualProduct', :comment =>
-      %(A single, identifiable product instance \(e.g. a laptop with a
-        particular serial number\).)
-    property :InfectiousAgentClass, :label => 'InfectiousAgentClass', :comment =>
-      %(Classes of agents or pathogens that transmit infectious
-        diseases. Enumerated type.)
-    property :InfectiousDisease, :label => 'InfectiousDisease', :comment =>
-      %(An infectious disease is a clinically evident human disease
-        resulting from the presence of pathogenic microbial agents,
-        like pathogenic viruses, pathogenic bacteria, fungi, protozoa,
-        multicellular parasites, and prions. To be considered an
-        infectious disease, such pathogens are known to be able to
-        cause this disease.)
-    property :InformAction, :label => 'InformAction', :comment =>
-      %(The act of notifying someone of information pertinent to them,
-        with no expectation of a response.)
-    property :InsertAction, :label => 'InsertAction', :comment =>
-      %(The act of adding at a specific location in an ordered
-        collection.)
-    property :InstallAction, :label => 'InstallAction', :comment =>
-      %(The act of installing an application.)
-    property :InsuranceAgency, :label => 'InsuranceAgency', :comment =>
-      %(Insurance agency.)
-    property :Intangible, :label => 'Intangible', :comment =>
-      %(A utility class that serves as the umbrella for a number of
-        'intangible' things such as quantities, structured values,
-        etc.)
-    property :Integer, :label => 'Integer', :comment =>
-      %(Data type: Integer.)
-    property :InteractAction, :label => 'InteractAction', :comment =>
-      %(The act of interacting with another person or organization.)
-    property :InternetCafe, :label => 'InternetCafe', :comment =>
-      %(An internet cafe.)
-    property :InviteAction, :label => 'InviteAction', :comment =>
-      %(The act of asking someone to attend an event. Reciprocal of
-        RsvpAction.)
-    property :ItemAvailability, :label => 'ItemAvailability', :comment =>
-      %(A list of possible product availability options.)
-    property :ItemList, :label => 'ItemList', :comment =>
-      %(A list of items of any sort&#x2014;for example, Top 10 Movies
-        About Weathermen, or Top 100 Party Songs. Not to be confused
-        with HTML lists, which are often used only for formatting.)
-    property :ItemPage, :label => 'ItemPage', :comment =>
-      %(A page devoted to a single item, such as a particular product
-        or hotel.)
-    property :JewelryStore, :label => 'JewelryStore', :comment =>
-      %(A jewelry store.)
-    property :JobPosting, :label => 'JobPosting', :comment =>
-      %(A listing that describes a job opening in a certain
-        organization.)
-    property :JoinAction, :label => 'JoinAction', :comment =>
-      %(An agent joins an event/group with participants/friends at a
-        location.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/RegisterAction">RegisterAction</a>:
-        Unlike RegisterAction, JoinAction refers to joining a
-        group/team of people.</li><li><a
-        href="http://schema.org/SubscribeAction">SubscribeAction</a>:
-        Unlike SubscribeAction, JoinAction does not imply that you'll
-        be receiving updates.</li><li><a
-        href="http://schema.org/FollowAction">FollowAction</a>: Unlike
-        FollowAction, JoinAction does not imply that you'll be polling
-        for updates.</li></ul>)
-    property :Joint, :label => 'Joint', :comment =>
-      %(The anatomical location at which two or more bones make
-        contact.)
-    property :LakeBodyOfWater, :label => 'LakeBodyOfWater', :comment =>
-      %(A lake \(for example, Lake Pontrachain\).)
-    property :Landform, :label => 'Landform', :comment =>
-      %(A landform or physical feature. Landform elements include
-        mountains, plains, lakes, rivers, seascape and oceanic
-        waterbody interface features such as bays, peninsulas, seas
-        and so forth, including sub-aqueous terrain features such as
-        submersed mountain ranges, volcanoes, and the great ocean
-        basins.)
-    property :LandmarksOrHistoricalBuildings, :label => 'LandmarksOrHistoricalBuildings', :comment =>
-      %(An historical landmark or building.)
-    property :Language, :label => 'Language', :comment =>
-      %(Natural languages such as Spanish, Tamil, Hindi, English, etc.
-        and programming languages such as Scheme and Lisp.)
-    property :LeaveAction, :label => 'LeaveAction', :comment =>
-      %(An agent leaves an event / group with participants/friends at
-        a location.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/JoinAction">JoinAction</a>: The
-        antagonym of LeaveAction.</li><li><a
-        href="http://schema.org/UnRegisterAction">UnRegisterAction</a>:
-        Unlike UnRegisterAction, LeaveAction implies leaving a
-        group/team of people rather than a service.</li></ul>)
-    property :LegislativeBuilding, :label => 'LegislativeBuilding', :comment =>
-      %(A legislative building&#x2014;for example, the state capitol.)
-    property :LendAction, :label => 'LendAction', :comment =>
-      %(The act of providing an object under an agreement that it will
-        be returned at a later date. Reciprocal of
-        BorrowAction.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/BorrowAction">BorrowAction</a>:
-        Reciprocal of LendAction.</li></ul>)
-    property :Library, :label => 'Library', :comment =>
-      %(A library.)
-    property :LifestyleModification, :label => 'LifestyleModification', :comment =>
-      %(A process of care involving exercise, changes to diet, fitness
-        routines, and other lifestyle changes aimed at improving a
-        health condition.)
-    property :Ligament, :label => 'Ligament', :comment =>
-      %(A short band of tough, flexible, fibrous connective tissue
-        that functions to connect multiple bones, cartilages, and
-        structurally support joints.)
-    property :LikeAction, :label => 'LikeAction', :comment =>
-      %(The act of expressing a positive sentiment about the object.
-        An agent likes an object \(a proposition, topic or theme\)
-        with participants.)
-    property :LiquorStore, :label => 'LiquorStore', :comment =>
-      %(A liquor store.)
-    property :ListenAction, :label => 'ListenAction', :comment =>
-      %(The act of consuming audio content.)
-    property :LiteraryEvent, :label => 'LiteraryEvent', :comment =>
-      %(Event type: Literary event.)
-    property :LocalBusiness, :label => 'LocalBusiness', :comment =>
-      %(A particular physical business or branch of an organization.
-        Examples of LocalBusiness include a restaurant, a particular
-        branch of a restaurant chain, a branch of a bank, a medical
-        practice, a club, a bowling alley, etc.)
-    property :LockerDelivery, :label => 'LockerDelivery', :comment =>
-      %(A DeliveryMethod in which an item is made available via
-        locker.)
-    property :Locksmith, :label => 'Locksmith', :comment =>
-      %(A locksmith.)
-    property :LodgingBusiness, :label => 'LodgingBusiness', :comment =>
-      %(A lodging business, such as a motel, hotel, or inn.)
-    property :LodgingReservation, :label => 'LodgingReservation', :comment =>
-      %(A reservation for lodging at a hotel, motel, inn, etc.Note:
-        This type is for information about actual reservations, e.g.
-        in confirmation emails or HTML pages with individual
-        confirmations of reservations.)
-    property :LoseAction, :label => 'LoseAction', :comment =>
-      %(The act of being defeated in a competitive activity.)
-    property :LymphaticVessel, :label => 'LymphaticVessel', :comment =>
-      %(A type of blood vessel that specifically carries lymph fluid
-        unidirectionally toward the heart.)
-    property :Map, :label => 'Map', :comment =>
-      %(A map.)
-    property :MarryAction, :label => 'MarryAction', :comment =>
-      %(The act of marrying a person.)
-    property :Mass, :label => 'Mass', :comment =>
-      %(Properties that take Mass as values are of the form
-        '&lt;Number&gt; &lt;Mass unit of measure&gt;'. E.g., '7 kg')
-    property :MaximumDoseSchedule, :label => 'MaximumDoseSchedule', :comment =>
-      %(The maximum dosing schedule considered safe for a drug or
-        supplement as recommended by an authority or by the
-        drug/supplement's manufacturer. Capture the recommending
-        authority in the recognizingAuthority property of
-        MedicalEntity.)
-    property :MediaObject, :label => 'MediaObject', :comment =>
-      %(An image, video, or audio object embedded in a web page. Note
-        that a creative work may have many media objects associated
-        with it on the same web page. For example, a page about a
-        single song \(MusicRecording\) may have a music video
-        \(VideoObject\), and a high and low bandwidth audio stream \(2
-        AudioObject's\).)
-    property :MedicalAudience, :label => 'MedicalAudience', :comment =>
-      %(Target audiences for medical web pages. Enumerated type.)
-    property :MedicalCause, :label => 'MedicalCause', :comment =>
-      %(The causative agent\(s\) that are responsible for the
-        pathophysiologic process that eventually results in a medical
-        condition, symptom or sign. In this schema, unless otherwise
-        specified this is meant to be the proximate cause of the
-        medical condition, symptom or sign. The proximate cause is
-        defined as the causative agent that most directly results in
-        the medical condition, symptom or sign. For example, the HIV
-        virus could be considered a cause of AIDS. Or in a diagnostic
-        context, if a patient fell and sustained a hip fracture and
-        two days later sustained a pulmonary embolism which eventuated
-        in a cardiac arrest, the cause of the cardiac arrest \(the
-        proximate cause\) would be the pulmonary embolism and not the
-        fall. <p>Medical causes can include cardiovascular, chemical,
-        dermatologic, endocrine, environmental, gastroenterologic,
-        genetic, hematologic, gynecologic, iatrogenic, infectious,
-        musculoskeletal, neurologic, nutritional, obstetric,
-        oncologic, otolaryngologic, pharmacologic, psychiatric,
-        pulmonary, renal, rheumatologic, toxic, traumatic, or urologic
-        causes; medical conditions can be causes as well.)
-    property :MedicalClinic, :label => 'MedicalClinic', :comment =>
-      %(A medical clinic.)
-    property :MedicalCode, :label => 'MedicalCode', :comment =>
-      %(A code for a medical entity.)
-    property :MedicalCondition, :label => 'MedicalCondition', :comment =>
-      %(Any condition of the human body that affects the normal
-        functioning of a person, whether physically or mentally.
-        Includes diseases, injuries, disabilities, disorders,
-        syndromes, etc.)
-    property :MedicalConditionStage, :label => 'MedicalConditionStage', :comment =>
-      %(A stage of a medical condition, such as 'Stage IIIa'.)
-    property :MedicalContraindication, :label => 'MedicalContraindication', :comment =>
-      %(A condition or factor that serves as a reason to withhold a
-        certain medical therapy. Contraindications can be absolute
-        \(there are no reasonable circumstances for undertaking a
-        course of action\) or relative \(the patient is at higher risk
-        of complications, but that these risks may be outweighed by
-        other considerations or mitigated by other measures\).)
-    property :MedicalDevice, :label => 'MedicalDevice', :comment =>
-      %(Any object used in a medical capacity, such as to diagnose or
-        treat a patient.)
-    property :MedicalDevicePurpose, :label => 'MedicalDevicePurpose', :comment =>
-      %(Categories of medical devices, organized by the purpose or
-        intended use of the device.)
-    property :MedicalEntity, :label => 'MedicalEntity', :comment =>
-      %(The most generic type of entity related to health and the
-        practice of medicine.)
-    property :MedicalEnumeration, :label => 'MedicalEnumeration', :comment =>
-      %(Enumerations related to health and the practice of medicine.)
-    property :MedicalEvidenceLevel, :label => 'MedicalEvidenceLevel', :comment =>
-      %(Level of evidence for a medical guideline. Enumerated type.)
-    property :MedicalGuideline, :label => 'MedicalGuideline', :comment =>
-      %(Any recommendation made by a standard society \(e.g. ACC/AHA\)
-        or consensus statement that denotes how to diagnose and treat
-        a particular condition. Note: this type should be used to tag
-        the actual guideline recommendation; if the guideline
-        recommendation occurs in a larger scholarly article, use
-        MedicalScholarlyArticle to tag the overall article, not this
-        type. Note also: the organization making the recommendation
-        should be captured in the recognizingAuthority base property
-        of MedicalEntity.)
-    property :MedicalGuidelineContraindication, :label => 'MedicalGuidelineContraindication', :comment =>
-      %(A guideline contraindication that designates a process as
-        harmful and where quality of the data supporting the
-        contraindication is sound.)
-    property :MedicalGuidelineRecommendation, :label => 'MedicalGuidelineRecommendation', :comment =>
-      %(A guideline recommendation that is regarded as efficacious and
-        where quality of the data supporting the recommendation is
-        sound.)
-    property :MedicalImagingTechnique, :label => 'MedicalImagingTechnique', :comment =>
-      %(Any medical imaging modality typically used for diagnostic
-        purposes. Enumerated type.)
-    property :MedicalIndication, :label => 'MedicalIndication', :comment =>
-      %(A condition or factor that indicates use of a medical therapy,
-        including signs, symptoms, risk factors, anatomical states,
-        etc.)
-    property :MedicalIntangible, :label => 'MedicalIntangible', :comment =>
-      %(A utility class that serves as the umbrella for a number of
-        'intangible' things in the medical space.)
-    property :MedicalObservationalStudy, :label => 'MedicalObservationalStudy', :comment =>
-      %(An observational study is a type of medical study that
-        attempts to infer the possible effect of a treatment through
-        observation of a cohort of subjects over a period of time. In
-        an observational study, the assignment of subjects into
-        treatment groups versus control groups is outside the control
-        of the investigator. This is in contrast with controlled
-        studies, such as the randomized controlled trials represented
-        by MedicalTrial, where each subject is randomly assigned to a
-        treatment group or a control group before the start of the
-        treatment.)
-    property :MedicalObservationalStudyDesign, :label => 'MedicalObservationalStudyDesign', :comment =>
-      %(Design models for observational medical studies. Enumerated
-        type.)
-    property :MedicalOrganization, :label => 'MedicalOrganization', :comment =>
-      %(A medical organization, such as a doctor's office or clinic.)
-    property :MedicalProcedure, :label => 'MedicalProcedure', :comment =>
-      %(A process of care used in either a diagnostic, therapeutic, or
-        palliative capacity that relies on invasive \(surgical\),
-        non-invasive, or percutaneous techniques.)
-    property :MedicalProcedureType, :label => 'MedicalProcedureType', :comment =>
-      %(An enumeration that describes different types of medical
-        procedures.)
-    property :MedicalRiskCalculator, :label => 'MedicalRiskCalculator', :comment =>
-      %(A complex mathematical calculation requiring an online
-        calculator, used to assess prognosis. Note: use the url
-        property of Thing to record any URLs for online calculators.)
-    property :MedicalRiskEstimator, :label => 'MedicalRiskEstimator', :comment =>
-      %(Any rule set or interactive tool for estimating the risk of
-        developing a complication or condition.)
-    property :MedicalRiskFactor, :label => 'MedicalRiskFactor', :comment =>
-      %(A risk factor is anything that increases a person's likelihood
-        of developing or contracting a disease, medical condition, or
-        complication.)
-    property :MedicalRiskScore, :label => 'MedicalRiskScore', :comment =>
-      %(A simple system that adds up the number of risk factors to
-        yield a score that is associated with prognosis, e.g. CHAD
-        score, TIMI risk score.)
-    property :MedicalScholarlyArticle, :label => 'MedicalScholarlyArticle', :comment =>
-      %(A scholarly article in the medical domain.)
-    property :MedicalSign, :label => 'MedicalSign', :comment =>
-      %(Any physical manifestation of a person's medical condition
-        discoverable by objective diagnostic tests or physical
-        examination.)
-    property :MedicalSignOrSymptom, :label => 'MedicalSignOrSymptom', :comment =>
-      %(Any indication of the existence of a medical condition or
-        disease.)
-    property :MedicalSpecialty, :label => 'MedicalSpecialty', :comment =>
-      %(Any specific branch of medical science or practice. Medical
-        specialities include clinical specialties that pertain to
-        particular organ systems and their respective disease states,
-        as well as allied health specialties. Enumerated type.)
-    property :MedicalStudy, :label => 'MedicalStudy', :comment =>
-      %(A medical study is an umbrella type covering all kinds of
-        research studies relating to human medicine or health,
-        including observational studies and interventional trials and
-        registries, randomized, controlled or not. When the specific
-        type of study is known, use one of the extensions of this
-        type, such as MedicalTrial or MedicalObservationalStudy. Also,
-        note that this type should be used to mark up data that
-        describes the study itself; to tag an article that publishes
-        the results of a study, use MedicalScholarlyArticle. Note: use
-        the code property of MedicalEntity to store study IDs, e.g.
-        clinicaltrials.gov ID.)
-    property :MedicalStudyStatus, :label => 'MedicalStudyStatus', :comment =>
-      %(The status of a medical study. Enumerated type.)
-    property :MedicalSymptom, :label => 'MedicalSymptom', :comment =>
-      %(Any indication of the existence of a medical condition or
-        disease that is apparent to the patient.)
-    property :MedicalTest, :label => 'MedicalTest', :comment =>
-      %(Any medical test, typically performed for diagnostic purposes.)
-    property :MedicalTestPanel, :label => 'MedicalTestPanel', :comment =>
-      %(Any collection of tests commonly ordered together.)
-    property :MedicalTherapy, :label => 'MedicalTherapy', :comment =>
-      %(Any medical intervention designed to prevent, treat, and cure
-        human diseases and medical conditions, including both curative
-        and palliative therapies. Medical therapies are typically
-        processes of care relying upon pharmacotherapy, behavioral
-        therapy, supportive therapy \(with fluid or nutrition for
-        example\), or detoxification \(e.g. hemodialysis\) aimed at
-        improving or preventing a health condition.)
-    property :MedicalTrial, :label => 'MedicalTrial', :comment =>
-      %(A medical trial is a type of medical study that uses
-        scientific process used to compare the safety and efficacy of
-        medical therapies or medical procedures. In general, medical
-        trials are controlled and subjects are allocated at random to
-        the different treatment and/or control groups.)
-    property :MedicalTrialDesign, :label => 'MedicalTrialDesign', :comment =>
-      %(Design models for medical trials. Enumerated type.)
-    property :MedicalWebPage, :label => 'MedicalWebPage', :comment =>
-      %(A web page that provides medical information.)
-    property :MedicineSystem, :label => 'MedicineSystem', :comment =>
-      %(Systems of medical practice.)
-    property :MensClothingStore, :label => 'MensClothingStore', :comment =>
-      %(A men's clothing store.)
-    property :MiddleSchool, :label => 'MiddleSchool', :comment =>
-      %(A middle school.)
-    property :MobileApplication, :label => 'MobileApplication', :comment =>
-      %(A mobile software application.)
-    property :MobilePhoneStore, :label => 'MobilePhoneStore', :comment =>
-      %(A mobile-phone store.)
-    property :Mosque, :label => 'Mosque', :comment =>
-      %(A mosque.)
-    property :Motel, :label => 'Motel', :comment =>
-      %(A motel.)
-    property :MotorcycleDealer, :label => 'MotorcycleDealer', :comment =>
-      %(A motorcycle dealer.)
-    property :MotorcycleRepair, :label => 'MotorcycleRepair', :comment =>
-      %(A motorcycle repair shop.)
-    property :Mountain, :label => 'Mountain', :comment =>
-      %(A mountain, like Mount Whitney or Mount Everest)
-    property :MoveAction, :label => 'MoveAction', :comment =>
-      %(The act of an agent relocating to a place.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/TransferAction">TransferAction</a>:
-        Unlike TransferAction, the subject of the move is a living
-        Person or Organization rather than an inanimate
-        object.</li></ul>)
-    property :Movie, :label => 'Movie', :comment =>
-      %(A movie.)
-    property :MovieRentalStore, :label => 'MovieRentalStore', :comment =>
-      %(A movie rental store.)
-    property :MovieTheater, :label => 'MovieTheater', :comment =>
-      %(A movie theater.)
-    property :MovingCompany, :label => 'MovingCompany', :comment =>
-      %(A moving company.)
-    property :Muscle, :label => 'Muscle', :comment =>
-      %(A muscle is an anatomical structure consisting of a
-        contractile form of tissue that animals use to effect
-        movement.)
-    property :Museum, :label => 'Museum', :comment =>
-      %(A museum.)
-    property :MusicAlbum, :label => 'MusicAlbum', :comment =>
-      %(A collection of music tracks.)
-    property :MusicEvent, :label => 'MusicEvent', :comment =>
-      %(Event type: Music event.)
-    property :MusicGroup, :label => 'MusicGroup', :comment =>
-      %(A musical group, such as a band, an orchestra, or a choir. Can
-        also be a solo musician.)
-    property :MusicPlaylist, :label => 'MusicPlaylist', :comment =>
-      %(A collection of music tracks in playlist form.)
-    property :MusicRecording, :label => 'MusicRecording', :comment =>
-      %(A music recording \(track\), usually a single song.)
-    property :MusicStore, :label => 'MusicStore', :comment =>
-      %(A music store.)
-    property :MusicVenue, :label => 'MusicVenue', :comment =>
-      %(A music venue.)
-    property :MusicVideoObject, :label => 'MusicVideoObject', :comment =>
-      %(A music video file.)
-    property :NGO, :label => 'NGO', :comment =>
-      %(Organization: Non-governmental Organization.)
-    property :NailSalon, :label => 'NailSalon', :comment =>
-      %(A nail salon.)
-    property :Nerve, :label => 'Nerve', :comment =>
-      %(A common pathway for the electrochemical nerve impulses that
-        are transmitted along each of the axons.)
-    property :NewsArticle, :label => 'NewsArticle', :comment =>
-      %(A news article)
-    property :NightClub, :label => 'NightClub', :comment =>
-      %(A nightclub or discotheque.)
-    property :Notary, :label => 'Notary', :comment =>
-      %(A notary.)
-    property :Number, :label => 'Number', :comment =>
-      %(Data type: Number.)
-    property :NutritionInformation, :label => 'NutritionInformation', :comment =>
-      %(Nutritional information about the recipe.)
-    property :OceanBodyOfWater, :label => 'OceanBodyOfWater', :comment =>
-      %(An ocean \(for example, the Pacific\).)
-    property :Offer, :label => 'Offer', :comment =>
-      %(An offer to sell an item&#x2014;for example, an offer to sell
-        a product, the DVD of a movie, or tickets to an event.)
-    property :OfferItemCondition, :label => 'OfferItemCondition', :comment =>
-      %(A list of possible conditions for the item for sale.)
-    property :OfficeEquipmentStore, :label => 'OfficeEquipmentStore', :comment =>
-      %(An office equipment store.)
-    property :OnDemandEvent, :label => 'OnDemandEvent', :comment =>
-      %(A publication event e.g. catch-up TV or radio podcast, during
-        which a program is available on-demand.)
-    property :OpeningHoursSpecification, :label => 'OpeningHoursSpecification', :comment =>
-      %(A structured value providing information about the opening
-        hours of a place or a certain service inside a place.)
-    property :Optician, :label => 'Optician', :comment =>
-      %(An optician's store.)
-    property :Order, :label => 'Order', :comment =>
-      %(An order is a confirmation of a transaction \(a receipt\),
-        which can contain multiple line items, each represented by an
-        Offer that has been accepted by the customer.)
-    property :OrderAction, :label => 'OrderAction', :comment =>
-      %(An agent orders an object/product/service to be
-        delivered/sent.)
-    property :OrderStatus, :label => 'OrderStatus', :comment =>
-      %(Enumerated status values for Order.)
-    property :Organization, :label => 'Organization', :comment =>
-      %(An organization such as a school, NGO, corporation, club, etc.)
-    property :OrganizeAction, :label => 'OrganizeAction', :comment =>
-      %(The act of manipulating/administering/supervising/controlling
-        one or more objects.)
-    property :OutletStore, :label => 'OutletStore', :comment =>
-      %(An outlet store.)
-    property :OwnershipInfo, :label => 'OwnershipInfo', :comment =>
-      %(A structured value providing information about when a certain
-        organization or person owned a certain product.)
-    property :PaintAction, :label => 'PaintAction', :comment =>
-      %(The act of producing a painting, typically with paint and
-        canvas as instruments.)
-    property :Painting, :label => 'Painting', :comment =>
-      %(A painting.)
-    property :PalliativeProcedure, :label => 'PalliativeProcedure', :comment =>
-      %(A medical procedure intended primarly for palliative purposes,
-        aimed at relieving the symptoms of an underlying health
-        condition.)
-    property :ParcelDelivery, :label => 'ParcelDelivery', :comment =>
-      %(The delivery of a parcel either via the postal service or a
-        commercial service.)
-    property :ParcelService, :label => 'ParcelService', :comment =>
-      %(A private parcel service as the delivery mode available for a
-        certain offer. Commonly used values:
-        http://purl.org/goodrelations/v1#DHL
-        http://purl.org/goodrelations/v1#FederalExpress
-        http://purl.org/goodrelations/v1#UPS)
-    property :ParentAudience, :label => 'ParentAudience', :comment =>
-      %(A set of characteristics describing parents, who can be
-        interested in viewing some content)
-    property :Park, :label => 'Park', :comment =>
-      %(A park.)
-    property :ParkingFacility, :label => 'ParkingFacility', :comment =>
-      %(A parking lot or other parking facility.)
-    property :PathologyTest, :label => 'PathologyTest', :comment =>
-      %(A medical test performed by a laboratory that typically
-        involves examination of a tissue sample by a pathologist.)
-    property :PawnShop, :label => 'PawnShop', :comment =>
-      %(A pawnstore.)
-    property :PayAction, :label => 'PayAction', :comment =>
-      %(An agent pays a price to a participant.)
-    property :PaymentChargeSpecification, :label => 'PaymentChargeSpecification', :comment =>
-      %(The costs of settling the payment using a particular payment
-        method.)
-    property :PaymentMethod, :label => 'PaymentMethod', :comment =>
-      %(A payment method is a standardized procedure for transferring
-        the monetary amount for a purchase. Payment methods are
-        characterized by the legal and technical structures used, and
-        by the organization or group carrying out the transaction.
-        Commonly used values:
-        http://purl.org/goodrelations/v1#ByBankTransferInAdvance
-        http://purl.org/goodrelations/v1#ByInvoice
-        http://purl.org/goodrelations/v1#Cash
-        http://purl.org/goodrelations/v1#CheckInAdvance
-        http://purl.org/goodrelations/v1#COD
-        http://purl.org/goodrelations/v1#DirectDebit
-        http://purl.org/goodrelations/v1#GoogleCheckout
-        http://purl.org/goodrelations/v1#PayPal
-        http://purl.org/goodrelations/v1#PaySwarm)
-    property :PeopleAudience, :label => 'PeopleAudience', :comment =>
-      %(A set of characteristics belonging to people, e.g. who compose
-        an item's target audience.)
-    property :PerformAction, :label => 'PerformAction', :comment =>
-      %(The act of participating in performance arts.)
-    property :PerformingArtsTheater, :label => 'PerformingArtsTheater', :comment =>
-      %(A theatre or other performing art center.)
-    property :PerformingGroup, :label => 'PerformingGroup', :comment =>
-      %(A performance group, such as a band, an orchestra, or a
-        circus.)
-    property :Permit, :label => 'Permit', :comment =>
-      %(A permit issued by an organization, e.g. a parking pass.)
-    property :Person, :label => 'Person', :comment =>
-      %(A person \(alive, dead, undead, or fictional\).)
-    property :PetStore, :label => 'PetStore', :comment =>
-      %(A pet store.)
-    property :Pharmacy, :label => 'Pharmacy', :comment =>
-      %(A pharmacy or drugstore.)
-    property :Photograph, :label => 'Photograph', :comment =>
-      %(A photograph.)
-    property :PhotographAction, :label => 'PhotographAction', :comment =>
-      %(The act of capturing still images of objects using a camera.)
-    property :PhysicalActivity, :label => 'PhysicalActivity', :comment =>
-      %(Any bodily activity that enhances or maintains physical
-        fitness and overall health and wellness. Includes activity
-        that is part of daily living and routine, structured exercise,
-        and exercise prescribed as part of a medical treatment or
-        recovery plan.)
-    property :PhysicalActivityCategory, :label => 'PhysicalActivityCategory', :comment =>
-      %(Categories of physical activity, organized by physiologic
-        classification.)
-    property :PhysicalExam, :label => 'PhysicalExam', :comment =>
-      %(A type of physical examination of a patient performed by a
-        physician. Enumerated type.)
-    property :PhysicalTherapy, :label => 'PhysicalTherapy', :comment =>
-      %(A process of progressive physical care and rehabilitation
-        aimed at improving a health condition.)
-    property :Physician, :label => 'Physician', :comment =>
-      %(A doctor's office.)
-    property :Place, :label => 'Place', :comment =>
-      %(Entities that have a somewhat fixed, physical extension.)
-    property :PlaceOfWorship, :label => 'PlaceOfWorship', :comment =>
-      %(Place of worship, such as a church, synagogue, or mosque.)
-    property :PlanAction, :label => 'PlanAction', :comment =>
-      %(The act of planning the execution of an
-        event/task/action/reservation/plan to a future date.)
-    property :PlayAction, :label => 'PlayAction', :comment =>
-      %(The act of playing/exercising/training/performing for
-        enjoyment, leisure, recreation, competion or
-        exercise.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/ListenAction">ListenAction</a>: Unlike
-        ListenAction \(which is under ConsumeAction\), PlayAction
-        refers to performing for an audience or at an event, rather
-        than consuming music.</li><li><a
-        href="http://schema.org/WatchAction">WatchAction</a>: Unlike
-        WatchAction \(which is under ConsumeAction\), PlayAction
-        refers to showing/displaying for an audience or at an event,
-        rather than consuming visual content.</li></ul>)
-    property :Playground, :label => 'Playground', :comment =>
-      %(A playground.)
-    property :Plumber, :label => 'Plumber', :comment =>
-      %(A plumbing service.)
-    property :PoliceStation, :label => 'PoliceStation', :comment =>
-      %(A police station.)
-    property :Pond, :label => 'Pond', :comment =>
-      %(A pond)
-    property :PostOffice, :label => 'PostOffice', :comment =>
-      %(A post office.)
-    property :PostalAddress, :label => 'PostalAddress', :comment =>
-      %(The mailing address.)
-    property :PrependAction, :label => 'PrependAction', :comment =>
-      %(The act of inserting at the beginning if an ordered
-        collection.)
-    property :Preschool, :label => 'Preschool', :comment =>
-      %(A preschool.)
-    property :PreventionIndication, :label => 'PreventionIndication', :comment =>
-      %(An indication for preventing an underlying condition, symptom,
-        etc.)
-    property :PriceSpecification, :label => 'PriceSpecification', :comment =>
-      %(A structured value representing a monetary amount. Typically,
-        only the subclasses of this type are used for markup.)
-    property :ProductModel, :label => 'ProductModel', :comment =>
-      %(A datasheet or vendor specification of a product \(in the
-        sense of a prototypical description\).)
-    property :ProfessionalService, :label => 'ProfessionalService', :comment =>
-      %(Provider of professional services.)
-    property :ProfilePage, :label => 'ProfilePage', :comment =>
-      %(Web page type: Profile page.)
-    property :ProgramMembership, :label => 'Program Membership', :comment =>
-      %(Used to describe membership in a loyalty programs \(e.g.
-        "StarAliance"\), traveler clubs \(e.g. "AAA"\), purchase clubs
-        \("Safeway Club"\), etc.)
-    property :Property, :label => 'Property', :comment =>
-      %(A property, used to indicate attributes and relationships of
-        some Thing; equivalent to rdf:Property.)
-    property :PropertyValueSpecification, :label => 'PropertyValueSpecification', :comment =>
-      %(A Property value specification.)
-    property :PsychologicalTreatment, :label => 'PsychologicalTreatment', :comment =>
-      %(A process of care relying upon counseling, dialogue,
-        communication, verbalization aimed at improving a mental
-        health condition.)
-    property :PublicSwimmingPool, :label => 'PublicSwimmingPool', :comment =>
-      %(A public swimming pool.)
-    property :PublicationEvent, :label => 'PublicationEvent', :comment =>
-      %(A PublicationEvent corresponds indifferently to the event of
-        publication for a CreativeWork of any type e.g. a broadcast
-        event, an on-demand event, a book/journal publication via a
-        variety of delivery media.)
-    property :QAPage, :label => 'QAPage', :comment =>
-      %(A QAPage is a WebPage focussed on a specific Question and its
-        Answer\(s\), e.g. in a question answering site or documenting
-        Frequently Asked Questions \(FAQs\).)
-    property :QualitativeValue, :label => 'QualitativeValue', :comment =>
-      %(A predefined value for a product characteristic, e.g. the the
-        power cord plug type "US" or the garment sizes "S", "M", "L",
-        and "XL")
-    property :QuantitativeValue, :label => 'QuantitativeValue', :comment =>
-      %(A point value or interval for product characteristics and
-        other purposes.)
-    property :Quantity, :label => 'Quantity', :comment =>
-      %(Quantities such as distance, time, mass, weight, etc.
-        Particular instances of say Mass are entities like '3 Kg' or
-        '4 milligrams'.)
-    property :Question, :label => 'Question', :comment =>
-      %(A specific question - e.g. from a user seeking answers online,
-        or collected in a Frequently Asked Questions \(FAQ\) document.)
-    property :QuoteAction, :label => 'QuoteAction', :comment =>
-      %(An agent quotes/estimates/appraises an object/product/service
-        with a price at a location/store.)
-    property :RVPark, :label => 'RVPark', :comment =>
-      %(An RV park.)
-    property :RadiationTherapy, :label => 'RadiationTherapy', :comment =>
-      %(A process of care using radiation aimed at improving a health
-        condition.)
-    property :RadioClip, :label => 'RadioClip', :comment =>
-      %(A short radio progam or a segment/part of a radio program.)
-    property :RadioEpisode, :label => 'RadioEpisode', :comment =>
-      %(A radio episode which can be part of a series or season.)
-    property :RadioSeason, :label => 'RadioSeason', :comment =>
-      %(Season dedicated to radio broadcast and associated online
-        delivery.)
-    property :RadioSeries, :label => 'RadioSeries', :comment =>
-      %(Series dedicated to radio broadcast and associated online
-        delivery.)
-    property :RadioStation, :label => 'RadioStation', :comment =>
-      %(A radio station.)
-    property :Rating, :label => 'Rating', :comment =>
-      %(The rating of the video.)
-    property :ReactAction, :label => 'ReactAction', :comment =>
-      %(The act of responding instinctively and emotionally to an
-        object, expressing a sentiment.)
-    property :ReadAction, :label => 'ReadAction', :comment =>
-      %(The act of consuming written content.)
-    property :RealEstateAgent, :label => 'RealEstateAgent', :comment =>
-      %(A real-estate agent.)
-    property :ReceiveAction, :label => 'ReceiveAction', :comment =>
-      %(The act of physically/electronically taking delivery of an
-        object thathas been transferred from an origin to a
-        destination. Reciprocal of SendAction.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/SendAction">SendAction</a>: The
-        reciprocal of ReceiveAction.</li><li><a
-        href="http://schema.org/TakeAction">TakeAction</a>: Unlike
-        TakeAction, ReceiveAction does not imply that the ownership
-        has been transfered \(e.g. I can receive a package, but it
-        does not mean the package is now mine\).</li></ul>)
-    property :Recipe, :label => 'Recipe', :comment =>
-      %(A recipe.)
-    property :RecommendedDoseSchedule, :label => 'RecommendedDoseSchedule', :comment =>
-      %(A recommended dosing schedule for a drug or supplement as
-        prescribed or recommended by an authority or by the
-        drug/supplement's manufacturer. Capture the recommending
-        authority in the recognizingAuthority property of
-        MedicalEntity.)
-    property :RecyclingCenter, :label => 'RecyclingCenter', :comment =>
-      %(A recycling center.)
-    property :RegisterAction, :label => 'RegisterAction', :comment =>
-      %(The act of registering to be a user of a service, product or
-        web page.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/JoinAction">JoinAction</a>: Unlike
-        JoinAction, RegisterAction implies you are registering to be a
-        user of a service, *not* a group/team of people.</li><li><a
-        href="http://schema.org/FollowAction">FollowAction</a>: Unlike
-        FollowAction, RegisterAction doesn't imply that the agent is
-        expecting to poll for updates from the object.</li><li><a
-        href="http://schema.org/SubscribeAction">SubscribeAction</a>:
-        Unlike SubscribeAction, RegisterAction doesn't imply that the
-        agent is expecting updates from the object.</li></ul>)
-    property :RejectAction, :label => 'RejectAction', :comment =>
-      %(The act of rejecting to/adopting an object.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/AcceptAction">AcceptAction</a>: The
-        antagonym of RejectAction.</li></ul>)
-    property :RentAction, :label => 'RentAction', :comment =>
-      %(The act of giving money in return for temporary use, but not
-        ownership, of an object such as a vehicle or property. For
-        example, an agent rents a property from a landlord in exchange
-        for a periodic payment.)
-    property :RentalCarReservation, :label => 'RentalCarReservation', :comment =>
-      %(A reservation for a rental car.Note: This type is for
-        information about actual reservations, e.g. in confirmation
-        emails or HTML pages with individual confirmations of
-        reservations.)
-    property :ReplaceAction, :label => 'ReplaceAction', :comment =>
-      %(The act of editing a recipient by replacing an old object with
-        a new object.)
-    property :ReplyAction, :label => 'ReplyAction', :comment =>
-      %(The act of responding to a question/message asked/sent by the
-        object. Related to <a
-        href="AskAction">AskAction</a>.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/AskAction">AskAction</a>: Appears
-        generally as an origin of a ReplyAction.</li></ul>)
-    property :ReportedDoseSchedule, :label => 'ReportedDoseSchedule', :comment =>
-      %(A patient-reported or observed dosing schedule for a drug or
-        supplement.)
-    property :Reservation, :label => 'Reservation', :comment =>
-      %(Describes a reservation for travel, dining or an event. Some
-        reservations require tickets.Note: This type is for
-        information about actual reservations, e.g. in confirmation
-        emails or HTML pages with individual confirmations of
-        reservations. For offers of tickets, restaurant reservations,
-        flights, or rental cars, use http://schema.org/Offer.)
-    property :ReservationPackage, :label => 'ReservationPackage', :comment =>
-      %(A group of multiple reservations with common values for all
-        sub-reservations.)
-    property :ReservationStatusType, :label => 'ReservationStatusType', :comment =>
-      %(Enumerated status values for Reservation.)
-    property :ReserveAction, :label => 'ReserveAction', :comment =>
-      %(Reserving a concrete object.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/ScheduleAction">ScheduleAction</a>:
-        Unlike ScheduleAction, ReserveAction reserves concrete objects
-        \(e.g. a table, a hotel\) towards a time slot / spatial
-        allocation.</li></ul>)
-    property :Reservoir, :label => 'Reservoir', :comment =>
-      %(A reservoir, like the Lake Kariba reservoir.)
-    property :Residence, :label => 'Residence', :comment =>
-      %(The place where a person lives.)
-    property :Restaurant, :label => 'Restaurant', :comment =>
-      %(A restaurant.)
-    property :ReturnAction, :label => 'ReturnAction', :comment =>
-      %(The act of returning to the origin that which was previously
-        received \(concrete objects\) or taken \(ownership\).)
-    property :Review, :label => 'Review', :comment =>
-      %(A review of an item - for example, a restaurant, movie, or
-        store.)
-    property :ReviewAction, :label => 'ReviewAction', :comment =>
-      %(The act of producing a balanced opinion about the object for
-        an audience. An agent reviews an object with participants
-        resulting in a review.)
-    property :RiverBodyOfWater, :label => 'RiverBodyOfWater', :comment =>
-      %(A river \(for example, the broad majestic Shannon\).)
-    property :RoofingContractor, :label => 'RoofingContractor', :comment =>
-      %(A roofing contractor.)
-    property :RsvpAction, :label => 'RsvpAction', :comment =>
-      %(The act of notifying an event organiser as to whether you
-        expect to attend the event.)
-    property :SaleEvent, :label => 'SaleEvent', :comment =>
-      %(Event type: Sales event.)
-    property :ScheduleAction, :label => 'ScheduleAction', :comment =>
-      %(Scheduling future actions, events, or tasks.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/ReserveAction">ReserveAction</a>:
-        Unlike ReserveAction, ScheduleAction allocates future actions
-        \(e.g. an event, a task, etc\) towards a time slot / spatial
-        allocation.</li></ul>)
-    property :ScholarlyArticle, :label => 'ScholarlyArticle', :comment =>
-      %(A scholarly article.)
-    property :School, :label => 'School', :comment =>
-      %(A school.)
-    property :Sculpture, :label => 'Sculpture', :comment =>
-      %(A piece of sculpture.)
-    property :SeaBodyOfWater, :label => 'SeaBodyOfWater', :comment =>
-      %(A sea \(for example, the Caspian sea\).)
-    property :SearchAction, :label => 'SearchAction', :comment =>
-      %(The act of searching for an object.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/FindAction">FindAction</a>:
-        SearchAction generally leads to a FindAction, but not
-        necessarily.</li></ul>)
-    property :SearchResultsPage, :label => 'SearchResultsPage', :comment =>
-      %(Web page type: Search results page.)
-    property :Season, :label => 'Season', :comment =>
-      %(A TV or radio season.)
-    property :Seat, :label => 'Seat', :comment =>
-      %(Used to describe a seat, such as a reserved seat in an event
-        reservation.)
-    property :SelfStorage, :label => 'SelfStorage', :comment =>
-      %(Self-storage facility.)
-    property :SellAction, :label => 'SellAction', :comment =>
-      %(The act of taking money from a buyer in exchange for goods or
-        services rendered. An agent sells an object, product, or
-        service to a buyer for a price. Reciprocal of BuyAction.)
-    property :SendAction, :label => 'SendAction', :comment =>
-      %(The act of physically/electronically dispatching an object for
-        transfer from an origin to a destination.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/ReceiveAction">ReceiveAction</a>: The
-        reciprocal of SendAction.</li><li><a
-        href="http://schema.org/GiveAction">GiveAction</a>: Unlike
-        GiveAction, SendAction does not imply the transfer of
-        ownership \(e.g. I can send you my laptop, but I'm not
-        necessarily giving it to you\).</li></ul>)
-    property :Series, :label => 'Series', :comment =>
-      %(A TV or radio series.)
-    property :Service, :label => 'Service', :comment =>
-      %(A service provided by an organization, e.g. delivery service,
-        print services, etc.)
-    property :ServiceChannel, :label => 'ServiceChannel', :comment =>
-      %(A means for accessing a service, e.g. a government office
-        location, web site, or phone number.)
-    property :ShareAction, :label => 'ShareAction', :comment =>
-      %(The act of distributing content to people for their amusement
-        or edification.)
-    property :ShoeStore, :label => 'ShoeStore', :comment =>
-      %(A shoe store.)
-    property :ShoppingCenter, :label => 'ShoppingCenter', :comment =>
-      %(A shopping center or mall.)
-    property :SingleFamilyResidence, :label => 'SingleFamilyResidence', :comment =>
-      %(Residence type: Single-family home.)
-    property :SiteNavigationElement, :label => 'SiteNavigationElement', :comment =>
-      %(A navigation element of the page.)
-    property :SkiResort, :label => 'SkiResort', :comment =>
-      %(A ski resort.)
-    property :SocialEvent, :label => 'SocialEvent', :comment =>
-      %(Event type: Social event.)
-    property :SoftwareApplication, :label => 'SoftwareApplication', :comment =>
-      %(A software application.)
-    property :SomeProducts, :label => 'SomeProducts', :comment =>
-      %(A placeholder for multiple similar products of the same kind.)
-    property :Specialty, :label => 'Specialty', :comment =>
-      %(Any branch of a field in which people typically develop
-        specific expertise, usually after significant study, time, and
-        effort.)
-    property :SportingGoodsStore, :label => 'SportingGoodsStore', :comment =>
-      %(A sporting goods store.)
-    property :SportsActivityLocation, :label => 'SportsActivityLocation', :comment =>
-      %(A sports location, such as a playing field.)
-    property :SportsClub, :label => 'SportsClub', :comment =>
-      %(A sports club.)
-    property :SportsEvent, :label => 'SportsEvent', :comment =>
-      %(Event type: Sports event.)
-    property :SportsTeam, :label => 'SportsTeam', :comment =>
-      %(Organization: Sports team.)
-    property :StadiumOrArena, :label => 'StadiumOrArena', :comment =>
-      %(A stadium.)
-    property :State, :label => 'State', :comment =>
-      %(A state or province.)
-    property :Store, :label => 'Store', :comment =>
-      %(A retail good store.)
-    property :StructuredValue, :label => 'StructuredValue', :comment =>
-      %(Structured values are strings&#x2014;for example,
-        addresses&#x2014;that have certain constraints on their
-        structure.)
-    property :SubscribeAction, :label => 'SubscribeAction', :comment =>
-      %(The act of forming a personal connection with
-        someone/something \(object\) unidirectionally/asymmetrically
-        to get updates pushed to.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/FollowAction">FollowAction</a>: Unlike
-        FollowAction, SubscribeAction implies that the subscriber acts
-        as a passive agent being constantly/actively pushed for
-        updates.</li><li><a
-        href="http://schema.org/RegisterAction">RegisterAction</a>:
-        Unlike RegisterAction, SubscribeAction implies that the agent
-        is interested in continuing receiving updates from the
-        object.</li><li><a
-        href="http://schema.org/JoinAction">JoinAction</a>: Unlike
-        JoinAction, SubscribeAction implies that the agent is
-        interested in continuing receiving updates from the
-        object.</li></ul>)
-    property :SubwayStation, :label => 'SubwayStation', :comment =>
-      %(A subway station.)
-    property :SuperficialAnatomy, :label => 'SuperficialAnatomy', :comment =>
-      %(Anatomical features that can be observed by sight \(without
-        dissection\), including the form and proportions of the human
-        body as well as surface landmarks that correspond to deeper
-        subcutaneous structures. Superficial anatomy plays an
-        important role in sports medicine, phlebotomy, and other
-        medical specialties as underlying anatomical structures can be
-        identified through surface palpation. For example, during back
-        surgery, superficial anatomy can be used to palpate and count
-        vertebrae to find the site of incision. Or in phlebotomy,
-        superficial anatomy can be used to locate an underlying vein;
-        for example, the median cubital vein can be located by
-        palpating the borders of the cubital fossa \(such as the
-        epicondyles of the humerus\) and then looking for the
-        superficial signs of the vein, such as size, prominence,
-        ability to refill after depression, and feel of surrounding
-        tissue support. As another example, in a subluxation
-        \(dislocation\) of the glenohumeral joint, the bony structure
-        becomes pronounced with the deltoid muscle failing to cover
-        the glenohumeral joint allowing the edges of the scapula to be
-        superficially visible. Here, the superficial anatomy is the
-        visible edges of the scapula, implying the underlying
-        dislocation of the joint \(the related anatomical structure\).)
-    property :Synagogue, :label => 'Synagogue', :comment =>
-      %(A synagogue.)
-    property :TVClip, :label => 'TVClip', :comment =>
-      %(A short TV progam or a segment/part of a TV program.)
-    property :TVEpisode, :label => 'TVEpisode', :comment =>
-      %(A TV episode which can be part of a series or season.)
-    property :TVSeason, :label => 'TVSeason', :comment =>
-      %(Season dedicated to TV broadcast and associated online
-        delivery.)
-    property :TVSeries, :label => 'TVSeries', :comment =>
-      %(Series dedicated to TV broadcast and associated online
-        delivery.)
-    property :Table, :label => 'Table', :comment =>
-      %(A table on the page.)
-    property :TakeAction, :label => 'TakeAction', :comment =>
-      %(The act of gaining ownership of an object from an origin.
-        Reciprocal of GiveAction.<p>Related actions:</p><ul><li><a
-        href="http://schema.org/GiveAction">GiveAction</a>: The
-        reciprocal of TakeAction.</li><li><a
-        href="http://schema.org/ReceiveAction">ReceiveAction</a>:
-        Unlike ReceiveAction, TakeAction implies that ownership has
-        been transfered.</li></ul>)
-    property :TattooParlor, :label => 'TattooParlor', :comment =>
-      %(A tattoo parlor.)
-    property :Taxi, :label => 'Taxi', :comment =>
-      %(A taxi.)
-    property :TaxiStand, :label => 'TaxiStand', :comment =>
-      %(A taxi stand.)
-    property :TechArticle, :label => 'TechArticle', :comment =>
-      %(A technical article - Example: How-to \(task\) topics,
-        step-by-step, procedural troubleshooting, specifications, etc.)
-    property :TelevisionStation, :label => 'TelevisionStation', :comment =>
-      %(A television station.)
-    property :TennisComplex, :label => 'TennisComplex', :comment =>
-      %(A tennis complex.)
-    property :Text, :label => 'Text', :comment =>
-      %(Data type: Text.)
-    property :TheaterEvent, :label => 'TheaterEvent', :comment =>
-      %(Event type: Theater performance.)
-    property :TheaterGroup, :label => 'TheaterGroup', :comment =>
-      %(A theater group or company&#x2014;for example, the Royal
-        Shakespeare Company or Druid Theatre.)
-    property :TherapeuticProcedure, :label => 'TherapeuticProcedure', :comment =>
-      %(A medical procedure intended primarly for therapeutic
-        purposes, aimed at improving a health condition.)
-    property :Thing, :label => 'Thing', :comment =>
-      %(The most generic type of item.)
-    property :Ticket, :label => 'Ticket', :comment =>
-      %(Used to describe a ticket to an event, a flight, a bus ride,
-        etc.)
-    property :TieAction, :label => 'TieAction', :comment =>
-      %(The act of reaching a draw in a competitive activity.)
-    property :Time, :label => 'Time', :comment =>
-      %(A point in time recurring on multiple days in the form
-        hh:mm:ss[Z|\(+|-\)hh:mm] \(see <a
-        href="http://www.w3.org/TR/xmlschema-2/#time">XML schema for
-        details</a>\).)
-    property :TipAction, :label => 'TipAction', :comment =>
-      %(The act of giving money voluntarily to a beneficiary in
-        recognition of services rendered.)
-    property :TireShop, :label => 'TireShop', :comment =>
-      %(A tire shop.)
-    property :TouristAttraction, :label => 'TouristAttraction', :comment =>
-      %(A tourist attraction.)
-    property :TouristInformationCenter, :label => 'TouristInformationCenter', :comment =>
-      %(A tourist information center.)
-    property :ToyStore, :label => 'ToyStore', :comment =>
-      %(A toystore.)
-    property :TrackAction, :label => 'TrackAction', :comment =>
-      %(An agent tracks an object for updates.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/FollowAction">FollowAction</a>: Unlike
-        FollowAction, TrackAction refers to the interest on the
-        location of innanimates objects.</li><li><a
-        href="http://schema.org/SubscribeAction">SubscribeAction</a>:
-        Unlike SubscribeAction, TrackAction refers to the interest on
-        the location of innanimate objects.</li></ul>)
-    property :TradeAction, :label => 'TradeAction', :comment =>
-      %(The act of participating in an exchange of goods and services
-        for monetary compensation. An agent trades an object, product
-        or service with a participant in exchange for a one time or
-        periodic payment.)
-    property :TrainTrip, :label => 'Train Trip', :comment =>
-      %(A trip on a commercial train line.)
-    property :TrainStation, :label => 'TrainStation', :comment =>
-      %(A train station.)
-    property :TransferAction, :label => 'TransferAction', :comment =>
-      %(The act of transferring/moving \(abstract or concrete\)
-        animate or inanimate objects from one place to another.)
-    property :TravelAction, :label => 'TravelAction', :comment =>
-      %(The act of traveling from an fromLocation to a destination by
-        a specified mode of transport, optionally with participants.)
-    property :TravelAgency, :label => 'TravelAgency', :comment =>
-      %(A travel agency.)
-    property :TreatmentIndication, :label => 'TreatmentIndication', :comment =>
-      %(An indication for treating an underlying condition, symptom,
-        etc.)
-    property :TypeAndQuantityNode, :label => 'TypeAndQuantityNode', :comment =>
-      %(A structured value indicating the quantity, unit of
-        measurement, and business function of goods included in a
-        bundle offer.)
-    property :URL, :label => 'URL', :comment =>
-      %(Data type: URL.)
-    property :UnRegisterAction, :label => 'UnRegisterAction', :comment =>
-      %(The act of un-registering from a service.<p>Related
-        actions:</p><ul><li><a
-        href="http://schema.org/RegisterAction">RegisterAction</a>:
-        Antagonym of UnRegisterAction.</li><li><a
-        href="http://schema.org/Leave">Leave</a>: Unlike LeaveAction,
-        UnRegisterAction implies that you are unregistering from a
-        service you werer previously registered, rather than leaving a
-        team/group of people.</li></ul>)
-    property :UnitPriceSpecification, :label => 'UnitPriceSpecification', :comment =>
-      %(The price asked for a given offer by the respective
-        organization or person.)
-    property :UpdateAction, :label => 'UpdateAction', :comment =>
-      %(The act of managing by changing/editing the state of the
-        object.)
-    property :UseAction, :label => 'UseAction', :comment =>
-      %(The act of applying an object to its intended purpose.)
-    property :UserBlocks, :label => 'UserBlocks', :comment =>
-      %(User interaction: Block this content.)
-    property :UserCheckins, :label => 'UserCheckins', :comment =>
-      %(User interaction: Check-in at a place.)
-    property :UserComments, :label => 'UserComments', :comment =>
-      %(The UserInteraction event in which a user comments on an item.)
-    property :UserDownloads, :label => 'UserDownloads', :comment =>
-      %(User interaction: Download of an item.)
-    property :UserInteraction, :label => 'UserInteraction', :comment =>
-      %(A user interacting with a page)
-    property :UserLikes, :label => 'UserLikes', :comment =>
-      %(User interaction: Like an item.)
-    property :UserPageVisits, :label => 'UserPageVisits', :comment =>
-      %(User interaction: Visit to a web page.)
-    property :UserPlays, :label => 'UserPlays', :comment =>
-      %(User interaction: Play count of an item, for example a video
-        or a song.)
-    property :UserPlusOnes, :label => 'UserPlusOnes', :comment =>
-      %(User interaction: +1.)
-    property :UserTweets, :label => 'UserTweets', :comment =>
-      %(User interaction: Tweets.)
-    property :Vehicle, :label => 'Vehicle', :comment =>
-      %(A vehicle.)
-    property :Vein, :label => 'Vein', :comment =>
-      %(A type of blood vessel that specifically carries blood to the
-        heart.)
-    property :Vessel, :label => 'Vessel', :comment =>
-      %(A component of the human body circulatory system comprised of
-        an intricate network of hollow tubes that transport blood
-        throughout the entire body.)
-    property :VeterinaryCare, :label => 'VeterinaryCare', :comment =>
-      %(A vet's office.)
-    property :VideoGallery, :label => 'VideoGallery', :comment =>
-      %(Web page type: Video gallery page.)
-    property :VideoObject, :label => 'VideoObject', :comment =>
-      %(A video file.)
-    property :ViewAction, :label => 'ViewAction', :comment =>
-      %(The act of consuming static visual content.)
-    property :VisualArtsEvent, :label => 'VisualArtsEvent', :comment =>
-      %(Event type: Visual arts event.)
-    property :Volcano, :label => 'Volcano', :comment =>
-      %(A volcano, like Fuji san)
-    property :VoteAction, :label => 'VoteAction', :comment =>
-      %(The act of expressing a preference from a
-        fixed/finite/structured set of choices/options.)
-    property :WPAdBlock, :label => 'WPAdBlock', :comment =>
-      %(An advertising section of the page.)
-    property :WPFooter, :label => 'WPFooter', :comment =>
-      %(The footer section of the page.)
-    property :WPHeader, :label => 'WPHeader', :comment =>
-      %(The header section of the page.)
-    property :WPSideBar, :label => 'WPSideBar', :comment =>
-      %(A sidebar section of the page.)
-    property :WantAction, :label => 'WantAction', :comment =>
-      %(The act of expressing a desire about the object. An agent
-        wants an object.)
-    property :WarrantyPromise, :label => 'WarrantyPromise', :comment =>
-      %(A structured value representing the duration and scope of
-        services that will be provided to a customer free of charge in
-        case of a defect or malfunction of a product.)
-    property :WarrantyScope, :label => 'WarrantyScope', :comment =>
-      %(A range of of services that will be provided to a customer
-        free of charge in case of a defect or malfunction of a
-        product. Commonly used values:
-        http://purl.org/goodrelations/v1#Labor-BringIn
-        http://purl.org/goodrelations/v1#PartsAndLabor-BringIn
-        http://purl.org/goodrelations/v1#PartsAndLabor-PickUp)
-    property :WatchAction, :label => 'WatchAction', :comment =>
-      %(The act of consuming dynamic/moving visual content.)
-    property :Waterfall, :label => 'Waterfall', :comment =>
-      %(A waterfall, like Niagara)
-    property :WearAction, :label => 'WearAction', :comment =>
-      %(The act of dressing oneself in clothing.)
-    property :WebApplication, :label => 'WebApplication', :comment =>
-      %(Web applications.)
-    property :WebPage, :label => 'WebPage', :comment =>
-      %(A web page. Every web page is implicitly assumed to be
-        declared to be of type WebPage, so the various properties
-        about that webpage, such as <code>breadcrumb</code> may be
-        used. We recommend explicit declaration if these properties
-        are specified, but if they are found outside of an itemscope,
-        they will be assumed to be about the page)
-    property :WebPageElement, :label => 'WebPageElement', :comment =>
-      %(A web page element, like a table or an image)
-    property :WholesaleStore, :label => 'WholesaleStore', :comment =>
-      %(A wholesale store.)
-    property :WinAction, :label => 'WinAction', :comment =>
-      %(The act of achieving victory in a competitive activity.)
-    property :Winery, :label => 'Winery', :comment =>
-      %(A winery.)
-    property :WriteAction, :label => 'WriteAction', :comment =>
-      %(The act of authoring written creative content.)
-    property :Zoo, :label => 'Zoo', :comment =>
-      %(A zoo.)
+    term :APIReference,
+      comment: %(Reference documentation for application programming interfaces \(APIs\).).freeze,
+      label: "APIReference".freeze,
+      subClassOf: "schema:TechArticle".freeze,
+      type: "rdfs:Class".freeze
+    term :AboutPage,
+      comment: %(Web page type: About page.).freeze,
+      label: "AboutPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :AcceptAction,
+      comment: %(The act of committing to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/RejectAction">RejectAction</a>: The antagonym of AcceptAction.</li></ul>).freeze,
+      label: "AcceptAction".freeze,
+      subClassOf: "schema:AllocateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :AccountingService,
+      comment: %(Accountancy business.).freeze,
+      label: "AccountingService".freeze,
+      subClassOf: "schema:FinancialService".freeze,
+      type: "rdfs:Class".freeze
+    term :AchieveAction,
+      comment: %(The act of accomplishing something via     previous efforts. It is an instantaneous action rather than an ongoing     process.).freeze,
+      label: "AchieveAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :Action,
+      comment: %(An action performed by a direct agent and indirect     participants upon a direct object. Optionally happens at a location     with the help of an inanimate instrument. The execution of the action     may produce a result. Specific action sub-type documentation specifies     the exact expectation of each argument/role.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_ActionCollabClass).freeze,
+      label: "Action".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :ActionStatusType,
+      comment: %(The status of an Action.).freeze,
+      label: "ActionStatusType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :AddAction,
+      comment: %(The act of editing by adding an object to a collection.).freeze,
+      label: "AddAction".freeze,
+      subClassOf: "schema:UpdateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :AdministrativeArea,
+      comment: %(A geographical region under the jurisdiction of a particular government.).freeze,
+      label: "AdministrativeArea".freeze,
+      subClassOf: "schema:Place".freeze,
+      type: "rdfs:Class".freeze
+    term :AdultEntertainment,
+      comment: %(An adult entertainment establishment.).freeze,
+      label: "AdultEntertainment".freeze,
+      subClassOf: "schema:EntertainmentBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AggregateOffer,
+      comment: %(When a single product is associated with multiple offers \(for example, the same pair of shoes is offered by different merchants\), then AggregateOffer can be used.).freeze,
+      label: "AggregateOffer".freeze,
+      subClassOf: "schema:Offer".freeze,
+      type: "rdfs:Class".freeze
+    term :AggregateRating,
+      comment: %(The average rating based on multiple ratings or reviews.).freeze,
+      label: "AggregateRating".freeze,
+      subClassOf: "schema:Rating".freeze,
+      type: "rdfs:Class".freeze
+    term :AgreeAction,
+      comment: %(The act of expressing a consistency of opinion with the object. An agent agrees to/about an object \(a proposition, topic or theme\) with participants.).freeze,
+      label: "AgreeAction".freeze,
+      subClassOf: "schema:ReactAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Airline,
+      comment: %(An organization that provides flights for passengers.).freeze,
+      label: "Airline".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :Airport,
+      comment: %(An airport.).freeze,
+      label: "Airport".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :AlignmentObject,
+      comment: %(An intangible item that describes an alignment between a learning resource and a node in an educational framework.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_LRMIClass).freeze,
+      label: "AlignmentObject".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :AllocateAction,
+      comment: %(The act of organizing tasks/objects/events by associating resources to it.).freeze,
+      label: "AllocateAction".freeze,
+      subClassOf: "schema:OrganizeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :AmusementPark,
+      comment: %(An amusement park.).freeze,
+      label: "AmusementPark".freeze,
+      subClassOf: "schema:EntertainmentBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AnatomicalStructure,
+      comment: %(Any part of the human body, typically a component of an anatomical system. Organs, tissues, and cells are all anatomical structures.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "AnatomicalStructure".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :AnatomicalSystem,
+      comment: %(An anatomical system is a group of anatomical structures that work together to perform a certain task. Anatomical systems, such as organ systems, are one organizing principle of anatomy, and can includes circulatory, digestive, endocrine, integumentary, immune, lymphatic, muscular, nervous, reproductive, respiratory, skeletal, urinary, vestibular, and other systems.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "AnatomicalSystem".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :AnimalShelter,
+      comment: %(Animal shelter.).freeze,
+      label: "AnimalShelter".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Answer,
+      comment: %(An answer offered to a question; perhaps correct, perhaps opinionated or wrong.).freeze,
+      label: "Answer".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :ApartmentComplex,
+      comment: %(Residence type: Apartment complex.).freeze,
+      label: "ApartmentComplex".freeze,
+      subClassOf: "schema:Residence".freeze,
+      type: "rdfs:Class".freeze
+    term :AppendAction,
+      comment: %(The act of inserting at the end if an ordered collection.).freeze,
+      label: "AppendAction".freeze,
+      subClassOf: "schema:InsertAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ApplyAction,
+      comment: %(The act of registering to an organization/service without the guarantee to receive it. NOTE\(goto\): should this be under InteractAction instead?<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, ApplyAction has no guarantees that the application will be accepted.</li></ul>).freeze,
+      label: "ApplyAction".freeze,
+      subClassOf: "schema:OrganizeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ApprovedIndication,
+      comment: %(An indication for a medical therapy that has been formally specified or approved by a regulatory body that regulates use of the therapy; for example, the US FDA approves indications for most drugs in the US.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "ApprovedIndication".freeze,
+      subClassOf: "schema:MedicalIndication".freeze,
+      type: "rdfs:Class".freeze
+    term :Aquarium,
+      comment: %(Aquarium.).freeze,
+      label: "Aquarium".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :ArriveAction,
+      comment: %(The act of arriving at a place. An agent arrives at a destination from an fromLocation, optionally with participants.).freeze,
+      label: "ArriveAction".freeze,
+      subClassOf: "schema:MoveAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ArtGallery,
+      comment: %(An art gallery.).freeze,
+      label: "ArtGallery".freeze,
+      subClassOf: "schema:EntertainmentBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Artery,
+      comment: %(A type of blood vessel that specifically carries blood away from the heart.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Artery".freeze,
+      subClassOf: "schema:Vessel".freeze,
+      type: "rdfs:Class".freeze
+    term :Article,
+      comment: %(An article, such as a news article or piece of investigative report. Newspapers and magazines have articles of many different types and this is intended to cover them all.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "Article".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :AskAction,
+      comment: %(The act of posing a question / favor to someone.<p>Related actions:</p><ul><li><a href="http://schema.org/ReplyAction">ReplyAction</a>: Appears generally as a response to AskAction.</li></ul>).freeze,
+      label: "AskAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :AssessAction,
+      comment: %(The act of forming one's opinion, reaction or sentiment.).freeze,
+      label: "AssessAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :AssignAction,
+      comment: %(The act of allocating an action/event/task to some destination \(someone or something\).).freeze,
+      label: "AssignAction".freeze,
+      subClassOf: "schema:AllocateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Attorney,
+      comment: %(Professional service: Attorney.).freeze,
+      label: "Attorney".freeze,
+      subClassOf: "schema:ProfessionalService".freeze,
+      type: "rdfs:Class".freeze
+    term :Audience,
+      comment: %(Intended audience for an item, i.e. the group for whom the item was created.).freeze,
+      label: "Audience".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :AudioObject,
+      comment: %(An audio file.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "AudioObject".freeze,
+      subClassOf: "schema:MediaObject".freeze,
+      type: "rdfs:Class".freeze
+    term :AuthorizeAction,
+      comment: %(The act of granting permission to an object.).freeze,
+      label: "AuthorizeAction".freeze,
+      subClassOf: "schema:AllocateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :AutoBodyShop,
+      comment: %(Auto body shop.).freeze,
+      label: "AutoBodyShop".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AutoDealer,
+      comment: %(An car dealership.).freeze,
+      label: "AutoDealer".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AutoPartsStore,
+      comment: %(An auto parts store.).freeze,
+      label: "AutoPartsStore".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AutoRental,
+      comment: %(A car rental business.).freeze,
+      label: "AutoRental".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AutoRepair,
+      comment: %(Car repair business.).freeze,
+      label: "AutoRepair".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AutoWash,
+      comment: %(A car wash business.).freeze,
+      label: "AutoWash".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :AutomatedTeller,
+      comment: %(ATM/cash machine.).freeze,
+      label: "AutomatedTeller".freeze,
+      subClassOf: "schema:FinancialService".freeze,
+      type: "rdfs:Class".freeze
+    term :AutomotiveBusiness,
+      comment: %(Car repair, sales, or parts.).freeze,
+      label: "AutomotiveBusiness".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Bacteria,
+      comment: %(Pathogenic bacteria that cause bacterial infection.).freeze,
+      label: "Bacteria".freeze,
+      type: "schema:InfectiousAgentClass".freeze
+    term :Bakery,
+      comment: %(A bakery.).freeze,
+      label: "Bakery".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :BankOrCreditUnion,
+      comment: %(Bank or credit union.).freeze,
+      label: "BankOrCreditUnion".freeze,
+      subClassOf: "schema:FinancialService".freeze,
+      type: "rdfs:Class".freeze
+    term :BarOrPub,
+      comment: %(A bar or pub.).freeze,
+      label: "BarOrPub".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :Beach,
+      comment: %(Beach.).freeze,
+      label: "Beach".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :BeautySalon,
+      comment: %(Beauty salon.).freeze,
+      label: "BeautySalon".freeze,
+      subClassOf: "schema:HealthAndBeautyBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :BedAndBreakfast,
+      comment: %(Bed and breakfast.).freeze,
+      label: "BedAndBreakfast".freeze,
+      subClassOf: "schema:LodgingBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :BefriendAction,
+      comment: %(The act of forming a personal connection with someone \(object\) mutually/bidirectionally/symmetrically.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, BefriendAction implies that the connection is reciprocal.</li></ul>).freeze,
+      label: "BefriendAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :BikeStore,
+      comment: %(A bike store.).freeze,
+      label: "BikeStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :Blog,
+      comment: %(A blog).freeze,
+      label: "Blog".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :BlogPosting,
+      comment: %(A blog post.).freeze,
+      label: "BlogPosting".freeze,
+      subClassOf: "schema:Article".freeze,
+      type: "rdfs:Class".freeze
+    term :BloodTest,
+      comment: %(A medical test performed on a sample of a patient's blood.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "BloodTest".freeze,
+      subClassOf: "schema:MedicalTest".freeze,
+      type: "rdfs:Class".freeze
+    term :BodyOfWater,
+      comment: %(A body of water, such as a sea, ocean, or lake.).freeze,
+      label: "BodyOfWater".freeze,
+      subClassOf: "schema:Landform".freeze,
+      type: "rdfs:Class".freeze
+    term :Bone,
+      comment: %(Rigid connective tissue that comprises up the skeletal structure of the human body.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Bone".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Book,
+      comment: %(A book.).freeze,
+      label: "Book".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :BookFormatType,
+      comment: %(The publication format of the book.).freeze,
+      label: "BookFormatType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :BookStore,
+      comment: %(A bookstore.).freeze,
+      label: "BookStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :BookmarkAction,
+      comment: %(An agent bookmarks/flags/labels/tags/marks an object.).freeze,
+      label: "BookmarkAction".freeze,
+      subClassOf: "schema:OrganizeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Boolean,
+      comment: %(Boolean: True or False.).freeze,
+      label: "Boolean".freeze,
+      subClassOf: "schema:DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :BorrowAction,
+      comment: %(The act of obtaining an object under an agreement to return it at a later date. Reciprocal of LendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/LendAction">LendAction</a>: Reciprocal of BorrowAction.</li></ul>).freeze,
+      label: "BorrowAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :BowlingAlley,
+      comment: %(A bowling alley.).freeze,
+      label: "BowlingAlley".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :BrainStructure,
+      comment: %(Any anatomical structure which pertains to the soft nervous tissue functioning as the coordinating center of sensation and intellectual and nervous activity.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "BrainStructure".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Brand,
+      comment: %(A brand is a name used by an organization or business person for labeling a product, product group, or similar.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "Brand".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Brewery,
+      comment: %(Brewery.).freeze,
+      label: "Brewery".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :BroadcastEvent,
+      comment: %(An over the air or online broadcast event.).freeze,
+      label: "BroadcastEvent".freeze,
+      subClassOf: "schema:PublicationEvent".freeze,
+      type: "rdfs:Class".freeze
+    term :BroadcastService,
+      comment: %(A delivery service through which content is provided via broadcast over the air or online.).freeze,
+      label: "BroadcastService".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :BuddhistTemple,
+      comment: %(A Buddhist temple.).freeze,
+      label: "BuddhistTemple".freeze,
+      subClassOf: "schema:PlaceOfWorship".freeze,
+      type: "rdfs:Class".freeze
+    term :BusReservation,
+      comment: %(A reservation for bus travel.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, use http://schema.org/Offer.).freeze,
+      label: "BusReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :BusStation,
+      comment: %(A bus station.).freeze,
+      label: "BusStation".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :BusStop,
+      comment: %(A bus stop.).freeze,
+      label: "BusStop".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :BusTrip,
+      comment: %(A trip on a commercial bus line.).freeze,
+      label: "Bus Trip".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :BusinessAudience,
+      comment: %(A set of characteristics belonging to businesses, e.g. who compose an item's target audience.).freeze,
+      label: "BusinessAudience".freeze,
+      subClassOf: "schema:Audience".freeze,
+      type: "rdfs:Class".freeze
+    term :BusinessEntityType,
+      comment: %(A business entity type is a conceptual entity representing the legal form, the size, the main line of business, the position in the value chain, or any combination thereof, of an organization or business person.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#Business
+    http://purl.org/goodrelations/v1#Enduser
+    http://purl.org/goodrelations/v1#PublicInstitution
+    http://purl.org/goodrelations/v1#Reseller
+
+    		).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "BusinessEntityType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :BusinessEvent,
+      comment: %(Event type: Business event.).freeze,
+      label: "BusinessEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :BusinessFunction,
+      comment: %(The business function specifies the type of activity or access \(i.e., the bundle of rights\) offered by the organization or business person through the offer. Typical are sell, rental or lease, maintenance or repair, manufacture / produce, recycle / dispose, engineering / construction, or installation. Proprietary specifications of access rights are also instances of this class.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#ConstructionInstallation
+    http://purl.org/goodrelations/v1#Dispose
+    http://purl.org/goodrelations/v1#LeaseOut
+    http://purl.org/goodrelations/v1#Maintain
+    http://purl.org/goodrelations/v1#ProvideService
+    http://purl.org/goodrelations/v1#Repair
+    http://purl.org/goodrelations/v1#Sell
+    http://purl.org/goodrelations/v1#Buy
+    		).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "BusinessFunction".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :BuyAction,
+      comment: %(The act of giving money to a seller in exchange for goods or services rendered. An agent buys an object, product, or service from a seller for a price. Reciprocal of SellAction.).freeze,
+      label: "BuyAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :CafeOrCoffeeShop,
+      comment: %(A cafe or coffee shop.).freeze,
+      label: "CafeOrCoffeeShop".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :Campground,
+      comment: %(A campground.).freeze,
+      label: "Campground".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Canal,
+      comment: %(A canal, like the Panama Canal).freeze,
+      label: "Canal".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :CancelAction,
+      comment: %(The act of asserting that a future event/action is no longer going to happen.<p>Related actions:</p><ul><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: The antagonym of CancelAction.</li></ul>).freeze,
+      label: "CancelAction".freeze,
+      subClassOf: "schema:PlanAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Car,
+      comment: %(An automobile.).freeze,
+      label: "Car".freeze,
+      subClassOf: "schema:Vehicle".freeze,
+      type: "rdfs:Class".freeze
+    term :Casino,
+      comment: %(A casino.).freeze,
+      label: "Casino".freeze,
+      subClassOf: "schema:EntertainmentBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :CatholicChurch,
+      comment: %(A Catholic church.).freeze,
+      label: "CatholicChurch".freeze,
+      subClassOf: "schema:PlaceOfWorship".freeze,
+      type: "rdfs:Class".freeze
+    term :Cemetery,
+      comment: %(A graveyard.).freeze,
+      label: "Cemetery".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :CheckAction,
+      comment: %(An agent inspects/determines/investigates/inquire or examine an object's accuracy/quality/condition or state.).freeze,
+      label: "CheckAction".freeze,
+      subClassOf: "schema:FindAction".freeze,
+      type: "rdfs:Class".freeze
+    term :CheckInAction,
+      comment: %(The act of an agent communicating \(service provider, social media, etc\) their arrival by registering/confirming for a previously reserved service \(e.g. flight check in\) or at a place \(e.g. hotel\), possibly resulting in a result \(boarding pass, etc\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckOutAction">CheckOutAction</a>: The antagonym of CheckInAction.</li><li><a href="http://schema.org/ArriveAction">ArriveAction</a>: Unlike ArriveAction, CheckInAction implies that the agent is informing/confirming the start of a previously reserved service.</li><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: Unlike ConfirmAction, CheckInAction implies that the agent is informing/confirming the *start* of a previously reserved service rather than its validity/existance.</li></ul>).freeze,
+      label: "CheckInAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :CheckOutAction,
+      comment: %(The act of an agent communicating \(service provider, social media, etc\) their departure of a previously reserved service \(e.g. flight check in\) or place \(e.g. hotel\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckInAction">CheckInAction</a>: The antagonym of CheckOutAction.</li><li><a href="http://schema.org/DepartAction">DepartAction</a>: Unlike DepartAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li><li><a href="http://schema.org/CancelAction">CancelAction</a>: Unlike CancelAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li></ul>).freeze,
+      label: "CheckOutAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :CheckoutPage,
+      comment: %(Web page type: Checkout page.).freeze,
+      label: "CheckoutPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :ChildCare,
+      comment: %(A Childcare center.).freeze,
+      label: "ChildCare".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :ChildrensEvent,
+      comment: %(Event type: Children's event.).freeze,
+      label: "ChildrensEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :ChooseAction,
+      comment: %(The act of expressing a preference from a set of options or a large or unbounded set of choices/options.).freeze,
+      label: "ChooseAction".freeze,
+      subClassOf: "schema:AssessAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Church,
+      comment: %(A church.).freeze,
+      label: "Church".freeze,
+      subClassOf: "schema:PlaceOfWorship".freeze,
+      type: "rdfs:Class".freeze
+    term :City,
+      comment: %(A city or town.).freeze,
+      label: "City".freeze,
+      subClassOf: "schema:AdministrativeArea".freeze,
+      type: "rdfs:Class".freeze
+    term :CityHall,
+      comment: %(A city hall.).freeze,
+      label: "CityHall".freeze,
+      subClassOf: "schema:GovernmentBuilding".freeze,
+      type: "rdfs:Class".freeze
+    term :CivicStructure,
+      comment: %(A public structure, such as a town hall or concert hall.).freeze,
+      label: "CivicStructure".freeze,
+      subClassOf: "schema:Place".freeze,
+      type: "rdfs:Class".freeze
+    term :Class,
+      comment: %(A class, also often called a 'Type'; equivalent to rdfs:Class.).freeze,
+      label: "Class".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :Clip,
+      comment: %(A short TV or radio program or a segment/part of a program.).freeze,
+      label: "Clip".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :ClothingStore,
+      comment: %(A clothing store.).freeze,
+      label: "ClothingStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :Code,
+      comment: %(Computer programming source code. Example: Full \(compile ready\) solutions, code snippet samples, scripts, templates.).freeze,
+      label: "Code".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :CollectionPage,
+      comment: %(Web page type: Collection page.).freeze,
+      label: "CollectionPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :CollegeOrUniversity,
+      comment: %(A college, university, or other third-level educational institution.).freeze,
+      label: "CollegeOrUniversity".freeze,
+      subClassOf: "schema:EducationalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :ComedyClub,
+      comment: %(A comedy club.).freeze,
+      label: "ComedyClub".freeze,
+      subClassOf: "schema:EntertainmentBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :ComedyEvent,
+      comment: %(Event type: Comedy event.).freeze,
+      label: "ComedyEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :Comment,
+      comment: %(A comment on an item - for example, a comment on a blog post. The comment's content is expressed via the "text" property, and its topic via "about", properties shared with all CreativeWorks.).freeze,
+      label: "Comment".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :CommentAction,
+      comment: %(The act of generating a comment about a subject.).freeze,
+      label: "CommentAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :CommunicateAction,
+      comment: %(The act of conveying information to another person via a communication medium \(instrument\) such as speech, email, or telephone conversation.).freeze,
+      label: "CommunicateAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ComputerStore,
+      comment: %(A computer store.).freeze,
+      label: "ComputerStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :ConfirmAction,
+      comment: %(The act of notifying someone that a future event/action is going to happen as expected.<p>Related actions:</p><ul><li><a href="http://schema.org/CancelAction">CancelAction</a>: The antagonym of ConfirmAction.</li></ul>).freeze,
+      label: "ConfirmAction".freeze,
+      subClassOf: "schema:InformAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ConsumeAction,
+      comment: %(The act of ingesting information/resources/food.).freeze,
+      label: "ConsumeAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :ContactPage,
+      comment: %(Web page type: Contact page.).freeze,
+      label: "ContactPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :ContactPoint,
+      comment: %(A contact point&#x2014;for example, a Customer Complaints department.).freeze,
+      label: "ContactPoint".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :ContactPointOption,
+      comment: %(Enumerated options related to a ContactPoint).freeze,
+      label: "ContactPointOption".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :Continent,
+      comment: %(One of the continents \(for example, Europe or Africa\).).freeze,
+      label: "Continent".freeze,
+      subClassOf: "schema:Landform".freeze,
+      type: "rdfs:Class".freeze
+    term :ConvenienceStore,
+      comment: %(A convenience store.).freeze,
+      label: "ConvenienceStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :CookAction,
+      comment: %(The act of producing/preparing food.).freeze,
+      label: "CookAction".freeze,
+      subClassOf: "schema:CreateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Corporation,
+      comment: %(Organization: A business corporation.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "Corporation".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :Country,
+      comment: %(A country.).freeze,
+      label: "Country".freeze,
+      subClassOf: "schema:AdministrativeArea".freeze,
+      type: "rdfs:Class".freeze
+    term :Courthouse,
+      comment: %(A courthouse.).freeze,
+      label: "Courthouse".freeze,
+      subClassOf: "schema:GovernmentBuilding".freeze,
+      type: "rdfs:Class".freeze
+    term :CreateAction,
+      comment: %(The act of deliberately creating/producing/generating/building a result out of the agent.).freeze,
+      label: "CreateAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :CreativeWork,
+      comment: %(The most generic kind of creative work, including books, movies, photographs, software programs, etc.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "CreativeWork".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :CreditCard,
+      comment: %(A credit or debit card type as a standardized procedure for transferring the monetary amount for a purchase.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#AmericanExpress
+    http://purl.org/goodrelations/v1#DinersClub
+    http://purl.org/goodrelations/v1#Discover
+    http://purl.org/goodrelations/v1#JCB
+    http://purl.org/goodrelations/v1#MasterCard
+    http://purl.org/goodrelations/v1#VISA
+    		).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "CreditCard".freeze,
+      subClassOf: "schema:PaymentMethod".freeze,
+      type: "rdfs:Class".freeze
+    term :Crematorium,
+      comment: %(A crematorium.).freeze,
+      label: "Crematorium".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :DDxElement,
+      comment: %(An alternative, closely-related condition typically considered later in the differential diagnosis process along with the signs that are used to distinguish it.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "DDxElement".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :DanceEvent,
+      comment: %(Event type: A social dance.).freeze,
+      label: "DanceEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :DanceGroup,
+      comment: %(A dance group&#x2014;for example, the Alvin Ailey Dance Theater or Riverdance.).freeze,
+      label: "DanceGroup".freeze,
+      subClassOf: "schema:PerformingGroup".freeze,
+      type: "rdfs:Class".freeze
+    term :DataCatalog,
+      comment: %(A collection of datasets.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
+      label: "DataCatalog".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :DataDownload,
+      comment: %(A dataset in downloadable form.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
+      label: "DataDownload".freeze,
+      subClassOf: "schema:MediaObject".freeze,
+      type: "rdfs:Class".freeze
+    term :DataType,
+      comment: %(The basic data types such as Integers, Strings, etc.).freeze,
+      label: "DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :Dataset,
+      comment: %(A body of structured information describing some topic\(s\) of interest.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
+      label: "Dataset".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :Date,
+      comment: %(A date value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>.).freeze,
+      label: "Date".freeze,
+      subClassOf: "schema:DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :DateTime,
+      comment: %(A combination of date and time of day in the form [-]CCYY-MM-DDThh:mm:ss[Z|\(+|-\)hh:mm] \(see Chapter 5.4 of ISO 8601\).).freeze,
+      label: "DateTime".freeze,
+      subClassOf: "schema:DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :DayOfWeek,
+      comment: %(The day of the week, e.g. used to specify to which day the opening hours of an OpeningHoursSpecification refer.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#Monday
+    http://purl.org/goodrelations/v1#Tuesday
+    http://purl.org/goodrelations/v1#Wednesday
+    http://purl.org/goodrelations/v1#Thursday
+    http://purl.org/goodrelations/v1#Friday
+    http://purl.org/goodrelations/v1#Saturday
+    http://purl.org/goodrelations/v1#Sunday
+    http://purl.org/goodrelations/v1#PublicHolidays
+    		).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "DayOfWeek".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :DaySpa,
+      comment: %(A day spa.).freeze,
+      label: "DaySpa".freeze,
+      subClassOf: "schema:HealthAndBeautyBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :DefenceEstablishment,
+      comment: %(A defence establishment, such as an army or navy base.).freeze,
+      label: "DefenceEstablishment".freeze,
+      subClassOf: "schema:GovernmentBuilding".freeze,
+      type: "rdfs:Class".freeze
+    term :DeleteAction,
+      comment: %(The act of editing a recipient by removing one of its objects.).freeze,
+      label: "DeleteAction".freeze,
+      subClassOf: "schema:UpdateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DeliveryChargeSpecification,
+      comment: %(The price for the delivery of an offer using a particular delivery method.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "DeliveryChargeSpecification".freeze,
+      subClassOf: "schema:PriceSpecification".freeze,
+      type: "rdfs:Class".freeze
+    term :DeliveryEvent,
+      comment: %(An event involving the delivery of an item.).freeze,
+      label: "DeliveryEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :DeliveryMethod,
+      comment: %(A delivery method is a standardized procedure for transferring the product or service to the destination of fulfilment chosen by the customer. Delivery methods are characterized by the means of transportation used, and by the organization or group that is the contracting party for the sending organization or person.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#DeliveryModeDirectDownload
+    http://purl.org/goodrelations/v1#DeliveryModeFreight
+    http://purl.org/goodrelations/v1#DeliveryModeMail
+    http://purl.org/goodrelations/v1#DeliveryModeOwnFleet
+    http://purl.org/goodrelations/v1#DeliveryModePickUp
+    http://purl.org/goodrelations/v1#DHL
+    http://purl.org/goodrelations/v1#FederalExpress
+    http://purl.org/goodrelations/v1#UPS
+    		).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "DeliveryMethod".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :Demand,
+      comment: %(A demand entity represents the public, not necessarily binding, not necessarily exclusive, announcement by an organization or person to seek a certain type of goods or services. For describing demand using this type, the very same properties used for Offer apply.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "Demand".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Dentist,
+      comment: %(A dentist.).freeze,
+      label: "Dentist".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :DepartAction,
+      comment: %(The act of  departing from a place. An agent departs from an fromLocation for a destination, optionally with participants.).freeze,
+      label: "DepartAction".freeze,
+      subClassOf: "schema:MoveAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DepartmentStore,
+      comment: %(A department store.).freeze,
+      label: "DepartmentStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :DiagnosticLab,
+      comment: %(A medical laboratory that offers on-site or off-site diagnostic services.).freeze,
+      label: "DiagnosticLab".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :DiagnosticProcedure,
+      comment: %(A medical procedure intended primarly for diagnostic, as opposed to therapeutic, purposes.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "DiagnosticProcedure".freeze,
+      subClassOf: "schema:MedicalProcedure".freeze,
+      type: "rdfs:Class".freeze
+    term :Diet,
+      comment: %(A strategy of regulating the intake of food to achieve or maintain a specific health-related goal.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Diet".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :DietarySupplement,
+      comment: %(A product taken by mouth that contains a dietary ingredient intended to supplement the diet. Dietary ingredients may include vitamins, minerals, herbs or other botanicals, amino acids, and substances such as enzymes, organ tissues, glandulars and metabolites.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "DietarySupplement".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :DisagreeAction,
+      comment: %(The act of expressing a difference of opinion with the object. An agent disagrees to/about an object \(a proposition, topic or theme\) with participants.).freeze,
+      label: "DisagreeAction".freeze,
+      subClassOf: "schema:ReactAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DiscoverAction,
+      comment: %(The act of discovering/finding an object.).freeze,
+      label: "DiscoverAction".freeze,
+      subClassOf: "schema:FindAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DislikeAction,
+      comment: %(The act of expressing a negative sentiment about the object. An agent dislikes an object \(a proposition, topic or theme\) with participants.).freeze,
+      label: "DislikeAction".freeze,
+      subClassOf: "schema:ReactAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Distance,
+      comment: %(Properties that take Distances as values are of the form '&lt;Number&gt; &lt;Length unit of measure&gt;'. E.g., '7 ft').freeze,
+      label: "Distance".freeze,
+      subClassOf: "schema:Quantity".freeze,
+      type: "rdfs:Class".freeze
+    term :DonateAction,
+      comment: %(The act of providing goods, services, or money without compensation, often for philanthropic reasons.).freeze,
+      label: "DonateAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DoseSchedule,
+      comment: %(A specific dosing schedule for a drug or supplement.).freeze,
+      label: "DoseSchedule".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :DownloadAction,
+      comment: %(The act of downloading an object.).freeze,
+      label: "DownloadAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DrawAction,
+      comment: %(The act of producing a visual/graphical representation of an object, typically with a pen/pencil and paper as instruments.).freeze,
+      label: "DrawAction".freeze,
+      subClassOf: "schema:CreateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DrinkAction,
+      comment: %(The act of swallowing liquids.).freeze,
+      label: "DrinkAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Drug,
+      comment: %(A chemical or biologic substance, used as a medical therapy, that has a physiological effect on an organism.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Drug".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugClass,
+      comment: %(A class of medical drugs, e.g., statins. Classes can represent general pharmacological class, common mechanisms of action, common physiological effects, etc.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "DrugClass".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugCost,
+      comment: %(The cost per unit of a medical drug. Note that this type is not meant to represent the price in an offer of a drug for sale; see the Offer type for that. This type will typically be used to tag wholesale or average retail cost of a drug, or maximum reimbursable cost. Costs of medical drugs vary widely depending on how and where they are paid for, so while this type captures some of the variables, costs should be used with caution by consumers of this schema's markup.).freeze,
+      label: "DrugCost".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugCostCategory,
+      comment: %(Enumerated categories of medical drug costs.).freeze,
+      label: "DrugCostCategory".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugLegalStatus,
+      comment: %(The legal availability status of a medical drug.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "DrugLegalStatus".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugPregnancyCategory,
+      comment: %(Categories that represent an assessment of the risk of fetal injury due to a drug or pharmaceutical used as directed by the mother during pregnancy.).freeze,
+      label: "DrugPregnancyCategory".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugPrescriptionStatus,
+      comment: %(Indicates whether this drug is available by prescription or over-the-counter.).freeze,
+      label: "DrugPrescriptionStatus".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :DrugStrength,
+      comment: %(A specific strength in which a medical drug is available in a specific country.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "DrugStrength".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :DryCleaningOrLaundry,
+      comment: %(A dry-cleaning business.).freeze,
+      label: "DryCleaningOrLaundry".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Duration,
+      comment: %(Quantity: Duration \(use  <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration format</a>\).).freeze,
+      label: "Duration".freeze,
+      subClassOf: "schema:Quantity".freeze,
+      type: "rdfs:Class".freeze
+    term :EatAction,
+      comment: %(The act of swallowing solid objects.).freeze,
+      label: "EatAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :EducationEvent,
+      comment: %(Event type: Education event.).freeze,
+      label: "EducationEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :EducationalAudience,
+      comment: %(An EducationalAudience).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_LRMIClass).freeze,
+      label: "EducationalAudience".freeze,
+      subClassOf: "schema:Audience".freeze,
+      type: "rdfs:Class".freeze
+    term :EducationalOrganization,
+      comment: %(An educational organization.).freeze,
+      label: "EducationalOrganization".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :Electrician,
+      comment: %(An electrician.).freeze,
+      label: "Electrician".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :ElectronicsStore,
+      comment: %(An electronics store.).freeze,
+      label: "ElectronicsStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :ElementarySchool,
+      comment: %(An elementary school.).freeze,
+      label: "ElementarySchool".freeze,
+      subClassOf: "schema:EducationalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :EmailMessage,
+      comment: %(An email message.).freeze,
+      label: "EmailMessage".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :Embassy,
+      comment: %(An embassy.).freeze,
+      label: "Embassy".freeze,
+      subClassOf: "schema:GovernmentBuilding".freeze,
+      type: "rdfs:Class".freeze
+    term :EmergencyService,
+      comment: %(An emergency service, such as a fire station or ER.).freeze,
+      label: "EmergencyService".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :EmploymentAgency,
+      comment: %(An employment agency.).freeze,
+      label: "EmploymentAgency".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :EndorseAction,
+      comment: %(An agent approves/certifies/likes/supports/sanction an object.).freeze,
+      label: "EndorseAction".freeze,
+      subClassOf: "schema:ReactAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Energy,
+      comment: %(Properties that take Enerygy as values are of the form '&lt;Number&gt; &lt;Energy unit of measure&gt;').freeze,
+      label: "Energy".freeze,
+      subClassOf: "schema:Quantity".freeze,
+      type: "rdfs:Class".freeze
+    term :EntertainmentBusiness,
+      comment: %(A business providing entertainment.).freeze,
+      label: "EntertainmentBusiness".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :EntryPoint,
+      comment: %(An entry point, within some Web-based protocol.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_ActionCollabClass).freeze,
+      label: "EntryPoint".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Enumeration,
+      comment: %(Lists or enumerations&#x2014;for example, a list of cuisines or music genres, etc.).freeze,
+      label: "Enumeration".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Episode,
+      comment: %(A TV or radio episode which can be part of a series or season.).freeze,
+      label: "Episode".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :Event,
+      comment: %(An event happening at a certain time and location, such as a concert, lecture, or festival. Ticketing information may be added via the 'offers' property. Repeated events may be structured as separate Event objects.).freeze,
+      label: "Event".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :EventReservation,
+      comment: %(A reservation for an event like a concert, sporting event, or lecture.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, use http://schema.org/Offer.).freeze,
+      label: "EventReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :EventStatusType,
+      comment: %(EventStatusType is an enumeration type whose instances represent several states that an Event may be in.).freeze,
+      label: "EventStatusType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :EventVenue,
+      comment: %(An event venue.).freeze,
+      label: "EventVenue".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :ExerciseAction,
+      comment: %(The act of participating in exertive activity for the purposes of improving health and fitness).freeze,
+      label: "ExerciseAction".freeze,
+      subClassOf: "schema:PlayAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ExerciseGym,
+      comment: %(A gym.).freeze,
+      label: "ExerciseGym".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :ExercisePlan,
+      comment: %(Fitness-related activity designed for a specific health-related purpose, including defined exercise routines as well as activity prescribed by a clinician.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "ExercisePlan".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :FastFoodRestaurant,
+      comment: %(A fast-food restaurant.).freeze,
+      label: "FastFoodRestaurant".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :Festival,
+      comment: %(Event type: Festival.).freeze,
+      label: "Festival".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :FilmAction,
+      comment: %(The act of capturing sound and moving images on film, video, or digitally.).freeze,
+      label: "FilmAction".freeze,
+      subClassOf: "schema:CreateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :FinancialService,
+      comment: %(Financial services business.).freeze,
+      label: "FinancialService".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :FindAction,
+      comment: %(The act of finding an object.<p>Related actions:</p><ul><li><a href="http://schema.org/SearchAction">SearchAction</a>: FindAction is generally lead by a SearchAction, but not necessarily.</li></ul>).freeze,
+      label: "FindAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :FireStation,
+      comment: %(A fire station. With firemen.).freeze,
+      label: "FireStation".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Flight,
+      comment: %(An airline flight.).freeze,
+      label: "Flight".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :FlightReservation,
+      comment: %(A reservation for air travel.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, use http://schema.org/Offer.).freeze,
+      label: "FlightReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :Float,
+      comment: %(Data type: Floating number.).freeze,
+      label: "Float".freeze,
+      subClassOf: "schema:Number".freeze,
+      type: "rdfs:Class".freeze
+    term :Florist,
+      comment: %(A florist.).freeze,
+      label: "Florist".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :FollowAction,
+      comment: %(The act of forming a personal connection with someone/something \(object\) unidirectionally/asymmetrically to get updates polled from.<p>Related actions:</p><ul><li><a href="http://schema.org/BefriendAction">BefriendAction</a>: Unlike BefriendAction, FollowAction implies that the connection is *not* necessarily reciprocal.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, FollowAction implies that the follower acts as an active agent constantly/actively polling for updates.</li><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, FollowAction implies that the agent is interested in continuing receiving updates from the object.</li><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, FollowAction implies that the agent is interested in getting updates from the object.</li><li><a href="http://schema.org/TrackAction">TrackAction</a>: Unlike TrackAction, FollowAction refers to the polling of updates of all aspects of animate objects rather than the location of inanimate objects \(e.g. you track a package, but you don't follow it\).</li></ul>).freeze,
+      label: "FollowAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :FoodEstablishment,
+      comment: %(A food-related business.).freeze,
+      label: "FoodEstablishment".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :FoodEstablishmentReservation,
+      comment: %(A reservation to dine at a food-related business.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations.).freeze,
+      label: "FoodEstablishmentReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :FoodEvent,
+      comment: %(Event type: Food event.).freeze,
+      label: "FoodEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :Fungus,
+      comment: %(Pathogenic fungus.).freeze,
+      label: "Fungus".freeze,
+      type: "schema:InfectiousAgentClass".freeze
+    term :FurnitureStore,
+      comment: %(A furniture store.).freeze,
+      label: "FurnitureStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :GardenStore,
+      comment: %(A garden store.).freeze,
+      label: "GardenStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :GasStation,
+      comment: %(A gas station.).freeze,
+      label: "GasStation".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :GatedResidenceCommunity,
+      comment: %(Residence type: Gated community.).freeze,
+      label: "GatedResidenceCommunity".freeze,
+      subClassOf: "schema:Residence".freeze,
+      type: "rdfs:Class".freeze
+    term :GeneralContractor,
+      comment: %(A general contractor.).freeze,
+      label: "GeneralContractor".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :GeoCoordinates,
+      comment: %(The geographic coordinates of a place or event.).freeze,
+      label: "GeoCoordinates".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :GeoShape,
+      comment: %(The geographic shape of a place.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "GeoShape".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :GiveAction,
+      comment: %(The act of transferring ownership of an object to a destination. Reciprocal of TakeAction.<p>Related actions:</p><ul><li><a href="http://schema.org/TakeAction">TakeAction</a>: Reciprocal of GiveAction.</li><li><a href="http://schema.org/SendAction">SendAction</a>: Unlike SendAction, GiveAction implies that ownership is being transferred \(e.g. I may send my laptop to you, but that doesn't mean I'm giving it to you\).</li></ul>).freeze,
+      label: "GiveAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :GolfCourse,
+      comment: %(A golf course.).freeze,
+      label: "GolfCourse".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :GovernmentBuilding,
+      comment: %(A government building.).freeze,
+      label: "GovernmentBuilding".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :GovernmentOffice,
+      comment: %(A government office&#x2014;for example, an IRS or DMV office.).freeze,
+      label: "GovernmentOffice".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :GovernmentOrganization,
+      comment: %(A governmental organization or agency.).freeze,
+      label: "GovernmentOrganization".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :GovernmentPermit,
+      comment: %(A permit issued by a government agency.).freeze,
+      label: "GovernmentPermit".freeze,
+      subClassOf: "schema:Permit".freeze,
+      type: "rdfs:Class".freeze
+    term :GovernmentService,
+      comment: %(A service provided by a government organization, e.g. food stamps, veterans benefits, etc.).freeze,
+      label: "GovernmentService".freeze,
+      subClassOf: "schema:Service".freeze,
+      type: "rdfs:Class".freeze
+    term :GroceryStore,
+      comment: %(A grocery store.).freeze,
+      label: "GroceryStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :HVACBusiness,
+      comment: %(An HVAC service.).freeze,
+      label: "HVACBusiness".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :HairSalon,
+      comment: %(A hair salon.).freeze,
+      label: "HairSalon".freeze,
+      subClassOf: "schema:HealthAndBeautyBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :HardwareStore,
+      comment: %(A hardware store.).freeze,
+      label: "HardwareStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :HealthAndBeautyBusiness,
+      comment: %(Health and beauty.).freeze,
+      label: "HealthAndBeautyBusiness".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :HealthClub,
+      comment: %(A health club.).freeze,
+      label: "HealthClub".freeze,
+      subClassOf: "schema:HealthAndBeautyBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :HighSchool,
+      comment: %(A high school.).freeze,
+      label: "HighSchool".freeze,
+      subClassOf: "schema:EducationalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :HinduTemple,
+      comment: %(A Hindu temple.).freeze,
+      label: "HinduTemple".freeze,
+      subClassOf: "schema:PlaceOfWorship".freeze,
+      type: "rdfs:Class".freeze
+    term :HobbyShop,
+      comment: %(A hobby store.).freeze,
+      label: "HobbyShop".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :HomeAndConstructionBusiness,
+      comment: %(A construction business.).freeze,
+      label: "HomeAndConstructionBusiness".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :HomeGoodsStore,
+      comment: %(A home goods store.).freeze,
+      label: "HomeGoodsStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :Hospital,
+      comment: %(A hospital.).freeze,
+      label: "Hospital".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Hostel,
+      comment: %(A hostel.).freeze,
+      label: "Hostel".freeze,
+      subClassOf: "schema:LodgingBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Hotel,
+      comment: %(A hotel.).freeze,
+      label: "Hotel".freeze,
+      subClassOf: "schema:LodgingBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :HousePainter,
+      comment: %(A house painting service.).freeze,
+      label: "HousePainter".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :IceCreamShop,
+      comment: %(An ice cream shop).freeze,
+      label: "IceCreamShop".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :IgnoreAction,
+      comment: %(The act of intentionally disregarding the object. An agent ignores an object.).freeze,
+      label: "IgnoreAction".freeze,
+      subClassOf: "schema:AssessAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ImageGallery,
+      comment: %(Web page type: Image gallery page.).freeze,
+      label: "ImageGallery".freeze,
+      subClassOf: "schema:CollectionPage".freeze,
+      type: "rdfs:Class".freeze
+    term :ImageObject,
+      comment: %(An image file.).freeze,
+      label: "ImageObject".freeze,
+      subClassOf: "schema:MediaObject".freeze,
+      type: "rdfs:Class".freeze
+    term :ImagingTest,
+      comment: %(Any medical imaging modality typically used for diagnostic purposes.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "ImagingTest".freeze,
+      subClassOf: "schema:MedicalTest".freeze,
+      type: "rdfs:Class".freeze
+    term :IndividualProduct,
+      comment: %(A single, identifiable product instance \(e.g. a laptop with a particular serial number\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "IndividualProduct".freeze,
+      subClassOf: "schema:Product".freeze,
+      type: "rdfs:Class".freeze
+    term :InfectiousAgentClass,
+      comment: %(Classes of agents or pathogens that transmit infectious diseases. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "InfectiousAgentClass".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :InfectiousDisease,
+      comment: %(An infectious disease is a clinically evident human disease resulting from the presence of pathogenic microbial agents, like pathogenic viruses, pathogenic bacteria, fungi, protozoa, multicellular parasites, and prions. To be considered an infectious disease, such pathogens are known to be able to cause this disease.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "InfectiousDisease".freeze,
+      subClassOf: "schema:MedicalCondition".freeze,
+      type: "rdfs:Class".freeze
+    term :InformAction,
+      comment: %(The act of notifying someone of information pertinent to them, with no expectation of a response.).freeze,
+      label: "InformAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :InsertAction,
+      comment: %(The act of adding at a specific location in an ordered collection.).freeze,
+      label: "InsertAction".freeze,
+      subClassOf: "schema:AddAction".freeze,
+      type: "rdfs:Class".freeze
+    term :InstallAction,
+      comment: %(The act of installing an application.).freeze,
+      label: "InstallAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :InsuranceAgency,
+      comment: %(Insurance agency.).freeze,
+      label: "InsuranceAgency".freeze,
+      subClassOf: "schema:FinancialService".freeze,
+      type: "rdfs:Class".freeze
+    term :Intangible,
+      comment: %(A utility class that serves as the umbrella for a number of 'intangible' things such as quantities, structured values, etc.).freeze,
+      label: "Intangible".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :Integer,
+      comment: %(Data type: Integer.).freeze,
+      label: "Integer".freeze,
+      subClassOf: "schema:Number".freeze,
+      type: "rdfs:Class".freeze
+    term :InteractAction,
+      comment: %(The act of interacting with another person or organization.).freeze,
+      label: "InteractAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :InternetCafe,
+      comment: %(An internet cafe.).freeze,
+      label: "InternetCafe".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :InviteAction,
+      comment: %(The act of asking someone to attend an event. Reciprocal of RsvpAction.).freeze,
+      label: "InviteAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ItemAvailability,
+      comment: %(A list of possible product availability options.).freeze,
+      label: "ItemAvailability".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :ItemList,
+      comment: %(A list of items of any sort&#x2014;for example, Top 10 Movies About Weathermen, or Top 100 Party Songs. Not to be confused with HTML lists, which are often used only for formatting.).freeze,
+      label: "ItemList".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :ItemPage,
+      comment: %(A page devoted to a single item, such as a particular product or hotel.).freeze,
+      label: "ItemPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :JewelryStore,
+      comment: %(A jewelry store.).freeze,
+      label: "JewelryStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :JobPosting,
+      comment: %(A listing that describes a job opening in a certain organization.).freeze,
+      label: "JobPosting".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :JoinAction,
+      comment: %(An agent joins an event/group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, JoinAction refers to joining a group/team of people.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, JoinAction does not imply that you'll be receiving updates.</li><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, JoinAction does not imply that you'll be polling for updates.</li></ul>).freeze,
+      label: "JoinAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Joint,
+      comment: %(The anatomical location at which two or more bones make contact.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Joint".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :LakeBodyOfWater,
+      comment: %(A lake \(for example, Lake Pontrachain\).).freeze,
+      label: "LakeBodyOfWater".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :Landform,
+      comment: %(A landform or physical feature.  Landform elements include mountains, plains, lakes, rivers, seascape and oceanic waterbody interface features such as bays, peninsulas, seas and so forth, including sub-aqueous terrain features such as submersed mountain ranges, volcanoes, and the great ocean basins.).freeze,
+      label: "Landform".freeze,
+      subClassOf: "schema:Place".freeze,
+      type: "rdfs:Class".freeze
+    term :LandmarksOrHistoricalBuildings,
+      comment: %(An historical landmark or building.).freeze,
+      label: "LandmarksOrHistoricalBuildings".freeze,
+      subClassOf: "schema:Place".freeze,
+      type: "rdfs:Class".freeze
+    term :Language,
+      comment: %(Natural languages such as Spanish, Tamil, Hindi, English, etc. and programming languages such as Scheme and Lisp.).freeze,
+      label: "Language".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :LeaveAction,
+      comment: %(An agent leaves an event / group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: The antagonym of LeaveAction.</li><li><a href="http://schema.org/UnRegisterAction">UnRegisterAction</a>: Unlike UnRegisterAction, LeaveAction implies leaving a group/team of people rather than a service.</li></ul>).freeze,
+      label: "LeaveAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :LegislativeBuilding,
+      comment: %(A legislative building&#x2014;for example, the state capitol.).freeze,
+      label: "LegislativeBuilding".freeze,
+      subClassOf: "schema:GovernmentBuilding".freeze,
+      type: "rdfs:Class".freeze
+    term :LendAction,
+      comment: %(The act of providing an object under an agreement that it will be returned at a later date. Reciprocal of BorrowAction.<p>Related actions:</p><ul><li><a href="http://schema.org/BorrowAction">BorrowAction</a>: Reciprocal of LendAction.</li></ul>).freeze,
+      label: "LendAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Library,
+      comment: %(A library.).freeze,
+      label: "Library".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :LifestyleModification,
+      comment: %(A process of care involving exercise, changes to diet, fitness routines, and other lifestyle changes aimed at improving a health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "LifestyleModification".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :Ligament,
+      comment: %(A short band of tough, flexible, fibrous connective tissue that functions to connect multiple bones, cartilages, and structurally support joints.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Ligament".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :LikeAction,
+      comment: %(The act of expressing a positive sentiment about the object. An agent likes an object \(a proposition, topic or theme\) with participants.).freeze,
+      label: "LikeAction".freeze,
+      subClassOf: "schema:ReactAction".freeze,
+      type: "rdfs:Class".freeze
+    term :LiquorStore,
+      comment: %(A liquor store.).freeze,
+      label: "LiquorStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :ListenAction,
+      comment: %(The act of consuming audio content.).freeze,
+      label: "ListenAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :LiteraryEvent,
+      comment: %(Event type: Literary event.).freeze,
+      label: "LiteraryEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :LocalBusiness,
+      comment: %(A particular physical business or branch of an organization. Examples of LocalBusiness include a restaurant, a particular branch of a restaurant chain, a branch of a bank, a medical practice, a club, a bowling alley, etc.).freeze,
+      label: "LocalBusiness".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :LockerDelivery,
+      comment: %(A DeliveryMethod in which an item is made available via locker.).freeze,
+      label: "LockerDelivery".freeze,
+      subClassOf: "schema:DeliveryMethod".freeze,
+      type: "rdfs:Class".freeze
+    term :Locksmith,
+      comment: %(A locksmith.).freeze,
+      label: "Locksmith".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :LodgingBusiness,
+      comment: %(A lodging business, such as a motel, hotel, or inn.).freeze,
+      label: "LodgingBusiness".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :LodgingReservation,
+      comment: %(A reservation for lodging at a hotel, motel, inn, etc.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations.).freeze,
+      label: "LodgingReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :LoseAction,
+      comment: %(The act of being defeated in a competitive activity.).freeze,
+      label: "LoseAction".freeze,
+      subClassOf: "schema:AchieveAction".freeze,
+      type: "rdfs:Class".freeze
+    term :LymphaticVessel,
+      comment: %(A type of blood vessel that specifically carries lymph fluid unidirectionally toward the heart.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "LymphaticVessel".freeze,
+      subClassOf: "schema:Vessel".freeze,
+      type: "rdfs:Class".freeze
+    term :Map,
+      comment: %(A map.).freeze,
+      label: "Map".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :MarryAction,
+      comment: %(The act of marrying a person.).freeze,
+      label: "MarryAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Mass,
+      comment: %(Properties that take Mass as values are of the form '&lt;Number&gt; &lt;Mass unit of measure&gt;'. E.g., '7 kg').freeze,
+      label: "Mass".freeze,
+      subClassOf: "schema:Quantity".freeze,
+      type: "rdfs:Class".freeze
+    term :MaximumDoseSchedule,
+      comment: %(The maximum dosing schedule considered safe for a drug or supplement as recommended by an authority or by the drug/supplement's manufacturer. Capture the recommending authority in the recognizingAuthority property of MedicalEntity.).freeze,
+      label: "MaximumDoseSchedule".freeze,
+      subClassOf: "schema:DoseSchedule".freeze,
+      type: "rdfs:Class".freeze
+    term :MediaObject,
+      comment: %(An image, video, or audio object embedded in a web page. Note that a creative work may have many media objects associated with it on the same web page. For example, a page about a single song \(MusicRecording\) may have a music video \(VideoObject\), and a high and low bandwidth audio stream \(2 AudioObject's\).).freeze,
+      label: "MediaObject".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalAudience,
+      comment: %(Target audiences for medical web pages. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalAudience".freeze,
+      subClassOf: "schema:Audience".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalCause,
+      comment: %(The causative agent\(s\) that are responsible for the pathophysiologic process that eventually results in a medical condition, symptom or sign. In this schema, unless otherwise specified this is meant to be the proximate cause of the medical condition, symptom or sign. The proximate cause is defined as the causative agent that most directly results in the medical condition, symptom or sign. For example, the HIV virus could be considered a cause of AIDS. Or in a diagnostic context, if a patient fell and sustained a hip fracture and two days later sustained a pulmonary embolism which eventuated in a cardiac arrest, the cause of the cardiac arrest \(the proximate cause\) would be the pulmonary embolism and not the fall. <p>Medical causes can include cardiovascular, chemical, dermatologic, endocrine, environmental, gastroenterologic, genetic, hematologic, gynecologic, iatrogenic, infectious, musculoskeletal, neurologic, nutritional, obstetric, oncologic, otolaryngologic, pharmacologic, psychiatric, pulmonary, renal, rheumatologic, toxic, traumatic, or urologic causes; medical conditions can be causes as well.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalCause".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalClinic,
+      comment: %(A medical clinic.).freeze,
+      label: "MedicalClinic".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalCode,
+      comment: %(A code for a medical entity.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalCode".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalCondition,
+      comment: %(Any condition of the human body that affects the normal functioning of a person, whether physically or mentally. Includes diseases, injuries, disabilities, disorders, syndromes, etc.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalCondition".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalConditionStage,
+      comment: %(A stage of a medical condition, such as 'Stage IIIa'.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalConditionStage".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalContraindication,
+      comment: %(A condition or factor that serves as a reason to withhold a certain medical therapy. Contraindications can be absolute \(there are no reasonable circumstances for undertaking a course of action\) or relative \(the patient is at higher risk of complications, but that these risks may be outweighed by other considerations or mitigated by other measures\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalContraindication".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalDevice,
+      comment: %(Any object used in a medical capacity, such as to diagnose or treat a patient.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalDevice".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalDevicePurpose,
+      comment: %(Categories of medical devices, organized by the purpose or intended use of the device.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalDevicePurpose".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalEntity,
+      comment: %(The most generic type of entity related to health and the practice of medicine.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalEntity".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalEnumeration,
+      comment: %(Enumerations related to health and the practice of medicine.).freeze,
+      label: "MedicalEnumeration".freeze,
+      subClassOf: "schema:MedicalIntangible".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalEvidenceLevel,
+      comment: %(Level of evidence for a medical guideline. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalEvidenceLevel".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalGuideline,
+      comment: %(Any recommendation made by a standard society \(e.g. ACC/AHA\) or consensus statement that denotes how to diagnose and treat a particular condition. Note: this type should be used to tag the actual guideline recommendation; if the guideline recommendation occurs in a larger scholarly article, use MedicalScholarlyArticle to tag the overall article, not this type. Note also: the organization making the recommendation should be captured in the recognizingAuthority base property of MedicalEntity.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalGuideline".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalGuidelineContraindication,
+      comment: %(A guideline contraindication that designates a process as harmful and where quality of the data supporting the contraindication is sound.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalGuidelineContraindication".freeze,
+      subClassOf: "schema:MedicalGuideline".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalGuidelineRecommendation,
+      comment: %(A guideline recommendation that is regarded as efficacious and where quality of the data supporting the recommendation is sound.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalGuidelineRecommendation".freeze,
+      subClassOf: "schema:MedicalGuideline".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalImagingTechnique,
+      comment: %(Any medical imaging modality typically used for diagnostic purposes. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalImagingTechnique".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalIndication,
+      comment: %(A condition or factor that indicates use of a medical therapy, including signs, symptoms, risk factors, anatomical states, etc.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalIndication".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalIntangible,
+      comment: %(A utility class that serves as the umbrella for a number of 'intangible' things in the medical space.).freeze,
+      label: "MedicalIntangible".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalObservationalStudy,
+      comment: %(An observational study is a type of medical study that attempts to infer the possible effect of a treatment through observation of a cohort of subjects over a period of time. In an observational study, the assignment of subjects into treatment groups versus control groups is outside the control of the investigator. This is in contrast with controlled studies, such as the randomized controlled trials represented by MedicalTrial, where each subject is randomly assigned to a treatment group or a control group before the start of the treatment.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalObservationalStudy".freeze,
+      subClassOf: "schema:MedicalStudy".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalObservationalStudyDesign,
+      comment: %(Design models for observational medical studies. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalObservationalStudyDesign".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalOrganization,
+      comment: %(A medical organization, such as a doctor's office or clinic.).freeze,
+      label: "MedicalOrganization".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalProcedure,
+      comment: %(A process of care used in either a diagnostic, therapeutic, or palliative capacity that relies on invasive \(surgical\), non-invasive, or percutaneous techniques.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalProcedure".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalProcedureType,
+      comment: %(An enumeration that describes different types of medical procedures.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalProcedureType".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalRiskCalculator,
+      comment: %(A complex mathematical calculation requiring an online calculator, used to assess prognosis. Note: use the url property of Thing to record any URLs for online calculators.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalRiskCalculator".freeze,
+      subClassOf: "schema:MedicalRiskEstimator".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalRiskEstimator,
+      comment: %(Any rule set or interactive tool for estimating the risk of developing a complication or condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalRiskEstimator".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalRiskFactor,
+      comment: %(A risk factor is anything that increases a person's likelihood of developing or contracting a disease, medical condition, or complication.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalRiskFactor".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalRiskScore,
+      comment: %(A simple system that adds up the number of risk factors to yield a score that is associated with prognosis, e.g. CHAD score, TIMI risk score.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalRiskScore".freeze,
+      subClassOf: "schema:MedicalRiskEstimator".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalScholarlyArticle,
+      comment: %(A scholarly article in the medical domain.).freeze,
+      label: "MedicalScholarlyArticle".freeze,
+      subClassOf: "schema:ScholarlyArticle".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalSign,
+      comment: %(Any physical manifestation of a person's medical condition discoverable by objective diagnostic tests or physical examination.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalSign".freeze,
+      subClassOf: "schema:MedicalSignOrSymptom".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalSignOrSymptom,
+      comment: %(Any indication of the existence of a medical condition or disease.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalSignOrSymptom".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalSpecialty,
+      comment: %(Any specific branch of medical science or practice. Medical specialities include clinical specialties that pertain to particular organ systems and their respective disease states, as well as allied health specialties. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalSpecialty".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalStudy,
+      comment: %(A medical study is an umbrella type covering all kinds of research studies relating to human medicine or health, including observational studies and interventional trials and registries, randomized, controlled or not. When the specific type of study is known, use one of the extensions of this type, such as MedicalTrial or MedicalObservationalStudy. Also, note that this type should be used to mark up data that describes the study itself; to tag an article that publishes the results of a study, use MedicalScholarlyArticle. Note: use the code property of MedicalEntity to store study IDs, e.g. clinicaltrials.gov ID.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalStudy".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalStudyStatus,
+      comment: %(The status of a medical study. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalStudyStatus".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalSymptom,
+      comment: %(Any indication of the existence of a medical condition or disease that is apparent to the patient.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalSymptom".freeze,
+      subClassOf: "schema:MedicalSignOrSymptom".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalTest,
+      comment: %(Any medical test, typically performed for diagnostic purposes.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalTest".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalTestPanel,
+      comment: %(Any collection of tests commonly ordered together.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalTestPanel".freeze,
+      subClassOf: "schema:MedicalTest".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalTherapy,
+      comment: %(Any medical intervention designed to prevent, treat, and cure human diseases and medical conditions, including both curative and palliative therapies. Medical therapies are typically processes of care relying upon pharmacotherapy, behavioral therapy, supportive therapy \(with fluid or nutrition for example\), or detoxification \(e.g. hemodialysis\) aimed at improving or preventing a health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalTherapy".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalTrial,
+      comment: %(A medical trial is a type of medical study that uses scientific process used to compare the safety and efficacy of medical therapies or medical procedures. In general, medical trials are controlled and subjects are allocated at random to the different treatment and/or control groups.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalTrial".freeze,
+      subClassOf: "schema:MedicalStudy".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalTrialDesign,
+      comment: %(Design models for medical trials. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "MedicalTrialDesign".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicalWebPage,
+      comment: %(A web page that provides medical information.).freeze,
+      label: "MedicalWebPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :MedicineSystem,
+      comment: %(Systems of medical practice.).freeze,
+      label: "MedicineSystem".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :MensClothingStore,
+      comment: %(A men's clothing store.).freeze,
+      label: "MensClothingStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :MiddleSchool,
+      comment: %(A middle school.).freeze,
+      label: "MiddleSchool".freeze,
+      subClassOf: "schema:EducationalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :MobileApplication,
+      comment: %(A mobile software application.).freeze,
+      label: "MobileApplication".freeze,
+      subClassOf: "schema:SoftwareApplication".freeze,
+      type: "rdfs:Class".freeze
+    term :MobilePhoneStore,
+      comment: %(A mobile-phone store.).freeze,
+      label: "MobilePhoneStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :Mosque,
+      comment: %(A mosque.).freeze,
+      label: "Mosque".freeze,
+      subClassOf: "schema:PlaceOfWorship".freeze,
+      type: "rdfs:Class".freeze
+    term :Motel,
+      comment: %(A motel.).freeze,
+      label: "Motel".freeze,
+      subClassOf: "schema:LodgingBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :MotorcycleDealer,
+      comment: %(A motorcycle dealer.).freeze,
+      label: "MotorcycleDealer".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :MotorcycleRepair,
+      comment: %(A motorcycle repair shop.).freeze,
+      label: "MotorcycleRepair".freeze,
+      subClassOf: "schema:AutomotiveBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Mountain,
+      comment: %(A mountain, like Mount Whitney or Mount Everest).freeze,
+      label: "Mountain".freeze,
+      subClassOf: "schema:Landform".freeze,
+      type: "rdfs:Class".freeze
+    term :MoveAction,
+      comment: %(The act of an agent relocating to a place.<p>Related actions:</p><ul><li><a href="http://schema.org/TransferAction">TransferAction</a>: Unlike TransferAction, the subject of the move is a living Person or Organization rather than an inanimate object.</li></ul>).freeze,
+      label: "MoveAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :Movie,
+      comment: %(A movie.).freeze,
+      label: "Movie".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :MovieRentalStore,
+      comment: %(A movie rental store.).freeze,
+      label: "MovieRentalStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :MovieTheater,
+      comment: %(A movie theater.).freeze,
+      label: "MovieTheater".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :MovingCompany,
+      comment: %(A moving company.).freeze,
+      label: "MovingCompany".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :MulticellularParasite,
+      comment: %(Multicellular parasite that causes an infection.).freeze,
+      label: "MulticellularParasite".freeze,
+      type: "schema:InfectiousAgentClass".freeze
+    term :Muscle,
+      comment: %(A muscle is an anatomical structure consisting of a contractile form of tissue that animals use to effect movement.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Muscle".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Museum,
+      comment: %(A museum.).freeze,
+      label: "Museum".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicAlbum,
+      comment: %(A collection of music tracks.).freeze,
+      label: "MusicAlbum".freeze,
+      subClassOf: "schema:MusicPlaylist".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicEvent,
+      comment: %(Event type: Music event.).freeze,
+      label: "MusicEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicGroup,
+      comment: %(A musical group, such as a band, an orchestra, or a choir. Can also be a solo musician.).freeze,
+      label: "MusicGroup".freeze,
+      subClassOf: "schema:PerformingGroup".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicPlaylist,
+      comment: %(A collection of music tracks in playlist form.).freeze,
+      label: "MusicPlaylist".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicRecording,
+      comment: %(A music recording \(track\), usually a single song.).freeze,
+      label: "MusicRecording".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicStore,
+      comment: %(A music store.).freeze,
+      label: "MusicStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicVenue,
+      comment: %(A music venue.).freeze,
+      label: "MusicVenue".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :MusicVideoObject,
+      comment: %(A music video file.).freeze,
+      label: "MusicVideoObject".freeze,
+      subClassOf: "schema:MediaObject".freeze,
+      type: "rdfs:Class".freeze
+    term :NGO,
+      comment: %(Organization: Non-governmental Organization.).freeze,
+      label: "NGO".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :NailSalon,
+      comment: %(A nail salon.).freeze,
+      label: "NailSalon".freeze,
+      subClassOf: "schema:HealthAndBeautyBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Nerve,
+      comment: %(A common pathway for the electrochemical nerve impulses that are transmitted along each of the axons.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Nerve".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :NewsArticle,
+      comment: %(A news article).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "NewsArticle".freeze,
+      subClassOf: "schema:Article".freeze,
+      type: "rdfs:Class".freeze
+    term :NightClub,
+      comment: %(A nightclub or discotheque.).freeze,
+      label: "NightClub".freeze,
+      subClassOf: "schema:EntertainmentBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Notary,
+      comment: %(A notary.).freeze,
+      label: "Notary".freeze,
+      subClassOf: "schema:ProfessionalService".freeze,
+      type: "rdfs:Class".freeze
+    term :Number,
+      comment: %(Data type: Number.).freeze,
+      label: "Number".freeze,
+      subClassOf: "schema:DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :NutritionInformation,
+      comment: %(Nutritional information about the recipe.).freeze,
+      label: "NutritionInformation".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :OceanBodyOfWater,
+      comment: %(An ocean \(for example, the Pacific\).).freeze,
+      label: "OceanBodyOfWater".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :Offer,
+      comment: %(An offer to transfer some rights to an item or to provide a service&#x2014;for example, an offer to sell tickets to an event, to rent the DVD of a movie, to stream a TV show over the internet, to repair a motorcycle, or to loan a book.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsProperties).freeze,
+      label: "Offer".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :OfferItemCondition,
+      comment: %(A list of possible conditions for the item.).freeze,
+      label: "OfferItemCondition".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :OfficeEquipmentStore,
+      comment: %(An office equipment store.).freeze,
+      label: "OfficeEquipmentStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :OnDemandEvent,
+      comment: %(A publication event e.g. catch-up TV or radio podcast, during which a program is available on-demand.).freeze,
+      label: "OnDemandEvent".freeze,
+      subClassOf: "schema:PublicationEvent".freeze,
+      type: "rdfs:Class".freeze
+    term :OpeningHoursSpecification,
+      comment: %(A structured value providing information about the opening hours of a place or a certain service inside a place.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "OpeningHoursSpecification".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :Optician,
+      comment: %(An optician's store.).freeze,
+      label: "Optician".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :Order,
+      comment: %(An order is a confirmation of a transaction \(a receipt\), which can contain multiple line items, each represented by an Offer that has been accepted by the customer.).freeze,
+      label: "Order".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :OrderAction,
+      comment: %(An agent orders an object/product/service to be delivered/sent.).freeze,
+      label: "OrderAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :OrderStatus,
+      comment: %(Enumerated status values for Order.).freeze,
+      label: "OrderStatus".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :Organization,
+      comment: %(An organization such as a school, NGO, corporation, club, etc.).freeze,
+      label: "Organization".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :OrganizeAction,
+      comment: %(The act of manipulating/administering/supervising/controlling one or more objects.).freeze,
+      label: "OrganizeAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :OutletStore,
+      comment: %(An outlet store.).freeze,
+      label: "OutletStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :OwnershipInfo,
+      comment: %(A structured value providing information about when a certain organization or person owned a certain product.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "OwnershipInfo".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :PaintAction,
+      comment: %(The act of producing a painting, typically with paint and canvas as instruments.).freeze,
+      label: "PaintAction".freeze,
+      subClassOf: "schema:CreateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Painting,
+      comment: %(A painting.).freeze,
+      label: "Painting".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :PalliativeProcedure,
+      comment: %(A medical procedure intended primarly for palliative purposes, aimed at relieving the symptoms of an underlying health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PalliativeProcedure".freeze,
+      subClassOf: "schema:MedicalProcedure".freeze,
+      type: "rdfs:Class".freeze
+    term :ParcelDelivery,
+      comment: %(The delivery of a parcel either via the postal service or a commercial service.).freeze,
+      label: "ParcelDelivery".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :ParcelService,
+      comment: %(A private parcel service as the delivery mode available for a certain offer.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#DHL
+    http://purl.org/goodrelations/v1#FederalExpress
+    http://purl.org/goodrelations/v1#UPS
+    	).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "ParcelService".freeze,
+      subClassOf: "schema:DeliveryMethod".freeze,
+      type: "rdfs:Class".freeze
+    term :ParentAudience,
+      comment: %(A set of characteristics describing parents, who can be interested in viewing some content).freeze,
+      label: "ParentAudience".freeze,
+      subClassOf: "schema:PeopleAudience".freeze,
+      type: "rdfs:Class".freeze
+    term :Park,
+      comment: %(A park.).freeze,
+      label: "Park".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :ParkingFacility,
+      comment: %(A parking lot or other parking facility.).freeze,
+      label: "ParkingFacility".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :PathologyTest,
+      comment: %(A medical test performed by a laboratory that typically involves examination of a tissue sample by a pathologist.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PathologyTest".freeze,
+      subClassOf: "schema:MedicalTest".freeze,
+      type: "rdfs:Class".freeze
+    term :PawnShop,
+      comment: %(A pawnstore.).freeze,
+      label: "PawnShop".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :PayAction,
+      comment: %(An agent pays a price to a participant.).freeze,
+      label: "PayAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :PaymentChargeSpecification,
+      comment: %(The costs of settling the payment using a particular payment method.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "PaymentChargeSpecification".freeze,
+      subClassOf: "schema:PriceSpecification".freeze,
+      type: "rdfs:Class".freeze
+    term :PaymentMethod,
+      comment: %(A payment method is a standardized procedure for transferring the monetary amount for a purchase. Payment methods are characterized by the legal and technical structures used, and by the organization or group carrying out the transaction.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#ByBankTransferInAdvance
+    http://purl.org/goodrelations/v1#ByInvoice
+    http://purl.org/goodrelations/v1#Cash
+    http://purl.org/goodrelations/v1#CheckInAdvance
+    http://purl.org/goodrelations/v1#COD
+    http://purl.org/goodrelations/v1#DirectDebit
+    http://purl.org/goodrelations/v1#GoogleCheckout
+    http://purl.org/goodrelations/v1#PayPal
+    http://purl.org/goodrelations/v1#PaySwarm
+    		).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "PaymentMethod".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :PeopleAudience,
+      comment: %(A set of characteristics belonging to people, e.g. who compose an item's target audience.).freeze,
+      label: "PeopleAudience".freeze,
+      subClassOf: "schema:Audience".freeze,
+      type: "rdfs:Class".freeze
+    term :PerformAction,
+      comment: %(The act of participating in performance arts.).freeze,
+      label: "PerformAction".freeze,
+      subClassOf: "schema:PlayAction".freeze,
+      type: "rdfs:Class".freeze
+    term :PerformingArtsTheater,
+      comment: %(A theatre or other performing art center.).freeze,
+      label: "PerformingArtsTheater".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :PerformingGroup,
+      comment: %(A performance group, such as a band, an orchestra, or a circus.).freeze,
+      label: "PerformingGroup".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :Permit,
+      comment: %(A permit issued by an organization, e.g. a parking pass.).freeze,
+      label: "Permit".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Person,
+      comment: %(A person \(alive, dead, undead, or fictional\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "Person".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :PetStore,
+      comment: %(A pet store.).freeze,
+      label: "PetStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :Pharmacy,
+      comment: %(A pharmacy or drugstore.).freeze,
+      label: "Pharmacy".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :Photograph,
+      comment: %(A photograph.).freeze,
+      label: "Photograph".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :PhotographAction,
+      comment: %(The act of capturing still images of objects using a camera.).freeze,
+      label: "PhotographAction".freeze,
+      subClassOf: "schema:CreateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :PhysicalActivity,
+      comment: %(Any bodily activity that enhances or maintains physical fitness and overall health and wellness. Includes activity that is part of daily living and routine, structured exercise, and exercise prescribed as part of a medical treatment or recovery plan.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PhysicalActivity".freeze,
+      subClassOf: "schema:LifestyleModification".freeze,
+      type: "rdfs:Class".freeze
+    term :PhysicalActivityCategory,
+      comment: %(Categories of physical activity, organized by physiologic classification.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PhysicalActivityCategory".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :PhysicalExam,
+      comment: %(A type of physical examination of a patient performed by a physician. Enumerated type.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PhysicalExam".freeze,
+      subClassOf: "schema:MedicalEnumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :PhysicalTherapy,
+      comment: %(A process of progressive physical care and rehabilitation aimed at improving a health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PhysicalTherapy".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :Physician,
+      comment: %(A doctor's office.).freeze,
+      label: "Physician".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :Place,
+      comment: %(Entities that have a somewhat fixed, physical extension.).freeze,
+      label: "Place".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :PlaceOfWorship,
+      comment: %(Place of worship, such as a church, synagogue, or mosque.).freeze,
+      label: "PlaceOfWorship".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :PlanAction,
+      comment: %(The act of planning the execution of an event/task/action/reservation/plan to a future date.).freeze,
+      label: "PlanAction".freeze,
+      subClassOf: "schema:OrganizeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :PlayAction,
+      comment: %(The act of playing/exercising/training/performing for enjoyment, leisure, recreation, competion or exercise.<p>Related actions:</p><ul><li><a href="http://schema.org/ListenAction">ListenAction</a>: Unlike ListenAction \(which is under ConsumeAction\), PlayAction refers to performing for an audience or at an event, rather than consuming music.</li><li><a href="http://schema.org/WatchAction">WatchAction</a>: Unlike WatchAction \(which is under ConsumeAction\), PlayAction refers to showing/displaying for an audience or at an event, rather than consuming visual content.</li></ul>).freeze,
+      label: "PlayAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :Playground,
+      comment: %(A playground.).freeze,
+      label: "Playground".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Plumber,
+      comment: %(A plumbing service.).freeze,
+      label: "Plumber".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :PoliceStation,
+      comment: %(A police station.).freeze,
+      label: "PoliceStation".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :Pond,
+      comment: %(A pond).freeze,
+      label: "Pond".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :PostOffice,
+      comment: %(A post office.).freeze,
+      label: "PostOffice".freeze,
+      subClassOf: "schema:GovernmentOffice".freeze,
+      type: "rdfs:Class".freeze
+    term :PostalAddress,
+      comment: %(The mailing address.).freeze,
+      label: "PostalAddress".freeze,
+      subClassOf: "schema:ContactPoint".freeze,
+      type: "rdfs:Class".freeze
+    term :PrependAction,
+      comment: %(The act of inserting at the beginning if an ordered collection.).freeze,
+      label: "PrependAction".freeze,
+      subClassOf: "schema:InsertAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Preschool,
+      comment: %(A preschool.).freeze,
+      label: "Preschool".freeze,
+      subClassOf: "schema:EducationalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :PreventionIndication,
+      comment: %(An indication for preventing an underlying condition, symptom, etc.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PreventionIndication".freeze,
+      subClassOf: "schema:MedicalIndication".freeze,
+      type: "rdfs:Class".freeze
+    term :PriceSpecification,
+      comment: %(A structured value representing a monetary amount. Typically, only the subclasses of this type are used for markup.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "PriceSpecification".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :Prion,
+      comment: %(A prion is an infectious agent composed of protein in a misfolded form.).freeze,
+      label: "Prion".freeze,
+      type: "schema:InfectiousAgentClass".freeze
+    term :Product,
+      comment: %(Any offered product or service. For example: a pair of shoes; a concert ticket; the rental of a car; a haircut; or an episode of a TV show streamed online.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsProperties).freeze,
+      label: "Product".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :ProductModel,
+      comment: %(A datasheet or vendor specification of a product \(in the sense of a prototypical description\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "ProductModel".freeze,
+      subClassOf: "schema:Product".freeze,
+      type: "rdfs:Class".freeze
+    term :ProfessionalService,
+      comment: %(Provider of professional services.).freeze,
+      label: "ProfessionalService".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :ProfilePage,
+      comment: %(Web page type: Profile page.).freeze,
+      label: "ProfilePage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :ProgramMembership,
+      comment: %(Used to describe membership in a loyalty programs \(e.g. "StarAliance"\), traveler clubs \(e.g. "AAA"\), purchase clubs \("Safeway Club"\), etc.).freeze,
+      label: "Program Membership".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Property,
+      comment: %(A property, used to indicate attributes and relationships of some Thing; equivalent to rdf:Property.).freeze,
+      label: "Property".freeze,
+      subClassOf: "schema:Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :PropertyValueSpecification,
+      comment: %(A Property value specification.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_ActionCollabClass).freeze,
+      label: "PropertyValueSpecification".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Protozoa,
+      comment: %(Single-celled organism that causes an infection.).freeze,
+      label: "Protozoa".freeze,
+      type: "schema:InfectiousAgentClass".freeze
+    term :PsychologicalTreatment,
+      comment: %(A process of care relying upon counseling, dialogue, communication, verbalization aimed at improving a mental health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "PsychologicalTreatment".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :PublicSwimmingPool,
+      comment: %(A public swimming pool.).freeze,
+      label: "PublicSwimmingPool".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :PublicationEvent,
+      comment: %(A PublicationEvent corresponds indifferently to the event of publication for a CreativeWork of any type e.g. a broadcast event, an on-demand event, a book/journal publication via a variety of delivery media.).freeze,
+      label: "PublicationEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :QAPage,
+      comment: %(A QAPage is a WebPage focussed on a specific Question and its Answer\(s\), e.g. in a question answering site or documenting Frequently Asked Questions \(FAQs\).).freeze,
+      label: "QAPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :QualitativeValue,
+      comment: %(A predefined value for a product characteristic, e.g. the the power cord plug type "US" or the garment sizes "S", "M", "L", and "XL").freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "QualitativeValue".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :QuantitativeValue,
+      comment: %( A point value or interval for product characteristics and other purposes.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "QuantitativeValue".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :Quantity,
+      comment: %(Quantities such as distance, time, mass, weight, etc. Particular instances of say Mass are entities like '3 Kg' or '4 milligrams'.).freeze,
+      label: "Quantity".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :Question,
+      comment: %(A specific question - e.g. from a user seeking answers online, or collected in a Frequently Asked Questions \(FAQ\) document.).freeze,
+      label: "Question".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :QuoteAction,
+      comment: %(An agent quotes/estimates/appraises an object/product/service with a price at a location/store.).freeze,
+      label: "QuoteAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :RVPark,
+      comment: %(An RV park.).freeze,
+      label: "RVPark".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :RadiationTherapy,
+      comment: %(A process of care using radiation aimed at improving a health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "RadiationTherapy".freeze,
+      subClassOf: "schema:MedicalTherapy".freeze,
+      type: "rdfs:Class".freeze
+    term :RadioClip,
+      comment: %(A short radio progam or a segment/part of a radio program.).freeze,
+      label: "RadioClip".freeze,
+      subClassOf: "schema:Clip".freeze,
+      type: "rdfs:Class".freeze
+    term :RadioEpisode,
+      comment: %(A radio episode which can be part of a series or season.).freeze,
+      label: "RadioEpisode".freeze,
+      subClassOf: "schema:Episode".freeze,
+      type: "rdfs:Class".freeze
+    term :RadioSeason,
+      comment: %(Season dedicated to radio broadcast and associated online delivery.).freeze,
+      label: "RadioSeason".freeze,
+      subClassOf: "schema:Season".freeze,
+      type: "rdfs:Class".freeze
+    term :RadioSeries,
+      comment: %(Series dedicated to radio broadcast and associated online delivery.).freeze,
+      label: "RadioSeries".freeze,
+      subClassOf: "schema:Series".freeze,
+      type: "rdfs:Class".freeze
+    term :RadioStation,
+      comment: %(A radio station.).freeze,
+      label: "RadioStation".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Rating,
+      comment: %(The rating of the video.).freeze,
+      label: "Rating".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :ReactAction,
+      comment: %(The act of responding instinctively and emotionally to an object, expressing a sentiment.).freeze,
+      label: "ReactAction".freeze,
+      subClassOf: "schema:AssessAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ReadAction,
+      comment: %(The act of consuming written content.).freeze,
+      label: "ReadAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :RealEstateAgent,
+      comment: %(A real-estate agent.).freeze,
+      label: "RealEstateAgent".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :ReceiveAction,
+      comment: %(The act of physically/electronically taking delivery of an object thathas been transferred from an origin to a destination. Reciprocal of SendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/SendAction">SendAction</a>: The reciprocal of ReceiveAction.</li><li><a href="http://schema.org/TakeAction">TakeAction</a>: Unlike TakeAction, ReceiveAction does not imply that the ownership has been transfered \(e.g. I can receive a package, but it does not mean the package is now mine\).</li></ul>).freeze,
+      label: "ReceiveAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Recipe,
+      comment: %(A recipe.).freeze,
+      label: "Recipe".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :RecommendedDoseSchedule,
+      comment: %(A recommended dosing schedule for a drug or supplement as prescribed or recommended by an authority or by the drug/supplement's manufacturer. Capture the recommending authority in the recognizingAuthority property of MedicalEntity.).freeze,
+      label: "RecommendedDoseSchedule".freeze,
+      subClassOf: "schema:DoseSchedule".freeze,
+      type: "rdfs:Class".freeze
+    term :RecyclingCenter,
+      comment: %(A recycling center.).freeze,
+      label: "RecyclingCenter".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :RegisterAction,
+      comment: %(The act of registering to be a user of a service, product or web page.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, RegisterAction implies you are registering to be a user of a service, *not* a group/team of people.</li><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, RegisterAction doesn't imply that the agent is expecting to poll for updates from the object.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, RegisterAction doesn't imply that the agent is expecting updates from the object.</li></ul>).freeze,
+      label: "RegisterAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :RejectAction,
+      comment: %(The act of rejecting to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/AcceptAction">AcceptAction</a>: The antagonym of RejectAction.</li></ul>).freeze,
+      label: "RejectAction".freeze,
+      subClassOf: "schema:AllocateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :RentAction,
+      comment: %(The act of giving money in return for temporary use, but not ownership, of an object such as a vehicle or property. For example, an agent rents a property from a landlord in exchange for a periodic payment.).freeze,
+      label: "RentAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :RentalCarReservation,
+      comment: %(A reservation for a rental car.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations.).freeze,
+      label: "RentalCarReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :ReplaceAction,
+      comment: %(The act of editing a recipient by replacing an old object with a new object.).freeze,
+      label: "ReplaceAction".freeze,
+      subClassOf: "schema:UpdateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ReplyAction,
+      comment: %(The act of responding to a question/message asked/sent by the object. Related to <a href="AskAction">AskAction</a>.<p>Related actions:</p><ul><li><a href="http://schema.org/AskAction">AskAction</a>: Appears generally as an origin of a ReplyAction.</li></ul>).freeze,
+      label: "ReplyAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ReportedDoseSchedule,
+      comment: %(A patient-reported or observed dosing schedule for a drug or supplement.).freeze,
+      label: "ReportedDoseSchedule".freeze,
+      subClassOf: "schema:DoseSchedule".freeze,
+      type: "rdfs:Class".freeze
+    term :Reservation,
+      comment: %(Describes a reservation for travel, dining or an event. Some reservations require tickets.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, restaurant reservations, flights, or rental cars, use http://schema.org/Offer.).freeze,
+      label: "Reservation".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :ReservationPackage,
+      comment: %(A group of multiple reservations with common values for all sub-reservations.).freeze,
+      label: "ReservationPackage".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :ReservationStatusType,
+      comment: %(Enumerated status values for Reservation.).freeze,
+      label: "ReservationStatusType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :ReserveAction,
+      comment: %(Reserving a concrete object.<p>Related actions:</p><ul><li><a href="http://schema.org/ScheduleAction">ScheduleAction</a>: Unlike ScheduleAction, ReserveAction reserves concrete objects \(e.g. a table, a hotel\) towards a time slot / spatial allocation.</li></ul>).freeze,
+      label: "ReserveAction".freeze,
+      subClassOf: "schema:PlanAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Reservoir,
+      comment: %(A reservoir, like the Lake Kariba reservoir.).freeze,
+      label: "Reservoir".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :Residence,
+      comment: %(The place where a person lives.).freeze,
+      label: "Residence".freeze,
+      subClassOf: "schema:Place".freeze,
+      type: "rdfs:Class".freeze
+    term :Restaurant,
+      comment: %(A restaurant.).freeze,
+      label: "Restaurant".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :ReturnAction,
+      comment: %(The act of returning to the origin that which was previously received \(concrete objects\) or taken \(ownership\).).freeze,
+      label: "ReturnAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Review,
+      comment: %(A review of an item - for example, a restaurant, movie, or store.).freeze,
+      label: "Review".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :ReviewAction,
+      comment: %(The act of producing a balanced opinion about the object for an audience. An agent reviews an object with participants resulting in a review.).freeze,
+      label: "ReviewAction".freeze,
+      subClassOf: "schema:AssessAction".freeze,
+      type: "rdfs:Class".freeze
+    term :RiverBodyOfWater,
+      comment: %(A river \(for example, the broad majestic Shannon\).).freeze,
+      label: "RiverBodyOfWater".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :RoofingContractor,
+      comment: %(A roofing contractor.).freeze,
+      label: "RoofingContractor".freeze,
+      subClassOf: "schema:HomeAndConstructionBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :RsvpAction,
+      comment: %(The act of notifying an event organiser as to whether you expect to attend the event.).freeze,
+      label: "RsvpAction".freeze,
+      subClassOf: "schema:InformAction".freeze,
+      type: "rdfs:Class".freeze
+    term :SaleEvent,
+      comment: %(Event type: Sales event.).freeze,
+      label: "SaleEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :ScheduleAction,
+      comment: %(Scheduling future actions, events, or tasks.<p>Related actions:</p><ul><li><a href="http://schema.org/ReserveAction">ReserveAction</a>: Unlike ReserveAction, ScheduleAction allocates future actions \(e.g. an event, a task, etc\) towards a time slot / spatial allocation.</li></ul>).freeze,
+      label: "ScheduleAction".freeze,
+      subClassOf: "schema:PlanAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ScholarlyArticle,
+      comment: %(A scholarly article.).freeze,
+      label: "ScholarlyArticle".freeze,
+      subClassOf: "schema:Article".freeze,
+      type: "rdfs:Class".freeze
+    term :School,
+      comment: %(A school.).freeze,
+      label: "School".freeze,
+      subClassOf: "schema:EducationalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :Sculpture,
+      comment: %(A piece of sculpture.).freeze,
+      label: "Sculpture".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :SeaBodyOfWater,
+      comment: %(A sea \(for example, the Caspian sea\).).freeze,
+      label: "SeaBodyOfWater".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :SearchAction,
+      comment: %(The act of searching for an object.<p>Related actions:</p><ul><li><a href="http://schema.org/FindAction">FindAction</a>: SearchAction generally leads to a FindAction, but not necessarily.</li></ul>).freeze,
+      label: "SearchAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :SearchResultsPage,
+      comment: %(Web page type: Search results page.).freeze,
+      label: "SearchResultsPage".freeze,
+      subClassOf: "schema:WebPage".freeze,
+      type: "rdfs:Class".freeze
+    term :Season,
+      comment: %(A TV or radio season.).freeze,
+      label: "Season".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :Seat,
+      comment: %(Used to describe a seat, such as a reserved seat in an event reservation.).freeze,
+      label: "Seat".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :SelfStorage,
+      comment: %(Self-storage facility.).freeze,
+      label: "SelfStorage".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :SellAction,
+      comment: %(The act of taking money from a buyer in exchange for goods or services rendered. An agent sells an object, product, or service to a buyer for a price. Reciprocal of BuyAction.).freeze,
+      label: "SellAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :SendAction,
+      comment: %(The act of physically/electronically dispatching an object for transfer from an origin to a destination.<p>Related actions:</p><ul><li><a href="http://schema.org/ReceiveAction">ReceiveAction</a>: The reciprocal of SendAction.</li><li><a href="http://schema.org/GiveAction">GiveAction</a>: Unlike GiveAction, SendAction does not imply the transfer of ownership \(e.g. I can send you my laptop, but I'm not necessarily giving it to you\).</li></ul>).freeze,
+      label: "SendAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Series,
+      comment: %(A TV or radio series.).freeze,
+      label: "Series".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :Service,
+      comment: %(A service provided by an organization, e.g. delivery service, print services, etc.).freeze,
+      label: "Service".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :ServiceChannel,
+      comment: %(A means for accessing a service, e.g. a government office location, web site, or phone number.).freeze,
+      label: "ServiceChannel".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :ShareAction,
+      comment: %(The act of distributing content to people for their amusement or edification.).freeze,
+      label: "ShareAction".freeze,
+      subClassOf: "schema:CommunicateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :ShoeStore,
+      comment: %(A shoe store.).freeze,
+      label: "ShoeStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :ShoppingCenter,
+      comment: %(A shopping center or mall.).freeze,
+      label: "ShoppingCenter".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :SingleFamilyResidence,
+      comment: %(Residence type: Single-family home.).freeze,
+      label: "SingleFamilyResidence".freeze,
+      subClassOf: "schema:Residence".freeze,
+      type: "rdfs:Class".freeze
+    term :SiteNavigationElement,
+      comment: %(A navigation element of the page.).freeze,
+      label: "SiteNavigationElement".freeze,
+      subClassOf: "schema:WebPageElement".freeze,
+      type: "rdfs:Class".freeze
+    term :SkiResort,
+      comment: %(A ski resort.).freeze,
+      label: "SkiResort".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :SocialEvent,
+      comment: %(Event type: Social event.).freeze,
+      label: "SocialEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :SoftwareApplication,
+      comment: %(A software application.).freeze,
+      label: "SoftwareApplication".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :SomeProducts,
+      comment: %(A placeholder for multiple similar products of the same kind.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "SomeProducts".freeze,
+      subClassOf: "schema:Product".freeze,
+      type: "rdfs:Class".freeze
+    term :Specialty,
+      comment: %(Any branch of a field in which people typically develop specific expertise, usually after significant study, time, and effort.).freeze,
+      label: "Specialty".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :SportingGoodsStore,
+      comment: %(A sporting goods store.).freeze,
+      label: "SportingGoodsStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :SportsActivityLocation,
+      comment: %(A sports location, such as a playing field.).freeze,
+      label: "SportsActivityLocation".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :SportsClub,
+      comment: %(A sports club.).freeze,
+      label: "SportsClub".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :SportsEvent,
+      comment: %(Event type: Sports event.).freeze,
+      label: "SportsEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :SportsTeam,
+      comment: %(Organization: Sports team.).freeze,
+      label: "SportsTeam".freeze,
+      subClassOf: "schema:Organization".freeze,
+      type: "rdfs:Class".freeze
+    term :StadiumOrArena,
+      comment: %(A stadium.).freeze,
+      label: "StadiumOrArena".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :State,
+      comment: %(A state or province.).freeze,
+      label: "State".freeze,
+      subClassOf: "schema:AdministrativeArea".freeze,
+      type: "rdfs:Class".freeze
+    term :Store,
+      comment: %(A retail good store.).freeze,
+      label: "Store".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :StructuredValue,
+      comment: %(Structured values are strings&#x2014;for example, addresses&#x2014;that have certain constraints on their structure.).freeze,
+      label: "StructuredValue".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :SubscribeAction,
+      comment: %(The act of forming a personal connection with someone/something \(object\) unidirectionally/asymmetrically to get updates pushed to.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, SubscribeAction implies that the subscriber acts as a passive agent being constantly/actively pushed for updates.</li><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, SubscribeAction implies that the agent is interested in continuing receiving updates from the object.</li><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, SubscribeAction implies that the agent is interested in continuing receiving updates from the object.</li></ul>).freeze,
+      label: "SubscribeAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :SubwayStation,
+      comment: %(A subway station.).freeze,
+      label: "SubwayStation".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :SuperficialAnatomy,
+      comment: %(Anatomical features that can be observed by sight \(without dissection\), including the form and proportions of the human body as well as surface landmarks that correspond to deeper subcutaneous structures. Superficial anatomy plays an important role in sports medicine, phlebotomy, and other medical specialties as underlying anatomical structures can be identified through surface palpation. For example, during back surgery, superficial anatomy can be used to palpate and count vertebrae to find the site of incision. Or in phlebotomy, superficial anatomy can be used to locate an underlying vein; for example, the median cubital vein can be located by palpating the borders of the cubital fossa \(such as the epicondyles of the humerus\) and then looking for the superficial signs of the vein, such as size, prominence, ability to refill after depression, and feel of surrounding tissue support. As another example, in a subluxation \(dislocation\) of the glenohumeral joint, the bony structure becomes pronounced with the deltoid muscle failing to cover the glenohumeral joint allowing the edges of the scapula to be superficially visible. Here, the superficial anatomy is the visible edges of the scapula, implying the underlying dislocation of the joint \(the related anatomical structure\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "SuperficialAnatomy".freeze,
+      subClassOf: "schema:MedicalEntity".freeze,
+      type: "rdfs:Class".freeze
+    term :Synagogue,
+      comment: %(A synagogue.).freeze,
+      label: "Synagogue".freeze,
+      subClassOf: "schema:PlaceOfWorship".freeze,
+      type: "rdfs:Class".freeze
+    term :TVClip,
+      comment: %(A short TV progam or a segment/part of a TV program.).freeze,
+      label: "TVClip".freeze,
+      subClassOf: "schema:Clip".freeze,
+      type: "rdfs:Class".freeze
+    term :TVEpisode,
+      comment: %(A TV episode which can be part of a series or season.).freeze,
+      label: "TVEpisode".freeze,
+      subClassOf: "schema:Episode".freeze,
+      type: "rdfs:Class".freeze
+    term :TVSeason,
+      comment: %(Season dedicated to TV broadcast and associated online delivery.).freeze,
+      label: "TVSeason".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :TVSeries,
+      comment: %(Series dedicated to TV broadcast and associated online delivery.).freeze,
+      label: "TVSeries".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :Table,
+      comment: %(A table on the page.).freeze,
+      label: "Table".freeze,
+      subClassOf: "schema:WebPageElement".freeze,
+      type: "rdfs:Class".freeze
+    term :TakeAction,
+      comment: %(The act of gaining ownership of an object from an origin. Reciprocal of GiveAction.<p>Related actions:</p><ul><li><a href="http://schema.org/GiveAction">GiveAction</a>: The reciprocal of TakeAction.</li><li><a href="http://schema.org/ReceiveAction">ReceiveAction</a>: Unlike ReceiveAction, TakeAction implies that ownership has been transfered.</li></ul>).freeze,
+      label: "TakeAction".freeze,
+      subClassOf: "schema:TransferAction".freeze,
+      type: "rdfs:Class".freeze
+    term :TattooParlor,
+      comment: %(A tattoo parlor.).freeze,
+      label: "TattooParlor".freeze,
+      subClassOf: "schema:HealthAndBeautyBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :Taxi,
+      comment: %(A taxi.).freeze,
+      label: "Taxi".freeze,
+      subClassOf: "schema:Service".freeze,
+      type: "rdfs:Class".freeze
+    term :TaxiReservation,
+      comment: %(A reservation for a taxi.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, use http://schema.org/Offer.).freeze,
+      label: " TaxiReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :TaxiStand,
+      comment: %(A taxi stand.).freeze,
+      label: "TaxiStand".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :TechArticle,
+      comment: %(A technical article - Example: How-to \(task\) topics, step-by-step, procedural troubleshooting, specifications, etc.).freeze,
+      label: "TechArticle".freeze,
+      subClassOf: "schema:Article".freeze,
+      type: "rdfs:Class".freeze
+    term :TelevisionStation,
+      comment: %(A television station.).freeze,
+      label: "TelevisionStation".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :TennisComplex,
+      comment: %(A tennis complex.).freeze,
+      label: "TennisComplex".freeze,
+      subClassOf: "schema:SportsActivityLocation".freeze,
+      type: "rdfs:Class".freeze
+    term :Text,
+      comment: %(Data type: Text.).freeze,
+      label: "Text".freeze,
+      subClassOf: "schema:DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :TheaterEvent,
+      comment: %(Event type: Theater performance.).freeze,
+      label: "TheaterEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :TheaterGroup,
+      comment: %(A theater group or company&#x2014;for example, the Royal Shakespeare Company or Druid Theatre.).freeze,
+      label: "TheaterGroup".freeze,
+      subClassOf: "schema:PerformingGroup".freeze,
+      type: "rdfs:Class".freeze
+    term :TherapeuticProcedure,
+      comment: %(A medical procedure intended primarly for therapeutic purposes, aimed at improving a health condition.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "TherapeuticProcedure".freeze,
+      subClassOf: "schema:MedicalProcedure".freeze,
+      type: "rdfs:Class".freeze
+    term :Thing,
+      comment: %(The most generic type of item.).freeze,
+      label: "Thing".freeze,
+      type: "rdfs:Class".freeze
+    term :Ticket,
+      comment: %(Used to describe a ticket to an event, a flight, a bus ride, etc.).freeze,
+      label: "Ticket".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :TieAction,
+      comment: %(The act of reaching a draw in a competitive activity.).freeze,
+      label: "TieAction".freeze,
+      subClassOf: "schema:AchieveAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Time,
+      comment: %(A point in time recurring on multiple days in the form hh:mm:ss[Z|\(+|-\)hh:mm] \(see <a href="http://www.w3.org/TR/xmlschema-2/#time">XML schema for details</a>\).).freeze,
+      label: "Time".freeze,
+      subClassOf: "schema:DataType".freeze,
+      type: "rdfs:Class".freeze
+    term :TipAction,
+      comment: %(The act of giving money voluntarily to a beneficiary in recognition of services rendered.).freeze,
+      label: "TipAction".freeze,
+      subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :TireShop,
+      comment: %(A tire shop.).freeze,
+      label: "TireShop".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :TouristAttraction,
+      comment: %(A tourist attraction.).freeze,
+      label: "TouristAttraction".freeze,
+      subClassOf: "schema:Place".freeze,
+      type: "rdfs:Class".freeze
+    term :TouristInformationCenter,
+      comment: %(A tourist information center.).freeze,
+      label: "TouristInformationCenter".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :ToyStore,
+      comment: %(A toystore.).freeze,
+      label: "ToyStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :TrackAction,
+      comment: %(An agent tracks an object for updates.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, TrackAction refers to the interest on the location of innanimates objects.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, TrackAction refers to  the interest on the location of innanimate objects.</li></ul>).freeze,
+      label: "TrackAction".freeze,
+      subClassOf: "schema:FindAction".freeze,
+      type: "rdfs:Class".freeze
+    term :TradeAction,
+      comment: %(The act of participating in an exchange of goods and services for monetary compensation. An agent trades an object, product or service with a participant in exchange for a one time or periodic payment.).freeze,
+      label: "TradeAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :TrainReservation,
+      comment: %(A reservation for train travel.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, use http://schema.org/Offer.).freeze,
+      label: " TrainReservation".freeze,
+      subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :TrainStation,
+      comment: %(A train station.).freeze,
+      label: "TrainStation".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :TrainTrip,
+      comment: %(A trip on a commercial train line.).freeze,
+      label: "Train Trip".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :TransferAction,
+      comment: %(The act of transferring/moving \(abstract or concrete\) animate or inanimate objects from one place to another.).freeze,
+      label: "TransferAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :TravelAction,
+      comment: %(The act of traveling from an fromLocation to a destination by a specified mode of transport, optionally with participants.).freeze,
+      label: "TravelAction".freeze,
+      subClassOf: "schema:MoveAction".freeze,
+      type: "rdfs:Class".freeze
+    term :TravelAgency,
+      comment: %(A travel agency.).freeze,
+      label: "TravelAgency".freeze,
+      subClassOf: "schema:LocalBusiness".freeze,
+      type: "rdfs:Class".freeze
+    term :TreatmentIndication,
+      comment: %(An indication for treating an underlying condition, symptom, etc.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "TreatmentIndication".freeze,
+      subClassOf: "schema:MedicalIndication".freeze,
+      type: "rdfs:Class".freeze
+    term :TypeAndQuantityNode,
+      comment: %(A structured value indicating the quantity, unit of measurement, and business function of goods included in a bundle offer.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "TypeAndQuantityNode".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :URL,
+      comment: %(Data type: URL.).freeze,
+      label: "URL".freeze,
+      subClassOf: "schema:Text".freeze,
+      type: "rdfs:Class".freeze
+    term :UnRegisterAction,
+      comment: %(The act of un-registering from a service.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Antagonym of UnRegisterAction.</li><li><a href="http://schema.org/Leave">Leave</a>: Unlike LeaveAction, UnRegisterAction implies that you are unregistering from a service you werer previously registered, rather than leaving a team/group of people.</li></ul>).freeze,
+      label: "UnRegisterAction".freeze,
+      subClassOf: "schema:InteractAction".freeze,
+      type: "rdfs:Class".freeze
+    term :UnitPriceSpecification,
+      comment: %(The price asked for a given offer by the respective organization or person.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "UnitPriceSpecification".freeze,
+      subClassOf: "schema:PriceSpecification".freeze,
+      type: "rdfs:Class".freeze
+    term :UpdateAction,
+      comment: %(The act of managing by changing/editing the state of the object.).freeze,
+      label: "UpdateAction".freeze,
+      subClassOf: "schema:Action".freeze,
+      type: "rdfs:Class".freeze
+    term :UseAction,
+      comment: %(The act of applying an object to its intended purpose.).freeze,
+      label: "UseAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserBlocks,
+      comment: %(User interaction: Block this content.).freeze,
+      label: "UserBlocks".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserCheckins,
+      comment: %(User interaction: Check-in at a place.).freeze,
+      label: "UserCheckins".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserComments,
+      comment: %(The UserInteraction event in which a user comments on an item.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "UserComments".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserDownloads,
+      comment: %(User interaction: Download of an item.).freeze,
+      label: "UserDownloads".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserInteraction,
+      comment: %(A user interacting with a page).freeze,
+      label: "UserInteraction".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :UserLikes,
+      comment: %(User interaction: Like an item.).freeze,
+      label: "UserLikes".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserPageVisits,
+      comment: %(User interaction: Visit to a web page.).freeze,
+      label: "UserPageVisits".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserPlays,
+      comment: %(User interaction: Play count of an item, for example a video or a song.).freeze,
+      label: "UserPlays".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserPlusOnes,
+      comment: %(User interaction: +1.).freeze,
+      label: "UserPlusOnes".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :UserTweets,
+      comment: %(User interaction: Tweets.).freeze,
+      label: "UserTweets".freeze,
+      subClassOf: "schema:UserInteraction".freeze,
+      type: "rdfs:Class".freeze
+    term :Vehicle,
+      comment: %(A vehicle.).freeze,
+      label: "Vehicle".freeze,
+      subClassOf: "schema:Product".freeze,
+      type: "rdfs:Class".freeze
+    term :Vein,
+      comment: %(A type of blood vessel that specifically carries blood to the heart.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Vein".freeze,
+      subClassOf: "schema:Vessel".freeze,
+      type: "rdfs:Class".freeze
+    term :Vessel,
+      comment: %(A component of the human body circulatory system comprised of an intricate network of hollow tubes that transport blood throughout the entire body.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_WikiDoc).freeze,
+      label: "Vessel".freeze,
+      subClassOf: "schema:AnatomicalStructure".freeze,
+      type: "rdfs:Class".freeze
+    term :VeterinaryCare,
+      comment: %(A vet's office.).freeze,
+      label: "VeterinaryCare".freeze,
+      subClassOf: "schema:MedicalOrganization".freeze,
+      type: "rdfs:Class".freeze
+    term :VideoGallery,
+      comment: %(Web page type: Video gallery page.).freeze,
+      label: "VideoGallery".freeze,
+      subClassOf: "schema:CollectionPage".freeze,
+      type: "rdfs:Class".freeze
+    term :VideoObject,
+      comment: %(A video file.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
+      label: "VideoObject".freeze,
+      subClassOf: "schema:MediaObject".freeze,
+      type: "rdfs:Class".freeze
+    term :ViewAction,
+      comment: %(The act of consuming static visual content.).freeze,
+      label: "ViewAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Virus,
+      comment: %(Pathogenic virus that causes viral infection.).freeze,
+      label: "Virus".freeze,
+      type: "schema:InfectiousAgentClass".freeze
+    term :VisualArtsEvent,
+      comment: %(Event type: Visual arts event.).freeze,
+      label: "VisualArtsEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
+    term :Volcano,
+      comment: %(A volcano, like Fuji san).freeze,
+      label: "Volcano".freeze,
+      subClassOf: "schema:Landform".freeze,
+      type: "rdfs:Class".freeze
+    term :VoteAction,
+      comment: %(The act of expressing a preference from a fixed/finite/structured set of choices/options.).freeze,
+      label: "VoteAction".freeze,
+      subClassOf: "schema:ChooseAction".freeze,
+      type: "rdfs:Class".freeze
+    term :WPAdBlock,
+      comment: %(An advertising section of the page.).freeze,
+      label: "WPAdBlock".freeze,
+      subClassOf: "schema:WebPageElement".freeze,
+      type: "rdfs:Class".freeze
+    term :WPFooter,
+      comment: %(The footer section of the page.).freeze,
+      label: "WPFooter".freeze,
+      subClassOf: "schema:WebPageElement".freeze,
+      type: "rdfs:Class".freeze
+    term :WPHeader,
+      comment: %(The header section of the page.).freeze,
+      label: "WPHeader".freeze,
+      subClassOf: "schema:WebPageElement".freeze,
+      type: "rdfs:Class".freeze
+    term :WPSideBar,
+      comment: %(A sidebar section of the page.).freeze,
+      label: "WPSideBar".freeze,
+      subClassOf: "schema:WebPageElement".freeze,
+      type: "rdfs:Class".freeze
+    term :WantAction,
+      comment: %(The act of expressing a desire about the object. An agent wants an object.).freeze,
+      label: "WantAction".freeze,
+      subClassOf: "schema:ReactAction".freeze,
+      type: "rdfs:Class".freeze
+    term :WarrantyPromise,
+      comment: %(A structured value representing the duration and scope of services that will be provided to a customer free of charge in case of a defect or malfunction of a product.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "WarrantyPromise".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
+    term :WarrantyScope,
+      comment: %(A range of of services that will be provided to a customer free of charge in case of a defect or malfunction of a product.
+
+    Commonly used values:
+
+    http://purl.org/goodrelations/v1#Labor-BringIn
+    http://purl.org/goodrelations/v1#PartsAndLabor-BringIn
+    http://purl.org/goodrelations/v1#PartsAndLabor-PickUp
+    	).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "WarrantyScope".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
+    term :WatchAction,
+      comment: %(The act of consuming dynamic/moving visual content.).freeze,
+      label: "WatchAction".freeze,
+      subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Waterfall,
+      comment: %(A waterfall, like Niagara).freeze,
+      label: "Waterfall".freeze,
+      subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :WearAction,
+      comment: %(The act of dressing oneself in clothing.).freeze,
+      label: "WearAction".freeze,
+      subClassOf: "schema:UseAction".freeze,
+      type: "rdfs:Class".freeze
+    term :WebApplication,
+      comment: %(Web applications.).freeze,
+      label: "WebApplication".freeze,
+      subClassOf: "schema:SoftwareApplication".freeze,
+      type: "rdfs:Class".freeze
+    term :WebPage,
+      comment: %(A web page. Every web page is implicitly assumed to be declared to be of type WebPage, so the various properties about that webpage, such as <code>breadcrumb</code> may be used. We recommend explicit declaration if these properties are specified, but if they are found outside of an itemscope, they will be assumed to be about the page).freeze,
+      label: "WebPage".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :WebPageElement,
+      comment: %(A web page element, like a table or an image).freeze,
+      label: "WebPageElement".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :WholesaleStore,
+      comment: %(A wholesale store.).freeze,
+      label: "WholesaleStore".freeze,
+      subClassOf: "schema:Store".freeze,
+      type: "rdfs:Class".freeze
+    term :WinAction,
+      comment: %(The act of achieving victory in a competitive activity.).freeze,
+      label: "WinAction".freeze,
+      subClassOf: "schema:AchieveAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Winery,
+      comment: %(A winery.).freeze,
+      label: "Winery".freeze,
+      subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :WriteAction,
+      comment: %(The act of authoring written creative content.).freeze,
+      label: "WriteAction".freeze,
+      subClassOf: "schema:CreateAction".freeze,
+      type: "rdfs:Class".freeze
+    term :Zoo,
+      comment: %(A zoo.).freeze,
+      label: "Zoo".freeze,
+      subClassOf: "schema:CivicStructure".freeze,
+      type: "rdfs:Class".freeze
 
     # Property definitions
-    property :about, :label => 'about', :comment =>
-      %(The subject matter of the content.)
-    property :acceptedAnswer, :label => 'acceptedAnswer', :comment =>
-      %(The answer that has been accepted as best, typically on a
-        Question/Answer site. Sites vary in their selection
-        mechanisms, e.g. drawing on community opinion and/or the view
-        of the Question author.)
-    property :acceptedOffer, :label => 'acceptedOffer', :comment =>
-      %(The offer\(s\) -- e.g., product, quantity and price
-        combinations -- included in the order.)
-    property :acceptedPaymentMethod, :label => 'acceptedPaymentMethod', :comment =>
-      %(The payment method\(s\) accepted by seller for this offer.)
-    property :acceptsReservations, :label => 'acceptsReservations', :comment =>
-      %(Does the establishment accept reservations?)
-    property :acceptsReservations, :label => 'acceptsReservations', :comment =>
-      %(Either <code>Yes/No</code>, or a URL at which reservations can
-        be made.)
-    property :accessCode, :label => 'accessCode', :comment =>
-      %(Password, PIN, or access code needed for delivery \(e.g. from
-        a locker\).)
-    property :accessibilityAPI, :label => 'accessibilityAPI', :comment =>
-      %(Indicates that the resource is compatible with the referenced
-        accessibility API \(<a
-        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
-        wiki lists possible values</a>\).)
-    property :accessibilityControl, :label => 'accessibilityControl', :comment =>
-      %(Identifies input methods that are sufficient to fully control
-        the described resource \(<a
-        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
-        wiki lists possible values</a>\).)
-    property :accessibilityFeature, :label => 'accessibilityFeature', :comment =>
-      %(Content features of the resource, such as accessible media,
-        alternatives and supported enhancements for accessibility \(<a
-        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
-        wiki lists possible values</a>\).)
-    property :accessibilityHazard, :label => 'accessibilityHazard', :comment =>
-      %(A characteristic of the described resource that is
-        physiologically dangerous to some users. Related to WCAG 2.0
-        guideline 2.3. \(<a
-        href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas
-        wiki lists possible values</a>\))
-    property :accountablePerson, :label => 'accountablePerson', :comment =>
-      %(Specifies the Person that is legally accountable for the
-        CreativeWork.)
-    property :acquiredFrom, :label => 'acquiredFrom', :comment =>
-      %(The organization or person from which the product was
-        acquired.)
-    property :action, :label => 'action', :comment =>
-      %(The movement the muscle generates.)
-    property :actionStatus, :label => 'actionStatus', :comment =>
-      %(Indicates the current disposition of the Action.)
-    property :activeIngredient, :label => 'activeIngredient', :comment =>
-      %(An active ingredient, typically chemical compounds and/or
-        biologic substances.)
-    property :activityDuration, :label => 'activityDuration', :comment =>
-      %(Length of time to engage in the activity.)
-    property :activityFrequency, :label => 'activityFrequency', :comment =>
-      %(How often one should engage in the activity.)
-    property :actor, :label => 'actor', :comment =>
-      %(A cast member of the movie, tv/radio series, season, episode,
-        or video.)
-    property :actors, :label => 'actors', :comment =>
-      %(A cast member of the movie, tv/radio series, season, episode,
-        or video. \(legacy spelling; see singular form, actor\))
-    property :addOn, :label => 'addOn', :comment =>
-      %(An additional offer that can only be obtained in combination
-        with the first base offer \(e.g. supplements and extensions
-        that are available for a surcharge\).)
-    property :additionalName, :label => 'additionalName', :comment =>
-      %(An additional name for a Person, can be used for a middle
-        name.)
-    property :additionalType, :label => 'additionalType', :comment =>
-      %(An additional type for the item, typically used for adding
-        more specific types from external vocabularies in microdata
-        syntax. This is a relationship between something and a class
-        that the thing is in. In RDFa syntax, it is better to use the
-        native RDFa syntax - the 'typeof' attribute - for multiple
-        types. Schema.org tools may have only weaker understanding of
-        extra types, in particular those defined externally.)
-    property :additionalVariable, :label => 'additionalVariable', :comment =>
-      %(Any additional component of the exercise prescription that may
-        need to be articulated to the patient. This may include the
-        order of exercises, the number of repetitions of movement,
-        quantitative distance, progressions over time, etc.)
-    property :address, :label => 'address', :comment =>
-      %(Physical address of the item.)
-    property :addressCountry, :label => 'addressCountry', :comment =>
-      %(The country. For example, USA. You can also provide the
-        two-letter <a
-        href='http://en.wikipedia.org/wiki/ISO_3166-1'>ISO 3166-1
-        alpha-2 country code</a>.)
-    property :addressLocality, :label => 'addressLocality', :comment =>
-      %(The locality. For example, Mountain View.)
-    property :addressRegion, :label => 'addressRegion', :comment =>
-      %(The region. For example, CA.)
-    property :administrationRoute, :label => 'administrationRoute', :comment =>
-      %(A route by which this drug may be administered, e.g. 'oral'.)
-    property :advanceBookingRequirement, :label => 'advanceBookingRequirement', :comment =>
-      %(The amount of time that is required between accepting the
-        offer and the actual usage of the resource or service.)
-    property :adverseOutcome, :label => 'adverseOutcome', :comment =>
-      %(A possible complication and/or side effect of this therapy. If
-        it is known that an adverse outcome is serious \(resulting in
-        death, disability, or permanent damage; requiring
-        hospitalization; or is otherwise life-threatening or requires
-        immediate medical attention\), tag it as a
-        seriouseAdverseOutcome instead.)
-    property :affectedBy, :label => 'affectedBy', :comment =>
-      %(Drugs that affect the test's results.)
-    property :affiliation, :label => 'affiliation', :comment =>
-      %(An organization that this person is affiliated with. For
-        example, a school/university, a club, or a team.)
-    property :agent, :label => 'agent', :comment =>
-      %(The direct performer or driver of the action \(animate or
-        inanimate\). e.g. *John* wrote a book.)
-    property :aggregateRating, :label => 'aggregateRating', :comment =>
-      %(The overall rating, based on a collection of reviews or
-        ratings, of the item.)
-    property :album, :label => 'album', :comment =>
-      %(A music album.)
-    property :albums, :label => 'albums', :comment =>
-      %(A collection of music albums \(legacy spelling; see singular
-        form, album\).)
-    property :alcoholWarning, :label => 'alcoholWarning', :comment =>
-      %(Any precaution, guidance, contraindication, etc. related to
-        consumption of alcohol while taking this drug.)
-    property :algorithm, :label => 'algorithm', :comment =>
-      %(The algorithm or rules to follow to compute the score.)
-    property :alignmentType, :label => 'alignmentType', :comment =>
-      %(A category of alignment between the learning resource and the
-        framework node. Recommended values include: 'assesses',
-        'teaches', 'requires', 'textComplexity', 'readingLevel',
-        'educationalSubject', and 'educationLevel'.)
-    property :alternateName, :label => 'alternateName', :comment =>
-      %(An alias for the item.)
-    property :alternativeHeadline, :label => 'alternativeHeadline', :comment =>
-      %(A secondary title of the CreativeWork.)
-    property :alumni, :label => 'alumni', :comment =>
-      %(Alumni of educational organization.)
-    property :alumniOf, :label => 'alumniOf', :comment =>
-      %(An educational organizations that the person is an alumni of.)
-    property :amountOfThisGood, :label => 'amountOfThisGood', :comment =>
-      %(The quantity of the goods included in the offer.)
-    property :answerCount, :label => 'answerCount', :comment =>
-      %(The number of answers this question has received.)
-    property :antagonist, :label => 'antagonist', :comment =>
-      %(The muscle whose action counteracts the specified muscle.)
-    property :applicableLocation, :label => 'applicableLocation', :comment =>
-      %(The location in which the status applies.)
-    property :application, :label => 'application', :comment =>
-      %(An application that can complete the request.)
-    property :applicationCategory, :label => 'applicationCategory', :comment =>
-      %(Type of software application, e.g. "Game, Multimedia".)
-    property :applicationSubCategory, :label => 'applicationSubCategory', :comment =>
-      %(Subcategory of the application, e.g. "Arcade Game".)
-    property :applicationSuite, :label => 'applicationSuite', :comment =>
-      %(The name of the application suite to which the application
-        belongs \(e.g. Excel belongs to Office\))
-    property :appliesToDeliveryMethod, :label => 'appliesToDeliveryMethod', :comment =>
-      %(The delivery method\(s\) to which the delivery charge or
-        payment charge specification applies.)
-    property :appliesToPaymentMethod, :label => 'appliesToPaymentMethod', :comment =>
-      %(The payment method\(s\) to which the payment charge
-        specification applies.)
-    property :area, :label => 'area', :comment =>
-      %(The area within which users can expect to reach the broadcast
-        service.)
-    property :areaServed, :label => 'areaServed', :comment =>
-      %(The location served by this contact point \(e.g., a phone
-        number intended for Europeans vs. North Americans or only
-        within the United States.\))
-    property :arrivalBusStop, :label => 'arrivalBusStop', :comment =>
-      %(The stop or station from which the bus arrives.)
-    property :arrivalGate, :label => 'arrivalGate', :comment =>
-      %(Identifier of the flight's arrival gate.)
-    property :arrivalPlatform, :label => 'arrivalPlatform', :comment =>
-      %(The platform where the train arrives.)
-    property :arrivalStation, :label => 'arrivalStation', :comment =>
-      %(The station where the train trip ends.)
-    property :arrivalTerminal, :label => 'arrivalTerminal', :comment =>
-      %(Identifier of the flight's arrival terminal.)
-    property :arrivalTime, :label => 'arrivalTime', :comment =>
-      %(The expected arrival time.)
-    property :arterialBranch, :label => 'arterialBranch', :comment =>
-      %(The branches that comprise the arterial structure.)
-    property :articleBody, :label => 'articleBody', :comment =>
-      %(The actual body of the article.)
-    property :articleSection, :label => 'articleSection', :comment =>
-      %(Articles may belong to one or more 'sections' in a magazine or
-        newspaper, such as Sports, Lifestyle, etc.)
-    property :aspect, :label => 'aspect', :comment =>
-      %(An aspect of medical practice that is considered on the page,
-        such as 'diagnosis', 'treatment', 'causes', 'prognosis',
-        'etiology', 'epidemiology', etc.)
-    property :assembly, :label => 'assembly', :comment =>
-      %(Library file name e.g., mscorlib.dll, system.web.dll)
-    property :assemblyVersion, :label => 'assemblyVersion', :comment =>
-      %(Associated product/technology version. e.g., .NET Framework
-        4.5)
-    property :associatedAnatomy, :label => 'associatedAnatomy', :comment =>
-      %(The anatomy of the underlying organ system or structures
-        associated with this entity.)
-    property :associatedArticle, :label => 'associatedArticle', :comment =>
-      %(A NewsArticle associated with the Media Object.)
-    property :associatedMedia, :label => 'associatedMedia', :comment =>
-      %(The media objects that encode this creative work. This
-        property is a synonym for encodings.)
-    property :associatedPathophysiology, :label => 'associatedPathophysiology', :comment =>
-      %(If applicable, a description of the pathophysiology associated
-        with the anatomical system, including potential abnormal
-        changes in the mechanical, physical, and biochemical functions
-        of the system.)
-    property :attendee, :label => 'attendee', :comment =>
-      %(A person or organization attending the event.)
-    property :attendees, :label => 'attendees', :comment =>
-      %(A person attending the event \(legacy spelling; see singular
-        form, attendee\).)
-    property :audience, :label => 'audience', :comment =>
-      %(The intended audience of the item, i.e. the group for whom the
-        item was created.)
-    property :audienceType, :label => 'audienceType', :comment =>
-      %(The target group associated with a given audience \(e.g.
-        veterans, car owners, musicians, etc.\) domain: Audience
-        Range: Text)
-    property :audio, :label => 'audio', :comment =>
-      %(An embedded audio object.)
-    property :author, :label => 'author', :comment =>
-      %(The author of this content. Please note that author is special
-        in that HTML 5 provides a special mechanism for indicating
-        authorship via the rel tag. That is equivalent to this and may
-        be used interchangeably.)
-    property :availability, :label => 'availability', :comment =>
-      %(The availability of this item&#x2014;for example In stock, Out
-        of stock, Pre-order, etc.)
-    property :availabilityEnds, :label => 'availabilityEnds', :comment =>
-      %(The end of the availability of the product or service included
-        in the offer.)
-    property :availabilityStarts, :label => 'availabilityStarts', :comment =>
-      %(The beginning of the availability of the product or service
-        included in the offer.)
-    property :availableAtOrFrom, :label => 'availableAtOrFrom', :comment =>
-      %(The place\(s\) from which the offer can be obtained \(e.g.
-        store locations\).)
-    property :availableChannel, :label => 'availableChannel', :comment =>
-      %(A means of accessing the service \(e.g. a phone bank, a web
-        site, a location, etc.\))
-    property :availableDeliveryMethod, :label => 'availableDeliveryMethod', :comment =>
-      %(The delivery method\(s\) available for this offer.)
-    property :availableFrom, :label => 'availableFrom', :comment =>
-      %(When the item is available for pickup from the store, locker,
-        etc.)
-    property :availableIn, :label => 'availableIn', :comment =>
-      %(The location in which the strength is available.)
-    property :availableLanguage, :label => 'availableLanguage', :comment =>
-      %(A language someone may use with the item.)
-    property :availableService, :label => 'availableService', :comment =>
-      %(A medical service available from this provider.)
-    property :availableStrength, :label => 'availableStrength', :comment =>
-      %(An available dosage strength for the drug.)
-    property :availableTest, :label => 'availableTest', :comment =>
-      %(A diagnostic test or procedure offered by this lab.)
-    property :availableThrough, :label => 'availableThrough', :comment =>
-      %(After this date, the item will no longer be available for
-        pickup.)
-    property :award, :label => 'award', :comment =>
-      %(An award won by this person or for this creative work.)
-    property :awards, :label => 'awards', :comment =>
-      %(Awards won by this person or for this creative work. \(legacy
-        spelling; see singular form, award\))
-    property :background, :label => 'background', :comment =>
-      %(Descriptive information establishing a historical perspective
-        on the supplement. May include the rationale for the name, the
-        population where the supplement first came to prominence, etc.)
-    property :baseSalary, :label => 'baseSalary', :comment =>
-      %(The base salary of the job.)
-    property :benefits, :label => 'benefits', :comment =>
-      %(Description of benefits associated with the job.)
-    property :bestRating, :label => 'bestRating', :comment =>
-      %(The highest value allowed in this rating system. If bestRating
-        is omitted, 5 is assumed.)
-    property :billingAddress, :label => 'billingAddress', :comment =>
-      %(The billing address for the order.)
-    property :billingIncrement, :label => 'billingIncrement', :comment =>
-      %(This property specifies the minimal quantity and rounding
-        increment that will be the basis for the billing. The unit of
-        measurement is specified by the unitCode property.)
-    property :biomechnicalClass, :label => 'biomechnicalClass', :comment =>
-      %(The biomechanical properties of the bone.)
-    property :birthDate, :label => 'birthDate', :comment =>
-      %(Date of birth.)
-    property :bitrate, :label => 'bitrate', :comment =>
-      %(The bitrate of the media object.)
-    property :blogPost, :label => 'blogPost', :comment =>
-      %(A posting that is part of this blog.)
-    property :blogPosts, :label => 'blogPosts', :comment =>
-      %(The postings that are part of this blog \(legacy spelling; see
-        singular form, blogPost\).)
-    property :bloodSupply, :label => 'bloodSupply', :comment =>
-      %(The blood vessel that carries blood from the heart to the
-        muscle.)
-    property :boardingGroup, :label => 'boardingGroup', :comment =>
-      %(The airline-specific indicator of boarding order / preference.)
-    property :bodyLocation, :label => 'bodyLocation', :comment =>
-      %(Location in the body of the anatomical structure.)
-    property :bookEdition, :label => 'bookEdition', :comment =>
-      %(The edition of the book.)
-    property :bookFormat, :label => 'bookFormat', :comment =>
-      %(The format of the book.)
-    property :bookingAgent, :label => 'bookingAgent', :comment =>
-      %(If the reservation was not booked directly through the
-        provider, the third-party booking agent can be recorded
-        through this property.)
-    property :bookingTime, :label => 'bookingTime', :comment =>
-      %(The date and time the reservation was booked.)
-    property :borrower, :label => 'borrower', :comment =>
-      %(A sub property of participant. The person that borrows the
-        object being lent.)
-    property :box, :label => 'box', :comment =>
-      %(A polygon is the area enclosed by a point-to-point path for
-        which the starting and ending points are the same. A polygon
-        is expressed as a series of four or more spacedelimited points
-        where the first and final points are identical.)
-    property :branch, :label => 'branch', :comment =>
-      %(The branches that delineate from the nerve bundle.)
-    property :branchOf, :label => 'branchOf', :comment =>
-      %(The larger organization that this local business is a branch
-        of, if any.)
-    property :brand, :label => 'brand', :comment =>
-      %(The brand\(s\) associated with a product or service, or the
-        brand\(s\) maintained by an organization or business person.)
-    property :breadcrumb, :label => 'breadcrumb', :comment =>
-      %(A set of links that can help a user understand and navigate a
-        website hierarchy.)
-    property :breastfeedingWarning, :label => 'breastfeedingWarning', :comment =>
-      %(Any precaution, guidance, contraindication, etc. related to
-        this drug's use by breastfeeding mothers.)
-    property :broadcaster, :label => 'broadcaster', :comment =>
-      %(The organization owning or operating the broadcast service.)
-    property :browserRequirements, :label => 'browserRequirements', :comment =>
-      %(Specifies browser requirements in human-readable text. For
-        example,"requires HTML5 support".)
-    property :busName, :label => 'busName', :comment =>
-      %(The name of the bus \(e.g. Bolt Express\).)
-    property :busNumber, :label => 'busNumber', :comment =>
-      %(The unique identifier for the trainbus.)
-    property :businessFunction, :label => 'businessFunction', :comment =>
-      %(The business function \(e.g. sell, lease, repair, dispose\) of
-        the offer or component of a bundle \(TypeAndQuantityNode\).
-        The default is http://purl.org/goodrelations/v1#Sell.)
-    property :buyer, :label => 'buyer', :comment =>
-      %(A sub property of participant. The
-        participant/person/organization that bought the object.)
-    property :byArtist, :label => 'byArtist', :comment =>
-      %(The artist that performed this album or recording.)
-    property :calories, :label => 'calories', :comment =>
-      %(The number of calories)
-    property :candidate, :label => 'candidate', :comment =>
-      %(A sub property of object. The candidate subject of this
-        action.)
-    property :caption, :label => 'caption', :comment =>
-      %(The caption for this object.)
-    property :carbohydrateContent, :label => 'carbohydrateContent', :comment =>
-      %(The number of grams of carbohydrates.)
-    property :carrier, :label => 'carrier', :comment =>
-      %(The party responsible for the parcel delivery.)
-    property :carrier, :label => 'carrier', :comment =>
-      %(The airline designated as the carrier for the flight.)
-    property :carrierRequirements, :label => 'carrierRequirements', :comment =>
-      %(Specifies specific carrier\(s\) requirements for the
-        application \(e.g. an application may only work on a specific
-        carrier network\).)
-    property :catalog, :label => 'catalog', :comment =>
-      %(A data catalog which contains a dataset.)
-    property :category, :label => 'category', :comment =>
-      %(A category for the item. Greater signs or slashes can be used
-        to informally indicate a category hierarchy.)
-    property :cause, :label => 'cause', :comment =>
-      %(An underlying cause. More specifically, one of the causative
-        agent\(s\) that are most directly responsible for the
-        pathophysiologic process that eventually results in the
-        occurrence.)
-    property :causeOf, :label => 'causeOf', :comment =>
-      %(The condition, complication, symptom, sign, etc. caused.)
-    property :checkinTime, :label => 'checkinTime', :comment =>
-      %(The earliest someone may check into a lodging establishment.)
-    property :checkoutTime, :label => 'checkoutTime', :comment =>
-      %(The latest someone may check out of a lodging establishment.)
-    property :childMaxAge, :label => 'childMaxAge', :comment =>
-      %(Maximal age of the child)
-    property :childMinAge, :label => 'childMinAge', :comment =>
-      %(Minimal age of the child)
-    property :children, :label => 'children', :comment =>
-      %(A child of the person.)
-    property :cholesterolContent, :label => 'cholesterolContent', :comment =>
-      %(The number of milligrams of cholesterol.)
-    property :circle, :label => 'circle', :comment =>
-      %(A circle is the circular region of a specified radius centered
-        at a specified latitude and longitude. A circle is expressed
-        as a pair followed by a radius in meters.)
-    property :citation, :label => 'citation', :comment =>
-      %(A citation or reference to another creative work, such as
-        another publication, web page, scholarly article, etc.)
-    property :clincalPharmacology, :label => 'clincalPharmacology', :comment =>
-      %(Description of the absorption and elimination of drugs,
-        including their concentration \(pharmacokinetics, pK\) and
-        biological effects \(pharmacodynamics, pD\).)
-    property :clipNumber, :label => 'clipNumber', :comment =>
-      %(Position of the clip within an ordered group of clips.)
-    property :closes, :label => 'closes', :comment =>
-      %(The closing hour of the place or service on the given day\(s\)
-        of the week.)
-    property :code, :label => 'code', :comment =>
-      %(A medical code for the entity, taken from a controlled
-        vocabulary or ontology such as ICD-9, DiseasesDB, MeSH,
-        SNOMED-CT, RxNorm, etc.)
-    property :codeRepository, :label => 'codeRepository', :comment =>
-      %(Link to the repository where the un-compiled, human readable
-        code and related code is located \(SVN, github, CodePlex\))
-    property :codeValue, :label => 'codeValue', :comment =>
-      %(The actual code.)
-    property :codingSystem, :label => 'codingSystem', :comment =>
-      %(The coding system, e.g. 'ICD-10'.)
-    property :colleague, :label => 'colleague', :comment =>
-      %(A colleague of the person.)
-    property :colleagues, :label => 'colleagues', :comment =>
-      %(A colleague of the person \(legacy spelling; see singular
-        form, colleague\).)
-    property :collection, :label => 'collection', :comment =>
-      %(A sub property of object. The collection target of the action.)
-    property :color, :label => 'color', :comment =>
-      %(The color of the product.)
-    property :comment, :label => 'comment', :comment =>
-      %(Comments, typically from users, on this CreativeWork.)
-    property :commentCount, :label => 'commentCount', :comment =>
-      %(The number of comments this CreativeWork \(e.g. Article,
-        Question or Answer\) has received. This is most applicable to
-        works published in Web sites with commenting system;
-        additional comments may exist elsewhere.)
-    property :commentText, :label => 'commentText', :comment =>
-      %(The text of the UserComment.)
-    property :commentTime, :label => 'commentTime', :comment =>
-      %(The time at which the UserComment was made.)
-    property :comprisedOf, :label => 'comprisedOf', :comment =>
-      %(The underlying anatomical structures, such as organs, that
-        comprise the anatomical system.)
-    property :confirmationNumber, :label => 'confirmationNumber', :comment =>
-      %(A number that confirms the given order.)
-    property :connectedTo, :label => 'connectedTo', :comment =>
-      %(Other anatomical structures to which this structure is
-        connected.)
-    property :contactOption, :label => 'contactOption', :comment =>
-      %(An option available on this contact point \(e.g. a toll-free
-        number or support for hearing-impaired callers.\))
-    property :contactPoint, :label => 'contactPoint', :comment =>
-      %(A contact point for a person or organization.)
-    property :contactPoints, :label => 'contactPoints', :comment =>
-      %(A contact point for a person or organization \(legacy
-        spelling; see singular form, contactPoint\).)
-    property :contactType, :label => 'contactType', :comment =>
-      %(A person or organization can have different contact points,
-        for different purposes. For example, a sales contact point, a
-        PR contact point and so on. This property is used to specify
-        the kind of contact point.)
-    property :containedIn, :label => 'containedIn', :comment =>
-      %(The basic containment relation between places.)
-    property :contentLocation, :label => 'contentLocation', :comment =>
-      %(The location of the content.)
-    property :contentRating, :label => 'contentRating', :comment =>
-      %(Official rating of a piece of content&#x2014;for example,'MPAA
-        PG-13'.)
-    property :contentSize, :label => 'contentSize', :comment =>
-      %(File size in \(mega/kilo\) bytes.)
-    property :contentType, :label => 'contentType', :comment =>
-      %(The supported content type\(s\) for an EntryPoint response.)
-    property :contentUrl, :label => 'contentUrl', :comment =>
-      %(Actual bytes of the media object, for example the image file
-        or video file. \(previous spelling: contentURL\))
-    property :contraindication, :label => 'contraindication', :comment =>
-      %(A contraindication for this therapy.)
-    property :contributor, :label => 'contributor', :comment =>
-      %(A secondary contributor to the CreativeWork.)
-    property :cookTime, :label => 'cookTime', :comment =>
-      %(The time it takes to actually cook the dish, in <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration
-        format</a>.)
-    property :cookingMethod, :label => 'cookingMethod', :comment =>
-      %(The method of cooking, such as Frying, Steaming, ...)
-    property :copyrightHolder, :label => 'copyrightHolder', :comment =>
-      %(The party holding the legal copyright to the CreativeWork.)
-    property :copyrightYear, :label => 'copyrightYear', :comment =>
-      %(The year during which the claimed copyright for the
-        CreativeWork was first asserted.)
-    property :cost, :label => 'cost', :comment =>
-      %(Cost per unit of the drug, as reported by the source being
-        tagged.)
-    property :costCategory, :label => 'costCategory', :comment =>
-      %(The category of cost, such as wholesale, retail, reimbursement
-        cap, etc.)
-    property :costCurrency, :label => 'costCurrency', :comment =>
-      %(The currency \(in 3-letter <a
-        href=http://en.wikipedia.org/wiki/ISO_4217>ISO 4217
-        format</a>\) of the drug cost.)
-    property :costOrigin, :label => 'costOrigin', :comment =>
-      %(Additional details to capture the origin of the cost data. For
-        example, 'Medicare Part B'.)
-    property :costPerUnit, :label => 'costPerUnit', :comment =>
-      %(The cost per unit of the drug.)
-    property :countriesNotSupported, :label => 'countriesNotSupported', :comment =>
-      %(Countries for which the application is not supported. You can
-        also provide the two-letter ISO 3166-1 alpha-2 country code.)
-    property :countriesSupported, :label => 'countriesSupported', :comment =>
-      %(Countries for which the application is supported. You can also
-        provide the two-letter ISO 3166-1 alpha-2 country code.)
-    property :course, :label => 'course', :comment =>
-      %(A sub property of location. The course where this action was
-        taken.)
-    property :creator, :label => 'creator', :comment =>
-      %(The creator/author of this CreativeWork or UserComments. This
-        is the same as the Author property for CreativeWork.)
-    property :currenciesAccepted, :label => 'currenciesAccepted', :comment =>
-      %(The currency accepted \(in <a
-        href='http://en.wikipedia.org/wiki/ISO_4217'>ISO 4217 currency
-        format</a>\).)
-    property :customer, :label => 'customer', :comment =>
-      %(Party placing the order.)
-    property :dataset, :label => 'dataset', :comment =>
-      %(A dataset contained in a catalog.)
-    property :dateCreated, :label => 'dateCreated', :comment =>
-      %(The date on which the CreativeWork was created.)
-    property :dateIssued, :label => 'dateIssued', :comment =>
-      %(The date the ticket was issued.)
-    property :dateModified, :label => 'dateModified', :comment =>
-      %(The date on which the CreativeWork was most recently modified.)
-    property :datePosted, :label => 'datePosted', :comment =>
-      %(Publication date for the job posting.)
-    property :datePublished, :label => 'datePublished', :comment =>
-      %(Date of first broadcast/publication.)
-    property :dateline, :label => 'dateline', :comment =>
-      %(The location where the NewsArticle was produced.)
-    property :dayOfWeek, :label => 'dayOfWeek', :comment =>
-      %(The day of the week for which these opening hours are valid.)
-    property :deathDate, :label => 'deathDate', :comment =>
-      %(Date of death.)
-    property :defaultValue, :label => 'defaultValue', :comment =>
-      %(The default value of the input. For properties that expect a
-        literal, the default is a literal value, for properties that
-        expect an object, it's an ID reference to one of the current
-        values.)
-    property :deliveryAddress, :label => 'deliveryAddress', :comment =>
-      %(Destination address.)
-    property :deliveryLeadTime, :label => 'deliveryLeadTime', :comment =>
-      %(The typical delay between the receipt of the order and the
-        goods leaving the warehouse.)
-    property :deliveryMethod, :label => 'deliveryMethod', :comment =>
-      %(A sub property of instrument. The method of delivery)
-    property :deliveryStatus, :label => 'deliveryStatus', :comment =>
-      %(New entry added as the package passes through each leg of its
-        journey \(from shipment to final delivery\).)
-    property :startTime, :label => 'departTime', :comment =>
-      %(When a FoodEstablishmentReservation starts or an Action was
-        performed: start time. This is for actions that span a period
-        of time. e.g. John wrote a book from *January* to December.)
-    property :startTime, :label => 'departTime', :comment =>
-      %(When the Action was performed: start time. This is for actions
-        that span a period of time. e.g. John wrote a book from
-        *January* to December.)
-    property :startTime, :label => 'departTime', :comment =>
-      %(The time a FoodEstablishmentReservation is required to end.)
-    property :department, :label => 'department', :comment =>
-      %(A relationship between an organization and a department of
-        that organization, also described as an organization
-        \(allowing different urls, logos, opening hours\). For
-        example: a store with a pharmacy, or a bakery with a cafe.)
-    property :arrivalAirport, :label => 'departureAirport', :comment =>
-      %(The airport where the flight terminates.)
-    property :departureAirport, :label => 'departureAirport', :comment =>
-      %(The airport where the flight originates.)
-    property :departureBusStop, :label => 'departureBusStop', :comment =>
-      %(The stop or station from which the bus departs.)
-    property :departureGate, :label => 'departureGate', :comment =>
-      %(Identifier of the flight's departure gate.)
-    property :departurePlatform, :label => 'departurePlatform', :comment =>
-      %(The platform from which the train departs.)
-    property :departureStation, :label => 'departureStation', :comment =>
-      %(The station from which the train departs.)
-    property :departureTerminal, :label => 'departureTerminal', :comment =>
-      %(Identifier of the flight's departure terminal.)
-    property :departureTime, :label => 'departureTime', :comment =>
-      %(The expected departure time.)
-    property :dependencies, :label => 'dependencies', :comment =>
-      %(Prerequisites needed to fulfill steps in article.)
-    property :depth, :label => 'depth', :comment =>
-      %(The depth of the product.)
-    property :description, :label => 'description', :comment =>
-      %(A short description of the item.)
-    property :device, :label => 'device', :comment =>
-      %(Device required to run the application. Used in cases where a
-        specific make/model is required to run the application.)
-    property :diagnosis, :label => 'diagnosis', :comment =>
-      %(One or more alternative conditions considered in the
-        differential diagnosis process.)
-    property :diagram, :label => 'diagram', :comment =>
-      %(An image containing a diagram that illustrates the structure
-        and/or its component substructures and/or connections with
-        other structures.)
-    property :diet, :label => 'diet', :comment =>
-      %(A sub property of instrument. The died used in this action.)
-    property :dietFeatures, :label => 'dietFeatures', :comment =>
-      %(Nutritional information specific to the dietary plan. May
-        include dietary recommendations on what foods to avoid, what
-        foods to consume, and specific alterations/deviations from the
-        USDA or other regulatory body's approved dietary guidelines.)
-    property :differentialDiagnosis, :label => 'differentialDiagnosis', :comment =>
-      %(One of a set of differential diagnoses for the condition.
-        Specifically, a closely-related or competing diagnosis
-        typically considered later in the cognitive process whereby
-        this medical condition is distinguished from others most
-        likely responsible for a similar collection of signs and
-        symptoms to reach the most parsimonious diagnosis or diagnoses
-        in a patient.)
-    property :director, :label => 'director', :comment =>
-      %(The director of the movie, tv/radio episode or series.)
-    property :directors, :label => 'directors', :comment =>
-      %(The director of the movie, tv/radio episode or series.
-        \(legacy spelling; see singular form, director\))
-    property :discount, :label => 'discount', :comment =>
-      %(Any discount applied \(to an Order\).)
-    property :discountCode, :label => 'discountCode', :comment =>
-      %(Code used to redeem a discount.)
-    property :discountCurrency, :label => 'discountCurrency', :comment =>
-      %(The currency \(in 3-letter ISO 4217 format\) of the discount.)
-    property :discusses, :label => 'discusses', :comment =>
-      %(Specifies the CreativeWork associated with the UserComment.)
-    property :discussionUrl, :label => 'discussionUrl', :comment =>
-      %(A link to the page containing the comments of the
-        CreativeWork.)
-    property :distance, :label => 'distance', :comment =>
-      %(A sub property of asset. The distance travelled.)
-    property :distinguishingSign, :label => 'distinguishingSign', :comment =>
-      %(One of a set of signs and symptoms that can be used to
-        distinguish this diagnosis from others in the differential
-        diagnosis.)
-    property :distribution, :label => 'distribution', :comment =>
-      %(A downloadable form of this dataset, at a specific location,
-        in a specific format.)
-    property :domainIncludes, :label => 'domainIncludes', :comment =>
-      %(Relates a property to a class that is \(one of\) the type\(s\)
-        the property is expected to be used on.)
-    property :doorTime, :label => 'doorTime', :comment =>
-      %(The time admission will commence.)
-    property :dosageForm, :label => 'dosageForm', :comment =>
-      %(A dosage form in which this drug/supplement is available, e.g.
-        'tablet', 'suspension', 'injection'.)
-    property :doseSchedule, :label => 'doseSchedule', :comment =>
-      %(A dosing schedule for the drug for a given population, either
-        observed, recommended, or maximum dose based on the type used.)
-    property :doseUnit, :label => 'doseUnit', :comment =>
-      %(The unit of the dose, e.g. 'mg'.)
-    property :doseValue, :label => 'doseValue', :comment =>
-      %(The value of the dose, e.g. 500.)
-    property :downloadUrl, :label => 'downloadUrl', :comment =>
-      %(If the file can be downloaded, URL to download the binary.)
-    property :downvoteCount, :label => 'downvoteCount', :comment =>
-      %(The number of downvotes this question has received from the
-        community.)
-    property :drainsTo, :label => 'drainsTo', :comment =>
-      %(The vasculature that the vein drains into.)
-    property :dropoffLocation, :label => 'dropoffLocation', :comment =>
-      %(Where a rental car can be dropped off.)
-    property :dropoffTime, :label => 'dropoffTime', :comment =>
-      %(When a rental car can be dropped off.)
-    property :drug, :label => 'drug', :comment =>
-      %(A drug in this drug class.)
-    property :drugClass, :label => 'drugClass', :comment =>
-      %(The class of drug this belongs to \(e.g., statins\).)
-    property :drugUnit, :label => 'drugUnit', :comment =>
-      %(The unit in which the drug is measured, e.g. '5 mg tablet'.)
-    property :duns, :label => 'duns', :comment =>
-      %(The Dun & Bradstreet DUNS number for identifying an
-        organization or business person.)
-    property :duplicateTherapy, :label => 'duplicateTherapy', :comment =>
-      %(A therapy that duplicates or overlaps this one.)
-    property :duration, :label => 'duration', :comment =>
-      %(The duration of the item \(movie, audio recording, event,
-        etc.\) in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO
-        8601 date format</a>.)
-    property :durationOfWarranty, :label => 'durationOfWarranty', :comment =>
-      %(The duration of the warranty promise. Common unitCode values
-        are ANN for year, MON for months, or DAY for days.)
-    property :editor, :label => 'editor', :comment =>
-      %(Specifies the Person who edited the CreativeWork.)
-    property :educationRequirements, :label => 'educationRequirements', :comment =>
-      %(Educational background needed for the position.)
-    property :educationalAlignment, :label => 'educationalAlignment', :comment =>
-      %(An alignment to an established educational framework.)
-    property :educationalFramework, :label => 'educationalFramework', :comment =>
-      %(The framework to which the resource being described is
-        aligned.)
-    property :educationalRole, :label => 'educationalRole', :comment =>
-      %(An educationalRole of an EducationalAudience)
-    property :educationalUse, :label => 'educationalUse', :comment =>
-      %(The purpose of a work in the context of education; for
-        example, 'assignment', 'group work'.)
-    property :elevation, :label => 'elevation', :comment =>
-      %(The elevation of a location.)
-    property :eligibleCustomerType, :label => 'eligibleCustomerType', :comment =>
-      %(The type\(s\) of customers for which the given offer is valid.)
-    property :eligibleDuration, :label => 'eligibleDuration', :comment =>
-      %(The duration for which the given offer is valid.)
-    property :eligibleQuantity, :label => 'eligibleQuantity', :comment =>
-      %(The interval and unit of measurement of ordering quantities
-        for which the offer or price specification is valid. This
-        allows e.g. specifying that a certain freight charge is valid
-        only for a certain quantity.)
-    property :eligibleRegion, :label => 'eligibleRegion', :comment =>
-      %(The ISO 3166-1 \(ISO 3166-1 alpha-2\) or ISO 3166-2 code, or
-        the GeoShape for the geo-political region\(s\) for which the
-        offer or delivery charge specification is valid.)
-    property :eligibleTransactionVolume, :label => 'eligibleTransactionVolume', :comment =>
-      %(The transaction volume, in a monetary unit, for which the
-        offer or price specification is valid, e.g. for indicating a
-        minimal purchasing volume, to express free shipping above a
-        certain order volume, or to limit the acceptance of credit
-        cards to purchases to a certain minimal amount.)
-    property :email, :label => 'email', :comment =>
-      %(Email address.)
-    property :embedUrl, :label => 'embedUrl', :comment =>
-      %(A URL pointing to a player for a specific video. In general,
-        this is the information in the <code>src</code> element of an
-        <code>embed</code> tag and should not be the same as the
-        content of the <code>loc</code> tag. \(previous spelling:
-        embedURL\))
-    property :employee, :label => 'employee', :comment =>
-      %(Someone working for this organization.)
-    property :employees, :label => 'employees', :comment =>
-      %(People working for this organization. \(legacy spelling; see
-        singular form, employee\))
-    property :employmentType, :label => 'employmentType', :comment =>
-      %(Type of employment \(e.g. full-time, part-time, contract,
-        temporary, seasonal, internship\).)
-    property :encodesCreativeWork, :label => 'encodesCreativeWork', :comment =>
-      %(The creative work encoded by this media object)
-    property :encoding, :label => 'encoding', :comment =>
-      %(A media object that encode this CreativeWork.)
-    property :encodingFormat, :label => 'encodingFormat', :comment =>
-      %(mp3, mpeg4, etc.)
-    property :encodingType, :label => 'encodingType', :comment =>
-      %(The supported encoding type\(s\) for an EntryPoint request.)
-    property :encodings, :label => 'encodings', :comment =>
-      %(The media objects that encode this creative work \(legacy
-        spelling; see singular form, encoding\).)
-    property :endDate, :label => 'endDate', :comment =>
-      %(The end date and time of the event or item \(in <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date
-        format</a>\).)
-    property :endTime, :label => 'endTime', :comment =>
-      %(When the Action was performed: end time. This is for actions
-        that span a period of time. e.g. John wrote a book from
-        January to *December*.)
-    property :endorsee, :label => 'endorsee', :comment =>
-      %(A sub property of participant. The person/organization being
-        supported.)
-    property :endorsers, :label => 'endorsers', :comment =>
-      %(People or organizations that endorse the plan.)
-    property :entertainmentBusiness, :label => 'entertainmentBusiness', :comment =>
-      %(A sub property of location. The entertainment business where
-        the action occurred.)
-    property :epidemiology, :label => 'epidemiology', :comment =>
-      %(The characteristics of associated patients, such as age,
-        gender, race etc.)
-    property :episode, :label => 'episode', :comment =>
-      %(An episode of a TV/radio series or season)
-    property :episodeNumber, :label => 'episodeNumber', :comment =>
-      %(Position of the episode within an ordered group of episodes.)
-    property :episodes, :label => 'episodes', :comment =>
-      %(An episode of a TV/radio series or season \(legacy spelling;
-        see singular form, episode\))
-    property :equal, :label => 'equal', :comment =>
-      %(This ordering relation for qualitative values indicates that
-        the subject is equal to the object.)
-    property :estimatedFlightDuration, :label => 'estimatedFlightDuration', :comment =>
-      %(The estimated time the flight will take.)
-    property :estimatesRiskOf, :label => 'estimatesRiskOf', :comment =>
-      %(The condition, complication, or symptom whose risk is being
-        estimated.)
-    property :event, :label => 'event', :comment =>
-      %(Upcoming or past event associated with this place or
-        organization.)
-    property :eventStatus, :label => 'eventStatus', :comment =>
-      %(An eventStatus of an event represents its status; particularly
-        useful when an event is cancelled or rescheduled.)
-    property :events, :label => 'events', :comment =>
-      %(Upcoming or past events associated with this place or
-        organization \(legacy spelling; see singular form, event\).)
-    property :evidenceLevel, :label => 'evidenceLevel', :comment =>
-      %(Strength of evidence of the data used to formulate the
-        guideline \(enumerated\).)
-    property :evidenceOrigin, :label => 'evidenceOrigin', :comment =>
-      %(Source of the data used to formulate the guidance, e.g. RCT,
-        consensus opinion, etc.)
-    property :exercisePlan, :label => 'exercisePlan', :comment =>
-      %(A sub property of instrument. The exercise plan used on this
-        action.)
-    property :exerciseType, :label => 'exerciseType', :comment =>
-      %(Type\(s\) of exercise or activity, such as strength training,
-        flexibility training, aerobics, cardiac rehabilitation, etc.)
-    property :exifData, :label => 'exifData', :comment =>
-      %(exif data for this object.)
-    property :expectedArrivalFrom, :label => 'expectedArrivalFrom', :comment =>
-      %(The earliest date the package may arrive.)
-    property :expectedArrivalUntil, :label => 'expectedArrivalUntil', :comment =>
-      %(The latest date the package may arrive.)
-    property :expectedPrognosis, :label => 'expectedPrognosis', :comment =>
-      %(The likely outcome in either the short term or long term of
-        the medical condition.)
-    property :experienceRequirements, :label => 'experienceRequirements', :comment =>
-      %(Description of skills and experience needed for the position.)
-    property :expertConsiderations, :label => 'expertConsiderations', :comment =>
-      %(Medical expert advice related to the plan.)
-    property :expires, :label => 'expires', :comment =>
-      %(Date the content expires and is no longer useful or available.
-        Useful for videos.)
-    property :familyName, :label => 'familyName', :comment =>
-      %(Family name. In the U.S., the last name of an Person. This can
-        be used along with givenName instead of the Name property.)
-    property :fatContent, :label => 'fatContent', :comment =>
-      %(The number of grams of fat.)
-    property :faxNumber, :label => 'faxNumber', :comment =>
-      %(The fax number.)
-    property :featureList, :label => 'featureList', :comment =>
-      %(Features or modules provided by this application \(and
-        possibly required by other applications\).)
-    property :fiberContent, :label => 'fiberContent', :comment =>
-      %(The number of grams of fiber.)
-    property :fileFormat, :label => 'fileFormat', :comment =>
-      %(MIME format of the binary \(e.g. application/zip\).)
-    property :fileSize, :label => 'fileSize', :comment =>
-      %(Size of the application / package \(e.g. 18MB\). In the
-        absence of a unit \(MB, KB etc.\), KB will be assumed.)
-    property :flightDistance, :label => 'flightDistance', :comment =>
-      %(The distance of the flight.)
-    property :flightNumber, :label => 'flightNumber', :comment =>
-      %(The unique identifier for a flight.)
-    property :followee, :label => 'followee', :comment =>
-      %(A sub property of object. The person or organization being
-        followed.)
-    property :follows, :label => 'follows', :comment =>
-      %(The most generic uni-directional social relation.)
-    property :followup, :label => 'followup', :comment =>
-      %(Typical or recommended followup care after the procedure is
-        performed.)
-    property :foodEstablishment, :label => 'foodEstablishment', :comment =>
-      %(A sub property of location. The specific food establishment
-        where the action occurreed.)
-    property :foodEvent, :label => 'foodEvent', :comment =>
-      %(A sub property of location. The specific food event where the
-        action occurred.)
-    property :foodWarning, :label => 'foodWarning', :comment =>
-      %(Any precaution, guidance, contraindication, etc. related to
-        consumption of specific foods while taking this drug.)
-    property :founder, :label => 'founder', :comment =>
-      %(A person who founded this organization.)
-    property :founders, :label => 'founders', :comment =>
-      %(A person who founded this organization \(legacy spelling; see
-        singular form, founder\).)
-    property :foundingDate, :label => 'foundingDate', :comment =>
-      %(The date that this organization was founded.)
-    property :free, :label => 'free', :comment =>
-      %(A flag to signal that the publication is accessible for free.)
-    property :frequency, :label => 'frequency', :comment =>
-      %(How often the dose is taken, e.g. 'daily'.)
-    property :fromLocation, :label => 'fromLocation', :comment =>
-      %(A sub property of location. The original location of the
-        object or the agent before the action.)
-    property :function, :label => 'function', :comment =>
-      %(Function of the anatomical structure.)
-    property :functionalClass, :label => 'functionalClass', :comment =>
-      %(The degree of mobility the joint allows.)
-    property :gender, :label => 'gender', :comment =>
-      %(Gender of the person.)
-    property :genre, :label => 'genre', :comment =>
-      %(Genre of the creative work)
-    property :geo, :label => 'geo', :comment =>
-      %(The geo coordinates of the place.)
-    property :geographicArea, :label => 'geographicArea', :comment =>
-      %(The geographic area associated with the audience.)
-    property :givenName, :label => 'givenName', :comment =>
-      %(Given name. In the U.S., the first name of a Person. This can
-        be used along with familyName instead of the Name property.)
-    property :globalLocationNumber, :label => 'globalLocationNumber', :comment =>
-      %(The Global Location Number \(GLN, sometimes also referred to
-        as International Location Number or ILN\) of the respective
-        organization, person, or place. The GLN is a 13-digit number
-        used to identify parties and physical locations.)
-    property :greater, :label => 'greater', :comment =>
-      %(This ordering relation for qualitative values indicates that
-        the subject is greater than the object.)
-    property :greaterOrEqual, :label => 'greaterOrEqual', :comment =>
-      %(This ordering relation for qualitative values indicates that
-        the subject is greater than or equal to the object.)
-    property :gtin13, :label => 'gtin13', :comment =>
-      %(The GTIN-13 code of the product, or the product to which the
-        offer refers. This is equivalent to 13-digit ISBN codes and
-        EAN UCC-13. Former 12-digit UPC codes can be converted into a
-        GTIN-13 code by simply adding a preceeding zero.)
-    property :gtin14, :label => 'gtin14', :comment =>
-      %(The GTIN-14 code of the product, or the product to which the
-        offer refers.)
-    property :gtin8, :label => 'gtin8', :comment =>
-      %(The GTIN-8 code of the product, or the product to which the
-        offer refers. This code is also known as EAN/UCC-8 or 8-digit
-        EAN.)
-    property :guideline, :label => 'guideline', :comment =>
-      %(A medical guideline related to this entity.)
-    property :guidelineDate, :label => 'guidelineDate', :comment =>
-      %(Date on which this guideline's recommendation was made.)
-    property :guidelineSubject, :label => 'guidelineSubject', :comment =>
-      %(The medical conditions, treatments, etc. that are the subject
-        of the guideline.)
-    property :hasDeliveryMethod, :label => 'hasDeliveryMethod', :comment =>
-      %(Method used for delivery or shipping.)
-    property :hasPOS, :label => 'hasPOS', :comment =>
-      %(Points-of-Sales operated by the organization or person.)
-    property :headline, :label => 'headline', :comment =>
-      %(Headline of the article)
-    property :healthCondition, :label => 'healthCondition', :comment =>
-      %(Expectations for health conditions of target audience)
-    property :height, :label => 'height', :comment =>
-      %(The height of the item.)
-    property :highPrice, :label => 'highPrice', :comment =>
-      %(The highest price of all offers available.)
-    property :hiringOrganization, :label => 'hiringOrganization', :comment =>
-      %(Organization offering the job position.)
-    property :homeLocation, :label => 'homeLocation', :comment =>
-      %(A contact location for a person's residence.)
-    property :honorificPrefix, :label => 'honorificPrefix', :comment =>
-      %(An honorific prefix preceding a Person's name such as
-        Dr/Mrs/Mr.)
-    property :honorificSuffix, :label => 'honorificSuffix', :comment =>
-      %(An honorific suffix preceding a Person's name such as M.D.
-        /PhD/MSCSW.)
-    property :hospitalAffiliation, :label => 'hospitalAffiliation', :comment =>
-      %(A hospital with which the physician or office is affiliated.)
-    property :hostingOrganization, :label => 'hostingOrganization', :comment =>
-      %(The organization \(airline, travelers' club, etc.\) the
-        membership is made with.)
-    property :hoursAvailable, :label => 'hoursAvailable', :comment =>
-      %(The hours during which this contact point is available.)
-    property :howPerformed, :label => 'howPerformed', :comment =>
-      %(How the procedure is performed.)
-    property :httpMethod, :label => 'httpMethod', :comment =>
-      %(An HTTP method that specifies the appropriate HTTP method for
-        a request to an HTTP EntryPoint. Values are capitalized
-        strings as used in HTTP.)
-    property :iataCode, :label => 'iataCode', :comment =>
-      %(IATA identifier for an airline or airport)
-    property :identifyingExam, :label => 'identifyingExam', :comment =>
-      %(A physical examination that can identify this sign.)
-    property :identifyingTest, :label => 'identifyingTest', :comment =>
-      %(A diagnostic test that can identify this sign.)
-    property :illustrator, :label => 'illustrator', :comment =>
-      %(The illustrator of the book.)
-    property :image, :label => 'image', :comment =>
-      %(URL of an image of the item.)
-    property :imagingTechnique, :label => 'imagingTechnique', :comment =>
-      %(Imaging technique used.)
-    property :inAlbum, :label => 'inAlbum', :comment =>
-      %(The album to which this recording belongs.)
-    property :inLanguage, :label => 'inLanguage', :comment =>
-      %(The language of the content. please use one of the language
-        codes from the <a href='http://tools.ietf.org/html/bcp47'>IETF
-        BCP 47 standard.</a>)
-    property :inPlaylist, :label => 'inPlaylist', :comment =>
-      %(The playlist to which this recording belongs.)
-    property :incentives, :label => 'incentives', :comment =>
-      %(Description of bonus and commission compensation aspects of
-        the job.)
-    property :includedRiskFactor, :label => 'includedRiskFactor', :comment =>
-      %(A modifiable or non-modifiable risk factor included in the
-        calculation, e.g. age, coexisting condition.)
-    property :includesObject, :label => 'includesObject', :comment =>
-      %(This links to a node or nodes indicating the exact quantity of
-        the products included in the offer.)
-    property :increasesRiskOf, :label => 'increasesRiskOf', :comment =>
-      %(The condition, complication, etc. influenced by this factor.)
-    property :indication, :label => 'indication', :comment =>
-      %(A factor that indicates use of this therapy for treatment
-        and/or prevention of a condition, symptom, etc. For therapies
-        such as drugs, indications can include both
-        officially-approved indications as well as off-label uses.
-        These can be distinguished by using the ApprovedIndication
-        subtype of MedicalIndication.)
-    property :industry, :label => 'industry', :comment =>
-      %(The industry associated with the job position.)
-    property :infectiousAgent, :label => 'infectiousAgent', :comment =>
-      %(The actual infectious agent, such as a specific bacterium.)
-    property :infectiousAgentClass, :label => 'infectiousAgentClass', :comment =>
-      %(The class of infectious agent \(bacteria, prion, etc.\) that
-        causes the disease.)
-    property :ingredients, :label => 'ingredients', :comment =>
-      %(An ingredient used in the recipe.)
-    property :insertion, :label => 'insertion', :comment =>
-      %(The place of attachment of a muscle, or what the muscle moves.)
-    property :installUrl, :label => 'installUrl', :comment =>
-      %(URL at which the app may be installed, if different from the
-        URL of the item.)
-    property :instrument, :label => 'instrument', :comment =>
-      %(The object that helped the agent perform the action. e.g. John
-        wrote a book with *a pen*.)
-    property :intensity, :label => 'intensity', :comment =>
-      %(Quantitative measure gauging the degree of force involved in
-        the exercise, for example, heartbeats per minute. May include
-        the velocity of the movement.)
-    property :interactingDrug, :label => 'interactingDrug', :comment =>
-      %(Another drug that is known to interact with this drug in a way
-        that impacts the effect of this drug or causes a risk to the
-        patient. Note: disease interactions are typically captured as
-        contraindications.)
-    property :interactionCount, :label => 'interactionCount', :comment =>
-      %(A count of a specific user interactions with this
-        item&#x2014;for example, <code>20 UserLikes</code>, <code>5
-        UserComments</code>, or <code>300 UserDownloads</code>. The
-        user interaction type should be one of the sub types of <a
-        href='UserInteraction'>UserInteraction</a>.)
-    property :interactivityType, :label => 'interactivityType', :comment =>
-      %(The predominant mode of learning supported by the learning
-        resource. Acceptable values are 'active', 'expositive', or
-        'mixed'.)
-    property :inventoryLevel, :label => 'inventoryLevel', :comment =>
-      %(The current approximate inventory level for the item or items.)
-    property :isAccessoryOrSparePartFor, :label => 'isAccessoryOrSparePartFor', :comment =>
-      %(A pointer to another product \(or multiple products\) for
-        which this product is an accessory or spare part.)
-    property :isAvailableGenerically, :label => 'isAvailableGenerically', :comment =>
-      %(True if the drug is available in a generic form \(regardless
-        of name\).)
-    property :isBasedOnUrl, :label => 'isBasedOnUrl', :comment =>
-      %(A resource that was used in the creation of this resource.
-        This term can be repeated for multiple sources. For example,
-        http://example.com/great-multiplication-intro.html)
-    property :isConsumableFor, :label => 'isConsumableFor', :comment =>
-      %(A pointer to another product \(or multiple products\) for
-        which this product is a consumable.)
-    property :isFamilyFriendly, :label => 'isFamilyFriendly', :comment =>
-      %(Indicates whether this content is family friendly.)
-    property :isGift, :label => 'isGift', :comment =>
-      %(Was the offer accepted as a gift for someone other than the
-        buyer.)
-    property :isPartOf, :label => 'isPartOf', :comment =>
-      %(Indicates the collection or gallery to which the item belongs.)
-    property :isProprietary, :label => 'isProprietary', :comment =>
-      %(True if this item's name is a proprietary/brand name \(vs.
-        generic name\).)
-    property :isRelatedTo, :label => 'isRelatedTo', :comment =>
-      %(A pointer to another, somehow related product \(or multiple
-        products\).)
-    property :isSimilarTo, :label => 'isSimilarTo', :comment =>
-      %(A pointer to another, functionally similar product \(or
-        multiple products\).)
-    property :isVariantOf, :label => 'isVariantOf', :comment =>
-      %(A pointer to a base product from which this product is a
-        variant. It is safe to infer that the variant inherits all
-        product features from the base model, unless defined locally.
-        This is not transitive.)
-    property :isbn, :label => 'isbn', :comment =>
-      %(The ISBN of the book.)
-    property :isicV4, :label => 'isicV4', :comment =>
-      %(The International Standard of Industrial Classification of All
-        Economic Activities \(ISIC\), Revision 4 code for a particular
-        organization, business person, or place.)
-    property :issuedBy, :label => 'issuedBy', :comment =>
-      %(The organization issuing the permit.)
-    property :issuedBy, :label => 'issuedBy', :comment =>
-      %(The organization issuing the ticket or permit.)
-    property :issuedThrough, :label => 'issuedThrough', :comment =>
-      %(The service through with the permit was granted.)
-    property :itemCondition, :label => 'itemCondition', :comment =>
-      %(A predefined value from OfferItemCondition or a textual
-        description of the condition of the product or service, or the
-        products or services included in the offer.)
-    property :itemListElement, :label => 'itemListElement', :comment =>
-      %(A single list item.)
-    property :itemListOrder, :label => 'itemListOrder', :comment =>
-      %(Type of ordering \(e.g. Ascending, Descending, Unordered\).)
-    property :itemOffered, :label => 'itemOffered', :comment =>
-      %(The item being sold.)
-    property :itemReviewed, :label => 'itemReviewed', :comment =>
-      %(The item that is being reviewed/rated.)
-    property :itemShipped, :label => 'itemShipped', :comment =>
-      %(Item\(s\) being shipped.)
-    property :jobLocation, :label => 'jobLocation', :comment =>
-      %(A \(typically single\) geographic location associated with the
-        job position.)
-    property :jobTitle, :label => 'jobTitle', :comment =>
-      %(The job title of the person \(for example, Financial
-        Manager\).)
-    property :keywords, :label => 'keywords', :comment =>
-      %(The keywords/tags used to describe this content.)
-    property :knows, :label => 'knows', :comment =>
-      %(The most generic bi-directional social/work relation.)
-    property :labelDetails, :label => 'labelDetails', :comment =>
-      %(Link to the drug's label details.)
-    property :landlord, :label => 'landlord', :comment =>
-      %(A sub property of participant. The owner of the real estate
-        property. Sub property of destination or participant?)
-    property :language, :label => 'language', :comment =>
-      %(A sub property of instrument. The languaged used on this
-        action.)
-    property :lastReviewed, :label => 'lastReviewed', :comment =>
-      %(Date on which the content on this web page was last reviewed
-        for accuracy and/or completeness.)
-    property :latitude, :label => 'latitude', :comment =>
-      %(The latitude of a location. For example <code>37.42242</code>.)
-    property :learningResourceType, :label => 'learningResourceType', :comment =>
-      %(The predominant type or kind characterizing the learning
-        resource. For example, 'presentation', 'handout'.)
-    property :legalName, :label => 'legalName', :comment =>
-      %(The official name of the organization, e.g. the registered
-        company name.)
-    property :legalStatus, :label => 'legalStatus', :comment =>
-      %(The drug or supplement's legal status, including any
-        controlled substance schedules that apply.)
-    property :lender, :label => 'lender', :comment =>
-      %(A sub property of participant. The person that lends the
-        object being borrowed.)
-    property :lesser, :label => 'lesser', :comment =>
-      %(This ordering relation for qualitative values indicates that
-        the subject is lesser than the object.)
-    property :lesserOrEqual, :label => 'lesserOrEqual', :comment =>
-      %(This ordering relation for qualitative values indicates that
-        the subject is lesser than or equal to the object.)
-    property :line, :label => 'line', :comment =>
-      %(A line is a point-to-point path consisting of two or more
-        points. A line is expressed as a series of two or more point
-        objects separated by space.)
-    property :location, :label => 'location', :comment =>
-      %(The location of the event, organization or action.)
-    property :lodgingUnitDescription, :label => 'lodgingUnitDescription', :comment =>
-      %(A full description of the lodging unit.)
-    property :lodgingUnitType, :label => 'lodgingUnitType', :comment =>
-      %(Textual description of the unit type \(including suite vs.
-        room, size of bed, etc.\).)
-    property :logo, :label => 'logo', :comment =>
-      %(A logo associated with an organization.)
-    property :longitude, :label => 'longitude', :comment =>
-      %(The longitude of a location. For example
-        <code>-122.08585</code>.)
-    property :loser, :label => 'loser', :comment =>
-      %(A sub property of participant. The loser of the action.)
-    property :lowPrice, :label => 'lowPrice', :comment =>
-      %(The lowest price of all offers available.)
-    property :mainContentOfPage, :label => 'mainContentOfPage', :comment =>
-      %(Indicates if this web page element is the main subject of the
-        page.)
-    property :makesOffer, :label => 'makesOffer', :comment =>
-      %(A pointer to products or services offered by the organization
-        or person.)
-    property :manufacturer, :label => 'manufacturer', :comment =>
-      %(The manufacturer of the product.)
-    property :map, :label => 'map', :comment =>
-      %(A URL to a map of the place.)
-    property :maps, :label => 'maps', :comment =>
-      %(A URL to a map of the place \(legacy spelling; see singular
-        form, map\).)
-    property :maxPrice, :label => 'maxPrice', :comment =>
-      %(The highest price if the price is a range.)
-    property :maxValue, :label => 'maxValue', :comment =>
-      %(The upper of the product characteristic.)
-    property :maxValue, :label => 'maxValue', :comment =>
-      %(Specifies a regular expression for testing literal values
-        according to the HTML spec.)
-    property :maximumIntake, :label => 'maximumIntake', :comment =>
-      %(Recommended intake of this supplement for a given population
-        as defined by a specific recommending authority.)
-    property :mealService, :label => 'mealService', :comment =>
-      %(Description of the meals that will be provided or available
-        for purchase.)
-    property :mechanismOfAction, :label => 'mechanismOfAction', :comment =>
-      %(The specific biochemical interaction through which this drug
-        or supplement produces its pharmacological effect.)
-    property :medicalSpecialty, :label => 'medicalSpecialty', :comment =>
-      %(A medical specialty of the provider.)
-    property :medicineSystem, :label => 'medicineSystem', :comment =>
-      %(The system of medicine that includes this MedicalEntity, for
-        example 'evidence-based', 'homeopathic', 'chiropractic', etc.)
-    property :member, :label => 'member', :comment =>
-      %(A member of this organization.)
-    property :member, :label => 'member', :comment =>
-      %(The individual with the membership.)
-    property :memberOf, :label => 'memberOf', :comment =>
-      %(An organization to which the person belongs.)
-    property :members, :label => 'members', :comment =>
-      %(A member of this organization \(legacy spelling; see singular
-        form, member\).)
-    property :membershipNumber, :label => 'membershipNumber', :comment =>
-      %(A unique identifier for the membership.)
-    property :memoryRequirements, :label => 'memoryRequirements', :comment =>
-      %(Minimum memory requirements.)
-    property :mentions, :label => 'mentions', :comment =>
-      %(Indicates that the CreativeWork contains a reference to, but
-        is not necessarily about a concept.)
-    property :menu, :label => 'menu', :comment =>
-      %(Either the actual menu or a URL of the menu.)
-    property :merchant, :label => 'merchant', :comment =>
-      %(The party taking the order \(e.g. Amazon.com is a merchant for
-        many sellers\).)
-    property :minPrice, :label => 'minPrice', :comment =>
-      %(The lowest price if the price is a range.)
-    property :minValue, :label => 'minValue', :comment =>
-      %(The lower value of the product characteristic.)
-    property :minValue, :label => 'minValue', :comment =>
-      %(Specifies a regular expression for testing literal values
-        according to the HTML spec.)
-    property :model, :label => 'model', :comment =>
-      %(The model of the product. Use with the URL of a ProductModel
-        or a textual representation of the model identifier. The URL
-        of the ProductModel can be from an external source. It is
-        recommended to additionally provide strong product identifiers
-        via the gtin8/gtin13/gtin14 and mpn properties.)
-    property :modifiedTime, :label => 'modifiedTime', :comment =>
-      %(The date and time the reservation was modified.)
-    property :mpn, :label => 'mpn', :comment =>
-      %(The Manufacturer Part Number \(MPN\) of the product, or the
-        product to which the offer refers.)
-    property :multipleValues, :label => 'multipleValues', :comment =>
-      %(Whether multiple values are allowed for the property. Default
-        is false.)
-    property :muscleAction, :label => 'muscleAction', :comment =>
-      %(The movement the muscle generates.)
-    property :musicBy, :label => 'musicBy', :comment =>
-      %(The composer of the movie or TV/radio soundtrack.)
-    property :musicGroupMember, :label => 'musicGroupMember', :comment =>
-      %(A member of the music group&#x2014;for example, John, Paul,
-        George, or Ringo.)
-    property :naics, :label => 'naics', :comment =>
-      %(The North American Industry Classification System \(NAICS\)
-        code for a particular organization or business person.)
-    property :name, :label => 'name', :comment =>
-      %(The name of the item.)
-    property :nationality, :label => 'nationality', :comment =>
-      %(Nationality of the person.)
-    property :naturalProgression, :label => 'naturalProgression', :comment =>
-      %(The expected progression of the condition if it is not treated
-        and allowed to progress naturally.)
-    property :nerve, :label => 'nerve', :comment =>
-      %(The underlying innervation associated with the muscle.)
-    property :nerveMotor, :label => 'nerveMotor', :comment =>
-      %(The neurological pathway extension that involves muscle
-        control.)
-    property :nonEqual, :label => 'nonEqual', :comment =>
-      %(This ordering relation for qualitative values indicates that
-        the subject is not equal to the object.)
-    property :nonProprietaryName, :label => 'nonProprietaryName', :comment =>
-      %(The generic name of this drug or supplement.)
-    property :normalRange, :label => 'normalRange', :comment =>
-      %(Range of acceptable values for a typical patient, when
-        applicable.)
-    property :numAdults, :label => 'numAdults', :comment =>
-      %(The number of adults staying in the unit.)
-    property :numChildren, :label => 'numChildren', :comment =>
-      %(The number of children staying in the unit.)
-    property :numTracks, :label => 'numTracks', :comment =>
-      %(The number of tracks in this album or playlist.)
-    property :numberOfEpisodes, :label => 'numberOfEpisodes', :comment =>
-      %(The number of episodes in this season or series.)
-    property :numberOfPages, :label => 'numberOfPages', :comment =>
-      %(The number of pages in the book.)
-    property :numberOfSeasons, :label => 'numberOfSeasons', :comment =>
-      %(The number of seasons in this series.)
-    property :numberofEmployees, :label => 'numberofEmployees', :comment =>
-      %(The size of business by number of employees.)
-    property :nutrition, :label => 'nutrition', :comment =>
-      %(Nutrition information about the recipe.)
-    property :object, :label => 'object', :comment =>
-      %(The object upon the action is carried out, whose state is kept
-        intact or changed. Also known as the semantic roles patient,
-        affected or undergoer \(which change their state\) or theme
-        \(which doesn't\). e.g. John read *a book*.)
-    property :occupationalCategory, :label => 'occupationalCategory', :comment =>
-      %(Category or categories describing the job. Use BLS O*NET-SOC
-        taxonomy: http://www.onetcenter.org/taxonomy.html. Ideally
-        includes textual label and formal code, with the property
-        repeated for each applicable value.)
-    property :offerCount, :label => 'offerCount', :comment =>
-      %(The number of offers for the product.)
-    property :offers, :label => 'offers', :comment =>
-      %(An offer to sell this item&#x2014;for example, an offer to
-        sell a product, the DVD of a movie, or tickets to an event.)
-    property :openingHours, :label => 'openingHours', :comment =>
-      %(The opening hours for a business. Opening hours can be
-        specified as a weekly time range, starting with days, then
-        times per day. Multiple days can be listed with commas ','
-        separating each day. Day or time ranges are specified using a
-        hyphen '-'.<br />- Days are specified using the following
-        two-letter combinations: <code>Mo</code>, <code>Tu</code>,
-        <code>We</code>, <code>Th</code>, <code>Fr</code>,
-        <code>Sa</code>, <code>Su</code>.<br />- Times are specified
-        using 24:00 time. For example, 3pm is specified as
-        <code>15:00</code>. <br />- Here is an example: <code>&lt;time
-        itemprop=&quot;openingHours&quot; datetime=&quot;Tu,Th
-        16:00-20:00&quot;&gt;Tuesdays and Thursdays
-        4-8pm&lt;/time&gt;</code>. <br />- If a business is open 7
-        days a week, then it can be specified as <code>&lt;time
-        itemprop=&quot;openingHours&quot;
-        datetime=&quot;Mo-Su&quot;&gt;Monday through Sunday, all
-        day&lt;/time&gt;</code>.)
-    property :openingHoursSpecification, :label => 'openingHoursSpecification', :comment =>
-      %(The opening hours of a certain place.)
-    property :opens, :label => 'opens', :comment =>
-      %(The opening hour of the place or service on the given day\(s\)
-        of the week.)
-    property :operatingSystem, :label => 'operatingSystem', :comment =>
-      %(Operating systems supported \(Windows 7, OSX 10.6, Android
-        1.6\).)
-    property :oponent, :label => 'oponent', :comment =>
-      %(A sub property of participant. The oponent on this action.)
-    property :option, :label => 'option', :comment =>
-      %(A sub property of object. The options subject to this action.)
-    property :orderDate, :label => 'orderDate', :comment =>
-      %(Date order was placed.)
-    property :orderNumber, :label => 'orderNumber', :comment =>
-      %(The identifier of the transaction.)
-    property :orderStatus, :label => 'orderStatus', :comment =>
-      %(The current status of the order.)
-    property :orderedItem, :label => 'orderedItem', :comment =>
-      %(The item ordered.)
-    property :origin, :label => 'origin', :comment =>
-      %(The place or point where a muscle arises.)
-    property :originAddress, :label => 'originAddress', :comment =>
-      %(Shipper's address.)
-    property :originatesFrom, :label => 'originatesFrom', :comment =>
-      %(The vasculature the lymphatic structure originates, or
-        afferents, from.)
-    property :outcome, :label => 'outcome', :comment =>
-      %(Expected or actual outcomes of the study.)
-    property :overdosage, :label => 'overdosage', :comment =>
-      %(Any information related to overdose on a drug, including signs
-        or symptoms, treatments, contact information for emergency
-        response.)
-    property :overview, :label => 'overview', :comment =>
-      %(Descriptive information establishing the overarching
-        theory/philosophy of the plan. May include the rationale for
-        the name, the population where the plan first came to
-        prominence, etc.)
-    property :ownedFrom, :label => 'ownedFrom', :comment =>
-      %(The date and time of obtaining the product.)
-    property :ownedThrough, :label => 'ownedThrough', :comment =>
-      %(The date and time of giving up ownership on the product.)
-    property :owns, :label => 'owns', :comment =>
-      %(Products owned by the organization or person.)
-    property :parent, :label => 'parent', :comment =>
-      %(A parent of this person.)
-    property :parentItem, :label => 'parentItem', :comment =>
-      %(The parent of a question, answer or item in general.)
-    property :parentService, :label => 'parentService', :comment =>
-      %(A broadcast service to which the broadcast service may belong
-        to such as regional variations of a national channel.)
-    property :parents, :label => 'parents', :comment =>
-      %(A parents of the person \(legacy spelling; see singular form,
-        parent\).)
-    property :partOfEpisode, :label => 'partOfEpisode', :comment =>
-      %(The episode to which this clip belongs.)
-    property :partOfOrder, :label => 'partOfOrder', :comment =>
-      %(The overall order the items in this delivery were included in.)
-    property :partOfSeason, :label => 'partOfSeason', :comment =>
-      %(The season to which this episode belongs.)
-    property :partOfSeries, :label => 'partOfSeries', :comment =>
-      %(The series to which this episode or season belongs.)
-    property :partOfSystem, :label => 'partOfSystem', :comment =>
-      %(The anatomical or organ system that this structure is part of.)
-    property :partOfTVSeries, :label => 'partOfTVSeries', :comment =>
-      %(The TV series to which this episode or season belongs.
-        \(legacy form; partOfSeries is preferred\))
-    property :participant, :label => 'participant', :comment =>
-      %(Other co-agents that participated in the action indirectly.
-        e.g. John wrote a book with *Steve*.)
-    property :partySize, :label => 'partySize', :comment =>
-      %(Number of people the reservation should accomodate.)
-    property :pathophysiology, :label => 'pathophysiology', :comment =>
-      %(Changes in the normal mechanical, physical, and biochemical
-        functions that are associated with this activity or condition.)
-    property :paymentAccepted, :label => 'paymentAccepted', :comment =>
-      %(Cash, credit card, etc.)
-    property :paymentDue, :label => 'paymentDue', :comment =>
-      %(The date that payment is due.)
-    property :paymentMethod, :label => 'paymentMethod', :comment =>
-      %(The name of the credit card or other method of payment for the
-        order.)
-    property :paymentMethodId, :label => 'paymentMethodId', :comment =>
-      %(An identifier for the method of payment used \(e.g. the last 4
-        digits of the credit card\).)
-    property :paymentUrl, :label => 'paymentUrl', :comment =>
-      %(The URL for sending a payment.)
-    property :performer, :label => 'performer', :comment =>
-      %(A performer at the event&#x2014;for example, a presenter,
-        musician, musical group or actor.)
-    property :performerIn, :label => 'performerIn', :comment =>
-      %(Event that this person is a performer or participant in.)
-    property :performers, :label => 'performers', :comment =>
-      %(The main performer or performers of the event&#x2014;for
-        example, a presenter, musician, or actor \(legacy spelling;
-        see singular form, performer\).)
-    property :permissions, :label => 'permissions', :comment =>
-      %(Permission\(s\) required to run the app \(for example, a
-        mobile app may require full internet access or may run only on
-        wifi\).)
-    property :permitAudience, :label => 'permitAudience', :comment =>
-      %(The target audience for this permit.)
-    property :phase, :label => 'phase', :comment =>
-      %(The phase of the trial.)
-    property :photo, :label => 'photo', :comment =>
-      %(A photograph of this place.)
-    property :photos, :label => 'photos', :comment =>
-      %(Photographs of this place \(legacy spelling; see singular
-        form, photo\).)
-    property :physiologicalBenefits, :label => 'physiologicalBenefits', :comment =>
-      %(Specific physiologic benefits associated to the plan.)
-    property :pickupLocation, :label => 'pickupLocation', :comment =>
-      %(Where a taxi will pick up a passenger or a rental car can be
-        picked up.)
-    property :pickupTime, :label => 'pickupTime', :comment =>
-      %(When a taxi will pickup a passegner or a rental car can be
-        picked up.)
-    property :playerType, :label => 'playerType', :comment =>
-      %(Player type required&#x2014;for example, Flash or Silverlight.)
-    property :polygon, :label => 'polygon', :comment =>
-      %(A polygon is the area enclosed by a point-to-point path for
-        which the starting and ending points are the same. A polygon
-        is expressed as a series of four or more spacedelimited points
-        where the first and final points are identical.)
-    property :population, :label => 'population', :comment =>
-      %(Any characteristics of the population used in the study, e.g.
-        'males under 65'.)
-    property :position, :label => 'position', :comment =>
-      %(Free text to define other than pure numerical ranking of an
-        episode or a season in an ordered list of items \(further
-        formatting restrictions may apply within particular user
-        groups\).)
-    property :possibleComplication, :label => 'possibleComplication', :comment =>
-      %(A possible unexpected and unfavorable evolution of a medical
-        condition. Complications may include worsening of the signs or
-        symptoms of the disease, extension of the condition to other
-        organ systems, etc.)
-    property :possibleTreatment, :label => 'possibleTreatment', :comment =>
-      %(A possible treatment to address this condition, sign or
-        symptom.)
-    property :postOfficeBoxNumber, :label => 'postOfficeBoxNumber', :comment =>
-      %(The post offce box number for PO box addresses.)
-    property :postOp, :label => 'postOp', :comment =>
-      %(A description of the postoperative procedures, care, and/or
-        followups for this device.)
-    property :postalCode, :label => 'postalCode', :comment =>
-      %(The postal code. For example, 94043.)
-    property :potentialAction, :label => 'potentialAction', :comment =>
-      %(Indicates a potential Action, which describes an idealized
-        action in which this thing would play an 'object' role.)
-    property :preOp, :label => 'preOp', :comment =>
-      %(A description of the workup, testing, and other preparations
-        required before implanting this device.)
-    property :predecessorOf, :label => 'predecessorOf', :comment =>
-      %(A pointer from a previous, often discontinued variant of the
-        product to its newer variant.)
-    property :pregnancyCategory, :label => 'pregnancyCategory', :comment =>
-      %(Pregnancy category of this drug.)
-    property :pregnancyWarning, :label => 'pregnancyWarning', :comment =>
-      %(Any precaution, guidance, contraindication, etc. related to
-        this drug's use during pregnancy.)
-    property :prepTime, :label => 'prepTime', :comment =>
-      %(The length of time it takes to prepare the recipe, in <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration
-        format</a>.)
-    property :preparation, :label => 'preparation', :comment =>
-      %(Typical preparation that a patient must undergo before having
-        the procedure performed.)
-    property :prescribingInfo, :label => 'prescribingInfo', :comment =>
-      %(Link to prescribing information for the drug.)
-    property :prescriptionStatus, :label => 'prescriptionStatus', :comment =>
-      %(Indicates whether this drug is available by prescription or
-        over-the-counter.)
-    property :previousStartDate, :label => 'previousStartDate', :comment =>
-      %(Used in conjunction with eventStatus for rescheduled or
-        cancelled events. This property contains the previously
-        scheduled start date. For rescheduled events, the startDate
-        property should be used for the newly scheduled start date. In
-        the \(rare\) case of an event that has been postponed and
-        rescheduled multiple times, this field may be repeated.)
-    property :price, :label => 'price', :comment =>
-      %(The offer price of a product, or of a price component when
-        attached to PriceSpecification and its subtypes.)
-    property :priceCurrency, :label => 'priceCurrency', :comment =>
-      %(The currency \(in 3-letter ISO 4217 format\) of the offer
-        price or a price component, when attached to
-        PriceSpecification and its subtypes.)
-    property :priceCurrency, :label => 'priceCurrency', :comment =>
-      %(The currency \(in 3-letter ISO 4217 format\) of the price or a
-        price component, when attached to PriceSpecification and its
-        subtypes.)
-    property :priceRange, :label => 'priceRange', :comment =>
-      %(The price range of the business, for example <code>$$$</code>.)
-    property :priceSpecification, :label => 'priceSpecification', :comment =>
-      %(One or more detailed price specifications, indicating the unit
-        price and delivery or payment charges.)
-    property :priceType, :label => 'priceType', :comment =>
-      %(A short text or acronym indicating multiple price
-        specifications for the same offer, e.g. SRP for the suggested
-        retail price or INVOICE for the invoice price, mostly used in
-        the car industry.)
-    property :priceValidUntil, :label => 'priceValidUntil', :comment =>
-      %(The date after which the price is no longer available.)
-    property :primaryImageOfPage, :label => 'primaryImageOfPage', :comment =>
-      %(Indicates the main image on the page)
-    property :primaryPrevention, :label => 'primaryPrevention', :comment =>
-      %(A preventative therapy used to prevent an initial occurrence
-        of the medical condition, such as vaccination.)
-    property :printColumn, :label => 'printColumn', :comment =>
-      %(The number of the column in which the NewsArticle appears in
-        the print edition.)
-    property :printEdition, :label => 'printEdition', :comment =>
-      %(The edition of the print product in which the NewsArticle
-        appears.)
-    property :printPage, :label => 'printPage', :comment =>
-      %(If this NewsArticle appears in print, this field indicates the
-        name of the page on which the article is found. Please note
-        that this field is intended for the exact page name \(e.g. A5,
-        B18\).)
-    property :printSection, :label => 'printSection', :comment =>
-      %(If this NewsArticle appears in print, this field indicates the
-        print section in which the article appeared.)
-    property :procedure, :label => 'procedure', :comment =>
-      %(A description of the procedure involved in setting up, using,
-        and/or installing the device.)
-    property :procedureType, :label => 'procedureType', :comment =>
-      %(The type of procedure, for example Surgical, Noninvasive, or
-        Percutaneous.)
-    property :processingTime, :label => 'processingTime', :comment =>
-      %(Estimated processing time for the service using this channel.)
-    property :processorRequirements, :label => 'processorRequirements', :comment =>
-      %(Processor architecture required to run the application \(e.g.
-        IA64\).)
-    property :producer, :label => 'producer', :comment =>
-      %(The producer of the movie, tv/radio series, season, or
-        episode, or video.)
-    property :produces, :label => 'produces', :comment =>
-      %(The tangible thing generated by the service, e.g. a passport,
-        permit, etc.)
-    property :productID, :label => 'productID', :comment =>
-      %(The product identifier, such as ISBN. For example:
-        <code>&lt;meta itemprop='productID'
-        content='isbn:123-456-789'/&gt;</code>.)
-    property :productSupported, :label => 'productSupported', :comment =>
-      %(The product or service this support contact point is related
-        to \(such as product support for a particular product line\).
-        This can be a specific product or product line \(e.g.
-        "iPhone"\) or a general category of products or services
-        \(e.g. "smartphones"\).)
-    property :productionCompany, :label => 'productionCompany', :comment =>
-      %(The production company or studio that made the movie, tv/radio
-        series, season, or episode, or media object.)
-    property :proficiencyLevel, :label => 'proficiencyLevel', :comment =>
-      %(Proficiency needed for this content; expected values:
-        'Beginner', 'Expert'.)
-    property :programMembershipUsed, :label => 'programMembershipUsed', :comment =>
-      %(Any membership in a frequent flyer, hotel loyalty program,
-        etc. being applied to the reservation.)
-    property :programName, :label => 'programName', :comment =>
-      %(The program providing the membership.)
-    property :programmingLanguage, :label => 'programmingLanguage', :comment =>
-      %(The computer programming language.)
-    property :programmingModel, :label => 'programmingModel', :comment =>
-      %(Indicates whether API is managed or unmanaged.)
-    property :proprietaryName, :label => 'proprietaryName', :comment =>
-      %(Proprietary name given to the diet plan, typically by its
-        originator or creator.)
-    property :proteinContent, :label => 'proteinContent', :comment =>
-      %(The number of grams of protein.)
-    property :provider, :label => 'provider', :comment =>
-      %(The person or organization providing the service, reservation,
-        or creative work.)
-    property :provider, :label => 'provider', :comment =>
-      %(The organization or agency that is providing the service.)
-    property :providesService, :label => 'providesService', :comment =>
-      %(The service provided by this channel.)
-    property :publication, :label => 'publication', :comment =>
-      %(A publication event associated with the episode, clip or media
-        object.)
-    property :publicationType, :label => 'publicationType', :comment =>
-      %(The type of the medical article, taken from the US NLM MeSH <a
-        href=http://www.nlm.nih.gov/mesh/pubtypes.html>publication
-        type catalog.)
-    property :publishedOn, :label => 'publishedOn', :comment =>
-      %(A broadcast service associated with the publication event)
-    property :publisher, :label => 'publisher', :comment =>
-      %(The publisher of the creative work.)
-    property :publishingPrinciples, :label => 'publishingPrinciples', :comment =>
-      %(Link to page describing the editorial principles of the
-        organization primarily responsible for the creation of the
-        CreativeWork.)
-    property :purpose, :label => 'purpose', :comment =>
-      %(A goal towards an action is taken. Can be concrete or
-        abstract.)
-    property :qualifications, :label => 'qualifications', :comment =>
-      %(Specific qualifications required for this role.)
-    property :query, :label => 'query', :comment =>
-      %(A sub property of instrument. The query used on this action.)
-    property :question, :label => 'question', :comment =>
-      %(A sub property of object. A question.)
-    property :rangeIncludes, :label => 'rangeIncludes', :comment =>
-      %(Relates a property to a class that constitutes \(one of\) the
-        expected type\(s\) for values of the property.)
-    property :ratingCount, :label => 'ratingCount', :comment =>
-      %(The count of total number of ratings.)
-    property :ratingValue, :label => 'ratingValue', :comment =>
-      %(The rating for the content.)
-    property :readonlyValue, :label => 'readonlyValue', :comment =>
-      %(Whether or not a property is mutable. Default is false.
-        Specifying this for a property that also has a value makes it
-        act similar to a "hidden" input in an HTML form.)
-    property :realEstateAgent, :label => 'realEstateAgent', :comment =>
-      %(A sub property of participant. The real estate agent involved
-        in the action.)
-    property :recipe, :label => 'recipe', :comment =>
-      %(A sub property of instrument. The recipe/instructions used to
-        perform the action.)
-    property :recipeCategory, :label => 'recipeCategory', :comment =>
-      %(The category of the recipe&#x2014;for example, appetizer,
-        entree, etc.)
-    property :recipeCuisine, :label => 'recipeCuisine', :comment =>
-      %(The cuisine of the recipe \(for example, French or Ethopian\).)
-    property :recipeInstructions, :label => 'recipeInstructions', :comment =>
-      %(The steps to make the dish.)
-    property :recipeYield, :label => 'recipeYield', :comment =>
-      %(The quantity produced by the recipe \(for example, number of
-        people served, number of servings, etc\).)
-    property :recipient, :label => 'recipient', :comment =>
-      %(A sub property of participant. The participant who is at the
-        receiving end of the action.)
-    property :recognizingAuthority, :label => 'recognizingAuthority', :comment =>
-      %(If applicable, the organization that officially recognizes
-        this entity as part of its endorsed system of medicine.)
-    property :recommendationStrength, :label => 'recommendationStrength', :comment =>
-      %(Strength of the guideline's recommendation \(e.g. 'class I'\).)
-    property :recommendedIntake, :label => 'recommendedIntake', :comment =>
-      %(Recommended intake of this supplement for a given population
-        as defined by a specific recommending authority.)
-    property :regionDrained, :label => 'regionDrained', :comment =>
-      %(The anatomical or organ system drained by this vessel;
-        generally refers to a specific part of an organ.)
-    property :regionsAllowed, :label => 'regionsAllowed', :comment =>
-      %(The regions where the media is allowed. If not specified, then
-        it's assumed to be allowed everywhere. Specify the countries
-        in <a href='http://en.wikipedia.org/wiki/ISO_3166'>ISO 3166
-        format</a>.)
-    property :relatedAnatomy, :label => 'relatedAnatomy', :comment =>
-      %(Anatomical systems or structures that relate to the
-        superficial anatomy.)
-    property :relatedCondition, :label => 'relatedCondition', :comment =>
-      %(A medical condition associated with this anatomy.)
-    property :relatedDrug, :label => 'relatedDrug', :comment =>
-      %(Any other drug related to this one, for example
-        commonly-prescribed alternatives.)
-    property :relatedLink, :label => 'relatedLink', :comment =>
-      %(A link related to this web page, for example to other related
-        web pages.)
-    property :relatedStructure, :label => 'relatedStructure', :comment =>
-      %(Related anatomical structure\(s\) that are not part of the
-        system but relate or connect to it, such as vascular bundles
-        associated with an organ system.)
-    property :relatedTherapy, :label => 'relatedTherapy', :comment =>
-      %(A medical therapy related to this anatomy.)
-    property :relatedTo, :label => 'relatedTo', :comment =>
-      %(The most generic familial relation.)
-    property :releaseDate, :label => 'releaseDate', :comment =>
-      %(The release date of a product or product model. This can be
-        used to distinguish the exact variant of a product.)
-    property :releaseNotes, :label => 'releaseNotes', :comment =>
-      %(Description of what changed in this version.)
-    property :relevantSpecialty, :label => 'relevantSpecialty', :comment =>
-      %(If applicable, a medical specialty in which this entity is
-        relevant.)
-    property :repetitions, :label => 'repetitions', :comment =>
-      %(Number of times one should repeat the activity.)
-    property :replacee, :label => 'replacee', :comment =>
-      %(A sub property of object. The object that is being replaced.)
-    property :replacer, :label => 'replacer', :comment =>
-      %(A sub property of object. The object that replaces.)
-    property :replyToUrl, :label => 'replyToUrl', :comment =>
-      %(The URL at which a reply may be posted to the specified
-        UserComment.)
-    property :representativeOfPage, :label => 'representativeOfPage', :comment =>
-      %(Indicates whether this image is representative of the content
-        of the page.)
-    property :requiredGender, :label => 'requiredGender', :comment =>
-      %(Audiences defined by a person's gender.)
-    property :requiredMaxAge, :label => 'requiredMaxAge', :comment =>
-      %(Audiences defined by a person's maximum age.)
-    property :requiredMinAge, :label => 'requiredMinAge', :comment =>
-      %(Audiences defined by a person's minimum age.)
-    property :requirements, :label => 'requirements', :comment =>
-      %(Component dependency requirements for application. This
-        includes runtime environments and shared libraries that are
-        not included in the application distribution package, but
-        required to run the application \(Examples: DirectX, Java or
-        .NET runtime\).)
-    property :requiresSubscription, :label => 'requiresSubscription', :comment =>
-      %(Indicates if use of the media require a subscription \(either
-        paid or free\). Allowed values are <code>true</code> or
-        <code>false</code> \(note that an earlier version had 'yes',
-        'no'\).)
-    property :reservationFor, :label => 'reservationFor', :comment =>
-      %(The thing -- flight, event, restaurant,etc. being reserved.)
-    property :reservationId, :label => 'reservationId', :comment =>
-      %(A unique identifier for the reservation.)
-    property :reservationStatus, :label => 'reservationStatus', :comment =>
-      %(The current status of the reservation.)
-    property :reservedTicket, :label => 'reservedTicket', :comment =>
-      %(A ticket associated with the reservation.)
-    property :responsibilities, :label => 'responsibilities', :comment =>
-      %(Responsibilities associated with this role.)
-    property :restPeriods, :label => 'restPeriods', :comment =>
-      %(How often one should break from the activity.)
-    property :result, :label => 'result', :comment =>
-      %(The result produced in the action. e.g. John wrote *a book*.)
-    property :resultReview, :label => 'resultReview', :comment =>
-      %(A sub property of result. The review that resulted in the
-        performing of the action.)
-    property :review, :label => 'review', :comment =>
-      %(A review of the item.)
-    property :reviewBody, :label => 'reviewBody', :comment =>
-      %(The actual body of the review)
-    property :reviewCount, :label => 'reviewCount', :comment =>
-      %(The count of total number of reviews.)
-    property :reviewRating, :label => 'reviewRating', :comment =>
-      %(The rating given in this review. Note that reviews can
-        themselves be rated. The <code>reviewRating</code> applies to
-        rating given by the review. The <code>aggregateRating</code>
-        property applies to the review itself, as a creative work.)
-    property :reviewedBy, :label => 'reviewedBy', :comment =>
-      %(People or organizations that have reviewed the content on this
-        web page for accuracy and/or completeness.)
-    property :reviews, :label => 'reviews', :comment =>
-      %(Review of the item \(legacy spelling; see singular form,
-        review\).)
-    property :riskFactor, :label => 'riskFactor', :comment =>
-      %(A modifiable or non-modifiable factor that increases the risk
-        of a patient contracting this condition, e.g. age, coexisting
-        condition.)
-    property :risks, :label => 'risks', :comment =>
-      %(Specific physiologic risks associated to the plan.)
-    property :runsTo, :label => 'runsTo', :comment =>
-      %(The vasculature the lymphatic structure runs, or efferents,
-        to.)
-    property :runtime, :label => 'runtime', :comment =>
-      %(Runtime platform or script interpreter dependencies \(Example
-        - Java v1, Python2.3, .Net Framework 3.0\))
-    property :safetyConsideration, :label => 'safetyConsideration', :comment =>
-      %(Any potential safety concern associated with the supplement.
-        May include interactions with other drugs and foods,
-        pregnancy, breastfeeding, known adverse reactions, and
-        documented efficacy of the supplement.)
-    property :salaryCurrency, :label => 'salaryCurrency', :comment =>
-      %(The currency \(coded using ISO 4217,
-        http://en.wikipedia.org/wiki/ISO_4217 used for the main salary
-        information in this job posting.)
-    property :sameAs, :label => 'sameAs', :comment =>
-      %(URL of a reference Web page that unambiguously indicates the
-        item's identity. E.g. the URL of the item's Wikipedia page,
-        Freebase page, or official website.)
-    property :sampleType, :label => 'sampleType', :comment =>
-      %(Full \(compile ready\) solution, code snippet, inline code,
-        scripts, template.)
-    property :saturatedFatContent, :label => 'saturatedFatContent', :comment =>
-      %(The number of grams of saturated fat.)
-    property :scheduledTime, :label => 'scheduledTime', :comment =>
-      %(The time the object is scheduled to.)
-    property :screenshot, :label => 'screenshot', :comment =>
-      %(A link to a screenshot image of the app.)
-    property :season, :label => 'season', :comment =>
-      %(A season in a tv/radio series.)
-    property :seasonNumber, :label => 'seasonNumber', :comment =>
-      %(Position of the season within an ordered group of seasons.)
-    property :seasons, :label => 'seasons', :comment =>
-      %(A season in a tv/radio series. \(legacy spelling; see singular
-        form, season\))
-    property :seatNumber, :label => 'seatNumber', :comment =>
-      %(The location of the reserved seat \(e.g., 27\).)
-    property :seatRow, :label => 'seatRow', :comment =>
-      %(The row location of the reserved seat \(e.g., B\).)
-    property :seatSection, :label => 'seatSection', :comment =>
-      %(The section location of the reserved seat \(e.g. Orchestra\).)
-    property :seatingType, :label => 'seatingType', :comment =>
-      %(The type/class of the seat.)
-    property :secondaryPrevention, :label => 'secondaryPrevention', :comment =>
-      %(A preventative therapy used to prevent reoccurrence of the
-        medical condition after an initial episode of the condition.)
-    property :seeks, :label => 'seeks', :comment =>
-      %(A pointer to products or services sought by the organization
-        or person \(demand\).)
-    property :seller, :label => 'seller', :comment =>
-      %(The seller.)
-    property :sender, :label => 'sender', :comment =>
-      %(A sub property of participant. The participant who is at the
-        sending end of the action.)
-    property :sensoryUnit, :label => 'sensoryUnit', :comment =>
-      %(The neurological pathway extension that inputs and sends
-        information to the brain or spinal cord.)
-    property :serialNumber, :label => 'serialNumber', :comment =>
-      %(The serial number or any alphanumeric identifier of a
-        particular product. When attached to an offer, it is a
-        shortcut for the serial number of the product included in the
-        offer.)
-    property :seriousAdverseOutcome, :label => 'seriousAdverseOutcome', :comment =>
-      %(A possible serious complication and/or serious side effect of
-        this therapy. Serious adverse outcomes include those that are
-        life-threatening; result in death, disability, or permanent
-        damage; require hospitalization or prolong existing
-        hospitalization; cause congenital anomalies or birth defects;
-        or jeopardize the patient and may require medical or surgical
-        intervention to prevent one of the outcomes in this
-        definition.)
-    property :servesCuisine, :label => 'servesCuisine', :comment =>
-      %(The cuisine of the restaurant.)
-    property :serviceArea, :label => 'serviceArea', :comment =>
-      %(The geographic area where the service is provided.)
-    property :serviceAudience, :label => 'serviceAudience', :comment =>
-      %(The audience eligible for this service.)
-    property :serviceLocation, :label => 'serviceLocation', :comment =>
-      %(The location \(e.g. civic structure, local business, etc.\)
-        where a person can go to access the service.)
-    property :serviceOperator, :label => 'serviceOperator', :comment =>
-      %(The operating organization, if different from the provider.
-        This enables the representation of services that are provided
-        by an organization, but operated by another organization like
-        a subcontractor.)
-    property :servicePhone, :label => 'servicePhone', :comment =>
-      %(The phone number to use to access the service.)
-    property :servicePostalAddress, :label => 'servicePostalAddress', :comment =>
-      %(The address for accessing the service by mail.)
-    property :serviceSmsNumber, :label => 'serviceSmsNumber', :comment =>
-      %(The number to access the service by text message.)
-    property :serviceType, :label => 'serviceType', :comment =>
-      %(The type of service being offered, e.g. veterans' benefits,
-        emergency relief, etc.)
-    property :serviceUrl, :label => 'serviceUrl', :comment =>
-      %(The website to access the service.)
-    property :servingSize, :label => 'servingSize', :comment =>
-      %(The serving size, in terms of the number of volume or mass)
-    property :sibling, :label => 'sibling', :comment =>
-      %(A sibling of the person.)
-    property :siblings, :label => 'siblings', :comment =>
-      %(A sibling of the person \(legacy spelling; see singular form,
-        sibling\).)
-    property :signDetected, :label => 'signDetected', :comment =>
-      %(A sign detected by the test.)
-    property :signOrSymptom, :label => 'signOrSymptom', :comment =>
-      %(A sign or symptom of this condition. Signs are objective or
-        physically observable manifestations of the medical condition
-        while symptoms are the subjective experienceof the medical
-        condition.)
-    property :significance, :label => 'significance', :comment =>
-      %(The significance associated with the superficial anatomy; as
-        an example, how characteristics of the superficial anatomy can
-        suggest underlying medical conditions or courses of treatment.)
-    property :significantLink, :label => 'significantLink', :comment =>
-      %(One of the more significant URLs on the page. Typically, these
-        are the non-navigation links that are clicked on the most.)
-    property :significantLinks, :label => 'significantLinks', :comment =>
-      %(The most significant URLs on the page. Typically, these are
-        the non-navigation links that are clicked on the most \(legacy
-        spelling; see singular form, significantLink\).)
-    property :skills, :label => 'skills', :comment =>
-      %(Skills required to fulfill this role.)
-    property :sku, :label => 'sku', :comment =>
-      %(The Stock Keeping Unit \(SKU\), i.e. a merchant-specific
-        identifier for a product or service, or the product to which
-        the offer refers.)
-    property :sodiumContent, :label => 'sodiumContent', :comment =>
-      %(The number of milligrams of sodium.)
-    property :softwareVersion, :label => 'softwareVersion', :comment =>
-      %(Version of the software instance.)
-    property :source, :label => 'source', :comment =>
-      %(The anatomical or organ system that the artery originates
-        from.)
-    property :sourceOrganization, :label => 'sourceOrganization', :comment =>
-      %(The Organization on whose behalf the creator was working.)
-    property :sourcedFrom, :label => 'sourcedFrom', :comment =>
-      %(The neurological pathway that originates the neurons.)
-    property :spatial, :label => 'spatial', :comment =>
-      %(The range of spatial applicability of a dataset, e.g. for a
-        dataset of New York weather, the state of New York.)
-    property :specialCommitments, :label => 'specialCommitments', :comment =>
-      %(Any special commitments associated with this job posting.
-        Valid entries include VeteranCommit, MilitarySpouseCommit,
-        etc.)
-    property :specialty, :label => 'specialty', :comment =>
-      %(One of the domain specialities to which this web page's
-        content applies.)
-    property :sponsor, :label => 'sponsor', :comment =>
-      %(Sponsor of the study.)
-    property :sportsActivityLocation, :label => 'sportsActivityLocation', :comment =>
-      %(A sub property of location. The sports activity location where
-        this action occurred.)
-    property :sportsEvent, :label => 'sportsEvent', :comment =>
-      %(A sub property of location. The sports event where this action
-        occurred.)
-    property :sportsTeam, :label => 'sportsTeam', :comment =>
-      %(A sub property of participant. The sports team that
-        participated on this action.)
-    property :spouse, :label => 'spouse', :comment =>
-      %(The person's spouse.)
-    property :stage, :label => 'stage', :comment =>
-      %(The stage of the condition, if applicable.)
-    property :stageAsNumber, :label => 'stageAsNumber', :comment =>
-      %(The stage represented as a number, e.g. 3.)
-    property :startDate, :label => 'startDate', :comment =>
-      %(The start date and time of the event or item \(in <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date
-        format</a>\).)
-    property :startTime, :label => 'startTime', :comment =>
-      %(When a FoodEstablishmentReservation starts or an Action was
-        performed: start time. This is for actions that span a period
-        of time. e.g. John wrote a book from *January* to December.)
-    property :startTime, :label => 'startTime', :comment =>
-      %(When the Action was performed: start time. This is for actions
-        that span a period of time. e.g. John wrote a book from
-        *January* to December.)
-    property :startTime, :label => 'startTime', :comment =>
-      %(The time a FoodEstablishmentReservation is required to end.)
-    property :status, :label => 'status', :comment =>
-      %(The status of the study \(enumerated\).)
-    property :stepValue, :label => 'stepValue', :comment =>
-      %(Specifies a regular expression for testing literal values
-        according to the HTML spec.)
-    property :storageRequirements, :label => 'storageRequirements', :comment =>
-      %(Storage requirements \(free space required\).)
-    property :streetAddress, :label => 'streetAddress', :comment =>
-      %(The street address. For example, 1600 Amphitheatre Pkwy.)
-    property :strengthUnit, :label => 'strengthUnit', :comment =>
-      %(The units of an active ingredient's strength, e.g. mg.)
-    property :strengthValue, :label => 'strengthValue', :comment =>
-      %(The value of an active ingredient's strength, e.g. 325.)
-    property :structuralClass, :label => 'structuralClass', :comment =>
-      %(The name given to how bone physically connects to each other.)
-    property :study, :label => 'study', :comment =>
-      %(A medical study or trial related to this entity.)
-    property :studyDesign, :label => 'studyDesign', :comment =>
-      %(Specifics about the observational study design \(enumerated\).)
-    property :studyLocation, :label => 'studyLocation', :comment =>
-      %(The location in which the study is taking/took place.)
-    property :studySubject, :label => 'studySubject', :comment =>
-      %(A subject of the study, i.e. one of the medical conditions,
-        therapies, devices, drugs, etc. investigated by the study.)
-    property :subEvent, :label => 'subEvent', :comment =>
-      %(An Event that is part of this event. For example, a conference
-        event includes many presentations, each are a subEvent of the
-        conference.)
-    property :subEvents, :label => 'subEvents', :comment =>
-      %(Events that are a part of this event. For example, a
-        conference event includes many presentations, each are
-        subEvents of the conference \(legacy spelling; see singular
-        form, subEvent\).)
-    property :subOrganization, :label => 'subOrganization', :comment =>
-      %(A relationship between two organizations where the first
-        includes the second, e.g., as a subsidiary. See also: the more
-        specific 'department' property.)
-    property :subReservation, :label => 'subReservation', :comment =>
-      %(The individual reservations included in the package. Typically
-        a repeated property.)
-    property :subStageSuffix, :label => 'subStageSuffix', :comment =>
-      %(The substage, e.g. 'a' for Stage IIIa.)
-    property :subStructure, :label => 'subStructure', :comment =>
-      %(Component \(sub-\)structure\(s\) that comprise this anatomical
-        structure.)
-    property :subTest, :label => 'subTest', :comment =>
-      %(A component test of the panel.)
-    property :subtype, :label => 'subtype', :comment =>
-      %(A more specific type of the condition, where applicable, for
-        example 'Type 1 Diabetes', 'Type 2 Diabetes', or 'Gestational
-        Diabetes' for Diabetes.)
-    property :successorOf, :label => 'successorOf', :comment =>
-      %(A pointer from a newer variant of a product to its previous,
-        often discontinued predecessor.)
-    property :sugarContent, :label => 'sugarContent', :comment =>
-      %(The number of grams of sugar.)
-    property :suggestedAnswer, :label => 'suggestedAnswer', :comment =>
-      %(An answer \(possibly one of several, possibly incorrect\) to a
-        Question, e.g. on a Question/Answer site, often collected in a
-        QAPage.)
-    property :suggestedGender, :label => 'suggestedGender', :comment =>
-      %(The gender of the person or audience.)
-    property :suggestedMaxAge, :label => 'suggestedMaxAge', :comment =>
-      %(Maximal age recommended for viewing content)
-    property :suggestedMinAge, :label => 'suggestedMinAge', :comment =>
-      %(Minimal age recommended for viewing content)
-    property :superEvent, :label => 'superEvent', :comment =>
-      %(An event that this event is a part of. For example, a
-        collection of individual music performances might each have a
-        music festival as their superEvent.)
-    property :supplyTo, :label => 'supplyTo', :comment =>
-      %(The area to which the artery supplies blood to.)
-    property :target, :label => 'target', :comment =>
-      %(Indicates a target EntryPoint for an Action.)
-    property :targetDescription, :label => 'targetDescription', :comment =>
-      %(The description of a node in an established educational
-        framework.)
-    property :targetName, :label => 'targetName', :comment =>
-      %(The name of a node in an established educational framework.)
-    property :targetPlatform, :label => 'targetPlatform', :comment =>
-      %(Type of app development: phone, Metro style, desktop, XBox,
-        etc.)
-    property :targetPopulation, :label => 'targetPopulation', :comment =>
-      %(Characteristics of the population for which this is intended,
-        or which typically uses it, e.g. 'adults'.)
-    property :targetProduct, :label => 'targetProduct', :comment =>
-      %(Target Operating System / Product to which the code applies.
-        If applies to several versions, just the product name can be
-        used.)
-    property :targetUrl, :label => 'targetUrl', :comment =>
-      %(The URL of a node in an established educational framework.)
-    property :taxID, :label => 'taxID', :comment =>
-      %(The Tax / Fiscal ID of the organization or person, e.g. the
-        TIN in the US or the CIF/NIF in Spain.)
-    property :telephone, :label => 'telephone', :comment =>
-      %(The telephone number.)
-    property :temporal, :label => 'temporal', :comment =>
-      %(The range of temporal applicability of a dataset, e.g. for a
-        2011 census dataset, the year 2011 \(in ISO 8601 time interval
-        format\).)
-    property :text, :label => 'text', :comment =>
-      %(The textual content of this CreativeWork.)
-    property :thumbnail, :label => 'thumbnail', :comment =>
-      %(Thumbnail image for an image or video.)
-    property :thumbnailUrl, :label => 'thumbnailUrl', :comment =>
-      %(A thumbnail image relevant to the Thing.)
-    property :tickerSymbol, :label => 'tickerSymbol', :comment =>
-      %(The exchange traded instrument associated with a Corporation
-        object. The tickerSymbol is expressed as an exchange and an
-        instrument name separated by a space character. For the
-        exchange component of the tickerSymbol attribute, we
-        reccommend using the controlled vocaulary of Market Identifier
-        Codes \(MIC\) specified in ISO15022.)
-    property :ticketNumber, :label => 'ticketNumber', :comment =>
-      %(The unique identifier for the ticket.)
-    property :ticketToken, :label => 'ticketToken', :comment =>
-      %(Reference to an asset \(e.g., Barcode, QR code image or PDF\)
-        usable for entrance.)
-    property :ticketedSeat, :label => 'ticketedSeat', :comment =>
-      %(The seat associated with the ticket.)
-    property :timeRequired, :label => 'timeRequired', :comment =>
-      %(Approximate or typical time it takes to work with or through
-        this learning resource for the typical intended target
-        audience, e.g. 'P30M', 'P1H25M'.)
-    property :tissueSample, :label => 'tissueSample', :comment =>
-      %(The type of tissue sample required for the test.)
-    property :title, :label => 'title', :comment =>
-      %(The title of the job.)
-    property :toLocation, :label => 'toLocation', :comment =>
-      %(A sub property of location. The final location of the object
-        or the agent after the action.)
-    property :totalPrice, :label => 'totalPrice', :comment =>
-      %(The total price for the reservation or ticket, including
-        applicable taxes, shipping, etc.)
-    property :totalTime, :label => 'totalTime', :comment =>
-      %(The total time it takes to prepare and cook the recipe, in <a
-        href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration
-        format</a>.)
-    property :track, :label => 'track', :comment =>
-      %(A music recording \(track\)&#x2014;usually a single song.)
-    property :trackingNumber, :label => 'trackingNumber', :comment =>
-      %(Shipper tracking number.)
-    property :trackingUrl, :label => 'trackingUrl', :comment =>
-      %(Tracking url for the parcel delivery.)
-    property :tracks, :label => 'tracks', :comment =>
-      %(A music recording \(track\)&#x2014;usually a single song
-        \(legacy spelling; see singular form, track\).)
-    property :trailer, :label => 'trailer', :comment =>
-      %(The trailer of a movie or tv/radio series, season, or episode.)
-    property :trainName, :label => 'trainName', :comment =>
-      %(The name of the train \(e.g. The Orient Express\).)
-    property :trainNumber, :label => 'trainNumber', :comment =>
-      %(The unique identifier for the train.)
-    property :transFatContent, :label => 'transFatContent', :comment =>
-      %(The number of grams of trans fat.)
-    property :transcript, :label => 'transcript', :comment =>
-      %(If this MediaObject is an AudioObject or VideoObject, the
-        transcript of that object.)
-    property :transmissionMethod, :label => 'transmissionMethod', :comment =>
-      %(How the disease spreads, either as a route or vector, for
-        example 'direct contact', 'Aedes aegypti', etc.)
-    property :trialDesign, :label => 'trialDesign', :comment =>
-      %(Specifics about the trial design \(enumerated\).)
-    property :tributary, :label => 'tributary', :comment =>
-      %(The anatomical or organ system that the vein flows into; a
-        larger structure that the vein connects to.)
-    property :typeOfGood, :label => 'typeOfGood', :comment =>
-      %(The product that this structured value is referring to.)
-    property :typicalAgeRange, :label => 'typicalAgeRange', :comment =>
-      %(The typical expected age range, e.g. '7-9', '11-'.)
-    property :typicalTest, :label => 'typicalTest', :comment =>
-      %(A medical test typically performed given this condition.)
-    property :underName, :label => 'underName', :comment =>
-      %(The person or organization the reservation or ticket is for.)
-    property :unitCode, :label => 'unitCode', :comment =>
-      %(The unit of measurement given using the UN/CEFACT Common Code
-        \(3 characters\).)
-    property :unsaturatedFatContent, :label => 'unsaturatedFatContent', :comment =>
-      %(The number of grams of unsaturated fat.)
-    property :uploadDate, :label => 'uploadDate', :comment =>
-      %(Date when this media object was uploaded to this site.)
-    property :upvoteCount, :label => 'upvoteCount', :comment =>
-      %(The number of upvotes this question has received from the
-        community.)
-    property :url, :label => 'url', :comment =>
-      %(URL of the item.)
-    property :usedToDiagnose, :label => 'usedToDiagnose', :comment =>
-      %(A condition the test is used to diagnose.)
-    property :usesDevice, :label => 'usesDevice', :comment =>
-      %(Device used to perform the test.)
-    property :validFor, :label => 'validFor', :comment =>
-      %(The time validity of the permit.)
-    property :validFrom, :label => 'validFrom', :comment =>
-      %(The date when the item becomes valid.)
-    property :validIn, :label => 'validIn', :comment =>
-      %(The geographic area where the permit is valid.)
-    property :validThrough, :label => 'validThrough', :comment =>
-      %(The end of the validity of offer, price specification, or
-        opening hours data.)
-    property :validUntil, :label => 'validUntil', :comment =>
-      %(The date when the item is no longer valid.)
-    property :value, :label => 'value', :comment =>
-      %(The value of the product characteristic.)
-    property :valueAddedTaxIncluded, :label => 'valueAddedTaxIncluded', :comment =>
-      %(Specifies whether the applicable value-added tax \(VAT\) is
-        included in the price specification or not.)
-    property :valueMaxLength, :label => 'valueMaxLength', :comment =>
-      %(Specifies the allowed range for number of characters in a
-        literal value.)
-    property :valueMinLength, :label => 'valueMinLength', :comment =>
-      %(Specifies the minimum allowed range for number of characters
-        in a literal value.)
-    property :valuePattern, :label => 'valuePattern', :comment =>
-      %(Specifies a regular expression for testing literal values
-        according to the HTML spec.)
-    property :valueReference, :label => 'valueReference', :comment =>
-      %(A pointer to a secondary value that provides additional
-        information on the original value, e.g. a reference
-        temperature.)
-    property :valueRequired, :label => 'valueRequired', :comment =>
-      %(Whether the property must be filled in to complete the action.
-        Default is false.)
-    property :vatID, :label => 'vatID', :comment =>
-      %(The Value-added Tax ID of the organisation or person.)
-    property :vendor, :label => 'vendor', :comment =>
-      %(A sub property of participant. The seller.The
-        participant/person/organization that sold the object.)
-    property :version, :label => 'version', :comment =>
-      %(The version of the CreativeWork embodied by a specified
-        resource.)
-    property :video, :label => 'video', :comment =>
-      %(An embedded video object.)
-    property :videoFrameSize, :label => 'videoFrameSize', :comment =>
-      %(The frame size of the video.)
-    property :videoQuality, :label => 'videoQuality', :comment =>
-      %(The quality of the video.)
-    property :warning, :label => 'warning', :comment =>
-      %(Any FDA or other warnings about the drug \(text or URL\).)
-    property :warranty, :label => 'warranty', :comment =>
-      %(The warranty promise\(s\) included in the offer.)
-    property :warrantyPromise, :label => 'warrantyPromise', :comment =>
-      %(The warranty promise\(s\) included in the offer.)
-    property :warrantyScope, :label => 'warrantyScope', :comment =>
-      %(The scope of the warranty promise.)
-    property :webCheckinTime, :label => 'webCheckinTime', :comment =>
-      %(The time when a passenger can check into the flight online.)
-    property :weight, :label => 'weight', :comment =>
-      %(The weight of the product.)
-    property :width, :label => 'width', :comment =>
-      %(The width of the item.)
-    property :winner, :label => 'winner', :comment =>
-      %(A sub property of participant. The winner of the action.)
-    property :wordCount, :label => 'wordCount', :comment =>
-      %(The number of words in the text of the Article.)
-    property :workHours, :label => 'workHours', :comment =>
-      %(The typical working hours for this job \(e.g. 1st shift, night
-        shift, 8am-5pm\).)
-    property :workLocation, :label => 'workLocation', :comment =>
-      %(A contact location for a person's place of work.)
-    property :workload, :label => 'workload', :comment =>
-      %(Quantitative measure of the physiologic output of the
-        exercise; also referred to as energy expenditure.)
-    property :worksFor, :label => 'worksFor', :comment =>
-      %(Organizations that the person works for.)
-    property :worstRating, :label => 'worstRating', :comment =>
-      %(The lowest value allowed in this rating system. If worstRating
-        is omitted, 1 is assumed.)
-    property :yearlyRevenue, :label => 'yearlyRevenue', :comment =>
-      %(The size of the business in annual revenue.)
-    property :yearsInOperation, :label => 'yearsInOperation', :comment =>
-      %(The age of the business.)
+    property :about,
+      comment: %(The subject matter of the content.).freeze,
+      label: "about".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :acceptedAnswer,
+      comment: %(The answer that has been accepted as best, typically on a Question/Answer site. Sites vary in their selection mechanisms, e.g. drawing on community opinion and/or the view of the Question author.).freeze,
+      label: "acceptedAnswer".freeze,
+      "schema:domainIncludes" => %(schema:Question).freeze,
+      "schema:rangeIncludes" => %(schema:Answer).freeze,
+      type: "rdf:Property".freeze
+    property :acceptedOffer,
+      comment: %(The offer\(s\) -- e.g., product, quantity and price combinations -- included in the order.).freeze,
+      label: "acceptedOffer".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Offer).freeze,
+      type: "rdf:Property".freeze
+    property :acceptedPaymentMethod,
+      comment: %(The payment method\(s\) accepted by seller for this offer.).freeze,
+      label: "acceptedPaymentMethod".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:PaymentMethod).freeze,
+      type: "rdf:Property".freeze
+    property :acceptsReservations,
+      comment: %(Either <code>Yes/No</code>, or a URL at which reservations can be made.).freeze,
+      label: "acceptsReservations".freeze,
+      "schema:domainIncludes" => %(schema:FoodEstablishment).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :accessCode,
+      comment: %(Password, PIN, or access code needed for delivery \(e.g. from a locker\).).freeze,
+      label: "accessCode".freeze,
+      "schema:domainIncludes" => %(schema:DeliveryEvent).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :accessibilityAPI,
+      comment: %(Indicates that the resource is compatible with the referenced accessibility API \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\).
+         ).freeze,
+      label: "accessibilityAPI".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :accessibilityControl,
+      comment: %(Identifies input methods that are sufficient to fully control the described resource \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\).).freeze,
+      label: "accessibilityControl".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :accessibilityFeature,
+      comment: %(Content features of the resource, such as accessible media, alternatives and supported enhancements for accessibility \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\).).freeze,
+      label: "accessibilityFeature".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :accessibilityHazard,
+      comment: %(A characteristic of the described resource that is physiologically dangerous to some users. Related to WCAG 2.0 guideline 2.3. \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\)).freeze,
+      label: "accessibilityHazard".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :accountablePerson,
+      comment: %(Specifies the Person that is legally accountable for the CreativeWork.).freeze,
+      label: "accountablePerson".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :acquiredFrom,
+      comment: %(The organization or person from which the product was acquired.).freeze,
+      label: "acquiredFrom".freeze,
+      "schema:domainIncludes" => %(schema:OwnershipInfo).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :action,
+      comment: %(The movement the muscle generates.).freeze,
+      label: "action".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      "schema:supercededBy" => %(schema:muscleAction).freeze,
+      type: "rdf:Property".freeze
+    property :actionStatus,
+      comment: %(Indicates the current disposition of the Action.).freeze,
+      label: "actionStatus".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:ActionStatusType).freeze,
+      type: "rdf:Property".freeze
+    property :activeIngredient,
+      comment: %(An active ingredient, typically chemical compounds and/or biologic substances.).freeze,
+      label: "activeIngredient".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :activityDuration,
+      comment: %(Length of time to engage in the activity.).freeze,
+      label: "activityDuration".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :activityFrequency,
+      comment: %(How often one should engage in the activity.).freeze,
+      label: "activityFrequency".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :actor,
+      comment: %(A cast member of the movie, tv/radio series, season, episode, or video.).freeze,
+      label: "actor".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :actors,
+      comment: %(A cast member of the movie, tv/radio series, season, episode, or video. \(legacy spelling; see singular form, actor\)).freeze,
+      label: "actors".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:actor).freeze,
+      type: "rdf:Property".freeze
+    property :addOn,
+      comment: %(An additional offer that can only be obtained in combination with the first base offer \(e.g. supplements and extensions that are available for a surcharge\).).freeze,
+      label: "addOn".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Offer).freeze,
+      type: "rdf:Property".freeze
+    property :additionalName,
+      comment: %(An additional name for a Person, can be used for a middle name.).freeze,
+      label: "additionalName".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :additionalType,
+      comment: %(An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.).freeze,
+      label: "additionalType".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :additionalVariable,
+      comment: %(Any additional component of the exercise prescription that may need to be articulated to the patient. This may include the order of exercises, the number of repetitions of movement, quantitative distance, progressions over time, etc.).freeze,
+      label: "additionalVariable".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :address,
+      comment: %(Physical address of the item.).freeze,
+      label: "address".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:PostalAddress).freeze,
+      type: "rdf:Property".freeze
+    property :addressCountry,
+      comment: %(The country. For example, USA. You can also provide the two-letter <a href='http://en.wikipedia.org/wiki/ISO_3166-1'>ISO 3166-1 alpha-2 country code</a>.).freeze,
+      label: "addressCountry".freeze,
+      "schema:domainIncludes" => %(schema:PostalAddress).freeze,
+      "schema:rangeIncludes" => %(schema:Country).freeze,
+      type: "rdf:Property".freeze
+    property :addressLocality,
+      comment: %(The locality. For example, Mountain View.).freeze,
+      label: "addressLocality".freeze,
+      "schema:domainIncludes" => %(schema:PostalAddress).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :addressRegion,
+      comment: %(The region. For example, CA.).freeze,
+      label: "addressRegion".freeze,
+      "schema:domainIncludes" => %(schema:PostalAddress).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :administrationRoute,
+      comment: %(A route by which this drug may be administered, e.g. 'oral'.).freeze,
+      label: "administrationRoute".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :advanceBookingRequirement,
+      comment: %(The amount of time that is required between accepting the offer and the actual usage of the resource or service.).freeze,
+      label: "advanceBookingRequirement".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :adverseOutcome,
+      comment: %(A possible complication and/or side effect of this therapy. If it is known that an adverse outcome is serious \(resulting in death, disability, or permanent damage; requiring hospitalization; or is otherwise life-threatening or requires immediate medical attention\), tag it as a seriouseAdverseOutcome instead.).freeze,
+      label: "adverseOutcome".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTherapy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :affectedBy,
+      comment: %(Drugs that affect the test's results.).freeze,
+      label: "affectedBy".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTest).freeze,
+      "schema:rangeIncludes" => %(schema:Drug).freeze,
+      type: "rdf:Property".freeze
+    property :affiliation,
+      comment: %(An organization that this person is affiliated with. For example, a school/university, a club, or a team.).freeze,
+      label: "affiliation".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :agent,
+      comment: %(The direct performer or driver of the action \(animate or inanimate\). e.g. *John* wrote a book.).freeze,
+      label: "agent".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :aggregateRating,
+      comment: %(The overall rating, based on a collection of reviews or ratings, of the item.).freeze,
+      label: "aggregateRating".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:AggregateRating).freeze,
+      type: "rdf:Property".freeze
+    property :aircraft,
+      comment: %(The kind of aircraft \(e.g., "Boeing 747"\).).freeze,
+      label: "aircraft".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :album,
+      comment: %(A music album.).freeze,
+      label: "album".freeze,
+      "schema:domainIncludes" => %(schema:MusicGroup).freeze,
+      "schema:rangeIncludes" => %(schema:MusicAlbum).freeze,
+      type: "rdf:Property".freeze
+    property :albums,
+      comment: %(A collection of music albums \(legacy spelling; see singular form, album\).).freeze,
+      label: "albums".freeze,
+      "schema:domainIncludes" => %(schema:MusicGroup).freeze,
+      "schema:rangeIncludes" => %(schema:MusicAlbum).freeze,
+      "schema:supercededBy" => %(schema:album).freeze,
+      type: "rdf:Property".freeze
+    property :alcoholWarning,
+      comment: %(Any precaution, guidance, contraindication, etc. related to consumption of alcohol while taking this drug.).freeze,
+      label: "alcoholWarning".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :algorithm,
+      comment: %(The algorithm or rules to follow to compute the score.).freeze,
+      label: "algorithm".freeze,
+      "schema:domainIncludes" => %(schema:MedicalRiskScore).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :alignmentType,
+      comment: %(A category of alignment between the learning resource and the framework node. Recommended values include: 'assesses', 'teaches', 'requires', 'textComplexity', 'readingLevel', 'educationalSubject', and 'educationLevel'.).freeze,
+      label: "alignmentType".freeze,
+      "schema:domainIncludes" => %(schema:AlignmentObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :alternateName,
+      comment: %(An alias for the item.).freeze,
+      label: "alternateName".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :alternativeHeadline,
+      comment: %(A secondary title of the CreativeWork.).freeze,
+      label: "alternativeHeadline".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :alumni,
+      comment: %(Alumni of educational organization.).freeze,
+      label: "alumni".freeze,
+      "schema:domainIncludes" => %(schema:EducationalOrganization).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :alumniOf,
+      comment: %(An educational organizations that the person is an alumni of.).freeze,
+      label: "alumniOf".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:EducationalOrganization).freeze,
+      type: "rdf:Property".freeze
+    property :amountOfThisGood,
+      comment: %(The quantity of the goods included in the offer.).freeze,
+      label: "amountOfThisGood".freeze,
+      "schema:domainIncludes" => %(schema:TypeAndQuantityNode).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :answerCount,
+      comment: %(The number of answers this question has received.).freeze,
+      label: "answerCount".freeze,
+      "schema:domainIncludes" => %(schema:Question).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :antagonist,
+      comment: %(The muscle whose action counteracts the specified muscle.).freeze,
+      label: "antagonist".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:Muscle).freeze,
+      type: "rdf:Property".freeze
+    property :applicableLocation,
+      comment: %(The location in which the status applies.).freeze,
+      label: "applicableLocation".freeze,
+      "schema:domainIncludes" => %(schema:DrugCost).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :application,
+      comment: %(An application that can complete the request.).freeze,
+      label: "application".freeze,
+      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:rangeIncludes" => %(schema:SoftwareApplication).freeze,
+      type: "rdf:Property".freeze
+    property :applicationCategory,
+      comment: %(Type of software application, e.g. "Game, Multimedia".).freeze,
+      label: "applicationCategory".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :applicationSubCategory,
+      comment: %(Subcategory of the application, e.g. "Arcade Game".).freeze,
+      label: "applicationSubCategory".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :applicationSuite,
+      comment: %(The name of the application suite to which the application belongs \(e.g. Excel belongs to Office\)).freeze,
+      label: "applicationSuite".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :appliesToDeliveryMethod,
+      comment: %(The delivery method\(s\) to which the delivery charge or payment charge specification applies.).freeze,
+      label: "appliesToDeliveryMethod".freeze,
+      "schema:domainIncludes" => %(schema:DeliveryChargeSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:DeliveryMethod).freeze,
+      type: "rdf:Property".freeze
+    property :appliesToPaymentMethod,
+      comment: %(The payment method\(s\) to which the payment charge specification applies.).freeze,
+      label: "appliesToPaymentMethod".freeze,
+      "schema:domainIncludes" => %(schema:PaymentChargeSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:PaymentMethod).freeze,
+      type: "rdf:Property".freeze
+    property :area,
+      comment: %(The area within which users can expect to reach the broadcast service.).freeze,
+      label: "area".freeze,
+      "schema:domainIncludes" => %(schema:BroadcastService).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :areaServed,
+      comment: %(The location served by this contact point \(e.g., a phone number intended for Europeans vs. North Americans or only within the United States.\)).freeze,
+      label: "areaServed".freeze,
+      "schema:domainIncludes" => %(schema:ContactPoint).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalAirport,
+      comment: %(The airport where the flight terminates.).freeze,
+      label: "departureAirport".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Airport).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalBusStop,
+      comment: %(The stop or station from which the bus arrives.).freeze,
+      label: "arrivalBusStop".freeze,
+      "schema:domainIncludes" => %(schema:BusTrip).freeze,
+      "schema:rangeIncludes" => %(schema:BusStation).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalGate,
+      comment: %(Identifier of the flight's arrival gate.).freeze,
+      label: "arrivalGate".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalPlatform,
+      comment: %(The platform where the train arrives.).freeze,
+      label: "arrivalPlatform".freeze,
+      "schema:domainIncludes" => %(schema:TrainTrip).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalStation,
+      comment: %(The station where the train trip ends.).freeze,
+      label: "arrivalStation".freeze,
+      "schema:domainIncludes" => %(schema:TrainTrip).freeze,
+      "schema:rangeIncludes" => %(schema:TrainStation).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalTerminal,
+      comment: %(Identifier of the flight's arrival terminal.).freeze,
+      label: "arrivalTerminal".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :arrivalTime,
+      comment: %(The expected arrival time.).freeze,
+      label: "arrivalTime".freeze,
+      "schema:domainIncludes" => %(schema:BusTrip).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :arterialBranch,
+      comment: %(The branches that comprise the arterial structure.).freeze,
+      label: "arterialBranch".freeze,
+      "schema:domainIncludes" => %(schema:Artery).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :articleBody,
+      comment: %(The actual body of the article.).freeze,
+      label: "articleBody".freeze,
+      "schema:domainIncludes" => %(schema:Article).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :articleSection,
+      comment: %(Articles may belong to one or more 'sections' in a magazine or newspaper, such as Sports, Lifestyle, etc.).freeze,
+      label: "articleSection".freeze,
+      "schema:domainIncludes" => %(schema:Article).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :aspect,
+      comment: %(An aspect of medical practice that is considered on the page, such as 'diagnosis', 'treatment', 'causes', 'prognosis', 'etiology', 'epidemiology', etc.).freeze,
+      label: "aspect".freeze,
+      "schema:domainIncludes" => %(schema:MedicalWebPage).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :assembly,
+      comment: %(Library file name e.g., mscorlib.dll, system.web.dll).freeze,
+      label: "assembly".freeze,
+      "schema:domainIncludes" => %(schema:APIReference).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :assemblyVersion,
+      comment: %(Associated product/technology version. e.g., .NET Framework 4.5).freeze,
+      label: "assemblyVersion".freeze,
+      "schema:domainIncludes" => %(schema:APIReference).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :associatedAnatomy,
+      comment: %(The anatomy of the underlying organ system or structures associated with this entity.).freeze,
+      label: "associatedAnatomy".freeze,
+      "schema:domainIncludes" => %(schema:PhysicalActivity).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :associatedArticle,
+      comment: %(A NewsArticle associated with the Media Object.).freeze,
+      label: "associatedArticle".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:NewsArticle).freeze,
+      type: "rdf:Property".freeze
+    property :associatedMedia,
+      comment: %(The media objects that encode this creative work. This property is a synonym for encodings.).freeze,
+      label: "associatedMedia".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:MediaObject).freeze,
+      type: "rdf:Property".freeze
+    property :associatedPathophysiology,
+      comment: %(If applicable, a description of the pathophysiology associated with the anatomical system, including potential abnormal changes in the mechanical, physical, and biochemical functions of the system.).freeze,
+      label: "associatedPathophysiology".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :attendee,
+      comment: %(A person or organization attending the event.).freeze,
+      label: "attendee".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :attendees,
+      comment: %(A person attending the event \(legacy spelling; see singular form, attendee\).).freeze,
+      label: "attendees".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      "schema:supercededBy" => %(schema:attendees).freeze,
+      type: "rdf:Property".freeze
+    property :audience,
+      comment: %(The intended audience of the item, i.e. the group for whom the item was created.).freeze,
+      label: "audience".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Audience).freeze,
+      type: "rdf:Property".freeze
+    property :audienceType,
+      comment: %(The target group associated with a given audience \(e.g. veterans, car owners, musicians, etc.\)
+          domain: Audience
+          Range: Text
+        ).freeze,
+      label: "audienceType".freeze,
+      "schema:domainIncludes" => %(schema:Audience).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :audio,
+      comment: %(An embedded audio object.).freeze,
+      label: "audio".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:AudioObject).freeze,
+      type: "rdf:Property".freeze
+    property :author,
+      comment: %(The author of this content. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.).freeze,
+      label: "author".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :availability,
+      comment: %(The availability of this item&#x2014;for example In stock, Out of stock, Pre-order, etc.).freeze,
+      label: "availability".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:ItemAvailability).freeze,
+      type: "rdf:Property".freeze
+    property :availabilityEnds,
+      comment: %(The end of the availability of the product or service included in the offer.).freeze,
+      label: "availabilityEnds".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :availabilityStarts,
+      comment: %(The beginning of the availability of the product or service included in the offer.).freeze,
+      label: "availabilityStarts".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :availableAtOrFrom,
+      comment: %(The place\(s\) from which the offer can be obtained \(e.g. store locations\).).freeze,
+      label: "availableAtOrFrom".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :availableChannel,
+      comment: %(A means of accessing the service \(e.g. a phone bank, a web site, a location, etc.\)).freeze,
+      label: "availableChannel".freeze,
+      "schema:domainIncludes" => %(schema:Service).freeze,
+      "schema:rangeIncludes" => %(schema:ServiceChannel).freeze,
+      type: "rdf:Property".freeze
+    property :availableDeliveryMethod,
+      comment: %(The delivery method\(s\) available for this offer.).freeze,
+      label: "availableDeliveryMethod".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:DeliveryMethod).freeze,
+      type: "rdf:Property".freeze
+    property :availableFrom,
+      comment: %(When the item is available for pickup from the store, locker, etc.).freeze,
+      label: "availableFrom".freeze,
+      "schema:domainIncludes" => %(schema:DeliveryEvent).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :availableIn,
+      comment: %(The location in which the strength is available.).freeze,
+      label: "availableIn".freeze,
+      "schema:domainIncludes" => %(schema:DrugStrength).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :availableLanguage,
+      comment: %(A language someone may use with the item.).freeze,
+      label: "availableLanguage".freeze,
+      "schema:domainIncludes" => %(schema:ContactPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Language).freeze,
+      type: "rdf:Property".freeze
+    property :availableService,
+      comment: %(A medical service available from this provider.).freeze,
+      label: "availableService".freeze,
+      "schema:domainIncludes" => %(schema:Hospital).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalProcedure).freeze,
+      type: "rdf:Property".freeze
+    property :availableStrength,
+      comment: %(An available dosage strength for the drug.).freeze,
+      label: "availableStrength".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:DrugStrength).freeze,
+      type: "rdf:Property".freeze
+    property :availableTest,
+      comment: %(A diagnostic test or procedure offered by this lab.).freeze,
+      label: "availableTest".freeze,
+      "schema:domainIncludes" => %(schema:DiagnosticLab).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTest).freeze,
+      type: "rdf:Property".freeze
+    property :availableThrough,
+      comment: %(After this date, the item will no longer be available for pickup.).freeze,
+      label: "availableThrough".freeze,
+      "schema:domainIncludes" => %(schema:DeliveryEvent).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :award,
+      comment: %(An award won by this person or for this creative work.).freeze,
+      label: "award".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :awards,
+      comment: %(Awards won by this person or for this creative work. \(legacy spelling; see singular form, award\)).freeze,
+      label: "awards".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      "schema:supercededBy" => %(schema:award).freeze,
+      type: "rdf:Property".freeze
+    property :background,
+      comment: %(Descriptive information establishing a historical perspective on the supplement. May include the rationale for the name, the population where the supplement first came to prominence, etc.).freeze,
+      label: "background".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :baseSalary,
+      comment: %(The base salary of the job.).freeze,
+      label: "baseSalary".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :benefits,
+      comment: %(Description of benefits associated with the job.).freeze,
+      label: "benefits".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :bestRating,
+      comment: %(The highest value allowed in this rating system. If bestRating is omitted, 5 is assumed.).freeze,
+      label: "bestRating".freeze,
+      "schema:domainIncludes" => %(schema:Rating).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :billingAddress,
+      comment: %(The billing address for the order.).freeze,
+      label: "billingAddress".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:PostalAddress).freeze,
+      type: "rdf:Property".freeze
+    property :billingIncrement,
+      comment: %(This property specifies the minimal quantity and rounding increment that will be the basis for the billing. The unit of measurement is specified by the unitCode property.).freeze,
+      label: "billingIncrement".freeze,
+      "schema:domainIncludes" => %(schema:UnitPriceSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :biomechnicalClass,
+      comment: %(The biomechanical properties of the bone.).freeze,
+      label: "biomechnicalClass".freeze,
+      "schema:domainIncludes" => %(schema:Joint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :birthDate,
+      comment: %(Date of birth.).freeze,
+      label: "birthDate".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :bitrate,
+      comment: %(The bitrate of the media object.).freeze,
+      label: "bitrate".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :blogPost,
+      comment: %(A posting that is part of this blog.).freeze,
+      label: "blogPost".freeze,
+      "schema:domainIncludes" => %(schema:Blog).freeze,
+      "schema:rangeIncludes" => %(schema:BlogPosting).freeze,
+      type: "rdf:Property".freeze
+    property :blogPosts,
+      comment: %(The postings that are part of this blog \(legacy spelling; see singular form, blogPost\).).freeze,
+      label: "blogPosts".freeze,
+      "schema:domainIncludes" => %(schema:Blog).freeze,
+      "schema:rangeIncludes" => %(schema:BlogPosting).freeze,
+      "schema:supercededBy" => %(schema:blogPost).freeze,
+      type: "rdf:Property".freeze
+    property :bloodSupply,
+      comment: %(The blood vessel that carries blood from the heart to the muscle.).freeze,
+      label: "bloodSupply".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:Vessel).freeze,
+      type: "rdf:Property".freeze
+    property :boardingGroup,
+      comment: %(The airline-specific indicator of boarding order / preference.).freeze,
+      label: "boardingGroup".freeze,
+      "schema:domainIncludes" => %(schema:FlightReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :bodyLocation,
+      comment: %(Location in the body of the anatomical structure.).freeze,
+      label: "bodyLocation".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :bookEdition,
+      comment: %(The edition of the book.).freeze,
+      label: "bookEdition".freeze,
+      "schema:domainIncludes" => %(schema:Book).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :bookFormat,
+      comment: %(The format of the book.).freeze,
+      label: "bookFormat".freeze,
+      "schema:domainIncludes" => %(schema:Book).freeze,
+      "schema:rangeIncludes" => %(schema:BookFormatType).freeze,
+      type: "rdf:Property".freeze
+    property :bookingAgent,
+      comment: %(If the reservation was not booked directly through the provider, the third-party booking agent can be recorded through this property.).freeze,
+      label: "bookingAgent".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :bookingTime,
+      comment: %(The date and time the reservation was booked.).freeze,
+      label: "bookingTime".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :borrower,
+      comment: %(A sub property of participant. The person that borrows the object being lent.).freeze,
+      label: "borrower".freeze,
+      "schema:domainIncludes" => %(schema:LendAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :box,
+      comment: %(A polygon is the area enclosed by a point-to-point path for which the starting and ending points are the same. A polygon is expressed as a series of four or more spacedelimited points where the first and final points are identical.).freeze,
+      label: "box".freeze,
+      "schema:domainIncludes" => %(schema:GeoShape).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :branch,
+      comment: %(The branches that delineate from the nerve bundle.).freeze,
+      label: "branch".freeze,
+      "schema:domainIncludes" => %(schema:Nerve).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :branchOf,
+      comment: %(The larger organization that this local business is a branch of, if any.).freeze,
+      label: "branchOf".freeze,
+      "schema:domainIncludes" => %(schema:LocalBusiness).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :brand,
+      comment: %(The brand\(s\) associated with a product or service, or the brand\(s\) maintained by an organization or business person.).freeze,
+      label: "brand".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Brand).freeze,
+      type: "rdf:Property".freeze
+    property :breadcrumb,
+      comment: %(A set of links that can help a user understand and navigate a website hierarchy.).freeze,
+      label: "breadcrumb".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :breastfeedingWarning,
+      comment: %(Any precaution, guidance, contraindication, etc. related to this drug's use by breastfeeding mothers.).freeze,
+      label: "breastfeedingWarning".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :broadcaster,
+      comment: %(The organization owning or operating the broadcast service.).freeze,
+      label: "broadcaster".freeze,
+      "schema:domainIncludes" => %(schema:BroadcastService).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :browserRequirements,
+      comment: %(Specifies browser requirements in human-readable text. For example,"requires HTML5 support".).freeze,
+      label: "browserRequirements".freeze,
+      "schema:domainIncludes" => %(schema:WebApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :busName,
+      comment: %(The name of the bus \(e.g. Bolt Express\).).freeze,
+      label: "busName".freeze,
+      "schema:domainIncludes" => %(schema:BusTrip).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :busNumber,
+      comment: %(The unique identifier for the bus.).freeze,
+      label: "busNumber".freeze,
+      "schema:domainIncludes" => %(schema:BusTrip).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :businessFunction,
+      comment: %(The business function \(e.g. sell, lease, repair, dispose\) of the offer or component of a bundle \(TypeAndQuantityNode\). The default is http://purl.org/goodrelations/v1#Sell.).freeze,
+      label: "businessFunction".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:BusinessFunction).freeze,
+      type: "rdf:Property".freeze
+    property :buyer,
+      comment: %(A sub property of participant. The participant/person/organization that bought the object.).freeze,
+      label: "buyer".freeze,
+      "schema:domainIncludes" => %(schema:SellAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :byArtist,
+      comment: %(The artist that performed this album or recording.).freeze,
+      label: "byArtist".freeze,
+      "schema:domainIncludes" => %(schema:MusicAlbum).freeze,
+      "schema:rangeIncludes" => %(schema:MusicGroup).freeze,
+      type: "rdf:Property".freeze
+    property :calories,
+      comment: %(The number of calories).freeze,
+      label: "calories".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Energy).freeze,
+      type: "rdf:Property".freeze
+    property :candidate,
+      comment: %(A sub property of object. The candidate subject of this action.).freeze,
+      label: "candidate".freeze,
+      "schema:domainIncludes" => %(schema:VoteAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :caption,
+      comment: %(The caption for this object.).freeze,
+      label: "caption".freeze,
+      "schema:domainIncludes" => %(schema:ImageObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :carbohydrateContent,
+      comment: %(The number of grams of carbohydrates.).freeze,
+      label: "carbohydrateContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :carrier,
+      comment: %(The party responsible for the parcel delivery.).freeze,
+      label: "carrier".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :carrierRequirements,
+      comment: %(Specifies specific carrier\(s\) requirements for the application \(e.g. an application may only work on a specific carrier network\).).freeze,
+      label: "carrierRequirements".freeze,
+      "schema:domainIncludes" => %(schema:MobileApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :catalog,
+      comment: %(A data catalog which contains a dataset.).freeze,
+      label: "catalog".freeze,
+      "schema:domainIncludes" => %(schema:Dataset).freeze,
+      "schema:rangeIncludes" => %(schema:DataCatalog).freeze,
+      type: "rdf:Property".freeze
+    property :category,
+      comment: %(A category for the item. Greater signs or slashes can be used to informally indicate a category hierarchy.).freeze,
+      label: "category".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:PhysicalActivityCategory).freeze,
+      type: "rdf:Property".freeze
+    property :cause,
+      comment: %(An underlying cause. More specifically, one of the causative agent\(s\) that are most directly responsible for the pathophysiologic process that eventually results in the occurrence.).freeze,
+      label: "cause".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalCause).freeze,
+      type: "rdf:Property".freeze
+    property :causeOf,
+      comment: %(The condition, complication, symptom, sign, etc. caused.).freeze,
+      label: "causeOf".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCause).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :checkinTime,
+      comment: %(The earliest someone may check into a lodging establishment.).freeze,
+      label: "checkinTime".freeze,
+      "schema:domainIncludes" => %(schema:LodgingReservation).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :checkoutTime,
+      comment: %(The latest someone may check out of a lodging establishment.).freeze,
+      label: "checkoutTime".freeze,
+      "schema:domainIncludes" => %(schema:LodgingReservation).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :childMaxAge,
+      comment: %(Maximal age of the child).freeze,
+      label: "childMaxAge".freeze,
+      "schema:domainIncludes" => %(schema:ParentAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :childMinAge,
+      comment: %(Minimal age of the child).freeze,
+      label: "childMinAge".freeze,
+      "schema:domainIncludes" => %(schema:ParentAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :children,
+      comment: %(A child of the person.).freeze,
+      label: "children".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :cholesterolContent,
+      comment: %(The number of milligrams of cholesterol.).freeze,
+      label: "cholesterolContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :circle,
+      comment: %(A circle is the circular region of a specified radius centered at a specified latitude and longitude. A circle is expressed as a pair followed by a radius in meters.).freeze,
+      label: "circle".freeze,
+      "schema:domainIncludes" => %(schema:GeoShape).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :citation,
+      comment: %(A citation or reference to another creative work, such as another publication, web page, scholarly article, etc.).freeze,
+      label: "citation".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:CreativeWork).freeze,
+      type: "rdf:Property".freeze
+    property :clincalPharmacology,
+      comment: %(Description of the absorption and elimination of drugs, including their concentration \(pharmacokinetics, pK\) and biological effects \(pharmacodynamics, pD\).).freeze,
+      label: "clincalPharmacology".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :clipNumber,
+      comment: %(Position of the clip within an ordered group of clips.).freeze,
+      label: "clipNumber".freeze,
+      "schema:domainIncludes" => %(schema:Clip).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :closes,
+      comment: %(The closing hour of the place or service on the given day\(s\) of the week.).freeze,
+      label: "closes".freeze,
+      "schema:domainIncludes" => %(schema:OpeningHoursSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Time).freeze,
+      type: "rdf:Property".freeze
+    property :code,
+      comment: %(A medical code for the entity, taken from a controlled vocabulary or ontology such as ICD-9, DiseasesDB, MeSH, SNOMED-CT, RxNorm, etc.).freeze,
+      label: "code".freeze,
+      "schema:domainIncludes" => %(schema:MedicalEntity).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalCode).freeze,
+      type: "rdf:Property".freeze
+    property :codeRepository,
+      comment: %(Link to the repository where the un-compiled, human readable code and related code is located \(SVN, github, CodePlex\)).freeze,
+      label: "codeRepository".freeze,
+      "schema:domainIncludes" => %(schema:Code).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :codeValue,
+      comment: %(The actual code.).freeze,
+      label: "codeValue".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCode).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :codingSystem,
+      comment: %(The coding system, e.g. 'ICD-10'.).freeze,
+      label: "codingSystem".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCode).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :colleague,
+      comment: %(A colleague of the person.).freeze,
+      label: "colleague".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :colleagues,
+      comment: %(A colleague of the person \(legacy spelling; see singular form, colleague\).).freeze,
+      label: "colleagues".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:colleague).freeze,
+      type: "rdf:Property".freeze
+    property :collection,
+      comment: %(A sub property of object. The collection target of the action.).freeze,
+      label: "collection".freeze,
+      "schema:domainIncludes" => %(schema:UpdateAction).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :color,
+      comment: %(The color of the product.).freeze,
+      label: "color".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :comment,
+      comment: %(Comments, typically from users, on this CreativeWork.).freeze,
+      label: "comment".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:UserComments).freeze,
+      type: "rdf:Property".freeze
+    property :commentCount,
+      comment: %(The number of comments this CreativeWork \(e.g. Article, Question or Answer\) has received. This is most applicable to works published in Web sites with commenting system; additional comments may exist elsewhere.).freeze,
+      label: "commentCount".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :commentText,
+      comment: %(The text of the UserComment.).freeze,
+      label: "commentText".freeze,
+      "schema:domainIncludes" => %(schema:UserComments).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :commentTime,
+      comment: %(The time at which the UserComment was made.).freeze,
+      label: "commentTime".freeze,
+      "schema:domainIncludes" => %(schema:UserComments).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :comprisedOf,
+      comment: %(The underlying anatomical structures, such as organs, that comprise the anatomical system.).freeze,
+      label: "comprisedOf".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalSystem).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :confirmationNumber,
+      comment: %(A number that confirms the given order.).freeze,
+      label: "confirmationNumber".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :connectedTo,
+      comment: %(Other anatomical structures to which this structure is connected.).freeze,
+      label: "connectedTo".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :contactOption,
+      comment: %(An option available on this contact point \(e.g. a toll-free number or support for hearing-impaired callers.\)).freeze,
+      label: "contactOption".freeze,
+      "schema:domainIncludes" => %(schema:ContactPoint).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPointOption).freeze,
+      type: "rdf:Property".freeze
+    property :contactPoint,
+      comment: %(A contact point for a person or organization.).freeze,
+      label: "contactPoint".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPoint).freeze,
+      type: "rdf:Property".freeze
+    property :contactPoints,
+      comment: %(A contact point for a person or organization \(legacy spelling; see singular form, contactPoint\).).freeze,
+      label: "contactPoints".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPoint).freeze,
+      "schema:supercededBy" => %(schema:contactPoint).freeze,
+      type: "rdf:Property".freeze
+    property :contactType,
+      comment: %(A person or organization can have different contact points, for different purposes. For example, a sales contact point, a PR contact point and so on. This property is used to specify the kind of contact point.).freeze,
+      label: "contactType".freeze,
+      "schema:domainIncludes" => %(schema:ContactPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :containedIn,
+      comment: %(The basic containment relation between places.).freeze,
+      label: "containedIn".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :contentLocation,
+      comment: %(The location of the content.).freeze,
+      label: "contentLocation".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :contentRating,
+      comment: %(Official rating of a piece of content&#x2014;for example,'MPAA PG-13'.).freeze,
+      label: "contentRating".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :contentSize,
+      comment: %(File size in \(mega/kilo\) bytes.).freeze,
+      label: "contentSize".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :contentType,
+      comment: %(The supported content type\(s\) for an EntryPoint response.).freeze,
+      label: "contentType".freeze,
+      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :contentUrl,
+      comment: %(Actual bytes of the media object, for example the image file or video file. \(previous spelling: contentURL\)).freeze,
+      label: "contentUrl".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :contraindication,
+      comment: %(A contraindication for this therapy.).freeze,
+      label: "contraindication".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTherapy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalContraindication).freeze,
+      type: "rdf:Property".freeze
+    property :contributor,
+      comment: %(A secondary contributor to the CreativeWork.).freeze,
+      label: "contributor".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :cookTime,
+      comment: %(The time it takes to actually cook the dish, in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration format</a>.).freeze,
+      label: "cookTime".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :cookingMethod,
+      comment: %(The method of cooking, such as Frying, Steaming, ...).freeze,
+      label: "cookingMethod".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :copyrightHolder,
+      comment: %(The party holding the legal copyright to the CreativeWork.).freeze,
+      label: "copyrightHolder".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :copyrightYear,
+      comment: %(The year during which the claimed copyright for the CreativeWork was first asserted.).freeze,
+      label: "copyrightYear".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :cost,
+      comment: %(Cost per unit of the drug, as reported by the source being tagged.).freeze,
+      label: "cost".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:DrugCost).freeze,
+      type: "rdf:Property".freeze
+    property :costCategory,
+      comment: %(The category of cost, such as wholesale, retail, reimbursement cap, etc.).freeze,
+      label: "costCategory".freeze,
+      "schema:domainIncludes" => %(schema:DrugCost).freeze,
+      "schema:rangeIncludes" => %(schema:DrugCostCategory).freeze,
+      type: "rdf:Property".freeze
+    property :costCurrency,
+      comment: %(The currency \(in 3-letter <a href=http://en.wikipedia.org/wiki/ISO_4217>ISO 4217 format</a>\) of the drug cost.).freeze,
+      label: "costCurrency".freeze,
+      "schema:domainIncludes" => %(schema:DrugCost).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :costOrigin,
+      comment: %(Additional details to capture the origin of the cost data. For example, 'Medicare Part B'.).freeze,
+      label: "costOrigin".freeze,
+      "schema:domainIncludes" => %(schema:DrugCost).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :costPerUnit,
+      comment: %(The cost per unit of the drug.).freeze,
+      label: "costPerUnit".freeze,
+      "schema:domainIncludes" => %(schema:DrugCost).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :countriesNotSupported,
+      comment: %(Countries for which the application is not supported. You can also provide the two-letter ISO 3166-1 alpha-2 country code.).freeze,
+      label: "countriesNotSupported".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :countriesSupported,
+      comment: %(Countries for which the application is supported. You can also provide the two-letter ISO 3166-1 alpha-2 country code.).freeze,
+      label: "countriesSupported".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :course,
+      comment: %(A sub property of location. The course where this action was taken.).freeze,
+      label: "course".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :creator,
+      comment: %(The creator/author of this CreativeWork or UserComments. This is the same as the Author property for CreativeWork.).freeze,
+      label: "creator".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :currenciesAccepted,
+      comment: %(The currency accepted \(in <a href='http://en.wikipedia.org/wiki/ISO_4217'>ISO 4217 currency format</a>\).).freeze,
+      label: "currenciesAccepted".freeze,
+      "schema:domainIncludes" => %(schema:LocalBusiness).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :customer,
+      comment: %(Party placing the order.).freeze,
+      label: "customer".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :dataset,
+      comment: %(A dataset contained in a catalog.).freeze,
+      label: "dataset".freeze,
+      "schema:domainIncludes" => %(schema:DataCatalog).freeze,
+      "schema:rangeIncludes" => %(schema:Dataset).freeze,
+      type: "rdf:Property".freeze
+    property :dateCreated,
+      comment: %(The date on which the CreativeWork was created.).freeze,
+      label: "dateCreated".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :dateIssued,
+      comment: %(The date the ticket was issued.).freeze,
+      label: "dateIssued".freeze,
+      "schema:domainIncludes" => %(schema:Ticket).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :dateModified,
+      comment: %(The date on which the CreativeWork was most recently modified.).freeze,
+      label: "dateModified".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :datePosted,
+      comment: %(Publication date for the job posting.).freeze,
+      label: "datePosted".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :datePublished,
+      comment: %(Date of first broadcast/publication.).freeze,
+      label: "datePublished".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :dateline,
+      comment: %(The location where the NewsArticle was produced.).freeze,
+      label: "dateline".freeze,
+      "schema:domainIncludes" => %(schema:NewsArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :dayOfWeek,
+      comment: %(The day of the week for which these opening hours are valid.).freeze,
+      label: "dayOfWeek".freeze,
+      "schema:domainIncludes" => %(schema:OpeningHoursSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:DayOfWeek).freeze,
+      type: "rdf:Property".freeze
+    property :deathDate,
+      comment: %(Date of death.).freeze,
+      label: "deathDate".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :defaultValue,
+      comment: %(The default value of the input.  For properties that expect a literal, the default is a literal value, for properties that expect an object, it's an ID reference to one of the current values.).freeze,
+      label: "defaultValue".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :deliveryAddress,
+      comment: %(Destination address.).freeze,
+      label: "deliveryAddress".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:PostalAddress).freeze,
+      type: "rdf:Property".freeze
+    property :deliveryLeadTime,
+      comment: %(The typical delay between the receipt of the order and the goods leaving the warehouse.).freeze,
+      label: "deliveryLeadTime".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :deliveryMethod,
+      comment: %(A sub property of instrument. The method of delivery).freeze,
+      label: "deliveryMethod".freeze,
+      "schema:domainIncludes" => %(schema:ReceiveAction).freeze,
+      "schema:rangeIncludes" => %(schema:DeliveryMethod).freeze,
+      type: "rdf:Property".freeze
+    property :deliveryStatus,
+      comment: %(New entry added as the package passes through each leg of its journey \(from shipment to final delivery\).).freeze,
+      label: "deliveryStatus".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:DeliveryEvent).freeze,
+      type: "rdf:Property".freeze
+    property :department,
+      comment: %(A relationship between an organization and a department of that organization, also described as an organization \(allowing different urls, logos, opening hours\). For example: a store with a pharmacy, or a bakery with a cafe.).freeze,
+      label: "department".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :departureAirport,
+      comment: %(The airport where the flight originates.).freeze,
+      label: "departureAirport".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Airport).freeze,
+      type: "rdf:Property".freeze
+    property :departureBusStop,
+      comment: %(The stop or station from which the bus departs.).freeze,
+      label: "departureBusStop".freeze,
+      "schema:domainIncludes" => %(schema:BusTrip).freeze,
+      "schema:rangeIncludes" => %(schema:BusStation).freeze,
+      type: "rdf:Property".freeze
+    property :departureGate,
+      comment: %(Identifier of the flight's departure gate.).freeze,
+      label: "departureGate".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :departurePlatform,
+      comment: %(The platform from which the train departs.).freeze,
+      label: "departurePlatform".freeze,
+      "schema:domainIncludes" => %(schema:TrainTrip).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :departureStation,
+      comment: %(The station from which the train departs.).freeze,
+      label: "departureStation".freeze,
+      "schema:domainIncludes" => %(schema:TrainTrip).freeze,
+      "schema:rangeIncludes" => %(schema:TrainStation).freeze,
+      type: "rdf:Property".freeze
+    property :departureTerminal,
+      comment: %(Identifier of the flight's departure terminal.).freeze,
+      label: "departureTerminal".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :departureTime,
+      comment: %(The expected departure time.).freeze,
+      label: "departureTime".freeze,
+      "schema:domainIncludes" => %(schema:BusTrip).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :dependencies,
+      comment: %(Prerequisites needed to fulfill steps in article.).freeze,
+      label: "dependencies".freeze,
+      "schema:domainIncludes" => %(schema:TechArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :depth,
+      comment: %(The depth of the product.).freeze,
+      label: "depth".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Distance).freeze,
+      type: "rdf:Property".freeze
+    property :description,
+      comment: %(A short description of the item.).freeze,
+      label: "description".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :device,
+      comment: %(Device required to run the application. Used in cases where a specific make/model is required to run the application.).freeze,
+      label: "device".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :diagnosis,
+      comment: %(One or more alternative conditions considered in the differential diagnosis process.).freeze,
+      label: "diagnosis".freeze,
+      "schema:domainIncludes" => %(schema:DDxElement).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalCondition).freeze,
+      type: "rdf:Property".freeze
+    property :diagram,
+      comment: %(An image containing a diagram that illustrates the structure and/or its component substructures and/or connections with other structures.).freeze,
+      label: "diagram".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      type: "rdf:Property".freeze
+    property :diet,
+      comment: %(A sub property of instrument. The died used in this action.).freeze,
+      label: "diet".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Diet).freeze,
+      type: "rdf:Property".freeze
+    property :dietFeatures,
+      comment: %(Nutritional information specific to the dietary plan. May include dietary recommendations on what foods to avoid, what foods to consume, and specific alterations/deviations from the USDA or other regulatory body's approved dietary guidelines.).freeze,
+      label: "dietFeatures".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :differentialDiagnosis,
+      comment: %(One of a set of differential diagnoses for the condition. Specifically, a closely-related or competing diagnosis typically considered later in the cognitive process whereby this medical condition is distinguished from others most likely responsible for a similar collection of signs and symptoms to reach the most parsimonious diagnosis or diagnoses in a patient.).freeze,
+      label: "differentialDiagnosis".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:DDxElement).freeze,
+      type: "rdf:Property".freeze
+    property :director,
+      comment: %(The director of the movie, tv/radio episode or series.).freeze,
+      label: "director".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :directors,
+      comment: %(The director of the movie, tv/radio episode or series. \(legacy spelling; see singular form, director\)).freeze,
+      label: "directors".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:director).freeze,
+      type: "rdf:Property".freeze
+    property :discount,
+      comment: %(Any discount applied \(to an Order\).).freeze,
+      label: "discount".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :discountCode,
+      comment: %(Code used to redeem a discount.).freeze,
+      label: "discountCode".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :discountCurrency,
+      comment: %(The currency \(in 3-letter ISO 4217 format\) of the discount.).freeze,
+      label: "discountCurrency".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :discusses,
+      comment: %(Specifies the CreativeWork associated with the UserComment.).freeze,
+      label: "discusses".freeze,
+      "schema:domainIncludes" => %(schema:UserComments).freeze,
+      "schema:rangeIncludes" => %(schema:CreativeWork).freeze,
+      type: "rdf:Property".freeze
+    property :discussionUrl,
+      comment: %(A link to the page containing the comments of the CreativeWork.).freeze,
+      label: "discussionUrl".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :distance,
+      comment: %(A sub property of asset. The distance travelled.).freeze,
+      label: "distance".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Distance).freeze,
+      type: "rdf:Property".freeze
+    property :distinguishingSign,
+      comment: %(One of a set of signs and symptoms that can be used to distinguish this diagnosis from others in the differential diagnosis.).freeze,
+      label: "distinguishingSign".freeze,
+      "schema:domainIncludes" => %(schema:DDxElement).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalSignOrSymptom).freeze,
+      type: "rdf:Property".freeze
+    property :distribution,
+      comment: %(A downloadable form of this dataset, at a specific location, in a specific format.).freeze,
+      label: "distribution".freeze,
+      "schema:domainIncludes" => %(schema:Dataset).freeze,
+      "schema:rangeIncludes" => %(schema:DataDownload).freeze,
+      type: "rdf:Property".freeze
+    property :domainIncludes,
+      comment: %(Relates a property to a class that is \(one of\) the type\(s\) the property is expected to be used on.).freeze,
+      label: "domainIncludes".freeze,
+      "schema:domainIncludes" => %(schema:Property).freeze,
+      "schema:rangeIncludes" => %(schema:Class).freeze,
+      type: "rdf:Property".freeze
+    property :doorTime,
+      comment: %(The time admission will commence.).freeze,
+      label: "doorTime".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :dosageForm,
+      comment: %(A dosage form in which this drug/supplement is available, e.g. 'tablet', 'suspension', 'injection'.).freeze,
+      label: "dosageForm".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :doseSchedule,
+      comment: %(A dosing schedule for the drug for a given population, either observed, recommended, or maximum dose based on the type used.).freeze,
+      label: "doseSchedule".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:DoseSchedule).freeze,
+      type: "rdf:Property".freeze
+    property :doseUnit,
+      comment: %(The unit of the dose, e.g. 'mg'.).freeze,
+      label: "doseUnit".freeze,
+      "schema:domainIncludes" => %(schema:DoseSchedule).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :doseValue,
+      comment: %(The value of the dose, e.g. 500.).freeze,
+      label: "doseValue".freeze,
+      "schema:domainIncludes" => %(schema:DoseSchedule).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :downloadUrl,
+      comment: %(If the file can be downloaded, URL to download the binary.).freeze,
+      label: "downloadUrl".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :downvoteCount,
+      comment: %(The number of downvotes this question has received from the community.).freeze,
+      label: "downvoteCount".freeze,
+      "schema:domainIncludes" => %(schema:Question).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :drainsTo,
+      comment: %(The vasculature that the vein drains into.).freeze,
+      label: "drainsTo".freeze,
+      "schema:domainIncludes" => %(schema:Vein).freeze,
+      "schema:rangeIncludes" => %(schema:Vessel).freeze,
+      type: "rdf:Property".freeze
+    property :dropoffLocation,
+      comment: %(Where a rental car can be dropped off.).freeze,
+      label: "dropoffLocation".freeze,
+      "schema:domainIncludes" => %(schema:RentalCarReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :dropoffTime,
+      comment: %(When a rental car can be dropped off.).freeze,
+      label: "dropoffTime".freeze,
+      "schema:domainIncludes" => %(schema:RentalCarReservation).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :drug,
+      comment: %(A drug in this drug class.).freeze,
+      label: "drug".freeze,
+      "schema:domainIncludes" => %(schema:DrugClass).freeze,
+      "schema:rangeIncludes" => %(schema:Drug).freeze,
+      type: "rdf:Property".freeze
+    property :drugClass,
+      comment: %(The class of drug this belongs to \(e.g., statins\).).freeze,
+      label: "drugClass".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:DrugClass).freeze,
+      type: "rdf:Property".freeze
+    property :drugUnit,
+      comment: %(The unit in which the drug is measured, e.g. '5 mg tablet'.).freeze,
+      label: "drugUnit".freeze,
+      "schema:domainIncludes" => %(schema:DrugCost).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :duns,
+      comment: %(The Dun & Bradstreet DUNS number for identifying an organization or business person.).freeze,
+      label: "duns".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :duplicateTherapy,
+      comment: %(A therapy that duplicates or overlaps this one.).freeze,
+      label: "duplicateTherapy".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTherapy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTherapy).freeze,
+      type: "rdf:Property".freeze
+    property :duration,
+      comment: %(The duration of the item \(movie, audio recording, event, etc.\) in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>.).freeze,
+      label: "duration".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :durationOfWarranty,
+      comment: %(The duration of the warranty promise. Common unitCode values are ANN for year, MON for months, or DAY for days.).freeze,
+      label: "durationOfWarranty".freeze,
+      "schema:domainIncludes" => %(schema:WarrantyPromise).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :editor,
+      comment: %(Specifies the Person who edited the CreativeWork.).freeze,
+      label: "editor".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :educationRequirements,
+      comment: %(Educational background needed for the position.).freeze,
+      label: "educationRequirements".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :educationalAlignment,
+      comment: %(An alignment to an established educational framework.).freeze,
+      label: "educationalAlignment".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:AlignmentObject).freeze,
+      type: "rdf:Property".freeze
+    property :educationalFramework,
+      comment: %(The framework to which the resource being described is aligned.).freeze,
+      label: "educationalFramework".freeze,
+      "schema:domainIncludes" => %(schema:AlignmentObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :educationalRole,
+      comment: %(An educationalRole of an EducationalAudience).freeze,
+      label: "educationalRole".freeze,
+      "schema:domainIncludes" => %(schema:EducationalAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :educationalUse,
+      comment: %(The purpose of a work in the context of education; for example, 'assignment', 'group work'.).freeze,
+      label: "educationalUse".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :elevation,
+      comment: %(The elevation of a location.).freeze,
+      label: "elevation".freeze,
+      "schema:domainIncludes" => %(schema:GeoCoordinates).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :eligibleCustomerType,
+      comment: %(The type\(s\) of customers for which the given offer is valid.).freeze,
+      label: "eligibleCustomerType".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:BusinessEntityType).freeze,
+      type: "rdf:Property".freeze
+    property :eligibleDuration,
+      comment: %(The duration for which the given offer is valid.).freeze,
+      label: "eligibleDuration".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :eligibleQuantity,
+      comment: %(The interval and unit of measurement of ordering quantities for which the offer or price specification is valid. This allows e.g. specifying that a certain freight charge is valid only for a certain quantity.).freeze,
+      label: "eligibleQuantity".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :eligibleRegion,
+      comment: %(The ISO 3166-1 \(ISO 3166-1 alpha-2\) or ISO 3166-2 code, or the GeoShape for the geo-political region\(s\) for which the offer or delivery charge specification is valid.).freeze,
+      label: "eligibleRegion".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:GeoShape).freeze,
+      type: "rdf:Property".freeze
+    property :eligibleTransactionVolume,
+      comment: %(The transaction volume, in a monetary unit, for which the offer or price specification is valid, e.g. for indicating a minimal purchasing volume, to express free shipping above a certain order volume, or to limit the acceptance of credit cards to purchases to a certain minimal amount.).freeze,
+      label: "eligibleTransactionVolume".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:PriceSpecification).freeze,
+      type: "rdf:Property".freeze
+    property :email,
+      comment: %(Email address.).freeze,
+      label: "email".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :embedUrl,
+      comment: %(A URL pointing to a player for a specific video. In general, this is the information in the <code>src</code> element of an <code>embed</code> tag and should not be the same as the content of the <code>loc</code> tag. \(previous spelling: embedURL\)).freeze,
+      label: "embedUrl".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :employee,
+      comment: %(Someone working for this organization.).freeze,
+      label: "employee".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :employees,
+      comment: %(People working for this organization. \(legacy spelling; see singular form, employee\)).freeze,
+      label: "employees".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:employee).freeze,
+      type: "rdf:Property".freeze
+    property :employmentType,
+      comment: %(Type of employment \(e.g. full-time, part-time, contract, temporary, seasonal, internship\).).freeze,
+      label: "employmentType".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :encodesCreativeWork,
+      comment: %(The creative work encoded by this media object).freeze,
+      label: "encodesCreativeWork".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:CreativeWork).freeze,
+      type: "rdf:Property".freeze
+    property :encoding,
+      comment: %(A media object that encode this CreativeWork.).freeze,
+      label: "encoding".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:MediaObject).freeze,
+      type: "rdf:Property".freeze
+    property :encodingFormat,
+      comment: %(mp3, mpeg4, etc.).freeze,
+      label: "encodingFormat".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :encodingType,
+      comment: %(The supported encoding type\(s\) for an EntryPoint request.).freeze,
+      label: "encodingType".freeze,
+      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :encodings,
+      comment: %(The media objects that encode this creative work \(legacy spelling; see singular form, encoding\).).freeze,
+      label: "encodings".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:MediaObject).freeze,
+      "schema:supercededBy" => %(schema:encoding).freeze,
+      type: "rdf:Property".freeze
+    property :endDate,
+      comment: %(The end date and time of the event or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
+      label: "endDate".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :endTime,
+      comment: %(When the Action was performed: end time. This is for actions that span a period of time. e.g. John wrote a book from January to *December*.).freeze,
+      label: "endTime".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :endorsee,
+      comment: %(A sub property of participant. The person/organization being supported.).freeze,
+      label: "endorsee".freeze,
+      "schema:domainIncludes" => %(schema:EndorseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :endorsers,
+      comment: %(People or organizations that endorse the plan.).freeze,
+      label: "endorsers".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :entertainmentBusiness,
+      comment: %(A sub property of location. The entertainment business where the action occurred.).freeze,
+      label: "entertainmentBusiness".freeze,
+      "schema:domainIncludes" => %(schema:PerformAction).freeze,
+      "schema:rangeIncludes" => %(schema:EntertainmentBusiness).freeze,
+      type: "rdf:Property".freeze
+    property :epidemiology,
+      comment: %(The characteristics of associated patients, such as age, gender, race etc.).freeze,
+      label: "epidemiology".freeze,
+      "schema:domainIncludes" => %(schema:PhysicalActivity).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :episode,
+      comment: %(An episode of a TV/radio series or season).freeze,
+      label: "episode".freeze,
+      "schema:domainIncludes" => %(schema:Season).freeze,
+      "schema:rangeIncludes" => %(schema:Episode).freeze,
+      type: "rdf:Property".freeze
+    property :episodeNumber,
+      comment: %(Position of the episode within an ordered group of episodes.).freeze,
+      label: "episodeNumber".freeze,
+      "schema:domainIncludes" => %(schema:Episode).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :episodes,
+      comment: %(An episode of a TV/radio series or season \(legacy spelling; see singular form, episode\)).freeze,
+      label: "episodes".freeze,
+      "schema:domainIncludes" => %(schema:Season).freeze,
+      "schema:rangeIncludes" => %(schema:Episode).freeze,
+      "schema:supercededBy" => %(schema:episode).freeze,
+      type: "rdf:Property".freeze
+    property :equal,
+      comment: %(This ordering relation for qualitative values indicates that the subject is equal to the object.).freeze,
+      label: "equal".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :estimatedFlightDuration,
+      comment: %(The estimated time the flight will take.).freeze,
+      label: "estimatedFlightDuration".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :estimatesRiskOf,
+      comment: %(The condition, complication, or symptom whose risk is being estimated.).freeze,
+      label: "estimatesRiskOf".freeze,
+      "schema:domainIncludes" => %(schema:MedicalRiskEstimator).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :event,
+      comment: %(Upcoming or past event associated with this place or organization.).freeze,
+      label: "event".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Event).freeze,
+      type: "rdf:Property".freeze
+    property :eventStatus,
+      comment: %(An eventStatus of an event represents its status; particularly useful when an event is cancelled or rescheduled.).freeze,
+      label: "eventStatus".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:EventStatusType).freeze,
+      type: "rdf:Property".freeze
+    property :events,
+      comment: %(Upcoming or past events associated with this place or organization \(legacy spelling; see singular form, event\).).freeze,
+      label: "events".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Event).freeze,
+      "schema:supercededBy" => %(schema:event).freeze,
+      type: "rdf:Property".freeze
+    property :evidenceLevel,
+      comment: %(Strength of evidence of the data used to formulate the guideline \(enumerated\).).freeze,
+      label: "evidenceLevel".freeze,
+      "schema:domainIncludes" => %(schema:MedicalGuideline).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEvidenceLevel).freeze,
+      type: "rdf:Property".freeze
+    property :evidenceOrigin,
+      comment: %(Source of the data used to formulate the guidance, e.g. RCT, consensus opinion, etc.).freeze,
+      label: "evidenceOrigin".freeze,
+      "schema:domainIncludes" => %(schema:MedicalGuideline).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :exercisePlan,
+      comment: %(A sub property of instrument. The exercise plan used on this action.).freeze,
+      label: "exercisePlan".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:ExercisePlan).freeze,
+      type: "rdf:Property".freeze
+    property :exerciseType,
+      comment: %(Type\(s\) of exercise or activity, such as strength training, flexibility training, aerobics, cardiac rehabilitation, etc.).freeze,
+      label: "exerciseType".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :exifData,
+      comment: %(exif data for this object.).freeze,
+      label: "exifData".freeze,
+      "schema:domainIncludes" => %(schema:ImageObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :expectedArrivalFrom,
+      comment: %(The earliest date the package may arrive.).freeze,
+      label: "expectedArrivalFrom".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :expectedArrivalUntil,
+      comment: %(The latest date the package may arrive.).freeze,
+      label: "expectedArrivalUntil".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :expectedPrognosis,
+      comment: %(The likely outcome in either the short term or long term of the medical condition.).freeze,
+      label: "expectedPrognosis".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :experienceRequirements,
+      comment: %(Description of skills and experience needed for the position.).freeze,
+      label: "experienceRequirements".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :expertConsiderations,
+      comment: %(Medical expert advice related to the plan.).freeze,
+      label: "expertConsiderations".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :expires,
+      comment: %(Date the content expires and is no longer useful or available. Useful for videos.).freeze,
+      label: "expires".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :familyName,
+      comment: %(Family name. In the U.S., the last name of an Person. This can be used along with givenName instead of the Name property.).freeze,
+      label: "familyName".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :fatContent,
+      comment: %(The number of grams of fat.).freeze,
+      label: "fatContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :faxNumber,
+      comment: %(The fax number.).freeze,
+      label: "faxNumber".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :featureList,
+      comment: %(Features or modules provided by this application \(and possibly required by other applications\).).freeze,
+      label: "featureList".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :fiberContent,
+      comment: %(The number of grams of fiber.).freeze,
+      label: "fiberContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :fileFormat,
+      comment: %(MIME format of the binary \(e.g. application/zip\).).freeze,
+      label: "fileFormat".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :fileSize,
+      comment: %(Size of the application / package \(e.g. 18MB\). In the absence of a unit \(MB, KB etc.\), KB will be assumed.).freeze,
+      label: "fileSize".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :flightDistance,
+      comment: %(The distance of the flight.).freeze,
+      label: "flightDistance".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :flightNumber,
+      comment: %(The unique identifier for a flight.).freeze,
+      label: "flightNumber".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :followee,
+      comment: %(A sub property of object. The person or organization being followed.).freeze,
+      label: "followee".freeze,
+      "schema:domainIncludes" => %(schema:FollowAction).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :follows,
+      comment: %(The most generic uni-directional social relation.).freeze,
+      label: "follows".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :followup,
+      comment: %(Typical or recommended followup care after the procedure is performed.).freeze,
+      label: "followup".freeze,
+      "schema:domainIncludes" => %(schema:MedicalProcedure).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :foodEstablishment,
+      comment: %(A sub property of location. The specific food establishment where the action occurred.).freeze,
+      label: "foodEstablishment".freeze,
+      "schema:domainIncludes" => %(schema:CookAction).freeze,
+      "schema:rangeIncludes" => %(schema:FoodEstablishment).freeze,
+      type: "rdf:Property".freeze
+    property :foodEvent,
+      comment: %(A sub property of location. The specific food event where the action occurred.).freeze,
+      label: "foodEvent".freeze,
+      "schema:domainIncludes" => %(schema:CookAction).freeze,
+      "schema:rangeIncludes" => %(schema:FoodEvent).freeze,
+      type: "rdf:Property".freeze
+    property :foodWarning,
+      comment: %(Any precaution, guidance, contraindication, etc. related to consumption of specific foods while taking this drug.).freeze,
+      label: "foodWarning".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :founder,
+      comment: %(A person who founded this organization.).freeze,
+      label: "founder".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :founders,
+      comment: %(A person who founded this organization \(legacy spelling; see singular form, founder\).).freeze,
+      label: "founders".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:founder).freeze,
+      type: "rdf:Property".freeze
+    property :foundingDate,
+      comment: %(The date that this organization was founded.).freeze,
+      label: "foundingDate".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :free,
+      comment: %(A flag to signal that the publication is accessible for free.).freeze,
+      label: "free".freeze,
+      "schema:domainIncludes" => %(schema:PublicationEvent).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :frequency,
+      comment: %(How often the dose is taken, e.g. 'daily'.).freeze,
+      label: "frequency".freeze,
+      "schema:domainIncludes" => %(schema:DoseSchedule).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :fromLocation,
+      comment: %(A sub property of location. The original location of the object or the agent before the action.).freeze,
+      label: "fromLocation".freeze,
+      "schema:domainIncludes" => %(schema:MoveAction).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :function,
+      comment: %(Function of the anatomical structure.).freeze,
+      label: "function".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :functionalClass,
+      comment: %(The degree of mobility the joint allows.).freeze,
+      label: "functionalClass".freeze,
+      "schema:domainIncludes" => %(schema:Joint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :gender,
+      comment: %(Gender of the person.).freeze,
+      label: "gender".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :genre,
+      comment: %(Genre of the creative work).freeze,
+      label: "genre".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :geo,
+      comment: %(The geo coordinates of the place.).freeze,
+      label: "geo".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:GeoCoordinates).freeze,
+      type: "rdf:Property".freeze
+    property :geographicArea,
+      comment: %(The geographic area associated with the audience.).freeze,
+      label: "geographicArea".freeze,
+      "schema:domainIncludes" => %(schema:Audience).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :givenName,
+      comment: %(Given name. In the U.S., the first name of a Person. This can be used along with familyName instead of the Name property.).freeze,
+      label: "givenName".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :globalLocationNumber,
+      comment: %(The Global Location Number \(GLN, sometimes also referred to as International Location Number or ILN\) of the respective organization, person, or place. The GLN is a 13-digit number used to identify parties and physical locations.).freeze,
+      label: "globalLocationNumber".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :greater,
+      comment: %(This ordering relation for qualitative values indicates that the subject is greater than the object.).freeze,
+      label: "greater".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :greaterOrEqual,
+      comment: %(This ordering relation for qualitative values indicates that the subject is greater than or equal to the object.).freeze,
+      label: "greaterOrEqual".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :gtin13,
+      comment: %(The GTIN-13 code of the product, or the product to which the offer refers. This is equivalent to 13-digit ISBN codes and EAN UCC-13. Former 12-digit UPC codes can be converted into a GTIN-13 code by simply adding a preceeding zero.).freeze,
+      label: "gtin13".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :gtin14,
+      comment: %(The GTIN-14 code of the product, or the product to which the offer refers.).freeze,
+      label: "gtin14".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :gtin8,
+      comment: %(The GTIN-8 code of the product, or the product to which the offer refers. This code is also known as EAN/UCC-8 or 8-digit EAN.).freeze,
+      label: "gtin8".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :guideline,
+      comment: %(A medical guideline related to this entity.).freeze,
+      label: "guideline".freeze,
+      "schema:domainIncludes" => %(schema:MedicalEntity).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalGuideline).freeze,
+      type: "rdf:Property".freeze
+    property :guidelineDate,
+      comment: %(Date on which this guideline's recommendation was made.).freeze,
+      label: "guidelineDate".freeze,
+      "schema:domainIncludes" => %(schema:MedicalGuideline).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :guidelineSubject,
+      comment: %(The medical conditions, treatments, etc. that are the subject of the guideline.).freeze,
+      label: "guidelineSubject".freeze,
+      "schema:domainIncludes" => %(schema:MedicalGuideline).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :hasDeliveryMethod,
+      comment: %(Method used for delivery or shipping.).freeze,
+      label: "hasDeliveryMethod".freeze,
+      "schema:domainIncludes" => %(schema:DeliveryEvent).freeze,
+      "schema:rangeIncludes" => %(schema:DeliveryMethod).freeze,
+      type: "rdf:Property".freeze
+    property :hasPOS,
+      comment: %(Points-of-Sales operated by the organization or person.).freeze,
+      label: "hasPOS".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :headline,
+      comment: %(Headline of the article).freeze,
+      label: "headline".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :healthCondition,
+      comment: %(Expectations for health conditions of target audience).freeze,
+      label: "healthCondition".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalCondition).freeze,
+      type: "rdf:Property".freeze
+    property :height,
+      comment: %(The height of the item.).freeze,
+      label: "height".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Distance).freeze,
+      type: "rdf:Property".freeze
+    property :highPrice,
+      comment: %(The highest price of all offers available.).freeze,
+      label: "highPrice".freeze,
+      "schema:domainIncludes" => %(schema:AggregateOffer).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :hiringOrganization,
+      comment: %(Organization offering the job position.).freeze,
+      label: "hiringOrganization".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :homeLocation,
+      comment: %(A contact location for a person's residence.).freeze,
+      label: "homeLocation".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPoint).freeze,
+      type: "rdf:Property".freeze
+    property :honorificPrefix,
+      comment: %(An honorific prefix preceding a Person's name such as Dr/Mrs/Mr.).freeze,
+      label: "honorificPrefix".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :honorificSuffix,
+      comment: %(An honorific suffix preceding a Person's name such as M.D. /PhD/MSCSW.).freeze,
+      label: "honorificSuffix".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :hospitalAffiliation,
+      comment: %(A hospital with which the physician or office is affiliated.).freeze,
+      label: "hospitalAffiliation".freeze,
+      "schema:domainIncludes" => %(schema:Physician).freeze,
+      "schema:rangeIncludes" => %(schema:Hospital).freeze,
+      type: "rdf:Property".freeze
+    property :hostingOrganization,
+      comment: %(The organization \(airline, travelers' club, etc.\) the membership is made with.).freeze,
+      label: "hostingOrganization".freeze,
+      "schema:domainIncludes" => %(schema:ProgramMembership).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :hoursAvailable,
+      comment: %(The hours during which this contact point is available.).freeze,
+      label: "hoursAvailable".freeze,
+      "schema:domainIncludes" => %(schema:ContactPoint).freeze,
+      "schema:rangeIncludes" => %(schema:OpeningHoursSpecification).freeze,
+      type: "rdf:Property".freeze
+    property :howPerformed,
+      comment: %(How the procedure is performed.).freeze,
+      label: "howPerformed".freeze,
+      "schema:domainIncludes" => %(schema:MedicalProcedure).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :httpMethod,
+      comment: %(An HTTP method that specifies the appropriate HTTP method for a request to an HTTP EntryPoint. Values are capitalized strings as used in HTTP.).freeze,
+      label: "httpMethod".freeze,
+      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :iataCode,
+      comment: %(IATA identifier for an airline or airport).freeze,
+      label: "iataCode".freeze,
+      "schema:domainIncludes" => %(schema:Airline).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :identifyingExam,
+      comment: %(A physical examination that can identify this sign.).freeze,
+      label: "identifyingExam".freeze,
+      "schema:domainIncludes" => %(schema:MedicalSign).freeze,
+      "schema:rangeIncludes" => %(schema:PhysicalExam).freeze,
+      type: "rdf:Property".freeze
+    property :identifyingTest,
+      comment: %(A diagnostic test that can identify this sign.).freeze,
+      label: "identifyingTest".freeze,
+      "schema:domainIncludes" => %(schema:MedicalSign).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTest).freeze,
+      type: "rdf:Property".freeze
+    property :illustrator,
+      comment: %(The illustrator of the book.).freeze,
+      label: "illustrator".freeze,
+      "schema:domainIncludes" => %(schema:Book).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :image,
+      comment: %(URL of an image of the item.).freeze,
+      label: "image".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :imagingTechnique,
+      comment: %(Imaging technique used.).freeze,
+      label: "imagingTechnique".freeze,
+      "schema:domainIncludes" => %(schema:ImagingTest).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalImagingTechnique).freeze,
+      type: "rdf:Property".freeze
+    property :inAlbum,
+      comment: %(The album to which this recording belongs.).freeze,
+      label: "inAlbum".freeze,
+      "schema:domainIncludes" => %(schema:MusicRecording).freeze,
+      "schema:rangeIncludes" => %(schema:MusicAlbum).freeze,
+      type: "rdf:Property".freeze
+    property :inLanguage,
+      comment: %(The language of the content. please use one of the language codes from the <a href='http://tools.ietf.org/html/bcp47'>IETF BCP 47 standard.</a>).freeze,
+      label: "inLanguage".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :inPlaylist,
+      comment: %(The playlist to which this recording belongs.).freeze,
+      label: "inPlaylist".freeze,
+      "schema:domainIncludes" => %(schema:MusicRecording).freeze,
+      "schema:rangeIncludes" => %(schema:MusicPlaylist).freeze,
+      type: "rdf:Property".freeze
+    property :incentives,
+      comment: %(Description of bonus and commission compensation aspects of the job.).freeze,
+      label: "incentives".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :includedRiskFactor,
+      comment: %(A modifiable or non-modifiable risk factor included in the calculation, e.g. age, coexisting condition.).freeze,
+      label: "includedRiskFactor".freeze,
+      "schema:domainIncludes" => %(schema:MedicalRiskEstimator).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalRiskFactor).freeze,
+      type: "rdf:Property".freeze
+    property :includesObject,
+      comment: %(This links to a node or nodes indicating the exact quantity of the products included in the offer.).freeze,
+      label: "includesObject".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:TypeAndQuantityNode).freeze,
+      type: "rdf:Property".freeze
+    property :increasesRiskOf,
+      comment: %(The condition, complication, etc. influenced by this factor.).freeze,
+      label: "increasesRiskOf".freeze,
+      "schema:domainIncludes" => %(schema:MedicalRiskFactor).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :indication,
+      comment: %(A factor that indicates use of this therapy for treatment and/or prevention of a condition, symptom, etc. For therapies such as drugs, indications can include both officially-approved indications as well as off-label uses. These can be distinguished by using the ApprovedIndication subtype of MedicalIndication.).freeze,
+      label: "indication".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTherapy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalIndication).freeze,
+      type: "rdf:Property".freeze
+    property :industry,
+      comment: %(The industry associated with the job position.).freeze,
+      label: "industry".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :infectiousAgent,
+      comment: %(The actual infectious agent, such as a specific bacterium.).freeze,
+      label: "infectiousAgent".freeze,
+      "schema:domainIncludes" => %(schema:InfectiousDisease).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :infectiousAgentClass,
+      comment: %(The class of infectious agent \(bacteria, prion, etc.\) that causes the disease.).freeze,
+      label: "infectiousAgentClass".freeze,
+      "schema:domainIncludes" => %(schema:InfectiousDisease).freeze,
+      "schema:rangeIncludes" => %(schema:InfectiousAgentClass).freeze,
+      type: "rdf:Property".freeze
+    property :ingredients,
+      comment: %(An ingredient used in the recipe.).freeze,
+      label: "ingredients".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :insertion,
+      comment: %(The place of attachment of a muscle, or what the muscle moves.).freeze,
+      label: "insertion".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :installUrl,
+      comment: %(URL at which the app may be installed, if different from the URL of the item.).freeze,
+      label: "installUrl".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :instrument,
+      comment: %(The object that helped the agent perform the action. e.g. John wrote a book with *a pen*.).freeze,
+      label: "instrument".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :intensity,
+      comment: %(Quantitative measure gauging the degree of force involved in the exercise, for example, heartbeats per minute. May include the velocity of the movement.).freeze,
+      label: "intensity".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :interactingDrug,
+      comment: %(Another drug that is known to interact with this drug in a way that impacts the effect of this drug or causes a risk to the patient. Note: disease interactions are typically captured as contraindications.).freeze,
+      label: "interactingDrug".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Drug).freeze,
+      type: "rdf:Property".freeze
+    property :interactionCount,
+      comment: %(A count of a specific user interactions with this item&#x2014;for example, <code>20 UserLikes</code>, <code>5 UserComments</code>, or <code>300 UserDownloads</code>. The user interaction type should be one of the sub types of <a href='UserInteraction'>UserInteraction</a>.).freeze,
+      label: "interactionCount".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :interactivityType,
+      comment: %(The predominant mode of learning supported by the learning resource. Acceptable values are 'active', 'expositive', or 'mixed'.).freeze,
+      label: "interactivityType".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :inventoryLevel,
+      comment: %(The current approximate inventory level for the item or items.).freeze,
+      label: "inventoryLevel".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :isAccessoryOrSparePartFor,
+      comment: %(A pointer to another product \(or multiple products\) for which this product is an accessory or spare part.).freeze,
+      label: "isAccessoryOrSparePartFor".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :isAvailableGenerically,
+      comment: %(True if the drug is available in a generic form \(regardless of name\).).freeze,
+      label: "isAvailableGenerically".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :isBasedOnUrl,
+      comment: %(A resource that was used in the creation of this resource. This term can be repeated for multiple sources. For example, http://example.com/great-multiplication-intro.html).freeze,
+      label: "isBasedOnUrl".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :isConsumableFor,
+      comment: %(A pointer to another product \(or multiple products\) for which this product is a consumable.).freeze,
+      label: "isConsumableFor".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :isFamilyFriendly,
+      comment: %(Indicates whether this content is family friendly.).freeze,
+      label: "isFamilyFriendly".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :isGift,
+      comment: %(Was the offer accepted as a gift for someone other than the buyer.).freeze,
+      label: "isGift".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :isPartOf,
+      comment: %(Indicates the collection or gallery to which the item belongs.).freeze,
+      label: "isPartOf".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:CollectionPage).freeze,
+      type: "rdf:Property".freeze
+    property :isProprietary,
+      comment: %(True if this item's name is a proprietary/brand name \(vs. generic name\).).freeze,
+      label: "isProprietary".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :isRelatedTo,
+      comment: %(A pointer to another, somehow related product \(or multiple products\).).freeze,
+      label: "isRelatedTo".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :isSimilarTo,
+      comment: %(A pointer to another, functionally similar product \(or multiple products\).).freeze,
+      label: "isSimilarTo".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :isVariantOf,
+      comment: %(A pointer to a base product from which this product is a variant. It is safe to infer that the variant inherits all product features from the base model, unless defined locally. This is not transitive.).freeze,
+      label: "isVariantOf".freeze,
+      "schema:domainIncludes" => %(schema:ProductModel).freeze,
+      "schema:rangeIncludes" => %(schema:ProductModel).freeze,
+      type: "rdf:Property".freeze
+    property :isbn,
+      comment: %(The ISBN of the book.).freeze,
+      label: "isbn".freeze,
+      "schema:domainIncludes" => %(schema:Book).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :isicV4,
+      comment: %(The International Standard of Industrial Classification of All Economic Activities \(ISIC\), Revision 4 code for a particular organization, business person, or place.).freeze,
+      label: "isicV4".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :issuedBy,
+      comment: %(The organization issuing the permit.).freeze,
+      label: "issuedBy".freeze,
+      "schema:domainIncludes" => %(schema:Permit).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :issuedThrough,
+      comment: %(The service through with the permit was granted.).freeze,
+      label: "issuedThrough".freeze,
+      "schema:domainIncludes" => %(schema:Permit).freeze,
+      "schema:rangeIncludes" => %(schema:Service).freeze,
+      type: "rdf:Property".freeze
+    property :itemCondition,
+      comment: %(A predefined value from OfferItemCondition or a textual description of the condition of the product or service, or the products or services included in the offer.).freeze,
+      label: "itemCondition".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:OfferItemCondition).freeze,
+      type: "rdf:Property".freeze
+    property :itemListElement,
+      comment: %(A single list item.).freeze,
+      label: "itemListElement".freeze,
+      "schema:domainIncludes" => %(schema:ItemList).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :itemListOrder,
+      comment: %(Type of ordering \(e.g. Ascending, Descending, Unordered\).).freeze,
+      label: "itemListOrder".freeze,
+      "schema:domainIncludes" => %(schema:ItemList).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :itemOffered,
+      comment: %(The item being offered.).freeze,
+      label: "itemOffered".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :itemReviewed,
+      comment: %(The item that is being reviewed/rated.).freeze,
+      label: "itemReviewed".freeze,
+      "schema:domainIncludes" => %(schema:AggregateRating).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :itemShipped,
+      comment: %(Item\(s\) being shipped.).freeze,
+      label: "itemShipped".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :jobLocation,
+      comment: %(A \(typically single\) geographic location associated with the job position.).freeze,
+      label: "jobLocation".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :jobTitle,
+      comment: %(The job title of the person \(for example, Financial Manager\).).freeze,
+      label: "jobTitle".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :keywords,
+      comment: %(The keywords/tags used to describe this content.).freeze,
+      label: "keywords".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :knows,
+      comment: %(The most generic bi-directional social/work relation.).freeze,
+      label: "knows".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :labelDetails,
+      comment: %(Link to the drug's label details.).freeze,
+      label: "labelDetails".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :landlord,
+      comment: %(A sub property of participant. The owner of the real estate property.).freeze,
+      label: "landlord".freeze,
+      "schema:domainIncludes" => %(schema:RentAction).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :language,
+      comment: %(A sub property of instrument. The languaged used on this action.).freeze,
+      label: "language".freeze,
+      "schema:domainIncludes" => %(schema:CommunicateAction).freeze,
+      "schema:rangeIncludes" => %(schema:Language).freeze,
+      type: "rdf:Property".freeze
+    property :lastReviewed,
+      comment: %(Date on which the content on this web page was last reviewed for accuracy and/or completeness.).freeze,
+      label: "lastReviewed".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :latitude,
+      comment: %(The latitude of a location. For example <code>37.42242</code>.).freeze,
+      label: "latitude".freeze,
+      "schema:domainIncludes" => %(schema:GeoCoordinates).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :learningResourceType,
+      comment: %(The predominant type or kind characterizing the learning resource. For example, 'presentation', 'handout'.).freeze,
+      label: "learningResourceType".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :legalName,
+      comment: %(The official name of the organization, e.g. the registered company name.).freeze,
+      label: "legalName".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :legalStatus,
+      comment: %(The drug or supplement's legal status, including any controlled substance schedules that apply.).freeze,
+      label: "legalStatus".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:DrugLegalStatus).freeze,
+      type: "rdf:Property".freeze
+    property :lender,
+      comment: %(A sub property of participant. The person that lends the object being borrowed.).freeze,
+      label: "lender".freeze,
+      "schema:domainIncludes" => %(schema:BorrowAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :lesser,
+      comment: %(This ordering relation for qualitative values indicates that the subject is lesser than the object.).freeze,
+      label: "lesser".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :lesserOrEqual,
+      comment: %(This ordering relation for qualitative values indicates that the subject is lesser than or equal to the object.).freeze,
+      label: "lesserOrEqual".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :line,
+      comment: %(A line is a point-to-point path consisting of two or more points. A line is expressed as a series of two or more point objects separated by space.).freeze,
+      label: "line".freeze,
+      "schema:domainIncludes" => %(schema:GeoShape).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :location,
+      comment: %(The location of the event, organization or action.).freeze,
+      label: "location".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :lodgingUnitDescription,
+      comment: %(A full description of the lodging unit.).freeze,
+      label: "lodgingUnitDescription".freeze,
+      "schema:domainIncludes" => %(schema:LodgingReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :lodgingUnitType,
+      comment: %(Textual description of the unit type \(including suite vs. room, size of bed, etc.\).).freeze,
+      label: "lodgingUnitType".freeze,
+      "schema:domainIncludes" => %(schema:LodgingReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :logo,
+      comment: %(A logo associated with an organization.).freeze,
+      label: "logo".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      type: "rdf:Property".freeze
+    property :longitude,
+      comment: %(The longitude of a location. For example <code>-122.08585</code>.).freeze,
+      label: "longitude".freeze,
+      "schema:domainIncludes" => %(schema:GeoCoordinates).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :loser,
+      comment: %(A sub property of participant. The loser of the action.).freeze,
+      label: "loser".freeze,
+      "schema:domainIncludes" => %(schema:WinAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :lowPrice,
+      comment: %(The lowest price of all offers available.).freeze,
+      label: "lowPrice".freeze,
+      "schema:domainIncludes" => %(schema:AggregateOffer).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :mainContentOfPage,
+      comment: %(Indicates if this web page element is the main subject of the page.).freeze,
+      label: "mainContentOfPage".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:WebPageElement).freeze,
+      type: "rdf:Property".freeze
+    property :makesOffer,
+      comment: %(A pointer to products or services offered by the organization or person.).freeze,
+      label: "makesOffer".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Offer).freeze,
+      type: "rdf:Property".freeze
+    property :manufacturer,
+      comment: %(The manufacturer of the product.).freeze,
+      label: "manufacturer".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :map,
+      comment: %(A URL to a map of the place.).freeze,
+      label: "map".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :maps,
+      comment: %(A URL to a map of the place \(legacy spelling; see singular form, map\).).freeze,
+      label: "maps".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      "schema:supercededBy" => %(schema:map).freeze,
+      type: "rdf:Property".freeze
+    property :maxPrice,
+      comment: %(The highest price if the price is a range.).freeze,
+      label: "maxPrice".freeze,
+      "schema:domainIncludes" => %(schema:PriceSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :maxValue,
+      comment: %(The upper of the product characteristic.).freeze,
+      label: "maxValue".freeze,
+      "schema:domainIncludes" => %(schema:QuantitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :maximumIntake,
+      comment: %(Recommended intake of this supplement for a given population as defined by a specific recommending authority.).freeze,
+      label: "maximumIntake".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:MaximumDoseSchedule).freeze,
+      type: "rdf:Property".freeze
+    property :mealService,
+      comment: %(Description of the meals that will be provided or available for purchase.).freeze,
+      label: "mealService".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :mechanismOfAction,
+      comment: %(The specific biochemical interaction through which this drug or supplement produces its pharmacological effect.).freeze,
+      label: "mechanismOfAction".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :medicalSpecialty,
+      comment: %(A medical specialty of the provider.).freeze,
+      label: "medicalSpecialty".freeze,
+      "schema:domainIncludes" => %(schema:Hospital).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalSpecialty).freeze,
+      type: "rdf:Property".freeze
+    property :medicineSystem,
+      comment: %(The system of medicine that includes this MedicalEntity, for example 'evidence-based', 'homeopathic', 'chiropractic', etc.).freeze,
+      label: "medicineSystem".freeze,
+      "schema:domainIncludes" => %(schema:MedicalEntity).freeze,
+      "schema:rangeIncludes" => %(schema:MedicineSystem).freeze,
+      type: "rdf:Property".freeze
+    property :member,
+      comment: %(A member of this organization.).freeze,
+      label: "member".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :memberOf,
+      comment: %(An organization to which the person belongs.).freeze,
+      label: "memberOf".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :members,
+      comment: %(A member of this organization \(legacy spelling; see singular form, member\).).freeze,
+      label: "members".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      "schema:supercededBy" => %(schema:member).freeze,
+      type: "rdf:Property".freeze
+    property :membershipNumber,
+      comment: %(A unique identifier for the membership.).freeze,
+      label: "membershipNumber".freeze,
+      "schema:domainIncludes" => %(schema:ProgramMembership).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :memoryRequirements,
+      comment: %(Minimum memory requirements.).freeze,
+      label: "memoryRequirements".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :mentions,
+      comment: %(Indicates that the CreativeWork contains a reference to, but is not necessarily about a concept.).freeze,
+      label: "mentions".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :menu,
+      comment: %(Either the actual menu or a URL of the menu.).freeze,
+      label: "menu".freeze,
+      "schema:domainIncludes" => %(schema:FoodEstablishment).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :merchant,
+      comment: %(The party taking the order \(e.g. Amazon.com is a merchant for many sellers\).).freeze,
+      label: "merchant".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :minPrice,
+      comment: %(The lowest price if the price is a range.).freeze,
+      label: "minPrice".freeze,
+      "schema:domainIncludes" => %(schema:PriceSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :minValue,
+      comment: %(The lower value of the product characteristic.).freeze,
+      label: "minValue".freeze,
+      "schema:domainIncludes" => %(schema:QuantitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :model,
+      comment: %(The model of the product. Use with the URL of a ProductModel or a textual representation of the model identifier. The URL of the ProductModel can be from an external source. It is recommended to additionally provide strong product identifiers via the gtin8/gtin13/gtin14 and mpn properties.).freeze,
+      label: "model".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:ProductModel).freeze,
+      type: "rdf:Property".freeze
+    property :modifiedTime,
+      comment: %(The date and time the reservation was modified.).freeze,
+      label: "modifiedTime".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :mpn,
+      comment: %(The Manufacturer Part Number \(MPN\) of the product, or the product to which the offer refers.).freeze,
+      label: "mpn".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :multipleValues,
+      comment: %(Whether multiple values are allowed for the property.  Default is false.).freeze,
+      label: "multipleValues".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :muscleAction,
+      comment: %(The movement the muscle generates.).freeze,
+      label: "muscleAction".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :musicBy,
+      comment: %(The composer of the movie or TV/radio soundtrack.).freeze,
+      label: "musicBy".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:MusicGroup).freeze,
+      type: "rdf:Property".freeze
+    property :musicGroupMember,
+      comment: %(A member of the music group&#x2014;for example, John, Paul, George, or Ringo.).freeze,
+      label: "musicGroupMember".freeze,
+      "schema:domainIncludes" => %(schema:MusicGroup).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :naics,
+      comment: %(The North American Industry Classification System \(NAICS\) code for a particular organization or business person.).freeze,
+      label: "naics".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :name,
+      comment: %(The name of the item.).freeze,
+      label: "name".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :nationality,
+      comment: %(Nationality of the person.).freeze,
+      label: "nationality".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Country).freeze,
+      type: "rdf:Property".freeze
+    property :naturalProgression,
+      comment: %(The expected progression of the condition if it is not treated and allowed to progress naturally.).freeze,
+      label: "naturalProgression".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :nerve,
+      comment: %(The underlying innervation associated with the muscle.).freeze,
+      label: "nerve".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:Nerve).freeze,
+      type: "rdf:Property".freeze
+    property :nerveMotor,
+      comment: %(The neurological pathway extension that involves muscle control.).freeze,
+      label: "nerveMotor".freeze,
+      "schema:domainIncludes" => %(schema:Nerve).freeze,
+      "schema:rangeIncludes" => %(schema:Muscle).freeze,
+      type: "rdf:Property".freeze
+    property :nonEqual,
+      comment: %(This ordering relation for qualitative values indicates that the subject is not equal to the object.).freeze,
+      label: "nonEqual".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :nonProprietaryName,
+      comment: %(The generic name of this drug or supplement.).freeze,
+      label: "nonProprietaryName".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :normalRange,
+      comment: %(Range of acceptable values for a typical patient, when applicable.).freeze,
+      label: "normalRange".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTest).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :numAdults,
+      comment: %(The number of adults staying in the unit.).freeze,
+      label: "numAdults".freeze,
+      "schema:domainIncludes" => %(schema:LodgingReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :numChildren,
+      comment: %(The number of children staying in the unit.).freeze,
+      label: "numChildren".freeze,
+      "schema:domainIncludes" => %(schema:LodgingReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :numTracks,
+      comment: %(The number of tracks in this album or playlist.).freeze,
+      label: "numTracks".freeze,
+      "schema:domainIncludes" => %(schema:MusicPlaylist).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :numberOfEpisodes,
+      comment: %(The number of episodes in this season or series.).freeze,
+      label: "numberOfEpisodes".freeze,
+      "schema:domainIncludes" => %(schema:Season).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :numberOfPages,
+      comment: %(The number of pages in the book.).freeze,
+      label: "numberOfPages".freeze,
+      "schema:domainIncludes" => %(schema:Book).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :numberOfSeasons,
+      comment: %(The number of seasons in this series.).freeze,
+      label: "numberOfSeasons".freeze,
+      "schema:domainIncludes" => %(schema:Series).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :numberofEmployees,
+      comment: %(The size of business by number of employees.).freeze,
+      label: "numberofEmployees".freeze,
+      "schema:domainIncludes" => %(schema:BusinessAudience).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :nutrition,
+      comment: %(Nutrition information about the recipe.).freeze,
+      label: "nutrition".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:NutritionInformation).freeze,
+      type: "rdf:Property".freeze
+    property :object,
+      comment: %(The object upon the action is carried out, whose state is kept intact or changed. Also known as the semantic roles patient, affected or undergoer \(which change their state\) or theme \(which doesn't\). e.g. John read *a book*.).freeze,
+      label: "object".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :occupationalCategory,
+      comment: %(Category or categories describing the job. Use BLS O*NET-SOC taxonomy: http://www.onetcenter.org/taxonomy.html. Ideally includes textual label and formal code, with the property repeated for each applicable value.).freeze,
+      label: "occupationalCategory".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :offerCount,
+      comment: %(The number of offers for the product.).freeze,
+      label: "offerCount".freeze,
+      "schema:domainIncludes" => %(schema:AggregateOffer).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :offers,
+      comment: %(An offer to provide this item&#x2014;for example, an offer to sell a product, rent the DVD of a movie, or give away tickets to an event.).freeze,
+      label: "offers".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Offer).freeze,
+      type: "rdf:Property".freeze
+    property :openingHours,
+      comment: %(The opening hours for a business. Opening hours can be specified as a weekly time range, starting with days, then times per day. Multiple days can be listed with commas ',' separating each day. Day or time ranges are specified using a hyphen '-'.<br />- Days are specified using the following two-letter combinations: <code>Mo</code>, <code>Tu</code>, <code>We</code>, <code>Th</code>, <code>Fr</code>, <code>Sa</code>, <code>Su</code>.<br />- Times are specified using 24:00 time. For example, 3pm is specified as <code>15:00</code>. <br />- Here is an example: <code>&lt;time itemprop=&quot;openingHours&quot; datetime=&quot;Tu,Th 16:00-20:00&quot;&gt;Tuesdays and Thursdays 4-8pm&lt;/time&gt;</code>. <br />- If a business is open 7 days a week, then it can be specified as <code>&lt;time itemprop=&quot;openingHours&quot; datetime=&quot;Mo-Su&quot;&gt;Monday through Sunday, all day&lt;/time&gt;</code>.).freeze,
+      label: "openingHours".freeze,
+      "schema:domainIncludes" => %(schema:LocalBusiness).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :openingHoursSpecification,
+      comment: %(The opening hours of a certain place.).freeze,
+      label: "openingHoursSpecification".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:OpeningHoursSpecification).freeze,
+      type: "rdf:Property".freeze
+    property :opens,
+      comment: %(The opening hour of the place or service on the given day\(s\) of the week.).freeze,
+      label: "opens".freeze,
+      "schema:domainIncludes" => %(schema:OpeningHoursSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Time).freeze,
+      type: "rdf:Property".freeze
+    property :operatingSystem,
+      comment: %(Operating systems supported \(Windows 7, OSX 10.6, Android 1.6\).).freeze,
+      label: "operatingSystem".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :opponent,
+      comment: %(A sub property of participant. The opponent on this action.).freeze,
+      label: "opponent".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :option,
+      comment: %(A sub property of object. The options subject to this action.).freeze,
+      label: "option".freeze,
+      "schema:domainIncludes" => %(schema:ChooseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :orderDate,
+      comment: %(Date order was placed.).freeze,
+      label: "orderDate".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :orderNumber,
+      comment: %(The identifier of the transaction.).freeze,
+      label: "orderNumber".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :orderStatus,
+      comment: %(The current status of the order.).freeze,
+      label: "orderStatus".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:OrderStatus).freeze,
+      type: "rdf:Property".freeze
+    property :orderedItem,
+      comment: %(The item ordered.).freeze,
+      label: "orderedItem".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :origin,
+      comment: %(The place or point where a muscle arises.).freeze,
+      label: "origin".freeze,
+      "schema:domainIncludes" => %(schema:Muscle).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :originAddress,
+      comment: %(Shipper's address.).freeze,
+      label: "originAddress".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:PostalAddress).freeze,
+      type: "rdf:Property".freeze
+    property :originatesFrom,
+      comment: %(The vasculature the lymphatic structure originates, or afferents, from.).freeze,
+      label: "originatesFrom".freeze,
+      "schema:domainIncludes" => %(schema:LymphaticVessel).freeze,
+      "schema:rangeIncludes" => %(schema:Vessel).freeze,
+      type: "rdf:Property".freeze
+    property :outcome,
+      comment: %(Expected or actual outcomes of the study.).freeze,
+      label: "outcome".freeze,
+      "schema:domainIncludes" => %(schema:MedicalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :overdosage,
+      comment: %(Any information related to overdose on a drug, including signs or symptoms, treatments, contact information for emergency response.).freeze,
+      label: "overdosage".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :overview,
+      comment: %(Descriptive information establishing the overarching theory/philosophy of the plan. May include the rationale for the name, the population where the plan first came to prominence, etc.).freeze,
+      label: "overview".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :ownedFrom,
+      comment: %(The date and time of obtaining the product.).freeze,
+      label: "ownedFrom".freeze,
+      "schema:domainIncludes" => %(schema:OwnershipInfo).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :ownedThrough,
+      comment: %(The date and time of giving up ownership on the product.).freeze,
+      label: "ownedThrough".freeze,
+      "schema:domainIncludes" => %(schema:OwnershipInfo).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :owns,
+      comment: %(Products owned by the organization or person.).freeze,
+      label: "owns".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:OwnershipInfo).freeze,
+      type: "rdf:Property".freeze
+    property :parent,
+      comment: %(A parent of this person.).freeze,
+      label: "parent".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :parentItem,
+      comment: %(The parent of a question, answer or item in general.).freeze,
+      label: "parentItem".freeze,
+      "schema:domainIncludes" => %(schema:Answer).freeze,
+      "schema:rangeIncludes" => %(schema:Question).freeze,
+      type: "rdf:Property".freeze
+    property :parentService,
+      comment: %(A broadcast service to which the broadcast service may belong to such as regional variations of a national channel.).freeze,
+      label: "parentService".freeze,
+      "schema:domainIncludes" => %(schema:BroadcastService).freeze,
+      "schema:rangeIncludes" => %(schema:BroadcastService).freeze,
+      type: "rdf:Property".freeze
+    property :parents,
+      comment: %(A parents of the person \(legacy spelling; see singular form, parent\).).freeze,
+      label: "parents".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:parent).freeze,
+      type: "rdf:Property".freeze
+    property :partOfEpisode,
+      comment: %(The episode to which this clip belongs.).freeze,
+      label: "partOfEpisode".freeze,
+      "schema:domainIncludes" => %(schema:Clip).freeze,
+      "schema:rangeIncludes" => %(schema:Episode).freeze,
+      type: "rdf:Property".freeze
+    property :partOfOrder,
+      comment: %(The overall order the items in this delivery were included in.).freeze,
+      label: "partOfOrder".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:Order).freeze,
+      type: "rdf:Property".freeze
+    property :partOfSeason,
+      comment: %(The season to which this episode belongs.).freeze,
+      label: "partOfSeason".freeze,
+      "schema:domainIncludes" => %(schema:Episode).freeze,
+      "schema:rangeIncludes" => %(schema:Season).freeze,
+      type: "rdf:Property".freeze
+    property :partOfSeries,
+      comment: %(The series to which this episode or season belongs.).freeze,
+      label: "partOfSeries".freeze,
+      "schema:domainIncludes" => %(schema:Episode).freeze,
+      "schema:rangeIncludes" => %(schema:Series).freeze,
+      type: "rdf:Property".freeze
+    property :partOfSystem,
+      comment: %(The anatomical or organ system that this structure is part of.).freeze,
+      label: "partOfSystem".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalSystem).freeze,
+      type: "rdf:Property".freeze
+    property :partOfTVSeries,
+      comment: %(The TV series to which this episode or season belongs. \(legacy form; partOfSeries is preferred\)).freeze,
+      label: "partOfTVSeries".freeze,
+      "schema:domainIncludes" => %(schema:TVEpisode).freeze,
+      "schema:rangeIncludes" => %(schema:TVSeries).freeze,
+      "schema:supercededBy" => %(schema:partOfSeries).freeze,
+      type: "rdf:Property".freeze
+    property :participant,
+      comment: %(Other co-agents that participated in the action indirectly. e.g. John wrote a book with *Steve*.).freeze,
+      label: "participant".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :partySize,
+      comment: %(Number of people the reservation should accommodate.).freeze,
+      label: "partySize".freeze,
+      "schema:domainIncludes" => %(schema:FoodEstablishmentReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :pathophysiology,
+      comment: %(Changes in the normal mechanical, physical, and biochemical functions that are associated with this activity or condition.).freeze,
+      label: "pathophysiology".freeze,
+      "schema:domainIncludes" => %(schema:PhysicalActivity).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :paymentAccepted,
+      comment: %(Cash, credit card, etc.).freeze,
+      label: "paymentAccepted".freeze,
+      "schema:domainIncludes" => %(schema:LocalBusiness).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :paymentDue,
+      comment: %(The date that payment is due.).freeze,
+      label: "paymentDue".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :paymentMethod,
+      comment: %(The name of the credit card or other method of payment for the order.).freeze,
+      label: "paymentMethod".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:PaymentMethod).freeze,
+      type: "rdf:Property".freeze
+    property :paymentMethodId,
+      comment: %(An identifier for the method of payment used \(e.g. the last 4 digits of the credit card\).).freeze,
+      label: "paymentMethodId".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :paymentUrl,
+      comment: %(The URL for sending a payment.).freeze,
+      label: "paymentUrl".freeze,
+      "schema:domainIncludes" => %(schema:Order).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :performer,
+      comment: %(A performer at the event&#x2014;for example, a presenter, musician, musical group or actor.).freeze,
+      label: "performer".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :performerIn,
+      comment: %(Event that this person is a performer or participant in.).freeze,
+      label: "performerIn".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Event).freeze,
+      type: "rdf:Property".freeze
+    property :performers,
+      comment: %(The main performer or performers of the event&#x2014;for example, a presenter, musician, or actor \(legacy spelling; see singular form, performer\).).freeze,
+      label: "performers".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      "schema:supercededBy" => %(schema:performer).freeze,
+      type: "rdf:Property".freeze
+    property :permissions,
+      comment: %(Permission\(s\) required to run the app \(for example, a mobile app may require full internet access or may run only on wifi\).).freeze,
+      label: "permissions".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :permitAudience,
+      comment: %(The target audience for this permit.).freeze,
+      label: "permitAudience".freeze,
+      "schema:domainIncludes" => %(schema:Permit).freeze,
+      "schema:rangeIncludes" => %(schema:Audience).freeze,
+      type: "rdf:Property".freeze
+    property :phase,
+      comment: %(The phase of the trial.).freeze,
+      label: "phase".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTrial).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :photo,
+      comment: %(A photograph of this place.).freeze,
+      label: "photo".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      type: "rdf:Property".freeze
+    property :photos,
+      comment: %(Photographs of this place \(legacy spelling; see singular form, photo\).).freeze,
+      label: "photos".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      "schema:supercededBy" => %(schema:photo).freeze,
+      type: "rdf:Property".freeze
+    property :physiologicalBenefits,
+      comment: %(Specific physiologic benefits associated to the plan.).freeze,
+      label: "physiologicalBenefits".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :pickupLocation,
+      comment: %(Where a taxi will pick up a passenger or a rental car can be picked up.).freeze,
+      label: "pickupLocation".freeze,
+      "schema:domainIncludes" => %(schema:RentalCarReservation).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :pickupTime,
+      comment: %(When a taxi will pickup a passenger or a rental car can be picked up.).freeze,
+      label: "pickupTime".freeze,
+      "schema:domainIncludes" => %(schema:RentalCarReservation).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :playerType,
+      comment: %(Player type required&#x2014;for example, Flash or Silverlight.).freeze,
+      label: "playerType".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :polygon,
+      comment: %(A polygon is the area enclosed by a point-to-point path for which the starting and ending points are the same. A polygon is expressed as a series of four or more space delimited points where the first and final points are identical.).freeze,
+      label: "polygon".freeze,
+      "schema:domainIncludes" => %(schema:GeoShape).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :population,
+      comment: %(Any characteristics of the population used in the study, e.g. 'males under 65'.).freeze,
+      label: "population".freeze,
+      "schema:domainIncludes" => %(schema:MedicalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :position,
+      comment: %(Free text to define other than pure numerical ranking of an episode or a season in an ordered list of items \(further formatting restrictions may apply within particular user groups\).).freeze,
+      label: "position".freeze,
+      "schema:domainIncludes" => %(schema:Episode).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :possibleComplication,
+      comment: %(A possible unexpected and unfavorable evolution of a medical condition. Complications may include worsening of the signs or symptoms of the disease, extension of the condition to other organ systems, etc.).freeze,
+      label: "possibleComplication".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :possibleTreatment,
+      comment: %(A possible treatment to address this condition, sign or symptom.).freeze,
+      label: "possibleTreatment".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTherapy).freeze,
+      type: "rdf:Property".freeze
+    property :postOfficeBoxNumber,
+      comment: %(The post office box number for PO box addresses.).freeze,
+      label: "postOfficeBoxNumber".freeze,
+      "schema:domainIncludes" => %(schema:PostalAddress).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :postOp,
+      comment: %(A description of the postoperative procedures, care, and/or followups for this device.).freeze,
+      label: "postOp".freeze,
+      "schema:domainIncludes" => %(schema:MedicalDevice).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :postalCode,
+      comment: %(The postal code. For example, 94043.).freeze,
+      label: "postalCode".freeze,
+      "schema:domainIncludes" => %(schema:PostalAddress).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :potentialAction,
+      comment: %(Indicates a potential Action, which describes an idealized action in which this thing would play an 'object' role.).freeze,
+      label: "potentialAction".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:Action).freeze,
+      type: "rdf:Property".freeze
+    property :preOp,
+      comment: %(A description of the workup, testing, and other preparations required before implanting this device.).freeze,
+      label: "preOp".freeze,
+      "schema:domainIncludes" => %(schema:MedicalDevice).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :predecessorOf,
+      comment: %(A pointer from a previous, often discontinued variant of the product to its newer variant.).freeze,
+      label: "predecessorOf".freeze,
+      "schema:domainIncludes" => %(schema:ProductModel).freeze,
+      "schema:rangeIncludes" => %(schema:ProductModel).freeze,
+      type: "rdf:Property".freeze
+    property :pregnancyCategory,
+      comment: %(Pregnancy category of this drug.).freeze,
+      label: "pregnancyCategory".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:DrugPregnancyCategory).freeze,
+      type: "rdf:Property".freeze
+    property :pregnancyWarning,
+      comment: %(Any precaution, guidance, contraindication, etc. related to this drug's use during pregnancy.).freeze,
+      label: "pregnancyWarning".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :prepTime,
+      comment: %(The length of time it takes to prepare the recipe, in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration format</a>.).freeze,
+      label: "prepTime".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :preparation,
+      comment: %(Typical preparation that a patient must undergo before having the procedure performed.).freeze,
+      label: "preparation".freeze,
+      "schema:domainIncludes" => %(schema:MedicalProcedure).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :prescribingInfo,
+      comment: %(Link to prescribing information for the drug.).freeze,
+      label: "prescribingInfo".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :prescriptionStatus,
+      comment: %(Indicates whether this drug is available by prescription or over-the-counter.).freeze,
+      label: "prescriptionStatus".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:DrugPrescriptionStatus).freeze,
+      type: "rdf:Property".freeze
+    property :previousStartDate,
+      comment: %(Used in conjunction with eventStatus for rescheduled or cancelled events. This property contains the previously scheduled start date. For rescheduled events, the startDate property should be used for the newly scheduled start date. In the \(rare\) case of an event that has been postponed and rescheduled multiple times, this field may be repeated.).freeze,
+      label: "previousStartDate".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :price,
+      comment: %(The offer price of a product, or of a price component when attached to PriceSpecification and its subtypes.).freeze,
+      label: "price".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :priceCurrency,
+      comment: %(The currency \(in 3-letter ISO 4217 format\) of the offer price or a price component, when attached to PriceSpecification and its subtypes.).freeze,
+      label: "priceCurrency".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :priceRange,
+      comment: %(The price range of the business, for example <code>$$$</code>.).freeze,
+      label: "priceRange".freeze,
+      "schema:domainIncludes" => %(schema:LocalBusiness).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :priceSpecification,
+      comment: %(One or more detailed price specifications, indicating the unit price and delivery or payment charges.).freeze,
+      label: "priceSpecification".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:PriceSpecification).freeze,
+      type: "rdf:Property".freeze
+    property :priceType,
+      comment: %(A short text or acronym indicating multiple price specifications for the same offer, e.g. SRP for the suggested retail price or INVOICE for the invoice price, mostly used in the car industry.).freeze,
+      label: "priceType".freeze,
+      "schema:domainIncludes" => %(schema:UnitPriceSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :priceValidUntil,
+      comment: %(The date after which the price is no longer available.).freeze,
+      label: "priceValidUntil".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :primaryImageOfPage,
+      comment: %(Indicates the main image on the page.).freeze,
+      label: "primaryImageOfPage".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      type: "rdf:Property".freeze
+    property :primaryPrevention,
+      comment: %(A preventative therapy used to prevent an initial occurrence of the medical condition, such as vaccination.).freeze,
+      label: "primaryPrevention".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTherapy).freeze,
+      type: "rdf:Property".freeze
+    property :printColumn,
+      comment: %(The number of the column in which the NewsArticle appears in the print edition.).freeze,
+      label: "printColumn".freeze,
+      "schema:domainIncludes" => %(schema:NewsArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :printEdition,
+      comment: %(The edition of the print product in which the NewsArticle appears.).freeze,
+      label: "printEdition".freeze,
+      "schema:domainIncludes" => %(schema:NewsArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :printPage,
+      comment: %(If this NewsArticle appears in print, this field indicates the name of the page on which the article is found. Please note that this field is intended for the exact page name \(e.g. A5, B18\).).freeze,
+      label: "printPage".freeze,
+      "schema:domainIncludes" => %(schema:NewsArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :printSection,
+      comment: %(If this NewsArticle appears in print, this field indicates the print section in which the article appeared.).freeze,
+      label: "printSection".freeze,
+      "schema:domainIncludes" => %(schema:NewsArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :procedure,
+      comment: %(A description of the procedure involved in setting up, using, and/or installing the device.).freeze,
+      label: "procedure".freeze,
+      "schema:domainIncludes" => %(schema:MedicalDevice).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :procedureType,
+      comment: %(The type of procedure, for example Surgical, Noninvasive, or Percutaneous.).freeze,
+      label: "procedureType".freeze,
+      "schema:domainIncludes" => %(schema:MedicalProcedure).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalProcedureType).freeze,
+      type: "rdf:Property".freeze
+    property :processingTime,
+      comment: %(Estimated processing time for the service using this channel.).freeze,
+      label: "processingTime".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :processorRequirements,
+      comment: %(Processor architecture required to run the application \(e.g. IA64\).).freeze,
+      label: "processorRequirements".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :producer,
+      comment: %(The producer of the movie, tv/radio series, season, or episode, or video.).freeze,
+      label: "producer".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :produces,
+      comment: %(The tangible thing generated by the service, e.g. a passport, permit, etc.).freeze,
+      label: "produces".freeze,
+      "schema:domainIncludes" => %(schema:Service).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :productID,
+      comment: %(The product identifier, such as ISBN. For example: <code>&lt;meta itemprop='productID' content='isbn:123-456-789'/&gt;</code>.).freeze,
+      label: "productID".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :productSupported,
+      comment: %(The product or service this support contact point is related to \(such as product support for a particular product line\). This can be a specific product or product line \(e.g. "iPhone"\) or a general category of products or services \(e.g. "smartphones"\).).freeze,
+      label: "productSupported".freeze,
+      "schema:domainIncludes" => %(schema:ContactPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :productionCompany,
+      comment: %(The production company or studio that made the movie, tv/radio series, season, or episode, or media object.).freeze,
+      label: "productionCompany".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :proficiencyLevel,
+      comment: %(Proficiency needed for this content; expected values: 'Beginner', 'Expert'.).freeze,
+      label: "proficiencyLevel".freeze,
+      "schema:domainIncludes" => %(schema:TechArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :programMembershipUsed,
+      comment: %(Any membership in a frequent flyer, hotel loyalty program, etc. being applied to the reservation.).freeze,
+      label: "programMembershipUsed".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:ProgramMembership).freeze,
+      type: "rdf:Property".freeze
+    property :programName,
+      comment: %(The program providing the membership.).freeze,
+      label: "programName".freeze,
+      "schema:domainIncludes" => %(schema:ProgramMembership).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :programmingLanguage,
+      comment: %(The computer programming language.).freeze,
+      label: "programmingLanguage".freeze,
+      "schema:domainIncludes" => %(schema:Code).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :programmingModel,
+      comment: %(Indicates whether API is managed or unmanaged.).freeze,
+      label: "programmingModel".freeze,
+      "schema:domainIncludes" => %(schema:APIReference).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :proprietaryName,
+      comment: %(Proprietary name given to the diet plan, typically by its originator or creator.).freeze,
+      label: "proprietaryName".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :proteinContent,
+      comment: %(The number of grams of protein.).freeze,
+      label: "proteinContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :provider,
+      comment: %(The organization or agency that is providing the service.).freeze,
+      label: "provider".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :providesService,
+      comment: %(The service provided by this channel.).freeze,
+      label: "providesService".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:Service).freeze,
+      type: "rdf:Property".freeze
+    property :publication,
+      comment: %(A publication event associated with the episode, clip or media object.).freeze,
+      label: "publication".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:PublicationEvent).freeze,
+      type: "rdf:Property".freeze
+    property :publicationType,
+      comment: %(The type of the medical article, taken from the US NLM MeSH <a href=http://www.nlm.nih.gov/mesh/pubtypes.html>publication type catalog.).freeze,
+      label: "publicationType".freeze,
+      "schema:domainIncludes" => %(schema:MedicalScholarlyArticle).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :publishedOn,
+      comment: %(A broadcast service associated with the publication event.).freeze,
+      label: "publishedOn".freeze,
+      "schema:domainIncludes" => %(schema:PublicationEvent).freeze,
+      "schema:rangeIncludes" => %(schema:BroadcastService).freeze,
+      type: "rdf:Property".freeze
+    property :publisher,
+      comment: %(The publisher of the creative work.).freeze,
+      label: "publisher".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :publishingPrinciples,
+      comment: %(Link to page describing the editorial principles of the organization primarily responsible for the creation of the CreativeWork.).freeze,
+      label: "publishingPrinciples".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :purpose,
+      comment: %(A goal towards an action is taken. Can be concrete or abstract.).freeze,
+      label: "purpose".freeze,
+      "schema:domainIncludes" => %(schema:MedicalDevice).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalDevicePurpose).freeze,
+      type: "rdf:Property".freeze
+    property :qualifications,
+      comment: %(Specific qualifications required for this role.).freeze,
+      label: "qualifications".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :query,
+      comment: %(A sub property of instrument. The query used on this action.).freeze,
+      label: "query".freeze,
+      "schema:domainIncludes" => %(schema:SearchAction).freeze,
+      "schema:rangeIncludes" => %(schema:Class).freeze,
+      type: "rdf:Property".freeze
+    property :question,
+      comment: %(A sub property of object. A question.).freeze,
+      label: "question".freeze,
+      "schema:domainIncludes" => %(schema:AskAction).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :rangeIncludes,
+      comment: %(Relates a property to a class that constitutes \(one of\) the expected type\(s\) for values of the property.).freeze,
+      label: "rangeIncludes".freeze,
+      "schema:domainIncludes" => %(schema:Property).freeze,
+      "schema:rangeIncludes" => %(schema:Class).freeze,
+      type: "rdf:Property".freeze
+    property :ratingCount,
+      comment: %(The count of total number of ratings.).freeze,
+      label: "ratingCount".freeze,
+      "schema:domainIncludes" => %(schema:AggregateRating).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :ratingValue,
+      comment: %(The rating for the content.).freeze,
+      label: "ratingValue".freeze,
+      "schema:domainIncludes" => %(schema:Rating).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :readonlyValue,
+      comment: %(Whether or not a property is mutable.  Default is false. Specifying this for a property that also has a value makes it act similar to a "hidden" input in an HTML form.).freeze,
+      label: "readonlyValue".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :realEstateAgent,
+      comment: %(A sub property of participant. The real estate agent involved in the action.).freeze,
+      label: "realEstateAgent".freeze,
+      "schema:domainIncludes" => %(schema:RentAction).freeze,
+      "schema:rangeIncludes" => %(schema:RealEstateAgent).freeze,
+      type: "rdf:Property".freeze
+    property :recipe,
+      comment: %(A sub property of instrument. The recipe/instructions used to perform the action.).freeze,
+      label: "recipe".freeze,
+      "schema:domainIncludes" => %(schema:CookAction).freeze,
+      "schema:rangeIncludes" => %(schema:Recipe).freeze,
+      type: "rdf:Property".freeze
+    property :recipeCategory,
+      comment: %(The category of the recipe&#x2014;for example, appetizer, entree, etc.).freeze,
+      label: "recipeCategory".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :recipeCuisine,
+      comment: %(The cuisine of the recipe \(for example, French or Ethopian\).).freeze,
+      label: "recipeCuisine".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :recipeInstructions,
+      comment: %(The steps to make the dish.).freeze,
+      label: "recipeInstructions".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :recipeYield,
+      comment: %(The quantity produced by the recipe \(for example, number of people served, number of servings, etc\).).freeze,
+      label: "recipeYield".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :recipient,
+      comment: %(A sub property of participant. The participant who is at the receiving end of the action.).freeze,
+      label: "recipient".freeze,
+      "schema:domainIncludes" => %(schema:CommunicateAction).freeze,
+      "schema:rangeIncludes" => %(schema:Audience).freeze,
+      type: "rdf:Property".freeze
+    property :recognizingAuthority,
+      comment: %(If applicable, the organization that officially recognizes this entity as part of its endorsed system of medicine.).freeze,
+      label: "recognizingAuthority".freeze,
+      "schema:domainIncludes" => %(schema:MedicalEntity).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :recommendationStrength,
+      comment: %(Strength of the guideline's recommendation \(e.g. 'class I'\).).freeze,
+      label: "recommendationStrength".freeze,
+      "schema:domainIncludes" => %(schema:MedicalGuidelineRecommendation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :recommendedIntake,
+      comment: %(Recommended intake of this supplement for a given population as defined by a specific recommending authority.).freeze,
+      label: "recommendedIntake".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:RecommendedDoseSchedule).freeze,
+      type: "rdf:Property".freeze
+    property :regionDrained,
+      comment: %(The anatomical or organ system drained by this vessel; generally refers to a specific part of an organ.).freeze,
+      label: "regionDrained".freeze,
+      "schema:domainIncludes" => %(schema:LymphaticVessel).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :regionsAllowed,
+      comment: %(The regions where the media is allowed. If not specified, then it's assumed to be allowed everywhere. Specify the countries in <a href='http://en.wikipedia.org/wiki/ISO_3166'>ISO 3166 format</a>.).freeze,
+      label: "regionsAllowed".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :relatedAnatomy,
+      comment: %(Anatomical systems or structures that relate to the superficial anatomy.).freeze,
+      label: "relatedAnatomy".freeze,
+      "schema:domainIncludes" => %(schema:SuperficialAnatomy).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :relatedCondition,
+      comment: %(A medical condition associated with this anatomy.).freeze,
+      label: "relatedCondition".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalCondition).freeze,
+      type: "rdf:Property".freeze
+    property :relatedDrug,
+      comment: %(Any other drug related to this one, for example commonly-prescribed alternatives.).freeze,
+      label: "relatedDrug".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Drug).freeze,
+      type: "rdf:Property".freeze
+    property :relatedLink,
+      comment: %(A link related to this web page, for example to other related web pages.).freeze,
+      label: "relatedLink".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :relatedStructure,
+      comment: %(Related anatomical structure\(s\) that are not part of the system but relate or connect to it, such as vascular bundles associated with an organ system.).freeze,
+      label: "relatedStructure".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalSystem).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :relatedTherapy,
+      comment: %(A medical therapy related to this anatomy.).freeze,
+      label: "relatedTherapy".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTherapy).freeze,
+      type: "rdf:Property".freeze
+    property :relatedTo,
+      comment: %(The most generic familial relation.).freeze,
+      label: "relatedTo".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :releaseDate,
+      comment: %(The release date of a product or product model. This can be used to distinguish the exact variant of a product.).freeze,
+      label: "releaseDate".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :releaseNotes,
+      comment: %(Description of what changed in this version.).freeze,
+      label: "releaseNotes".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :relevantSpecialty,
+      comment: %(If applicable, a medical specialty in which this entity is relevant.).freeze,
+      label: "relevantSpecialty".freeze,
+      "schema:domainIncludes" => %(schema:MedicalEntity).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalSpecialty).freeze,
+      type: "rdf:Property".freeze
+    property :repetitions,
+      comment: %(Number of times one should repeat the activity.).freeze,
+      label: "repetitions".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :replacee,
+      comment: %(A sub property of object. The object that is being replaced.).freeze,
+      label: "replacee".freeze,
+      "schema:domainIncludes" => %(schema:ReplaceAction).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :replacer,
+      comment: %(A sub property of object. The object that replaces.).freeze,
+      label: "replacer".freeze,
+      "schema:domainIncludes" => %(schema:ReplaceAction).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :replyToUrl,
+      comment: %(The URL at which a reply may be posted to the specified UserComment.).freeze,
+      label: "replyToUrl".freeze,
+      "schema:domainIncludes" => %(schema:UserComments).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :representativeOfPage,
+      comment: %(Indicates whether this image is representative of the content of the page.).freeze,
+      label: "representativeOfPage".freeze,
+      "schema:domainIncludes" => %(schema:ImageObject).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :requiredGender,
+      comment: %(Audiences defined by a person's gender.).freeze,
+      label: "requiredGender".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :requiredMaxAge,
+      comment: %(Audiences defined by a person's maximum age.).freeze,
+      label: "requiredMaxAge".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :requiredMinAge,
+      comment: %(Audiences defined by a person's minimum age.).freeze,
+      label: "requiredMinAge".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :requirements,
+      comment: %(Component dependency requirements for application. This includes runtime environments and shared libraries that are not included in the application distribution package, but required to run the application \(Examples: DirectX, Java or .NET runtime\).).freeze,
+      label: "requirements".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :requiresSubscription,
+      comment: %(Indicates if use of the media require a subscription  \(either paid or free\). Allowed values are <code>true</code> or <code>false</code> \(note that an earlier version had 'yes', 'no'\).).freeze,
+      label: "requiresSubscription".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :reservationFor,
+      comment: %(The thing -- flight, event, restaurant,etc. being reserved.).freeze,
+      label: "reservationFor".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :reservationId,
+      comment: %(A unique identifier for the reservation.).freeze,
+      label: "reservationId".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :reservationStatus,
+      comment: %(The current status of the reservation.).freeze,
+      label: "reservationStatus".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:ReservationStatusType).freeze,
+      type: "rdf:Property".freeze
+    property :reservedTicket,
+      comment: %(A ticket associated with the reservation.).freeze,
+      label: "reservedTicket".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:Ticket).freeze,
+      type: "rdf:Property".freeze
+    property :responsibilities,
+      comment: %(Responsibilities associated with this role.).freeze,
+      label: "responsibilities".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :restPeriods,
+      comment: %(How often one should break from the activity.).freeze,
+      label: "restPeriods".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :result,
+      comment: %(The result produced in the action. e.g. John wrote *a book*.).freeze,
+      label: "result".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:Thing).freeze,
+      type: "rdf:Property".freeze
+    property :resultReview,
+      comment: %(A sub property of result. The review that resulted in the performing of the action.).freeze,
+      label: "resultReview".freeze,
+      "schema:domainIncludes" => %(schema:ReviewAction).freeze,
+      "schema:rangeIncludes" => %(schema:Review).freeze,
+      type: "rdf:Property".freeze
+    property :review,
+      comment: %(A review of the item.).freeze,
+      label: "review".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Review).freeze,
+      type: "rdf:Property".freeze
+    property :reviewBody,
+      comment: %(The actual body of the review.).freeze,
+      label: "reviewBody".freeze,
+      "schema:domainIncludes" => %(schema:Review).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :reviewCount,
+      comment: %(The count of total number of reviews.).freeze,
+      label: "reviewCount".freeze,
+      "schema:domainIncludes" => %(schema:AggregateRating).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :reviewRating,
+      comment: %(The rating given in this review. Note that reviews can themselves be rated. The <code>reviewRating</code> applies to rating given by the review. The <code>aggregateRating</code> property applies to the review itself, as a creative work.).freeze,
+      label: "reviewRating".freeze,
+      "schema:domainIncludes" => %(schema:Review).freeze,
+      "schema:rangeIncludes" => %(schema:Rating).freeze,
+      type: "rdf:Property".freeze
+    property :reviewedBy,
+      comment: %(People or organizations that have reviewed the content on this web page for accuracy and/or completeness.).freeze,
+      label: "reviewedBy".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :reviews,
+      comment: %(Review of the item \(legacy spelling; see singular form, review\).).freeze,
+      label: "reviews".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Review).freeze,
+      "schema:supercededBy" => %(schema:review).freeze,
+      type: "rdf:Property".freeze
+    property :riskFactor,
+      comment: %(A modifiable or non-modifiable factor that increases the risk of a patient contracting this condition, e.g. age,  coexisting condition.).freeze,
+      label: "riskFactor".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalRiskFactor).freeze,
+      type: "rdf:Property".freeze
+    property :risks,
+      comment: %(Specific physiologic risks associated to the plan.).freeze,
+      label: "risks".freeze,
+      "schema:domainIncludes" => %(schema:Diet).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :runsTo,
+      comment: %(The vasculature the lymphatic structure runs, or efferents, to.).freeze,
+      label: "runsTo".freeze,
+      "schema:domainIncludes" => %(schema:LymphaticVessel).freeze,
+      "schema:rangeIncludes" => %(schema:Vessel).freeze,
+      type: "rdf:Property".freeze
+    property :runtime,
+      comment: %(Runtime platform or script interpreter dependencies \(Example - Java v1, Python2.3, .Net Framework 3.0\)).freeze,
+      label: "runtime".freeze,
+      "schema:domainIncludes" => %(schema:Code).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :safetyConsideration,
+      comment: %(Any potential safety concern associated with the supplement. May include interactions with other drugs and foods, pregnancy, breastfeeding, known adverse reactions, and documented efficacy of the supplement.).freeze,
+      label: "safetyConsideration".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :salaryCurrency,
+      comment: %(The currency \(coded using ISO 4217, http://en.wikipedia.org/wiki/ISO_4217 used for the main salary information in this job posting.).freeze,
+      label: "salaryCurrency".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :sameAs,
+      comment: %(URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Freebase page, or official website.).freeze,
+      label: "sameAs".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :sampleType,
+      comment: %(Full \(compile ready\) solution, code snippet, inline code, scripts, template.).freeze,
+      label: "sampleType".freeze,
+      "schema:domainIncludes" => %(schema:Code).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :saturatedFatContent,
+      comment: %(The number of grams of saturated fat.).freeze,
+      label: "saturatedFatContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :scheduledTime,
+      comment: %(The time the object is scheduled to.).freeze,
+      label: "scheduledTime".freeze,
+      "schema:domainIncludes" => %(schema:PlanAction).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :screenshot,
+      comment: %(A link to a screenshot image of the app.).freeze,
+      label: "screenshot".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      type: "rdf:Property".freeze
+    property :season,
+      comment: %(A season in a tv/radio series.).freeze,
+      label: "season".freeze,
+      "schema:domainIncludes" => %(schema:Series).freeze,
+      "schema:rangeIncludes" => %(schema:Season).freeze,
+      type: "rdf:Property".freeze
+    property :seasonNumber,
+      comment: %(Position of the season within an ordered group of seasons.).freeze,
+      label: "seasonNumber".freeze,
+      "schema:domainIncludes" => %(schema:Season).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :seasons,
+      comment: %(A season in a tv/radio series. \(legacy spelling; see singular form, season\)).freeze,
+      label: "seasons".freeze,
+      "schema:domainIncludes" => %(schema:Series).freeze,
+      "schema:rangeIncludes" => %(schema:Season).freeze,
+      "schema:supercededBy" => %(schema:season).freeze,
+      type: "rdf:Property".freeze
+    property :seatNumber,
+      comment: %(The location of the reserved seat \(e.g., 27\).).freeze,
+      label: "seatNumber".freeze,
+      "schema:domainIncludes" => %(schema:Seat).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :seatRow,
+      comment: %(The row location of the reserved seat \(e.g., B\).).freeze,
+      label: "seatRow".freeze,
+      "schema:domainIncludes" => %(schema:Seat).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :seatSection,
+      comment: %(The section location of the reserved seat \(e.g. Orchestra\).).freeze,
+      label: "seatSection".freeze,
+      "schema:domainIncludes" => %(schema:Seat).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :seatingType,
+      comment: %(The type/class of the seat.).freeze,
+      label: "seatingType".freeze,
+      "schema:domainIncludes" => %(schema:Seat).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :secondaryPrevention,
+      comment: %(A preventative therapy used to prevent reoccurrence of the medical condition after an initial episode of the condition.).freeze,
+      label: "secondaryPrevention".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTherapy).freeze,
+      type: "rdf:Property".freeze
+    property :seeks,
+      comment: %(A pointer to products or services sought by the organization or person \(demand\).).freeze,
+      label: "seeks".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Demand).freeze,
+      type: "rdf:Property".freeze
+    property :seller,
+      comment: %(The organization or person making the offer.).freeze,
+      label: "seller".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :sender,
+      comment: %(A sub property of participant. The participant who is at the sending end of the action.).freeze,
+      label: "sender".freeze,
+      "schema:domainIncludes" => %(schema:ReceiveAction).freeze,
+      "schema:rangeIncludes" => %(schema:Audience).freeze,
+      type: "rdf:Property".freeze
+    property :sensoryUnit,
+      comment: %(The neurological pathway extension that inputs and sends information to the brain or spinal cord.).freeze,
+      label: "sensoryUnit".freeze,
+      "schema:domainIncludes" => %(schema:Nerve).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :serialNumber,
+      comment: %(The serial number or any alphanumeric identifier of a particular product. When attached to an offer, it is a shortcut for the serial number of the product included in the offer.).freeze,
+      label: "serialNumber".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :seriousAdverseOutcome,
+      comment: %(A possible serious complication and/or serious side effect of this therapy. Serious adverse outcomes include those that are life-threatening; result in death, disability, or permanent damage; require hospitalization or prolong existing hospitalization; cause congenital anomalies or birth defects; or jeopardize the patient and may require medical or surgical intervention to prevent one of the outcomes in this definition.).freeze,
+      label: "seriousAdverseOutcome".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTherapy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :servesCuisine,
+      comment: %(The cuisine of the restaurant.).freeze,
+      label: "servesCuisine".freeze,
+      "schema:domainIncludes" => %(schema:FoodEstablishment).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :serviceArea,
+      comment: %(The geographic area where the service is provided.).freeze,
+      label: "serviceArea".freeze,
+      "schema:domainIncludes" => %(schema:Service).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :serviceAudience,
+      comment: %(The audience eligible for this service.).freeze,
+      label: "serviceAudience".freeze,
+      "schema:domainIncludes" => %(schema:Service).freeze,
+      "schema:rangeIncludes" => %(schema:Audience).freeze,
+      type: "rdf:Property".freeze
+    property :serviceLocation,
+      comment: %(The location \(e.g. civic structure, local business, etc.\) where a person can go to access the service.).freeze,
+      label: "serviceLocation".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :serviceOperator,
+      comment: %(The operating organization, if different from the provider.  This enables the representation of services that are provided by an organization, but operated by another organization like a subcontractor.).freeze,
+      label: "serviceOperator".freeze,
+      "schema:domainIncludes" => %(schema:GovernmentService).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :servicePhone,
+      comment: %(The phone number to use to access the service.).freeze,
+      label: "servicePhone".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPoint).freeze,
+      type: "rdf:Property".freeze
+    property :servicePostalAddress,
+      comment: %(The address for accessing the service by mail.).freeze,
+      label: "servicePostalAddress".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:PostalAddress).freeze,
+      type: "rdf:Property".freeze
+    property :serviceSmsNumber,
+      comment: %(The number to access the service by text message.).freeze,
+      label: "serviceSmsNumber".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPoint).freeze,
+      type: "rdf:Property".freeze
+    property :serviceType,
+      comment: %(The type of service being offered, e.g. veterans' benefits, emergency relief, etc.).freeze,
+      label: "serviceType".freeze,
+      "schema:domainIncludes" => %(schema:Service).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :serviceUrl,
+      comment: %(The website to access the service.).freeze,
+      label: "serviceUrl".freeze,
+      "schema:domainIncludes" => %(schema:ServiceChannel).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :servingSize,
+      comment: %(The serving size, in terms of the number of volume or mass.).freeze,
+      label: "servingSize".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :sibling,
+      comment: %(A sibling of the person.).freeze,
+      label: "sibling".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :siblings,
+      comment: %(A sibling of the person \(legacy spelling; see singular form, sibling\).).freeze,
+      label: "siblings".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:sibling).freeze,
+      type: "rdf:Property".freeze
+    property :signDetected,
+      comment: %(A sign detected by the test.).freeze,
+      label: "signDetected".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTest).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalSign).freeze,
+      type: "rdf:Property".freeze
+    property :signOrSymptom,
+      comment: %(A sign or symptom of this condition. Signs are objective or physically observable manifestations of the medical condition while symptoms are the subjective experience of the medical condition.).freeze,
+      label: "signOrSymptom".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalSignOrSymptom).freeze,
+      type: "rdf:Property".freeze
+    property :significance,
+      comment: %(The significance associated with the superficial anatomy; as an example, how characteristics of the superficial anatomy can suggest underlying medical conditions or courses of treatment.).freeze,
+      label: "significance".freeze,
+      "schema:domainIncludes" => %(schema:SuperficialAnatomy).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :significantLink,
+      comment: %(One of the more significant URLs on the page. Typically, these are the non-navigation links that are clicked on the most.).freeze,
+      label: "significantLink".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :significantLinks,
+      comment: %(The most significant URLs on the page. Typically, these are the non-navigation links that are clicked on the most \(legacy spelling; see singular form, significantLink\).).freeze,
+      label: "significantLinks".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      "schema:supercededBy" => %(schema:significantLink).freeze,
+      type: "rdf:Property".freeze
+    property :skills,
+      comment: %(Skills required to fulfill this role.).freeze,
+      label: "skills".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :sku,
+      comment: %(The Stock Keeping Unit \(SKU\), i.e. a merchant-specific identifier for a product or service, or the product to which the offer refers.).freeze,
+      label: "sku".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :sodiumContent,
+      comment: %(The number of milligrams of sodium.).freeze,
+      label: "sodiumContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :softwareVersion,
+      comment: %(Version of the software instance.).freeze,
+      label: "softwareVersion".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :source,
+      comment: %(The anatomical or organ system that the artery originates from.).freeze,
+      label: "source".freeze,
+      "schema:domainIncludes" => %(schema:Artery).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :sourceOrganization,
+      comment: %(The Organization on whose behalf the creator was working.).freeze,
+      label: "sourceOrganization".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :sourcedFrom,
+      comment: %(The neurological pathway that originates the neurons.).freeze,
+      label: "sourcedFrom".freeze,
+      "schema:domainIncludes" => %(schema:Nerve).freeze,
+      "schema:rangeIncludes" => %(schema:BrainStructure).freeze,
+      type: "rdf:Property".freeze
+    property :spatial,
+      comment: %(The range of spatial applicability of a dataset, e.g. for a dataset of New York weather, the state of New York.).freeze,
+      label: "spatial".freeze,
+      "schema:domainIncludes" => %(schema:Dataset).freeze,
+      "schema:rangeIncludes" => %(schema:Place).freeze,
+      type: "rdf:Property".freeze
+    property :specialCommitments,
+      comment: %(Any special commitments associated with this job posting. Valid entries include VeteranCommit, MilitarySpouseCommit, etc.).freeze,
+      label: "specialCommitments".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :specialty,
+      comment: %(One of the domain specialities to which this web page's content applies.).freeze,
+      label: "specialty".freeze,
+      "schema:domainIncludes" => %(schema:WebPage).freeze,
+      "schema:rangeIncludes" => %(schema:Specialty).freeze,
+      type: "rdf:Property".freeze
+    property :sponsor,
+      comment: %(Sponsor of the study.).freeze,
+      label: "sponsor".freeze,
+      "schema:domainIncludes" => %(schema:MedicalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :sportsActivityLocation,
+      comment: %(A sub property of location. The sports activity location where this action occurred.).freeze,
+      label: "sportsActivityLocation".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:SportsActivityLocation).freeze,
+      type: "rdf:Property".freeze
+    property :sportsEvent,
+      comment: %(A sub property of location. The sports event where this action occurred.).freeze,
+      label: "sportsEvent".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:SportsEvent).freeze,
+      type: "rdf:Property".freeze
+    property :sportsTeam,
+      comment: %(A sub property of participant. The sports team that participated on this action.).freeze,
+      label: "sportsTeam".freeze,
+      "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
+      "schema:rangeIncludes" => %(schema:SportsTeam).freeze,
+      type: "rdf:Property".freeze
+    property :spouse,
+      comment: %(The person's spouse.).freeze,
+      label: "spouse".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :stage,
+      comment: %(The stage of the condition, if applicable.).freeze,
+      label: "stage".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalConditionStage).freeze,
+      type: "rdf:Property".freeze
+    property :stageAsNumber,
+      comment: %(The stage represented as a number, e.g. 3.).freeze,
+      label: "stageAsNumber".freeze,
+      "schema:domainIncludes" => %(schema:MedicalConditionStage).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :startDate,
+      comment: %(The start date and time of the event or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
+      label: "startDate".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :startTime,
+      comment: %(When the Action was performed: start time. This is for actions that span a period of time. e.g. John wrote a book from *January* to December.).freeze,
+      label: "startTime".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :status,
+      comment: %(The status of the study \(enumerated\).).freeze,
+      label: "status".freeze,
+      "schema:domainIncludes" => %(schema:MedicalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalStudyStatus).freeze,
+      type: "rdf:Property".freeze
+    property :stepValue,
+      comment: %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze,
+      label: "stepValue".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :storageRequirements,
+      comment: %(Storage requirements \(free space required\).).freeze,
+      label: "storageRequirements".freeze,
+      "schema:domainIncludes" => %(schema:SoftwareApplication).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :streetAddress,
+      comment: %(The street address. For example, 1600 Amphitheatre Pkwy.).freeze,
+      label: "streetAddress".freeze,
+      "schema:domainIncludes" => %(schema:PostalAddress).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :strengthUnit,
+      comment: %(The units of an active ingredient's strength, e.g. mg.).freeze,
+      label: "strengthUnit".freeze,
+      "schema:domainIncludes" => %(schema:DrugStrength).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :strengthValue,
+      comment: %(The value of an active ingredient's strength, e.g. 325.).freeze,
+      label: "strengthValue".freeze,
+      "schema:domainIncludes" => %(schema:DrugStrength).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :structuralClass,
+      comment: %(The name given to how bone physically connects to each other.).freeze,
+      label: "structuralClass".freeze,
+      "schema:domainIncludes" => %(schema:Joint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :study,
+      comment: %(A medical study or trial related to this entity.).freeze,
+      label: "study".freeze,
+      "schema:domainIncludes" => %(schema:MedicalEntity).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalStudy).freeze,
+      type: "rdf:Property".freeze
+    property :studyDesign,
+      comment: %(Specifics about the observational study design \(enumerated\).).freeze,
+      label: "studyDesign".freeze,
+      "schema:domainIncludes" => %(schema:MedicalObservationalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalObservationalStudyDesign).freeze,
+      type: "rdf:Property".freeze
+    property :studyLocation,
+      comment: %(The location in which the study is taking/took place.).freeze,
+      label: "studyLocation".freeze,
+      "schema:domainIncludes" => %(schema:MedicalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :studySubject,
+      comment: %(A subject of the study, i.e. one of the medical conditions, therapies, devices, drugs, etc. investigated by the study.).freeze,
+      label: "studySubject".freeze,
+      "schema:domainIncludes" => %(schema:MedicalStudy).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :subEvent,
+      comment: %(An Event that is part of this event. For example, a conference event includes many presentations, each of which is a subEvent of the conference.).freeze,
+      label: "subEvent".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Event).freeze,
+      type: "rdf:Property".freeze
+    property :subEvents,
+      comment: %(Events that are a part of this event. For example, a conference event includes many presentations, each subEvents of the conference \(legacy spelling; see singular form, subEvent\).).freeze,
+      label: "subEvents".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Event).freeze,
+      "schema:supercededBy" => %(schema:subEvent).freeze,
+      type: "rdf:Property".freeze
+    property :subOrganization,
+      comment: %(A relationship between two organizations where the first includes the second, e.g., as a subsidiary. See also: the more specific 'department' property.).freeze,
+      label: "subOrganization".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :subReservation,
+      comment: %(The individual reservations included in the package. Typically a repeated property.).freeze,
+      label: "subReservation".freeze,
+      "schema:domainIncludes" => %(schema:ReservationPackage).freeze,
+      "schema:rangeIncludes" => %(schema:Reservation).freeze,
+      type: "rdf:Property".freeze
+    property :subStageSuffix,
+      comment: %(The substage, e.g. 'a' for Stage IIIa.).freeze,
+      label: "subStageSuffix".freeze,
+      "schema:domainIncludes" => %(schema:MedicalConditionStage).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :subStructure,
+      comment: %(Component \(sub-\)structure\(s\) that comprise this anatomical structure.).freeze,
+      label: "subStructure".freeze,
+      "schema:domainIncludes" => %(schema:AnatomicalStructure).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :subTest,
+      comment: %(A component test of the panel.).freeze,
+      label: "subTest".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTestPanel).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTest).freeze,
+      type: "rdf:Property".freeze
+    property :subtype,
+      comment: %(A more specific type of the condition, where applicable, for example 'Type 1 Diabetes', 'Type 2 Diabetes', or 'Gestational Diabetes' for Diabetes.).freeze,
+      label: "subtype".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :successorOf,
+      comment: %(A pointer from a newer variant of a product  to its previous, often discontinued predecessor.).freeze,
+      label: "successorOf".freeze,
+      "schema:domainIncludes" => %(schema:ProductModel).freeze,
+      "schema:rangeIncludes" => %(schema:ProductModel).freeze,
+      type: "rdf:Property".freeze
+    property :sugarContent,
+      comment: %(The number of grams of sugar.).freeze,
+      label: "sugarContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :suggestedAnswer,
+      comment: %(An answer \(possibly one of several, possibly incorrect\) to a Question, e.g. on a Question/Answer site, often collected in a QAPage.).freeze,
+      label: "suggestedAnswer".freeze,
+      "schema:domainIncludes" => %(schema:Question).freeze,
+      "schema:rangeIncludes" => %(schema:Answer).freeze,
+      subPropertyOf: "schema:answer".freeze,
+      type: "rdf:Property".freeze
+    property :suggestedGender,
+      comment: %(The gender of the person or audience.).freeze,
+      label: "suggestedGender".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :suggestedMaxAge,
+      comment: %(Maximal age recommended for viewing content.).freeze,
+      label: "suggestedMaxAge".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :suggestedMinAge,
+      comment: %(Minimal age recommended for viewing content.).freeze,
+      label: "suggestedMinAge".freeze,
+      "schema:domainIncludes" => %(schema:PeopleAudience).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :superEvent,
+      comment: %(An event that this event is a part of. For example, a collection of individual music performances might each have a music festival as their superEvent.).freeze,
+      label: "superEvent".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:Event).freeze,
+      type: "rdf:Property".freeze
+    property :supplyTo,
+      comment: %(The area to which the artery supplies blood.).freeze,
+      label: "supplyTo".freeze,
+      "schema:domainIncludes" => %(schema:Artery).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :target,
+      comment: %(Indicates a target EntryPoint for an Action.).freeze,
+      label: "target".freeze,
+      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:rangeIncludes" => %(schema:EntryPoint).freeze,
+      type: "rdf:Property".freeze
+    property :targetDescription,
+      comment: %(The description of a node in an established educational framework.).freeze,
+      label: "targetDescription".freeze,
+      "schema:domainIncludes" => %(schema:AlignmentObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :targetName,
+      comment: %(The name of a node in an established educational framework.).freeze,
+      label: "targetName".freeze,
+      "schema:domainIncludes" => %(schema:AlignmentObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :targetPlatform,
+      comment: %(Type of app development: phone, Metro style, desktop, XBox, etc.).freeze,
+      label: "targetPlatform".freeze,
+      "schema:domainIncludes" => %(schema:APIReference).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :targetPopulation,
+      comment: %(Characteristics of the population for which this is intended, or which typically uses it, e.g. 'adults'.).freeze,
+      label: "targetPopulation".freeze,
+      "schema:domainIncludes" => %(schema:DietarySupplement).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :targetProduct,
+      comment: %(Target Operating System / Product to which the code applies.  If applies to several versions, just the product name can be used.).freeze,
+      label: "targetProduct".freeze,
+      "schema:domainIncludes" => %(schema:Code).freeze,
+      "schema:rangeIncludes" => %(schema:SoftwareApplication).freeze,
+      type: "rdf:Property".freeze
+    property :targetUrl,
+      comment: %(The URL of a node in an established educational framework.).freeze,
+      label: "targetUrl".freeze,
+      "schema:domainIncludes" => %(schema:AlignmentObject).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :taxID,
+      comment: %(The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.).freeze,
+      label: "taxID".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :telephone,
+      comment: %(The telephone number.).freeze,
+      label: "telephone".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :temporal,
+      comment: %(The range of temporal applicability of a dataset, e.g. for a 2011 census dataset, the year 2011 \(in ISO 8601 time interval format\).).freeze,
+      label: "temporal".freeze,
+      "schema:domainIncludes" => %(schema:Dataset).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :text,
+      comment: %(The textual content of this CreativeWork.).freeze,
+      label: "text".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :thumbnail,
+      comment: %(Thumbnail image for an image or video.).freeze,
+      label: "thumbnail".freeze,
+      "schema:domainIncludes" => %(schema:ImageObject).freeze,
+      "schema:rangeIncludes" => %(schema:ImageObject).freeze,
+      type: "rdf:Property".freeze
+    property :thumbnailUrl,
+      comment: %(A thumbnail image relevant to the Thing.).freeze,
+      label: "thumbnailUrl".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :tickerSymbol,
+      comment: %(The exchange traded instrument associated with a Corporation object. The tickerSymbol is expressed as an exchange and an instrument name separated by a space character. For the exchange component of the tickerSymbol attribute, we reccommend using the controlled vocaulary of Market Identifier Codes \(MIC\) specified in ISO15022.).freeze,
+      label: "tickerSymbol".freeze,
+      "schema:domainIncludes" => %(schema:Corporation).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :ticketNumber,
+      comment: %(The unique identifier for the ticket.).freeze,
+      label: "ticketNumber".freeze,
+      "schema:domainIncludes" => %(schema:Ticket).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :ticketToken,
+      comment: %(Reference to an asset \(e.g., Barcode, QR code image or PDF\) usable for entrance.).freeze,
+      label: "ticketToken".freeze,
+      "schema:domainIncludes" => %(schema:Ticket).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :ticketedSeat,
+      comment: %(The seat associated with the ticket.).freeze,
+      label: "ticketedSeat".freeze,
+      "schema:domainIncludes" => %(schema:Ticket).freeze,
+      "schema:rangeIncludes" => %(schema:Seat).freeze,
+      type: "rdf:Property".freeze
+    property :timeRequired,
+      comment: %(Approximate or typical time it takes to work with or through this learning resource for the typical intended target audience, e.g. 'P30M', 'P1H25M'.).freeze,
+      label: "timeRequired".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :tissueSample,
+      comment: %(The type of tissue sample required for the test.).freeze,
+      label: "tissueSample".freeze,
+      "schema:domainIncludes" => %(schema:PathologyTest).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :title,
+      comment: %(The title of the job.).freeze,
+      label: "title".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :toLocation,
+      comment: %(A sub property of location. The final location of the object or the agent after the action.).freeze,
+      label: "toLocation".freeze,
+      "schema:domainIncludes" => %(schema:InsertAction).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :totalPrice,
+      comment: %(The total price for the reservation or ticket, including applicable taxes, shipping, etc.).freeze,
+      label: "totalPrice".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :totalTime,
+      comment: %(The total time it takes to prepare and cook the recipe, in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 duration format</a>.).freeze,
+      label: "totalTime".freeze,
+      "schema:domainIncludes" => %(schema:Recipe).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :track,
+      comment: %(A music recording \(track\)&#x2014;usually a single song.).freeze,
+      label: "track".freeze,
+      "schema:domainIncludes" => %(schema:MusicPlaylist).freeze,
+      "schema:rangeIncludes" => %(schema:MusicRecording).freeze,
+      type: "rdf:Property".freeze
+    property :trackingNumber,
+      comment: %(Shipper tracking number.).freeze,
+      label: "trackingNumber".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :trackingUrl,
+      comment: %(Tracking url for the parcel delivery.).freeze,
+      label: "trackingUrl".freeze,
+      "schema:domainIncludes" => %(schema:ParcelDelivery).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :tracks,
+      comment: %(A music recording \(track\)&#x2014;usually a single song \(legacy spelling; see singular form, track\).).freeze,
+      label: "tracks".freeze,
+      "schema:domainIncludes" => %(schema:MusicPlaylist).freeze,
+      "schema:rangeIncludes" => %(schema:MusicRecording).freeze,
+      "schema:supercededBy" => %(schema:track).freeze,
+      type: "rdf:Property".freeze
+    property :trailer,
+      comment: %(The trailer of a movie or tv/radio series, season, or episode.).freeze,
+      label: "trailer".freeze,
+      "schema:domainIncludes" => %(schema:Movie).freeze,
+      "schema:rangeIncludes" => %(schema:VideoObject).freeze,
+      type: "rdf:Property".freeze
+    property :trainName,
+      comment: %(The name of the train \(e.g. The Orient Express\).).freeze,
+      label: "trainName".freeze,
+      "schema:domainIncludes" => %(schema:TrainTrip).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :trainNumber,
+      comment: %(The unique identifier for the train.).freeze,
+      label: "trainNumber".freeze,
+      "schema:domainIncludes" => %(schema:TrainTrip).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :transFatContent,
+      comment: %(The number of grams of trans fat.).freeze,
+      label: "transFatContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :transcript,
+      comment: %(If this MediaObject is an AudioObject or VideoObject, the transcript of that object.).freeze,
+      label: "transcript".freeze,
+      "schema:domainIncludes" => %(schema:AudioObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :transmissionMethod,
+      comment: %(How the disease spreads, either as a route or vector, for example 'direct contact', 'Aedes aegypti', etc.).freeze,
+      label: "transmissionMethod".freeze,
+      "schema:domainIncludes" => %(schema:InfectiousDisease).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :trialDesign,
+      comment: %(Specifics about the trial design \(enumerated\).).freeze,
+      label: "trialDesign".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTrial).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTrialDesign).freeze,
+      type: "rdf:Property".freeze
+    property :tributary,
+      comment: %(The anatomical or organ system that the vein flows into; a larger structure that the vein connects to.).freeze,
+      label: "tributary".freeze,
+      "schema:domainIncludes" => %(schema:Vein).freeze,
+      "schema:rangeIncludes" => %(schema:AnatomicalStructure).freeze,
+      type: "rdf:Property".freeze
+    property :typeOfGood,
+      comment: %(The product that this structured value is referring to.).freeze,
+      label: "typeOfGood".freeze,
+      "schema:domainIncludes" => %(schema:OwnershipInfo).freeze,
+      "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :typicalAgeRange,
+      comment: %(The typical expected age range, e.g. '7-9', '11-'.).freeze,
+      label: "typicalAgeRange".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :typicalTest,
+      comment: %(A medical test typically performed given this condition.).freeze,
+      label: "typicalTest".freeze,
+      "schema:domainIncludes" => %(schema:MedicalCondition).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalTest).freeze,
+      type: "rdf:Property".freeze
+    property :underName,
+      comment: %(The person or organization the reservation or ticket is for.).freeze,
+      label: "underName".freeze,
+      "schema:domainIncludes" => %(schema:Reservation).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :unitCode,
+      comment: %(The unit of measurement given using the UN/CEFACT Common Code \(3 characters\).).freeze,
+      label: "unitCode".freeze,
+      "schema:domainIncludes" => %(schema:QuantitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :unsaturatedFatContent,
+      comment: %(The number of grams of unsaturated fat.).freeze,
+      label: "unsaturatedFatContent".freeze,
+      "schema:domainIncludes" => %(schema:NutritionInformation).freeze,
+      "schema:rangeIncludes" => %(schema:Mass).freeze,
+      type: "rdf:Property".freeze
+    property :uploadDate,
+      comment: %(Date when this media object was uploaded to this site.).freeze,
+      label: "uploadDate".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :upvoteCount,
+      comment: %(The number of upvotes this question has received from the community.).freeze,
+      label: "upvoteCount".freeze,
+      "schema:domainIncludes" => %(schema:Question).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :url,
+      comment: %(URL of the item.).freeze,
+      label: "url".freeze,
+      "schema:domainIncludes" => %(schema:Thing).freeze,
+      "schema:rangeIncludes" => %(schema:URL).freeze,
+      type: "rdf:Property".freeze
+    property :usedToDiagnose,
+      comment: %(A condition the test is used to diagnose.).freeze,
+      label: "usedToDiagnose".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTest).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalCondition).freeze,
+      type: "rdf:Property".freeze
+    property :usesDevice,
+      comment: %(Device used to perform the test.).freeze,
+      label: "usesDevice".freeze,
+      "schema:domainIncludes" => %(schema:MedicalTest).freeze,
+      "schema:rangeIncludes" => %(schema:MedicalDevice).freeze,
+      type: "rdf:Property".freeze
+    property :validFor,
+      comment: %(The time validity of the permit.).freeze,
+      label: "validFor".freeze,
+      "schema:domainIncludes" => %(schema:Permit).freeze,
+      "schema:rangeIncludes" => %(schema:Duration).freeze,
+      type: "rdf:Property".freeze
+    property :validFrom,
+      comment: %(The date when the item becomes valid.).freeze,
+      label: "validFrom".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :validIn,
+      comment: %(The geographic area where the permit is valid.).freeze,
+      label: "validIn".freeze,
+      "schema:domainIncludes" => %(schema:Permit).freeze,
+      "schema:rangeIncludes" => %(schema:AdministrativeArea).freeze,
+      type: "rdf:Property".freeze
+    property :validThrough,
+      comment: %(The end of the validity of offer, price specification, or opening hours data.).freeze,
+      label: "validThrough".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :validUntil,
+      comment: %(The date when the item is no longer valid.).freeze,
+      label: "validUntil".freeze,
+      "schema:domainIncludes" => %(schema:Permit).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
+    property :value,
+      comment: %(The value of the product characteristic.).freeze,
+      label: "value".freeze,
+      "schema:domainIncludes" => %(schema:QuantitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :valueAddedTaxIncluded,
+      comment: %(Specifies whether the applicable value-added tax \(VAT\) is included in the price specification or not.).freeze,
+      label: "valueAddedTaxIncluded".freeze,
+      "schema:domainIncludes" => %(schema:PriceSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :valueMaxLength,
+      comment: %(Specifies the allowed range for number of characters in a literal value.).freeze,
+      label: "valueMaxLength".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :valueMinLength,
+      comment: %(Specifies the minimum allowed range for number of characters in a literal value.).freeze,
+      label: "valueMinLength".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :valuePattern,
+      comment: %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze,
+      label: "valuePattern".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :valueReference,
+      comment: %(A pointer to a secondary value that provides additional information on the original value, e.g. a reference temperature.).freeze,
+      label: "valueReference".freeze,
+      "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
+      "schema:rangeIncludes" => %(schema:Enumeration).freeze,
+      type: "rdf:Property".freeze
+    property :valueRequired,
+      comment: %(Whether the property must be filled in to complete the action.  Default is false.).freeze,
+      label: "valueRequired".freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
+      "schema:rangeIncludes" => %(schema:Boolean).freeze,
+      type: "rdf:Property".freeze
+    property :vatID,
+      comment: %(The Value-added Tax ID of the organisation or person.).freeze,
+      label: "vatID".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :vendor,
+      comment: %(A sub property of participant. The seller. The participant/person/organization that sold the object.).freeze,
+      label: "vendor".freeze,
+      "schema:domainIncludes" => %(schema:BuyAction).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :version,
+      comment: %(The version of the CreativeWork embodied by a specified resource.).freeze,
+      label: "version".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :video,
+      comment: %(An embedded video object.).freeze,
+      label: "video".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => %(schema:VideoObject).freeze,
+      type: "rdf:Property".freeze
+    property :videoFrameSize,
+      comment: %(The frame size of the video.).freeze,
+      label: "videoFrameSize".freeze,
+      "schema:domainIncludes" => %(schema:VideoObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :videoQuality,
+      comment: %(The quality of the video.).freeze,
+      label: "videoQuality".freeze,
+      "schema:domainIncludes" => %(schema:VideoObject).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :warning,
+      comment: %(Any FDA or other warnings about the drug \(text or URL\).).freeze,
+      label: "warning".freeze,
+      "schema:domainIncludes" => %(schema:Drug).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :warranty,
+      comment: %(The warranty promise\(s\) included in the offer.).freeze,
+      label: "warranty".freeze,
+      "schema:domainIncludes" => %(schema:Offer).freeze,
+      "schema:rangeIncludes" => %(schema:WarrantyPromise).freeze,
+      type: "rdf:Property".freeze
+    property :warrantyPromise,
+      comment: %(The warranty promise\(s\) included in the offer.).freeze,
+      label: "warrantyPromise".freeze,
+      "schema:domainIncludes" => %(schema:BuyAction).freeze,
+      "schema:rangeIncludes" => %(schema:WarrantyPromise).freeze,
+      type: "rdf:Property".freeze
+    property :warrantyScope,
+      comment: %(The scope of the warranty promise.).freeze,
+      label: "warrantyScope".freeze,
+      "schema:domainIncludes" => %(schema:WarrantyPromise).freeze,
+      "schema:rangeIncludes" => %(schema:WarrantyScope).freeze,
+      type: "rdf:Property".freeze
+    property :webCheckinTime,
+      comment: %(The time when a passenger can check into the flight online.).freeze,
+      label: "webCheckinTime".freeze,
+      "schema:domainIncludes" => %(schema:Flight).freeze,
+      "schema:rangeIncludes" => %(schema:DateTime).freeze,
+      type: "rdf:Property".freeze
+    property :weight,
+      comment: %(The weight of the product.).freeze,
+      label: "weight".freeze,
+      "schema:domainIncludes" => %(schema:Product).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :width,
+      comment: %(The width of the item.).freeze,
+      label: "width".freeze,
+      "schema:domainIncludes" => %(schema:MediaObject).freeze,
+      "schema:rangeIncludes" => %(schema:Distance).freeze,
+      type: "rdf:Property".freeze
+    property :winner,
+      comment: %(A sub property of participant. The winner of the action.).freeze,
+      label: "winner".freeze,
+      "schema:domainIncludes" => %(schema:LoseAction).freeze,
+      "schema:rangeIncludes" => %(schema:Person).freeze,
+      type: "rdf:Property".freeze
+    property :wordCount,
+      comment: %(The number of words in the text of the Article.).freeze,
+      label: "wordCount".freeze,
+      "schema:domainIncludes" => %(schema:Article).freeze,
+      "schema:rangeIncludes" => %(schema:Integer).freeze,
+      type: "rdf:Property".freeze
+    property :workHours,
+      comment: %(The typical working hours for this job \(e.g. 1st shift, night shift, 8am-5pm\).).freeze,
+      label: "workHours".freeze,
+      "schema:domainIncludes" => %(schema:JobPosting).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :workLocation,
+      comment: %(A contact location for a person's place of work.).freeze,
+      label: "workLocation".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:ContactPoint).freeze,
+      type: "rdf:Property".freeze
+    property :workPerformed,
+      comment: %(A work performed in some event, for example a play performed in a TheaterEvent.).freeze,
+      label: "workPerformed".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => %(schema:CreativeWork).freeze,
+      type: "rdf:Property".freeze
+    property :workload,
+      comment: %(Quantitative measure of the physiologic output of the exercise; also referred to as energy expenditure.).freeze,
+      label: "workload".freeze,
+      "schema:domainIncludes" => %(schema:ExercisePlan).freeze,
+      "schema:rangeIncludes" => %(schema:Energy).freeze,
+      type: "rdf:Property".freeze
+    property :worksFor,
+      comment: %(Organizations that the person works for.).freeze,
+      label: "worksFor".freeze,
+      "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      type: "rdf:Property".freeze
+    property :worstRating,
+      comment: %(The lowest value allowed in this rating system. If worstRating is omitted, 1 is assumed.).freeze,
+      label: "worstRating".freeze,
+      "schema:domainIncludes" => %(schema:Rating).freeze,
+      "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :yearlyRevenue,
+      comment: %(The size of the business in annual revenue.).freeze,
+      label: "yearlyRevenue".freeze,
+      "schema:domainIncludes" => %(schema:BusinessAudience).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :yearsInOperation,
+      comment: %(The age of the business.).freeze,
+      label: "yearsInOperation".freeze,
+      "schema:domainIncludes" => %(schema:BusinessAudience).freeze,
+      "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
+      type: "rdf:Property".freeze
+
+    # Extra definitions
+    term :Abdomen,
+      comment: %(Abdomen).freeze,
+      label: "Abdomen".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :ActiveActionStatus,
+      comment: %(An in-progress action \(e.g, while watching the movie, or driving to a location\).).freeze,
+      label: "ActiveActionStatus".freeze,
+      type: "schema:ActionStatusType".freeze
+    term :ActiveNotRecruiting,
+      comment: %(Active, but not recruiting new participants.).freeze,
+      label: "ActiveNotRecruiting".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :AerobicActivity,
+      comment: %(Physical activity of relatively low intensity that depends primarily on the aerobic energy-generating process; during activity, the aerobic metabolism uses oxygen to adequately meet energy demands during exercise.).freeze,
+      label: "AerobicActivity".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :AnaerobicActivity,
+      comment: %(Physical activity that is of high-intensity which utilizes the anaerobic metabolism of the body.).freeze,
+      label: "AnaerobicActivity".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :Anesthesia,
+      comment: %(A specific branch of medical science that pertains to study of anesthetics and their application.).freeze,
+      label: "Anesthesia".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Appearance,
+      comment: %(Appearance).freeze,
+      label: "Appearance".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :Ayurvedic,
+      comment: %(A system of medicine that originated in India over thousands of years and that focuses on integrating and balancing the body, mind, and spirit.).freeze,
+      label: "Ayurvedic".freeze,
+      type: "schema:MedicineSystem".freeze
+    term :Balance,
+      comment: %(Physical activity that is engaged to help maintain posture and balance.).freeze,
+      label: "Balance".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :CT,
+      comment: %(X-ray computed tomography imaging.).freeze,
+      label: "CT".freeze,
+      type: "schema:MedicalImagingTechnique".freeze
+    term :Cardiovascular,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of heart and vasculature.).freeze,
+      label: "Cardiovascular".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :CardiovascularExam,
+      comment: %(Cardiovascular).freeze,
+      label: "CardiovascularExam".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :CaseSeries,
+      comment: %(A case series \(also known as a clinical series\) is a medical research study that tracks patients with a known exposure given similar treatment or examines their medical records for exposure and outcome. A case series can be retrospective or prospective and usually involves a smaller number of patients than the more powerful case-control studies or randomized controlled trials. Case series may be consecutive or non-consecutive, depending on whether all cases presenting to the reporting authors over a period of time were included, or only a selection.).freeze,
+      label: "CaseSeries".freeze,
+      type: "schema:MedicalObservationalStudyDesign".freeze
+    term :Chiropractic,
+      comment: %(A system of medicine focused on the relationship between the body's structure, mainly the spine, and its functioning.).freeze,
+      label: "Chiropractic".freeze,
+      type: "schema:MedicineSystem".freeze
+    term :Clinician,
+      comment: %(Medical clinicians, including practicing physicians and other medical professionals involved in clinical practice.).freeze,
+      label: "Clinician".freeze,
+      type: "schema:MedicalAudience".freeze
+    term :CohortStudy,
+      comment: %(Also known as a panel study. A cohort study is a form of longitudinal study used in medicine and social science. It is one type of study design and should be compared with a cross-sectional study.  A cohort is a group of people who share a common characteristic or experience within a defined period \(e.g., are born, leave school, lose their job, are exposed to a drug or a vaccine, etc.\). The comparison group may be the general population from which the cohort is drawn, or it may be another cohort of persons thought to have had little or no exposure to the substance under investigation, but otherwise similar. Alternatively, subgroups within the cohort may be compared with each other.).freeze,
+      label: "CohortStudy".freeze,
+      type: "schema:MedicalObservationalStudyDesign".freeze
+    term :CommunityHealth,
+      comment: %(Community health.).freeze,
+      label: "CommunityHealth".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Completed,
+      comment: %(Completed.).freeze,
+      label: "Completed".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :CompletedActionStatus,
+      comment: %(An action that has already taken place.).freeze,
+      label: "CompletedActionStatus".freeze,
+      type: "schema:ActionStatusType".freeze
+    term :CrossSectional,
+      comment: %(Studies carried out on pre-existing data \(usually from 'snapshot' surveys\), such as that collected by the Census Bureau. Sometimes called Prevalence Studies.).freeze,
+      label: "CrossSectional".freeze,
+      type: "schema:MedicalObservationalStudyDesign".freeze
+    term :DamagedCondition,
+      comment: %(Indicates that the item is damaged.).freeze,
+      label: "DamagedCondition".freeze,
+      type: "schema:OfferItemCondition".freeze
+    term :Dentistry,
+      comment: %(Dentistry.).freeze,
+      label: "Dentistry".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Dermatologic,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of skin.).freeze,
+      label: "Dermatologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Diagnostic,
+      comment: %(A medical device used for diagnostic purposes.).freeze,
+      label: "Diagnostic".freeze,
+      type: "schema:MedicalDevicePurpose".freeze
+    term :DietNutrition,
+      comment: %(Diet and nutrition.).freeze,
+      label: "DietNutrition".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Discontinued,
+      comment: %(Indicates that the item has been discontinued.).freeze,
+      label: "Discontinued".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :DoubleBlindedTrial,
+      comment: %(A trial design in which neither the researcher nor the patient knows the details of the treatment the patient was randomly assigned to.).freeze,
+      label: "DoubleBlindedTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :EBook,
+      comment: %(Book format: Ebook.).freeze,
+      label: "EBook".freeze,
+      type: "schema:BookFormatType".freeze
+    term :Ear,
+      comment: %(Ear).freeze,
+      label: "Ear".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :Emergency,
+      comment: %(A specific branch of medical science that is deals with the evaluation and initial treatment of medical conditions caused by trauma or sudden illness.).freeze,
+      label: "Emergency".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Endocrine,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of endocrine glands and their secretions.).freeze,
+      label: "Endocrine".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :EnrollingByInvitation,
+      comment: %(Enrolling participants by invitation only.).freeze,
+      label: "EnrollingByInvitation".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :EventCancelled,
+      comment: %(The event has been cancelled. If the event has multiple startDate values, all are assumed to be cancelled. Either startDate or previousStartDate may be used to specify the event’s cancelled date\(s\).).freeze,
+      label: "EventCancelled".freeze,
+      type: "schema:EventStatusType".freeze
+    term :EventPostponed,
+      comment: %(The event has been postponed and no new date has been set. The event’s previousStartDate should be set.).freeze,
+      label: "EventPostponed".freeze,
+      type: "schema:EventStatusType".freeze
+    term :EventRescheduled,
+      comment: %(The event has been rescheduled. The event’s previousStartDate should be set to the old date and the startDate should be set to the event’s new date. \(If the event has been rescheduled multiple times, the previousStartDate property may be repeated.\)).freeze,
+      label: "EventRescheduled".freeze,
+      type: "schema:EventStatusType".freeze
+    term :EventScheduled,
+      comment: %(The event is taking place or has taken place on the startDate as scheduled. Use of this value is optional, as it is assumed by default.).freeze,
+      label: "EventScheduled".freeze,
+      type: "schema:EventStatusType".freeze
+    term :EvidenceLevelA,
+      comment: %(Data derived from multiple randomized clinical trials or meta-analyses.).freeze,
+      label: "EvidenceLevelA".freeze,
+      type: "schema:MedicalEvidenceLevel".freeze
+    term :EvidenceLevelB,
+      comment: %(Data derived from a single randomized trial, or nonrandomized studies.).freeze,
+      label: "EvidenceLevelB".freeze,
+      type: "schema:MedicalEvidenceLevel".freeze
+    term :EvidenceLevelC,
+      comment: %(Only consensus opinion of experts, case studies, or standard-of-care.).freeze,
+      label: "EvidenceLevelC".freeze,
+      type: "schema:MedicalEvidenceLevel".freeze
+    term :Eye,
+      comment: %(Eye).freeze,
+      label: "Eye".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :FDAcategoryA,
+      comment: %(A designation by the US FDA signifying that adequate and well-controlled studies have failed to demonstrate a risk to the fetus in the first trimester of pregnancy \(and there is no evidence of risk in later trimesters\).).freeze,
+      label: "FDAcategoryA".freeze,
+      type: "schema:DrugPregnancyCategory".freeze
+    term :FDAcategoryB,
+      comment: %(A designation by the US FDA signifying that animal reproduction studies have failed to demonstrate a risk to the fetus and there are no adequate and well-controlled studies in pregnant women.).freeze,
+      label: "FDAcategoryB".freeze,
+      type: "schema:DrugPregnancyCategory".freeze
+    term :FDAcategoryC,
+      comment: %(A designation by the US FDA signifying that animal reproduction studies have shown an adverse effect on the fetus and there are no adequate and well-controlled studies in humans, but potential benefits may warrant use of the drug in pregnant women despite potential risks.).freeze,
+      label: "FDAcategoryC".freeze,
+      type: "schema:DrugPregnancyCategory".freeze
+    term :FDAcategoryD,
+      comment: %(A designation by the US FDA signifying that there is positive evidence of human fetal risk based on adverse reaction data from investigational or marketing experience or studies in humans, but potential benefits may warrant use of the drug in pregnant women despite potential risks.).freeze,
+      label: "FDAcategoryD".freeze,
+      type: "schema:DrugPregnancyCategory".freeze
+    term :FDAcategoryX,
+      comment: %(A designation by the US FDA signifying that studies in animals or humans have demonstrated fetal abnormalities and/or there is positive evidence of human fetal risk based on adverse reaction data from investigational or marketing experience, and the risks involved in use of the drug in pregnant women clearly outweigh potential benefits.).freeze,
+      label: "FDAcategoryX".freeze,
+      type: "schema:DrugPregnancyCategory".freeze
+    term :FDAnotEvaluated,
+      comment: %(A designation that the drug in question has not been assigned a pregnancy category designation by the US FDA.).freeze,
+      label: "FDAnotEvaluated".freeze,
+      type: "schema:DrugPregnancyCategory".freeze
+    term :False,
+      comment: %(The boolean value false).freeze,
+      label: "False".freeze,
+      type: "schema:Boolean".freeze
+    term :Flexibility,
+      comment: %(Physical activity that is engaged in to improve joint and muscle flexibility.).freeze,
+      label: "Flexibility".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :Gastroenterologic,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of digestive system.).freeze,
+      label: "Gastroenterologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Genetic,
+      comment: %(A specific branch of medical science that pertains to hereditary transmission and the variation of inherited characteristics and disorders.).freeze,
+      label: "Genetic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Genitourinary,
+      comment: %(Genitourinary).freeze,
+      label: "Genitourinary".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :Geriatric,
+      comment: %(A specific branch of medical science that is concerned with the diagnosis and treatment of diseases, debilities and provision of care to the aged.).freeze,
+      label: "Geriatric".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Gynecologic,
+      comment: %(A specific branch of medical science that pertains to the health care of women, particularly in the diagnosis and treatment of disorders affecting the female reproductive system.).freeze,
+      label: "Gynecologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Hardcover,
+      comment: %(Book format: Hardcover.).freeze,
+      label: "Hardcover".freeze,
+      type: "schema:BookFormatType".freeze
+    term :Head,
+      comment: %(Head).freeze,
+      label: "Head".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :HearingImpairedSupported,
+      comment: %(Uses devices to support users with hearing impairments.).freeze,
+      label: "HearingImpairedSupported".freeze,
+      type: "schema:ContactPointOption".freeze
+    term :Hematologic,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of blood and blood producing organs.).freeze,
+      label: "Hematologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Homeopathic,
+      comment: %(A system of medicine based on the principle that a disease can be cured by a substance that produces similar symptoms in healthy people.).freeze,
+      label: "Homeopathic".freeze,
+      type: "schema:MedicineSystem".freeze
+    term :InStock,
+      comment: %(Indicates that the item is in stock.).freeze,
+      label: "InStock".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :InStoreOnly,
+      comment: %(Indicates that the item is available only at physical locations.).freeze,
+      label: "InStoreOnly".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :Infectious,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of bacterial, viral, fungal and parasitic infections.).freeze,
+      label: "Infectious".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :InternationalTrial,
+      comment: %(An international trial.).freeze,
+      label: "InternationalTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :LaboratoryScience,
+      comment: %(Laboratory science.).freeze,
+      label: "LaboratoryScience".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :LeisureTimeActivity,
+      comment: %(Any physical activity engaged in for recreational purposes. Examples may include ballroom dancing, roller skating, canoeing, fishing, etc.).freeze,
+      label: "LeisureTimeActivity".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :LimitedAvailability,
+      comment: %(Indicates that the item has limited availability.).freeze,
+      label: "LimitedAvailability".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :Longitudinal,
+      comment: %(Unlike cross-sectional studies, longitudinal studies track the same people, and therefore the differences observed in those people are less likely to be the result of cultural differences across generations. Longitudinal studies are also used in medicine to uncover predictors of certain diseases.).freeze,
+      label: "Longitudinal".freeze,
+      type: "schema:MedicalObservationalStudyDesign".freeze
+    term :Lung,
+      comment: %(Lung).freeze,
+      label: "Lung".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :MRI,
+      comment: %(Magnetic resonance imaging.).freeze,
+      label: "MRI".freeze,
+      type: "schema:MedicalImagingTechnique".freeze
+    term :MedicalResearcher,
+      comment: %(Medical researchers.).freeze,
+      label: "MedicalResearcher".freeze,
+      type: "schema:MedicalAudience".freeze
+    term :Midwifery,
+      comment: %(Midwifery.).freeze,
+      label: "Midwifery".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :MultiCenterTrial,
+      comment: %(A trial that takes place at multiple centers.).freeze,
+      label: "MultiCenterTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :Musculoskeletal,
+      comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of muscles, ligaments and skeletal system.).freeze,
+      label: "Musculoskeletal".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :MusculoskeletalExam,
+      comment: %(Musculoskeletal).freeze,
+      label: "MusculoskeletalExam".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :Neck,
+      comment: %(Neck).freeze,
+      label: "Neck".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :Neuro,
+      comment: %(Neuro).freeze,
+      label: "Neuro".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :Neurologic,
+      comment: %(A specific branch of medical science that studies the nerves and nervous system and its respective disease states.).freeze,
+      label: "Neurologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :NewCondition,
+      comment: %(Indicates that the item is new.).freeze,
+      label: "NewCondition".freeze,
+      type: "schema:OfferItemCondition".freeze
+    term :NoninvasiveProcedure,
+      comment: %(A type of medical procedure that involves noninvasive techniques.).freeze,
+      label: "NoninvasiveProcedure".freeze,
+      type: "schema:MedicalProcedureType".freeze
+    term :Nose,
+      comment: %(Nose).freeze,
+      label: "Nose".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :NotYetRecruiting,
+      comment: %(Not yet recruiting.).freeze,
+      label: "NotYetRecruiting".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :Nursing,
+      comment: %(Nursing.).freeze,
+      label: "Nursing".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :OTC,
+      comment: %(Available over the counter.).freeze,
+      label: "OTC".freeze,
+      type: "schema:DrugPrescriptionStatus".freeze
+    term :Observational,
+      comment: %(An observational study design.).freeze,
+      label: "Observational".freeze,
+      type: "schema:MedicalObservationalStudyDesign".freeze
+    term :Obstetric,
+      comment: %(A specific branch of medical science that specializes in the care of women during the prenatal and postnatal care and with the delivery of the child.).freeze,
+      label: "Obstetric".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :OccupationalActivity,
+      comment: %(Any physical activity engaged in for job-related purposes. Examples may include waiting tables, maid service, carrying a mailbag, picking fruits or vegetables, construction work, etc.).freeze,
+      label: "OccupationalActivity".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :OccupationalTherapy,
+      comment: %(Occupational therapy.).freeze,
+      label: "OccupationalTherapy".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :OnSitePickup,
+      comment: %(A DeliveryMethod in which an item is collected on site, e.g. in a store or at a box office.).freeze,
+      label: "OnSitePickup".freeze,
+      type: "schema:DeliveryMethod".freeze
+    term :Oncologic,
+      comment: %(A specific branch of medical science that deals with benign and malignant tumors, including the study of their development, diagnosis, treatment and prevention.).freeze,
+      label: "Oncologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :OnlineOnly,
+      comment: %(Indicates that the item is available only online.).freeze,
+      label: "OnlineOnly".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :OpenTrial,
+      comment: %(A trial design in which the researcher knows the full details of the treatment, and so does the patient.).freeze,
+      label: "OpenTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :Optometic,
+      comment: %(Optometry.).freeze,
+      label: "Optometic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :OrderCancelled,
+      comment: %(OrderStatus representing cancellation of an order.).freeze,
+      label: "OrderCancelled".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderDelivered,
+      comment: %(OrderStatus representing successful delivery of an order.).freeze,
+      label: "OrderDelivered".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderInTransit,
+      comment: %(OrderStatus representing that an order is in transit.).freeze,
+      label: "OrderInTransit".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderPaymentDue,
+      comment: %(OrderStatus representing that payment is due on an order.).freeze,
+      label: "OrderPaymentDue".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderPickupAvailable,
+      comment: %(OrderStatus representing availability of an order for pickup.).freeze,
+      label: "OrderPickupAvailable".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderProblem,
+      comment: %(OrderStatus representing that there is a problem with the order.).freeze,
+      label: "OrderProblem".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderProcessing,
+      comment: %(OrderStatus representing that an order is being processed.).freeze,
+      label: "OrderProcessing".freeze,
+      type: "schema:OrderStatus".freeze
+    term :OrderReturned,
+      comment: %(OrderStatus representing that an order has been returned.).freeze,
+      label: "OrderReturned".freeze,
+      type: "schema:OrderStatus".freeze
+    term :Osteopathic,
+      comment: %(A system of medicine focused on promoting the body's innate ability to heal itself.).freeze,
+      label: "Osteopathic".freeze,
+      type: "schema:MedicineSystem".freeze
+    term :Otolaryngologic,
+      comment: %(A specific branch of medical science that is concerned with the ear, nose and throat and their respective disease states.).freeze,
+      label: "Otolaryngologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :OutOfStock,
+      comment: %(Indicates that the item is out of stock.).freeze,
+      label: "OutOfStock".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :PET,
+      comment: %(Positron emission tomography imaging.).freeze,
+      label: "PET".freeze,
+      type: "schema:MedicalImagingTechnique".freeze
+    term :Paperback,
+      comment: %(Book format: Paperback.).freeze,
+      label: "Paperback".freeze,
+      type: "schema:BookFormatType".freeze
+    term :Pathology,
+      comment: %(A specific branch of medical science that is concerned with the study of the cause, origin and nature of a disease state, including its consequences as a result of manifestation of the disease. In clinical care, the term is used to designate a branch of medicine using laboratory tests to diagnose and determine the prognostic significance of illness.).freeze,
+      label: "Pathology".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Patient,
+      comment: %(Patients.).freeze,
+      label: "Patient".freeze,
+      type: "schema:MedicalAudience".freeze
+    term :Pediatric,
+      comment: %(A specific branch of medical science that specializes in the care of infants, children and adolescents.).freeze,
+      label: "Pediatric".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :PercutaneousProcedure,
+      comment: %(A type of medical procedure that involves percutaneous techniques, where access to organs or tissue is achieved via needle-puncture of the skin. For example, catheter-based procedures like stent delivery.).freeze,
+      label: "PercutaneousProcedure".freeze,
+      type: "schema:MedicalProcedureType".freeze
+    term :PharmacySpecialty,
+      comment: %(Pharmacy.).freeze,
+      label: "PharmacySpecialty".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Physiotherapy,
+      comment: %(Physiotherapy.).freeze,
+      label: "Physiotherapy".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :PlaceboControlledTrial,
+      comment: %(A placebo-controlled trial design.).freeze,
+      label: "PlaceboControlledTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :PlasticSurgery,
+      comment: %(A specific branch of medical science that pertains to therapeutic or cosmetic repair or re-formation of missing, injured or malformed tissues or body parts by manual and instrumental means.).freeze,
+      label: "PlasticSurgery".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Podiatric,
+      comment: %(Podiatry.).freeze,
+      label: "Podiatric".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :PotentialActionStatus,
+      comment: %(A description of an action that is supported.).freeze,
+      label: "PotentialActionStatus".freeze,
+      type: "schema:ActionStatusType".freeze
+    term :PreOrder,
+      comment: %(Indicates that the item is available for pre-order.).freeze,
+      label: "PreOrder".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :PrescriptionOnly,
+      comment: %(Available by prescription only.).freeze,
+      label: "PrescriptionOnly".freeze,
+      type: "schema:DrugPrescriptionStatus".freeze
+    term :PrimaryCare,
+      comment: %(Primary care.).freeze,
+      label: "PrimaryCare".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Psychiatric,
+      comment: %(A specific branch of medical science that is concerned with the study, treatment, and prevention of mental illness, using both medical and psychological therapies.).freeze,
+      label: "Psychiatric".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :PublicHealth,
+      comment: %(Environment and public health.).freeze,
+      label: "PublicHealth".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Pulmonary,
+      comment: %(A specific branch of medical science that pertains to the study of the respiratory system and its respective disease states.).freeze,
+      label: "Pulmonary".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Radiograpy,
+      comment: %(Radiography.).freeze,
+      label: "Radiograpy".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :RandomizedTrial,
+      comment: %(A randomized trial design.).freeze,
+      label: "RandomizedTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :Recruiting,
+      comment: %(Recruiting participants.).freeze,
+      label: "Recruiting".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :RefurbishedCondition,
+      comment: %(Indicates that the item is refurbished.).freeze,
+      label: "RefurbishedCondition".freeze,
+      type: "schema:OfferItemCondition".freeze
+    term :Registry,
+      comment: %(A registry-based study design.).freeze,
+      label: "Registry".freeze,
+      type: "schema:MedicalObservationalStudyDesign".freeze
+    term :ReimbursementCap,
+      comment: %(The drug's cost represents the maximum reimbursement paid by an insurer for the drug.).freeze,
+      label: "ReimbursementCap".freeze,
+      type: "schema:DrugCostCategory".freeze
+    term :Renal,
+      comment: %(A specific branch of medical science that pertains to the study of the kidneys and its respective disease states.).freeze,
+      label: "Renal".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :Researcher,
+      comment: %(Researchers.).freeze,
+      label: "Researcher".freeze,
+      type: "schema:Audience".freeze
+    term :ReservationCancelled,
+      comment: %(The status for a previously confirmed reservation that is now cancelled.).freeze,
+      label: "ReservationCancelled".freeze,
+      type: "schema:ReservationStatusType".freeze
+    term :ReservationConfirmed,
+      comment: %(The status of a confirmed reservation.).freeze,
+      label: "ReservationConfirmed".freeze,
+      type: "schema:ReservationStatusType".freeze
+    term :ReservationHold,
+      comment: %(The status of a reservation on hold pending an update like credit card number or flight changes.).freeze,
+      label: "ReservationHold".freeze,
+      type: "schema:ReservationStatusType".freeze
+    term :ReservationPending,
+      comment: %(The status of a reservation when a request has been sent, but not confirmed.).freeze,
+      label: "ReservationPending".freeze,
+      type: "schema:ReservationStatusType".freeze
+    term :RespiratoryTherapy,
+      comment: %(Respiratory therapy.).freeze,
+      label: "RespiratoryTherapy".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :ResultsAvailable,
+      comment: %(Results are available.).freeze,
+      label: "ResultsAvailable".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :ResultsNotAvailable,
+      comment: %(Results are not available.).freeze,
+      label: "ResultsNotAvailable".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :Retail,
+      comment: %(The drug's cost represents the retail cost of the drug.).freeze,
+      label: "Retail".freeze,
+      type: "schema:DrugCostCategory".freeze
+    term :Rheumatologic,
+      comment: %(A specific branch of medical science that deals with the study and treatment of rheumatic, automimmune or joint diseases.).freeze,
+      label: "Rheumatologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :SingleBlindedTrial,
+      comment: %(A trial design in which the researcher knows which treatment the patient was randomly assigned to but the patient does not.).freeze,
+      label: "SingleBlindedTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :SingleCenterTrial,
+      comment: %(A trial that takes place at a single center.).freeze,
+      label: "SingleCenterTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :Skin,
+      comment: %(Skin).freeze,
+      label: "Skin".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :SoldOut,
+      comment: %(Indicates that the item has sold out.).freeze,
+      label: "SoldOut".freeze,
+      type: "schema:ItemAvailability".freeze
+    term :SpeechPathology,
+      comment: %(Speech pathology.).freeze,
+      label: "SpeechPathology".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :StrengthTraining,
+      comment: %(Physical activity that is engaged in to improve muscle and bone strength. Also referred to as resistance training.).freeze,
+      label: "StrengthTraining".freeze,
+      type: "schema:PhysicalActivityCategory".freeze
+    term :Surgical,
+      comment: %(A specific branch of medical science that pertains to treating diseases, injuries and deformities by manual and instrumental means.).freeze,
+      label: "Surgical".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :SurgicalProcedure,
+      comment: %(A type of medical procedure that involves invasive surgical techniques.).freeze,
+      label: "SurgicalProcedure".freeze,
+      type: "schema:MedicalProcedureType".freeze
+    term :Suspended,
+      comment: %(Suspended.).freeze,
+      label: "Suspended".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :Terminated,
+      comment: %(Terminated.).freeze,
+      label: "Terminated".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :Therapeutic,
+      comment: %(A medical device used for therapeutic purposes.).freeze,
+      label: "Therapeutic".freeze,
+      type: "schema:MedicalDevicePurpose".freeze
+    term :Throat,
+      comment: %(Throat).freeze,
+      label: "Throat".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :TollFree,
+      comment: %(The associated telephone number is toll free.).freeze,
+      label: "TollFree".freeze,
+      type: "schema:ContactPointOption".freeze
+    term :Toxicologic,
+      comment: %(A specific branch of medical science that is concerned with poisons, their nature, effects and detection and involved in the treatment of poisoning.).freeze,
+      label: "Toxicologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :TraditionalChinese,
+      comment: %(A system of medicine based on common theoretical concepts that originated in China and evolved over thousands of years, that uses herbs, acupuncture, exercise, massage, dietary therapy, and other methods to treat a wide range of conditions.).freeze,
+      label: "TraditionalChinese".freeze,
+      type: "schema:MedicineSystem".freeze
+    term :TripleBlindedTrial,
+      comment: %(A trial design in which neither the researcher, the person administering the therapy nor the patient knows the details of the treatment the patient was randomly assigned to.).freeze,
+      label: "TripleBlindedTrial".freeze,
+      type: "schema:MedicalTrialDesign".freeze
+    term :True,
+      comment: %(The boolean value true).freeze,
+      label: "True".freeze,
+      type: "schema:Boolean".freeze
+    term :Ultrasound,
+      comment: %(Ultrasound imaging.).freeze,
+      label: "Ultrasound".freeze,
+      type: "schema:MedicalImagingTechnique".freeze
+    term :Urologic,
+      comment: %(A specific branch of medical science that is concerned with the diagnosis and treatment of diseases pertaining to the urinary tract and the urogenital system.).freeze,
+      label: "Urologic".freeze,
+      type: "schema:MedicalSpecialty".freeze
+    term :UsedCondition,
+      comment: %(Indicates that the item is used.).freeze,
+      label: "UsedCondition".freeze,
+      type: "schema:OfferItemCondition".freeze
+    term :VitalSign,
+      comment: %(VitalSign).freeze,
+      label: "VitalSign".freeze,
+      type: "schema:PhysicalExam".freeze
+    term :WesternConventional,
+      comment: %(The conventional Western system of medicine, that aims to apply the best available evidence gained from the scientific method to clinical decision making. Also known as conventional or Western medicine.).freeze,
+      label: "WesternConventional".freeze,
+      type: "schema:MedicineSystem".freeze
+    term :Wholesale,
+      comment: %(The drug's cost represents the wholesale acquisition cost of the drug.).freeze,
+      label: "Wholesale".freeze,
+      type: "schema:DrugCostCategory".freeze
+    term :Withdrawn,
+      comment: %(Withdrawn.).freeze,
+      label: "Withdrawn".freeze,
+      type: "schema:MedicalStudyStatus".freeze
+    term :XRay,
+      comment: %(X-ray imaging.).freeze,
+      label: "XRay".freeze,
+      type: "schema:MedicalImagingTechnique".freeze
   end
 end

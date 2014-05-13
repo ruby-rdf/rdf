@@ -111,7 +111,7 @@ module RDF
     end
 
     # @private
-    def from_solution(solution)
+    def from_solution(solution, op = "property")
       uri_match = %r{\A#{@uri}(.*)}
       return if !solution.resource.uri? || (match = uri_match.match(solution.resource.to_s)).nil?
       name = match[1]
@@ -132,11 +132,40 @@ module RDF
         gsub(/\s+/m, ' ').
         gsub(/([\(\)])/, '\\\\\\1')
 
-      @output.write "    property #{name.to_sym.inspect}"
-      @output.write ", :label => '#{label}'" unless label.empty?
-      @output.write ", :comment =>\n      %(#{comment.scan(/\S.{0,60}\S(?=\s|$)|\S+/).join("\n        ")})" unless comment.empty?
+      @output.write "    #{op} #{name.to_sym.inspect}"
+      @output.write ", :label => '#{label}'.freeze" unless label.empty?
+      @output.write ", :comment =>\n      %(#{comment}).freeze" unless comment.empty?
       @output.puts
     rescue Encoding::UndefinedConversionError
+    end
+
+    ##
+    # Turn a node definition into a property/term expression
+    def from_node(name, attributes, term_type)
+      op = term_type == :property ? "property" : "term"
+
+      components = ["    #{op} #{name.to_sym.inspect}"]
+      attributes.keys.sort_by(&:to_s).each do |key|
+        value = attributes[key]
+        component = key.is_a?(Symbol) ? "#{key}: " : "#{key.inspect} => "
+        value = value.first if value.length == 1
+        component << if value.is_a?(Array)
+          '[' + value.map {|v| serialize_value(v, key)}.join("], [") + "]"
+        else
+          serialize_value(value, key)
+        end
+        components << component
+      end
+      @output.puts components.join(",\n      ")
+    end
+
+    def serialize_value(value, key)
+      case key
+      when :comment, String
+        "%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze"
+      else
+        "#{value.inspect}.freeze"
+      end
     end
 
     # Actually executes the load-and-emit process - useful when using this
@@ -149,94 +178,64 @@ module RDF
           class #{class_name} < #{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
-      classes = RDF::Query.new do
-        pattern [:resource, RDF.type, RDFS.Class]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      owl_classes = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.Class]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      class_defs = graph.query(classes).to_a + graph.query(owl_classes).to_a
-      unless class_defs.empty?
-        @output.puts "\n    # Class definitions"
-        class_defs.sort_by {|s| (s[:label] || s[:resource]).to_s}.each do |klass|
-          from_solution(klass)
+      json = ::JSON::LD::API.fromRdf(graph)
+      
+      # Split nodes into Class/Property/Datatype/Other
+      term_nodes = {
+        class: {},
+        property: {},
+        datatype: {},
+        other: {}
+      }
+      json.each do |node|
+        next unless node['@id'].start_with?(uri)
+        node_classification = case node['@type'].to_s
+        when /Class/    then :class
+        when /Property/ then :property
+        when /Datatype/ then :datatype
+        else                 :other
         end
-      end
 
-      properties = RDF::Query.new do
-        pattern [:resource, RDF.type, RDF.Property]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
+        name = node['@id'][uri.to_s.length..-1]
+        term_nodes[node_classification][name] = attributes = {}
 
-      dt_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.DatatypeProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      obj_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.ObjectProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      ann_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.AnnotationProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      ont_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.OntologyProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-      prop_defs = graph.query(properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(dt_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(obj_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(ann_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(ont_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      unless prop_defs.empty?
-        @output.puts "\n    # Property definitions"
-        prop_defs.each do |prop|
-          from_solution(prop)
-        end
-      end
-
-
-      datatypes = RDF::Query.new do
-        pattern [:resource, RDF.type, RDFS.Datatype]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      dt_defs = graph.query(datatypes).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      unless dt_defs.empty?
-        @output.puts "\n    # Datatype definitions"
-        dt_defs.each do |dt|
-          from_solution(dt)
-        end
-      end
-
-      unless @extra.empty?
-        @output.puts "\n    # Extra definitions"
-        case @extra
-        when Array
-          @extra.each do |extra|
-            @output.puts "    property #{extra.to_sym.inspect}"
+        node.each do |key, values|
+          prop = case key
+          when "@id"                   then next
+          when "@type"                 then :type
+          when RDF::RDFS.subClassOf    then :subClassOf
+          when RDF::RDFS.subPropertyOf then :subPropertyOf
+          when RDF::RDFS.range         then :range
+          when RDF::RDFS.domain        then :domain
+          when RDF::RDFS.comment       then :comment
+          when RDF::RDFS.label         then :label
+          else                         RDF::URI(key).pname
           end
-        when Hash
-          @extra.each do |n, opts|
-            @output.puts "    property #{n.to_sym.inspect}, #{opts.inspect}"
-          end
+
+          values = values.map do |v|
+            if v.is_a?(Hash) && v.keys == %w(@id)
+              RDF::URI(v['@id']).pname
+            elsif v.is_a?(Hash) && v.has_key?('@value')
+              # Only take values in English, or having no language, for now
+              v['@value'] if v.fetch('@language', "en") == "en"
+            else
+              prop == :type ? RDF::URI(v).pname : v
+            end
+          end.compact
+          next if values.empty?
+          attributes[prop] = values.length > 1 ? values.first : values
         end
+      end
+
+      {
+        class: "Class definitions",
+        property: "Property definitions",
+        datatype: "Datatype definitions",
+        other: "Extra definitions"
+      }.each do |tt, comment|
+        next if term_nodes[tt].empty?
+        @output.puts "\n    # #{comment}"
+        term_nodes[tt].each {|name, attributes| from_node name, attributes, tt}
       end
 
       # Query the vocabulary to extract property and class definitions

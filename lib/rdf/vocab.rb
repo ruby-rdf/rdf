@@ -4,6 +4,9 @@ module RDF
   #
   # A {Vocabulary} can also serve as a Domain Specific Language (DSL) for generating an RDF Graph definition for the vocabulary (see {RDF::Vocabulary#to_graph}).
   #
+  # ### Defining a vocabulary using the DSL
+  # Vocabularies can be defined based on {RDF::Vocabulary} or {RDF::StrictVocabulary} using a simple Domain Specific Language (DSL). Terms of the vocabulary are specified using either `property` or `term` (alias), with the attributes of the term listed in a hash. See {property} for description of the hash.
+  #
   # ### Vocabularies:
   #
   # The following vocabularies are pre-defined for your convenience:
@@ -18,7 +21,7 @@ module RDF
   # * {RDF::FOAF}   - Friend of a Friend (FOAF)
   # * {RDF::GEO}    - WGS84 Geo Positioning (GEO)
   # * {RDF::GR}     - Good Relations
-  # * {RDF::HTTP}   - Hypertext Transfer Protocol (HTTP)
+  # * {RDF::HT}   - Hypertext Transfer Protocol (HTTP)
   # * {RDF::ICAL}   - iCal
   # * {RDF::MA}     - W3C Meda Annotations
   # * {RDF::OG}     - FaceBook OpenGraph
@@ -61,6 +64,15 @@ module RDF
   #   graph = RDF::RDFS.to_graph
   #   graph.dump(:ntriples)
   #
+  # @example Defining a simple vocabulary
+  #   class EX < RDF::StrictVocabulay("http://example/ns#")
+  #     term :Class,
+  #       label: "My Class",
+  #       comment: "Good to use as an example",
+  #       "rdf:type" => "rdfs:Class",
+  #       "rdfs:subClassOf" => "http://example/SuperClass"
+  #   end
+  #
   # @see http://www.w3.org/TR/curie/
   # @see http://en.wikipedia.org/wiki/QName
   class Vocabulary
@@ -99,9 +111,21 @@ module RDF
       #
       #   @param [String, #to_s] name
       #   @param [Hash{Symbol => Object}] options
-      #     Symbol forms are supported for `:label` and `:comment`. Any other values are expected to be {Term} with a {Term} or {Array<Term>} value. These can be used to regenerate the RDF definition of the vocabulary property/term
-      #   @option options [Literal, #to_s] :label
-      #   @option options [Literal, #to_s] :comment
+      #     Any other values are expected to be String which expands to a {URI} using built-in vocabulary prefixes. The value is a `String` or `Array<String>` which is interpreted according to the `range` of the associated property.
+      #   @option options [String, Array<String>] :label
+      #     Shortcut for `rdfs:label`, values are String interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :comment
+      #     Shortcut for `rdfs:comment`, values are String interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :subClassOf
+      #     Shortcut for `rdfs:subClassOf`, values are String interpreted as a {URI}.
+      #   @option options [String, Array<String>] :subPropertyOf
+      #     Shortcut for `rdfs:subPropertyOf`, values are String interpreted as a {URI}.
+      #   @option options [String, Array<String>] :domain
+      #     Shortcut for `rdfs:domain`, values are String interpreted as a {URI}.
+      #   @option options [String, Array<String>] :range
+      #     Shortcut for `rdfs:range`, values are String interpreted as a {URI}.
+      #   @option options [String, Array<String>] :type
+      #     Shortcut for `rdf:type`, values are String interpreted as a {URI}.
       def property(*args)
         case args.length
         when 0
@@ -122,6 +146,20 @@ module RDF
       #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
       def properties
         props.keys
+      end
+
+      ##
+      # Attempt to expand a Compact IRI/PName/QName using loaded vocabularies
+      #
+      # @param [String, #to_s] pname
+      # @return [RDF::URI]
+      def expand_pname(pname)
+        prefix, suffix = pname.to_s.split(":", 2)
+        if prefix == "rdf"
+          RDF[suffix]
+        elsif vocab = RDF::Vocabulary.each.detect {|v| v.__name__ && v.__prefix__ == prefix.to_sym}
+          suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
+        end
       end
 
       ##
@@ -181,6 +219,21 @@ module RDF
           attributes.each do |prop, values|
             Array(values).each do |value|
               case prop
+              when :type
+                value = expand_pname(value) || RDF::URI(value)
+                block.call RDF::Statement(subject, RDF.type, value)
+              when :subClassOf
+                value = expand_pname(value) || RDF::URI(value)
+                block.call RDF::Statement(subject, RDFS.subClassOf, value)
+              when :subPropertyOf
+                value = expand_pname(value) || RDF::URI(value)
+                block.call RDF::Statement(subject, RDFS.subPropertyOf, value)
+              when :domain
+                value = expand_pname(value) || RDF::URI(value)
+                block.call RDF::Statement(subject, RDFS.domain, value)
+              when :range
+                value = expand_pname(value) || RDF::URI(value)
+                block.call RDF::Statement(subject, RDFS.range, value)
               when :label
                 block.call RDF::Statement(subject, RDFS.label, value)
               when :comment
@@ -218,7 +271,7 @@ module RDF
       alias_method :__name__, :name
 
       ##
-      # Returns a suggested CURIE/QName prefix for this vocabulary class.
+      # Returns a suggested CURIE/PName prefix for this vocabulary class.
       #
       # @return [Symbol]
       # @since  0.3.0

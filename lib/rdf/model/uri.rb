@@ -634,6 +634,14 @@ module RDF
     end
 
     ##
+    # Returns a string version of the QName or the full IRI
+    #
+    # @return [String] or `nil`
+    def pname
+      (q = self.qname) ? q.join(":") : to_s
+    end
+
+    ##
     # Returns a duplicate copy of `self`.
     #
     # @return [RDF::URI]

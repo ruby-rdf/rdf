@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Vocabulary do
-  VOCABS = %w(cc cert dc doap exif foaf geo http owl rdf rdfs rsa rss sioc skos wot xhtml xsd)
-  STRICT_VOCABS = %w(cc cert dc doap exif foaf geo http owl rdf rdfs rsa rss sioc skos wot xhtml)
+  VOCABS = %w(cc cert dc doap exif foaf geo ht owl rdf rdfs rsa rss sioc skos vs wot xhtml xsd)
+  STRICT_VOCABS = %w(cc cert dc doap exif foaf geo ht owl rdf rdfs rsa rss sioc skos vs wot)
 
   context "#new" do
     it "should require one argument" do
@@ -85,6 +85,11 @@ describe RDF::Vocabulary do
       end
     end
 
+    it "should expand PName for vocabulary" do
+      expect(RDF::Vocabulary.expand_pname("rdfs:")).to eql RDF::RDFS.to_uri
+      expect(RDF::Vocabulary.expand_pname("rdfs:label")).to eql RDF::RDFS.label
+    end
+
     it "should support Creative Commons (CC)" do
       expect(RDF::CC).to be_a_vocabulary("http://creativecommons.org/ns#")
       expect(RDF::CC).to have_properties("http://creativecommons.org/ns#", %w(attributionName attributionURL deprecatedOn jurisdiction legalcode license morePermissions permits prohibits requires))
@@ -122,9 +127,9 @@ describe RDF::Vocabulary do
       expect(RDF::GEO).to have_terms("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
     end
 
-    it "should support Hypertext Transfer Protocol (HTTP)" do
-      expect(RDF::HTTP).to be_a_vocabulary("http://www.w3.org/2006/http#")
-      expect(RDF::HTTP).to have_properties("http://www.w3.org/2006/http#", %w(abs_path absoluteURI authority body connectionAuthority elementName elementValue fieldName fieldValue header param paramName paramValue request requestURI response responseCode version))
+    it "should support Hypertext Transfer Protocol (HT)" do
+      expect(RDF::HT).to be_a_vocabulary("http://www.w3.org/2006/http#")
+      expect(RDF::HT).to have_properties("http://www.w3.org/2006/http#", %w(abs_path absoluteURI authority body connectionAuthority elementName elementValue fieldName fieldValue header param paramName paramValue request requestURI response responseCode version))
     end
 
     it "should support Web Ontology Language (OWL)" do
@@ -187,7 +192,7 @@ describe RDF::Vocabulary do
       expect(RDF::VOID).to be_a_vocabulary("http://rdfs.org/ns/void#")
       expect(RDF::VOID).to have_properties("http://rdfs.org/ns/void#", %w(Dataset DatasetDescription Linkset TechnicalFeature dataDump objectsTarget subjectsTarget target uriSpace linkPredicate class classPartition classes distinctObjects distinctSubjects exampleResource feature uriRegexPattern sparqlEndpoint uriLookupEndpoint subset inDataset documents entities properties triples openSearchDescription property propertyPartition rootResource vocabulary uriSpace))
       expect(RDF::VOID.label_for("property")).to eq "property"
-      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a\n        property-based partition.)
+      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a property-based partition.)
     end
 
     it "should support W3C Media Annotation Ontology" do
