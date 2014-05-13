@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://rdf.data-vocabulary.org/
 require 'rdf'
 module RDF

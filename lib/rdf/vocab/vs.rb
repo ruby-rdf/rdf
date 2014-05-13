@@ -1,7 +1,8 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/06/sw-vocab-status/ns#
 require 'rdf'
 module RDF
-  class VS < StrictVocabulary("http://www.w3.org/2003/06/sw-vocab-status/ns#")
+  class VS < StrictVocabulary("# -*- encoding: utf-8 -*-
+")
 
     # Property definitions
     property :moreinfo,

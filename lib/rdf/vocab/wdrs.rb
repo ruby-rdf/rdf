@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://www.w3.org/2007/05/powder-s#
 require 'rdf'
 module RDF

@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://usefulinc.com/ns/doap#
 require 'rdf'
 module RDF

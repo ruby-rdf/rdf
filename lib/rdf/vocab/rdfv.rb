@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://www.w3.org/1999/02/22-rdf-syntax-ns#
 require 'rdf'
 module RDF

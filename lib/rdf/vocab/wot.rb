@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://xmlns.com/wot/0.1/index.rdf
 require 'rdf'
 module RDF

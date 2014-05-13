@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://purl.org/ontology/mo/
 require 'rdf'
 module RDF

@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/ma-ont.rdf
 require 'rdf'
 module RDF

@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # This file generated automatically using vocab-fetch from http://purl.org/rss/1.0/schema.rdf
 require 'rdf'
 module RDF

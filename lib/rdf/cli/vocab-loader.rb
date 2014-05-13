@@ -172,7 +172,8 @@ module RDF
     # class outside of a command line - instantiate, set attributes manually,
     # then call #run
     def run
-      @output.print %(# This file generated automatically using vocab-fetch from #{source}
+      @output.print %(# -*- encoding: utf-8 -*-
+        # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module RDF
           class #{class_name} < #{"Strict" if @strict}Vocabulary("#{uri}")
