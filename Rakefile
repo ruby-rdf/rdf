@@ -90,7 +90,9 @@ vocab_sources = {
   wot:    {uri: "http://xmlns.com/wot/0.1/", source: "http://xmlns.com/wot/0.1/index.rdf"},
   xhtml:  {uri: "http://www.w3.org/1999/xhtml#", strict: false},
   xhv:    {uri: "http://www.w3.org/1999/xhtml/vocab#", strict: false},
-  xsd:    {:prefix => "http://www.w3.org/2001/XMLSchema#", source: "http://groups.csail.mit.edu/mac/projects/tami/amord/xsd.ttl"},
+  xsd:    {uri: "http://www.w3.org/2001/XMLSchema#",
+           source: "etc/xsd.ttl",
+           strict: false},
 }
 
 task :gen_vocabs => vocab_sources.keys.map {|v| "lib/rdf/vocab/#{v}.rb"}
