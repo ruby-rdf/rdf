@@ -228,6 +228,18 @@ module RDF
         end
       end
 
+      # Add extra definitions
+      case @extra
+      when Array
+        @extra.each do |extra|
+          term_nodes[:other][extra.to_sym] = {label: extra.to_s}
+        end
+      when Hash
+        @extra.each do |n, opts|
+          term_nodes[:other][n] = {label: n.to_s}.merge(opts)
+        end
+      end
+
       {
         class: "Class definitions",
         property: "Property definitions",

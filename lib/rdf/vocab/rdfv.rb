@@ -132,5 +132,53 @@ module RDF
       label: "nil".freeze,
       "rdfs:isDefinedBy" => %(rdf:).freeze,
       type: "rdf:List".freeze
+    term :about,
+      comment: %(RDF/XML attribute declaring subject).freeze,
+      label: "about".freeze
+    term :Alt,
+      comment: %(RDF/XML Alt container).freeze,
+      label: "Alt".freeze
+    term :Bag,
+      comment: %(RDF/XML Bag container).freeze,
+      label: "Bag".freeze
+    term :datatype,
+      comment: %(RDF/XML literal datatype).freeze,
+      label: "datatype".freeze
+    term :Description,
+      comment: %(RDF/XML node element).freeze,
+      label: "Description".freeze
+    term :ID,
+      comment: %(RDF/XML attribute creating a Reification).freeze,
+      label: "ID".freeze
+    term :li,
+      comment: %(RDF/XML container membership list element).freeze,
+      label: "li".freeze
+    term :nil,
+      comment: %(The empty list, with no items in it. If the rest of a list is nil then the list has no more items in it.).freeze,
+      label: "nil".freeze
+    term :nodeID,
+      comment: %(RDF/XML Blank Node identifier).freeze,
+      label: "nodeID".freeze
+    term :object,
+      comment: %(RDF/XML reification object).freeze,
+      label: "object".freeze
+    term :parseType,
+      comment: %(Parse type for RDF/XML, either Collection, Literal or Resource).freeze,
+      label: "parseType".freeze
+    term :predicate,
+      comment: %(RDF/XML reification predicate).freeze,
+      label: "predicate".freeze
+    term :resource,
+      comment: %(RDF/XML attribute declaring object).freeze,
+      label: "resource".freeze
+    term :Seq,
+      comment: %(RDF/XML Seq container).freeze,
+      label: "Seq".freeze
+    term :Statement,
+      comment: %(RDF/XML reification Statement).freeze,
+      label: "Statement".freeze
+    term :subject,
+      comment: %(RDF/XML reification subject).freeze,
+      label: "subject".freeze
   end
 end

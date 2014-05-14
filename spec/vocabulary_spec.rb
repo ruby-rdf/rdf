@@ -50,6 +50,18 @@ describe RDF::Vocabulary do
     it "yields rdfs:comment" do
       expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment_for("comment")))
     end
+    it "yields rdfs:isDefinedBy" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
+    end
+    it "yields rdf:type" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF.type, RDF.Property))
+    end
+    it "yields rdfs:domain" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.domain, RDF::RDFS.Resource))
+    end
+    it "yields rdfs:range" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.range, RDF::RDFS.Literal))
+    end
   end
 
   context "strict vocabularies" do
@@ -140,7 +152,8 @@ describe RDF::Vocabulary do
     it "should support Resource Description Framework (RDF)" do
       expect(RDF).to be_a_vocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
       expect(RDF).to have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(first object predicate rest subject type value))
-      expect(RDF).to have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
+      expect(RDF).to have_terms("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
+      expect(RDF).to have_terms("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
       %w(first object predicate rest subject type value).each do |p|
         expect(RDF.send(p)).to eq RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns##{p}")
       end
@@ -185,7 +198,7 @@ describe RDF::Vocabulary do
 
     it "should support XML Schema (XSD)" do
       expect(RDF::XSD).to be_a_vocabulary("http://www.w3.org/2001/XMLSchema#")
-      expect(RDF::XSD).to have_properties("http://www.w3.org/2001/XMLSchema#", %w(NOTATION QName anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time ENTITIES ENTITY ID IDREF IDREFS NCName NMTOKEN NMTOKENS Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
+      expect(RDF::XSD).to have_properties("http://www.w3.org/2001/XMLSchema#", %w(anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time NCName NMTOKEN Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
     end
 
     it "should support VOID" do
@@ -259,6 +272,11 @@ describe RDF::Vocabulary do
   describe RDF::Vocabulary::Term do
     subject {RDF::RDFS.comment}
     specify {should be_uri}
+    specify {should respond_to(:type)}
+    specify {should respond_to(:label)}
+    specify {should respond_to(:comment)}
+    specify {should respond_to(:domain)}
+    specify {should respond_to(:range)}
     its(:label) {should eq RDF::RDFS.label_for("comment")}
     its(:comment) {should eq RDF::RDFS.comment_for("comment")}
   end

@@ -212,35 +212,41 @@ module RDF
       ##
       # Enumerate each statement constructed from the defined vocabulary terms
       #
+      # If a property value is known to be a {URI}, or expands to a {URI}, the `object` is a URI, otherwise, it will be a {Literal}.
+      #
       # @yield statement
       # @yieldparam [RDF::Statement]
       def each_statement(&block)
         props.each do |subject, attributes|
           attributes.each do |prop, values|
+            prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
+            next unless prop
             Array(values).each do |value|
               case prop
               when :type
+                prop = RDF.type
                 value = expand_pname(value) || RDF::URI(value)
-                block.call RDF::Statement(subject, RDF.type, value)
               when :subClassOf
+                prop = RDFS.subClassOf
                 value = expand_pname(value) || RDF::URI(value)
-                block.call RDF::Statement(subject, RDFS.subClassOf, value)
               when :subPropertyOf
+                prop = RDFS.subPropertyOf
                 value = expand_pname(value) || RDF::URI(value)
-                block.call RDF::Statement(subject, RDFS.subPropertyOf, value)
               when :domain
+                prop = RDFS.domain
                 value = expand_pname(value) || RDF::URI(value)
-                block.call RDF::Statement(subject, RDFS.domain, value)
               when :range
+                prop = RDFS.range
                 value = expand_pname(value) || RDF::URI(value)
-                block.call RDF::Statement(subject, RDFS.range, value)
               when :label
-                block.call RDF::Statement(subject, RDFS.label, value)
+                prop = RDFS.label
               when :comment
-                block.call RDF::Statement(subject, RDFS.comment, value)
-              when RDF::Resource
-                block.call RDF::Statement(subject, prop, value)
+                prop = RDFS.comment
+              else
+                value = RDF::Vocabulary.expand_pname(value) || value
               end
+
+              block.call RDF::Statement(subject, prop, value)
             end
           end
         end
@@ -291,7 +297,9 @@ module RDF
       end
 
       def method_missing(property, *args, &block)
-        if args.empty? && !to_s.empty?
+        if %w(to_ary).include?(property.to_s)
+          super
+        elsif args.empty? && !to_s.empty?
           Term.intern([to_s, property.to_s].join(''), attributes: {:label => property.to_s})
         else
           super
@@ -362,10 +370,12 @@ module RDF
     end
 
     def method_missing(property, *args, &block)
-      if args.empty?
+      if %w(to_ary).include?(property.to_s)
+        super
+      elsif args.empty?
         self[property]
       else
-        raise ArgumentError.new("wrong number of arguments (#{args.size} for 0)")
+        super
       end
     end
 
@@ -425,20 +435,6 @@ module RDF
       end
 
       ##
-      # Label for this vocabulary term
-      # @return [String]
-      def label
-        @attributes.fetch(:label, "")
-      end
-
-      ##
-      # Comment for this vocabulary term
-      # @return [String]
-      def comment
-        @attributes.fetch(:comment, "")
-      end
-
-      ##
       # Determine if the URI is a valid according to RFC3987
       #
       # @return [Boolean] `true` or `false`
@@ -454,6 +450,31 @@ module RDF
       # @return [String] The URI object's state, as a <code>String</code>.
       def inspect
         sprintf("#<%s:%#0x URI:%s>", Term.to_s, self.object_id, self.to_s)
+      end
+
+      # Implement accessor to symbol attributes
+      def respond_to?(method)
+        @attributes.has_key?(method) || super
+      end
+
+    protected
+      # Implement accessor to symbol attributes
+      def method_missing(method, *args, &block)
+        case method
+        when :label, :comment
+          @attributes.fetch(method, "")
+        when :type, :subClassOf, :subPropertyOf, :domain, :range
+          case @attributes[method]
+          when Array
+            @attributes[method].each {|v| RDF::Vocabulary.expand_pname(v)}
+          when nil
+            super
+          else
+            RDF::Vocabulary.expand_pname(@attributes[method])
+          end
+        else
+          super
+        end
       end
     end
   end # Vocabulary
