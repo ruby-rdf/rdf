@@ -110,35 +110,6 @@ module RDF
       end
     end
 
-    # @private
-    def from_solution(solution, op = "property")
-      uri_match = %r{\A#{@uri}(.*)}
-      return if !solution.resource.uri? || (match = uri_match.match(solution.resource.to_s)).nil?
-      name = match[1]
-
-      # If there's a label or comment, the must either have no language, or be en
-      label = solution[:label]
-      comment = solution[:comment]
-
-      return if label && label.has_language? && !label.language.to_s.start_with?("en")
-      return if comment && comment.has_language? && !comment.language.to_s.start_with?("en")
-      label = label.to_s.
-        encode(Encoding::US_ASCII). # also force exception if invalid
-        strip.
-        gsub(/\s+/m, ' ')
-      comment = comment.to_s.
-        encode(Encoding::US_ASCII). # also force exception if invalid
-        strip.
-        gsub(/\s+/m, ' ').
-        gsub(/([\(\)])/, '\\\\\\1')
-
-      @output.write "    #{op} #{name.to_sym.inspect}"
-      @output.write ", :label => '#{label}'.freeze" unless label.empty?
-      @output.write ", :comment =>\n      %(#{comment}).freeze" unless comment.empty?
-      @output.puts
-    rescue Encoding::UndefinedConversionError
-    end
-
     ##
     # Turn a node definition into a property/term expression
     def from_node(name, attributes, term_type)
@@ -179,7 +150,13 @@ module RDF
           class #{class_name} < #{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
-      json = ::JSON::LD::API.fromRdf(graph)
+      # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values
+      term_defs = {}
+      graph.each do |statement|
+        next unless statement.subject.uri? && statement.subject.start_with?(uri)
+        term = (term_defs[statement.subject] ||= {})
+        (term[statement.predicate] ||= []) << statement.object
+      end
       
       # Split nodes into Class/Property/Datatype/Other
       term_nodes = {
@@ -188,22 +165,21 @@ module RDF
         datatype: {},
         other: {}
       }
-      json.each do |node|
-        next unless node['@id'].start_with?(uri)
-        node_classification = case node['@type'].to_s
+      term_defs.keys.sort.each do |subject|
+        node = term_defs[subject]
+        node_classification = case node[RDF.type].to_s
         when /Class/    then :class
         when /Property/ then :property
         when /Datatype/ then :datatype
         else                 :other
         end
 
-        name = node['@id'][uri.to_s.length..-1]
+        name = subject.to_s[uri.to_s.length..-1]
         term_nodes[node_classification][name] = attributes = {}
 
         node.each do |key, values|
           prop = case key
-          when "@id"                   then next
-          when "@type"                 then :type
+          when RDF.type                then :type
           when RDF::RDFS.subClassOf    then :subClassOf
           when RDF::RDFS.subPropertyOf then :subPropertyOf
           when RDF::RDFS.range         then :range
@@ -214,13 +190,10 @@ module RDF
           end
 
           values = values.map do |v|
-            if v.is_a?(Hash) && v.keys == %w(@id)
-              RDF::URI(v['@id']).pname
-            elsif v.is_a?(Hash) && v.has_key?('@value')
-              # Only take values in English, or having no language, for now
-              v['@value'] if v.fetch('@language', "en") == "en"
-            else
-              prop == :type ? RDF::URI(v).pname : v
+            if v.uri?
+              v.pname
+            elsif v.literal? && (v.language || :en) == :en
+              v.to_s
             end
           end.compact
           next if values.empty?
