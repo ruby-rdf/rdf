@@ -13,7 +13,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Contributor".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :coverage,
       comment: %(The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.).freeze,
@@ -23,7 +23,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Coverage".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :creator,
       comment: %(An entity primarily responsible for making the resource.).freeze,
@@ -33,7 +33,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Creator".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :date,
       comment: %(A point or period of time associated with an event in the lifecycle of the resource.).freeze,
@@ -43,7 +43,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Date".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :description,
       comment: %(An account of the resource.).freeze,
@@ -53,7 +53,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Description".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :format,
       comment: %(The file format, physical medium, or dimensions of the resource.).freeze,
@@ -63,7 +63,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Format".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :identifier,
       comment: %(An unambiguous reference to the resource within a given context.).freeze,
@@ -73,7 +73,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Identifier".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :language,
       comment: %(A language of the resource.).freeze,
@@ -84,7 +84,7 @@ module RDF
       label: "Language".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
       "rdfs:seeAlso" => %(http://www.ietf.org/rfc/rfc4646.txt).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :publisher,
       comment: %(An entity responsible for making the resource available.).freeze,
@@ -94,7 +94,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Publisher".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :relation,
       comment: %(A related resource.).freeze,
@@ -104,7 +104,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Relation".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :rights,
       comment: %(Information about rights held in and over the resource.).freeze,
@@ -114,7 +114,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Rights".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :source,
       comment: %(A related resource from which the described resource is derived.).freeze,
@@ -124,7 +124,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Source".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :subject,
       comment: %(The topic of the resource.).freeze,
@@ -134,7 +134,7 @@ module RDF
       "dc:modified" => %(2012-06-14).freeze,
       label: "Subject".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :title,
       comment: %(A name given to the resource.).freeze,
@@ -143,7 +143,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Title".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
     property :type,
       comment: %(The nature or genre of the resource.).freeze,
@@ -153,13 +153,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Type".freeze,
       "rdfs:isDefinedBy" => %(dc11:).freeze,
-      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace (http://purl.org/dc/terms/).  See the Introduction to the document "DCMI Metadata Terms" (http://dublincore.org/documents/dcmi-terms/) for an explanation.).freeze,
+      "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
-
-    # Extra definitions
-    term :"",
-      "dc:modified" => %(2012-06-14).freeze,
-      "dc:publisher" => %(http://purl.org/dc/aboutdcmi#DCMI).freeze,
-      "dc:title" => %(Dublin Core Metadata Element Set, Version 1.1).freeze
   end
 end

@@ -158,7 +158,7 @@ module RDF
       "dc11:date" => %(2004-02-23).freeze,
       "dc11:description" => %(Web Of Trust \(wot\) RDF vocabulary, described using W3C RDF Schema and the Web Ontology Language.).freeze,
       "dc11:title" => %(Web Of Trust vocabulary).freeze,
-      "owl:imports" => %(http://www.w3.org/2000/01/rdf-schema).freeze,
+      "owl:imports" => [%(http://www.w3.org/2000/01/rdf-schema).freeze, %(http://www.w3.org/2002/07/owl).freeze],
       "rdfs:seeAlso" => %(foaf:).freeze,
       type: "owl:Ontology".freeze
   end

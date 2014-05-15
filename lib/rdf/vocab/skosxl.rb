@@ -35,7 +35,7 @@ module RDF
       label: "label relation".freeze,
       range: "skosxl:Label".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/2008/05/skos-xl).freeze,
-      "skos:definition" => %(The property skosxl:labelRelation is used for representing binary ('direct') relations between instances of the class skosxl:Label.).freeze,
+      "skos:definition" => %(The property skosxl:labelRelation is used for representing binary \('direct'\) relations between instances of the class skosxl:Label.).freeze,
       "skos:scopeNote" => %(skosxl:labelRelation is not intended to be used directly, but rather as the basis for a design pattern which can be refined for more specific labeling scenarios.).freeze,
       type: "owl:ObjectProperty".freeze
     property :literalForm,

@@ -91,9 +91,9 @@ module RDF
           # Ruby's autoloading facility, meaning that `@@subclasses` will be
           # empty until each subclass has been touched or require'd.
           RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" unless v == :rdf }
-          @@subclasses.each(&block)
+          @@subclasses.select(&:name).each(&block)
         else
-          properties.each(&block)
+          __properties__.each(&block)
         end
       end
 
@@ -141,12 +141,14 @@ module RDF
 
       # Alternate use for vocabulary terms, functionally equivalent to {#property}.
       alias_method :term, :property
+      alias_method :__property__, :property
 
       ##
       #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
       def properties
         props.keys
       end
+      alias_method :__properties__, :properties
 
       ##
       # Attempt to expand a Compact IRI/PName/QName using loaded vocabularies
@@ -171,7 +173,7 @@ module RDF
         if self.respond_to?(property.to_sym)
           self.send(property.to_sym)
         else
-          Term.intern([to_s, property.to_s].join(''), attributes: {:label => property.to_s})
+          Term.intern([to_s, property.to_s].join(''), attributes: {})
         end
       end
 
@@ -261,6 +263,71 @@ module RDF
       end
 
       ##
+      # Load a vocabulary, optionally from a separate location.
+      #
+      # @param [URI, #to_s] uri
+      # @param [Hash{Symbol => Object}] options
+      # @option options [String] class_name
+      #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
+      # @option options [URI, #to_s] :location
+      #   Location from which to load the vocabulary, if not from `uri`.
+      # @option options [Array<Symbol>, Hash{Symbol => Hash}] :extra
+      #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {#property}.
+      # @return [RDF::Vocabulary] the loaded vocabulary
+      def load(uri, options = {})
+        source = options.fetch(:location, uri)
+        class_name = options[:class_name]
+        vocab = if class_name
+          Object.const_set(class_name, Class.new(self.create(uri)))
+        else
+          Class.new(self.create(uri))
+        end
+
+        graph = RDF::Graph.load(source)
+        term_defs = {}
+        graph.each do |statement|
+          next unless statement.subject.uri? && statement.subject.start_with?(uri)
+          name = statement.subject.to_s[uri.to_s.length..-1] 
+          term = (term_defs[name.to_sym] ||= {})
+          key = case statement.predicate
+          when RDF.type                then :type
+          when RDF::RDFS.subClassOf    then :subClassOf
+          when RDF::RDFS.subPropertyOf then :subPropertyOf
+          when RDF::RDFS.range         then :range
+          when RDF::RDFS.domain        then :domain
+          when RDF::RDFS.comment       then :comment
+          when RDF::RDFS.label         then :label
+          else                         statement.predicate.pname
+          end
+
+          value = if statement.object.uri?
+            statement.object.pname
+          elsif statement.object.literal? && (statement.object.language || :en) == :en
+            statement.object.to_s
+          end
+
+          (term[key] ||= []) << value if value
+        end
+
+        # Create extra terms
+        term_defs = case options[:extra]
+        when Array
+          options[:extra].inject({}) {|memo, s| memo[s.to_sym] = {label: s.to_s}; memo}.merge(term_defs)
+        when Hash
+          options[:extra].merge(term_defs)
+        else
+          term_defs
+        end
+
+        # Create each term
+        term_defs.each do |term, attributes|
+          vocab.term term, attributes
+        end
+
+        vocab
+      end
+
+      ##
       # Returns a developer-friendly representation of this vocabulary class.
       #
       # @return [String]
@@ -300,7 +367,7 @@ module RDF
         if %w(to_ary).include?(property.to_s)
           super
         elsif args.empty? && !to_s.empty?
-          Term.intern([to_s, property.to_s].join(''), attributes: {:label => property.to_s})
+          Term.intern([to_s, property.to_s].join(''), attributes: {})
         else
           super
         end
@@ -332,7 +399,7 @@ module RDF
     # @param  [#to_s] property
     # @return [URI]
     def [](property)
-      Term.intern([to_s, property.to_s].join(''), attributes: {:label => property.to_s})
+      Term.intern([to_s, property.to_s].join(''), attributes: {})
     end
 
     ##
@@ -461,14 +528,16 @@ module RDF
       # Implement accessor to symbol attributes
       def method_missing(method, *args, &block)
         case method
-        when :label, :comment
+        when :comment
           @attributes.fetch(method, "")
+        when :label
+          @attributes.fetch(method, to_s.split(/[\/\#]/).last)
         when :type, :subClassOf, :subPropertyOf, :domain, :range
           case @attributes[method]
           when Array
             @attributes[method].each {|v| RDF::Vocabulary.expand_pname(v)}
           when nil
-            super
+            nil
           else
             RDF::Vocabulary.expand_pname(@attributes[method])
           end

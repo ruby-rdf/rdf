@@ -110,7 +110,7 @@ module RDF
 
     # Extra definitions
     term :"",
-      "dc11:title" => %(The RDF Schema vocabulary (RDFS)).freeze,
+      "dc11:title" => %(The RDF Schema vocabulary \(RDFS\)).freeze,
       "rdfs:seeAlso" => %(http://www.w3.org/2000/01/rdf-schema-more).freeze,
       type: "owl:Ontology".freeze
   end

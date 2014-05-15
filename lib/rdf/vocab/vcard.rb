@@ -277,7 +277,7 @@ module RDF
       subClassOf: "vcard:Gender".freeze,
       type: "owl:Class".freeze
     term :VCard,
-      comment: %(The vCard class is deprecated and equivalent to the new Kind class, which is the parent for the four explicit types of vCards (Individual, Organization, Location, Group)).freeze,
+      comment: %(The vCard class is deprecated and equivalent to the new Kind class, which is the parent for the four explicit types of vCards \(Individual, Organization, Location, Group\)).freeze,
       label: "VCard".freeze,
       "owl:deprecated" => %(true).freeze,
       type: "owl:Class".freeze
@@ -385,15 +385,15 @@ module RDF
       range: "vcard:Address".freeze,
       type: "owl:ObjectProperty".freeze
     property :hasCalendarBusy,
-      comment: %(To specify the busy time associated with the object. (Was called FBURL in RFC6350)).freeze,
+      comment: %(To specify the busy time associated with the object. \(Was called FBURL in RFC6350\)).freeze,
       label: "has calendar busy".freeze,
       type: "owl:ObjectProperty".freeze
     property :hasCalendarLink,
-      comment: %(To specify the calendar associated with the object. (Was called CALURI in RFC6350)).freeze,
+      comment: %(To specify the calendar associated with the object. \(Was called CALURI in RFC6350\)).freeze,
       label: "has calendar link".freeze,
       type: "owl:ObjectProperty".freeze
     property :hasCalendarRequest,
-      comment: %(To specify the calendar user address to which a scheduling request be sent for the object. (Was called CALADRURI in RFC6350)).freeze,
+      comment: %(To specify the calendar user address to which a scheduling request be sent for the object. \(Was called CALADRURI in RFC6350\)).freeze,
       label: "has calendar request".freeze,
       type: "owl:ObjectProperty".freeze
     property :hasCategory,
@@ -439,7 +439,7 @@ URIs are recommended to enable interoperable sex and gender codes to be used.).f
       label: "has honorific suffix".freeze,
       type: "owl:ObjectProperty".freeze
     property :hasInstantMessage,
-      comment: %(To specify the instant messaging and presence protocol communications with the object. (Was called IMPP in RFC6350)).freeze,
+      comment: %(To specify the instant messaging and presence protocol communications with the object. \(Was called IMPP in RFC6350\)).freeze,
       label: "has messaging".freeze,
       type: "owl:ObjectProperty".freeze
     property :hasKey,
@@ -461,7 +461,7 @@ URIs are recommended to enable interoperable sex and gender codes to be used.).f
       "owl:equivalentProperty" => %(vcard:logo).freeze,
       type: "owl:ObjectProperty".freeze
     property :hasMember,
-      comment: %(To include a member in the group this object represents. (This property can only be used by Group individuals)).freeze,
+      comment: %(To include a member in the group this object represents. \(This property can only be used by Group individuals\)).freeze,
       domain: "vcard:Group".freeze,
       label: "has member".freeze,
       range: "vcard:Kind".freeze,
@@ -575,7 +575,7 @@ URIs are recommended to enable interoperable sex and gender codes to be used.).f
       "owl:deprecated" => %(true).freeze,
       type: "owl:DatatypeProperty".freeze
     property :locality,
-      comment: %(The locality (e.g. city or town) associated with the address of the object).freeze,
+      comment: %(The locality \(e.g. city or town\) associated with the address of the object).freeze,
       label: "locality".freeze,
       range: "xsd:string".freeze,
       type: "owl:DatatypeProperty".freeze
@@ -646,7 +646,7 @@ URIs are recommended to enable interoperable sex and gender codes to be used.).f
       range: "xsd:string".freeze,
       type: "owl:DatatypeProperty".freeze
     property :region,
-      comment: %(The region (e.g. state or province) associated with the address of the object).freeze,
+      comment: %(The region \(e.g. state or province\) associated with the address of the object).freeze,
       label: "region".freeze,
       range: "xsd:string".freeze,
       type: "owl:DatatypeProperty".freeze

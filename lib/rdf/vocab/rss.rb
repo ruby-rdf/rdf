@@ -45,7 +45,7 @@ module RDF
       subPropertyOf: "dc11:identifier".freeze,
       type: "rdf:Property".freeze
     property :name,
-      comment: %(The text input field's (variable) name.).freeze,
+      comment: %(The text input field's \(variable\) name.).freeze,
       label: "Name".freeze,
       "rdfs:isDefinedBy" => %(rss:).freeze,
       type: "rdf:Property".freeze

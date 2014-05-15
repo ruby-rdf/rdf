@@ -20,13 +20,13 @@ module RDF
 
     # Property definitions
     property :alt,
-      comment: %(The WGS84 altitude of a SpatialThing (decimal meters 
-above the local reference ellipsoid).).freeze,
+      comment: %(The WGS84 altitude of a SpatialThing \(decimal meters 
+above the local reference ellipsoid\).).freeze,
       domain: "geo:SpatialThing".freeze,
       label: "altitude".freeze,
       type: "rdf:Property".freeze
     property :lat,
-      comment: %(The WGS84 latitude of a SpatialThing (decimal degrees).).freeze,
+      comment: %(The WGS84 latitude of a SpatialThing \(decimal degrees\).).freeze,
       domain: "geo:SpatialThing".freeze,
       label: "latitude".freeze,
       type: "rdf:Property".freeze
@@ -39,7 +39,7 @@ above the local reference ellipsoid).).freeze,
  or other geometrical thing in space, where it is.  For example, the realtionship between
  a radio tower and a Point with a given lat and long.
  Or a relationship between a park and its outline as a closed arc of points, or a road and
- its location as a arc (a sequence of points).
+ its location as a arc \(a sequence of points\).
  Clearly in practice there will be limit to the accuracy of any such statement, but one would expect
  an accuracy appropriate for the size of the object and uses such as mapping .
  ).freeze,
@@ -48,7 +48,7 @@ above the local reference ellipsoid).).freeze,
       subPropertyOf: "foaf:based_near".freeze,
       type: "rdf:Property".freeze
     property :long,
-      comment: %(The WGS84 longitude of a SpatialThing (decimal degrees).).freeze,
+      comment: %(The WGS84 longitude of a SpatialThing \(decimal degrees\).).freeze,
       domain: "geo:SpatialThing".freeze,
       label: "longitude".freeze,
       type: "rdf:Property".freeze
@@ -65,10 +65,10 @@ Revision 1.21  2009/04/20 12:52:47  timbl
 try again
 
 Revision 1.20  2009/04/20 12:42:11  timbl
-Add Event (edited ages ago and never checked in), and location (following discussion http://chatlogs.planetrdf.com/swig/2009-04-20#T12-36-09)
+Add Event \(edited ages ago and never checked in\), and location \(following discussion http://chatlogs.planetrdf.com/swig/2009-04-20#T12-36-09\)
 
 Revision 1.19  2009/04/20 12:36:31  timbl
-Add Event (edited ages ago and never checked in), and location (following discussion http://chatlogs.planetrdf.com/swig/2009-04-20#T12-36-09)
+Add Event \(edited ages ago and never checked in\), and location \(following discussion http://chatlogs.planetrdf.com/swig/2009-04-20#T12-36-09\)
 
 Revision 1.18  2006/02/01 22:01:04  danbri
 Clarified that lat and long are decimal degrees, and that alt is decimal metres about local reference ellipsoid
@@ -104,12 +104,12 @@ http://www.w3.org/2001/XMLSchema#float
 
 Revision 1.7  2003/01/10 20:25:16  danbri
 Longer rdfs:comment for Point, trying to be Earth-centric and neutral about
-coordinate system(s) at the same time. Feedback welcomed.
+coordinate system\(s\) at the same time. Feedback welcomed.
 
 Revision 1.6  2003/01/10 20:18:30  danbri
 Added CVS log comments into the RDF/XML as an rdfs:comment property of the
-vocabulary. Note that this is not common practice (but seems both harmless
-and potentially useful).
+vocabulary. Note that this is not common practice \(but seems both harmless
+and potentially useful\).
 
 
 revision 1.5
@@ -118,7 +118,7 @@ Updated schema:
 Added a dc:date, added url for more info. Changed the rdfs:label of the
 namespace from gp to geo. Added a class Point, set as the rdfs:domain of
 each property. Added XML comment on the lat_long property suggesting that
-we might not need it (based on #rdfig commentary from implementors).
+we might not need it \(based on #rdfig commentary from implementors\).
 
 revision 1.4
 date: 2003/01/10 20:01:07;  author: danbri;  state: Exp;  lines: +6 -5

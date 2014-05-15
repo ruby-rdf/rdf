@@ -40,13 +40,13 @@ module RDF
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :cfaPattern,
-      comment: %(The color filter array (CFA) geometric pattern of the image sensor when a one-chip color area sensor is used. It does not apply to all sensing methods.).freeze,
+      comment: %(The color filter array \(CFA\) geometric pattern of the image sensor when a one-chip color area sensor is used. It does not apply to all sensing methods.).freeze,
       "exif:tagNumber" => %(41730).freeze,
       label: "CFAPattern".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :colorSpace,
-      comment: %(The color space information tag (ColorSpace) is always recorded as the color space specifier. Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment.).freeze,
+      comment: %(The color space information tag \(ColorSpace\) is always recorded as the color space specifier. Normally sRGB \(=1\) is used to define the color space based on the PC monitor conditions and environment.).freeze,
       "exif:tagNumber" => %(40961).freeze,
       label: "ColorSpace".freeze,
       subPropertyOf: "exif:imageDataCharacter".freeze,
@@ -93,7 +93,7 @@ module RDF
       subPropertyOf: "dc11:type".freeze,
       type: "rdf:Property".freeze
     property :date,
-      comment: %(a date information. Usually saved as YYYY:MM:DD (HH:MM:SS) format in Exif data, but represented here as W3C-DTF format).freeze,
+      comment: %(a date information. Usually saved as YYYY:MM:DD \(HH:MM:SS\) format in Exif data, but represented here as W3C-DTF format).freeze,
       label: "Date".freeze,
       subPropertyOf: "dc11:date".freeze,
       type: "rdf:Property".freeze
@@ -178,7 +178,7 @@ module RDF
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :exposureTime,
-      comment: %(Exposure time, given in seconds (sec).).freeze,
+      comment: %(Exposure time, given in seconds \(sec\).).freeze,
       "exif:tagNumber" => %(33434).freeze,
       label: "ExposureTime".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
@@ -202,7 +202,7 @@ module RDF
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :flashEnergy,
-      comment: %(The strobe energy at the time the image is captured, as measured in Beam Candle Power Seconds (BCPS).).freeze,
+      comment: %(The strobe energy at the time the image is captured, as measured in Beam Candle Power Seconds \(BCPS\).).freeze,
       "exif:tagNumber" => %(41483).freeze,
       label: "FlashEnergy".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
@@ -232,13 +232,13 @@ module RDF
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :focalPlaneXResolution,
-      comment: %(The number of pixels in the image width (X) direction per FocalPlaneResolutionUnit on the camera focal plane.).freeze,
+      comment: %(The number of pixels in the image width \(X\) direction per FocalPlaneResolutionUnit on the camera focal plane.).freeze,
       "exif:tagNumber" => %(41486).freeze,
       label: "FocalPlaneXResolution".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :focalPlaneYResolution,
-      comment: %(The number of pixels in the image height (Y) direction per FocalPlaneResolutionUnit on the camera focal plane.).freeze,
+      comment: %(The number of pixels in the image height \(Y\) direction per FocalPlaneResolutionUnit on the camera focal plane.).freeze,
       "exif:tagNumber" => %(41487).freeze,
       label: "FocalPlaneYResolution".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
@@ -272,13 +272,13 @@ module RDF
       subPropertyOf: "exif:gpsInfo".freeze,
       type: "rdf:Property".freeze
     property :gpsDOP,
-      comment: %(The GPS DOP (data degree of precision). An HDOP value is written during two-dimensional measurement, and PDOP during three-dimensional measurement.).freeze,
+      comment: %(The GPS DOP \(data degree of precision\). An HDOP value is written during two-dimensional measurement, and PDOP during three-dimensional measurement.).freeze,
       "exif:tagNumber" => %(11).freeze,
       label: "GPSDOP".freeze,
       subPropertyOf: "exif:gpsInfo".freeze,
       type: "rdf:Property".freeze
     property :gpsDateStamp,
-      comment: %(date and time information relative to UTC (Coordinated Universal Time). The record format is "YYYY:MM:DD" while converted to W3C-DTF to use in RDF).freeze,
+      comment: %(date and time information relative to UTC \(Coordinated Universal Time\). The record format is "YYYY:MM:DD" while converted to W3C-DTF to use in RDF).freeze,
       "exif:tagNumber" => %(29).freeze,
       label: "GPSDateStamp".freeze,
       subPropertyOf: "exif:gpsInfo".freeze,
@@ -427,7 +427,7 @@ module RDF
       subPropertyOf: "exif:gpsInfo".freeze,
       type: "rdf:Property".freeze
     property :gpsTimeStamp,
-      comment: %(The time as UTC (Coordinated Universal Time). TimeStamp is expressed as three RATIONAL values giving the hour, minute, and second.).freeze,
+      comment: %(The time as UTC \(Coordinated Universal Time\). TimeStamp is expressed as three RATIONAL values giving the hour, minute, and second.).freeze,
       "exif:tagNumber" => %(7).freeze,
       label: "GPSTimeStamp".freeze,
       subPropertyOf: "exif:gpsInfo".freeze,
@@ -506,7 +506,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:exifAttribute".freeze,
       type: "rdf:Property".freeze
     property :interoperabilityIndex,
-      comment: %(Indicates the identification of the Interoperability rule. 'R98' = conforming to R98 file specification of Recommended Exif Interoperability Rules (ExifR98) or to DCF basic file stipulated by Design Rule for Camera File System. 'THM' = conforming to DCF thumbnail file stipulated by Design rule for Camera File System.).freeze,
+      comment: %(Indicates the identification of the Interoperability rule. 'R98' = conforming to R98 file specification of Recommended Exif Interoperability Rules \(ExifR98\) or to DCF basic file stipulated by Design Rule for Camera File System. 'THM' = conforming to DCF thumbnail file stipulated by Design rule for Camera File System.).freeze,
       "exif:tagNumber" => %(1).freeze,
       label: "InteroperabilityIndex".freeze,
       subPropertyOf: "exif:interopInfo".freeze,
@@ -530,7 +530,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :jpegInterchangeFormat,
-      comment: %(The offset to the start byte (SOI) of JPEG compressed thumbnail data. This is not used for primary image JPEG data.).freeze,
+      comment: %(The offset to the start byte \(SOI\) of JPEG compressed thumbnail data. This is not used for primary image JPEG data.).freeze,
       "exif:tagNumber" => %(513).freeze,
       label: "JPEGInterchangeFormat".freeze,
       subPropertyOf: "exif:recOffset".freeze,
@@ -592,7 +592,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:exifAttribute".freeze,
       type: "rdf:Property".freeze
     property :oecf,
-      comment: %(Indicates the Opto-Electric Conversion Function (OECF) specified in ISO 14524. OECF is the relationship between the camera optical input and the image values.).freeze,
+      comment: %(Indicates the Opto-Electric Conversion Function \(OECF\) specified in ISO 14524. OECF is the relationship between the camera optical input and the image values.).freeze,
       "exif:tagNumber" => %(34856).freeze,
       label: "OECF".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
@@ -662,13 +662,13 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:imageConfig".freeze,
       type: "rdf:Property".freeze
     property :planarConfiguration,
-      comment: %(Indicates whether pixel components are recorded in chunky or planar format. In JPEG compressed files a JPEG marker is used instead of this tag. If this field does not exist, the TIFF default of 1 (chunky) is assumed.).freeze,
+      comment: %(Indicates whether pixel components are recorded in chunky or planar format. In JPEG compressed files a JPEG marker is used instead of this tag. If this field does not exist, the TIFF default of 1 \(chunky\) is assumed.).freeze,
       "exif:tagNumber" => %(284).freeze,
       label: "PlanarConfiguration".freeze,
       subPropertyOf: "exif:imageDataStruct".freeze,
       type: "rdf:Property".freeze
     property :primaryChromaticities,
-      comment: %(The chromaticity of the three primary colors of the image. Normally this tag is not necessary, since color space is specified in the color space information tag (ColorSpace).).freeze,
+      comment: %(The chromaticity of the three primary colors of the image. Normally this tag is not necessary, since color space is specified in the color space information tag \(ColorSpace\).).freeze,
       "exif:tagNumber" => %(319).freeze,
       label: "PrimaryChromaticities".freeze,
       subPropertyOf: "exif:imageDataCharacter".freeze,
@@ -724,7 +724,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       label: "Resolution".freeze,
       type: "rdf:Property".freeze
     property :resolutionUnit,
-      comment: %(The unit for measuring XResolution and YResolution. The same unit is used for both XResolution and YResolution. If the image resolution in unknown, 2 (inches) is designated.).freeze,
+      comment: %(The unit for measuring XResolution and YResolution. The same unit is used for both XResolution and YResolution. If the image resolution in unknown, 2 \(inches\) is designated.).freeze,
       "exif:tagNumber" => %(296).freeze,
       label: "ResolutionUnit".freeze,
       subPropertyOf: "exif:imageDataStruct".freeze,
@@ -748,7 +748,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :sceneCaptureType,
-      comment: %(The type of scene that was shot. It can also be used to record the mode in which the image was shot, such as Landscape, Portrait etc. Note that this differs from the scene type (SceneType) tag.).freeze,
+      comment: %(The type of scene that was shot. It can also be used to record the mode in which the image was shot, such as Landscape, Portrait etc. Note that this differs from the scene type \(SceneType\) tag.).freeze,
       "exif:tagNumber" => %(41990).freeze,
       label: "SceneCaptureType".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
@@ -776,7 +776,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :shutterSpeedValue,
-      comment: %(Shutter speed. The unit is the APEX (Additive System of Photographic Exposure) setting).freeze,
+      comment: %(Shutter speed. The unit is the APEX \(Additive System of Photographic Exposure\) setting).freeze,
       "exif:tagNumber" => %(37377).freeze,
       label: "ShutterSpeedValue".freeze,
       subPropertyOf: "exif:pictTaking".freeze,
@@ -868,7 +868,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:tag_number".freeze,
       type: "rdf:Property".freeze
     property :transferFunction,
-      comment: %(A transfer function for the image, described in tabular style. Normally this tag is not necessary, since color space is specified in the color space information tag (ColorSpace).).freeze,
+      comment: %(A transfer function for the image, described in tabular style. Normally this tag is not necessary, since color space is specified in the color space information tag \(ColorSpace\).).freeze,
       "exif:tagNumber" => %(301).freeze,
       label: "TransferFunction".freeze,
       subPropertyOf: "exif:imageDataCharacter".freeze,
@@ -896,7 +896,7 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       subPropertyOf: "exif:pictTaking".freeze,
       type: "rdf:Property".freeze
     property :whitePoint,
-      comment: %(The chromaticity of the white point of the image. Normally this tag is not necessary, since color space is specified in the color space information tag (ColorSpace).).freeze,
+      comment: %(The chromaticity of the white point of the image. Normally this tag is not necessary, since color space is specified in the color space information tag \(ColorSpace\).).freeze,
       "exif:tagNumber" => %(318).freeze,
       label: "WhitePoint".freeze,
       subPropertyOf: "exif:imageDataCharacter".freeze,

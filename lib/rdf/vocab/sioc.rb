@@ -98,7 +98,7 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:ObjectProperty".freeze
     property :addressed_to,
-      comment: %(Refers to who (e.g. a UserAccount, e-mail address, etc.) a particular Item is addressed to.).freeze,
+      comment: %(Refers to who \(e.g. a UserAccount, e-mail address, etc.\) a particular Item is addressed to.).freeze,
       domain: "sioc:Item".freeze,
       label: "addressed to".freeze,
       "rdfs:isDefinedBy" => %(sioc:).freeze,
@@ -166,12 +166,12 @@ module RDF
       comment: %(The content of the Post.).freeze,
       domain: "sioc:Post".freeze,
       label: "description".freeze,
-      "owl:versionInfo" => %(This property is deprecated. Use sioc:content or other methods (AtomOwl, content:encoded from RSS 1.0, etc.) instead.).freeze,
+      "owl:versionInfo" => %(This property is deprecated. Use sioc:content or other methods \(AtomOwl, content:encoded from RSS 1.0, etc.\) instead.).freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:DeprecatedProperty".freeze
     property :earlier_version,
-      comment: %(Links to a previous (older) revision of this Item or Post.).freeze,
+      comment: %(Links to a previous \(older\) revision of this Item or Post.).freeze,
       domain: "sioc:Item".freeze,
       label: "earlier version".freeze,
       "owl:inverseOf" => %(sioc:later_version).freeze,
@@ -199,12 +199,12 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:ObjectProperty".freeze
     property :feed,
-      comment: %(A feed (e.g. RSS, Atom, etc.) pertaining to this resource (e.g. for a Forum, Site, UserAccount, etc.).).freeze,
+      comment: %(A feed \(e.g. RSS, Atom, etc.\) pertaining to this resource \(e.g. for a Forum, Site, UserAccount, etc.\).).freeze,
       label: "feed".freeze,
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:ObjectProperty".freeze
     property :first_name,
-      comment: %(First (real) name of this User. Synonyms include given name or christian name.).freeze,
+      comment: %(First \(real\) name of this User. Synonyms include given name or christian name.).freeze,
       domain: "sioc:UserAccount".freeze,
       label: "first name".freeze,
       "owl:versionInfo" => %(This property is deprecated. Use foaf:name or foaf:firstName from the FOAF vocabulary instead.).freeze,
@@ -212,7 +212,7 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:DeprecatedProperty".freeze
     property :follows,
-      comment: %(Indicates that one UserAccount follows another UserAccount (e.g. for microblog posts or other content item updates).).freeze,
+      comment: %(Indicates that one UserAccount follows another UserAccount \(e.g. for microblog posts or other content item updates\).).freeze,
       domain: "sioc:UserAccount".freeze,
       label: "follows".freeze,
       range: "sioc:UserAccount".freeze,
@@ -393,7 +393,7 @@ module RDF
       subPropertyOf: "dc:date".freeze,
       type: "owl:DatatypeProperty".freeze
     property :last_item_date,
-      comment: %(The date and time of the last Post (or Item) in a Forum (or a Container), in ISO 8601 format.).freeze,
+      comment: %(The date and time of the last Post \(or Item\) in a Forum \(or a Container\), in ISO 8601 format.).freeze,
       domain: "sioc:Container".freeze,
       label: "last item date".freeze,
       range: "rdfs:Literal".freeze,
@@ -401,7 +401,7 @@ module RDF
       subPropertyOf: "dc:date".freeze,
       type: "owl:DatatypeProperty".freeze
     property :last_name,
-      comment: %(Last (real) name of this user. Synonyms include surname or family name.).freeze,
+      comment: %(Last \(real\) name of this user. Synonyms include surname or family name.).freeze,
       domain: "sioc:UserAccount".freeze,
       label: "last name".freeze,
       "owl:versionInfo" => %(This property is deprecated. Use foaf:name or foaf:surname from the FOAF vocabulary instead.).freeze,
@@ -416,7 +416,7 @@ module RDF
       subPropertyOf: "dc:date".freeze,
       type: "owl:DatatypeProperty".freeze
     property :later_version,
-      comment: %(Links to a later (newer) revision of this Item or Post.).freeze,
+      comment: %(Links to a later \(newer\) revision of this Item or Post.).freeze,
       domain: "sioc:Item".freeze,
       label: "later version".freeze,
       "owl:inverseOf" => %(sioc:earlier_version).freeze,
@@ -503,13 +503,13 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:DatatypeProperty".freeze
     property :num_authors,
-      comment: %(The number of unique authors (UserAccounts and unregistered posters) who have contributed to this Item, Thread, Post, etc.).freeze,
+      comment: %(The number of unique authors \(UserAccounts and unregistered posters\) who have contributed to this Item, Thread, Post, etc.).freeze,
       label: "num authors".freeze,
       range: "xsd:nonNegativeInteger".freeze,
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:DatatypeProperty".freeze
     property :num_items,
-      comment: %(The number of Posts (or Items) in a Forum (or a Container).).freeze,
+      comment: %(The number of Posts \(or Items\) in a Forum \(or a Container\).).freeze,
       domain: "sioc:Container".freeze,
       label: "num items".freeze,
       range: "xsd:nonNegativeInteger".freeze,
@@ -522,7 +522,7 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:DatatypeProperty".freeze
     property :num_threads,
-      comment: %(The number of Threads (AKA discussion topics) in a Forum.).freeze,
+      comment: %(The number of Threads \(AKA discussion topics\) in a Forum.).freeze,
       domain: "sioc:Forum".freeze,
       label: "num threads".freeze,
       range: "xsd:nonNegativeInteger".freeze,
@@ -602,7 +602,7 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:ObjectProperty".freeze
     property :sibling,
-      comment: %(An Item may have a sibling or a twin that exists in a different Container, but the siblings may differ in some small way (for example, language, category, etc.). The sibling of this Item should be self-describing (that is, it should contain all available information).).freeze,
+      comment: %(An Item may have a sibling or a twin that exists in a different Container, but the siblings may differ in some small way \(for example, language, category, etc.\). The sibling of this Item should be self-describing \(that is, it should contain all available information\).).freeze,
       domain: "sioc:Item".freeze,
       label: "sibling".freeze,
       range: "sioc:Item".freeze,
@@ -616,7 +616,7 @@ module RDF
       "rdfs:isDefinedBy" => %(sioc:).freeze,
       type: "owl:ObjectProperty".freeze
     property :subject,
-      comment: %(Keyword(s) describing subject of the Post.).freeze,
+      comment: %(Keyword\(s\) describing subject of the Post.).freeze,
       domain: "sioc:Post".freeze,
       label: "subject".freeze,
       "owl:versionInfo" => %(This property is deprecated. Use dcterms:subject from the Dublin Core ontology for text keywords and sioc:topic if the subject can be represented by a URI instead.).freeze,
@@ -633,7 +633,7 @@ module RDF
       "rdfs:seeAlso" => %(sioc:feed).freeze,
       type: "owl:ObjectProperty".freeze
     property :title,
-      comment: %(This is the title (subject line) of the Post. Note that for a Post within a threaded discussion that has no parents, it would detail the topic thread.).freeze,
+      comment: %(This is the title \(subject line\) of the Post. Note that for a Post within a threaded discussion that has no parents, it would detail the topic thread.).freeze,
       domain: "sioc:Post".freeze,
       label: "title".freeze,
       "owl:versionInfo" => %(This property is deprecated. Use dcterms:title from the Dublin Core ontology instead.).freeze,
@@ -657,11 +657,11 @@ module RDF
 
     # Extra definitions
     term :"",
-      "dc:description" => %(SIOC (Semantically-Interlinked Online Communities) is an ontology for describing the information in online communities. 
-This information can be used to export information from online communities and to link them together. The scope of the application areas that SIOC can be used for includes (and is not limited to) weblogs, message boards, mailing lists and chat channels.).freeze,
+      "dc:description" => %(SIOC \(Semantically-Interlinked Online Communities\) is an ontology for describing the information in online communities. 
+This information can be used to export information from online communities and to link them together. The scope of the application areas that SIOC can be used for includes \(and is not limited to\) weblogs, message boards, mailing lists and chat channels.).freeze,
       "dc:title" => %(SIOC Core Ontology Namespace).freeze,
       "owl:versionInfo" => %(Revision: 1.35).freeze,
       "rdfs:seeAlso" => %(http://rdfs.org/sioc/spec).freeze,
-      type: "owl:Ontology".freeze
+      type: ["owl:Ontology".freeze, "owl:Thing".freeze]
   end
 end

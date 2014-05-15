@@ -21,6 +21,12 @@ describe RDF::Vocabulary do
       expect {subject["foo"]}.not_to raise_error
       expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
     end
+
+    it "does not add to @@uris" do
+      RDF::Vocabulary.new("http://example/")
+      expect(RDF::Vocabulary.class_variable_get(:"@@uris")).to be_a(Hash)
+      expect(RDF::Vocabulary.class_variable_get(:"@@uris").values).not_to include("http://example/")
+    end
   end
 
   describe "#each" do
@@ -266,6 +272,34 @@ describe RDF::Vocabulary do
 
     it "should respond to comment_for from base RDFS" do
       test_vocab.comment_for(:prop2).should == " Test property comment"
+    end
+
+    it "should not enumerate from RDF::Vocabulary.each" do
+      expect(RDF::Vocabulary.each.to_a).not_to include(test_vocab)
+    end
+
+    it "should accept property class method" do
+      test_vocab.property :prop3, label: "prop3"
+      expect(test_vocab.properties).to include("http://example.com/test#prop3")
+    end
+  end
+
+  describe ".load" do
+    let!(:nt) {%{
+      <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+      <http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .
+      <http://example/prop> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+      <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
+    }}
+    before(:each) do
+      RDF::Graph.stub(:load) {RDF::Graph.new << RDF::NTriples::Reader.new(nt)}
+    end
+
+    subject {RDF::Vocabulary.load("http://example/")}
+
+    it "creates terms" do
+      expect(subject).to be_a_vocabulary("http://example/")
+      expect(subject).to have_properties("http://example/", %w(Class prop))
     end
   end
 

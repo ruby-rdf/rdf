@@ -21,6 +21,7 @@ module RDF
       "vs:term_status" => %(unstable).freeze
     term :Key,
       comment: %(the class of keys).freeze,
+      label: "Key".freeze,
       "rdfs:isDefinedBy" => %(cert:).freeze,
       type: "owl:Class".freeze,
       "vs:term_status" => %(unstable).freeze
@@ -236,7 +237,7 @@ module RDF
       "dc:created" => %(2008-11-13).freeze,
       "foaf:maker" => %(http://bblfish.net/people/henry/card#me).freeze,
       label: "Ontology for Certificates and crypto stuff.".freeze,
-      "rdfs:seeAlso" => %(http://lists.foaf-project.org/mailman/listinfo/foaf-protocols).freeze,
+      "rdfs:seeAlso" => [%(http://lists.foaf-project.org/mailman/listinfo/foaf-protocols).freeze, %(http://www.w3.org/ns/auth/X509Uml.svg).freeze, %(http://www.w3.org/ns/auth/rsa).freeze],
       type: "owl:Ontology".freeze,
       "vs:term_status" => %(unstable).freeze
   end

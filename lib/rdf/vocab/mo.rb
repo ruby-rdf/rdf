@@ -687,6 +687,7 @@ work #1 J. S. Bach's The art of the fugue
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(testing).freeze
     property :availableAs,
+      label: "availableAs".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/available_as).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -702,6 +703,7 @@ work #1 J. S. Bach's The art of the fugue
     ).freeze,
       domain: "http://purl.org/ontology/mo/MusicalManifestation".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "available_as".freeze,
       range: "http://purl.org/ontology/mo/MusicalItem".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       subPropertyOf: "http://purl.org/vocab/frbr/core#exemplar".freeze,
@@ -723,6 +725,7 @@ work #1 J. S. Bach's The art of the fugue
     ).freeze,
       domain: "http://purl.org/ontology/mo/DigitalSignal".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "bitsPerSample".freeze,
       range: "xsd:int".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:FunctionalProperty".freeze,
@@ -755,6 +758,7 @@ work #1 J. S. Bach's The art of the fugue
     ).freeze,
       domain: "http://purl.org/ontology/mo/Signal".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "channels".freeze,
       range: "xsd:int".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:FunctionalProperty".freeze,
@@ -842,6 +846,7 @@ work #1 J. S. Bach's The art of the fugue
       comment: %(Relates a performance to the conductor involved).freeze,
       domain: "http://purl.org/ontology/mo/Performance".freeze,
       "http://purl.org/ontology/mo/level" => %(2).freeze,
+      label: "conductor".freeze,
       "owl:inverseOf" => %(http://purl.org/ontology/mo/conducted).freeze,
       range: "foaf:Agent".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
@@ -949,6 +954,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
       comment: %(The duration of a track or a signal in ms).freeze,
       domain: "_:g2177389700".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "duration".freeze,
       range: "xsd:float".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:DatatypeProperty".freeze,
@@ -989,6 +995,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
       comment: %(Relates a performance or a recording to the engineer involved).freeze,
       domain: "_:g2172300380".freeze,
       "http://purl.org/ontology/mo/level" => %(2).freeze,
+      label: "engineer".freeze,
       "owl:inverseOf" => %(http://purl.org/ontology/mo/engineered).freeze,
       range: "foaf:Agent".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
@@ -1007,6 +1014,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :eventHomePage,
+      label: "eventHomePage".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/event_homepage).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -1059,6 +1067,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(stable).freeze
     property :freedownload,
+      label: "freedownload".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/free_download).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -1105,6 +1114,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(testing).freeze
     property :has_track,
+      label: "has_track".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/track).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -1151,6 +1161,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
       comment: %(Relates a performance to a musical instrument involved).freeze,
       domain: "http://purl.org/ontology/mo/Performance".freeze,
       "http://purl.org/ontology/mo/level" => %(2).freeze,
+      label: "instrument".freeze,
       range: "http://purl.org/ontology/mo/Instrument".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       subPropertyOf: "http://purl.org/NET/c4dm/event.owl#factor".freeze,
@@ -1216,6 +1227,7 @@ The artist usually selected the tracks, chose their sequence, and slightly chang
         ).freeze,
       domain: "http://purl.org/ontology/mo/MusicalManifestation".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "item".freeze,
       range: "http://purl.org/ontology/mo/MusicalItem".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       subPropertyOf: "http://purl.org/ontology/mo/available_as".freeze,
@@ -1291,6 +1303,7 @@ This is usually used to link to a Creative Commons licence.).freeze,
       comment: %(Relates a performance to the listener involved).freeze,
       domain: "http://purl.org/ontology/mo/Performance".freeze,
       "http://purl.org/ontology/mo/level" => %(2).freeze,
+      label: "listener".freeze,
       "owl:inverseOf" => %(http://purl.org/ontology/mo/listened).freeze,
       range: "foaf:Agent".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
@@ -1395,6 +1408,7 @@ This means that the orignial musical expression were rearranged to create a new 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :movementNum,
+      label: "movementNum".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/movement_number).freeze,
       type: "owl:DatatypeProperty".freeze
     property :movement_number,
@@ -1510,6 +1524,7 @@ This means that the orignial musical expression were rearranged to create a new 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(stable).freeze
     property :paiddownload,
+      label: "paiddownload".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/paid_download).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -1559,6 +1574,7 @@ This means that the orignial musical expression were rearranged to create a new 
       comment: %(Relates a performance to the performers involved).freeze,
       domain: "http://purl.org/ontology/mo/Performance".freeze,
       "http://purl.org/ontology/mo/level" => %(2).freeze,
+      label: "performer".freeze,
       "owl:inverseOf" => %(http://purl.org/ontology/mo/performed).freeze,
       range: "foaf:Agent".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
@@ -1581,6 +1597,7 @@ This means that the orignial musical expression were rearranged to create a new 
         ).freeze,
       domain: "http://purl.org/ontology/mo/MusicalManifestation".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "preview".freeze,
       range: "http://purl.org/ontology/mo/MusicalItem".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       subPropertyOf: "http://purl.org/ontology/mo/available_as".freeze,
@@ -1697,24 +1714,29 @@ This means that the orignial musical expression were rearranged to create a new 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(stable).freeze
     property :producesSignal,
+      label: "producesSignal".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/produced_signal).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :producesSound,
+      label: "producesSound".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/produced_sound).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :producesWork,
+      label: "producesWork".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/produced_work).freeze,
       type: "owl:ObjectProperty".freeze
     property :productOfComposition,
+      label: "productOfComposition".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/composed_in).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :publicationOf,
+      label: "publicationOf".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/publication_of).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -1739,6 +1761,7 @@ This means that the orignial musical expression were rearranged to create a new 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :publishedAs,
+      label: "publishedAs".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/published_as).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -1766,6 +1789,7 @@ This means that the orignial musical expression were rearranged to create a new 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :publishingLocation,
+      label: "publishingLocation".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/publishing_location).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -1835,6 +1859,7 @@ in conjunction with mo:track_number, so that one can infer e.g. "A1", that means
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(testing).freeze
     property :recordedAs,
+      label: "recordedAs".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/recorded_as).freeze,
       type: "owl:ObjectProperty".freeze
     property :recorded_as,
@@ -1909,10 +1934,12 @@ in conjunction with mo:track_number, so that one can infer e.g. "A1", that means
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(testing).freeze
     property :releaseStatus,
+      label: "releaseStatus".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/release_status).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :releaseType,
+      label: "releaseType".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/release_type).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -1922,6 +1949,7 @@ in conjunction with mo:track_number, so that one can infer e.g. "A1", that means
         ).freeze,
       domain: "http://purl.org/ontology/mo/MusicalManifestation".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "release_status".freeze,
       range: "http://purl.org/ontology/mo/ReleaseStatus".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -1932,6 +1960,7 @@ in conjunction with mo:track_number, so that one can infer e.g. "A1", that means
     ).freeze,
       domain: "http://purl.org/ontology/mo/MusicalManifestation".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "release_type".freeze,
       range: "http://purl.org/ontology/mo/ReleaseType".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -1990,6 +2019,7 @@ The review does not have to be open content, as long as it is accessible to the 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(stable).freeze
     property :sampleRate,
+      label: "sampleRate".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/sample_rate).freeze,
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
@@ -2000,6 +2030,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       domain: "http://purl.org/ontology/mo/DigitalSignal".freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "sample_rate".freeze,
       range: "xsd:float".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:FunctionalProperty".freeze,
@@ -2015,6 +2046,7 @@ The review does not have to be open content, as long as it is accessible to the 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :sampledVersionOf,
+      label: "sampledVersionOf".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/sampled_version_of).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -2072,6 +2104,7 @@ The review does not have to be open content, as long as it is accessible to the 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(testing).freeze
     property :signalTime,
+      label: "signalTime".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/time).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -2098,6 +2131,7 @@ The review does not have to be open content, as long as it is accessible to the 
       comment: %(Relates a performance to an involved singer).freeze,
       domain: "http://purl.org/ontology/mo/Performance".freeze,
       "http://purl.org/ontology/mo/level" => %(2).freeze,
+      label: "singer".freeze,
       range: "foaf:Agent".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       subPropertyOf: "http://purl.org/ontology/mo/performer".freeze,
@@ -2156,6 +2190,7 @@ The review does not have to be open content, as long as it is accessible to the 
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(stable).freeze
     property :trackNum,
+      label: "trackNum".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/track_number).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:DatatypeProperty".freeze,
@@ -2221,21 +2256,25 @@ The review does not have to be open content, as long as it is accessible to the 
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(testing).freeze
     property :usedInPerformance,
+      label: "usedInPerformance".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/performed_in).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :usedInRecording,
+      label: "usedInRecording".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/recorded_in).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :usesSound,
+      label: "usesSound".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/recording_of).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
       "vs:term_status" => %(deprecated).freeze
     property :usesWork,
+      label: "usesWork".freeze,
       "owl:equivalentProperty" => %(http://purl.org/ontology/mo/performance_of).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "owl:ObjectProperty".freeze,
@@ -2275,19 +2314,6 @@ The review does not have to be open content, as long as it is accessible to the 
       "vs:term_status" => %(stable).freeze
 
     # Extra definitions
-    term :"",
-      "dc11:created" => %(2006/12/21 12:00:00).freeze,
-      "dc11:date" => %(2013/07/22 16:54:19).freeze,
-      "dc11:description" => %(
-        The Music Ontology Specification provides main concepts and 
-        properties fo describing music \(i.e. artists, albums and tracks\) 
-        on the Semantic Web. 
-    ).freeze,
-      "dc11:title" => %(The Music Ontology).freeze,
-      "foaf:maker" => %(http://raimond.me.uk/foaf.rdf#moustaki).freeze,
-      "owl:imports" => %(http://purl.org/vocab/bio/0.1/).freeze,
-      "owl:versionInfo" => %(Revision: 2.1.5).freeze,
-      type: "owl:Ontology".freeze
     term :album,
       "dc11:description" => %(
         One or more track issued together.
@@ -2295,6 +2321,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(album).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "album".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :audiobook,
@@ -2304,12 +2331,14 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(audio book).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "audiobook".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :bootleg,
       "dc11:description" => %(An unofficial/underground musical work or the expression of a musical work that was not sanctioned by the artist and/or the corporate body. ).freeze,
       "dc11:title" => %(bootleg).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "bootleg".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseStatus".freeze
     term :compilation,
@@ -2319,6 +2348,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(compilation).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "compilation".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :ep,
@@ -2327,6 +2357,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(ep).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "ep".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :interview,
@@ -2336,6 +2367,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(interview).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "interview".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :live,
@@ -2344,18 +2376,21 @@ The review does not have to be open content, as long as it is accessible to the 
         This is a type of MusicalManifestation defined by the musical industry.).freeze,
       "dc11:title" => %(live).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "live".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :official,
       "dc11:description" => %(Any musical work or the expression of a musical work officially sanctioned by the artist and/or their corporate body.).freeze,
       "dc11:title" => %(official).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "official".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseStatus".freeze
     term :promotion,
       "dc11:description" => %(A giveaway musical work or the expression of a musical work intended to promote an upcoming official musical work or the expression of a musical work.).freeze,
       "dc11:title" => %(promotion).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "promotion".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseStatus".freeze
     term :remix,
@@ -2365,12 +2400,14 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(remix).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "remix".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :single,
       "dc11:description" => %(A single or record single is a type of release, typically a recording of two tracks. In most cases, the single is a song that is released separately from an album, but it can still appear on an album.).freeze,
       "dc11:title" => %(single).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "single".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :soundtrack,
@@ -2380,6 +2417,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(soundtrack).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "soundtrack".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
     term :spokenword,
@@ -2390,6 +2428,7 @@ The review does not have to be open content, as long as it is accessible to the 
     ).freeze,
       "dc11:title" => %(spoken word).freeze,
       "http://purl.org/ontology/mo/level" => %(1).freeze,
+      label: "spokenword".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/ontology/mo/).freeze,
       type: "http://purl.org/ontology/mo/ReleaseType".freeze
   end

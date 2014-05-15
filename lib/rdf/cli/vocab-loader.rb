@@ -95,11 +95,6 @@ module RDF
       end
     end
 
-    # Loads the graph
-    def graph
-      @graph ||= RDF::Graph.load(source)
-    end
-
     # Parse command line arguments and run the load-and-emit process
     def go(argv)
       parse_options(argv)
@@ -117,11 +112,11 @@ module RDF
 
       components = ["    #{op} #{name.to_sym.inspect}"]
       attributes.keys.sort_by(&:to_s).each do |key|
-        value = attributes[key]
+        value = Array(attributes[key])
         component = key.is_a?(Symbol) ? "#{key}: " : "#{key.inspect} => "
         value = value.first if value.length == 1
         component << if value.is_a?(Array)
-          '[' + value.map {|v| serialize_value(v, key)}.join("], [") + "]"
+          '[' + value.map {|v| serialize_value(v, key)}.join(", ") + "]"
         else
           serialize_value(value, key)
         end
@@ -151,13 +146,8 @@ module RDF
         ).gsub(/^        /, '') if @output_class_file
 
       # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values
-      term_defs = {}
-      graph.each do |statement|
-        next unless statement.subject.uri? && statement.subject.start_with?(uri)
-        term = (term_defs[statement.subject] ||= {})
-        (term[statement.predicate] ||= []) << statement.object
-      end
-      
+      vocab = RDF::Vocabulary.load(uri, location: source, extra: @extra)
+
       # Split nodes into Class/Property/Datatype/Other
       term_nodes = {
         class: {},
@@ -165,52 +155,15 @@ module RDF
         datatype: {},
         other: {}
       }
-      term_defs.keys.sort.each do |subject|
-        node = term_defs[subject]
-        node_classification = case node[RDF.type].to_s
+      vocab.each.to_a.sort.each do |term|
+        name = term.to_s[uri.length..-1].to_sym
+        kind = case term.type.to_s
         when /Class/    then :class
         when /Property/ then :property
         when /Datatype/ then :datatype
         else                 :other
         end
-
-        name = subject.to_s[uri.to_s.length..-1]
-        term_nodes[node_classification][name] = attributes = {}
-
-        node.each do |key, values|
-          prop = case key
-          when RDF.type                then :type
-          when RDF::RDFS.subClassOf    then :subClassOf
-          when RDF::RDFS.subPropertyOf then :subPropertyOf
-          when RDF::RDFS.range         then :range
-          when RDF::RDFS.domain        then :domain
-          when RDF::RDFS.comment       then :comment
-          when RDF::RDFS.label         then :label
-          else                         RDF::URI(key).pname
-          end
-
-          values = values.map do |v|
-            if v.uri?
-              v.pname
-            elsif v.literal? && (v.language || :en) == :en
-              v.to_s
-            end
-          end.compact
-          next if values.empty?
-          attributes[prop] = values.length > 1 ? values.first : values
-        end
-      end
-
-      # Add extra definitions
-      case @extra
-      when Array
-        @extra.each do |extra|
-          term_nodes[:other][extra.to_sym] = {label: extra.to_s}
-        end
-      when Hash
-        @extra.each do |n, opts|
-          term_nodes[:other][n] = {label: n.to_s}.merge(opts)
-        end
+        term_nodes[kind][name] = term.attributes
       end
 
       {

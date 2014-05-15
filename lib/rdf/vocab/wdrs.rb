@@ -65,7 +65,7 @@ module RDF
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/powder-dr/#line3).freeze,
       type: "rdf:Property".freeze
     property :logo,
-      comment: %(Points to a graphic summary for the resources in a given class. Typically, it is a logo denoting conformance of a given (set of) resource(s) to a given set of criteria.).freeze,
+      comment: %(Points to a graphic summary for the resources in a given class. Typically, it is a logo denoting conformance of a given \(set of\) resource\(s\) to a given set of criteria.).freeze,
       label: "logo".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/powder-dr/#line13).freeze,
       type: "rdf:Property".freeze

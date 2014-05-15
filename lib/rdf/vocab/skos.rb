@@ -39,7 +39,7 @@ module RDF
       label: "alternative label".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/2004/02/skos/core).freeze,
       "skos:definition" => %(An alternative lexical label for a resource.).freeze,
-      "skos:example" => %(Acronyms, abbreviations, spelling variants, and irregular plural/singular forms may be included among the alternative labels for a concept. Mis-spelled terms are normally included as hidden labels (see skos:hiddenLabel).).freeze,
+      "skos:example" => %(Acronyms, abbreviations, spelling variants, and irregular plural/singular forms may be included among the alternative labels for a concept. Mis-spelled terms are normally included as hidden labels \(see skos:hiddenLabel\).).freeze,
       subPropertyOf: "rdfs:label".freeze,
       type: "owl:AnnotationProperty".freeze
     property :broadMatch,
@@ -50,12 +50,12 @@ module RDF
       subPropertyOf: "skos:mappingRelation".freeze,
       type: "owl:ObjectProperty".freeze
     property :broader,
-      comment: %(Broader concepts are typically rendered as parents in a concept hierarchy (tree).).freeze,
+      comment: %(Broader concepts are typically rendered as parents in a concept hierarchy \(tree\).).freeze,
       label: "has broader".freeze,
       "owl:inverseOf" => %(skos:narrower).freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/2004/02/skos/core).freeze,
       "skos:definition" => %(Relates a concept to a concept that is more general in meaning.).freeze,
-      "skos:scopeNote" => %(By convention, skos:broader is only used to assert an immediate (i.e. direct) hierarchical link between two conceptual resources.).freeze,
+      "skos:scopeNote" => %(By convention, skos:broader is only used to assert an immediate \(i.e. direct\) hierarchical link between two conceptual resources.).freeze,
       subPropertyOf: "skos:broaderTransitive".freeze,
       type: "owl:ObjectProperty".freeze
     property :broaderTransitive,
@@ -128,11 +128,11 @@ module RDF
       label: "is in scheme".freeze,
       range: "skos:ConceptScheme".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/2004/02/skos/core).freeze,
-      "skos:definition" => %(Relates a resource (for example a concept) to a concept scheme in which it is included.).freeze,
+      "skos:definition" => %(Relates a resource \(for example a concept\) to a concept scheme in which it is included.).freeze,
       "skos:scopeNote" => %(A concept may be a member of more than one concept scheme.).freeze,
       type: "owl:ObjectProperty".freeze
     property :mappingRelation,
-      comment: %(These concept mapping relations mirror semantic relations, and the data model defined below is similar (with the exception of skos:exactMatch) to the data model defined for semantic relations. A distinct vocabulary is provided for concept mapping relations, to provide a convenient way to differentiate links within a concept scheme from links between concept schemes. However, this pattern of usage is not a formal requirement of the SKOS data model, and relies on informal definitions of best practice.).freeze,
+      comment: %(These concept mapping relations mirror semantic relations, and the data model defined below is similar \(with the exception of skos:exactMatch\) to the data model defined for semantic relations. A distinct vocabulary is provided for concept mapping relations, to provide a convenient way to differentiate links within a concept scheme from links between concept schemes. However, this pattern of usage is not a formal requirement of the SKOS data model, and relies on informal definitions of best practice.).freeze,
       label: "is in mapping relation with".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/2004/02/skos/core).freeze,
       "skos:definition" => %(Relates two concepts coming, by convention, from different schemes, and that have comparable meanings).freeze,
@@ -162,12 +162,12 @@ module RDF
       subPropertyOf: "skos:mappingRelation".freeze,
       type: "owl:ObjectProperty".freeze
     property :narrower,
-      comment: %(Narrower concepts are typically rendered as children in a concept hierarchy (tree).).freeze,
+      comment: %(Narrower concepts are typically rendered as children in a concept hierarchy \(tree\).).freeze,
       label: "has narrower".freeze,
       "owl:inverseOf" => %(skos:broader).freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/2004/02/skos/core).freeze,
       "skos:definition" => %(Relates a concept to a concept that is more specific in meaning.).freeze,
-      "skos:scopeNote" => %(By convention, skos:broader is only used to assert an immediate (i.e. direct) hierarchical link between two conceptual resources.).freeze,
+      "skos:scopeNote" => %(By convention, skos:broader is only used to assert an immediate \(i.e. direct\) hierarchical link between two conceptual resources.).freeze,
       subPropertyOf: "skos:narrowerTransitive".freeze,
       type: "owl:ObjectProperty".freeze
     property :narrowerTransitive,
