@@ -49,7 +49,7 @@ module RDF
     # Parses arguments, for use in a command line tool
     def parse_options(argv)
       opti = OptionParser.new
-      opti.banner = "Usage: #{File.basename($0)} [options] [uri [outfile]]\nFetch an RDFS file and produce an RDF::StrictVocabulary with it.\n\n"
+      opti.banner = "Usage: #{File.basename($0)} [options] [uri]\nFetch an RDFS file and produce an RDF::StrictVocabulary with it.\n\n"
 
       opti.on("--uri URI", "The URI for the fetched RDF vocabulary") do |uri|
         self.uri = uri
@@ -78,21 +78,7 @@ module RDF
         raise "Class name (--class-name) is required!"
       end
 
-      if uri.nil?
-        self.uri, outfile, extra = *others
-      else
-        outfile, extra = *others
-      end
-
-      unless outfile.nil?
-        @output = File.open(outfile, "w")
-      end
-
-      unless extra.nil?
-        $stderr.puts "Too many arguments!"
-        $stderr.puts opti
-        exit 1
-      end
+      uri ||= others.first
     end
 
     # Parse command line arguments and run the load-and-emit process

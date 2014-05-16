@@ -284,6 +284,33 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe ".find" do
+    it "returns the vocab given a Term" do
+      expect(RDF::Vocabulary.find(RDF::FOAF.Person)).to equal RDF::FOAF
+    end
+    it "returns the vocab given a URI" do
+      expect(RDF::Vocabulary.find(RDF::URI(RDF::FOAF.Person.to_s))).to equal RDF::FOAF
+    end
+    it "returns the vocab given a String" do
+      expect(RDF::Vocabulary.find(RDF::FOAF.Person.to_s)).to equal RDF::FOAF
+    end
+    it "returns RDFV given an RDF URI" do
+      expect(RDF::Vocabulary.find(RDF::URI(RDF.type))).to equal RDF::RDFV
+    end
+  end
+
+  describe ".find_term" do
+    it "returns itself given a Term" do
+      expect(RDF::Vocabulary.find_term(RDF::FOAF.Person)).to equal RDF::FOAF.Person
+    end
+    it "returns the term given a URI" do
+      expect(RDF::Vocabulary.find_term(RDF::URI(RDF::FOAF.Person.to_s))).to equal RDF::FOAF.Person
+    end
+    it "returns the term given a String" do
+      expect(RDF::Vocabulary.find_term(RDF::FOAF.Person.to_s)).to equal RDF::FOAF.Person
+    end
+  end
+
   describe ".load" do
     let!(:nt) {%{
       <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
@@ -311,7 +338,27 @@ describe RDF::Vocabulary do
     specify {should respond_to(:comment)}
     specify {should respond_to(:domain)}
     specify {should respond_to(:range)}
+    specify {should be_property}
+    specify {should_not be_class}
+    specify {should_not be_datatype}
+    specify {should_not be_other}
     its(:label) {should eq RDF::RDFS.label_for("comment")}
     its(:comment) {should eq RDF::RDFS.comment_for("comment")}
+
+    context RDF::FOAF.Person do
+      subject {RDF::FOAF.Person}
+      specify {should_not be_property}
+      specify {should be_class}
+      specify {should_not be_datatype}
+      specify {should_not be_other}
+    end
+
+    context RDF::XSD.integer do
+      subject {RDF::XSD.integer}
+      specify {should_not be_property}
+      specify {should_not be_class}
+      specify {should be_datatype}
+      specify {should_not be_other}
+    end
   end
 end

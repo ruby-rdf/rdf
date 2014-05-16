@@ -165,6 +165,27 @@ module RDF
       end
 
       ##
+      # Return the Vocabulary associated with a URI
+      #
+      # @param [RDF::URI] uri
+      # @return [Vocabulary]
+      def find(uri)
+        RDF::Vocabulary.detect {|v| RDF::URI(uri).start_with?(v)}
+      end
+
+      ##
+      # Return the Vocabulary term associated with a  URI
+      #
+      # @param [RDF::URI] uri
+      # @return [Vocabulary::Term]
+      def find_term(uri)
+        uri = RDF::URI(uri)
+        return uri if uri.is_a?(Vocabulary::Term)
+        vocab = RDF::Vocabulary.detect {|v| uri.start_with?(v)}
+        term = vocab[uri.to_s[vocab.to_s.length..-1]] if vocab
+      end
+
+      ##
       # Returns the URI for the term `property` in this vocabulary.
       #
       # @param  [#to_s] property
@@ -509,6 +530,34 @@ module RDF
       def valid?
         # Validate relative to RFC3987
         to_s.match(RDF::URI::IRI) || false
+      end
+
+      ##
+      # Is this a class term?
+      # @return [Boolean]
+      def class?
+        self.type.to_s =~ /Class/
+      end
+
+      ##
+      # Is this a class term?
+      # @return [Boolean]
+      def property?
+        self.type.to_s =~ /Property/
+      end
+
+      ##
+      # Is this a class term?
+      # @return [Boolean]
+      def datatype?
+        self.type.to_s =~ /Datatype/
+      end
+
+      ##
+      # Is this neither a class, property or datatype term?
+      # @return [Boolean]
+      def other?
+        self.type.to_s !~ /(Class|Property|Datatype)/
       end
 
       ##
