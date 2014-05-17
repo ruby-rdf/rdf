@@ -536,28 +536,28 @@ module RDF
       # Is this a class term?
       # @return [Boolean]
       def class?
-        self.type.to_s =~ /Class/
+        !!(self.type.to_s =~ /Class/)
       end
 
       ##
       # Is this a class term?
       # @return [Boolean]
       def property?
-        self.type.to_s =~ /Property/
+        !!(self.type.to_s =~ /Property/)
       end
 
       ##
       # Is this a class term?
       # @return [Boolean]
       def datatype?
-        self.type.to_s =~ /Datatype/
+        !!(self.type.to_s =~ /Datatype/)
       end
 
       ##
       # Is this neither a class, property or datatype term?
       # @return [Boolean]
       def other?
-        self.type.to_s !~ /(Class|Property|Datatype)/
+        !!(self.type.to_s !~ /(Class|Property|Datatype)/)
       end
 
       ##
