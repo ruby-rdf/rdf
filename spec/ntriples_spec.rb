@@ -179,11 +179,22 @@ describe RDF::NTriples::Writer do
     expect(RDF::NTriples::Writer.to_sym).to eq :ntriples
   end
 
+  context "Nodes" do
+    let(:statement) {RDF::Statement(RDF::Node("a"), RDF.type, RDF::Node("b"))}
+    it "uses node lables by default" do
+      expect(@writer_class.buffer {|w| w << statement}).to match %r(_:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:b \.)
+    end
+
+    it "uses unique labels if :unique_bnodes is true" do
+      expect(@writer_class.buffer(unique_bnodes:true) {|w| w << statement}).to match %r(_:g\w+ <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:g\w+ \.)
+    end
+  end
+
   context "validataion" do
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
         let(:graph) {RDF::Graph.new << statement}
-        subject {RDF::NTriples::Writer.buffer(:validate => true) {|w| w << graph}}
+        subject {RDF::NTriples::Writer.buffer(validate: true) {|w| w << graph}}
 
         if valid
           specify {expect {subject}.not_to raise_error}
@@ -214,7 +225,7 @@ describe RDF::NTriples::Writer do
     shared_examples "c14n" do |statement, result|
       context "given #{statement}" do
         let(:graph) {RDF::Graph.new << statement}
-        subject {RDF::NTriples::Writer.buffer(:validate => false, :canonicalize => true) {|w| w << graph}}
+        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true) {|w| w << graph}}
         if result
           specify {expect(subject).to eq "#{result}\n"}
         else
@@ -454,7 +465,7 @@ describe RDF::NTriples do
           %q(<http://example/a> <http://example/b> <http://example/c> .)
       }.each_pair do |input, output|
         it "for #{input.inspect}" do
-          expect(parse(input, :validate => true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
+          expect(parse(input, validate: true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
         end
       end
     end
@@ -642,7 +653,7 @@ describe RDF::NTriples do
         ]
       }.each do |name, (nt, error)|
         it name do
-          expect {@reader.new(nt.freeze, :validate => true).to_a}.to raise_error(error || RDF::ReaderError)
+          expect {@reader.new(nt.freeze, validate: true).to_a}.to raise_error(error || RDF::ReaderError)
         end
       end
     end
@@ -726,7 +737,7 @@ describe RDF::NTriples do
           %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
       }.each_pair do |input, output|
         it "for '#{input}'" do
-          expect(parse(input, :validate => true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
+          expect(parse(input, validate: true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
         end
       end
 
@@ -771,7 +782,7 @@ describe RDF::NTriples do
         %(http://example.com/\u003E),
       ].each do |uri|
         it "rejects #{('<' + uri + '>').inspect}" do
-          expect {parse(%(<s> <p> <#{uri}>), :validate => true)}.to raise_error RDF::ReaderError
+          expect {parse(%(<s> <p> <#{uri}>), validate: true)}.to raise_error RDF::ReaderError
         end
       end
     end
@@ -809,8 +820,8 @@ describe RDF::NTriples do
 
   def parse(input, options = {})
     options = {
-      :validate => false,
-      :canonicalize => false,
+      validate: false,
+      canonicalize: false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new
     @reader.new(input, options).each do |statement|

@@ -155,11 +155,19 @@ module RDF
     alias_method :===, :==
 
     ##
-    # Returns the base representation of this URI.
+    # Returns the base representation of this node.
     #
     # @return [Sring]
     def to_base
       to_s
+    end
+
+    ##
+    # Returns a representation of this node independent of any identifier used to initialize it
+    #
+    # @return [String]
+    def to_unique_base
+      "_:g#{__id__.to_i.abs}"
     end
 
     ##

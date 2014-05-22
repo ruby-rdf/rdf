@@ -207,6 +207,8 @@ module RDF
     # @option options [#to_s]    :base_uri     (nil)
     #   the base URI to use when constructing relative URIs (not supported
     #   by all writers)
+    # @option options [Boolean]  :unique_bnodes   (false)
+    #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples#format_node}
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
@@ -429,7 +431,9 @@ module RDF
 
     ##
     # @param  [RDF::Node] value
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
+    # @option options [Boolean] :unique_bnodes (false)
+    #   Serialize node using unique identifier, rather than any used to create the node.
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
@@ -439,7 +443,7 @@ module RDF
 
     ##
     # @param  [RDF::URI] value
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
@@ -449,7 +453,7 @@ module RDF
 
     ##
     # @param  [RDF::Literal, String, #to_s] value
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
@@ -459,7 +463,7 @@ module RDF
 
     ##
     # @param  [RDF::List] value
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
     # @abstract
     # @since  0.2.3

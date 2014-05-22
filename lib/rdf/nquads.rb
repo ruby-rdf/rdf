@@ -114,17 +114,18 @@ module RDF
       # @param  [RDF::Term]     object
       # @return [void]
       def write_quad(subject, predicate, object, context)
-        puts format_quad(subject, predicate, object, context)
+        puts format_quad(subject, predicate, object, context, @options)
       end
 
       ##
       # Returns the N-Quads representation of a statement.
       #
       # @param  [RDF::Statement] statement
+      # @param  [Hash{Symbol => Object}] options = ({})
       # @return [String]
       # @since  0.4.0
-      def format_statement(statement)
-        format_quad(*statement.to_quad)
+      def format_statement(statement, options = {})
+        format_quad(*statement.to_quad, options)
       end
 
       ##
@@ -134,10 +135,11 @@ module RDF
       # @param  [RDF::URI]      predicate
       # @param  [RDF::Term]     object
       # @param  [RDF::Term]     context
+      # @param  [Hash{Symbol => Object}] options = ({})
       # @return [String]
-      def format_quad(subject, predicate, object, context)
-        s = "%s %s %s " % [subject, predicate, object].map { |value| format_term(value) }
-        s += format_term(context) + " " if context
+      def format_quad(subject, predicate, object, context, options = {})
+        s = "%s %s %s " % [subject, predicate, object].map { |value| format_term(value, options) }
+        s += format_term(context, options) + " " if context
         s + "."
       end
     end # Writer
