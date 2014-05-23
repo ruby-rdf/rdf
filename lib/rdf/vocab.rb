@@ -591,7 +591,7 @@ module RDF
         when :type, :subClassOf, :subPropertyOf, :domain, :range
           case @attributes[method]
           when Array
-            @attributes[method].each {|v| RDF::Vocabulary.expand_pname(v)}
+            @attributes[method].map {|v| RDF::Vocabulary.expand_pname(v)}
           when nil
             nil
           else
