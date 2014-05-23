@@ -333,6 +333,7 @@ describe RDF::Vocabulary do
   describe RDF::Vocabulary::Term do
     subject {RDF::RDFS.comment}
     specify {should be_uri}
+    specify {should respond_to(:vocab)}
     specify {should respond_to(:type)}
     specify {should respond_to(:label)}
     specify {should respond_to(:comment)}
@@ -344,6 +345,7 @@ describe RDF::Vocabulary do
     specify {should_not be_other}
     its(:label) {should eq RDF::RDFS.label_for("comment")}
     its(:comment) {should eq RDF::RDFS.comment_for("comment")}
+    its(:vocab) {should eql RDF::RDFS}
 
     context RDF::FOAF.Person do
       subject {RDF::FOAF.Person}
@@ -351,6 +353,7 @@ describe RDF::Vocabulary do
       specify {should be_class}
       specify {should_not be_datatype}
       specify {should_not be_other}
+      its(:vocab) {should eql RDF::FOAF}
     end
 
     context RDF::XSD.integer do
@@ -359,6 +362,7 @@ describe RDF::Vocabulary do
       specify {should_not be_class}
       specify {should be_datatype}
       specify {should_not be_other}
+      its(:vocab) {should eql RDF::XSD}
     end
   end
 end

@@ -9,13 +9,14 @@ module RDF
   class VocabularyLoader
     def initialize(class_name = nil)
       @class_name = class_name
+      @module_name = "RDF"
       @output = $stdout
       @output_class_file = true
       @uri = nil
       @strict = true
       @extra = []
     end
-    attr_accessor :class_name, :output, :output_class_file
+    attr_accessor :class_name, :module_name, :output, :output_class_file
     attr_reader :uri, :source
 
     # Set the URI for the loaded RDF file - by default, sets the source as
@@ -63,6 +64,10 @@ module RDF
         self.class_name = name
       end
 
+      opti.on("--module-name NAME", "The module name for the output StrictVocabulary subclass") do |name|
+        self.module_name = name
+      end
+
       opti.on("--raw", "Don't output an output file - just the RDF") do
         @output_class_file = false
       end
@@ -98,6 +103,7 @@ module RDF
 
       components = ["    #{op} #{name.to_sym.inspect}"]
       attributes.keys.sort_by(&:to_s).each do |key|
+        next if key == :vocab
         value = Array(attributes[key])
         component = key.is_a?(Symbol) ? "#{key}: " : "#{key.inspect} => "
         value = value.first if value.length == 1
@@ -127,8 +133,8 @@ module RDF
       @output.print %(# -*- encoding: utf-8 -*-
         # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
-        module RDF
-          class #{class_name} < #{"Strict" if @strict}Vocabulary("#{uri}")
+        module #{module_name}
+          class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
       # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values

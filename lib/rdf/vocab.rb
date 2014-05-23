@@ -129,10 +129,10 @@ module RDF
       def property(*args)
         case args.length
         when 0
-          Term.intern("#{self}property", attributes: {:label => "property"})
+          Term.intern("#{self}property", attributes: {label: "property", vocab: self})
         else
           name, options = args
-          options = {:label => name.to_s}.merge(options || {})
+          options = {:label => name.to_s, vocab: self}.merge(options || {})
           prop = Term.intern([to_s, name.to_s].join(''), attributes: options)
           props[prop] = options
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
@@ -194,7 +194,7 @@ module RDF
         if self.respond_to?(property.to_sym)
           self.send(property.to_sym)
         else
-          Term.intern([to_s, property.to_s].join(''), attributes: {})
+          Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self})
         end
       end
 
@@ -388,7 +388,7 @@ module RDF
         if %w(to_ary).include?(property.to_s)
           super
         elsif args.empty? && !to_s.empty?
-          Term.intern([to_s, property.to_s].join(''), attributes: {})
+          Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self})
         else
           super
         end
@@ -420,7 +420,7 @@ module RDF
     # @param  [#to_s] property
     # @return [URI]
     def [](property)
-      Term.intern([to_s, property.to_s].join(''), attributes: {})
+      Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self.class})
     end
 
     ##
@@ -492,6 +492,7 @@ module RDF
       #   @param  [Hash{Symbol => Object}] options
       #   @option options [Boolean] :validate (false)
       #   @option options [Boolean] :canonicalize (false)
+      #   @option [Vocabulary] :vocab The {Vocabulary} associated with this term.
       #   @option [String, #to_s] :scheme The scheme component.
       #   @option [String, #to_s] :user The user component.
       #   @option [String, #to_s] :password The password component.
@@ -513,6 +514,12 @@ module RDF
         @attributes = options.fetch(:attributes)
         super
       end
+
+      ##
+      # Vocabulary of this term.
+      #
+      # @return [RDF::Vocabulary]
+      def vocab; @attributes.fetch(:vocab); end
 
       ##
       # Returns a duplicate copy of `self`.
