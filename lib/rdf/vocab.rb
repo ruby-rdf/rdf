@@ -161,6 +161,8 @@ module RDF
           RDF[suffix]
         elsif vocab = RDF::Vocabulary.each.detect {|v| v.__name__ && v.__prefix__ == prefix.to_sym}
           suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
+        else
+          RDF::Vocabulary.find_term(pname) || RDF::URI(pname)
         end
       end
 
@@ -170,7 +172,7 @@ module RDF
       # @param [RDF::URI] uri
       # @return [Vocabulary]
       def find(uri)
-        RDF::Vocabulary.detect {|v| RDF::URI(uri).start_with?(v)}
+        RDF::Vocabulary.detect {|v| RDF::URI(uri).start_with?(v.to_uri)}
       end
 
       ##
@@ -181,8 +183,8 @@ module RDF
       def find_term(uri)
         uri = RDF::URI(uri)
         return uri if uri.is_a?(Vocabulary::Term)
-        vocab = RDF::Vocabulary.detect {|v| uri.start_with?(v)}
-        term = vocab[uri.to_s[vocab.to_s.length..-1]] if vocab
+        vocab = RDF::Vocabulary.detect {|v| uri.start_with?(v.to_uri)}
+        term = vocab[uri.to_s[vocab.to_uri.to_s.length..-1]] if vocab
       end
 
       ##
@@ -248,25 +250,25 @@ module RDF
               case prop
               when :type
                 prop = RDF.type
-                value = expand_pname(value) || RDF::URI(value)
+                value = expand_pname(value)
               when :subClassOf
                 prop = RDFS.subClassOf
-                value = expand_pname(value) || RDF::URI(value)
+                value = expand_pname(value)
               when :subPropertyOf
                 prop = RDFS.subPropertyOf
-                value = expand_pname(value) || RDF::URI(value)
+                value = expand_pname(value)
               when :domain
                 prop = RDFS.domain
-                value = expand_pname(value) || RDF::URI(value)
+                value = expand_pname(value)
               when :range
                 prop = RDFS.range
-                value = expand_pname(value) || RDF::URI(value)
+                value = expand_pname(value)
               when :label
                 prop = RDFS.label
               when :comment
                 prop = RDFS.comment
               else
-                value = RDF::Vocabulary.expand_pname(value) || value
+                value = RDF::Vocabulary.expand_pname(value)
               end
 
               block.call RDF::Statement(subject, prop, value)
@@ -376,7 +378,7 @@ module RDF
     protected
       def inherited(subclass) # @private
         unless @@uri.nil?
-          @@subclasses << subclass #unless subclass == ::RDF::RDF
+          @@subclasses << subclass unless %w(http://www.w3.org/1999/02/22-rdf-syntax-ns#).include?(@@uri)
           subclass.send(:private_class_method, :new)
           @@uris[subclass] = @@uri
           @@uri = nil
@@ -589,14 +591,7 @@ module RDF
         when :label
           @attributes.fetch(method, to_s.split(/[\/\#]/).last)
         when :type, :subClassOf, :subPropertyOf, :domain, :range
-          case @attributes[method]
-          when Array
-            @attributes[method].map {|v| RDF::Vocabulary.expand_pname(v)}
-          when nil
-            nil
-          else
-            RDF::Vocabulary.expand_pname(@attributes[method])
-          end
+          Array(@attributes[method]).map {|v| RDF::Vocabulary.expand_pname(v)}
         else
           super
         end

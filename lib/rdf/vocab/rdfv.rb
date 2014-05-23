@@ -4,6 +4,11 @@ require 'rdf'
 module RDF
   class RDFV < StrictVocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
+    class << self
+      def name; "RDF"; end
+      alias_method :__name__, :name
+    end
+
     # Class definitions
     term :Alt,
       comment: %(The class of containers of alternatives.).freeze,

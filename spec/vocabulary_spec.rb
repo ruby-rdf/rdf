@@ -284,30 +284,44 @@ describe RDF::Vocabulary do
     end
   end
 
+  let(:terms) {{
+    RDF::FOAF.Person => RDF::FOAF,
+    RDF.type         => RDF
+  }}
+
   describe ".find" do
     it "returns the vocab given a Term" do
-      expect(RDF::Vocabulary.find(RDF::FOAF.Person)).to equal RDF::FOAF
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(term)).to equal vocab
+      end
     end
     it "returns the vocab given a URI" do
-      expect(RDF::Vocabulary.find(RDF::URI(RDF::FOAF.Person.to_s))).to equal RDF::FOAF
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(RDF::URI(term.to_s))).to equal vocab
+      end
     end
     it "returns the vocab given a String" do
-      expect(RDF::Vocabulary.find(RDF::FOAF.Person.to_s)).to equal RDF::FOAF
-    end
-    it "returns RDFV given an RDF URI" do
-      expect(RDF::Vocabulary.find(RDF::URI(RDF.type))).to equal RDF::RDFV
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(term.to_s)).to equal vocab
+      end
     end
   end
 
   describe ".find_term" do
     it "returns itself given a Term" do
-      expect(RDF::Vocabulary.find_term(RDF::FOAF.Person)).to equal RDF::FOAF.Person
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find_term(term)).to equal term
+      end
     end
     it "returns the term given a URI" do
-      expect(RDF::Vocabulary.find_term(RDF::URI(RDF::FOAF.Person.to_s))).to equal RDF::FOAF.Person
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find_term(RDF::URI(term.to_s))).to equal term
+      end
     end
     it "returns the term given a String" do
-      expect(RDF::Vocabulary.find_term(RDF::FOAF.Person.to_s)).to equal RDF::FOAF.Person
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find_term(term.to_s)).to equal term
+      end
     end
   end
 
