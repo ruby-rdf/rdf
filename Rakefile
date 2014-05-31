@@ -83,7 +83,6 @@ vocab_sources = {
   sioc:   {uri: "http://rdfs.org/sioc/ns#"},
   skos:   {uri: "http://www.w3.org/2004/02/skos/core#"},
   skosxl: {uri: "http://www.w3.org/2008/05/skos-xl#", source: "http://www.w3.org/TR/skos-reference/skos-xl.rdf"},
-  v:      {uri: "http://rdf.data-vocabulary.org/"},
   vcard:  {uri: "http://www.w3.org/2006/vcard/ns#"},
   void:   {uri: "http://rdfs.org/ns/void#", source: "http://vocab.deri.ie/void.rdf"},
   vs:     {uri: "http://www.w3.org/2003/06/sw-vocab-status/ns#"},
