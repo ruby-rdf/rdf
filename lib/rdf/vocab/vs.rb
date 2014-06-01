@@ -1,0 +1,27 @@
+# -*- encoding: utf-8 -*-
+# This file generated automatically using vocab-fetch from http://www.w3.org/2003/06/sw-vocab-status/ns#
+require 'rdf'
+module RDF
+  class VS < StrictVocabulary("http://www.w3.org/2003/06/sw-vocab-status/ns#")
+
+    # Property definitions
+    property :moreinfo,
+      comment: %(more information about the status etc of a term, typically human oriented).freeze,
+      "http://www.w3.org/2003/06/sw-vocab-status/ns#term_status" => %(unstable).freeze,
+      label: "more info".freeze,
+      "rdfs:isDefinedBy" => %(http://www.w3.org/2003/06/sw-vocab-status/ns#).freeze,
+      type: "rdf:Property".freeze
+    property :term_status,
+      comment: %(the status of a vocabulary term, expressed as a short symbolic string; known values include 'unstable','testing', 'stable' and 'archaic').freeze,
+      "http://www.w3.org/2003/06/sw-vocab-status/ns#term_status" => %(unstable).freeze,
+      label: "term status".freeze,
+      "rdfs:isDefinedBy" => %(http://www.w3.org/2003/06/sw-vocab-status/ns#).freeze,
+      type: "rdf:Property".freeze
+    property :userdocs,
+      comment: %(human-oriented documentation, examples etc for use of this term).freeze,
+      "http://www.w3.org/2003/06/sw-vocab-status/ns#term_status" => %(unstable).freeze,
+      label: "user docs".freeze,
+      "rdfs:isDefinedBy" => %(http://www.w3.org/2003/06/sw-vocab-status/ns#).freeze,
+      type: "rdf:Property".freeze
+  end
+end

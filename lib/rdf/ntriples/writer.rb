@@ -179,7 +179,7 @@ module RDF::NTriples
     #
     # @param  [IO, File] output
     #   the output stream
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
     #   any additional options. See {RDF::Writer#initialize}
     # @option options [Boolean]  :validate (true)
     #   whether to validate terms when serializing
@@ -208,16 +208,17 @@ module RDF::NTriples
     # @param  [RDF::Term]     object
     # @return [void]
     def write_triple(subject, predicate, object)
-      puts format_triple(subject, predicate, object)
+      puts format_triple(subject, predicate, object, @options)
     end
 
     ##
     # Returns the N-Triples representation of a statement.
     #
     # @param  [RDF::Statement] statement
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
-    def format_statement(statement)
-      format_triple(*statement.to_triple)
+    def format_statement(statement, options = {})
+      format_triple(*statement.to_triple, options)
     end
 
     ##
@@ -226,26 +227,29 @@ module RDF::NTriples
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Term]     object
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
-    def format_triple(subject, predicate, object)
-      "%s %s %s ." % [subject, predicate, object].map { |value| format_term(value) }
+    def format_triple(subject, predicate, object, options = {})
+      "%s %s %s ." % [subject, predicate, object].map { |value| format_term(value, options) }
     end
 
     ##
     # Returns the N-Triples representation of a blank node.
     #
     # @param  [RDF::Node] node
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
+    # @option options [Boolean] :unique_bnodes (false)
+    #   Serialize node using unique identifier, rather than any used to create the node.
     # @return [String]
     def format_node(node, options = {})
-      node.to_base
+      options[:unique_bnodes] ? node.to_unique_base : node.to_base
     end
 
     ##
     # Returns the N-Triples representation of a URI reference.
     #
     # @param  [RDF::URI] uri
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
     def format_uri(uri, options = {})
       uri.to_base
@@ -255,7 +259,7 @@ module RDF::NTriples
     # Returns the N-Triples representation of a literal.
     #
     # @param  [RDF::Literal, String, #to_s] literal
-    # @param  [Hash{Symbol => Object}] options
+    # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
     def format_literal(literal, options = {})
       case literal

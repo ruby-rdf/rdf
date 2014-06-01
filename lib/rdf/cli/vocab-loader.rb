@@ -9,27 +9,27 @@ module RDF
   class VocabularyLoader
     def initialize(class_name = nil)
       @class_name = class_name
+      @module_name = "RDF"
       @output = $stdout
       @output_class_file = true
-      @prefix = nil
-      @url = nil
+      @uri = nil
       @strict = true
       @extra = []
     end
-    attr_accessor :class_name, :output, :output_class_file
-    attr_reader :prefix, :source
+    attr_accessor :class_name, :module_name, :output, :output_class_file
+    attr_reader :uri, :source
 
-    # Set the prefix for the loaded RDF file - by default, sets the source as
+    # Set the URI for the loaded RDF file - by default, sets the source as
     # well
-    def prefix=(uri)
-      @prefix = uri
+    def uri=(uri)
+      @uri = uri
       @source ||= uri
     end
 
-    # Set the source for the loaded RDF - by default, sets the prefix as well
+    # Set the source for the loaded RDF - by default, sets the URI as well
     def source=(uri)
       @source = uri
-      @prefix ||= uri
+      @uri ||= uri
     end
 
     # Set output
@@ -50,10 +50,10 @@ module RDF
     # Parses arguments, for use in a command line tool
     def parse_options(argv)
       opti = OptionParser.new
-      opti.banner = "Usage: #{File.basename($0)} [options] [prefix [outfile]]\nFetch an RDFS file and produce an RDF::StrictVocabulary with it.\n\n"
+      opti.banner = "Usage: #{File.basename($0)} [options] [uri]\nFetch an RDFS file and produce an RDF::StrictVocabulary with it.\n\n"
 
-      opti.on("--prefix URI", "The prefix for the fetched RDF vocabulary") do |uri|
-        self.prefix = uri
+      opti.on("--uri URI", "The URI for the fetched RDF vocabulary") do |uri|
+        self.uri = uri
       end
 
       opti.on("--source SOURCE", "The source URI or file for the vocabulary") do |uri|
@@ -62,6 +62,10 @@ module RDF
 
       opti.on("--class-name NAME", "The class name for the output StrictVocabulary subclass") do |name|
         self.class_name = name
+      end
+
+      opti.on("--module-name NAME", "The module name for the output StrictVocabulary subclass") do |name|
+        self.module_name = name
       end
 
       opti.on("--raw", "Don't output an output file - just the RDF") do
@@ -79,26 +83,7 @@ module RDF
         raise "Class name (--class-name) is required!"
       end
 
-      if prefix.nil?
-        self.prefix, outfile, extra = *others
-      else
-        outfile, extra = *others
-      end
-
-      unless outfile.nil?
-        @output = File.open(outfile, "w")
-      end
-
-      unless extra.nil?
-        $stderr.puts "Too many arguments!"
-        $stderr.puts opti
-        exit 1
-      end
-    end
-
-    # Loads the graph
-    def graph
-      @graph ||= RDF::Graph.load(source)
+      uri ||= others.first
     end
 
     # Parse command line arguments and run the load-and-emit process
@@ -111,126 +96,77 @@ module RDF
       end
     end
 
-    # @private
-    def from_solution(solution)
-      prefix_match = %r{\A#{@prefix}(.*)}
-      return if !solution.resource.uri? || (match = prefix_match.match(solution.resource.to_s)).nil?
-      name = match[1]
+    ##
+    # Turn a node definition into a property/term expression
+    def from_node(name, attributes, term_type)
+      op = term_type == :property ? "property" : "term"
 
-      # If there's a label or comment, the must either have no language, or be en
-      label = solution[:label]
-      comment = solution[:comment]
+      components = ["    #{op} #{name.to_sym.inspect}"]
+      attributes.keys.sort_by(&:to_s).each do |key|
+        next if key == :vocab
+        value = Array(attributes[key])
+        component = key.is_a?(Symbol) ? "#{key}: " : "#{key.inspect} => "
+        value = value.first if value.length == 1
+        component << if value.is_a?(Array)
+          '[' + value.map {|v| serialize_value(v, key)}.join(", ") + "]"
+        else
+          serialize_value(value, key)
+        end
+        components << component
+      end
+      @output.puts components.join(",\n      ")
+    end
 
-      return if label && label.has_language? && !label.language.to_s.start_with?("en")
-      return if comment && comment.has_language? && !comment.language.to_s.start_with?("en")
-      label = label.to_s.
-        encode(Encoding::US_ASCII). # also force exception if invalid
-        strip.
-        gsub(/\s+/m, ' ')
-      comment = comment.to_s.
-        encode(Encoding::US_ASCII). # also force exception if invalid
-        strip.
-        gsub(/\s+/m, ' ').
-        gsub(/([\(\)])/, '\\\\\\1')
-
-      @output.write "    property #{name.to_sym.inspect}"
-      @output.write ", :label => '#{label}'" unless label.empty?
-      @output.write ", :comment =>\n      %(#{comment.scan(/\S.{0,60}\S(?=\s|$)|\S+/).join("\n        ")})" unless comment.empty?
-      @output.puts
-    rescue Encoding::UndefinedConversionError
+    def serialize_value(value, key)
+      case key
+      when :comment, String
+        "%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze"
+      else
+        "#{value.inspect}.freeze"
+      end
     end
 
     # Actually executes the load-and-emit process - useful when using this
     # class outside of a command line - instantiate, set attributes manually,
     # then call #run
     def run
-      @output.print %(# This file generated automatically using vocab-fetch from #{source}
+      @output.print %(# -*- encoding: utf-8 -*-
+        # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
-        module RDF
-          class #{class_name} < #{"Strict" if @strict}Vocabulary("#{prefix}")
+        module #{module_name}
+          class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
-      classes = RDF::Query.new do
-        pattern [:resource, RDF.type, RDFS.Class]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
+      # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values
+      vocab = RDF::Vocabulary.load(uri, location: source, extra: @extra)
 
-      owl_classes = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.Class]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      class_defs = graph.query(classes).to_a + graph.query(owl_classes).to_a
-      unless class_defs.empty?
-        @output.puts "\n    # Class definitions"
-        class_defs.sort_by {|s| (s[:label] || s[:resource]).to_s}.each do |klass|
-          from_solution(klass)
+      # Split nodes into Class/Property/Datatype/Other
+      term_nodes = {
+        class: {},
+        property: {},
+        datatype: {},
+        other: {}
+      }
+      vocab.each.to_a.sort.each do |term|
+        name = term.to_s[uri.length..-1].to_sym
+        kind = case term.type.to_s
+        when /Class/    then :class
+        when /Property/ then :property
+        when /Datatype/ then :datatype
+        else                 :other
         end
+        term_nodes[kind][name] = term.attributes
       end
 
-      properties = RDF::Query.new do
-        pattern [:resource, RDF.type, RDF.Property]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      dt_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.DatatypeProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      obj_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.ObjectProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      ann_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.AnnotationProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      ont_properties = RDF::Query.new do
-        pattern [:resource, RDF.type, OWL.OntologyProperty]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-      prop_defs = graph.query(properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(dt_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(obj_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(ann_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      prop_defs += graph.query(ont_properties).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      unless prop_defs.empty?
-        @output.puts "\n    # Property definitions"
-        prop_defs.each do |prop|
-          from_solution(prop)
-        end
-      end
-
-
-      datatypes = RDF::Query.new do
-        pattern [:resource, RDF.type, RDFS.Datatype]
-        pattern [:resource, RDFS.label, :label], :optional => true
-        pattern [:resource, RDFS.comment, :comment], :optional => true
-      end
-
-      dt_defs = graph.query(datatypes).to_a.sort_by {|s| (s[:label] || s[:resource]).to_s}
-      unless dt_defs.empty?
-        @output.puts "\n    # Datatype definitions"
-        dt_defs.each do |dt|
-          from_solution(dt)
-        end
-      end
-
-      unless @extra.empty?
-        @output.puts "\n    # Extra definitions"
-        @extra.each do |extra|
-          @output.puts "    property #{extra.to_sym.inspect}"
-        end
+      {
+        class: "Class definitions",
+        property: "Property definitions",
+        datatype: "Datatype definitions",
+        other: "Extra definitions"
+      }.each do |tt, comment|
+        next if term_nodes[tt].empty?
+        @output.puts "\n    # #{comment}"
+        term_nodes[tt].each {|name, attributes| from_node name, attributes, tt}
       end
 
       # Query the vocabulary to extract property and class definitions

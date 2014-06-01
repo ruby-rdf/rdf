@@ -18,21 +18,23 @@ module RDF; class Query
     ##
     # @overload initialize(options = {})
     #   @param  [Hash{Symbol => Object}]     options
-    #   @option options [Variable, Resource, nil] :subject   (nil)
-    #   @option options [Variable, URI, nil]      :predicate (nil)
-    #   @option options [Variable, Term, nil]     :object    (nil)
-    #   @option options [Variable, Resource, nil, false] :context   (nil)
+    #   @option options [Variable, Resource, Symbol, nil] :subject   (nil)
+    #   @option options [Variable, URI, Symbol, nil]      :predicate (nil)
+    #   @option options [Variable, Term, Symbol, nil]     :object    (nil)
+    #   @option options [Variable, Resource, Symbol, nil, false] :context   (nil)
     #     A context of nil matches any context, a context of false, matches only the default context.
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
-    #   @param  [Variable, Resource, nil]         subject
-    #   @param  [Variable, URI, nil]              predicate
-    #   @param  [Variable, Termm, nil]            object
+    #   @param  [Variable, Resource, Symbol, nil]         subject
+    #   @param  [Variable, URI, Symbol, nil]              predicate
+    #   @param  [Variable, Termm, Symbol, nil]            object
     #   @param  [Hash{Symbol => Object}]          options
-    #   @option options [Variable, Resource, nil, false] :context   (nil)
+    #   @option options [Variable, Resource, Symbol, nil, false] :context   (nil)
     #     A context of nil matches any context, a context of false, matches only the default context.
     #   @option options [Boolean]                 :optional  (false)
+    #
+    # @note {Statement} treats symbols as interned {Node} instances, in a {Pattern}, they are treated as {Variable}.
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       super
     end

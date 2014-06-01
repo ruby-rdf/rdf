@@ -89,10 +89,13 @@ end
 
 describe RDF::NQuads::Reader do
   let(:testfile) {fixture_path('test.nq')}
+  let!(:test_count) {File.open(testfile).each_line.to_a.reject {|l| l.sub(/#.*$/, '').strip.empty?}.length}
 
   before(:each) do
     @reader_class = RDF::NQuads::Reader
     @reader = RDF::NQuads::Reader.new
+    @reader_input = File.read(testfile)
+    @reader_count = test_count
   end
   
   # @see lib/rdf/spec/reader.rb in rdf-spec
@@ -162,9 +165,9 @@ describe RDF::NQuads::Reader do
   
   context "with simple quads" do
     [
-      ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::URI("d"))],
-      ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Node.new("d"))],
-      ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Literal("d"))],
+      ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::URI("d"))],
+      ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::Node.new("d"))],
+      ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::Literal("d"))],
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
         graph = RDF::Graph.new << @reader_class.new(str)
@@ -229,9 +232,9 @@ describe RDF::NQuads::Writer do
 
       context "with simple quads" do
         [
-          ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::URI("d"))],
-          ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Node.new("d"))],
-          ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), :context => RDF::Literal("d"))],
+          ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::URI("d"))],
+          ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::Node.new("d"))],
+          ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::Literal("d"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
             expect(@writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
@@ -241,6 +244,16 @@ describe RDF::NQuads::Writer do
     end
   end
 
+  context "Nodes" do
+    let(:statement) {RDF::Statement(RDF::Node("a"), RDF.type, RDF::Node("b"), context: RDF::Node("c"))}
+    it "uses node lables by default" do
+      expect(@writer_class.buffer {|w| w << statement}).to match %r(_:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:b _:c \.)
+    end
+
+    it "uses unique labels if :unique_bnodes is true" do
+      expect(@writer_class.buffer(unique_bnodes:true) {|w| w << statement}).to match %r(_:g\w+ <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:g\w+ _:g\w+ \.)
+    end
+  end
 
   context "validataion" do
     it "defaults validation to be true" do
@@ -250,7 +263,7 @@ describe RDF::NQuads::Writer do
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
         let(:graph) {RDF::Repository.new << statement}
-        subject {RDF::NTriples::Writer.buffer(:validate => true) {|w| w << graph}}
+        subject {RDF::NTriples::Writer.buffer(validate: true) {|w| w << graph}}
         if valid
           specify {expect {subject}.not_to raise_error}
         else
@@ -259,19 +272,19 @@ describe RDF::NQuads::Writer do
       end
     end
     {
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF::Node("node")) => true,
-      RDF::Statement.new(RDF::Node("node"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Node("node"), :context => RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal"), :context => RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
-      RDF::Statement.new(nil, RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil, :context => RDF.to_uri) => false,
-      RDF::Statement.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), :context => RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), :context => RDF::Literal("literal")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF::Node("node")) => true,
+      RDF::Statement.new(RDF::Node("node"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Node("node"), context: RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::Literal("literal"), context: RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => false,
+      RDF::Statement.new(nil, RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil, context: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), context: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self"), context: RDF::Literal("literal")) => false,
     }.each do |st, valid|
       include_examples "validation", st, valid
     end
@@ -282,7 +295,7 @@ describe RDF::NQuads::Writer do
     shared_examples "c14n" do |statement, result|
       context "given #{statement}" do
         let(:graph) {RDF::Graph.new << statement}
-        subject {RDF::NTriples::Writer.buffer(:validate => false, :canonicalize => true) {|w| w << graph}}
+        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true) {|w| w << graph}}
         if result
           specify {expect(subject).to eq "#{result}\n"}
         else

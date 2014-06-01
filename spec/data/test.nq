@@ -19,5 +19,5 @@ _:b<http://xmlns.com/foaf/0.1/name>"Bob"<http://example.org/alice/foaf.rdf>.
 _:b<http://xmlns.com/foaf/0.1/homepage><http://example.org/bob/><http://example.org/alice/foaf.rdf>.
 _:b<http://www.w3.org/2000/01/rdf-schema#seeAlso><http://example.org/bob/foaf.rdf><http://example.org/alice/foaf.rdf>.
 _:b<http://www.w3.org/2000/01/rdf-schema#seeAlso>_:bnode2<http://example.org/alice/foaf.rdf>.
-_:b<http://www.w3.org/2000/01/rdf-schema#seeAlso>_:bnode2_:bnode3.
+_:b<http://www.w3.org/2000/01/rdf-schema#seeAlso>_:bnode2 _:bnode3.
 

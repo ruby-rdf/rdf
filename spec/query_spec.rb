@@ -797,11 +797,11 @@ describe RDF::Query do
     end
     
     it "contains patterns from each query in order" do
-      subject.pattern [RDF.first, RDF.second, RDF.third]
+      subject.pattern [EX.first, EX.second, EX.third]
       rhs = RDF::Query.new
-      subject.pattern [RDF.a, RDF.b, RDF.c]
+      subject.pattern [EX.a, EX.b, EX.c]
       q = subject + rhs
-      expect(q.patterns).to eq [[RDF.first, RDF.second, RDF.third], [RDF.a, RDF.b, RDF.c]]
+      expect(q.patterns).to eq [[EX.first, EX.second, EX.third], [EX.a, EX.b, EX.c]]
     end
   end
 

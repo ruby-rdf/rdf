@@ -693,5 +693,30 @@ module RDF
         super
       end
     end
+
+    ##
+    # @private
+    # @param  [Symbol, #to_sym] method
+    # @return [Enumerator]
+    # @see    Object#enum_for
+    def enum_for(method = :each, *args)
+      # Ensure that enumerators are, themselves, queryable
+      this = self
+      Enumerable::Enumerator.new do |yielder|
+        this.send(method, *args) {|*y| yielder << (y.length > 1 ? y : y.first)}
+      end
+    end
+    alias_method :to_enum, :enum_for
+
+    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
+    class Enumerator < ::Enumerator
+      include Queryable
+      include Enumerable
+
+      # Make sure returned arrays are also queryable
+      def to_a
+        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
+      end
+    end
   end # Enumerable
 end # RDF

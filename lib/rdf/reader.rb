@@ -115,6 +115,15 @@ module RDF
     ##
     # Parses input from the given file name or URL.
     #
+    # @note A reader returned via this method may not be readable depending on the processing model of the specific reader, as the file is only open during the scope of `open`. The reader is intended to be accessed through a block.
+    #
+    # @example Parsing RDF statements from a file
+    #   RDF::Reader.open("etc/doap.nt") do |reader|
+    #     reader.each_statement do |statement|
+    #       puts statement.inspect
+    #     end
+    #   end
+    #
     # @param  [String, #to_s] filename
     # @param  [Hash{Symbol => Object}] options
     #   any additional options (see {RDF::Util::File.open_file}, {RDF::Reader#initialize} and {RDF::Format.for})
@@ -138,7 +147,7 @@ module RDF
         if reader
           reader.new(file, options, &block)
         else
-          raise FormatError, "unknown RDF format: #{format_options.inspect}"
+          raise FormatError, "unknown RDF format: #{format_options.inspect}\nThis may be resolved with a require of the 'linkeddata' gem."
         end
       end
     end

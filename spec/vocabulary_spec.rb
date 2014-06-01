@@ -1,13 +1,98 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Vocabulary do
-  VOCABS = %w(cc cert dc doap exif foaf geo http owl rdfs rsa rss sioc skos wot xhtml xsd)
+  VOCABS = %w(cc cert dc doap exif foaf geo ht owl rdf rdfs rsa rss sioc skos vs wot xhtml xsd)
+  STRICT_VOCABS = %w(cc cert dc doap exif foaf geo ht owl rdf rdfs rsa rss sioc skos vs wot)
 
-  context "when created" do
+  context "#new" do
     it "should require one argument" do
       expect { RDF::Vocabulary.new }.to raise_error(ArgumentError)
       expect { RDF::Vocabulary.new("http://purl.org/dc/terms/") }.not_to raise_error
       expect { RDF::Vocabulary.new("http://purl.org/dc/terms/", "http://purl.org/dc/terms/") }.to raise_error(ArgumentError)
+    end
+
+    subject {RDF::Vocabulary.new('http://example.org/')}
+    it "should allow method_missing" do
+      expect {subject.foo}.not_to raise_error
+      expect(subject.foo).to be_a(RDF::Vocabulary::Term)
+    end
+
+    it "should allow []" do
+      expect {subject["foo"]}.not_to raise_error
+      expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
+    end
+
+    it "does not add to @@uris" do
+      RDF::Vocabulary.new("http://example/")
+      expect(RDF::Vocabulary.class_variable_get(:"@@uris")).to be_a(Hash)
+      expect(RDF::Vocabulary.class_variable_get(:"@@uris").values).not_to include("http://example/")
+    end
+  end
+
+  describe "#each" do
+    it "inumerates pre-defined vocabularies" do
+      expect {|b| RDF::Vocabulary.each(&b)}.to yield_control.at_least(10).times
+      expect(RDF::Vocabulary.each.to_a).to include(RDF, RDF::CC, RDF::DC, RDF::RDFS)
+    end
+
+    it "inumerates properties of a subclass" do
+      expect {|b| RDF::RDFS.each(&b)}.to yield_control.at_least(5).times
+      expect(RDF::RDFS.each.to_a).to include(RDF::RDFS.range, RDF::RDFS.subClassOf, RDF::RDFS.domain)
+    end
+  end
+
+  describe "#to_enum" do
+    subject {RDF::RDFS.to_enum}
+    it {should be_enumerable}
+    its(:count) {should >= 30}
+    it "enumerates statements" do
+      expect {|b| subject.each(&b)}.to yield_control.at_least(30).times
+      subject.each {|s| expect(s).to be_statement}
+    end
+
+    it "yields rdfs:label" do
+      expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.label_for("comment")))
+    end
+    it "yields rdfs:comment" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment_for("comment")))
+    end
+    it "yields rdfs:isDefinedBy" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
+    end
+    it "yields rdf:type" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF.type, RDF.Property))
+    end
+    it "yields rdfs:domain" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.domain, RDF::RDFS.Resource))
+    end
+    it "yields rdfs:range" do
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.range, RDF::RDFS.Literal))
+    end
+  end
+
+  context "strict vocabularies" do
+    STRICT_VOCABS.map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
+      context vocab do
+        subject {vocab}
+        specify {should be_strict}
+
+        it "raises error on unknown property" do
+          expect {vocab._unknown_}.to raise_error(NoMethodError)
+        end
+      end
+    end
+  end
+
+  context "non-strict vocabularies" do
+    (VOCABS - STRICT_VOCABS).map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
+      context vocab do
+        subject {vocab}
+        specify {should_not be_strict}
+      end
+
+      it "allows unknown property" do
+        expect(vocab._unknown_).to eq "#{vocab.to_uri}_unknown_"
+      end
     end
   end
 
@@ -18,6 +103,11 @@ describe RDF::Vocabulary do
       end
     end
 
+    it "should expand PName for vocabulary" do
+      expect(RDF::Vocabulary.expand_pname("rdfs:")).to eql RDF::RDFS.to_uri
+      expect(RDF::Vocabulary.expand_pname("rdfs:label")).to eql RDF::RDFS.label
+    end
+
     it "should support Creative Commons (CC)" do
       expect(RDF::CC).to be_a_vocabulary("http://creativecommons.org/ns#")
       expect(RDF::CC).to have_properties("http://creativecommons.org/ns#", %w(attributionName attributionURL deprecatedOn jurisdiction legalcode license morePermissions permits prohibits requires))
@@ -26,7 +116,7 @@ describe RDF::Vocabulary do
     it "should support W3 Authentication Certificate (CERT)" do
       expect(RDF::CERT).to be_a_vocabulary("http://www.w3.org/ns/auth/cert#")
       expect(RDF::CERT).to have_properties("http://www.w3.org/ns/auth/cert#", %w(hex identity))
-      expect(RDF::CERT).to have_subclasses("http://www.w3.org/ns/auth/cert#", %w(Certificate PGPCertificate PrivateKey PublicKey Signature X509Certificate))
+      expect(RDF::CERT).to have_terms("http://www.w3.org/ns/auth/cert#", %w(Certificate PGPCertificate PrivateKey PublicKey Signature X509Certificate))
     end
 
     it "should support Dublin Core (DC)" do
@@ -52,12 +142,12 @@ describe RDF::Vocabulary do
     it "should support WGS84 Geo Positioning (GEO)" do
       expect(RDF::GEO).to be_a_vocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
       expect(RDF::GEO).to have_properties("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(lat location long lat_long))
-      expect(RDF::GEO).to have_subclasses("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
+      expect(RDF::GEO).to have_terms("http://www.w3.org/2003/01/geo/wgs84_pos#", %w(SpatialThing Point))
     end
 
-    it "should support Hypertext Transfer Protocol (HTTP)" do
-      expect(RDF::HTTP).to be_a_vocabulary("http://www.w3.org/2006/http#")
-      expect(RDF::HTTP).to have_properties("http://www.w3.org/2006/http#", %w(abs_path absoluteURI authority body connectionAuthority elementName elementValue fieldName fieldValue header param paramName paramValue request requestURI response responseCode version))
+    it "should support Hypertext Transfer Protocol (HT)" do
+      expect(RDF::HT).to be_a_vocabulary("http://www.w3.org/2006/http#")
+      expect(RDF::HT).to have_properties("http://www.w3.org/2006/http#", %w(abs_path absoluteURI authority body connectionAuthority elementName elementValue fieldName fieldValue header param paramName paramValue request requestURI response responseCode version))
     end
 
     it "should support Web Ontology Language (OWL)" do
@@ -67,6 +157,9 @@ describe RDF::Vocabulary do
 
     it "should support Resource Description Framework (RDF)" do
       expect(RDF).to be_a_vocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+      expect(RDF).to have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(first object predicate rest subject type value))
+      expect(RDF).to have_terms("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
+      expect(RDF).to have_terms("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
       %w(first object predicate rest subject type value).each do |p|
         expect(RDF.send(p)).to eq RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns##{p}")
       end
@@ -75,13 +168,13 @@ describe RDF::Vocabulary do
     it "should support RDF Schema (RDFS)" do
       expect(RDF::RDFS).to be_a_vocabulary("http://www.w3.org/2000/01/rdf-schema#")
       expect(RDF::RDFS).to have_properties("http://www.w3.org/2000/01/rdf-schema#", %w(comment domain isDefinedBy label member range seeAlso subClassOf subPropertyOf))
-      expect(RDF::RDFS).to have_subclasses("http://www.w3.org/2000/01/rdf-schema#", %w(Class Container ContainerMembershipProperty Datatype Literal Resource))
+      expect(RDF::RDFS).to have_terms("http://www.w3.org/2000/01/rdf-schema#", %w(Class Container ContainerMembershipProperty Datatype Literal Resource))
     end
 
     it "should support W3 RSA Keys (RSA)" do
       expect(RDF::RSA).to be_a_vocabulary("http://www.w3.org/ns/auth/rsa#")
       expect(RDF::RSA).to have_properties("http://www.w3.org/ns/auth/rsa#", %w(modulus private_exponent public_exponent))
-      expect(RDF::RSA).to have_subclasses("http://www.w3.org/ns/auth/rsa#", %w(RSAKey RSAPrivateKey RSAPublicKey))
+      expect(RDF::RSA).to have_terms("http://www.w3.org/ns/auth/rsa#", %w(RSAKey RSAPrivateKey RSAPublicKey))
     end
 
     it "should support RDF Site Summary (RSS)" do
@@ -111,7 +204,7 @@ describe RDF::Vocabulary do
 
     it "should support XML Schema (XSD)" do
       expect(RDF::XSD).to be_a_vocabulary("http://www.w3.org/2001/XMLSchema#")
-      expect(RDF::XSD).to have_properties("http://www.w3.org/2001/XMLSchema#", %w(NOTATION QName anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time ENTITIES ENTITY ID IDREF IDREFS NCName NMTOKEN NMTOKENS Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
+      expect(RDF::XSD).to have_properties("http://www.w3.org/2001/XMLSchema#", %w(anyURI base64Binary boolean date dateTime decimal double duration float gDay gMonth gMonthDay gYear gYearMonth hexBinary string time NCName NMTOKEN Name byte int integer language long negativeInteger nonNegativeInteger nonPositiveInteger normalizedString positiveInteger short token unsignedByte unsignedInt unsignedLong unsignedShort))
     end
 
     it "should support VOID" do
@@ -125,6 +218,18 @@ describe RDF::Vocabulary do
       expect(RDF::MA).to be_a_vocabulary("http://www.w3.org/ns/ma-ont#")
       expect(RDF::MA).to have_properties("http://www.w3.org/ns/ma-ont#", %w(isRatingOf alternativeTitle averageBitRate collectionName copyright createdIn creationDate date depictsFictionalLocation description duration editDate features fragmentName frameHeight frameRate frameSizeUnit frameWidth hasAccessConditions hasAudioDescription hasCaptioning hasChapter hasClassification hasClassificationSystem hasCompression hasContributor hasCreator hasFormat hasFragment hasGenre hasKeyword hasLanguage hasLocationCoordinateSystem hasNamedFragment hasPermissions hasPolicy hasPublished hasPublisher hasRating hasRatingSystem hasRelatedImage hasRelatedLocation hasRelatedResource hasSigning hasSource hasSubtitling hasTargetAudience hasTrack isChapterOf isCopyrightedBy isLocationRelatedTo isMemberOf isProvidedBy isRelatedTo isSourceOf isTargetAudienceOf locationAltitude locationLatitude locationLongitude locationName locator mainOriginalTitle numberOfTracks ratingScaleMax ratingScaleMin ratingValue recordDate releaseDate samplingRate title trackName))
     end
+
+    describe "#properties" do
+      context "when iterating over vocabularies" do
+        it "includes properties only from the selected vocabulary" do
+          [RDF::RDFS, RDF::FOAF].each do |v|
+            v.properties.each do |p|
+              expect(p.to_s).to start_with(v.to_s)
+            end
+          end
+        end
+      end
+    end
   end
 
   context "ad-hoc vocabularies" do
@@ -137,9 +242,7 @@ describe RDF::Vocabulary do
     end
 
     it "should have Vocabulary::method_missing" do
-      expect do
-        test_vocab.a_missing_method
-      end.not_to raise_error
+      expect {test_vocab.a_missing_method}.not_to raise_error
     end
 
     it "should respond to [] with properties that have been defined" do
@@ -151,6 +254,9 @@ describe RDF::Vocabulary do
       test_vocab[:not_a_prop].should be_a(RDF::URI)
       test_vocab["not_a_prop"].should be_a(RDF::URI)
     end
+
+    its(:property) {should eq RDF::URI("http://example.com/test#property")}
+    its(:properties) {should include("http://example.com/test#Class", "http://example.com/test#prop", "http://example.com/test#prop2")}
 
     it "should respond to methods for which a property has been defined explicitly" do
       test_vocab.prop.should be_a(RDF::URI)
@@ -165,7 +271,112 @@ describe RDF::Vocabulary do
     end
 
     it "should respond to comment_for from base RDFS" do
-      test_vocab.comment_for(:prop2).should == "Test property comment"
+      test_vocab.comment_for(:prop2).should == " Test property comment"
+    end
+
+    it "should not enumerate from RDF::Vocabulary.each" do
+      expect(RDF::Vocabulary.each.to_a).not_to include(test_vocab)
+    end
+
+    it "should accept property class method" do
+      test_vocab.property :prop3, label: "prop3"
+      expect(test_vocab.properties).to include("http://example.com/test#prop3")
+    end
+  end
+
+  let(:terms) {{
+    RDF::FOAF.Person => RDF::FOAF,
+    RDF.type         => RDF
+  }}
+
+  describe ".find" do
+    it "returns the vocab given a Term" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(term)).to equal vocab
+      end
+    end
+    it "returns the vocab given a URI" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(RDF::URI(term.to_s))).to equal vocab
+      end
+    end
+    it "returns the vocab given a String" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(term.to_s)).to equal vocab
+      end
+    end
+  end
+
+  describe ".find_term" do
+    it "returns itself given a Term" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find_term(term)).to equal term
+      end
+    end
+    it "returns the term given a URI" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find_term(RDF::URI(term.to_s))).to equal term
+      end
+    end
+    it "returns the term given a String" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find_term(term.to_s)).to equal term
+      end
+    end
+  end
+
+  describe ".load" do
+    let!(:nt) {%{
+      <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+      <http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .
+      <http://example/prop> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+      <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
+    }}
+    before(:each) do
+      RDF::Graph.stub(:load) {RDF::Graph.new << RDF::NTriples::Reader.new(nt)}
+    end
+
+    subject {RDF::Vocabulary.load("http://example/")}
+
+    it "creates terms" do
+      expect(subject).to be_a_vocabulary("http://example/")
+      expect(subject).to have_properties("http://example/", %w(Class prop))
+    end
+  end
+
+  describe RDF::Vocabulary::Term do
+    subject {RDF::RDFS.comment}
+    specify {should be_uri}
+    specify {should respond_to(:vocab)}
+    specify {should respond_to(:type)}
+    specify {should respond_to(:label)}
+    specify {should respond_to(:comment)}
+    specify {should respond_to(:domain)}
+    specify {should respond_to(:range)}
+    specify {should be_property}
+    specify {should_not be_class}
+    specify {should_not be_datatype}
+    specify {should_not be_other}
+    its(:label) {should eq RDF::RDFS.label_for("comment")}
+    its(:comment) {should eq RDF::RDFS.comment_for("comment")}
+    its(:vocab) {should eql RDF::RDFS}
+
+    context RDF::FOAF.Person do
+      subject {RDF::FOAF.Person}
+      specify {should_not be_property}
+      specify {should be_class}
+      specify {should_not be_datatype}
+      specify {should_not be_other}
+      its(:vocab) {should eql RDF::FOAF}
+    end
+
+    context RDF::XSD.integer do
+      subject {RDF::XSD.integer}
+      specify {should_not be_property}
+      specify {should_not be_class}
+      specify {should be_datatype}
+      specify {should_not be_other}
+      its(:vocab) {should eql RDF::XSD}
     end
   end
 end

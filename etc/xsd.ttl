@@ -1,0 +1,385 @@
+# XSchema definitions for RDF.
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+    
+xsd:string a rdfs:Datatype;
+   rdfs:label "string";
+   rdfs:comment """
+     The string datatype represents character strings in XML. The ·value space·
+     of string is the set of finite-length sequences of characters (as defined
+     in [XML 1.0 (Second Edition)]) that ·match· the Char production from [XML
+     1.0 (Second Edition)]. A character is an atomic unit of communication; it
+     is not further specified except to note that every character has a
+     corresponding Universal Character Set code point, which is an integer.
+    """ .
+
+xsd:normalizedString a rdfs:Datatype;
+    rdfs:subClassOf xsd:string;
+    rdfs:label "normalizedString";
+    rdfs:comment """
+      normalizedString represents white space normalized strings. The ·value
+      space· of normalizedString is the set of strings that do not contain the
+      carriage return (#xD), line feed (#xA) nor tab (#x9) characters. The
+      ·lexical space· of normalizedString is the set of strings that do not
+      contain the carriage return (#xD), line feed (#xA) nor tab (#x9)
+      characters. The ·base type· of normalizedString is string.
+    """ .
+
+xsd:token a rdfs:Datatype;
+    rdfs:subClassOf xsd:normalizedString;
+    rdfs:label "token";
+    rdfs:comment """
+      token represents tokenized strings. The ·value space· of token is the set
+      of strings that do not contain the carriage return (#xD), line feed (#xA)
+      nor tab (#x9) characters, that have no leading or trailing spaces (#x20)
+      and that have no internal sequences of two or more spaces. The ·lexical
+      space· of token is the set of strings that do not contain the carriage
+      return (#xD), line feed (#xA) nor tab (#x9) characters, that have no
+      leading or trailing spaces (#x20) and that have no internal sequences of
+      two or more spaces. The ·base type· of token is normalizedString.
+    """ .
+
+xsd:language a rdfs:Datatype;
+    rdfs:subClassOf xsd:token;
+    rdfs:label "language";
+    rdfs:comment """
+      language represents natural language identifiers as defined by by [RFC
+      3066] . The ·value space· of language is the set of all strings that are
+      valid language identifiers as defined [RFC 3066] . The ·lexical space· of
+      language is the set of all strings that conform to the pattern
+      [a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})* . The ·base type· of language is token.
+    """ .
+
+xsd:NMTOKEN a rdfs:Datatype;
+    rdfs:subClassOf xsd:token;
+    rdfs:label "NMTOKEN";
+    rdfs:comment """
+      NMTOKEN represents the NMTOKEN attribute type from [XML 1.0 (Second
+      Edition)]. The ·value space· of NMTOKEN is the set of tokens that ·match·
+      the Nmtoken production in [XML 1.0 (Second Edition)]. The ·lexical space·
+      of NMTOKEN is the set of strings that ·match· the Nmtoken production in
+      [XML 1.0 (Second Edition)]. The ·base type· of NMTOKEN is token.
+    """ .
+
+xsd:Name a rdfs:Datatype;
+    rdfs:subClassOf xsd:token;
+    rdfs:label "Name";
+    rdfs:comment """
+      Name represents XML Names. The ·value space· of Name is the set of all
+      strings which ·match· the Name production of [XML 1.0 (Second Edition)].
+      The ·lexical space· of Name is the set of all strings which ·match· the
+      Name production of [XML 1.0 (Second Edition)]. The ·base type· of Name is
+      token.
+    """ .
+
+xsd:NCName a rdfs:Datatype;
+    rdfs:subClassOf xsd:name;
+    rdfs:label "NCName";
+    rdfs:comment """
+      NCName represents XML "non-colonized" Names. The ·value space· of NCName
+      is the set of all strings which ·match· the NCName production of
+      [Namespaces in XML]. The ·lexical space· of NCName is the set of all
+      strings which ·match· the NCName production of [Namespaces in XML]. The
+      ·base type· of NCName is Name.
+    """ .
+
+xsd:boolean a rdfs:Datatype;
+    rdfs:label "boolean";
+    rdfs:comment """
+      boolean has the ·value space· required to support the mathematical
+      concept of binary-valued logic: {true, false}.
+    """ .
+
+xsd:decimal a rdfs:Datatype;
+    rdfs:label "decimal";
+    rdfs:comment """
+      decimal represents a subset of the real numbers, which can be represented
+      by decimal numerals. The ·value space· of decimal is the set of numbers
+      that can be obtained by multiplying an integer by a non-positive power of
+      ten, i.e., expressible as i × 10^-n where i and n are integers and n >=
+      0. Precision is not reflected in this value space; the number 2.0 is not
+      distinct from the number 2.00. The ·order-relation· on decimal is the
+      order relation on real numbers, restricted to this subset.
+    """ .
+
+xsd:float a rdfs:Datatype;
+  rdfs:label "float";
+  rdfs:comment """
+    float is patterned after the IEEE single-precision 32-bit floating point
+    type [IEEE 754-1985]. The basic ·value space· of float consists of the
+    values m × 2^e, where m is an integer whose absolute value is less than
+    2^24, and e is an integer between -149 and 104, inclusive. In addition to
+    the basic ·value space· described above, the ·value space· of float also
+    contains the following three special values: positive and negative infinity
+    and not-a-number (NaN). The ·order-relation· on float is: x < y iff y - x
+    is positive for x and y in the value space. Positive infinity is greater
+    than all other non-NaN values. NaN equals itself but is ·incomparable· with
+    (neither greater than nor less than) any other value in the ·value space·.
+  """ .
+
+xsd:double a rdfs:Datatype;
+    rdfs:label "double";
+    rdfs:comment """
+      The double datatype is patterned after the IEEE double-precision 64-bit
+      floating point type [IEEE 754-1985]. The basic ·value space· of double
+      consists of the values m × 2^e, where m is an integer whose absolute
+      value is less than 2^53, and e is an integer between -1075 and 970,
+      inclusive. In addition to the basic ·value space· described above, the
+      ·value space· of double also contains the following three special values:
+      positive and negative infinity and not-a-number (NaN). The
+      ·order-relation· on double is: x < y iff y - x is positive for x and y in
+      the value space. Positive infinity is greater than all other non-NaN
+      values. NaN equals itself but is ·incomparable· with (neither greater
+      than nor less than) any other value in the ·value space·.
+    """ .
+
+xsd:integer a rdfs:Datatype;
+    rdfs:subClassOf xsd:decimal;
+    rdfs:label "integer";
+    rdfs:comment """
+      integer is ·derived· from decimal by fixing the value of ·fractionDigits·
+      to be 0and disallowing the trailing decimal point. This results in the
+      standard mathematical concept of the integer numbers. The ·value space·
+      of integer is the infinite set {...,-2,-1,0,1,2,...}. The ·base type· of
+      integer is decimal.
+    """ .
+
+xsd:nonPositiveInteger a rdfs:Datatype;
+    rdfs:subClassOf xsd:integer;
+    rdfs:label "nonPositiveInteger";
+    rdfs:comment """
+      nonPositiveInteger is ·derived· from integer by setting the value of
+      ·maxInclusive· to be 0. This results in the standard mathematical concept
+      of the non-positive integers. The ·value space· of nonPositiveInteger is
+      the infinite set {...,-2,-1,0}. The ·base type· of nonPositiveInteger is
+      integer.
+    """ .
+
+xsd:negativeInteger a rdfs:Datatype;
+    rdfs:subClassOf xsd:nonPositiveInteger;
+    rdfs:label "negativeInteger";
+    rdfs:comment """
+      negativeInteger is ·derived· from nonPositiveInteger by setting the value
+      of ·maxInclusive· to be -1. This results in the standard mathematical
+      concept of the negative integers. The ·value space· of negativeInteger is
+      the infinite set {...,-2,-1}. The ·base type· of negativeInteger is
+      nonPositiveInteger.
+    """ .
+
+xsd:long a rdfs:Datatype;
+    rdfs:subClassOf xsd:integer;
+    rdfs:label "long";
+    rdfs:comment """
+      long is ·derived· from integer by setting the value of ·maxInclusive· to
+      be 9223372036854775807 and ·minInclusive· to be -9223372036854775808. The
+      ·base type· of long is integer.
+    """ .
+
+xsd:int a rdfs:Datatype;
+    rdfs:subClassOf xsd:long;
+    rdfs:label "int";
+    rdfs:comment """
+      int is ·derived· from long by setting the value of ·maxInclusive· to be
+      2147483647 and ·minInclusive· to be -2147483648. The ·base type· of int
+      is long.
+    """ .
+
+xsd:short a rdfs:Datatype;
+    rdfs:subClassOf xsd:int;
+    rdfs:label "short";
+    rdfs:comment """
+      short is ·derived· from int by setting the value of ·maxInclusive· to be
+      32767 and ·minInclusive· to be -32768. The ·base type· of short is int.
+    """ .
+
+xsd:byte a rdfs:Datatype;
+    rdfs:subClassOf xsd:short;
+    rdfs:label "byte";
+    rdfs:comment """
+      byte is ·derived· from short by setting the value of ·maxInclusive· to be
+      127 and ·minInclusive· to be -128. The ·base type· of byte is short.
+    """ .
+
+xsd:nonNegativeInteger a rdfs:Datatype;
+    rdfs:subClassOf xsd:integer;
+    rdfs:label "nonNegativeInteger";
+    rdfs:comment """
+      nonNegativeInteger is ·derived· from integer by setting the value of
+      ·minInclusive· to be 0. This results in the standard mathematical concept
+      of the non-negative integers. The ·value space· of nonNegativeInteger is
+      the infinite set {0,1,2,...}. The ·base type· of nonNegativeInteger is
+      integer.
+    """ .
+
+xsd:unsignedLong a rdfs:Datatype;
+    rdfs:subClassOf xsd:nonNegativeInteger;
+    rdfs:label "unsignedLong";
+    rdfs:comment """
+      unsignedLong is ·derived· from nonNegativeInteger by setting the value of
+      ·maxInclusive· to be 18446744073709551615. The ·base type· of
+      unsignedLong is nonNegativeInteger.
+    """ .
+
+xsd:unsignedInt a rdfs:Datatype;
+    rdfs:subClassOf xsd:unsignedLong;
+    rdfs:label "unsignedInt";
+    rdfs:comment """
+      unsignedInt is ·derived· from unsignedLong by setting the value of
+      ·maxInclusive· to be 4294967295. The ·base type· of unsignedInt is
+      unsignedLong.
+    """ .
+
+xsd:unsignedShort a rdfs:Datatype;
+    rdfs:subClassOf xsd:unsignedInt;
+    rdfs:label "unsignedShort";
+    rdfs:comment """
+      unsignedShort is ·derived· from unsignedInt by setting the value of
+      ·maxInclusive· to be 65535. The ·base type· of unsignedShort is
+      unsignedInt.
+    """ .
+
+xsd:unsignedByte a rdfs:Datatype;
+    rdfs:subClassOf xsd:unsignedShort;
+    rdfs:label "unsignedByte";
+    rdfs:comment """
+      unsignedByte is ·derived· from unsignedShort by setting the value of
+      ·maxInclusive· to be 255. The ·base type· of unsignedByte is
+      unsignedShort.
+    """ .
+
+xsd:positiveInteger a rdfs:Datatype;
+    rdfs:subClassOf xsd:nonNegativeInteger;
+    rdfs:label "positiveInteger";
+    rdfs:comment """
+      positiveInteger is ·derived· from nonNegativeInteger by setting the value
+      of ·minInclusive· to be 1. This results in the standard mathematical
+      concept of the positive integer numbers. The ·value space· of
+      positiveInteger is the infinite set {1,2,...}. The ·base type· of
+      positiveInteger is nonNegativeInteger.
+    """ .
+
+xsd:duration a rdfs:Datatype;
+    rdfs:label "duration";
+    rdfs:comment """
+      duration represents a duration of time. The ·value space· of duration is
+      a six-dimensional space where the coordinates designate the Gregorian
+      year, month, day, hour, minute, and second components defined in §
+      5.5.3.2 of [ISO 8601], respectively. These components are ordered in
+      their significance by their order of appearance i.e. as year, month, day,
+      hour, minute, and second.
+    """ .
+
+xsd:dateTime a rdfs:Datatype;
+    rdfs:label "dateTime";
+    rdfs:comment """
+      dateTime values may be viewed as objects with integer-valued year, month,
+      day, hour and minute properties, a decimal-valued second property, and a
+      boolean timezoned property. Each such object also has one decimal-valued
+      method or computed property, timeOnTimeline, whose value is always a
+      decimal number; the values are dimensioned in seconds, the integer 0 is
+      0001-01-01T00:00:00 and the value of timeOnTimeline for other dateTime
+      values is computed using the Gregorian algorithm as modified for
+      leap-seconds. The timeOnTimeline values form two related "timelines", one
+      for timezoned values and one for non-timezoned values. Each timeline is a
+      copy of the ·value space· of decimal, with integers given units of seconds.
+    """ .
+
+xsd:time a rdfs:Datatype;
+    rdfs:label "time";
+    rdfs:comment """
+      time represents an instant of time that recurs every day. The ·value
+      space· of time is the space of time of day values as defined in § 5.3 of
+      [ISO 8601]. Specifically, it is a set of zero-duration daily time
+      instances.
+    """ .
+
+xsd:date a rdfs:Datatype;
+    rdfs:label "date";
+    rdfs:comment """
+      The ·value space· of date consists of top-open intervals of exactly one
+      day in length on the timelines of dateTime, beginning on the beginning
+      moment of each day (in each timezone), i.e. '00:00:00', up to but not
+      including '24:00:00' (which is identical with '00:00:00' of the next
+      day). For nontimezoned values, the top-open intervals disjointly cover
+      the nontimezoned timeline, one per day. For timezoned values, the
+      intervals begin at every minute and therefore overlap.
+    """ .
+
+xsd:gYearMonth a rdfs:Datatype;
+    rdfs:label "gYearMonth";
+    rdfs:comment """
+      gYearMonth represents a specific gregorian month in a specific gregorian
+      year. The ·value space· of gYearMonth is the set of Gregorian calendar
+      months as defined in § 5.2.1 of [ISO 8601]. Specifically, it is a set of
+      one-month long, non-periodic instances e.g. 1999-10 to represent the
+      whole month of 1999-10, independent of how many days this month has.
+    """ .
+
+xsd:gYear a rdfs:Datatype;
+    rdfs:label "gYear";
+    rdfs:comment """
+      gYear represents a gregorian calendar year. The ·value space· of gYear is
+      the set of Gregorian calendar years as defined in § 5.2.1 of [ISO 8601].
+      Specifically, it is a set of one-year long, non-periodic instances e.g.
+      lexical 1999 to represent the whole year 1999, independent of how many
+      months and days this year has.
+    """ .
+
+xsd:gMonthDay a rdfs:Datatype;
+    rdfs:label "gMonthDay";
+    rdfs:comment """
+      gMonthDay is a gregorian date that recurs, specifically a day of the year
+      such as the third of May. Arbitrary recurring dates are not supported by
+      this datatype. The ·value space· of gMonthDay is the set of calendar
+      dates, as defined in § 3 of [ISO 8601]. Specifically, it is a set of
+      one-day long, annually periodic instances.
+    """ .
+
+xsd:gDay a rdfs:Datatype;
+    rdfs:label "gDay";
+    rdfs:comment """
+      gDay is a gregorian day that recurs, specifically a day of the month such
+      as the 5th of the month. Arbitrary recurring days are not supported by
+      this datatype. The ·value space· of gDay is the space of a set of
+      calendar dates as defined in § 3 of [ISO 8601]. Specifically, it is a set
+      of one-day long, monthly periodic instances.
+    """ .
+
+xsd:gMonth a rdfs:Datatype;
+    rdfs:label "gMonth";
+    rdfs:comment """
+      gMonth is a gregorian month that recurs every year. The ·value space· of
+      gMonth is the space of a set of calendar months as defined in § 3 of [ISO
+      8601]. Specifically, it is a set of one-month long, yearly periodic
+      instances.
+    """ .
+
+xsd:hexBinary a rdfs:Datatype;
+    rdfs:label "hexBinary";
+    rdfs:comment """
+      hexBinary represents arbitrary hex-encoded binary data. The ·value space·
+      of hexBinary is the set of finite-length sequences of binary octets.
+    """ .
+
+xsd:base64Binary a rdfs:Datatype;
+    rdfs:label "base64Binary";
+    rdfs:comment """
+      base64Binary represents Base64-encoded arbitrary binary data. The ·value
+      space· of base64Binary is the set of finite-length sequences of binary
+      octets. For base64Binary data the entire binary stream is encoded using
+      the Base64 Alphabet in [RFC 2045].
+    """ .
+
+xsd:anyURI a rdfs:Datatype;
+    rdfs:label "anyURI";
+    rdfs:comment """
+      anyURI represents a Uniform Resource Identifier Reference (URI). An
+      anyURI value can be absolute or relative, and may have an optional
+      fragment identifier (i.e., it may be a URI Reference). This type should
+      be used to specify the intention that the value fulfills the role of a
+      URI as defined by [RFC 2396], as amended by [RFC 2732].
+    """ .

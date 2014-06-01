@@ -110,6 +110,19 @@ describe RDF::Statement do
     it {should_not eql stmtc}
   end
 
+  context "when used with symbols" do
+    specify {expect(RDF::Statement(:s, p, o)).to eq (RDF::Statement(:s, p, o))}
+    specify {expect(RDF::Statement(:s, p, o)).to eql (RDF::Statement(:s, p, o))}
+    specify {expect(RDF::Statement(s, p, :o)).to eq (RDF::Statement(s, p, :o))}
+    specify {expect(RDF::Statement(s, p, :o)).to eql (RDF::Statement(s, p, :o))}
+  end
+
+  context "when used with strings" do
+    specify {expect(RDF::Statement(s, p, "o")).to eq (RDF::Statement(s, p, "o"))}
+    specify {expect(RDF::Statement(s, p, "o")).to eql (RDF::Statement(s, p, RDF::Literal("o")))}
+    specify {expect(RDF::Statement(s, p, RDF::Literal("o"))).to eql (RDF::Statement(s, p, "o"))}
+  end
+
   context "when used like an Array" do
     it {should respond_to(:to_a)}
     it {should respond_to(:[])}
@@ -274,6 +287,17 @@ describe RDF::Statement do
         :predicate => RDF::DC.creator,
         :object    => RDF::URI.new("http://ar.to/#self"),
       })).to be_a_statement
+    end
+
+    it "Creating an RDF statement with interned nodes" do
+      s = RDF::Node.intern("s")
+      o = RDF::Node.intern("o")
+      expect(RDF::Statement.new(:s, p, :o)).to eql RDF::Statement.new(s, p, o)
+    end
+
+    it "Creating an RDF statement with interned nodes" do
+      o = RDF::Literal("o")
+      expect(RDF::Statement.new(s, p, "o")).to eql RDF::Statement.new(s, p, o)
     end
   end
 end
