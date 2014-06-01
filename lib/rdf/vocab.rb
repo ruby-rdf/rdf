@@ -104,7 +104,7 @@ module RDF
       ##
       # @overload property
       #   Returns `property` in the current vocabulary
-      #   @return [RDF::URI]
+      #   @return [RDF::Vocabulary::Term]
       #
       # @overload property(name, options)
       #   Defines a new property or class in the vocabulary.
@@ -126,6 +126,7 @@ module RDF
       #     Shortcut for `rdfs:range`, values are String interpreted as a {URI}.
       #   @option options [String, Array<String>] :type
       #     Shortcut for `rdf:type`, values are String interpreted as a {URI}.
+      #   @return [RDF::Vocabulary::Term]
       def property(*args)
         case args.length
         when 0
@@ -136,6 +137,7 @@ module RDF
           prop = Term.intern([to_s, name.to_s].join(''), attributes: options)
           props[prop] = options
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
+          prop
         end
       end
 
