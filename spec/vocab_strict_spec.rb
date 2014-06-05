@@ -23,8 +23,8 @@ describe RDF::StrictVocabulary do
   end
 
   it "should respond to [] with properties that have been defined" do
-    test_vocab[:prop].should be_a(RDF::URI)
-    test_vocab["prop2"].should be_a(RDF::URI)
+    expect(test_vocab[:prop]).to be_a(RDF::URI)
+    expect(test_vocab["prop2"]).to be_a(RDF::URI)
   end
 
   it "should list properties that have been defined" do
@@ -37,22 +37,22 @@ describe RDF::StrictVocabulary do
   end
 
   it "should respond to methods for which a property has been defined explicitly" do
-    test_vocab.prop.should be_a(RDF::URI)
+    expect(test_vocab.prop).to be_a(RDF::URI)
   end
 
   it "should respond to methods for which a property has been defined by a graph" do
-    test_vocab.prop2.should be_a(RDF::URI)
+    expect(test_vocab.prop2).to be_a(RDF::URI)
   end
 
   it "should respond to methods for which a class has been defined by a graph" do
-    test_vocab.Class.should be_a(RDF::URI)
+    expect(test_vocab.Class).to be_a(RDF::URI)
   end
 
   it "should respond to label_for from base RDFS" do
-    test_vocab.label_for("prop2").should == "Test property label"
+    expect(test_vocab.label_for("prop2")).to eql "Test property label"
   end
 
   it "should respond to comment_for from base RDFS" do
-    test_vocab.comment_for(:prop2).should == "Test property comment"
+    expect(test_vocab.comment_for(:prop2)).to eql "Test property comment"
   end
 end

@@ -477,7 +477,7 @@ describe RDF::List do
   describe "#fetch with a block" do
     it "yields to the given block for invalid indexes" do
       expect { ten.fetch(20) { |index| } }.not_to raise_error
-      expect(ten.fetch(20) { |index| true }).to be_true
+      expect(ten.fetch(20) { |index| true }).to be_truthy
     end
   end
 
@@ -1045,7 +1045,7 @@ describe RDF::List do
 
     describe(:each_statement) do
       it "yields statements" do
-        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*([RDF::Statement] * 6))
+        expect {|b| subject.each_statement(&b)}.to yield_successive_args(*subject.each_statement.to_a)
       end
     end
 

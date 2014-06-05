@@ -431,6 +431,7 @@ module RDF
                                  lineno: lineno)
     end
 
+  public
     ##
     # Returns the encoding of the input stream.
     #

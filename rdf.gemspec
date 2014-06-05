@@ -32,7 +32,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-rdfa',    '~> 1.1'
   gem.add_development_dependency 'rdf-turtle',  '~> 1.1'
   gem.add_development_dependency 'rdf-xsd',     '~> 1.1'
-  gem.add_development_dependency 'rspec',       '~> 2.14'
+  gem.add_development_dependency 'rspec',       '~> 3.0'
+  gem.add_development_dependency 'rspec-its',   '~> 1.0'
   gem.add_development_dependency 'webmock',     '~> 1.17'
   gem.add_development_dependency 'yard',        '~> 0.8'
 

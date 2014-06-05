@@ -246,32 +246,32 @@ describe RDF::Vocabulary do
     end
 
     it "should respond to [] with properties that have been defined" do
-      test_vocab[:prop].should be_a(RDF::URI)
-      test_vocab["prop2"].should be_a(RDF::URI)
+      expect(test_vocab[:prop]).to be_a(RDF::URI)
+      expect(test_vocab["prop2"]).to be_a(RDF::URI)
     end
 
     it "should respond to [] with properties that have not been defined" do
-      test_vocab[:not_a_prop].should be_a(RDF::URI)
-      test_vocab["not_a_prop"].should be_a(RDF::URI)
+      expect(test_vocab[:not_a_prop]).to be_a(RDF::URI)
+      expect(test_vocab["not_a_prop"]).to be_a(RDF::URI)
     end
 
     its(:property) {should eq RDF::URI("http://example.com/test#property")}
     its(:properties) {should include("http://example.com/test#Class", "http://example.com/test#prop", "http://example.com/test#prop2")}
 
     it "should respond to methods for which a property has been defined explicitly" do
-      test_vocab.prop.should be_a(RDF::URI)
+      expect(test_vocab.prop).to be_a(RDF::URI)
     end
 
     it "should respond to methods for which a class has been defined by a graph" do
-      test_vocab.Class.should be_a(RDF::URI)
+      expect(test_vocab.Class).to be_a(RDF::URI)
     end
 
     it "should respond to label_for from base RDFS" do
-      test_vocab.label_for("prop2").should == "Test property label"
+      expect(test_vocab.label_for("prop2")).to eql "Test property label"
     end
 
     it "should respond to comment_for from base RDFS" do
-      test_vocab.comment_for(:prop2).should == " Test property comment"
+      expect(test_vocab.comment_for(:prop2)).to eql " Test property comment"
     end
 
     it "should not enumerate from RDF::Vocabulary.each" do
@@ -333,7 +333,7 @@ describe RDF::Vocabulary do
       <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
     }}
     before(:each) do
-      RDF::Graph.stub(:load) {RDF::Graph.new << RDF::NTriples::Reader.new(nt)}
+      allow(RDF::Graph).to receive(:load).and_return(RDF::Graph.new << RDF::NTriples::Reader.new(nt))
     end
 
     subject {RDF::Vocabulary.load("http://example/")}

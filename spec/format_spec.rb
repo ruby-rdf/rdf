@@ -99,8 +99,8 @@ describe RDF::Format do
       let(:file_extensions) {
         RDF::Format.file_extensions.map {|ext, f| ext if f.include?(format)}.compact
       }
-      its(:content_type) {should =~ content_types}
-      its(:file_extension) {should =~ file_extensions}
+      its(:content_type) {should match content_types}
+      its(:file_extension) {should match file_extensions}
     end
   end
 
@@ -128,8 +128,9 @@ describe RDF::Format do
       end
     end
 
-    its(:content_types) {should include({"application/n-triples" => [RDF::NTriples::Format]})}
-    its(:file_extensions) {should include({:nt => [RDF::NTriples::Format]})}
+    # FIXME: stack overflow with rspec 3.0
+    its(:content_types) {pending "RSpec 3.0 stack overflow"; should include({"application/n-triples" => [RDF::NTriples::Format]})}
+    its(:file_extensions) {pending "RSpec 3.0 stack overflow"; should include({:nt => [RDF::NTriples::Format]})}
 
     it "Defining a new RDF serialization format class" do
       expect {
@@ -162,7 +163,7 @@ describe RDF::Format do
     end
 
     describe ".detect" do
-      specify {expect(RDF::NTriples::Format.detect("<a> <b> <c> .")).to be_true}
+      specify {expect(RDF::NTriples::Format.detect("<a> <b> <c> .")).to be_truthy}
     end
   end
 end

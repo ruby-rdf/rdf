@@ -67,7 +67,7 @@ describe RDF::Statement do
 
     it {should have_subject}
     its(:subject) {should_not be_nil}
-    it {expect(subject.has_predicate?).to be_true}
+    it {expect(subject.has_predicate?).to be_truthy}
     its(:predicate) {should_not be_nil}
     it {should have_object}
     its(:object) {should_not be_nil}
@@ -196,11 +196,11 @@ describe RDF::Statement do
     end
 
     it "should match (===) a statement with a missing component to one with that component" do
-      expect(subject === other_stmt).to be_true
+      expect(subject === other_stmt).to be_truthy
     end
 
     it "should not match (===) a statement with a component to one which is missing that component" do
-      expect(other_stmt === subject).not_to be_true
+      expect(other_stmt === subject).not_to be_truthy
     end
 
     it "should only equals? with object equality" do

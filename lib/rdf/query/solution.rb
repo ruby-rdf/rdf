@@ -25,7 +25,7 @@ class RDF::Query
     undef_method(*instance_methods.
                   map(&:to_s).
                   select {|m| m =~ /^\w+$/}.
-                  reject {|m| %w(object_id dup instance_eval inspect to_s class should should_not pretty_print).include?(m) || m[0,2] == '__'}.
+                  reject {|m| %w(object_id dup instance_eval inspect to_s private_methods class should should_not pretty_print).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 
     include Enumerable

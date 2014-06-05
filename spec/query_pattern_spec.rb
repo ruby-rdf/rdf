@@ -23,7 +23,7 @@ describe RDF::Query::Pattern do
     end
     
     it "should not have variables" do
-      expect(subject.variables?).to be_false
+      expect(subject.variables?).to be_falsey
       expect(subject.variable_count).to eq 0
       expect(subject.variables).to eq({})
     end
@@ -37,12 +37,12 @@ describe RDF::Query::Pattern do
     end
 
     it "should not be bound or unbound" do
-      expect(subject.unbound?).to be_false
-      expect(subject.bound?).to be_false
+      expect(subject.unbound?).to be_falsey
+      expect(subject.bound?).to be_falsey
     end
 
     it "should not have bindings" do
-      expect(subject.bindings?).to be_false
+      expect(subject.bindings?).to be_falsey
       expect(subject.binding_count).to eq 0
       expect(subject.bindings).to eq({})
     end
@@ -53,7 +53,7 @@ describe RDF::Query::Pattern do
     subject {RDF::Query::Pattern.new(s)}
 
     it "should have one variable" do
-      expect(subject.variables?).to be_true
+      expect(subject.variables?).to be_truthy
       expect(subject.variable_count).to eq 1
       expect(subject.variables.keys).to eq [:s]
       expect(subject.variables).to eq({:s => s})
@@ -69,12 +69,12 @@ describe RDF::Query::Pattern do
     end
 
     it "should be fully bound" do
-      expect(subject.unbound?).to be_false
-      expect(subject.bound?).to be_true
+      expect(subject.unbound?).to be_falsey
+      expect(subject.bound?).to be_truthy
     end
 
     it "should have one binding" do
-      expect(subject.bindings?).to be_true
+      expect(subject.bindings?).to be_truthy
       expect(subject.binding_count).to eq 1
       expect(subject.bindings).to eq({:s => true})
     end
@@ -87,7 +87,7 @@ describe RDF::Query::Pattern do
     subject {RDF::Query::Pattern.new(s, p, o)}
 
     it "should have three variables" do
-      expect(subject.variables?).to be_true
+      expect(subject.variables?).to be_truthy
       expect(subject.variable_count).to eq 3
       expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
       expect(subject.variables).to eq({:s => s, :p => p, :o => o})
@@ -103,12 +103,12 @@ describe RDF::Query::Pattern do
     end
 
     it "should be fully bound" do
-      expect(subject.unbound?).to be_false
-      expect(subject.bound?).to be_true
+      expect(subject.unbound?).to be_falsey
+      expect(subject.bound?).to be_truthy
     end
 
     it "should have three bindings" do
-      expect(subject.bindings?).to be_true
+      expect(subject.bindings?).to be_truthy
       expect(subject.binding_count).to eq 3
       expect(subject.bindings).to eq({:s => true, :p => true, :o => true})
     end
@@ -140,7 +140,7 @@ describe RDF::Query::Pattern do
     subject {pattern}
     describe "#execute" do
       it "executes query against repo" do
-        expect(subject.execute(repo).to_a).to have(repo.count).items
+        expect(subject.execute(repo).to_a.size).to eql repo.count
       end
     end
 

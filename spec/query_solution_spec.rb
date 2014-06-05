@@ -11,19 +11,19 @@ describe RDF::Query::Solution do
     it "returns true if two solutions have equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1"})
       s2 = RDF::Query::Solution.new({:a => "1"})
-      expect(s1.compatible?(s2)).to be_true
+      expect(s1.compatible?(s2)).to be_truthy
     end
 
     it "returns true if two solutions have overlapping equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "1", :b => "2"})
-      expect(s1.compatible?(s2)).to be_true
+      expect(s1.compatible?(s2)).to be_truthy
     end
     
     it "returns false if two solutions any mappings which are different" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "3", :c => "3"})
-      expect(s1.compatible?(s2)).to be_false
+      expect(s1.compatible?(s2)).to be_falsey
     end
 
     context "subsetByExcl02" do
@@ -80,19 +80,19 @@ describe RDF::Query::Solution do
     it "returns true if two solutions have equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1"})
       s2 = RDF::Query::Solution.new({:a => "1"})
-      expect(s1.eql?(s2)).to be_true
+      expect(s1.eql?(s2)).to be_truthy
     end
 
     it "returns false if two solutions have overlapping equivalent bindings" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "1", :b => "2"})
-      expect(s1.eql?(s2)).to be_false
+      expect(s1.eql?(s2)).to be_falsey
     end
     
     it "returns false if two solutions any mappings which are different" do
       s1 = RDF::Query::Solution.new({:a => "1", :c => "3"})
       s2 = RDF::Query::Solution.new({:a => "3", :c => "3"})
-      expect(s1.eql?(s2)).to be_false
+      expect(s1.eql?(s2)).to be_falsey
     end
   end
 
