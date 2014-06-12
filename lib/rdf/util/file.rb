@@ -57,8 +57,9 @@ module RDF; module Util
         result = nil
         until remote_document do
           Net::HTTP::start(parsed_url.host, parsed_url.port,
-                          :open_timeout => 60 * 1000,
-                          :use_ssl => filename_or_url.start_with?("https")
+                          open_timeout: 60 * 1000,
+                          use_ssl: parsed_url.scheme == 'https',
+                          verify_mode: OpenSSL::SSL::VERIFY_NONE
           ) do |http|
             request = Net::HTTP::Get.new(parsed_url.request_uri, headers)
             http.request(request) do |response|
