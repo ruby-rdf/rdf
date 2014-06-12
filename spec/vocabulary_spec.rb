@@ -325,6 +325,18 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe ".imports" do
+    {
+      RDF::FOAF => [],
+      RDF::WOT => [RDF::RDFS, RDF::OWL]
+    }.each do |v, r|
+      context v.to_uri do
+        subject {v}
+        its(:imports) {should eq r}
+      end
+    end
+  end
+
   describe ".load" do
     let!(:nt) {%{
       <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .

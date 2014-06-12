@@ -157,6 +157,7 @@ module RDF
       #
       # @param [String, #to_s] pname
       # @return [RDF::URI]
+      # @raise [KeyError] if pname suffix not found in identified vocabulary
       def expand_pname(pname)
         prefix, suffix = pname.to_s.split(":", 2)
         if prefix == "rdf"
@@ -169,12 +170,18 @@ module RDF
       end
 
       ##
-      # Return the Vocabulary associated with a URI
+      # Return the Vocabulary associated with a URI. Allows the trailing '/' or '#' to be excluded
       #
       # @param [RDF::URI] uri
       # @return [Vocabulary]
       def find(uri)
-        RDF::Vocabulary.detect {|v| RDF::URI(uri).start_with?(v.to_uri)}
+        RDF::Vocabulary.detect do |v|
+          if uri.length >= v.to_uri.length
+            RDF::URI(uri).start_with?(v.to_uri)
+          else
+            v.to_uri.to_s.sub(%r([/#]$), '') == uri.to_s
+          end
+        end
       end
 
       ##
@@ -202,12 +209,25 @@ module RDF
         end
       end
 
+      ##
+      # List of vocabularies this vocabulary has an `owl:imports` on
+      # @return [Array<RDF::Vocabulary>]
+      def imports
+        @imports ||= Array(self[""].attributes["owl:imports"]).map do |pn|
+          find(expand_pname(pn)) rescue nil
+        end.compact
+      end
+
+      ##
       # @return [String] The label for the named property
+      # @deprecated Use {RDF::Vocabulary::Term#label}
       def label_for(name)
         props.fetch(self[name], {}).fetch(:label, "")
       end
 
+      ##
       # @return [String] The comment for the named property
+      # @deprecated Use {RDF::Vocabulary::Term#comment}
       def comment_for(name)
         props.fetch(self[name], {}).fetch(:comment, "")
       end
