@@ -210,13 +210,25 @@ module RDF
       end
 
       ##
-      # List of vocabularies this vocabulary has an `owl:imports` on
+      # List of vocabularies this vocabulary `owl:imports`
+      #
+      # @note the alias {__imports__} guards against `RDF::OWL.imports` returning a term, rather than an array of vocabularies
       # @return [Array<RDF::Vocabulary>]
       def imports
         @imports ||= begin
           Array(self[""].attributes["owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
         rescue KeyError
           []
+        end
+      end
+      alias_method :__imports__, :imports
+
+      ##
+      # List of vocabularies which import this vocabulary
+      # @return [Array<RDF::Vocabulary>]
+      def imported_from
+        @imported_from ||= begin
+          RDF::Vocabulary.select {|v| v.__imports__.include?(self)}
         end
       end
 

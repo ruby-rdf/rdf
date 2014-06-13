@@ -339,6 +339,21 @@ describe RDF::Vocabulary do
     specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
   end
 
+  describe ".imported_from" do
+    {
+      RDF::FOAF => [],
+      RDF::RDFS => [RDF::WOT],
+      RDF::OWL => [RDF::WOT]
+    }.each do |v, r|
+      context v.to_uri do
+        subject {v}
+        its(:imported_from) {should eq r}
+      end
+    end
+
+    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
+  end
+
   describe ".load" do
     let!(:nt) {%{
       <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
