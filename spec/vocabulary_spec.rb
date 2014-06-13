@@ -335,6 +335,8 @@ describe RDF::Vocabulary do
         its(:imports) {should eq r}
       end
     end
+
+    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
   end
 
   describe ".load" do

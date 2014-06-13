@@ -213,9 +213,11 @@ module RDF
       # List of vocabularies this vocabulary has an `owl:imports` on
       # @return [Array<RDF::Vocabulary>]
       def imports
-        @imports ||= Array(self[""].attributes["owl:imports"]).map do |pn|
-          find(expand_pname(pn)) rescue nil
-        end.compact
+        @imports ||= begin
+          Array(self[""].attributes["owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
+        rescue KeyError
+          []
+        end
       end
 
       ##
