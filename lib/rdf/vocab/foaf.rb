@@ -607,6 +607,7 @@ module RDF
     term :"",
       "dc11:description" => %(The Friend of a Friend \(FOAF\) RDF vocabulary, described using W3C RDF Schema and the Web Ontology Language.).freeze,
       "dc11:title" => %(Friend of a Friend \(FOAF\) vocabulary).freeze,
+      label: "".freeze,
       type: "owl:Ontology".freeze
   end
 end

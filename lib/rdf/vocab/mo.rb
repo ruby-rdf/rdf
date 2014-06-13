@@ -2314,6 +2314,20 @@ The review does not have to be open content, as long as it is accessible to the 
       "vs:term_status" => %(stable).freeze
 
     # Extra definitions
+    term :"",
+      "dc11:created" => %(2006/12/21 12:00:00).freeze,
+      "dc11:date" => %(2013/07/22 16:54:19).freeze,
+      "dc11:description" => %(
+        The Music Ontology Specification provides main concepts and 
+        properties fo describing music \(i.e. artists, albums and tracks\) 
+        on the Semantic Web. 
+    ).freeze,
+      "dc11:title" => %(The Music Ontology).freeze,
+      "foaf:maker" => [%(http://raimond.me.uk/foaf.rdf#moustaki).freeze, %(http://foaf.me/zazi#me).freeze, %(http://www.talkdigger.com/foaf/fgiasson).freeze, %(http://kurtisrandom.com/foaf.rdf#kurtjx).freeze],
+      label: "".freeze,
+      "owl:imports" => [%(http://purl.org/vocab/bio/0.1/).freeze, %(http://purl.org/NET/c4dm/event.owl).freeze, %(http://purl.org/ontology/ao/core).freeze, %(http://www.w3.org/2006/time).freeze, %(foaf:).freeze, %(dc:).freeze, %(http://purl.org/NET/c4dm/keys.owl).freeze, %(http://purl.org/vocab/frbr/core).freeze],
+      "owl:versionInfo" => %(Revision: 2.1.5).freeze,
+      type: "owl:Ontology".freeze
     term :album,
       "dc11:description" => %(
         One or more track issued together.

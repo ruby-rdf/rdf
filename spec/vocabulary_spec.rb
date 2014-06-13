@@ -341,7 +341,7 @@ describe RDF::Vocabulary do
 
   describe ".imported_from" do
     {
-      RDF::FOAF => [],
+      RDF::FOAF => [RDF::DOAP, RDF::MO],
       RDF::RDFS => [RDF::WOT],
       RDF::OWL => [RDF::WOT]
     }.each do |v, r|

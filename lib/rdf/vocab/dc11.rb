@@ -155,5 +155,12 @@ module RDF
       "rdfs:isDefinedBy" => %(dc11:).freeze,
       "skos:note" => %(A second property with the same name as this property has been declared in the dcterms: namespace \(http://purl.org/dc/terms/\).  See the Introduction to the document "DCMI Metadata Terms" \(http://dublincore.org/documents/dcmi-terms/\) for an explanation.).freeze,
       type: "rdf:Property".freeze
+
+    # Extra definitions
+    term :"",
+      "dc:modified" => %(2012-06-14).freeze,
+      "dc:publisher" => %(http://purl.org/dc/aboutdcmi#DCMI).freeze,
+      "dc:title" => %(Dublin Core Metadata Element Set, Version 1.1).freeze,
+      label: "".freeze
   end
 end

@@ -134,7 +134,7 @@ module RDF
         # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module #{module_name}
-          class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary("#{uri}")
+          class #{class_name} < #{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
       # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values

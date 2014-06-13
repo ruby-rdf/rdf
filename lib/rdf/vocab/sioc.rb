@@ -660,6 +660,7 @@ module RDF
       "dc:description" => %(SIOC \(Semantically-Interlinked Online Communities\) is an ontology for describing the information in online communities. 
 This information can be used to export information from online communities and to link them together. The scope of the application areas that SIOC can be used for includes \(and is not limited to\) weblogs, message boards, mailing lists and chat channels.).freeze,
       "dc:title" => %(SIOC Core Ontology Namespace).freeze,
+      label: "".freeze,
       "owl:versionInfo" => %(Revision: 1.35).freeze,
       "rdfs:seeAlso" => %(http://rdfs.org/sioc/spec).freeze,
       type: ["owl:Ontology".freeze, "owl:Thing".freeze]

@@ -187,6 +187,7 @@ module RDF
     term :"",
       comment: [%(A namespace for describing HTTP messages
    \(http://www.w3.org/Protocols/rfc2616/rfc2616.html\)).freeze, %(This has been obsoleted by http://www.w3.org/2011/http.rdfs).freeze],
+      label: "".freeze,
       "rdfs:seeAlso" => %(http://www.w3.org/2011/http.rdfs).freeze
     term :"100",
       label: "Continue".freeze,

@@ -858,6 +858,11 @@ module RDF
       type: "rdfs:Datatype".freeze
 
     # Extra definitions
+    term :"",
+      "dc:modified" => %(2012-06-14).freeze,
+      "dc:publisher" => %(http://purl.org/dc/aboutdcmi#DCMI).freeze,
+      "dc:title" => %(DCMI Metadata Terms - other).freeze,
+      label: "".freeze
     term :DCMIType,
       comment: %(The set of classes specified by the DCMI Type Vocabulary, used to categorize the nature or genre of the resource.).freeze,
       "dc:hasVersion" => %(http://dublincore.org/usage/terms/history/#DCMIType-005).freeze,

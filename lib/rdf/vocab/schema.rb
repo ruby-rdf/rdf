@@ -4526,6 +4526,12 @@ module RDF
       "schema:domainIncludes" => %(schema:CreativeWork).freeze,
       "schema:rangeIncludes" => %(schema:URL).freeze,
       type: "rdf:Property".freeze
+    property :dissolutionDate,
+      comment: %(The date that this organization was dissolved.).freeze,
+      label: "dissolutionDate".freeze,
+      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:rangeIncludes" => %(schema:Date).freeze,
+      type: "rdf:Property".freeze
     property :distance,
       comment: %(A sub property of asset. The distance travelled.).freeze,
       label: "distance".freeze,
@@ -5261,6 +5267,12 @@ module RDF
       comment: %(IATA identifier for an airline or airport).freeze,
       label: "iataCode".freeze,
       "schema:domainIncludes" => %(schema:Airline).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :icaoCode,
+      comment: %(IACO identifier for an airport.).freeze,
+      label: "iacoCode".freeze,
+      "schema:domainIncludes" => %(schema:Airport).freeze,
       "schema:rangeIncludes" => %(schema:Text).freeze,
       type: "rdf:Property".freeze
     property :identifyingExam,
@@ -7724,6 +7736,12 @@ module RDF
       "schema:domainIncludes" => %(schema:Thing).freeze,
       "schema:rangeIncludes" => %(schema:URL).freeze,
       type: "rdf:Property".freeze
+    property :urlTemplate,
+      comment: %(An url template \(RFC6570\) that will be used to construct the target of the execution of the action.).freeze,
+      label: "urlTemplate".freeze,
+      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
     property :usedToDiagnose,
       comment: %(A condition the test is used to diagnose.).freeze,
       label: "usedToDiagnose".freeze,
@@ -7789,6 +7807,12 @@ module RDF
       label: "valueMinLength".freeze,
       "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
       "schema:rangeIncludes" => %(schema:Number).freeze,
+      type: "rdf:Property".freeze
+    property :valueName,
+      comment: %(Indicates the name of the PropertyValueSpecification to be used in URL templates and form encoding in a manner analogous to HTML's input@name.).freeze,
+      label: "valueName".freeze,
+      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
       type: "rdf:Property".freeze
     property :valuePattern,
       comment: %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze,
