@@ -137,7 +137,7 @@ module RDF
           uri_str = [to_s, name.to_s].join('')
           Term.cache.delete(uri_str)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)
-          props[prop] = options
+          props[name.to_sym] = prop
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
           prop
         end
@@ -150,7 +150,7 @@ module RDF
       ##
       #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
       def properties
-        props.keys
+        props.values
       end
       alias_method :__properties__, :properties
 
@@ -195,7 +195,7 @@ module RDF
         uri = RDF::URI(uri)
         return uri if uri.is_a?(Vocabulary::Term)
         vocab = RDF::Vocabulary.detect {|v| uri.start_with?(v.to_uri)}
-        term = vocab[uri.to_s[vocab.to_uri.to_s.length..-1]] if vocab
+        vocab[uri.to_s[vocab.to_uri.to_s.length..-1]] if vocab
       end
 
       ##
@@ -204,8 +204,8 @@ module RDF
       # @param  [#to_s] property
       # @return [RDF::URI]
       def [](property)
-        if self.respond_to?(property.to_sym)
-          self.send(property.to_sym)
+        if props.has_key?(property.to_sym)
+          props[property.to_sym]
         else
           Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self})
         end
@@ -238,14 +238,14 @@ module RDF
       # @return [String] The label for the named property
       # @deprecated Use {RDF::Vocabulary::Term#label}
       def label_for(name)
-        props.fetch(self[name], {}).fetch(:label, "")
+        self[name].label || ''
       end
 
       ##
       # @return [String] The comment for the named property
       # @deprecated Use {RDF::Vocabulary::Term#comment}
       def comment_for(name)
-        props.fetch(self[name], {}).fetch(:comment, "")
+        self[name].comment || ''
       end
 
       ##
@@ -280,8 +280,8 @@ module RDF
       # @yield statement
       # @yieldparam [RDF::Statement]
       def each_statement(&block)
-        props.each do |subject, attributes|
-          attributes.each do |prop, values|
+        props.each do |name, subject|
+          subject.attributes.each do |prop, values|
             prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
             next unless prop
             Array(values).each do |value|
@@ -651,10 +651,14 @@ module RDF
       # Is this a strict vocabulary, or a liberal vocabulary allowing arbitrary properties?
       def strict?; true; end
 
+      ##
+      # Returns the URI for the term `property` in this vocabulary.
+      #
+      # @param  [#to_s] property
+      # @return [RDF::URI]
+      # @raise [KeyError] if property not defined in vocabulary
       def [](name)
-        prop = super
-        props.fetch(prop) #raises KeyError on missing value
-        return prop
+        props.fetch(name.to_sym)
       end
     end
   end # StrictVocabulary
