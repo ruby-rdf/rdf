@@ -10,13 +10,13 @@ module RDF
       label: "GNU Arch repository".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       subClassOf: "doap:Repository".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "owl:Class".freeze]
     term :BKRepository,
       comment: %(BitKeeper source code repository.).freeze,
       label: "BitKeeper Repository".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       subClassOf: "doap:Repository".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "owl:Class".freeze]
     term :BazaarBranch,
       comment: %(Bazaar source code branch.).freeze,
       label: "Bazaar Branch".freeze,
@@ -28,7 +28,7 @@ module RDF
       label: "CVS Repository".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       subClassOf: "doap:Repository".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "owl:Class".freeze]
     term :DarcsRepository,
       comment: %(darcs source code repository.).freeze,
       label: "darcs Repository".freeze,
@@ -51,7 +51,7 @@ module RDF
       comment: %(A project.).freeze,
       label: "Project".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
-      subClassOf: "http://xmlns.com/wordnet/1.6/Project".freeze,
+      subClassOf: ["http://xmlns.com/wordnet/1.6/Project".freeze, "foaf:Project".freeze],
       type: "rdfs:Class".freeze
     term :Repository,
       comment: %(Source code repository.).freeze,
@@ -174,7 +174,7 @@ module RDF
       label: "homepage".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       subPropertyOf: "foaf:homepage".freeze,
-      type: "rdf:Property".freeze
+      type: ["rdf:Property".freeze, "owl:InverseFunctionalProperty".freeze]
     property :implements,
       comment: %(A specification that a project implements. Could be a standard, API or legally defined level of conformance.).freeze,
       domain: "doap:Project".freeze,
@@ -183,7 +183,7 @@ module RDF
       "rdfs:isDefinedBy" => %(doap:).freeze,
       type: "rdf:Property".freeze
     property :language,
-      comment: %(ISO language code a project has been translated into).freeze,
+      comment: [%(ISO language code a project has been translated into).freeze, %(このプロジェクトの翻訳された言語のISO言語コート).freeze],
       domain: "doap:Project".freeze,
       label: "language".freeze,
       range: "rdfs:Literal".freeze,
@@ -215,7 +215,6 @@ module RDF
       type: "rdf:Property".freeze
     property :module,
       comment: %(Module name of a repository.).freeze,
-      domain: "_:g2158960040".freeze,
       label: "module".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       type: "rdf:Property".freeze
@@ -233,17 +232,17 @@ module RDF
       label: "old homepage".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       subPropertyOf: "foaf:homepage".freeze,
-      type: "rdf:Property".freeze
+      type: ["rdf:Property".freeze, "owl:InverseFunctionalProperty".freeze]
     property :os,
       comment: %(Operating system that a project is limited to.  Omit this property if the project is not OS-specific.).freeze,
-      domain: "doap:Project".freeze,
+      domain: ["doap:Project".freeze, "doap:Version".freeze],
       label: "operating system".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
       type: "rdf:Property".freeze
     property :platform,
       comment: %(Indicator of software platform \(non-OS specific\), e.g. Java, Firefox, ECMA CLR).freeze,
-      domain: "doap:Project".freeze,
+      domain: ["doap:Project".freeze, "doap:Version".freeze],
       label: "platform".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(doap:).freeze,
@@ -296,7 +295,7 @@ module RDF
       "rdfs:isDefinedBy" => %(doap:).freeze,
       type: "rdf:Property".freeze
     property :tester,
-      comment: %(A tester or other quality control contributor.).freeze,
+      comment: [%(A tester or other quality control contributor.).freeze, %(このプロジェクトのため、試験をする人や品質メンテナー。).freeze],
       domain: "doap:Project".freeze,
       label: "tester".freeze,
       range: "foaf:Person".freeze,

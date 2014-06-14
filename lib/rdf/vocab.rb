@@ -134,7 +134,9 @@ module RDF
         else
           name, options = args
           options = {:label => name.to_s, vocab: self}.merge(options || {})
-          prop = Term.intern([to_s, name.to_s].join(''), attributes: options)
+          uri_str = [to_s, name.to_s].join('')
+          Term.cache.delete(uri_str)  # Clear any previous entry
+          prop = Term.intern(uri_str, attributes: options)
           props[prop] = options
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
           prop
@@ -378,7 +380,6 @@ module RDF
           term_defs
         end
 
-        # Create each term
         term_defs.each do |term, attributes|
           vocab.term term, attributes
         end
@@ -528,23 +529,23 @@ module RDF
       #
       # @overload URI(options = {})
       #   @param  [Hash{Symbol => Object}] options
-      #   @option options [Boolean] :validate (false)
-      #   @option options [Boolean] :canonicalize (false)
-      #   @option [Vocabulary] :vocab The {Vocabulary} associated with this term.
-      #   @option [String, #to_s] :scheme The scheme component.
-      #   @option [String, #to_s] :user The user component.
-      #   @option [String, #to_s] :password The password component.
-      #   @option [String, #to_s] :userinfo
-      #     The userinfo component. If this is supplied, the user and password
-      #     components must be omitted.
-      #   @option [String, #to_s] :host The host component.
-      #   @option [String, #to_s] :port The port component.
-      #   @option [String, #to_s] :authority
-      #     The authority component. If this is supplied, the user, password,
-      #     userinfo, host, and port components must be omitted.
-      #   @option [String, #to_s] :path The path component.
-      #   @option [String, #to_s] :query The query component.
-      #   @option [String, #to_s] :fragment The fragment component.
+      #   @option options options [Boolean] :validate (false)
+      #   @option options options [Boolean] :canonicalize (false)
+      #   @option options [Vocabulary] :vocab The {Vocabulary} associated with this term.
+      #   @option options [String, #to_s] :scheme The scheme component.
+      #   @option options [String, #to_s] :user The user component.
+      #   @option options [String, #to_s] :password The password component.
+      #   @option options [String, #to_s] :userinfo
+      #     The u optionsserinfo component. If this is supplied, the user and password
+      #     compo optionsnents must be omitted.
+      #   @option options [String, #to_s] :host The host component.
+      #   @option options [String, #to_s] :port The port component.
+      #   @option options [String, #to_s] :authority
+      #     The a optionsuthority component. If this is supplied, the user, password,
+      #     useri optionsnfo, host, and port components must be omitted.
+      #   @option options [String, #to_s] :path The path component.
+      #   @option options [String, #to_s] :query The query component.
+      #   @option options [String, #to_s] :fragment The fragment component.
       #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       def initialize(*args)

@@ -85,6 +85,17 @@ module RDF; module Util
         end
         value
       end
+
+      ##
+      # Remove cache entry for key
+      #
+      # @param [Object] key
+      # @return [Object] the previously referenced object
+      def delete(key)
+        id = @cache[key]
+        @cache.delete(key)
+        @index.delete(id) if id
+      end
     end # ObjectSpaceCache
 
     ##
@@ -123,6 +134,16 @@ module RDF; module Util
           @cache[key] = WeakRef.new(value)
         end
         value
+      end
+
+      ##
+      # Remove cache entry for key
+      #
+      # @param [Object] key
+      # @return [Object] the previously referenced object
+      def delete(key)
+        ref = @cache.delete(key)
+        ref.__getobj__ rescue nil
       end
     end # WeakRefCache
   end # Cache

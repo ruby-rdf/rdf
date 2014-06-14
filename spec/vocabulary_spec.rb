@@ -407,5 +407,23 @@ describe RDF::Vocabulary do
       specify {should_not be_other}
       its(:vocab) {should eql RDF::XSD}
     end
+
+    context "#initialize" do
+      subject {
+        RDF::Vocabulary::Term.new(:foo,
+                                  label: "foo",
+                                  attributes: {
+                                    domain: RDF::RDFS.Resource,
+                                    range: [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                    "schema:domainIncludes" => RDF::RDFS.Resource,
+                                    "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                  })
+          }
+      its(:label) {should eq "foo"}
+      its(:domain) {should include(RDF::RDFS.Resource)}
+      its(:range) {should include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      its(:attributes) {should include("schema:domainIncludes" => RDF::RDFS.Resource)}
+      its(:attributes) {should include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+    end
   end
 end
