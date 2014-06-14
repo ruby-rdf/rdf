@@ -381,7 +381,7 @@ module RDF
         end
 
         term_defs.each do |term, attributes|
-          vocab.term term, attributes
+          vocab.__property__ term, attributes
         end
 
         vocab
