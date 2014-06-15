@@ -40,13 +40,13 @@ vmd:Review-aggregate a rdfs:Class;
   """;
    rdfs:subClassOf vmd:Review .
 
-vmd:Ingredient a rdfs:Class;
+vmd:RecipeIngredient a rdfs:Class;
    rdfs:comment "Represents ingredients used in a recipe." .
 
 vmd:ingredient a rdf:Property;
    rdfs:comment "Represents ingredients used in a recipe.";
    rdfs:domain vmd:Recipe;
-   rdfs:range vmd:Ingredient .
+   rdfs:range vmd:RecipeIngredient .
 
 vmd:Instructions a rdfs:Class;
    rdfs:comment "Represents the steps to make a dish." .
@@ -91,7 +91,7 @@ vmd:affiliation a rdf:Property;
    ] .
 
 vmd:amount a rdf:Property;
-   rdfs:domain vmd:Ingredient .
+   rdfs:domain vmd:RecipeIngredient .
 
 vmd:author a rdf:Property;
    rdfs:comment "An author of the recipe can be specified by a string literal or a Person instance.";

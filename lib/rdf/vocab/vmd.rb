@@ -13,10 +13,6 @@ module RDF
       comment: %(Represents a single Breadcrumb in a Breadcrumb trail.).freeze,
       label: "Breadcrumb".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze]
-    term :Ingredient,
-      comment: %(Represents ingredients used in a recipe.).freeze,
-      label: "Ingredient".freeze,
-      type: "rdfs:Class".freeze
     term :Instructions,
       comment: %(Represents the steps to make a dish.).freeze,
       label: "Instructions".freeze,
@@ -53,6 +49,10 @@ module RDF
       comment: %(A single instance of a Recipe.).freeze,
       label: "Recipe".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze]
+    term :RecipeIngredient,
+      comment: %(Represents ingredients used in a recipe.).freeze,
+      label: "RecipeIngredient".freeze,
+      type: "rdfs:Class".freeze
     term :Review,
       comment: %(A single instance of a Review.).freeze,
       label: "Review".freeze,
@@ -84,7 +84,7 @@ module RDF
       label: "affiliation".freeze,
       type: "rdf:Property".freeze
     property :amount,
-      domain: "vmd:Ingredient".freeze,
+      domain: "vmd:RecipeIngredient".freeze,
       label: "amount".freeze,
       type: "rdf:Property".freeze
     property :author,
@@ -195,7 +195,7 @@ module RDF
       comment: %(Represents ingredients used in a recipe.).freeze,
       domain: "vmd:Recipe".freeze,
       label: "ingredient".freeze,
-      range: "vmd:Ingredient".freeze,
+      range: "vmd:RecipeIngredient".freeze,
       type: "rdf:Property".freeze
     property :instruction,
       domain: "vmd:Instructions".freeze,
