@@ -6,7 +6,7 @@ describe RDF::Query::Variable do
     subject {var}
 
     it "is named" do
-      expect(subject.named?).to be_true
+      expect(subject.named?).to be_truthy
       expect(subject.name).to eq :x
     end
 
@@ -92,13 +92,13 @@ describe RDF::Query::Variable do
     describe "#===" do
       it "matches any Term" do
         [RDF::URI("foo"), RDF::Node.new, RDF::Literal("foo"), subject].each do |value|
-          expect((subject === value)).to be_true
+          expect((subject === value)).to be_truthy
         end
       end
 
       it "does not match non-terms" do
         [nil, true, false, 123].each do |value|
-          expect((subject === value)).to be_false
+          expect((subject === value)).to be_falsey
         end
       end
     end
@@ -120,9 +120,9 @@ describe RDF::Query::Variable do
 
     it "matches only its value" do
       [nil, true, false, RDF::Literal(456)].each do |value|
-        expect((subject === value)).to be_false
+        expect((subject === value)).to be_falsey
       end
-      expect((subject === RDF::Literal(123))).to be_true
+      expect((subject === RDF::Literal(123))).to be_truthy
     end
 
     it "has a string representation" do

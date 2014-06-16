@@ -155,7 +155,7 @@ module RDF
       label: "url".freeze,
       range: "http://ogp.me/ns/class#url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
-      "rdfs:seeAlso" => %(dc11:identifier).freeze,
+      "rdfs:seeAlso" => [%(dc11:identifier).freeze, %(foaf:homepage).freeze],
       type: "rdf:Property".freeze
     property :video,
       label: "video".freeze,

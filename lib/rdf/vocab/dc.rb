@@ -12,7 +12,7 @@ module RDF
       "dc:issued" => %(2008-01-14).freeze,
       label: "Agent".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      type: "dc:AgentClass".freeze
+      type: ["dc:AgentClass".freeze, "rdfs:Class".freeze]
     term :AgentClass,
       comment: %(A group of agents.).freeze,
       "dc:description" => %(Examples of Agent Class include groups seen as classes, such as students, women, charities, lecturers.).freeze,
@@ -184,7 +184,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Abstract".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:description".freeze,
+      subPropertyOf: ["dc11:description".freeze, "dc:description".freeze],
       type: "rdf:Property".freeze
     property :accessRights,
       comment: %(Information about who can access the resource or an indication of its security status.).freeze,
@@ -195,7 +195,7 @@ module RDF
       label: "Access Rights".freeze,
       range: "dc:RightsStatement".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:rights".freeze,
+      subPropertyOf: ["dc11:rights".freeze, "dc:rights".freeze],
       type: "rdf:Property".freeze
     property :accrualMethod,
       comment: %(The method by which items are added to a collection.).freeze,
@@ -236,7 +236,7 @@ module RDF
       label: "Alternative Title".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:title".freeze,
+      subPropertyOf: ["dc11:title".freeze, "dc:title".freeze],
       type: "rdf:Property".freeze
     property :audience,
       comment: %(A class of entity for whom the resource is intended or useful.).freeze,
@@ -255,7 +255,7 @@ module RDF
       label: "Date Available".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :bibliographicCitation,
       comment: %(A bibliographic reference for the resource.).freeze,
@@ -267,7 +267,7 @@ module RDF
       label: "Bibliographic Citation".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:identifier".freeze,
+      subPropertyOf: ["dc11:identifier".freeze, "dc:identifier".freeze],
       type: "rdf:Property".freeze
     property :conformsTo,
       comment: %(An established standard to which the described resource conforms.).freeze,
@@ -277,7 +277,7 @@ module RDF
       label: "Conforms To".freeze,
       range: "dc:Standard".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :contributor,
       comment: %(An entity responsible for making contributions to the resource.).freeze,
@@ -309,7 +309,7 @@ module RDF
       label: "Date Created".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :creator,
       comment: %(An entity primarily responsible for making the resource.).freeze,
@@ -321,7 +321,7 @@ module RDF
       "owl:equivalentProperty" => %(foaf:maker).freeze,
       range: "dc:Agent".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:creator".freeze,
+      subPropertyOf: ["dc11:creator".freeze, "dc:contributor".freeze],
       type: "rdf:Property".freeze
     property :date,
       comment: %(A point or period of time associated with an event in the lifecycle of the resource.).freeze,
@@ -343,7 +343,7 @@ module RDF
       label: "Date Accepted".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :dateCopyrighted,
       comment: %(Date of copyright.).freeze,
@@ -353,7 +353,7 @@ module RDF
       label: "Date Copyrighted".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :dateSubmitted,
       comment: %(Date of submission of the resource.).freeze,
@@ -364,7 +364,7 @@ module RDF
       label: "Date Submitted".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :description,
       comment: %(An account of the resource.).freeze,
@@ -394,7 +394,7 @@ module RDF
       label: "Extent".freeze,
       range: "dc:SizeOrDuration".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:format".freeze,
+      subPropertyOf: ["dc11:format".freeze, "dc:format".freeze],
       type: "rdf:Property".freeze
     property :format,
       comment: %(The file format, physical medium, or dimensions of the resource.).freeze,
@@ -415,7 +415,7 @@ module RDF
       label: "Has Format".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :hasPart,
       comment: %(A related resource that is included either physically or logically in the described resource.).freeze,
@@ -425,7 +425,7 @@ module RDF
       label: "Has Part".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :hasVersion,
       comment: %(A related resource that is a version, edition, or adaptation of the described resource.).freeze,
@@ -435,7 +435,7 @@ module RDF
       label: "Has Version".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :identifier,
       comment: %(An unambiguous reference to the resource within a given context.).freeze,
@@ -466,7 +466,7 @@ module RDF
       label: "Is Format Of".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :isPartOf,
       comment: %(A related resource in which the described resource is physically or logically included.).freeze,
@@ -476,7 +476,7 @@ module RDF
       label: "Is Part Of".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :isReferencedBy,
       comment: %(A related resource that references, cites, or otherwise points to the described resource.).freeze,
@@ -486,7 +486,7 @@ module RDF
       label: "Is Referenced By".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :isReplacedBy,
       comment: %(A related resource that supplants, displaces, or supersedes the described resource.).freeze,
@@ -496,7 +496,7 @@ module RDF
       label: "Is Replaced By".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :isRequiredBy,
       comment: %(A related resource that requires the described resource to support its function, delivery, or coherence.).freeze,
@@ -506,7 +506,7 @@ module RDF
       label: "Is Required By".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :isVersionOf,
       comment: %(A related resource of which the described resource is a version, edition, or adaptation.).freeze,
@@ -517,7 +517,7 @@ module RDF
       label: "Is Version Of".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :issued,
       comment: %(Date of formal issuance \(e.g., publication\) of the resource.).freeze,
@@ -527,7 +527,7 @@ module RDF
       label: "Date Issued".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :language,
       comment: %(A language of the resource.).freeze,
@@ -548,7 +548,7 @@ module RDF
       label: "License".freeze,
       range: "dc:LicenseDocument".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:rights".freeze,
+      subPropertyOf: ["dc11:rights".freeze, "dc:rights".freeze],
       type: "rdf:Property".freeze
     property :mediator,
       comment: %(An entity that mediates access to the resource and for whom the resource is intended or useful.).freeze,
@@ -570,7 +570,7 @@ module RDF
       label: "Medium".freeze,
       range: "dc:PhysicalMedium".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:format".freeze,
+      subPropertyOf: ["dc11:format".freeze, "dc:format".freeze],
       type: "rdf:Property".freeze
     property :modified,
       comment: %(Date on which the resource was changed.).freeze,
@@ -580,7 +580,7 @@ module RDF
       label: "Date Modified".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
     property :provenance,
       comment: %(A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.).freeze,
@@ -611,7 +611,7 @@ module RDF
       label: "References".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :relation,
       comment: %(A related resource.).freeze,
@@ -632,7 +632,7 @@ module RDF
       label: "Replaces".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :requires,
       comment: %(A related resource that is required by the described resource to support its function, delivery, or coherence.).freeze,
@@ -642,7 +642,7 @@ module RDF
       label: "Requires".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:relation".freeze,
+      subPropertyOf: ["dc11:relation".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :rights,
       comment: %(Information about rights held in and over the resource.).freeze,
@@ -673,7 +673,7 @@ module RDF
       label: "Source".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
       "skos:note" => %(This term is intended to be used with non-literal values as defined in the DCMI Abstract Model \(http://dublincore.org/documents/abstract-model/\).  As of December 2007, the DCMI Usage Board is seeking a way to express this intention with a formal range declaration.).freeze,
-      subPropertyOf: "dc11:source".freeze,
+      subPropertyOf: ["dc11:source".freeze, "dc:relation".freeze],
       type: "rdf:Property".freeze
     property :spatial,
       comment: %(Spatial characteristics of the resource.).freeze,
@@ -683,7 +683,7 @@ module RDF
       label: "Spatial Coverage".freeze,
       range: "dc:Location".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:coverage".freeze,
+      subPropertyOf: ["dc11:coverage".freeze, "dc:coverage".freeze],
       type: "rdf:Property".freeze
     property :subject,
       comment: %(The topic of the resource.).freeze,
@@ -703,7 +703,7 @@ module RDF
       "dc:modified" => %(2008-01-14).freeze,
       label: "Table Of Contents".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:description".freeze,
+      subPropertyOf: ["dc11:description".freeze, "dc:description".freeze],
       type: "rdf:Property".freeze
     property :temporal,
       comment: %(Temporal characteristics of the resource.).freeze,
@@ -713,7 +713,7 @@ module RDF
       label: "Temporal Coverage".freeze,
       range: "dc:PeriodOfTime".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:coverage".freeze,
+      subPropertyOf: ["dc11:coverage".freeze, "dc:coverage".freeze],
       type: "rdf:Property".freeze
     property :title,
       comment: %(A name given to the resource.).freeze,
@@ -744,7 +744,7 @@ module RDF
       label: "Date Valid".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(dc:).freeze,
-      subPropertyOf: "dc11:date".freeze,
+      subPropertyOf: ["dc11:date".freeze, "dc:date".freeze],
       type: "rdf:Property".freeze
 
     # Datatype definitions
@@ -858,6 +858,11 @@ module RDF
       type: "rdfs:Datatype".freeze
 
     # Extra definitions
+    term :"",
+      "dc:modified" => %(2012-06-14).freeze,
+      "dc:publisher" => %(http://purl.org/dc/aboutdcmi#DCMI).freeze,
+      "dc:title" => %(DCMI Metadata Terms - other).freeze,
+      label: "".freeze
     term :DCMIType,
       comment: %(The set of classes specified by the DCMI Type Vocabulary, used to categorize the nature or genre of the resource.).freeze,
       "dc:hasVersion" => %(http://dublincore.org/usage/terms/history/#DCMIType-005).freeze,

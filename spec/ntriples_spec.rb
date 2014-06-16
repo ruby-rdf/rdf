@@ -55,7 +55,7 @@ describe RDF::NTriples::Format do
       :multi_line => %(<a>\n  <b>\n  "literal"\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        expect(subject.detect(str)).to be_true
+        expect(subject.detect(str)).to be_truthy
       end
     end
 
@@ -69,7 +69,7 @@ describe RDF::NTriples::Format do
       :n3            => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
     }.each do |sym, str|
       it "does not detect #{sym}" do
-        expect(subject.detect(str)).to be_false
+        expect(subject.detect(str)).to be_falsey
       end
     end
   end
@@ -747,7 +747,7 @@ describe RDF::NTriples do
         %(<http://example/bob> <http://example/resumé> "Bob's non-normalized resumé".) => '<http://example/bob> <http://example/resumé> "Bob\'s non-normalized resumé" .',
         %(<http://example/alice> <http://example/resumé> "Alice's normalized resumé".) => '<http://example/alice> <http://example/resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |input, output|
-          it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+          it "for '#{input}'" do
             expect(parse(input).dump(:ntriples)).to eq parse(output).dump(:ntriples)
           end
         end
@@ -756,7 +756,7 @@ describe RDF::NTriples do
         %(<http://example/#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>  "URI straight in UTF8".) => %(<http://example/#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(<http://example/a> <http://example/related> <http://example/ひらがな> .) => %(<http://example/a> <http://example/related> <http://example/\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |input, output|
-        it "for '#{input}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+        it "for '#{input}'" do
           expect(parse(input).dump(:ntriples)).to eq parse(output).dump(:ntriples)
         end
       end

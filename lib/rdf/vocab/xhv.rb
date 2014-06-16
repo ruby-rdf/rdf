@@ -352,6 +352,14 @@ module RDF
       should be included in a summary of page features.).freeze,
       label: "region".freeze,
       type: "rdf:Property".freeze
+    property :role,
+      comment: %(role indicates the purpose of the
+      resource. See the XHTML Role
+      Vocabulary for roles in this vocabulary space, and XHTMLROLE for information on extending the
+      collection of roles. ).freeze,
+      label: "role".freeze,
+      "rdfs:member" => %(xhv:relrev-properties).freeze,
+      type: ["rdf:Bag".freeze, "rdf:Property".freeze]
     property :row,
       comment: %(A row of
       cells in a grid.).freeze,
@@ -489,16 +497,8 @@ module RDF
       label: "relrev-properties".freeze,
       "rdfs:member" => %(xhv:role-properties).freeze,
       type: "rdf:Bag".freeze
-    term :role,
-      comment: %(role indicates the purpose of the
-      resource. See the XHTML Role
-      Vocabulary for roles in this vocabulary space, and XHTMLROLE for information on extending the
-      collection of roles. ).freeze,
-      label: "role".freeze,
-      "rdfs:member" => %(xhv:relrev-properties).freeze,
-      type: "rdf:Bag".freeze
     term :"role-properties",
       label: "role-properties".freeze,
-      type: "rdf:Bag".freeze
+      type: ["rdf:Bag".freeze, "rdfs:member".freeze]
   end
 end

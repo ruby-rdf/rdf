@@ -246,32 +246,32 @@ describe RDF::Vocabulary do
     end
 
     it "should respond to [] with properties that have been defined" do
-      test_vocab[:prop].should be_a(RDF::URI)
-      test_vocab["prop2"].should be_a(RDF::URI)
+      expect(test_vocab[:prop]).to be_a(RDF::URI)
+      expect(test_vocab["prop2"]).to be_a(RDF::URI)
     end
 
     it "should respond to [] with properties that have not been defined" do
-      test_vocab[:not_a_prop].should be_a(RDF::URI)
-      test_vocab["not_a_prop"].should be_a(RDF::URI)
+      expect(test_vocab[:not_a_prop]).to be_a(RDF::URI)
+      expect(test_vocab["not_a_prop"]).to be_a(RDF::URI)
     end
 
     its(:property) {should eq RDF::URI("http://example.com/test#property")}
     its(:properties) {should include("http://example.com/test#Class", "http://example.com/test#prop", "http://example.com/test#prop2")}
 
     it "should respond to methods for which a property has been defined explicitly" do
-      test_vocab.prop.should be_a(RDF::URI)
+      expect(test_vocab.prop).to be_a(RDF::URI)
     end
 
     it "should respond to methods for which a class has been defined by a graph" do
-      test_vocab.Class.should be_a(RDF::URI)
+      expect(test_vocab.Class).to be_a(RDF::URI)
     end
 
     it "should respond to label_for from base RDFS" do
-      test_vocab.label_for("prop2").should == "Test property label"
+      expect(test_vocab.label_for("prop2")).to eql "Test property label"
     end
 
     it "should respond to comment_for from base RDFS" do
-      test_vocab.comment_for(:prop2).should == " Test property comment"
+      expect(test_vocab.comment_for(:prop2)).to eql " Test property comment"
     end
 
     it "should not enumerate from RDF::Vocabulary.each" do
@@ -325,6 +325,35 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe ".imports" do
+    {
+      RDF::FOAF => [],
+      RDF::WOT => [RDF::RDFS, RDF::OWL]
+    }.each do |v, r|
+      context v.to_uri do
+        subject {v}
+        its(:imports) {should eq r}
+      end
+    end
+
+    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
+  end
+
+  describe ".imported_from" do
+    {
+      RDF::FOAF => [RDF::DOAP, RDF::MO],
+      RDF::RDFS => [RDF::WOT],
+      RDF::OWL => [RDF::WOT]
+    }.each do |v, r|
+      context v.to_uri do
+        subject {v}
+        its(:imported_from) {should eq r}
+      end
+    end
+
+    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
+  end
+
   describe ".load" do
     let!(:nt) {%{
       <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
@@ -333,7 +362,7 @@ describe RDF::Vocabulary do
       <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
     }}
     before(:each) do
-      RDF::Graph.stub(:load) {RDF::Graph.new << RDF::NTriples::Reader.new(nt)}
+      allow(RDF::Graph).to receive(:load).and_return(RDF::Graph.new << RDF::NTriples::Reader.new(nt))
     end
 
     subject {RDF::Vocabulary.load("http://example/")}
@@ -377,6 +406,24 @@ describe RDF::Vocabulary do
       specify {should be_datatype}
       specify {should_not be_other}
       its(:vocab) {should eql RDF::XSD}
+    end
+
+    context "#initialize" do
+      subject {
+        RDF::Vocabulary::Term.new(:foo,
+                                  label: "foo",
+                                  attributes: {
+                                    domain: RDF::RDFS.Resource,
+                                    range: [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                    "schema:domainIncludes" => RDF::RDFS.Resource,
+                                    "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                  })
+          }
+      its(:label) {should eq "foo"}
+      its(:domain) {should include(RDF::RDFS.Resource)}
+      its(:range) {should include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      its(:attributes) {should include("schema:domainIncludes" => RDF::RDFS.Resource)}
+      its(:attributes) {should include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
     end
   end
 end

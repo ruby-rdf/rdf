@@ -8,18 +8,18 @@ module RDF
     term :Agent,
       comment: %(A person or organisation contributing to the media resource.).freeze,
       label: "Agent".freeze,
-      "owl:disjointWith" => %(ma:Collection).freeze,
+      "owl:disjointWith" => [%(ma:Collection).freeze, %(ma:Location).freeze, %(ma:MediaResource).freeze, %(ma:Rating).freeze, %(ma:TargetAudience).freeze],
       type: "owl:Class".freeze
     term :AudioTrack,
       comment: %(A specialisation of Track for Audio to provide a link to specific data properties such as sampleRate, etc. Specialisation is defined through object properties.).freeze,
       label: "AudioTrack".freeze,
-      "owl:disjointWith" => %(ma:DataTrack).freeze,
+      "owl:disjointWith" => [%(ma:DataTrack).freeze, %(ma:VideoTrack).freeze],
       subClassOf: "ma:Track".freeze,
       type: "owl:Class".freeze
     term :Collection,
       comment: %(Any group of media resource e.g. a series.).freeze,
       label: "Collection".freeze,
-      "owl:disjointWith" => %(ma:Location).freeze,
+      "owl:disjointWith" => [%(ma:Location).freeze, %(ma:MediaResource).freeze, %(ma:Rating).freeze, %(ma:TargetAudience).freeze],
       type: "owl:Class".freeze
     term :DataTrack,
       comment: %(Ancillary data track e.g. captioning  in addition to video and audio tracks. Specialisation is made through the use of appropriate object properties.).freeze,
@@ -35,7 +35,7 @@ module RDF
     term :Location,
       comment: %(A location related to the media resource, e.g. depicted in the resource \(possibly fictional\) or where the resource was created \(shooting location\), etc.).freeze,
       label: "Location".freeze,
-      "owl:disjointWith" => %(ma:MediaResource).freeze,
+      "owl:disjointWith" => [%(ma:MediaResource).freeze, %(ma:Rating).freeze, %(ma:TargetAudience).freeze],
       type: "owl:Class".freeze
     term :MediaFragment,
       comment: %(A media fragment \(spatial, temporal, track...\) composing a media resource. In other ontologies fragment is sometimes referred to as a 'part' or 'segment'.).freeze,
@@ -45,7 +45,7 @@ module RDF
     term :MediaResource,
       comment: %(An image or an audiovisual media resource, which can be composed of one or more fragment / track.).freeze,
       label: "MediaResource".freeze,
-      "owl:disjointWith" => %(ma:Rating).freeze,
+      "owl:disjointWith" => [%(ma:Rating).freeze, %(ma:TargetAudience).freeze],
       type: "owl:Class".freeze
     term :Organisation,
       comment: %(An organisation or moral agent.).freeze,
@@ -86,7 +86,6 @@ module RDF
       type: "owl:DatatypeProperty".freeze
     property :averageBitRate,
       comment: %(Corresponds to 'averageBitRate' in the Ontology for Media Resources, expressed in kilobits/second.).freeze,
-      domain: "_:g2180057780".freeze,
       label: "averageBitRate".freeze,
       range: "xsd:decimal".freeze,
       type: "owl:DatatypeProperty".freeze
@@ -129,7 +128,6 @@ module RDF
       type: "owl:DatatypeProperty".freeze
     property :duration,
       comment: %(Corresponds to 'duration' in the Ontology for Media Resources.).freeze,
-      domain: "_:g2179005900".freeze,
       label: "duration".freeze,
       range: "xsd:decimal".freeze,
       type: "owl:DatatypeProperty".freeze

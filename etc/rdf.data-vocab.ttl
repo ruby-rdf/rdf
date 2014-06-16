@@ -1,0 +1,374 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix vmd: <http://rdf.data-vocabulary.org/#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+vmd:Address a rdfs:Class;
+   rdfs:comment "Postal address for a Person or Organization."  .
+
+vmd:Breadcrumb a rdfs:Class, owl:Class;
+   rdfs:comment """Represents a single Breadcrumb in a Breadcrumb trail."""  .
+
+vmd:Offer a rdfs:Class, owl:Class;
+   rdfs:comment "Represents an offer to sell a product." .
+
+vmd:OfferAggregate a rdfs:Class, owl:Class;
+   rdfs:comment """Represents a collection of offers to sell a product.""" .
+
+vmd:Organization a rdfs:Class, owl:Class;
+   rdfs:comment "An Organization is a business, agency, school, etc." .
+
+vmd:Person a rdfs:Class, owl:Class;
+   rdfs:comment "Represents a Person, living/dead/fictional." .
+
+vmd:Product a rdfs:Class, owl:Class;
+   rdfs:comment "Represents a product or service in a Review or Review-aggregate." .
+
+vmd:Rating a rdfs:Class, owl:Class;
+   rdfs:comment "Represents a rating in a Review or Review-aggregate." .
+
+vmd:Recipe a rdfs:Class, owl:Class;
+   rdfs:comment "A single instance of a Recipe." .
+
+vmd:Review a rdfs:Class, owl:Class;
+   rdfs:comment "A single instance of a Review." .
+
+vmd:Review-aggregate a rdfs:Class;
+   rdfs:comment """Represents data from a collection of reviews.
+    Can be used whether or not there is instance-level Review data on the page.
+  """;
+   rdfs:subClassOf vmd:Review .
+
+vmd:RecipeIngredient a rdfs:Class;
+   rdfs:comment "Represents ingredients used in a recipe." .
+
+vmd:ingredient a rdf:Property;
+   rdfs:comment "Represents ingredients used in a recipe.";
+   rdfs:domain vmd:Recipe;
+   rdfs:range vmd:RecipeIngredient .
+
+vmd:Instructions a rdfs:Class;
+   rdfs:comment "Represents the steps to make a dish." .
+
+vmd:instructions a rdf:Property;
+   rdfs:comment "Represents the steps to make a dish.";
+   rdfs:domain vmd:Recipe;
+   rdfs:range vmd:Instructions .
+
+vmd:Nutrition a rdfs:Class;
+   rdfs:comment "Represents the nutrition information about a recipe." .
+
+vmd:nutrition a rdf:Property;
+   rdfs:comment "Represents the nutrition information about a recipe.";
+   rdfs:domain vmd:Recipe;
+   rdfs:range vmd:Nutrition .
+
+vmd:TimeRange a rdfs:Class, owl:Class;;
+   rdfs:comment "Represents the length of time it takes to prepare a recipe." .
+
+vmd:timeRange a rdf:Property;
+   rdfs:comment "Represents the length of time it takes to prepare a recipe.";
+   rdfs:domain vmd:Recipe;
+   rdfs:range vmd:TimeRange .
+
+vmd:acquaintance a rdf:Property;
+   rdfs:domain vmd:Person .
+
+vmd:address a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Person vmd:Organization)
+   ];
+   rdfs:range vmd:Address .
+
+vmd:affiliation a rdf:Property;
+   rdfs:comment "An affiliation can be specified by a string literal or an Organization instance.";
+   rdfs:domain vmd:Person;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:Organization xsd:string)
+   ] .
+
+vmd:amount a rdf:Property;
+   rdfs:domain vmd:RecipeIngredient .
+
+vmd:author a rdf:Property;
+   rdfs:comment "An author of the recipe can be specified by a string literal or a Person instance.";
+   rdfs:domain vmd:Recipe;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:Person xsd:string)
+   ] .
+
+vmd:availability a rdf:Property;
+   rdfs:domain vmd:Offer .
+
+vmd:average a rdf:Property;
+   rdfs:comment "The average of an aggregate value.";
+   rdfs:domain vmd:Rating .
+
+vmd:best a rdf:Property;
+   rdfs:comment "The best value of a rating scale (default 5).";
+   rdfs:domain vmd:Rating .
+
+vmd:brand a rdf:Property;
+   rdfs:domain vmd:Product .
+
+vmd:calories a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:carbohydrates a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:category a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Organization vmd:Product)
+   ] .
+
+vmd:child a rdf:Property;
+   rdfs:domain vmd:Breadcrumb .
+
+vmd:cholesterol a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:colleague a rdf:Property;
+   rdfs:domain vmd:Person .
+
+vmd:condition a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Offer vmd:OfferAggregate)
+   ] .
+
+vmd:contact a rdf:Property;
+   rdfs:domain vmd:Person .
+
+vmd:cookTime a rdf:Property;
+   rdfs:domain vmd:Recipe;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:TimeRange xsd:string)
+   ] .
+
+vmd:count a rdf:Property;
+   rdfs:comment "The total number of items used in an aggregate (e.g., number of reviews).";
+   rdfs:domain vmd:Review-aggregate .
+
+vmd:country-name a rdf:Property;
+   rdfs:domain vmd:Address .
+
+vmd:currency a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Offer vmd:OfferAggregate)
+   ] .
+
+vmd:description a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Review vmd:Product)
+   ] .
+
+vmd:dtreviewed a rdf:Property;
+   rdfs:comment "The date of the review.";
+   rdfs:domain vmd:Review .
+
+vmd:duration a rdf:Property;
+   rdfs:domain vmd:Recipe;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:TimeRange xsd:string)
+   ] .
+
+vmd:fat a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:fiber a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:friend a rdf:Property;
+   rdfs:domain vmd:Person .
+
+vmd:highprice a rdf:Property;
+   rdfs:domain vmd:OfferAggregate .
+
+vmd:identifier a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Product vmd:Offer)
+   ] .
+
+vmd:image a rdf:Property;
+   rdfs:domain vmd:Product .
+
+vmd:instruction a rdf:Property;
+   rdfs:domain vmd:Instructions .
+
+vmd:itemoffered a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Offer vmd:OfferAggregate)
+   ] .
+
+vmd:itemreviewed a rdf:Property;
+   rdfs:domain vmd:Review .
+
+vmd:locality a rdf:Property;
+   rdfs:domain vmd:Address .
+
+vmd:lowprice a rdf:Property;
+   rdfs:domain vmd:OfferAggregate .
+
+vmd:max a rdf:Property;
+   rdfs:comment "The maximum value of an aggregated Rating.";
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Rating vmd:TimeRange)
+  ] .
+
+vmd:min a rdf:Property;
+   rdfs:comment "The minimum value of an aggregated Rating.";
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Rating vmd:TimeRange)
+  ] .
+
+vmd:name a rdf:Property .
+
+vmd:nickname a rdf:Property;
+   rdfs:domain vmd:Person .
+
+vmd:offercount a rdf:Property;
+   rdfs:domain vmd:OfferAggregate .
+
+vmd:offerdetails a rdf:Property;
+   rdfs:domain vmd:Product .
+
+vmd:offerurl a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Offer vmd:OfferAggregate)
+   ] .
+
+vmd:photo a rdf:Property .
+
+vmd:postal-code a rdf:Property;
+   rdfs:domain vmd:Address .
+
+vmd:prepTime a rdf:Property;
+   rdfs:domain vmd:Recipe;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:TimeRange xsd:string)
+   ] .
+
+vmd:price a rdf:Property;
+   rdfs:domain vmd:Offer .
+
+vmd:pricerange a rdf:Property;
+   rdfs:comment """The price range of products and services offered
+    by a restaurant, business or other organization.
+  """;
+   rdfs:domain vmd:Organization .
+
+vmd:pricevaliduntil a rdf:Property;
+   rdfs:domain vmd:Offer .
+
+vmd:protein a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:published a rdf:Property;
+   rdfs:domain vmd:Recipe .
+
+vmd:quantity a rdf:Property;
+   rdfs:domain vmd:Offer .
+
+vmd:rating a rdf:Property;
+   rdfs:comment "A rating can be specified by a string literal or a Rating instance.";
+   rdfs:domain vmd:Review;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:Rating xsd:string)
+   ] .
+
+vmd:recipeType a rdf:Property;
+   rdfs:domain vmd:Recipe .
+
+vmd:region a rdf:Property;
+   rdfs:domain vmd:Address .
+
+vmd:reviewer a rdf:Property;
+   rdfs:comment "A reviewer can be specified by a string literal or a Person instance.";
+   rdfs:domain vmd:Review;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:Person xsd:string)
+   ] .
+
+vmd:role a rdf:Property;
+   rdfs:domain vmd:Person .
+
+vmd:saturatedFat a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:seller a rdf:Property;
+   rdfs:domain vmd:Offer .
+
+vmd:servingSize a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:street-address a rdf:Property;
+   rdfs:domain vmd:Address .
+
+vmd:sugar a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:summary a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Review vmd:Recipe)
+   ] .
+
+vmd:tag a rdf:Property;
+   rdfs:domain vmd:Recipe .
+
+vmd:tel a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Person vmd:Organization)
+   ] .
+
+vmd:title a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Person vmd:Breadcrumb)
+   ] .
+
+vmd:totalTime a rdf:Property;
+   rdfs:domain vmd:Recipe;
+   rdfs:range [
+     a owl:Class;
+     owl:unionOf (vmd:TimeRange xsd:string)
+   ] .
+
+vmd:unsaturatedFat a rdf:Property;
+   rdfs:domain vmd:Nutrition .
+
+vmd:url a rdf:Property;
+   rdfs:domain [
+     a owl:Class;
+     owl:unionOf (vmd:Person vmd:Organization vmd:Product vmd:Breadcrumb)
+   ] .
+
+vmd:value a rdf:Property;
+   rdfs:comment "The value of a single Rating.";
+   rdfs:domain vmd:Rating .
+
+vmd:worst a rdf:Property;
+   rdfs:comment "The poorest value of a rating scale (default 1).";
+   rdfs:domain vmd:Rating .
+
+vmd:yield a rdf:Property;
+   rdfs:domain vmd:Recipe .

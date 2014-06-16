@@ -20,7 +20,7 @@ module RDF
     ).freeze,
       label: "RSA Private Key".freeze,
       "rdfs:seeAlso" => %(http://en.wikipedia.org/wiki/RSA).freeze,
-      subClassOf: "cert:PrivateKey".freeze,
+      subClassOf: ["cert:PrivateKey".freeze, "rsa:RSAKey".freeze],
       type: "owl:Class".freeze,
       "vs:term_status" => %(unstable).freeze
     term :RSAPublicKey,
@@ -30,7 +30,7 @@ module RDF
     ).freeze,
       label: "RSA Public Key".freeze,
       "rdfs:seeAlso" => %(http://en.wikipedia.org/wiki/RSA).freeze,
-      subClassOf: "cert:PublicKey".freeze,
+      subClassOf: ["cert:PublicKey".freeze, "rsa:RSAKey".freeze],
       type: "owl:Class".freeze,
       "vs:term_status" => %(unstable).freeze
 

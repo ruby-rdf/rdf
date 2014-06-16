@@ -134,8 +134,10 @@ module RDF
         else
           name, options = args
           options = {:label => name.to_s, vocab: self}.merge(options || {})
-          prop = Term.intern([to_s, name.to_s].join(''), attributes: options)
-          props[prop] = options
+          uri_str = [to_s, name.to_s].join('')
+          Term.cache.delete(uri_str)  # Clear any previous entry
+          prop = Term.intern(uri_str, attributes: options)
+          props[name.to_sym] = prop
           (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
           prop
         end
@@ -148,7 +150,7 @@ module RDF
       ##
       #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
       def properties
-        props.keys
+        props.values
       end
       alias_method :__properties__, :properties
 
@@ -157,6 +159,7 @@ module RDF
       #
       # @param [String, #to_s] pname
       # @return [RDF::URI]
+      # @raise [KeyError] if pname suffix not found in identified vocabulary
       def expand_pname(pname)
         prefix, suffix = pname.to_s.split(":", 2)
         if prefix == "rdf"
@@ -169,12 +172,18 @@ module RDF
       end
 
       ##
-      # Return the Vocabulary associated with a URI
+      # Return the Vocabulary associated with a URI. Allows the trailing '/' or '#' to be excluded
       #
       # @param [RDF::URI] uri
       # @return [Vocabulary]
       def find(uri)
-        RDF::Vocabulary.detect {|v| RDF::URI(uri).start_with?(v.to_uri)}
+        RDF::Vocabulary.detect do |v|
+          if uri.length >= v.to_uri.length
+            RDF::URI(uri).start_with?(v.to_uri)
+          else
+            v.to_uri.to_s.sub(%r([/#]$), '') == uri.to_s
+          end
+        end
       end
 
       ##
@@ -186,7 +195,7 @@ module RDF
         uri = RDF::URI(uri)
         return uri if uri.is_a?(Vocabulary::Term)
         vocab = RDF::Vocabulary.detect {|v| uri.start_with?(v.to_uri)}
-        term = vocab[uri.to_s[vocab.to_uri.to_s.length..-1]] if vocab
+        vocab[uri.to_s[vocab.to_uri.to_s.length..-1]] if vocab
       end
 
       ##
@@ -195,21 +204,48 @@ module RDF
       # @param  [#to_s] property
       # @return [RDF::URI]
       def [](property)
-        if self.respond_to?(property.to_sym)
-          self.send(property.to_sym)
+        if props.has_key?(property.to_sym)
+          props[property.to_sym]
         else
           Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self})
         end
       end
 
-      # @return [String] The label for the named property
-      def label_for(name)
-        props.fetch(self[name], {}).fetch(:label, "")
+      ##
+      # List of vocabularies this vocabulary `owl:imports`
+      #
+      # @note the alias {__imports__} guards against `RDF::OWL.imports` returning a term, rather than an array of vocabularies
+      # @return [Array<RDF::Vocabulary>]
+      def imports
+        @imports ||= begin
+          Array(self[""].attributes["owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
+        rescue KeyError
+          []
+        end
+      end
+      alias_method :__imports__, :imports
+
+      ##
+      # List of vocabularies which import this vocabulary
+      # @return [Array<RDF::Vocabulary>]
+      def imported_from
+        @imported_from ||= begin
+          RDF::Vocabulary.select {|v| v.__imports__.include?(self)}
+        end
       end
 
+      ##
+      # @return [String] The label for the named property
+      # @deprecated Use {RDF::Vocabulary::Term#label}
+      def label_for(name)
+        self[name].label || ''
+      end
+
+      ##
       # @return [String] The comment for the named property
+      # @deprecated Use {RDF::Vocabulary::Term#comment}
       def comment_for(name)
-        props.fetch(self[name], {}).fetch(:comment, "")
+        self[name].comment || ''
       end
 
       ##
@@ -244,8 +280,8 @@ module RDF
       # @yield statement
       # @yieldparam [RDF::Statement]
       def each_statement(&block)
-        props.each do |subject, attributes|
-          attributes.each do |prop, values|
+        props.each do |name, subject|
+          subject.attributes.each do |prop, values|
             prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
             next unless prop
             Array(values).each do |value|
@@ -344,9 +380,8 @@ module RDF
           term_defs
         end
 
-        # Create each term
         term_defs.each do |term, attributes|
-          vocab.term term, attributes
+          vocab.__property__ term, attributes
         end
 
         vocab
@@ -494,23 +529,23 @@ module RDF
       #
       # @overload URI(options = {})
       #   @param  [Hash{Symbol => Object}] options
-      #   @option options [Boolean] :validate (false)
-      #   @option options [Boolean] :canonicalize (false)
-      #   @option [Vocabulary] :vocab The {Vocabulary} associated with this term.
-      #   @option [String, #to_s] :scheme The scheme component.
-      #   @option [String, #to_s] :user The user component.
-      #   @option [String, #to_s] :password The password component.
-      #   @option [String, #to_s] :userinfo
-      #     The userinfo component. If this is supplied, the user and password
-      #     components must be omitted.
-      #   @option [String, #to_s] :host The host component.
-      #   @option [String, #to_s] :port The port component.
-      #   @option [String, #to_s] :authority
-      #     The authority component. If this is supplied, the user, password,
-      #     userinfo, host, and port components must be omitted.
-      #   @option [String, #to_s] :path The path component.
-      #   @option [String, #to_s] :query The query component.
-      #   @option [String, #to_s] :fragment The fragment component.
+      #   @option options options [Boolean] :validate (false)
+      #   @option options options [Boolean] :canonicalize (false)
+      #   @option options [Vocabulary] :vocab The {Vocabulary} associated with this term.
+      #   @option options [String, #to_s] :scheme The scheme component.
+      #   @option options [String, #to_s] :user The user component.
+      #   @option options [String, #to_s] :password The password component.
+      #   @option options [String, #to_s] :userinfo
+      #     The u optionsserinfo component. If this is supplied, the user and password
+      #     compo optionsnents must be omitted.
+      #   @option options [String, #to_s] :host The host component.
+      #   @option options [String, #to_s] :port The port component.
+      #   @option options [String, #to_s] :authority
+      #     The a optionsuthority component. If this is supplied, the user, password,
+      #     useri optionsnfo, host, and port components must be omitted.
+      #   @option options [String, #to_s] :path The path component.
+      #   @option options [String, #to_s] :query The query component.
+      #   @option options [String, #to_s] :fragment The fragment component.
       #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       def initialize(*args)
@@ -616,10 +651,14 @@ module RDF
       # Is this a strict vocabulary, or a liberal vocabulary allowing arbitrary properties?
       def strict?; true; end
 
+      ##
+      # Returns the URI for the term `property` in this vocabulary.
+      #
+      # @param  [#to_s] property
+      # @return [RDF::URI]
+      # @raise [KeyError] if property not defined in vocabulary
       def [](name)
-        prop = super
-        props.fetch(prop) #raises KeyError on missing value
-        return prop
+        props.fetch(name.to_sym)
       end
     end
   end # StrictVocabulary

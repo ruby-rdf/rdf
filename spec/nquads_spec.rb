@@ -66,7 +66,7 @@ describe RDF::NQuads::Format do
       :multi_line => %(<a>\n  <b>\n  "literal"\n <d> .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        expect(subject.detect(str)).to be_true
+        expect(subject.detect(str)).to be_truthy
       end
     end
 
@@ -81,7 +81,7 @@ describe RDF::NQuads::Format do
       :microdata => '<div itemref="bar"></div>',
     }.each do |sym, str|
       it "does not detect #{sym}" do
-        expect(subject.detect(str)).to be_false
+        expect(subject.detect(str)).to be_falsey
       end
     end
   end

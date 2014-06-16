@@ -768,23 +768,23 @@ describe RDF::Query do
 
   describe "#named?" do
     it "returns false with no context" do
-      expect(subject.named?).to be_false
+      expect(subject.named?).to be_falsey
     end
     
     it "returns true with a context" do
       subject.context = RDF.first
-      expect(subject.named?).to be_true
+      expect(subject.named?).to be_truthy
     end
   end
   
   describe "#unnamed?" do
     it "returns true with no context" do
-      expect(subject.unnamed?).to be_true
+      expect(subject.unnamed?).to be_truthy
     end
     
     it "returns false with a context" do
       subject.context = RDF.first
-      expect(subject.unnamed?).to be_false
+      expect(subject.unnamed?).to be_falsey
     end
   end
   
@@ -838,14 +838,14 @@ describe RDF::Query do
     end
 
     it "Executing a basic graph pattern query" do
-      expect(subject.execute(graph).each.to_a).to have_at_least(3).items
+      expect(subject.execute(graph).each.to_a.size).to be >= 3
     end
 
     it "Constructing and executing a query in one go (1)" do
       solutions = RDF::Query.execute(graph) do
         pattern [:person, RDF.type, FOAF.Person]
       end
-      expect(solutions.to_a).to have_at_least(3).items
+      expect(solutions.to_a.size).to be >= 3
     end
 
     it "Constructing and executing a query in one go (2)" do
@@ -854,7 +854,7 @@ describe RDF::Query do
           RDF.type => FOAF.Person,
         }
       })
-      expect(solutions.to_a).to have_at_least(3).items
+      expect(solutions.to_a.size).to be >= 3
     end
   end
 end

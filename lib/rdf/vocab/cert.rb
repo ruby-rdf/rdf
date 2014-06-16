@@ -64,7 +64,7 @@ module RDF
       label: "RSA Public Key".freeze,
       "rdfs:isDefinedBy" => %(cert:).freeze,
       "rdfs:seeAlso" => %(http://en.wikipedia.org/wiki/RSA).freeze,
-      subClassOf: "cert:PublicKey".freeze,
+      subClassOf: ["cert:PublicKey".freeze, "cert:RSAKey".freeze],
       type: "owl:Class".freeze,
       "vs:term_status" => %(unstable).freeze
     term :Signature,
@@ -108,16 +108,16 @@ module RDF
          It turns out that this relation is unintuitive to write out and to name.
          One should instead use cert:key
     ).freeze,
-      type: "rdf:Property".freeze,
+      type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze],
       "vs:term_status" => %(archaic).freeze
     property :key,
       comment: %(relates an agent to a key - most often the public key.).freeze,
       domain: "foaf:Agent".freeze,
       label: "key".freeze,
       "owl:inverseOf" => %(cert:identity).freeze,
-      range: "cert:Key".freeze,
+      range: ["cert:Key".freeze, "cert:PublicKey".freeze],
       "rdfs:isDefinedBy" => %(cert:).freeze,
-      type: "rdf:Property".freeze,
+      type: ["rdf:Property".freeze, "owl:InverseFunctionalProperty".freeze, "owl:ObjectProperty".freeze],
       "vs:term_status" => %(unstable).freeze
     property :modulus,
       comment: %(    
@@ -132,9 +132,9 @@ module RDF
  <p>The only difference is that the octet string is then encoded using either xsd:base64Binary or xsd:hexBinary. Currently for all usages of this relation, the xsd:hexBinary datatype should be used until the SPARQL working group specifies specifies in its <a href="http://www.w3.org/TR/sparql11-entailment/#DEntRegime">D-Entailment</a> that those two types are equivalent.</p>
  <p>It would have been better had there been a hexInteger datatype that was standard and supported by all tools.</p>
    ).freeze,
-      domain: "cert:DSAKey".freeze,
+      domain: ["cert:DSAKey".freeze, "cert:RSAKey".freeze],
       label: "modulus".freeze,
-      range: "xsd:base64Binary".freeze,
+      range: ["xsd:base64Binary".freeze, "xsd:hexBinary".freeze],
       "rdfs:isDefinedBy" => %(cert:).freeze,
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(unstable).freeze

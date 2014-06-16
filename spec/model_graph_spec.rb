@@ -51,8 +51,8 @@ describe RDF::Graph do
       expect { @new.call("http://rdf.rubyforge.org/") }.to raise_error
     end
 
-    its(:named?) {should be_true}
-    its(:unnamed?) {should be_false}
+    its(:named?) {should be_truthy}
+    its(:unnamed?) {should be_falsey}
     its(:name) {should_not be_nil}
     its(:context) {should_not be_nil}
     its(:contexts) {expect(subject.contexts.size).to eq 1}

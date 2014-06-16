@@ -18,7 +18,7 @@ module RDF
 
 \(Source: Wikipedia, the free encyclopedia, see http://en.wikipedia.org/wiki/Brand\)).freeze,
       label: "Brand".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :BusinessEntity,
@@ -29,8 +29,7 @@ Example: Siemens Austria AG, Volkswagen Ltd., Peter Miller's Cell phone Shop LLC
 Compatibility with schema.org: This class is equivalent to the union of http://schema.org/Person and http://schema.org/Organization.		
 ).freeze,
       label: "Business entity".freeze,
-      "owl:disjointWith" => %(gr:Location).freeze,
-      "owl:equivalentClass" => %(_:g2178357860).freeze,
+      "owl:disjointWith" => [%(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :BusinessEntityType,
@@ -38,7 +37,7 @@ Compatibility with schema.org: This class is equivalent to the union of http://s
 
 Examples: Consumers, Retailers, Wholesalers, or Public Institutions).freeze,
       label: "Business entity type".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :BusinessFunction,
@@ -48,7 +47,7 @@ Licenses and other proprietary specifications of access rights are also instance
 
 Examples: A particular offering made by Miller Rentals Ltd. says that they \(1\) sell Volkswagen Golf convertibles, \(2\) lease out a particular Ford pick-up truck, and \(3\) dispose car wrecks of any make and model.).freeze,
       label: "Business function".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:Offering).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :DayOfWeek,
@@ -56,7 +55,7 @@ Examples: A particular offering made by Miller Rentals Ltd. says that they \(1\)
 
 Examples: Monday, Tuesday, Wednesday,...).freeze,
       label: "Day of week".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:Offering).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :DeliveryChargeSpecification,
@@ -71,7 +70,7 @@ If the price can only be given as a range, use gr:hasMaxCurrencyValue and gr:has
 
 Important: When querying for the price, always use gr:hasMaxCurrencyValue and gr:hasMinCurrencyValue.).freeze,
       label: "Delivery charge specification".freeze,
-      "owl:disjointWith" => %(gr:PaymentChargeSpecification).freeze,
+      "owl:disjointWith" => [%(gr:PaymentChargeSpecification).freeze, %(gr:UnitPriceSpecification).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       subClassOf: "gr:PriceSpecification".freeze,
       type: "owl:Class".freeze
@@ -80,7 +79,7 @@ Important: When querying for the price, always use gr:hasMaxCurrencyValue and gr
 
 Examples: Delivery by mail, delivery by direct download, delivery by UPS).freeze,
       label: "Delivery method".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :DeliveryModeParcelService,
@@ -101,10 +100,10 @@ Note 2: This class is the new, shorter form of the former gr:ActualProductOrServ
 
 Compatibility with schema.org: This class is a subclass of http://schema.org/Product.).freeze,
       label: "Individual".freeze,
-      "owl:disjointWith" => %(gr:SomeItems).freeze,
+      "owl:disjointWith" => [%(gr:SomeItems).freeze, %(gr:ProductOrServiceModel).freeze],
       "owl:equivalentClass" => %(gr:ActualProductOrServiceInstance).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subClassOf: "gr:ProductOrService".freeze,
+      subClassOf: ["gr:ProductOrService".freeze, "schema:Product".freeze],
       type: "owl:Class".freeze
     term :License,
       comment: %(A license is the specification of a bundle of rights that determines the type of activity or access offered by the gr:BusinessEntity on the gr:ProductOrService through the gr:Offering.
@@ -123,7 +122,7 @@ Note: Typical address standards \(vcard\) and location data \(geo, WGC84\) shoul
 		
 Compatibility with schema.org: This class is equivalent to http://schema.org/Place.).freeze,
       label: "Location".freeze,
-      "owl:disjointWith" => %(gr:OpeningHoursSpecification).freeze,
+      "owl:disjointWith" => [%(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "owl:equivalentClass" => %(gr:LocationOfSalesOrServiceProvisioning).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
@@ -153,13 +152,13 @@ Example: Peter Miller offers to repair TV sets made by Siemens, Volkswagen Innsb
 
 Compatibility with schema.org: This class is a superclass to http://schema.org/Offer, since gr:Offering can also represent demand.).freeze,
       label: "Offering".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:WarrantyScope).freeze, %(gr:Brand).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:QualitativeValue).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :OpeningHoursSpecification,
       comment: %(This is a conceptual entity that holds together all information about the opening hours on a given day \(gr:DayOfWeek\).).freeze,
       label: "Opening hours specification".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :PaymentChargeSpecification,
@@ -174,7 +173,7 @@ If the price can only be given as a range, use gr:hasMaxCurrencyValue and gr:has
 
 Important: When querying for the price, always use gr:hasMaxCurrencyValue and gr:hasMinCurrencyValue.).freeze,
       label: "Payment charge specification".freeze,
-      "owl:disjointWith" => %(gr:UnitPriceSpecification).freeze,
+      "owl:disjointWith" => [%(gr:UnitPriceSpecification).freeze, %(gr:DeliveryChargeSpecification).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       subClassOf: "gr:PriceSpecification".freeze,
       type: "owl:Class".freeze
@@ -183,7 +182,7 @@ Important: When querying for the price, always use gr:hasMaxCurrencyValue and gr
 
 Examples: VISA, MasterCard, Diners, cash, or bank transfer in advance.).freeze,
       label: "Payment method".freeze,
-      "owl:disjointWith" => %(gr:Location).freeze,
+      "owl:disjointWith" => [%(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:QuantitativeValue).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :PaymentMethodCreditCard,
@@ -197,7 +196,7 @@ Examples: VISA, MasterCard, or American Express.).freeze,
     term :PriceSpecification,
       comment: %(The superclass of all price specifications.).freeze,
       label: "Price specification".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :ProductOrService,
@@ -212,7 +211,7 @@ Note: Your first choice for specializations of gr:ProductOrService should be htt
 
 Compatibility with schema.org: This class is \(approximately\) equivalent to http://schema.org/Product.).freeze,
       label: "Product or service".freeze,
-      "owl:disjointWith" => %(gr:OpeningHoursSpecification).freeze,
+      "owl:disjointWith" => [%(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:QuantitativeValue).freeze, %(gr:WarrantyPromise).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :ProductOrServiceModel,
@@ -224,9 +223,9 @@ Note: An actual product or service \(gr:Individual\) by default shares the featu
 	
 Compatibility with schema.org: This class is \(approximately\) a subclass of http://schema.org/Product.).freeze,
       label: "Product or service model".freeze,
-      "owl:disjointWith" => %(gr:SomeItems).freeze,
+      "owl:disjointWith" => [%(gr:SomeItems).freeze, %(gr:BusinessEntity).freeze, %(gr:Individual).freeze, %(gr:Brand).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subClassOf: "gr:ProductOrService".freeze,
+      subClassOf: ["gr:ProductOrService".freeze, "schema:Product".freeze],
       type: "owl:Class".freeze
     term :ProductOrServicesSomeInstancesPlaceholder,
       comment: %(DEPRECATED - This class is superseded by gr:SomeItems. Replace all occurrences of gr:ProductOrServicesSomeInstancesPlaceholder by gr:SomeItems, if possible.).freeze,
@@ -245,7 +244,7 @@ Note: Value sets are supported by creating subclasses of this class. Ordinal rel
 
 Compatibility with schema.org: This class is equivalent to http://schema.org/Enumeration.).freeze,
       label: "Qualitative value".freeze,
-      "owl:disjointWith" => %(gr:QuantitativeValue).freeze,
+      "owl:disjointWith" => [%(gr:QuantitativeValue).freeze, %(gr:TypeAndQuantityNode).freeze, %(gr:Offering).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :QuantitativeValue,
@@ -255,7 +254,7 @@ Example: a weight between 10 and 25 kilogramms, a length between 10 and 15 milim
 
 Compatibility with schema.org: This class is equivalent to http://schema.org/Quantity.).freeze,
       label: "Quantitative value".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:BusinessEntityType).freeze, %(gr:WarrantyScope).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:QualitativeValue).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :QuantitativeValueFloat,
@@ -291,17 +290,17 @@ Note: This class is the new, shorter form of the former gr:ProductOrServicesSome
 		
 Compatibility with schema.org: This class is \(approximately\) a subclass of http://schema.org/Product.).freeze,
       label: "Some items".freeze,
-      "owl:disjointWith" => %(gr:ProductOrServiceModel).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrServiceModel).freeze, %(gr:Individual).freeze],
       "owl:equivalentClass" => %(gr:ProductOrServicesSomeInstancesPlaceholder).freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subClassOf: "gr:ProductOrService".freeze,
+      subClassOf: ["gr:ProductOrService".freeze, "schema:Product".freeze],
       type: "owl:Class".freeze
     term :TypeAndQuantityNode,
       comment: %(This class collates all the information about a gr:ProductOrService included in a bundle. If a gr:Offering contains just one item, you can directly link from the gr:Offering to the gr:ProductOrService using gr:includes. If the offering contains multiple items, use an instance of this class for each component to indicate the quantity, unit of measurement, and type of product, and link from the gr:Offering via gr:includesObject.
 
 Example: An offering may include of 100g of Butter and 1 kg of potatoes, or 1 cell phone and 2 headsets.).freeze,
       label: "Type and quantity node".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:WarrantyScope).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:QualitativeValue).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :UnitPriceSpecification,
@@ -332,7 +331,7 @@ Note 1: Due to the complexity of pricing scenarios in various industries, it may
 Note 2: For Google, attaching a gr:validThrough statement to a gr:UnitPriceSpecification is mandatory. 
 ).freeze,
       label: "Unit price specification".freeze,
-      "owl:disjointWith" => %(gr:PaymentChargeSpecification).freeze,
+      "owl:disjointWith" => [%(gr:PaymentChargeSpecification).freeze, %(gr:DeliveryChargeSpecification).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       subClassOf: "gr:PriceSpecification".freeze,
       type: "owl:Class".freeze
@@ -343,7 +342,7 @@ A Warranty promise is an entity representing the duration and scope of services 
 
 Examples: 12 months parts and labor, 36 months parts).freeze,
       label: "Warranty promise".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyScope).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
     term :WarrantyScope,
@@ -351,21 +350,19 @@ Examples: 12 months parts and labor, 36 months parts).freeze,
 
 Examples: Parts and Labor, Parts).freeze,
       label: "Warranty scope".freeze,
-      "owl:disjointWith" => %(gr:ProductOrService).freeze,
+      "owl:disjointWith" => [%(gr:ProductOrService).freeze, %(gr:Location).freeze, %(gr:OpeningHoursSpecification).freeze, %(gr:PriceSpecification).freeze, %(gr:BusinessFunction).freeze, %(gr:QuantitativeValue).freeze, %(gr:BusinessEntityType).freeze, %(gr:Brand).freeze, %(gr:Offering).freeze, %(gr:PaymentMethod).freeze, %(gr:WarrantyPromise).freeze, %(gr:DeliveryMethod).freeze, %(gr:BusinessEntity).freeze, %(gr:DayOfWeek).freeze, %(gr:TypeAndQuantityNode).freeze],
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:Class".freeze
 
     # Property definitions
     property :acceptedPaymentMethods,
       comment: %(The gr:PaymentMethod or methods accepted by the gr:BusinessEntity for the given gr:Offering.).freeze,
-      domain: "_:g2172062380".freeze,
       label: "accepted payment methods (0..*)".freeze,
       range: "gr:PaymentMethod".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :addOn,
       comment: %(This property points from a gr:Offering to additional offerings that can only be obtained in combination with the first offering. This can be used to model supplements and extensions that are available for a surcharge. Any gr:PriceSpecification attached to the secondary offering is to be understood as an additional charge.).freeze,
-      domain: "_:g2176962200".freeze,
       label: "add-on (0..*)".freeze,
       range: "gr:Offering".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -374,7 +371,6 @@ Examples: Parts and Labor, Parts).freeze,
       comment: %(The minimal and maximal amount of time that is required between accepting the gr:Offering and the actual usage of the resource or service. This is mostly relevant for offers regarding hotel rooms, the rental of objects, or the provisioning of services. The duration is specified relatively to the beginning of the usage of the contracted object. It is represented by attaching an instance of the class gr:QuantitativeValueInteger. The lower and upper boundaries are specified using the properties gr:hasMinValueInteger and gr:hasMaxValueInteger to that instance. The unit of measurement is specified using the property gr:hasUnitOfMeasurement with a string holding a UN/CEFACT code suitable for durations, e.g. MON \(months\), DAY \(days\), HUR \(hours\), or MIN \(minutes\).
 
 The difference to the gr:validFrom and gr:validThrough properties is that those specify the interval during which the gr:Offering is valid, while gr:advanceBookingRequirement specifies the acceptable relative amount of time between accepting the offer and the fulfilment or usage.).freeze,
-      domain: "_:g2172526500".freeze,
       label: "advance booking requirement (0..1)".freeze,
       range: "gr:QuantitativeValueInteger".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -419,7 +415,6 @@ or
 2008-05-30T09:30:10+09:00.
 
 Note: There is another property gr:availableAtOrFrom, which is used to indicate the gr:Location \(e.g. store or shop\) from which the goods would be available.).freeze,
-      domain: "_:g2170140980".freeze,
       label: "availability ends (0..1)".freeze,
       range: "xsd:dateTime".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -443,21 +438,18 @@ or
 2008-05-30T09:30:10+09:00.
 
 Note: There is another property gr:availableAtOrFrom, which is used to indicate the gr:Location \(e.g. store or shop\) from which the goods would be available.).freeze,
-      domain: "_:g2177273360".freeze,
       label: "availability starts (0..1)".freeze,
       range: "xsd:dateTime".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:DatatypeProperty".freeze
     property :availableAtOrFrom,
       comment: %(This states that a particular gr:Offering is available at or from the given gr:Location \(e.g. shop or branch\).).freeze,
-      domain: "_:g2176979660".freeze,
       label: "available at or from (0..*)".freeze,
       range: "gr:Location".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :availableDeliveryMethods,
       comment: %(This specifies the gr:DeliveryMethod or methods available for a given gr:Offering.).freeze,
-      domain: "_:g2172427120".freeze,
       label: "available delivery methods (0..*)".freeze,
       range: "gr:DeliveryMethod".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -482,7 +474,6 @@ This property makes sense only for instances of gr:Offering that include not mor
 Note 1: For products, it is better to add an rdf:type statement referring to a GoodRelations-compliant ontology for vertical industries instead, but if you just have a short text label, gr:category is simpler.
 Note 2: You can use greater signs or slashes to informally indicate a category hierarchy, e.g. "restaurants/asian_restaurants" or "cables > usb_cables"
 ).freeze,
-      domain: "_:g2170826280".freeze,
       label: "category (0..*)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -511,7 +502,6 @@ Note 3: If the shop re-opens on the same day of the week or set of days of the w
       type: "owl:DatatypeProperty".freeze
     property :color,
       comment: %(The color of the product.).freeze,
-      domain: "_:g2178205740".freeze,
       label: "color (0..1)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -519,7 +509,6 @@ Note 3: If the shop re-opens on the same day of the week or set of days of the w
       type: "owl:DatatypeProperty".freeze
     property :condition,
       comment: %(A textual description of the condition of the product or service, or the products or services included in the offer \(when attached to a gr:Offering\)).freeze,
-      domain: "_:g2156343640".freeze,
       label: "condition (0..1)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -528,7 +517,6 @@ Note 3: If the shop re-opens on the same day of the week or set of days of the w
       comment: %(This property is the super property for all pure datatype properties that can be used to describe a gr:ProductOrService.
 
 In products and services ontologies, only such properties that are no quantitative properties and that have no predefined gr:QualitativeValue instances are subproperties of this property. In practice, this refers to a few integer properties for which the integer value represents qualitative aspects, for string datatypes \(as long as no predefined values exist\), for boolean datatype properties, and for dates and times.).freeze,
-      domain: "_:g2178031160".freeze,
       label: "datatype product or service property (0..*)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -537,7 +525,6 @@ In products and services ontologies, only such properties that are no quantitati
       comment: %(This property can be used to indicate the promised delay between the receipt of the order and the goods leaving the warehouse.
 
 The duration is specified by attaching an instance of gr:QuantitativeValueInteger. The lower and upper boundaries are specified using the properties gr:hasMinValueInteger and gr:hasMaxValueInteger to that instance. A point value can be modeled with the gr:hasValueInteger property. The unit of measurement is specified using the property gr:hasUnitOfMeasurement with a string holding a UN/CEFACT code suitable for durations, e.g. MON \(months\), DAY \(days\), HUR \(hours\), or MIN \(minutes\).).freeze,
-      domain: "_:g2177276460".freeze,
       label: "delivery lead time (0..1)".freeze,
       range: "gr:QuantitativeValueInteger".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -545,7 +532,6 @@ The duration is specified by attaching an instance of gr:QuantitativeValueIntege
     property :depth,
       comment: %(The depth of the product.
 Typical unit code\(s\): CMT for centimeters, INH for inches).freeze,
-      domain: "_:g2171357240".freeze,
       label: "depth (0..1)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -555,7 +541,6 @@ Typical unit code\(s\): CMT for centimeters, INH for inches).freeze,
       comment: %(A short textual description of the resource. 
 
 This property is semantically equivalent to rdfs:comment and just meant as a handy shortcut for marking up data.).freeze,
-      domain: "_:g2170338020".freeze,
       label: "description (0..1)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -577,7 +562,6 @@ Note: Rely on this property only for data originating from a single RDF graph; o
       type: "owl:DatatypeProperty".freeze
     property :eligibleCustomerTypes,
       comment: %(The types of customers \(gr:BusinessEntityType\) for which the given gr:Offering is valid.).freeze,
-      domain: "_:g2169968240".freeze,
       label: "eligible customer types (0..*)".freeze,
       range: "gr:BusinessEntityType".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -586,7 +570,6 @@ Note: Rely on this property only for data originating from a single RDF graph; o
       comment: %(The minimal and maximal duration for which the given gr:Offering or gr:License is valid. This is mostly used for offers regarding accommodation, the rental of objects, or software licenses. The duration is specified by attaching an instance of gr:QuantitativeValue. The lower and upper boundaries are specified using the properties gr:hasMinValue and gr:hasMaxValue to that instance. If they are the same, use the gr:hasValue property. The unit of measurement is specified using the property gr:hasUnitOfMeasurement with a string holding a UN/CEFACT code suitable for durations, e.g. MON \(months\), DAY \(days\), HUR \(hours\), or MIN \(minutes\).
 
 The difference to the gr:validFrom and gr:validThrough properties is that those specify the absiolute interval during which the gr:Offering or gr:License is valid, while gr:eligibleDuration specifies the acceptable duration of the contract or usage.).freeze,
-      domain: "_:g2169222340".freeze,
       label: "eligible duration (0..1)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -595,7 +578,6 @@ The difference to the gr:validFrom and gr:validThrough properties is that those 
       comment: %(This property specifies the geo-political region or regions for which the gr:Offering, gr:License, or gr:DeliveryChargeSpecification is valid using the two-character version of ISO 3166-1 \(ISO 3166-1 alpha-2\)  for regions or ISO 3166-2 , which breaks down the countries from ISO 3166-1 into administrative subdivisions.
 
 Important: Do NOT use 3-letter ISO 3166-1 codes!).freeze,
-      domain: "_:g2171041180".freeze,
       label: "eligible regions (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -604,7 +586,6 @@ Important: Do NOT use 3-letter ISO 3166-1 codes!).freeze,
       comment: %(This property can be used to indicate the transaction volume, in a monetary unit, for which the gr:Offering or gr:PriceSpecification is valid. This is mostly used to specify a minimal purchasing volume, to express free shipping above a certain order volume, or to limit the acceptance of credit cards to purchases above a certain amount.
 
 The object is a gr:PriceSpecification that uses the properties gr:hasMaxCurrencyValue and gr:hasMinCurrencyValue to indicate the lower and upper boundaries and gr:hasCurrency to indicate the currency using the ISO 4217 standard \(3 characters\).).freeze,
-      domain: "_:g2172409180".freeze,
       label: "eligible transaction volume (0..1)".freeze,
       range: "gr:PriceSpecification".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -616,7 +597,7 @@ The object is a gr:PriceSpecification that uses the properties gr:hasMaxCurrency
       "owl:inverseOf" => %(gr:equal).freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze, "owl:SymmetricProperty".freeze]
     property :greater,
       comment: %(This ordering relation for qualitative values indicates that the subject is greater than the object.).freeze,
       domain: "gr:QualitativeValue".freeze,
@@ -624,7 +605,7 @@ The object is a gr:PriceSpecification that uses the properties gr:hasMaxCurrency
       "owl:inverseOf" => %(gr:lesser).freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze]
     property :greaterOrEqual,
       comment: %(This ordering relation for qualitative values indicates that the subject is greater than or equal to the object.).freeze,
       domain: "gr:QualitativeValue".freeze,
@@ -632,10 +613,9 @@ The object is a gr:PriceSpecification that uses the properties gr:hasMaxCurrency
       "owl:inverseOf" => %(gr:lesserOrEqual).freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze]
     property :hasBrand,
       comment: %(This specifies the brand or brands \(gr:Brand\) associated with a gr:ProductOrService, or the brand or brands maintained by a gr:BusinessEntity.).freeze,
-      domain: "_:g2171584740".freeze,
       label: "has brand (0..*)".freeze,
       range: "gr:Brand".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -644,7 +624,6 @@ The object is a gr:PriceSpecification that uses the properties gr:hasMaxCurrency
       comment: %(This specifies the business function of the gr:Offering, i.e. whether the gr:BusinessEntity is offering to sell, to lease, or to repair the particular type of product. In the case of bundles, it is also possible to attach individual business functions to each gr:TypeAndQuantityNode. The business function of the main gr:Offering determines the business function for all included objects or services, unless a business function attached to a gr:TypeAndQuantityNode overrides it.
 	
 Note: While it is possible that an entity is offering multiple types of business functions for the same set of objects \(e.g. rental and sales\), this should usually not be stated by attaching multiple business functions to the same gr:Offering, since the gr:UnitPriceSpecification for the varying business functions will typically be very different.).freeze,
-      domain: "_:g2171902180".freeze,
       label: "has business function (1..*)".freeze,
       range: "gr:BusinessFunction".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -668,11 +647,10 @@ Using gr:hasCurrencyValue sets the upper and lower bounds to the same given valu
       label: "has currency value (0..1)".freeze,
       range: "xsd:float".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subPropertyOf: "gr:hasMinCurrencyValue".freeze,
+      subPropertyOf: ["gr:hasMinCurrencyValue".freeze, "gr:hasMaxCurrencyValue".freeze],
       type: "owl:DatatypeProperty".freeze
     property :hasDUNS,
       comment: %(The Dun & Bradstreet DUNS number for identifying a gr:BusinessEntity. The Dun & Bradstreet DUNS is a nine-digit number used to identify legal entities \(but usually not branches or locations of logistical importance only\).).freeze,
-      domain: "_:g2177647120".freeze,
       label: "has DUNS (0..1)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -682,7 +660,6 @@ Using gr:hasCurrencyValue sets the upper and lower bounds to the same given valu
 
 Note 1: When using this property for searching by 12-digit UPC codes, you must add a preceeding zero digit.
 Note 2: As of January 1, 2007, the former ISBN numbers for books etc. have been integrated into the EAN·UCC-13 code. For each old ISBN-10 code, there exists a proper translation into EAN·UCC-13 by adding "978" or "979" as prefix. Since the old ISBN-10 is now deprecated, GoodRelations does not provide a property for ISBNs.).freeze,
-      domain: "_:g2171255300".freeze,
       label: "has EAN/UCC-13 (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -691,14 +668,12 @@ Note 2: As of January 1, 2007, the former ISBN numbers for books etc. have been 
     property :hasEligibleQuantity,
       comment: %(This specifies the interval and unit of measurement of ordering quantities for which the gr:Offering or gr:PriceSpecification is valid. This allows e.g. specifying that a certain freight charge is valid only for a certain quantity.
 Note that if an offering is a bundle, i.e. it consists of more than one unit of a single type of good, or if the unit of measurement for the good is different from unit \(Common Code C62\), then gr:hasEligibleQuantity refers to units of this bundle. In other words, "C62" for "Units or pieces" is usually the appropriate unit of measurement.).freeze,
-      domain: "_:g2170003320".freeze,
       label: "has eligible quantity (0..1)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :"hasGTIN-14",
       comment: %(The Global Trade Item Number \(GTIN-14\) of the given gr:ProductOrService or gr:Offering.).freeze,
-      domain: "_:g2177932320".freeze,
       label: "has GTIN-14 (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -706,7 +681,6 @@ Note that if an offering is a bundle, i.e. it consists of more than one unit of 
       type: "owl:DatatypeProperty".freeze
     property :"hasGTIN-8",
       comment: %(The 8-digit Global Trade Item Number \(GTIN-8\) of the given gr:ProductOrService or gr:Offering, also known as EAN/UCC-8 \(8-digit EAN\).).freeze,
-      domain: "_:g2171799280".freeze,
       label: "has GTIN-8 (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -715,7 +689,6 @@ Note that if an offering is a bundle, i.e. it consists of more than one unit of 
     property :hasGlobalLocationNumber,
       comment: %(The Global Location Number \(GLN, sometimes also referred to as International Location Number or ILN\) of the respective gr:BusinessEntity or gr:Location.
 The Global Location Number is a thirteen-digit number used to identify parties and physical locations.).freeze,
-      domain: "_:g2172051400".freeze,
       label: "has Global Location Number (0..1)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -724,7 +697,6 @@ The Global Location Number is a thirteen-digit number used to identify parties a
       comment: %(The International Standard of Industrial Classification of All Economic Activities \(ISIC\), Revision 4 code for a particular gr:BusinessEntity or gr:Location. See http://unstats.un.org/unsd/cr/registry/isic-4.asp for more information.
 
 Note: While ISIC codes are sometimes misused for classifying products or services, they are designed and suited only for classifying business establishments.).freeze,
-      domain: "_:g2171804800".freeze,
       label: "has ISIC v4 (0..*)".freeze,
       range: "xsd:int".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -733,7 +705,6 @@ Note: While ISIC codes are sometimes misused for classifying products or service
       comment: %(This property specifies the current approximate inventory level for gr:SomeItems. The unit of measurement and the point value or interval are indicated using the attached gr:QuantitativeValueFloat instance.
 
 This property can also be attached to a gr:Offering in cases where the included products are not modeled in more detail.).freeze,
-      domain: "_:g2169238840".freeze,
       label: "has inventory level (0..1)".freeze,
       range: "gr:QuantitativeValueFloat".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -746,7 +717,6 @@ Important: Be careful when assuming two products or services instances or offeri
 Usually, the properties gr:hasEAN_UCC-13 and gr:hasGTIN-14 are much more reliable identifiers, because they are globally unique.
 
 See also http://en.wikipedia.org/wiki/Part_number).freeze,
-      domain: "_:g2171239660".freeze,
       label: "has MPN (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -756,14 +726,12 @@ See also http://en.wikipedia.org/wiki/Part_number).freeze,
       comment: %(This states that an actual product instance \(gr:Individual\) or a placeholder instance for multiple, unidentified such instances \(gr:SomeItems\) is one occurence of a particular gr:ProductOrServiceModel.
 
 Example: myFordT hasMakeAndModel FordT.).freeze,
-      domain: "_:g2176928480".freeze,
       label: "has make and model (0..1)".freeze,
       range: "gr:ProductOrServiceModel".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :hasManufacturer,
       comment: %(This object property links a gr:ProductOrService to the gr:BusinessEntity that produces it. Mostly used with gr:ProductOrServiceModel.).freeze,
-      domain: "_:g2170729700".freeze,
       label: "has manufacturer (0..1)".freeze,
       range: "gr:BusinessEntity".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -839,7 +807,6 @@ Using gr:hasCurrencyValue sets the upper and lower bounds to the same given valu
 See http://www.census.gov/eos/www/naics/ for more details.
 
 Note: While NAICS codes are sometimes misused for classifying products or services, they are designed and suited only for classifying business establishments.).freeze,
-      domain: "_:g2171585140".freeze,
       label: "has NAICS (0..*)".freeze,
       range: "xsd:int".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -867,14 +834,12 @@ Note: Use multiple instances of gr:OpeningHoursSpecification for specifying the 
       type: "owl:ObjectProperty".freeze
     property :hasOpeningHoursSpecification,
       comment: %(This property links a gr:Location to a gr:OpeningHoursSpecification.).freeze,
-      domain: "_:g2178177100".freeze,
       label: "has opening hours specification (0..*)".freeze,
       range: "gr:OpeningHoursSpecification".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :hasPOS,
       comment: %(This property states that the respective gr:Location is a point of sale for the respective gr:BusinessEntity. It allows linking those two types of entities without the need for a particular gr:Offering.).freeze,
-      domain: "_:g2170382320".freeze,
       label: "has POS (0..*)".freeze,
       range: "gr:Location".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -895,7 +860,6 @@ Since days of the week are a cycle, this property is not transitive.).freeze,
       comment: %(This links a gr:Offering to a gr:PriceSpecification or specifications. There can be unit price specifications, payment charge specifications, and delivery charge specifications. For each type, multiple specifications for the same gr:Offering are possible, e.g. for different quantity ranges or for different currencies, or for different combinations of gr:DeliveryMethod and target destinations.
 
 Recommended retail prices etc. can be marked by the gr:priceType property of the gr:UnitPriceSpecification.).freeze,
-      domain: "_:g2171590340".freeze,
       label: "has price specification (0..*)".freeze,
       range: "gr:PriceSpecification".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -913,7 +877,6 @@ Important: Be careful when assuming two products or services instances or offeri
 Usually, the properties gr:hasEAN_UCC-13 and gr:hasGTIN-14 are much more reliable identifiers, because they are globally unique.
 
 See also http://en.wikipedia.org/wiki/Stock_Keeping_Unit.).freeze,
-      domain: "_:g2177144740".freeze,
       label: "has Stock Keeping Unit (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -921,7 +884,6 @@ See also http://en.wikipedia.org/wiki/Stock_Keeping_Unit.).freeze,
       type: "owl:DatatypeProperty".freeze
     property :hasUnitOfMeasurement,
       comment: %(The unit of measurement for a gr:QuantitativeValue, a gr:UnitPriceSpecification, or a gr:TypeAndQuantityNode given using the UN/CEFACT Common Code \(3 characters\).).freeze,
-      domain: "_:g2177386160".freeze,
       label: "has unit of measurement (1..1)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -932,7 +894,7 @@ See also http://en.wikipedia.org/wiki/Stock_Keeping_Unit.).freeze,
       label: "has value (0..1)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subPropertyOf: "gr:hasMaxValue".freeze,
+      subPropertyOf: ["gr:hasMaxValue".freeze, "gr:hasMinValue".freeze],
       type: "owl:DatatypeProperty".freeze
     property :hasValueFloat,
       comment: %(This subproperty specifies that the upper and lower limit of the given gr:QuantitativeValueFloat are identical and have the respective float value. It is a shortcut for such cases where a quantitative property is \(at least practically\) a single point value and not an interval.).freeze,
@@ -940,7 +902,7 @@ See also http://en.wikipedia.org/wiki/Stock_Keeping_Unit.).freeze,
       label: "has value float (0..1)".freeze,
       range: "xsd:float".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subPropertyOf: "gr:hasMaxValueFloat".freeze,
+      subPropertyOf: ["gr:hasMaxValueFloat".freeze, "gr:hasMinValueFloat".freeze],
       type: "owl:DatatypeProperty".freeze
     property :hasValueInteger,
       comment: %(This subproperty specifies that the upper and lower limit of the given gr:QuantitativeValueInteger are identical and have the respective integer value. It is a shortcut for such cases where a quantitative property is \(at least practically\) a single point value and not an interval.).freeze,
@@ -948,11 +910,10 @@ See also http://en.wikipedia.org/wiki/Stock_Keeping_Unit.).freeze,
       label: "has value integer (0..1)".freeze,
       range: "xsd:int".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      subPropertyOf: "gr:hasMinValueInteger".freeze,
+      subPropertyOf: ["gr:hasMinValueInteger".freeze, "gr:hasMaxValueInteger".freeze],
       type: "owl:DatatypeProperty".freeze
     property :hasWarrantyPromise,
       comment: %(This specifies the gr:WarrantyPromise made by the gr:BusinessEntity for the given gr:Offering.).freeze,
-      domain: "_:g2178106840".freeze,
       label: "has warranty promise (0..*)".freeze,
       range: "gr:WarrantyPromise".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -967,7 +928,6 @@ See also http://en.wikipedia.org/wiki/Stock_Keeping_Unit.).freeze,
     property :height,
       comment: %(The height of the product.
 Typical unit code\(s\): CMT for centimeters, INH for inches).freeze,
-      domain: "_:g2170715340".freeze,
       label: "height (0..1)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -989,21 +949,18 @@ When linking to a gr:ProductOrServiceModel, it is equivalent to
       type: "owl:ObjectProperty".freeze
     property :includesObject,
       comment: %(This object property links a gr:Offering to one or multiple gr:TypeAndQuantityNode or nodes that specify the components that are included in the respective offer.).freeze,
-      domain: "_:g2171440000".freeze,
       label: "includes object (0..*)".freeze,
       range: "gr:TypeAndQuantityNode".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :isAccessoryOrSparePartFor,
       comment: %(This states that a particular gr:ProductOrService is an accessory or spare part for another product or service.).freeze,
-      domain: "_:g2177883920".freeze,
       label: "is accessory or spare part for (0..*)".freeze,
       range: "gr:ProductOrService".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :isConsumableFor,
       comment: %(This states that a particular gr:ProductOrService is a consumable for another product or service.).freeze,
-      domain: "_:g2177519020".freeze,
       label: "is consumable for (0..*)".freeze,
       range: "gr:ProductOrService".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1019,7 +976,6 @@ DEPRECATED. Use the gr:priceType property instead.).freeze,
       type: "owl:DatatypeProperty".freeze
     property :isSimilarTo,
       comment: %(This states that a given gr:ProductOrService is similar to another product or service. Of course, this is a subjective statement; when interpreting it, the trust in the origin of the statement should be taken into account.).freeze,
-      domain: "_:g2156356880".freeze,
       label: "is similar to (0..*)".freeze,
       range: "gr:ProductOrService".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1036,7 +992,6 @@ foo:Red_Ford_T_Model gr:isVariantOf foo:Ford_T_Model).freeze,
       type: "owl:ObjectProperty".freeze
     property :legalName,
       comment: %(The legal name of the gr:BusinessEntity.).freeze,
-      domain: "_:g2171438660".freeze,
       label: "legal name (0..1)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1048,7 +1003,7 @@ foo:Red_Ford_T_Model gr:isVariantOf foo:Ford_T_Model).freeze,
       "owl:inverseOf" => %(gr:greater).freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze]
     property :lesserOrEqual,
       comment: %(This ordering relation for gr:QualitativeValue pairs indicates that the subject is lesser than or equal to the object.).freeze,
       domain: "gr:QualitativeValue".freeze,
@@ -1056,12 +1011,11 @@ foo:Red_Ford_T_Model gr:isVariantOf foo:Ford_T_Model).freeze,
       "owl:inverseOf" => %(gr:greaterOrEqual).freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze]
     property :name,
       comment: %(A short text describing the respective resource.
 
 This property is semantically equivalent to dcterms:title and rdfs:label and just meant as a handy shortcut for marking up data.).freeze,
-      domain: "_:g2169645460".freeze,
       label: "name (0..1)".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1073,10 +1027,9 @@ This property is semantically equivalent to dcterms:title and rdfs:label and jus
       "owl:inverseOf" => %(gr:nonEqual).freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:SymmetricProperty".freeze]
     property :offers,
       comment: %(This links a gr:BusinessEntity to the offers \(gr:Offering\) it makes. If you want to express interest in receiving offers, use gr:seeks instead.).freeze,
-      domain: "_:g2177191740".freeze,
       label: "offers (0..*)".freeze,
       range: "gr:Offering".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1111,7 +1064,6 @@ Note 3: If the shop re-opens on the same day of the week or set of days of the w
 Note that the product must be an instance of the class gr:Individual.
 
 This property can also be safely applied to foaf:Agent instances.).freeze,
-      domain: "_:g2177729800".freeze,
       label: "owns (0..*)".freeze,
       range: "gr:Individual".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1127,7 +1079,7 @@ This relation is transitive.).freeze,
       "owl:inverseOf" => %(gr:successorOf).freeze,
       range: "gr:ProductOrServiceModel".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze]
     property :priceType,
       comment: %(This attribute can be used to distinguish multiple different price specifications for the same gr:Offering. It supersedes the former gr:isListPrice property. The following values are recommended:
 
@@ -1143,14 +1095,12 @@ INVOICE: The invoice price, mostly used in the car industry - this is the price 
       type: "owl:DatatypeProperty".freeze
     property :qualitativeProductOrServiceProperty,
       comment: %(This is the super property of all qualitative properties for products and services. All properties in product or service ontologies for which gr:QualitativeValue instances are specified are subproperties of this property.).freeze,
-      domain: "_:g2172588260".freeze,
       label: "qualitative product or service property (0..*)".freeze,
       range: "gr:QualitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :quantitativeProductOrServiceProperty,
       comment: %(This is the super property of all quantitative  properties for products and services. All properties in product or service ontologies that specify quantitative characteristics, for which an interval is at least theoretically an appropriate value, are subproperties of this property.).freeze,
-      domain: "_:g2171240280".freeze,
       label: "quantitative product or service property (0..*)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1164,7 +1114,6 @@ In principle, any existing or upcoming vocabulary for Web Services can be used i
       type: "owl:AnnotationProperty".freeze
     property :seeks,
       comment: %(This links a gr:BusinessEntity to gr:Offering nodes that describe what the business entity is interested in \(i.e., the buy side\). If you want to express interest in offering something, use gr:offers instead. Note that this substitutes the former gr:BusinessFunction gr:Buy, which is now deprecated.).freeze,
-      domain: "_:g2172426320".freeze,
       label: "seeks (0..*)".freeze,
       range: "gr:Offering".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1173,7 +1122,6 @@ In principle, any existing or upcoming vocabulary for Web Services can be used i
       comment: %(The serial number or any alphanumeric identifier of a particular product. Note that serial number are unique only for the same brand or the same model, so you cannot infer from two occurrences of the same serial number that the objects to which they are attached are identical.
 
 This property can also be attached to a gr:Offering in cases where the included products are not modeled in more detail.).freeze,
-      domain: "_:g2171936620".freeze,
       label: "serial number (0..*)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1189,10 +1137,9 @@ This relation is transitive.).freeze,
       "owl:inverseOf" => %(gr:predecessorOf).freeze,
       range: "gr:ProductOrServiceModel".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
-      type: "owl:ObjectProperty".freeze
+      type: ["owl:ObjectProperty".freeze, "owl:TransitiveProperty".freeze]
     property :taxID,
       comment: %(The Tax / Fiscal ID of the gr:BusinessEntity, e.g. the TIN in the US or the CIF/NIF in Spain. It is usually assigned by the country of residence).freeze,
-      domain: "_:g2172567560".freeze,
       label: "Tax ID (0..1)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1201,7 +1148,6 @@ This relation is transitive.).freeze,
       comment: %(This specifies the gr:ProductOrService that the gr:TypeAndQuantityNode is referring to.).freeze,
       domain: "gr:TypeAndQuantityNode".freeze,
       label: "type of good (1..1)".freeze,
-      range: "_:g2177483360".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :validFrom,
@@ -1221,7 +1167,6 @@ or
 Note: If multiple contradicting instances of a gr:Offering, gr:PriceSpecification, or gr:OpeningHoursSpecification exist, it is a good heuristics to assume that
 1. Information with validity information for the respective period of time ranks higher than information without validity information.
 2. Among conflicting nodes both having validity information, the one with the shorter validity span ranks higher.).freeze,
-      domain: "_:g2170483600".freeze,
       label: "valid from (0..1)".freeze,
       range: "xsd:dateTime".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1244,7 +1189,6 @@ Note 1: If multiple contradicting instances of a gr:Offering, gr:PriceSpecificat
 2. Among conflicting nodes both having validity information, the one with the shorter validity span ranks higher.
 Note 2: For Google, attaching a gr:validThrough statement to a gr:UnitPriceSpecification is mandatory. 
 ).freeze,
-      domain: "_:g2178023560".freeze,
       label: "valid through (0..1)".freeze,
       range: "xsd:dateTime".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1260,14 +1204,11 @@ Note: This is a simple representation which may not properly reflect all details
       type: "owl:DatatypeProperty".freeze
     property :valueReference,
       comment: %(The superclass of properties that link a gr:QuantitativeValue or a gr:QualitativeValue to a second gr:QuantitativeValue or a gr:QualitativeValue that provides additional information on the original value. A good modeling practice is to define specializations of this property \(e.g. foo:referenceTemperature\) for your particular domain.).freeze,
-      domain: "_:g2170726040".freeze,
       label: "value reference (0..*)".freeze,
-      range: "_:g2170826980".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
       type: "owl:ObjectProperty".freeze
     property :vatID,
       comment: %(The Value-added Tax ID of the gr:BusinessEntity. See http://en.wikipedia.org/wiki/Value_added_tax_identification_number for details.).freeze,
-      domain: "_:g2171091600".freeze,
       label: "VAT ID (0..1)".freeze,
       range: "xsd:string".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1275,7 +1216,6 @@ Note: This is a simple representation which may not properly reflect all details
     property :weight,
       comment: %(The weight of the gr:ProductOrService.
 Typical unit code\(s\): GRM for gram, KGM for kilogram, LBR for pound).freeze,
-      domain: "_:g2171619540".freeze,
       label: "weight (0..1)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
@@ -1284,7 +1224,6 @@ Typical unit code\(s\): GRM for gram, KGM for kilogram, LBR for pound).freeze,
     property :width,
       comment: %(The width of the gr:ProductOrService.
 Typical unit code\(s\): CMT for centimeters, INH for inches).freeze,
-      domain: "_:g2170432580".freeze,
       label: "width (0..1)".freeze,
       range: "gr:QuantitativeValue".freeze,
       "rdfs:isDefinedBy" => %(http://purl.org/goodrelations/v1).freeze,
