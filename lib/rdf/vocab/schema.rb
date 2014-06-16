@@ -548,7 +548,7 @@ module RDF
     term :Class,
       comment: %(A class, also often called a 'Type'; equivalent to rdfs:Class.).freeze,
       label: "Class".freeze,
-      subClassOf: "schema:Thing".freeze,
+      subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :Clip,
       comment: %(A short TV or radio program or a segment/part of a program.).freeze,
@@ -713,12 +713,14 @@ module RDF
       comment: %(A collection of datasets.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "DataCatalog".freeze,
+      "owl:equivalentClass" => %(dcat:DataCatalog).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :DataDownload,
       comment: %(A dataset in downloadable form.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "DataDownload".freeze,
+      "owl:equivalentClass" => %(dcat:Distribution).freeze,
       subClassOf: "schema:MediaObject".freeze,
       type: "rdfs:Class".freeze
     term :DataType,
@@ -729,6 +731,7 @@ module RDF
       comment: %(A body of structured information describing some topic\(s\) of interest.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "Dataset".freeze,
+      "owl:equivalentClass" => [%(dcat:Dataset).freeze, %(void:Dataset).freeze, %(dc:Dataset).freeze],
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :Date,
@@ -1036,6 +1039,7 @@ module RDF
     term :Event,
       comment: %(An event happening at a certain time and location, such as a concert, lecture, or festival. Ticketing information may be added via the 'offers' property. Repeated events may be structured as separate Event objects.).freeze,
       label: "Event".freeze,
+      "owl:equivalentClass" => %(dc:Event).freeze,
       subClassOf: "schema:Thing".freeze,
       type: "rdfs:Class".freeze
     term :EventReservation,
@@ -1307,6 +1311,7 @@ module RDF
     term :ImageObject,
       comment: %(An image file.).freeze,
       label: "ImageObject".freeze,
+      "owl:equivalentClass" => %(dc:Image).freeze,
       subClassOf: "schema:MediaObject".freeze,
       type: "rdfs:Class".freeze
     term :ImagingTest,
@@ -2010,6 +2015,11 @@ module RDF
       label: "Organization".freeze,
       subClassOf: "schema:Thing".freeze,
       type: "rdfs:Class".freeze
+    term :OrganizationRole,
+      comment: %(A subclass of Role used to describe roles within organizations.).freeze,
+      label: "OrganizationRole".freeze,
+      subClassOf: "schema:Role".freeze,
+      type: "rdfs:Class".freeze
     term :OrganizeAction,
       comment: %(The act of manipulating/administering/supervising/controlling one or more objects.).freeze,
       label: "OrganizeAction".freeze,
@@ -2126,6 +2136,11 @@ module RDF
       label: "PerformAction".freeze,
       subClassOf: "schema:PlayAction".freeze,
       type: "rdfs:Class".freeze
+    term :PerformanceRole,
+      comment: %(A PerformanceRole is a Role that some entity places with regard to a theatrical performance, e.g. in a Movie, TVSeries etc.).freeze,
+      label: "PerformanceRole".freeze,
+      subClassOf: "schema:Role".freeze,
+      type: "rdfs:Class".freeze
     term :PerformingArtsTheater,
       comment: %(A theater or other performing art center.).freeze,
       label: "PerformingArtsTheater".freeze,
@@ -2145,6 +2160,7 @@ module RDF
       comment: %(A person \(alive, dead, undead, or fictional\).).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
       label: "Person".freeze,
+      "owl:equivalentClass" => %(foaf:Person).freeze,
       subClassOf: "schema:Thing".freeze,
       type: "rdfs:Class".freeze
     term :PetStore,
@@ -2212,7 +2228,7 @@ module RDF
       subClassOf: "schema:OrganizeAction".freeze,
       type: "rdfs:Class".freeze
     term :PlayAction,
-      comment: %(The act of playing/exercising/training/performing for enjoyment, leisure, recreation, competion or exercise.<p>Related actions:</p><ul><li><a href="http://schema.org/ListenAction">ListenAction</a>: Unlike ListenAction \(which is under ConsumeAction\), PlayAction refers to performing for an audience or at an event, rather than consuming music.</li><li><a href="http://schema.org/WatchAction">WatchAction</a>: Unlike WatchAction \(which is under ConsumeAction\), PlayAction refers to showing/displaying for an audience or at an event, rather than consuming visual content.</li></ul>).freeze,
+      comment: %(The act of playing/exercising/training/performing for enjoyment, leisure, recreation, Competition or exercise.<p>Related actions:</p><ul><li><a href="http://schema.org/ListenAction">ListenAction</a>: Unlike ListenAction \(which is under ConsumeAction\), PlayAction refers to performing for an audience or at an event, rather than consuming music.</li><li><a href="http://schema.org/WatchAction">WatchAction</a>: Unlike WatchAction \(which is under ConsumeAction\), PlayAction refers to showing/displaying for an audience or at an event, rather than consuming visual content.</li></ul>).freeze,
       label: "PlayAction".freeze,
       subClassOf: "schema:Action".freeze,
       type: "rdfs:Class".freeze
@@ -2302,7 +2318,7 @@ module RDF
     term :Property,
       comment: %(A property, used to indicate attributes and relationships of some Thing; equivalent to rdf:Property.).freeze,
       label: "Property".freeze,
-      subClassOf: "schema:Thing".freeze,
+      subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :PropertyValueSpecification,
       comment: %(A Property value specification.).freeze,
@@ -2528,6 +2544,12 @@ module RDF
       comment: %(A river \(for example, the broad majestic Shannon\).).freeze,
       label: "RiverBodyOfWater".freeze,
       subClassOf: "schema:BodyOfWater".freeze,
+      type: "rdfs:Class".freeze
+    term :Role,
+      comment: %(Represents additional information about a relationship or property. For example a Role can be used to say that a 'member' role linking some SportsTeam to a player occured during a particular time period. Or that a Person's 'actor' role in a Movie was for some particular characterName. Such properties can be attached to a Role entity, which is then associated with the main entities using ordinary properties like 'member' or 'actor'.
+    ).freeze,
+      label: "Role".freeze,
+      subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :RoofingContractor,
       comment: %(A roofing contractor.).freeze,
@@ -3164,6 +3186,7 @@ module RDF
       label: "acceptedAnswer".freeze,
       "schema:domainIncludes" => %(schema:Question).freeze,
       "schema:rangeIncludes" => %(schema:Answer).freeze,
+      subPropertyOf: "schema:suggestedAnswer".freeze,
       type: "rdf:Property".freeze
     property :acceptedOffer,
       comment: %(The offer\(s\) -- e.g., product, quantity and price combinations -- included in the order.).freeze,
@@ -3178,7 +3201,7 @@ module RDF
       "schema:rangeIncludes" => %(schema:PaymentMethod).freeze,
       type: "rdf:Property".freeze
     property :acceptsReservations,
-      comment: [%(Either <code>Yes/No</code>, or a URL at which reservations can be made.).freeze, %(Does the establishment accept reservations?).freeze],
+      comment: %(Indicates whether a FoodEstablishment accepts reservations. Values can be Boolean, an URL at which reservations can be made or \(for backwards compatibility\) the strings <code>Yes</code> or <code>No</code>.).freeze,
       label: "acceptsReservations".freeze,
       "schema:domainIncludes" => %(schema:FoodEstablishment).freeze,
       "schema:rangeIncludes" => [%(schema:Text).freeze, %(schema:URL).freeze, %(schema:Boolean).freeze],
@@ -3413,12 +3436,14 @@ module RDF
       comment: %(Alumni of educational organization.).freeze,
       label: "alumni".freeze,
       "schema:domainIncludes" => %(schema:EducationalOrganization).freeze,
+      "schema:inverseOf" => %(schema:alumniOf).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
       type: "rdf:Property".freeze
     property :alumniOf,
       comment: %(An educational organizations that the person is an alumni of.).freeze,
       label: "alumniOf".freeze,
       "schema:domainIncludes" => %(schema:Person).freeze,
+      "schema:inverseOf" => %(schema:alumni).freeze,
       "schema:rangeIncludes" => %(schema:EducationalOrganization).freeze,
       type: "rdf:Property".freeze
     property :amountOfThisGood,
@@ -3840,6 +3865,7 @@ module RDF
       label: "borrower".freeze,
       "schema:domainIncludes" => %(schema:LendAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :box,
       comment: %(A polygon is the area enclosed by a point-to-point path for which the starting and ending points are the same. A polygon is expressed as a series of four or more space delimited points where the first and final points are identical.).freeze,
@@ -3912,6 +3938,7 @@ module RDF
       label: "buyer".freeze,
       "schema:domainIncludes" => %(schema:SellAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :byArtist,
       comment: %(The artist that performed this album or recording.).freeze,
@@ -3930,6 +3957,7 @@ module RDF
       label: "candidate".freeze,
       "schema:domainIncludes" => %(schema:VoteAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :caption,
       comment: %(The caption for this object.).freeze,
@@ -3978,6 +4006,12 @@ module RDF
       label: "causeOf".freeze,
       "schema:domainIncludes" => %(schema:MedicalCause).freeze,
       "schema:rangeIncludes" => %(schema:MedicalEntity).freeze,
+      type: "rdf:Property".freeze
+    property :characterName,
+      comment: %(The name of a character played in some acting or performing role, i.e. in a PerformanceRole.).freeze,
+      label: "characterName".freeze,
+      "schema:domainIncludes" => %(schema:PerformanceRole).freeze,
+      "schema:rangeIncludes" => %(schema:Text).freeze,
       type: "rdf:Property".freeze
     property :checkinTime,
       comment: %(The earliest someone may check into a lodging establishment.).freeze,
@@ -4087,6 +4121,7 @@ module RDF
       label: "collection".freeze,
       "schema:domainIncludes" => %(schema:UpdateAction).freeze,
       "schema:rangeIncludes" => %(schema:Thing).freeze,
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :color,
       comment: %(The color of the product.).freeze,
@@ -4280,6 +4315,7 @@ module RDF
       label: "course".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:Place).freeze,
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :creator,
       comment: %(The creator/author of this CreativeWork or UserComments. This is the same as the Author property for CreativeWork.).freeze,
@@ -4357,7 +4393,7 @@ module RDF
       comment: %(The default value of the input.  For properties that expect a literal, the default is a literal value, for properties that expect an object, it's an ID reference to one of the current values.).freeze,
       label: "defaultValue".freeze,
       "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
-      "schema:rangeIncludes" => [%(schema:Thing).freeze, %(schema:Literal).freeze],
+      "schema:rangeIncludes" => [%(schema:Thing).freeze, %(schema:Text).freeze],
       type: "rdf:Property".freeze
     property :deliveryAddress,
       comment: %(Destination address.).freeze,
@@ -4376,6 +4412,7 @@ module RDF
       label: "deliveryMethod".freeze,
       "schema:domainIncludes" => [%(schema:ReceiveAction).freeze, %(schema:SendAction).freeze, %(schema:TrackAction).freeze],
       "schema:rangeIncludes" => %(schema:DeliveryMethod).freeze,
+      subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :deliveryStatus,
       comment: %(New entry added as the package passes through each leg of its journey \(from shipment to final delivery\).).freeze,
@@ -4468,10 +4505,11 @@ module RDF
       "schema:rangeIncludes" => %(schema:ImageObject).freeze,
       type: "rdf:Property".freeze
     property :diet,
-      comment: %(A sub property of instrument. The died used in this action.).freeze,
+      comment: %(A sub property of instrument. The diet used in this action.).freeze,
       label: "diet".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:Diet).freeze,
+      subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :dietFeatures,
       comment: %(Nutritional information specific to the dietary plan. May include dietary recommendations on what foods to avoid, what foods to consume, and specific alterations/deviations from the USDA or other regulatory body's approved dietary guidelines.).freeze,
@@ -4535,7 +4573,7 @@ module RDF
       "schema:rangeIncludes" => %(schema:Date).freeze,
       type: "rdf:Property".freeze
     property :distance,
-      comment: %(A sub property of asset. The distance travelled.).freeze,
+      comment: %(The distance travelled, e.g. exercising or travelling.).freeze,
       label: "distance".freeze,
       "schema:domainIncludes" => [%(schema:ExerciseAction).freeze, %(schema:TravelAction).freeze],
       "schema:rangeIncludes" => %(schema:Distance).freeze,
@@ -4795,15 +4833,18 @@ module RDF
       "schema:supercededBy" => %(schema:encoding).freeze,
       type: "rdf:Property".freeze
     property :endDate,
-      comment: %(The end date and time of the event or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
+      comment: %(The end date and time of the role, event or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
       label: "endDate".freeze,
-      "schema:domainIncludes" => [%(schema:Event).freeze, %(schema:Season).freeze, %(schema:TVSeason).freeze, %(schema:Series).freeze, %(schema:TVSeries).freeze],
+      "schema:domainIncludes" => [%(schema:Role).freeze, %(schema:Event).freeze, %(schema:Season).freeze, %(schema:TVSeason).freeze, %(schema:Series).freeze, %(schema:TVSeries).freeze],
       "schema:rangeIncludes" => %(schema:Date).freeze,
       type: "rdf:Property".freeze
     property :endTime,
-      comment: %(When the Action was performed: end time. This is for actions that span a period of time. e.g. John wrote a book from January to *December*.).freeze,
+      comment: %(The endTime of something. For a reserved event or service \(e.g. FoodEstablishmentReservation\), the time that it is expected to end. For actions that span a period of time, when the action was performed. e.g. John wrote a book from January to *December*.
+
+Note that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions.
+).freeze,
       label: "endTime".freeze,
-      "schema:domainIncludes" => %(schema:Action).freeze,
+      "schema:domainIncludes" => [%(schema:Action).freeze, %(schema:FoodEstablishmentReservation).freeze],
       "schema:rangeIncludes" => %(schema:DateTime).freeze,
       type: "rdf:Property".freeze
     property :endorsee,
@@ -4811,6 +4852,7 @@ module RDF
       label: "endorsee".freeze,
       "schema:domainIncludes" => %(schema:EndorseAction).freeze,
       "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:Person).freeze],
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :endorsers,
       comment: %(People or organizations that endorse the plan.).freeze,
@@ -4823,6 +4865,7 @@ module RDF
       label: "entertainmentBusiness".freeze,
       "schema:domainIncludes" => %(schema:PerformAction).freeze,
       "schema:rangeIncludes" => %(schema:EntertainmentBusiness).freeze,
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :epidemiology,
       comment: %(The characteristics of associated patients, such as age, gender, race etc.).freeze,
@@ -4903,6 +4946,7 @@ module RDF
       label: "exercisePlan".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:ExercisePlan).freeze,
+      subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :exerciseType,
       comment: %(Type\(s\) of exercise or activity, such as strength training, flexibility training, aerobics, cardiac rehabilitation, etc.).freeze,
@@ -5011,6 +5055,7 @@ module RDF
       label: "followee".freeze,
       "schema:domainIncludes" => %(schema:FollowAction).freeze,
       "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:Person).freeze],
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :follows,
       comment: %(The most generic uni-directional social relation.).freeze,
@@ -5029,12 +5074,14 @@ module RDF
       label: "foodEstablishment".freeze,
       "schema:domainIncludes" => %(schema:CookAction).freeze,
       "schema:rangeIncludes" => [%(schema:FoodEstablishment).freeze, %(schema:Place).freeze],
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :foodEvent,
       comment: %(A sub property of location. The specific food event where the action occurred.).freeze,
       label: "foodEvent".freeze,
       "schema:domainIncludes" => %(schema:CookAction).freeze,
       "schema:rangeIncludes" => %(schema:FoodEvent).freeze,
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :foodWarning,
       comment: %(Any precaution, guidance, contraindication, etc. related to consumption of specific foods while taking this drug.).freeze,
@@ -5078,6 +5125,7 @@ module RDF
       label: "fromLocation".freeze,
       "schema:domainIncludes" => [%(schema:MoveAction).freeze, %(schema:TransferAction).freeze, %(schema:ExerciseAction).freeze],
       "schema:rangeIncludes" => [%(schema:Number).freeze, %(schema:Place).freeze],
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :function,
       comment: %(Function of the anatomical structure.).freeze,
@@ -5427,6 +5475,12 @@ module RDF
       "schema:domainIncludes" => [%(schema:Offer).freeze, %(schema:Demand).freeze, %(schema:SomeProducts).freeze],
       "schema:rangeIncludes" => %(schema:QuantitativeValue).freeze,
       type: "rdf:Property".freeze
+    property :inverseOf,
+      comment: %(Relates a property to a property that is its inverse. Inverse properties relate the same pairs of items to each other, but in reversed direction. For example, the 'alumni' and 'alumniOf' properties are inverseOf each other. Some properties don't have explicit inverses; in these situations RDFa and JSON-LD syntax for reverse properties can be used.).freeze,
+      label: "inverseOf".freeze,
+      "schema:domainIncludes" => %(schema:Property).freeze,
+      "schema:rangeIncludes" => %(schema:Property).freeze,
+      type: "rdf:Property".freeze
     property :isAccessoryOrSparePartFor,
       comment: %(A pointer to another product \(or multiple products\) for which this product is an accessory or spare part.).freeze,
       label: "isAccessoryOrSparePartFor".freeze,
@@ -5506,9 +5560,9 @@ module RDF
       "schema:rangeIncludes" => %(schema:Text).freeze,
       type: "rdf:Property".freeze
     property :issuedBy,
-      comment: [%(The organization issuing the permit.).freeze, %(The organization issuing the ticket or permit.).freeze],
+      comment: %(The organization issuing the ticket or permit.).freeze,
       label: "issuedBy".freeze,
-      "schema:domainIncludes" => [%(schema:Permit).freeze, %(schema:Ticket).freeze],
+      "schema:domainIncludes" => [%(schema:Ticket).freeze, %(schema:Permit).freeze],
       "schema:rangeIncludes" => %(schema:Organization).freeze,
       type: "rdf:Property".freeze
     property :issuedThrough,
@@ -5588,12 +5642,14 @@ module RDF
       label: "landlord".freeze,
       "schema:domainIncludes" => %(schema:RentAction).freeze,
       "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:Person).freeze],
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :language,
       comment: %(A sub property of instrument. The language used on this action.).freeze,
       label: "language".freeze,
       "schema:domainIncludes" => [%(schema:CommunicateAction).freeze, %(schema:WriteAction).freeze],
       "schema:rangeIncludes" => %(schema:Language).freeze,
+      subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :lastReviewed,
       comment: %(Date on which the content on this web page was last reviewed for accuracy and/or completeness.).freeze,
@@ -5630,6 +5686,7 @@ module RDF
       label: "lender".freeze,
       "schema:domainIncludes" => %(schema:BorrowAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :lesser,
       comment: %(This ordering relation for qualitative values indicates that the subject is lesser than the object.).freeze,
@@ -5642,6 +5699,12 @@ module RDF
       label: "lesserOrEqual".freeze,
       "schema:domainIncludes" => %(schema:QualitativeValue).freeze,
       "schema:rangeIncludes" => %(schema:QualitativeValue).freeze,
+      type: "rdf:Property".freeze
+    property :license,
+      comment: %(A license document that applies to this content, typically indicated by URL.).freeze,
+      label: "license".freeze,
+      "schema:domainIncludes" => %(schema:CreativeWork).freeze,
+      "schema:rangeIncludes" => [%(schema:CreativeWork).freeze, %(schema:URL).freeze],
       type: "rdf:Property".freeze
     property :line,
       comment: %(A line is a point-to-point path consisting of two or more points. A line is expressed as a series of two or more point objects separated by space.).freeze,
@@ -5684,6 +5747,7 @@ module RDF
       label: "loser".freeze,
       "schema:domainIncludes" => %(schema:WinAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :lowPrice,
       comment: %(The lowest price of all offers available.).freeze,
@@ -5729,7 +5793,7 @@ module RDF
       "schema:rangeIncludes" => %(schema:Number).freeze,
       type: "rdf:Property".freeze
     property :maxValue,
-      comment: [%(The upper of the product characteristic.).freeze, %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze],
+      comment: %(The upper value of some characteristic or property.).freeze,
       label: "maxValue".freeze,
       "schema:domainIncludes" => [%(schema:QuantitativeValue).freeze, %(schema:PropertyValueSpecification).freeze],
       "schema:rangeIncludes" => %(schema:Number).freeze,
@@ -5765,21 +5829,23 @@ module RDF
       "schema:rangeIncludes" => %(schema:MedicineSystem).freeze,
       type: "rdf:Property".freeze
     property :member,
-      comment: [%(A member of this organization.).freeze, %(The individual with the membership.).freeze],
+      comment: %(A member of an Organization or a ProgramMembership. Organizations can be members of organizations; ProgramMembership is typically for individuals.).freeze,
       label: "member".freeze,
       "schema:domainIncludes" => [%(schema:Organization).freeze, %(schema:ProgramMembership).freeze],
+      "schema:inverseOf" => %(schema:memberOf).freeze,
       "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:Person).freeze],
       type: "rdf:Property".freeze
     property :memberOf,
-      comment: %(An organization to which the person belongs.).freeze,
+      comment: %(An Organization \(or ProgramMembership\) to which this Person or Organization belongs.).freeze,
       label: "memberOf".freeze,
-      "schema:domainIncludes" => %(schema:Person).freeze,
-      "schema:rangeIncludes" => %(schema:Organization).freeze,
+      "schema:domainIncludes" => [%(schema:Person).freeze, %(schema:Organization).freeze],
+      "schema:inverseOf" => %(schema:member).freeze,
+      "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:ProgramMembership).freeze],
       type: "rdf:Property".freeze
     property :members,
       comment: %(A member of this organization \(legacy spelling; see singular form, member\).).freeze,
       label: "members".freeze,
-      "schema:domainIncludes" => %(schema:Organization).freeze,
+      "schema:domainIncludes" => [%(schema:Organization).freeze, %(schema:ProgramMembership).freeze],
       "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:Person).freeze],
       "schema:supercededBy" => %(schema:member).freeze,
       type: "rdf:Property".freeze
@@ -5820,7 +5886,7 @@ module RDF
       "schema:rangeIncludes" => %(schema:Number).freeze,
       type: "rdf:Property".freeze
     property :minValue,
-      comment: [%(The lower value of the product characteristic.).freeze, %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze],
+      comment: %(The lower value of some characteristic or property.).freeze,
       label: "minValue".freeze,
       "schema:domainIncludes" => [%(schema:QuantitativeValue).freeze, %(schema:PropertyValueSpecification).freeze],
       "schema:rangeIncludes" => %(schema:Number).freeze,
@@ -5862,10 +5928,11 @@ module RDF
       "schema:rangeIncludes" => [%(schema:MusicGroup).freeze, %(schema:Person).freeze],
       type: "rdf:Property".freeze
     property :musicGroupMember,
-      comment: %(A member of the music group&#x2014;for example, John, Paul, George, or Ringo.).freeze,
+      comment: %(A member of a music group&#x2014;for example, John, Paul, George, or Ringo.).freeze,
       label: "musicGroupMember".freeze,
       "schema:domainIncludes" => %(schema:MusicGroup).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      "schema:supercededBy" => %(schema:member).freeze,
       type: "rdf:Property".freeze
     property :naics,
       comment: %(The North American Industry Classification System \(NAICS\) code for a particular organization or business person.).freeze,
@@ -5878,6 +5945,12 @@ module RDF
       label: "name".freeze,
       "schema:domainIncludes" => %(schema:Thing).freeze,
       "schema:rangeIncludes" => %(schema:Text).freeze,
+      type: "rdf:Property".freeze
+    property :namedPosition,
+      comment: %(A position played, performed or filled by a person or organization, as part of an organization. For example, an athlete in a SportsTeam might play in the position named 'Quarterback'.).freeze,
+      label: "namedPosition".freeze,
+      "schema:domainIncludes" => %(schema:OrganizationRole).freeze,
+      "schema:rangeIncludes" => [%(schema:Text).freeze, %(schema:URL).freeze],
       type: "rdf:Property".freeze
     property :nationality,
       comment: %(Nationality of the person.).freeze,
@@ -6022,12 +6095,14 @@ module RDF
       label: "opponent".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :option,
       comment: %(A sub property of object. The options subject to this action.).freeze,
       label: "option".freeze,
       "schema:domainIncludes" => %(schema:ChooseAction).freeze,
       "schema:rangeIncludes" => [%(schema:Text).freeze, %(schema:Thing).freeze],
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :orderDate,
       comment: %(Date order was placed.).freeze,
@@ -6406,9 +6481,9 @@ module RDF
       "schema:rangeIncludes" => [%(schema:Number).freeze, %(schema:Text).freeze],
       type: "rdf:Property".freeze
     property :priceCurrency,
-      comment: [%(The currency \(in 3-letter ISO 4217 format\) of the offer price or a price component, when attached to PriceSpecification and its subtypes.).freeze, %(The currency \(in 3-letter ISO 4217 format\) of the price or a price component, when attached to PriceSpecification and its subtypes.).freeze],
+      comment: %(The currency \(in 3-letter ISO 4217 format\) of the price or a price component, when attached to PriceSpecification and its subtypes.).freeze,
       label: "priceCurrency".freeze,
-      "schema:domainIncludes" => [%(schema:Offer).freeze, %(schema:PriceSpecification).freeze, %(schema:Reservation).freeze, %(schema:Ticket).freeze],
+      "schema:domainIncludes" => [%(schema:Reservation).freeze, %(schema:Ticket).freeze, %(schema:Offer).freeze, %(schema:PriceSpecification).freeze],
       "schema:rangeIncludes" => %(schema:Text).freeze,
       type: "rdf:Property".freeze
     property :priceRange,
@@ -6626,12 +6701,14 @@ module RDF
       label: "query".freeze,
       "schema:domainIncludes" => %(schema:SearchAction).freeze,
       "schema:rangeIncludes" => [%(schema:Class).freeze, %(schema:Text).freeze],
+      subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :question,
       comment: %(A sub property of object. A question.).freeze,
       label: "question".freeze,
       "schema:domainIncludes" => %(schema:AskAction).freeze,
       "schema:rangeIncludes" => %(schema:Text).freeze,
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :rangeIncludes,
       comment: %(Relates a property to a class that constitutes \(one of\) the expected type\(s\) for values of the property.).freeze,
@@ -6662,12 +6739,14 @@ module RDF
       label: "realEstateAgent".freeze,
       "schema:domainIncludes" => %(schema:RentAction).freeze,
       "schema:rangeIncludes" => %(schema:RealEstateAgent).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :recipe,
       comment: %(A sub property of instrument. The recipe/instructions used to perform the action.).freeze,
       label: "recipe".freeze,
       "schema:domainIncludes" => %(schema:CookAction).freeze,
       "schema:rangeIncludes" => %(schema:Recipe).freeze,
+      subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :recipeCategory,
       comment: %(The category of the recipe&#x2014;for example, appetizer, entree, etc.).freeze,
@@ -6698,6 +6777,7 @@ module RDF
       label: "recipient".freeze,
       "schema:domainIncludes" => [%(schema:CommunicateAction).freeze, %(schema:AuthorizeAction).freeze, %(schema:DonateAction).freeze, %(schema:GiveAction).freeze, %(schema:PayAction).freeze, %(schema:ReturnAction).freeze, %(schema:SendAction).freeze, %(schema:TipAction).freeze],
       "schema:rangeIncludes" => [%(schema:Audience).freeze, %(schema:Organization).freeze, %(schema:Person).freeze],
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :recognizingAuthority,
       comment: %(If applicable, the organization that officially recognizes this entity as part of its endorsed system of medicine.).freeze,
@@ -6800,12 +6880,14 @@ module RDF
       label: "replacee".freeze,
       "schema:domainIncludes" => %(schema:ReplaceAction).freeze,
       "schema:rangeIncludes" => %(schema:Thing).freeze,
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :replacer,
       comment: %(A sub property of object. The object that replaces.).freeze,
       label: "replacer".freeze,
       "schema:domainIncludes" => %(schema:ReplaceAction).freeze,
       "schema:rangeIncludes" => %(schema:Thing).freeze,
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :replyToUrl,
       comment: %(The URL at which a reply may be posted to the specified UserComment.).freeze,
@@ -6896,6 +6978,7 @@ module RDF
       label: "resultReview".freeze,
       "schema:domainIncludes" => %(schema:ReviewAction).freeze,
       "schema:rangeIncludes" => %(schema:Review).freeze,
+      subPropertyOf: "schema:result".freeze,
       type: "rdf:Property".freeze
     property :review,
       comment: %(A review of the item.).freeze,
@@ -7066,6 +7149,7 @@ module RDF
       label: "sender".freeze,
       "schema:domainIncludes" => %(schema:ReceiveAction).freeze,
       "schema:rangeIncludes" => [%(schema:Audience).freeze, %(schema:Organization).freeze, %(schema:Person).freeze],
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :sensoryUnit,
       comment: %(The neurological pathway extension that inputs and sends information to the brain or spinal cord.).freeze,
@@ -7266,18 +7350,21 @@ module RDF
       label: "sportsActivityLocation".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:SportsActivityLocation).freeze,
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :sportsEvent,
       comment: %(A sub property of location. The sports event where this action occurred.).freeze,
       label: "sportsEvent".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:SportsEvent).freeze,
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :sportsTeam,
       comment: %(A sub property of participant. The sports team that participated on this action.).freeze,
       label: "sportsTeam".freeze,
       "schema:domainIncludes" => %(schema:ExerciseAction).freeze,
       "schema:rangeIncludes" => %(schema:SportsTeam).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :spouse,
       comment: %(The person's spouse.).freeze,
@@ -7298,14 +7385,17 @@ module RDF
       "schema:rangeIncludes" => %(schema:Number).freeze,
       type: "rdf:Property".freeze
     property :startDate,
-      comment: %(The start date and time of the event or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
+      comment: %(The start date and time of the event, role or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
       label: "startDate".freeze,
-      "schema:domainIncludes" => [%(schema:Event).freeze, %(schema:Season).freeze, %(schema:TVSeason).freeze, %(schema:Series).freeze, %(schema:TVSeries).freeze],
+      "schema:domainIncludes" => [%(schema:Role).freeze, %(schema:Event).freeze, %(schema:Season).freeze, %(schema:TVSeason).freeze, %(schema:Series).freeze, %(schema:TVSeries).freeze],
       "schema:rangeIncludes" => %(schema:Date).freeze,
       type: "rdf:Property".freeze
     property :startTime,
-      comment: [%(When the Action was performed: start time. This is for actions that span a period of time. e.g. John wrote a book from *January* to December.).freeze, %(The time a FoodEstablishmentReservation is required to end.).freeze, %(When a FoodEstablishmentReservation starts or an Action was performed: start time. This is for actions that span a period of time. e.g. John wrote a book from *January* to December.).freeze],
-      label: ["startTime".freeze, "departTime".freeze],
+      comment: %(The startTime of something. For a reserved event or service \(e.g. FoodEstablishmentReservation\), the time that it is expected to start. For actions that span a period of time, when the action was performed. e.g. John wrote a book from *January* to December.
+
+Note that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions.
+).freeze,
+      label: "startTime".freeze,
       "schema:domainIncludes" => [%(schema:Action).freeze, %(schema:FoodEstablishmentReservation).freeze],
       "schema:rangeIncludes" => %(schema:DateTime).freeze,
       type: "rdf:Property".freeze
@@ -7316,7 +7406,7 @@ module RDF
       "schema:rangeIncludes" => %(schema:MedicalStudyStatus).freeze,
       type: "rdf:Property".freeze
     property :stepValue,
-      comment: %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze,
+      comment: %(The stepValue attribute indicates the granularity that is expected \(and required\) of the value in a PropertyValueSpecification.).freeze,
       label: "stepValue".freeze,
       "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
       "schema:rangeIncludes" => %(schema:Number).freeze,
@@ -7437,11 +7527,10 @@ module RDF
       "schema:rangeIncludes" => %(schema:Mass).freeze,
       type: "rdf:Property".freeze
     property :suggestedAnswer,
-      comment: %(An answer \(possibly one of several, possibly incorrect\) to a Question, e.g. on a Question/Answer site, often collected in a QAPage.).freeze,
+      comment: %(An answer \(possibly one of several, possibly incorrect\) to a Question, e.g. on a Question/Answer site.).freeze,
       label: "suggestedAnswer".freeze,
       "schema:domainIncludes" => %(schema:Question).freeze,
       "schema:rangeIncludes" => %(schema:Answer).freeze,
-      subPropertyOf: "schema:answer".freeze,
       type: "rdf:Property".freeze
     property :suggestedGender,
       comment: %(The gender of the person or audience.).freeze,
@@ -7466,6 +7555,12 @@ module RDF
       label: "superEvent".freeze,
       "schema:domainIncludes" => %(schema:Event).freeze,
       "schema:rangeIncludes" => %(schema:Event).freeze,
+      type: "rdf:Property".freeze
+    property :supercededBy,
+      comment: %(Relates a property to one that supercedes it.).freeze,
+      label: "supercededBy".freeze,
+      "schema:domainIncludes" => %(schema:Property).freeze,
+      "schema:rangeIncludes" => %(schema:Property).freeze,
       type: "rdf:Property".freeze
     property :supplyTo,
       comment: %(The area to which the artery supplies blood.).freeze,
@@ -7598,6 +7693,7 @@ module RDF
       label: "toLocation".freeze,
       "schema:domainIncludes" => [%(schema:InsertAction).freeze, %(schema:MoveAction).freeze, %(schema:TransferAction).freeze, %(schema:ExerciseAction).freeze],
       "schema:rangeIncludes" => [%(schema:Number).freeze, %(schema:Place).freeze],
+      subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :totalPrice,
       comment: %(The total price for the reservation or ticket, including applicable taxes, shipping, etc.).freeze,
@@ -7813,7 +7909,7 @@ module RDF
     property :valueName,
       comment: %(Indicates the name of the PropertyValueSpecification to be used in URL templates and form encoding in a manner analogous to HTML's input@name.).freeze,
       label: "valueName".freeze,
-      "schema:domainIncludes" => %(schema:EntryPoint).freeze,
+      "schema:domainIncludes" => %(schema:PropertyValueSpecification).freeze,
       "schema:rangeIncludes" => %(schema:Text).freeze,
       type: "rdf:Property".freeze
     property :valuePattern,
@@ -7845,6 +7941,7 @@ module RDF
       label: "vendor".freeze,
       "schema:domainIncludes" => %(schema:BuyAction).freeze,
       "schema:rangeIncludes" => [%(schema:Organization).freeze, %(schema:Person).freeze],
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :version,
       comment: %(The version of the CreativeWork embodied by a specified resource.).freeze,
@@ -7917,6 +8014,7 @@ module RDF
       label: "winner".freeze,
       "schema:domainIncludes" => %(schema:LoseAction).freeze,
       "schema:rangeIncludes" => %(schema:Person).freeze,
+      subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :wordCount,
       comment: %(The number of words in the text of the Article.).freeze,
@@ -8161,6 +8259,7 @@ module RDF
     term :False,
       comment: %(The boolean value false).freeze,
       label: "False".freeze,
+      subClassOf: "schema:Boolean".freeze,
       type: "schema:Boolean".freeze
     term :Flexibility,
       comment: %(Physical activity that is engaged in to improve joint and muscle flexibility.).freeze,
@@ -8589,6 +8688,7 @@ module RDF
     term :True,
       comment: %(The boolean value true).freeze,
       label: "True".freeze,
+      subClassOf: "schema:Boolean".freeze,
       type: "schema:Boolean".freeze
     term :Ultrasound,
       comment: %(Ultrasound imaging.).freeze,
