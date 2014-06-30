@@ -1,4 +1,5 @@
 require 'net/http'
+require 'openssl'
 require 'time'
 
 module RDF; module Util
