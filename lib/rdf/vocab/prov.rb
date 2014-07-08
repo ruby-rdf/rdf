@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/prov#
 require 'rdf'
 module RDF
-  class PROV < StrictVocabulary("http://www.w3.org/ns/prov#")
+  class PROV < RDF::StrictVocabulary("http://www.w3.org/ns/prov#")
 
     # Class definitions
     term :Accept,

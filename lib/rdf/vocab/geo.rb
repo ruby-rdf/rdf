@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/01/geo/wgs84_pos#
 require 'rdf'
 module RDF
-  class GEO < StrictVocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
+  class GEO < RDF::StrictVocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
 
     # Class definitions
     term :Point,

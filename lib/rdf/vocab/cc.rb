@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://creativecommons.org/ns#
 require 'rdf'
 module RDF
-  class CC < StrictVocabulary("http://creativecommons.org/ns#")
+  class CC < RDF::StrictVocabulary("http://creativecommons.org/ns#")
 
     # Class definitions
     term :Jurisdiction,

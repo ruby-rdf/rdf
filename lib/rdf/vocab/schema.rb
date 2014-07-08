@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://schema.org/docs/schema_org_rdfa.html
 require 'rdf'
 module RDF
-  class SCHEMA < StrictVocabulary("http://schema.org/")
+  class SCHEMA < RDF::StrictVocabulary("http://schema.org/")
 
     # Class definitions
     term :APIReference,
@@ -1532,6 +1532,11 @@ module RDF
       label: "Map".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
+    term :MapCategoryType,
+      comment: %(An enumeration of several kinds of Map.).freeze,
+      label: "MapCategoryType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
     term :MarryAction,
       comment: %(The act of marrying a person.).freeze,
       label: "MarryAction".freeze,
@@ -2546,7 +2551,7 @@ module RDF
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
     term :Role,
-      comment: %(Represents additional information about a relationship or property. For example a Role can be used to say that a 'member' role linking some SportsTeam to a player occured during a particular time period. Or that a Person's 'actor' role in a Movie was for some particular characterName. Such properties can be attached to a Role entity, which is then associated with the main entities using ordinary properties like 'member' or 'actor'.
+      comment: %(Represents additional information about a relationship or property. For example a Role can be used to say that a 'member' role linking some SportsTeam to a player occurred during a particular time period. Or that a Person's 'actor' role in a Movie was for some particular characterName. Such properties can be attached to a Role entity, which is then associated with the main entities using ordinary properties like 'member' or 'actor'.
     ).freeze,
       label: "Role".freeze,
       subClassOf: "schema:Intangible".freeze,
@@ -5229,6 +5234,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       "schema:domainIncludes" => [%(schema:DeliveryEvent).freeze, %(schema:ParcelDelivery).freeze],
       "schema:rangeIncludes" => %(schema:DeliveryMethod).freeze,
       type: "rdf:Property".freeze
+    property :hasMap,
+      comment: %(A URL to a map of the place.).freeze,
+      label: "hasMap".freeze,
+      "schema:domainIncludes" => %(schema:Place).freeze,
+      "schema:rangeIncludes" => [%(schema:URL).freeze, %(schema:Map).freeze],
+      type: "rdf:Property".freeze
     property :hasPOS,
       comment: %(Points-of-Sales operated by the organization or person.).freeze,
       label: "hasPOS".freeze,
@@ -5347,7 +5358,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(URL of an image of the item.).freeze,
       label: "image".freeze,
       "schema:domainIncludes" => %(schema:Thing).freeze,
-      "schema:rangeIncludes" => %(schema:URL).freeze,
+      "schema:rangeIncludes" => [%(schema:URL).freeze, %(schema:ImageObject).freeze],
       type: "rdf:Property".freeze
     property :imagingTechnique,
       comment: %(Imaging technique used.).freeze,
@@ -5778,13 +5789,20 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "map".freeze,
       "schema:domainIncludes" => %(schema:Place).freeze,
       "schema:rangeIncludes" => %(schema:URL).freeze,
+      "schema:supercededBy" => %(schema:hasMap).freeze,
+      type: "rdf:Property".freeze
+    property :mapType,
+      comment: %(Indicates the kind of Map, from the MapCategoryType Enumeration.).freeze,
+      label: "mapType".freeze,
+      "schema:domainIncludes" => %(schema:Map).freeze,
+      "schema:rangeIncludes" => %(schema:MapCategoryType).freeze,
       type: "rdf:Property".freeze
     property :maps,
       comment: %(A URL to a map of the place \(legacy spelling; see singular form, map\).).freeze,
       label: "maps".freeze,
       "schema:domainIncludes" => %(schema:Place).freeze,
       "schema:rangeIncludes" => %(schema:URL).freeze,
-      "schema:supercededBy" => %(schema:map).freeze,
+      "schema:supercededBy" => %(schema:hasMap).freeze,
       type: "rdf:Property".freeze
     property :maxPrice,
       comment: %(The highest price if the price is a range.).freeze,
@@ -6127,6 +6145,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "orderedItem".freeze,
       "schema:domainIncludes" => %(schema:Order).freeze,
       "schema:rangeIncludes" => %(schema:Product).freeze,
+      type: "rdf:Property".freeze
+    property :organizer,
+      comment: %(An organizer of an Event.).freeze,
+      label: "organizer".freeze,
+      "schema:domainIncludes" => %(schema:Event).freeze,
+      "schema:rangeIncludes" => [%(schema:Person).freeze, %(schema:Organization).freeze],
       type: "rdf:Property".freeze
     property :origin,
       comment: %(The place or point where a muscle arises.).freeze,
@@ -8489,6 +8513,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Book format: Paperback.).freeze,
       label: "Paperback".freeze,
       type: "schema:BookFormatType".freeze
+    term :ParkingMap,
+      comment: %(A parking map.).freeze,
+      label: "ParkingMap".freeze
     term :Pathology,
       comment: %(A specific branch of medical science that is concerned with the study of the cause, origin and nature of a disease state, including its consequences as a result of manifestation of the disease. In clinical care, the term is used to designate a branch of medicine using laboratory tests to diagnose and determine the prognostic significance of illness.).freeze,
       label: "Pathology".freeze,
@@ -8621,6 +8648,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A specific branch of medical science that deals with the study and treatment of rheumatic, autoimmune or joint diseases.).freeze,
       label: "Rheumatologic".freeze,
       type: "schema:MedicalSpecialty".freeze
+    term :SeatingMap,
+      comment: %(A seating map.).freeze,
+      label: "SeatingMap".freeze
     term :SingleBlindedTrial,
       comment: %(A trial design in which the researcher knows which treatment the patient was randomly assigned to but the patient does not.).freeze,
       label: "SingleBlindedTrial".freeze,
@@ -8681,6 +8711,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A system of medicine based on common theoretical concepts that originated in China and evolved over thousands of years, that uses herbs, acupuncture, exercise, massage, dietary therapy, and other methods to treat a wide range of conditions.).freeze,
       label: "TraditionalChinese".freeze,
       type: "schema:MedicineSystem".freeze
+    term :TransitMap,
+      comment: %(A transit map.).freeze,
+      label: "TransitMap".freeze
     term :TripleBlindedTrial,
       comment: %(A trial design in which neither the researcher, the person administering the therapy nor the patient knows the details of the treatment the patient was randomly assigned to.).freeze,
       label: "TripleBlindedTrial".freeze,
@@ -8702,6 +8735,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Indicates that the item is used.).freeze,
       label: "UsedCondition".freeze,
       type: "schema:OfferItemCondition".freeze
+    term :VenueMap,
+      comment: %(A venue map \(e.g. for malls, auditoriums, museums, etc.\).).freeze,
+      label: "VenueMap".freeze
     term :VitalSign,
       comment: %(VitalSign).freeze,
       label: "VitalSign".freeze,

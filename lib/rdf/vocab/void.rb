@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://vocab.deri.ie/void.rdf
 require 'rdf'
 module RDF
-  class VOID < StrictVocabulary("http://rdfs.org/ns/void#")
+  class VOID < RDF::StrictVocabulary("http://rdfs.org/ns/void#")
 
     # Class definitions
     term :Dataset,

@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2000/01/rdf-schema#
 require 'rdf'
 module RDF
-  class RDFS < StrictVocabulary("http://www.w3.org/2000/01/rdf-schema#")
+  class RDFS < RDF::StrictVocabulary("http://www.w3.org/2000/01/rdf-schema#")
 
     # Class definitions
     term :Class,

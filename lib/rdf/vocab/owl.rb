@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2002/07/owl#
 require 'rdf'
 module RDF
-  class OWL < StrictVocabulary("http://www.w3.org/2002/07/owl#")
+  class OWL < RDF::StrictVocabulary("http://www.w3.org/2002/07/owl#")
 
     # Class definitions
     term :AllDifferent,

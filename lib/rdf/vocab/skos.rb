@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2004/02/skos/core#
 require 'rdf'
 module RDF
-  class SKOS < StrictVocabulary("http://www.w3.org/2004/02/skos/core#")
+  class SKOS < RDF::StrictVocabulary("http://www.w3.org/2004/02/skos/core#")
 
     # Class definitions
     term :Collection,

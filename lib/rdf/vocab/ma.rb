@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/ma-ont.rdf
 require 'rdf'
 module RDF
-  class MA < StrictVocabulary("http://www.w3.org/ns/ma-ont#")
+  class MA < RDF::StrictVocabulary("http://www.w3.org/ns/ma-ont#")
 
     # Class definitions
     term :Agent,

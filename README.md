@@ -312,25 +312,41 @@ from BNode identity (i.e., they each entail the other)
 
 ### RDF Vocabularies
 
-* {RDF}        - Resource Description Framework (RDF)
-* {RDF::CC}    - Creative Commons (CC)
-* {RDF::CERT}  - W3 Authentication Certificate (CERT)
-* {RDF::DC}    - Dublin Core (DC)
-* {RDF::DC11}  - Dublin Core 1.1 (DC11) _deprecated_
-* {RDF::DOAP}  - Description of a Project (DOAP)
-* {RDF::EXIF}  - Exchangeable Image File Format (EXIF)
-* {RDF::FOAF}  - Friend of a Friend (FOAF)
-* {RDF::GEO}   - WGS84 Geo Positioning (GEO)
-* {RDF::HTTP}  - Hypertext Transfer Protocol (HTTP)
-* {RDF::OWL}   - Web Ontology Language (OWL)
-* {RDF::RDFS}  - RDF Schema (RDFS)
-* {RDF::RSA}   - W3 RSA Keys (RSA)
-* {RDF::RSS}   - RDF Site Summary (RSS)
-* {RDF::SIOC}  - Semantically-Interlinked Online Communities (SIOC)
-* {RDF::SKOS}  - Simple Knowledge Organization System (SKOS)
-* {RDF::WOT}   - Web of Trust (WOT)
-* {RDF::XHTML} - Extensible HyperText Markup Language (XHTML)
-* {RDF::XSD}   - XML Schema (XSD)
+* {RDF}         - Resource Description Framework (RDF)
+* {RDF::CC}     - Creative Commons (CC)
+* {RDF::CERT}   - W3 Authentication Certificate (CERT)
+* {RDF::DC}     - Dublin Core (DC)
+* {RDF::DC11}   - Dublin Core 1.1 (DC11) _deprecated_
+* {RDF::DOAP}   - Description of a Project (DOAP)
+* {RDF::EXIF}   - Exchangeable Image File Format (EXIF)
+* {RDF::FOAF}   - Friend of a Friend (FOAF)
+* {RDF::GEO}    - WGS84 Geo Positioning (GEO)
+* {RDF::GR}     - GoodRelations (GR)
+* {RDF::HT}     - Hypertext Transfer Protocol (HT)
+* {RDF::ICAL}   - RDF Calendar Workspace (ICAL)
+* {RDF::MA}     - Media Resources (MA)
+* {RDF::MO}     - Music Ontology (MO)
+* {RDF::OG}     - Open Graph protocol (OG)
+* {RDF::OWL}    - Web Ontology Language (OWL)
+* {RDF::PROV}   - Provenance on the web (PROV)
+* {RDF::RDFS}   - RDF Schema (RDFS)
+* {RDF::RDFV}   - RDF Vocabulary (RDFV)
+* {RDF::RSA}    - W3 RSA Keys (RSA)
+* {RDF::RSS}    - RDF Site Summary (RSS)
+* {RDF::SCHEMA} - Schema.org (SCHEMA)
+* {RDF::SIOC}   - Semantically-Interlinked Online Communities (SIOC)
+* {RDF::SKOS}   - Simple Knowledge Organization System (SKOS)
+* {RDF::SKOSXL} - SKOS eXtension for Labels (SKOSXL)
+* {RDF::V}      - RDF data vocabulary (V)
+* {RDF::VCARD}  - Ontology for vCards (VCARD)
+* {RDF::VMD}    - Data-Vocabulary.org (VMD)
+* {RDF::VOID}   - Vocabulary of Interlinked Datasets (VOID)
+* {RDF::VS}     - SemWeb Vocab Status ontology (VS)
+* {RDF::WDRS}   - Protocol for Web Description Resources (WDRS)
+* {RDF::WOT}    - Web of Trust (WOT)
+* {RDF::XHTML}  - Extensible HyperText Markup Language (XHTML)
+* {RDF::XHV}    - XHTML Vocabulary (XHV)
+* {RDF::XSD}    - XML Schema (XSD)
 
 ## Dependencies
 
@@ -387,6 +403,7 @@ follows:
 * [Keita Urashima](http://github.com/ursm) - <http://ursm.jp/>
 * [Pius Uzamere](http://github.com/pius) - <http://pius.me/>
 * [Judson Lester](https://github.com/nyarly) - <https://github.com/nyarly>
+* [Peter Vandenabeele](https://github.com/petervandenabeele) - <https://github.com/petervandenabeele>
 
 ## Contributing
 

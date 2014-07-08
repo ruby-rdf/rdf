@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from etc/rdf.data-vocab.ttl
 require 'rdf'
 module RDF
-  class V < StrictVocabulary("http://rdf.data-vocabulary.org/#")
+  class V < RDF::StrictVocabulary("http://rdf.data-vocabulary.org/#")
 
     # Class definitions
     term :Address,

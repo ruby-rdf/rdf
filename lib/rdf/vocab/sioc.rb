@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://rdfs.org/sioc/ns#
 require 'rdf'
 module RDF
-  class SIOC < StrictVocabulary("http://rdfs.org/sioc/ns#")
+  class SIOC < RDF::StrictVocabulary("http://rdfs.org/sioc/ns#")
 
     # Class definitions
     term :Community,

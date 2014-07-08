@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2006/vcard/ns#
 require 'rdf'
 module RDF
-  class VCARD < StrictVocabulary("http://www.w3.org/2006/vcard/ns#")
+  class VCARD < RDF::StrictVocabulary("http://www.w3.org/2006/vcard/ns#")
 
     # Class definitions
     term :Acquaintance,

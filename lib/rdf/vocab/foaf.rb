@@ -2,37 +2,37 @@
 # This file generated automatically using vocab-fetch from http://xmlns.com/foaf/0.1/
 require 'rdf'
 module RDF
-  class FOAF < StrictVocabulary("http://xmlns.com/foaf/0.1/")
+  class FOAF < RDF::StrictVocabulary("http://xmlns.com/foaf/0.1/")
 
     # Class definitions
     term :Agent,
       comment: %(An agent \(eg. person, group, software or physical artifact\).).freeze,
       label: "Agent".freeze,
       "owl:equivalentClass" => %(dc:Agent).freeze,
+      "rdfs:isDefinedBy" => %(foaf:).freeze,
       type: ["owl:Class".freeze, "rdfs:Class".freeze],
       "vs:term_status" => %(stable).freeze
     term :Document,
       comment: %(A document.).freeze,
       label: "Document".freeze,
       "owl:disjointWith" => [%(foaf:Organization).freeze, %(foaf:Project).freeze],
-      "owl:equivalentClass" => %(schema:CreativeWork).freeze,
       "rdfs:isDefinedBy" => %(foaf:).freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze],
-      "vs:term_status" => %(stable).freeze
+      "vs:term_status" => %(testing).freeze
     term :Group,
       comment: %(A class of Agents.).freeze,
       label: "Group".freeze,
+      "rdfs:isDefinedBy" => %(foaf:).freeze,
       subClassOf: "foaf:Agent".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze],
       "vs:term_status" => %(stable).freeze
     term :Image,
       comment: %(An image.).freeze,
       label: "Image".freeze,
-      "owl:equivalentClass" => %(schema:ImageObject).freeze,
       "rdfs:isDefinedBy" => %(foaf:).freeze,
       subClassOf: "foaf:Document".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze],
-      "vs:term_status" => %(stable).freeze
+      "vs:term_status" => %(testing).freeze
     term :LabelProperty,
       comment: %(A foaf:LabelProperty is any RDF property with texual values that serve as labels.).freeze,
       label: "Label Property".freeze,
@@ -79,14 +79,14 @@ module RDF
       comment: %(A person.).freeze,
       label: "Person".freeze,
       "owl:disjointWith" => [%(foaf:Organization).freeze, %(foaf:Project).freeze],
-      "owl:equivalentClass" => [%(schema:Person).freeze, %(http://www.w3.org/2000/10/swap/pim/contact#Person).freeze],
       "rdfs:isDefinedBy" => %(foaf:).freeze,
-      subClassOf: ["foaf:Agent".freeze, "geo:SpatialThing".freeze],
+      subClassOf: ["foaf:Agent".freeze, "http://www.w3.org/2000/10/swap/pim/contact#Person".freeze, "geo:SpatialThing".freeze],
       type: ["rdfs:Class".freeze, "owl:Class".freeze],
       "vs:term_status" => %(stable).freeze
     term :PersonalProfileDocument,
       comment: %(A personal profile RDF document.).freeze,
       label: "PersonalProfileDocument".freeze,
+      "rdfs:isDefinedBy" => %(foaf:).freeze,
       subClassOf: "foaf:Document".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze],
       "vs:term_status" => %(testing).freeze
@@ -352,7 +352,7 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze],
       "vs:term_status" => %(stable).freeze
     property :maker,
-      comment: %(An agent that  made this thing.).freeze,
+      comment: %(An agent that made this thing.).freeze,
       domain: "owl:Thing".freeze,
       label: "maker".freeze,
       "owl:equivalentProperty" => %(dc:creator).freeze,
@@ -362,7 +362,7 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze],
       "vs:term_status" => %(stable).freeze
     property :mbox,
-      comment: %(A  personal mailbox, ie. an Internet mailbox associated with exactly one owner, the first owner of this mailbox. This is a 'static inverse functional property', in that  there is \(across time and change\) at most one individual that ever has any particular value for foaf:mbox.).freeze,
+      comment: %(A personal mailbox, ie. an Internet mailbox associated with exactly one owner, the first owner of this mailbox. This is a 'static inverse functional property', in that there is \(across time and change\) at most one individual that ever has any particular value for foaf:mbox.).freeze,
       domain: "foaf:Agent".freeze,
       label: "personal mailbox".freeze,
       range: "owl:Thing".freeze,
@@ -370,7 +370,7 @@ module RDF
       type: ["rdf:Property".freeze, "owl:InverseFunctionalProperty".freeze, "owl:ObjectProperty".freeze],
       "vs:term_status" => %(stable).freeze
     property :mbox_sha1sum,
-      comment: %(The sha1sum of the URI of an Internet mailbox associated with exactly one owner, the  first owner of the mailbox.).freeze,
+      comment: %(The sha1sum of the URI of an Internet mailbox associated with exactly one owner, the first owner of the mailbox.).freeze,
       domain: "foaf:Agent".freeze,
       label: "sha1sum of a personal mailbox URI name".freeze,
       range: "rdfs:Literal".freeze,
@@ -440,7 +440,7 @@ module RDF
       range: "foaf:Document".freeze,
       "rdfs:isDefinedBy" => %(foaf:).freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze],
-      "vs:term_status" => %(stable).freeze
+      "vs:term_status" => %(testing).freeze
     property :pastProject,
       comment: %(A project this person has previously worked on.).freeze,
       domain: "foaf:Person".freeze,
@@ -450,7 +450,7 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze],
       "vs:term_status" => %(testing).freeze
     property :phone,
-      comment: %(A phone,  specified using fully qualified tel: URI scheme \(refs: http://www.w3.org/Addressing/schemes.html#tel\).).freeze,
+      comment: %(A phone, specified using fully qualified tel: URI scheme \(refs: http://www.w3.org/Addressing/schemes.html#tel\).).freeze,
       label: "phone".freeze,
       "rdfs:isDefinedBy" => %(foaf:).freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze],
@@ -576,7 +576,7 @@ module RDF
       "rdfs:isDefinedBy" => %(foaf:).freeze,
       subPropertyOf: "foaf:page".freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze, "owl:InverseFunctionalProperty".freeze],
-      "vs:term_status" => %(stable).freeze
+      "vs:term_status" => %(testing).freeze
     property :workInfoHomepage,
       comment: %(A work info homepage of some person; a page about their work for some organization.).freeze,
       domain: "foaf:Person".freeze,

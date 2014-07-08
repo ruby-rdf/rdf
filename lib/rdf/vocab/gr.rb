@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.heppnetz.de/ontologies/goodrelations/v1.owl
 require 'rdf'
 module RDF
-  class GR < StrictVocabulary("http://purl.org/goodrelations/v1#")
+  class GR < RDF::StrictVocabulary("http://purl.org/goodrelations/v1#")
 
     # Class definitions
     term :ActualProductOrServiceInstance,

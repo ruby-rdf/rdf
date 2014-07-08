@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/auth/cert#
 require 'rdf'
 module RDF
-  class CERT < StrictVocabulary("http://www.w3.org/ns/auth/cert#")
+  class CERT < RDF::StrictVocabulary("http://www.w3.org/ns/auth/cert#")
 
     # Class definitions
     term :Certificate,
