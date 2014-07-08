@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://xmlns.com/wot/0.1/index.rdf
 require 'rdf'
 module RDF
-  class WOT < StrictVocabulary("http://xmlns.com/wot/0.1/")
+  class WOT < RDF::StrictVocabulary("http://xmlns.com/wot/0.1/")
 
     # Class definitions
     term :EncryptedDocument,

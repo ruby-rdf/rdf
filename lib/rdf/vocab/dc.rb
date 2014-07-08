@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://purl.org/dc/terms/
 require 'rdf'
 module RDF
-  class DC < StrictVocabulary("http://purl.org/dc/terms/")
+  class DC < RDF::StrictVocabulary("http://purl.org/dc/terms/")
 
     # Class definitions
     term :Agent,

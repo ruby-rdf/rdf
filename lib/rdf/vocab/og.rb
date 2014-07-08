@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://ogp.me/ns#
 require 'rdf'
 module RDF
-  class OG < StrictVocabulary("http://ogp.me/ns#")
+  class OG < RDF::StrictVocabulary("http://ogp.me/ns#")
 
     # Property definitions
     property :audio,

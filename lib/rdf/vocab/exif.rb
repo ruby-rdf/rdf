@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/12/exif/ns#
 require 'rdf'
 module RDF
-  class EXIF < StrictVocabulary("http://www.w3.org/2003/12/exif/ns#")
+  class EXIF < RDF::StrictVocabulary("http://www.w3.org/2003/12/exif/ns#")
 
     # Class definitions
     term :IFD,

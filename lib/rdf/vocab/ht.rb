@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2006/http#
 require 'rdf'
 module RDF
-  class HT < StrictVocabulary("http://www.w3.org/2006/http#")
+  class HT < RDF::StrictVocabulary("http://www.w3.org/2006/http#")
 
     # Class definitions
     term :ConnectRequest,

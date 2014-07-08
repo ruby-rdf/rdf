@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2007/05/powder-s#
 require 'rdf'
 module RDF
-  class WDRS < StrictVocabulary("http://www.w3.org/2007/05/powder-s#")
+  class WDRS < RDF::StrictVocabulary("http://www.w3.org/2007/05/powder-s#")
 
     # Class definitions
     term :Document,

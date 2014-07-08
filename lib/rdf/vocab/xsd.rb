@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from etc/xsd.ttl
 require 'rdf'
 module RDF
-  class XSD < Vocabulary("http://www.w3.org/2001/XMLSchema#")
+  class XSD < RDF::Vocabulary("http://www.w3.org/2001/XMLSchema#")
 
     # Datatype definitions
     term :NCName,

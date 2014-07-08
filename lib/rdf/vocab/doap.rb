@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://usefulinc.com/ns/doap#
 require 'rdf'
 module RDF
-  class DOAP < StrictVocabulary("http://usefulinc.com/ns/doap#")
+  class DOAP < RDF::StrictVocabulary("http://usefulinc.com/ns/doap#")
 
     # Class definitions
     term :ArchRepository,
@@ -330,7 +330,7 @@ module RDF
       "dc11:rights" => %(Copyright © 2004-2009 Edd Dumbill).freeze,
       "dc11:title" => %(Description of a Project \(DOAP\) vocabulary).freeze,
       label: "".freeze,
-      "owl:imports" => %(foaf:).freeze,
+      "owl:imports" => %(foaf:index.rdf).freeze,
       type: "owl:Ontology".freeze
   end
 end

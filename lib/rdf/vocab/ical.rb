@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2002/12/cal/icaltzd#
 require 'rdf'
 module RDF
-  class ICAL < StrictVocabulary("http://www.w3.org/2002/12/cal/icaltzd#")
+  class ICAL < RDF::StrictVocabulary("http://www.w3.org/2002/12/cal/icaltzd#")
 
     # Class definitions
     term :DomainOf_rrule,
