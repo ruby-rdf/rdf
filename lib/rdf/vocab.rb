@@ -321,14 +321,17 @@ module RDF
           name = statement.subject.to_s[uri.to_s.length..-1] 
           term = (term_defs[name.to_sym] ||= {})
           key = case statement.predicate
-          when RDF.type                then :type
-          when RDF::RDFS.subClassOf    then :subClassOf
-          when RDF::RDFS.subPropertyOf then :subPropertyOf
-          when RDF::RDFS.range         then :range
-          when RDF::RDFS.domain        then :domain
-          when RDF::RDFS.comment       then :comment
-          when RDF::RDFS.label         then :label
-          else                         statement.predicate.pname
+          when RDF.type                   then :type
+          when RDF::RDFS.subClassOf       then :subClassOf
+          when RDF::RDFS.subPropertyOf    then :subPropertyOf
+          when RDF::RDFS.range            then :range
+          when RDF::RDFS.domain           then :domain
+          when RDF::RDFS.comment          then :comment
+          when RDF::RDFS.label            then :label
+          when RDF::SCHEMA.inverseOf      then :inverseOf
+          when RDF::SCHEMA.domainIncludes then :domainIncludes
+          when RDF::SCHEMA.rangeIncludes  then :rangeIncludes
+          else                            statement.predicate.pname
           end
 
           value = if statement.object.uri?

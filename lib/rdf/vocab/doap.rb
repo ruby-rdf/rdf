@@ -330,7 +330,7 @@ module RDF
       "dc11:rights" => %(Copyright © 2004-2009 Edd Dumbill).freeze,
       "dc11:title" => %(Description of a Project \(DOAP\) vocabulary).freeze,
       label: "".freeze,
-      "owl:imports" => %(foaf:index.rdf).freeze,
+      "owl:imports" => %(foaf:).freeze,
       type: "owl:Ontology".freeze
   end
 end
