@@ -656,11 +656,15 @@ module RDF
 
       # Accessor for {#domainIncludes}
       # @return [RDF::URI]
-      def domain_includes; domain_includes; end
+      def domain_includes
+        Array(@attributes[:domainIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
+      end
 
       # Accessor for {#rangeIncludes}
       # @return [RDF::URI]
-      def range_includes; range_includes; end
+      def range_includes
+        Array(@attributes[:rangeIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
+      end
 
       # @!method comment
       #   @return [String]
