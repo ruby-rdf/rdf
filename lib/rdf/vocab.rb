@@ -591,39 +591,43 @@ module RDF
           prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
           next unless prop
           Array(values).each do |value|
-            case prop
-            when :type
-              prop = RDF.type
-              value = RDF::Vocabulary.expand_pname(value)
-            when :subClassOf
-              prop = RDFS.subClassOf
-              value = RDF::Vocabulary.expand_pname(value)
-            when :subPropertyOf
-              prop = RDFS.subPropertyOf
-              value = RDF::Vocabulary.expand_pname(value)
-            when :domain
-              prop = RDFS.domain
-              value = RDF::Vocabulary.expand_pname(value)
-            when :range
-              prop = RDFS.range
-              value = RDF::Vocabulary.expand_pname(value)
-            when :inverseOf
-              prop = RDF::SCHEMA.inverseOf
-              value = RDF::Vocabulary.expand_pname(value)
-            when :domainIncludes
-              prop = RDF::SCHEMA.domainIncludes
-              value = RDF::Vocabulary.expand_pname(value)
-            when :rangeIncludes
-              prop = RDF::SCHEMA.rangeIncludes
-              value = RDF::Vocabulary.expand_pname(value)
-            when :label
-              prop = RDFS.label
-            when :comment
-              prop = RDFS.comment
-            else
-              value = RDF::Vocabulary.expand_pname(value)
+            begin
+              case prop
+              when :type
+                prop = RDF.type
+                value = RDF::Vocabulary.expand_pname(value)
+              when :subClassOf
+                prop = RDFS.subClassOf
+                value = RDF::Vocabulary.expand_pname(value)
+              when :subPropertyOf
+                prop = RDFS.subPropertyOf
+                value = RDF::Vocabulary.expand_pname(value)
+              when :domain
+                prop = RDFS.domain
+                value = RDF::Vocabulary.expand_pname(value)
+              when :range
+                prop = RDFS.range
+                value = RDF::Vocabulary.expand_pname(value)
+              when :inverseOf
+                prop = RDF::SCHEMA.inverseOf
+                value = RDF::Vocabulary.expand_pname(value)
+              when :domainIncludes
+                prop = RDF::SCHEMA.domainIncludes
+                value = RDF::Vocabulary.expand_pname(value)
+              when :rangeIncludes
+                prop = RDF::SCHEMA.rangeIncludes
+                value = RDF::Vocabulary.expand_pname(value)
+              when :label
+                prop = RDFS.label
+              when :comment
+                prop = RDFS.comment
+              else
+                value = RDF::Vocabulary.expand_pname(value)
+              end
+              block.call RDF::Statement(self, prop, value)
+            rescue KeyError
+              # Skip things eroneously defined in the vocabulary
             end
-            block.call RDF::Statement(self, prop, value)
           end
         end
       end
