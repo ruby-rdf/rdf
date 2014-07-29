@@ -3153,6 +3153,11 @@ module RDF
       label: "WebPageElement".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
+    term :WebSite,
+      comment: %(A WebSite is a set of related web pages and other items typically served from a single web domain and accessible via URLs.).freeze,
+      label: "WebSite".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
     term :WholesaleStore,
       comment: %(A wholesale store.).freeze,
       label: "WholesaleStore".freeze,
@@ -3614,7 +3619,7 @@ module RDF
       rangeIncludes: "schema:NewsArticle".freeze,
       type: "rdf:Property".freeze
     property :associatedMedia,
-      comment: %(The media objects that encode this creative work. This property is a synonym for encodings.).freeze,
+      comment: %(A media object that encodes this CreativeWork. This property is a synonym for encoding.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "associatedMedia".freeze,
       rangeIncludes: "schema:MediaObject".freeze,
@@ -4807,13 +4812,13 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :encodesCreativeWork,
-      comment: %(The creative work encoded by this media object).freeze,
+      comment: %(The CreativeWork encoded by this media object.).freeze,
       domainIncludes: "schema:MediaObject".freeze,
       label: "encodesCreativeWork".freeze,
       rangeIncludes: "schema:CreativeWork".freeze,
       type: "rdf:Property".freeze
     property :encoding,
-      comment: %(A media object that encode this CreativeWork.).freeze,
+      comment: %(A media object that encodes this CreativeWork. This property is a synonym for associatedMedia.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "encoding".freeze,
       rangeIncludes: "schema:MediaObject".freeze,
@@ -4831,7 +4836,7 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :encodings,
-      comment: %(The media objects that encode this creative work \(legacy spelling; see singular form, encoding\).).freeze,
+      comment: %(A media object that encodes this CreativeWork \(legacy spelling; see singular form, encoding\).).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "encodings".freeze,
       rangeIncludes: "schema:MediaObject".freeze,
@@ -5529,10 +5534,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Boolean".freeze,
       type: "rdf:Property".freeze
     property :isPartOf,
-      comment: %(Indicates the collection or gallery to which the item belongs.).freeze,
-      domainIncludes: "schema:WebPage".freeze,
+      comment: %(Indicates a CreativeWork that this CreativeWork is \(in some sense\) part of.).freeze,
+      domainIncludes: "schema:CreativeWork".freeze,
       label: "isPartOf".freeze,
-      rangeIncludes: "schema:CollectionPage".freeze,
+      rangeIncludes: "schema:CreativeWork".freeze,
       type: "rdf:Property".freeze
     property :isProprietary,
       comment: %(True if this item's name is a proprietary/brand name \(vs. generic name\).).freeze,
