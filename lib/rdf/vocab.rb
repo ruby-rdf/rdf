@@ -281,37 +281,7 @@ module RDF
       # @yieldparam [RDF::Statement]
       def each_statement(&block)
         props.each do |name, subject|
-          subject.attributes.each do |prop, values|
-            prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
-            next unless prop
-            Array(values).each do |value|
-              case prop
-              when :type
-                prop = RDF.type
-                value = expand_pname(value)
-              when :subClassOf
-                prop = RDFS.subClassOf
-                value = expand_pname(value)
-              when :subPropertyOf
-                prop = RDFS.subPropertyOf
-                value = expand_pname(value)
-              when :domain
-                prop = RDFS.domain
-                value = expand_pname(value)
-              when :range
-                prop = RDFS.range
-                value = expand_pname(value)
-              when :label
-                prop = RDFS.label
-              when :comment
-                prop = RDFS.comment
-              else
-                value = RDF::Vocabulary.expand_pname(value)
-              end
-
-              block.call RDF::Statement(subject, prop, value)
-            end
-          end
+          subject.each_statement(&block)
         end
       end
 
@@ -351,14 +321,17 @@ module RDF
           name = statement.subject.to_s[uri.to_s.length..-1] 
           term = (term_defs[name.to_sym] ||= {})
           key = case statement.predicate
-          when RDF.type                then :type
-          when RDF::RDFS.subClassOf    then :subClassOf
-          when RDF::RDFS.subPropertyOf then :subPropertyOf
-          when RDF::RDFS.range         then :range
-          when RDF::RDFS.domain        then :domain
-          when RDF::RDFS.comment       then :comment
-          when RDF::RDFS.label         then :label
-          else                         statement.predicate.pname
+          when RDF.type                   then :type
+          when RDF::RDFS.subClassOf       then :subClassOf
+          when RDF::RDFS.subPropertyOf    then :subPropertyOf
+          when RDF::RDFS.range            then :range
+          when RDF::RDFS.domain           then :domain
+          when RDF::RDFS.comment          then :comment
+          when RDF::RDFS.label            then :label
+          when RDF::SCHEMA.inverseOf      then :inverseOf
+          when RDF::SCHEMA.domainIncludes then :domainIncludes
+          when RDF::SCHEMA.rangeIncludes  then :rangeIncludes
+          else                            statement.predicate.pname
           end
 
           value = if statement.object.uri?
@@ -607,6 +580,72 @@ module RDF
       end
 
       ##
+      # Enumerate each statement constructed from the defined vocabulary terms
+      #
+      # If a property value is known to be a {URI}, or expands to a {URI}, the `object` is a URI, otherwise, it will be a {Literal}.
+      #
+      # @yield statement
+      # @yieldparam [RDF::Statement]
+      def each_statement(&block)
+        attributes.reject {|p| p == :vocab}.each do |prop, values|
+          prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
+          next unless prop
+          Array(values).each do |value|
+            begin
+              case prop
+              when :type
+                prop = RDF.type
+                value = RDF::Vocabulary.expand_pname(value)
+              when :subClassOf
+                prop = RDFS.subClassOf
+                value = RDF::Vocabulary.expand_pname(value)
+              when :subPropertyOf
+                prop = RDFS.subPropertyOf
+                value = RDF::Vocabulary.expand_pname(value)
+              when :domain
+                prop = RDFS.domain
+                value = RDF::Vocabulary.expand_pname(value)
+              when :range
+                prop = RDFS.range
+                value = RDF::Vocabulary.expand_pname(value)
+              when :inverseOf
+                prop = RDF::SCHEMA.inverseOf
+                value = RDF::Vocabulary.expand_pname(value)
+              when :domainIncludes
+                prop = RDF::SCHEMA.domainIncludes
+                value = RDF::Vocabulary.expand_pname(value)
+              when :rangeIncludes
+                prop = RDF::SCHEMA.rangeIncludes
+                value = RDF::Vocabulary.expand_pname(value)
+              when :label
+                prop = RDFS.label
+              when :comment
+                prop = RDFS.comment
+              else
+                value = RDF::Vocabulary.expand_pname(value)
+              end
+              block.call RDF::Statement(self, prop, value)
+            rescue KeyError
+              # Skip things eroneously defined in the vocabulary
+            end
+          end
+        end
+      end
+
+      ##
+      # Return an enumerator over {RDF::Statement} defined for this vocabulary.
+      # @return [RDF::Enumerable::Enumerator]
+      # @see    Object#enum_for
+      def enum_for(method = :each_statement, *args)
+        # Ensure that enumerators are, themselves, queryable
+        this = self
+        Enumerable::Enumerator.new do |yielder|
+          this.send(method, *args) {|*y| yielder << (y.length > 1 ? y : y.first)}
+        end
+      end
+      alias_method :to_enum, :enum_for
+
+      ##
       # Returns a <code>String</code> representation of the URI object's state.
       #
       # @return [String] The URI object's state, as a <code>String</code>.
@@ -619,6 +658,38 @@ module RDF
         @attributes.has_key?(method) || super
       end
 
+      # Accessor for {#domainIncludes}
+      # @return [RDF::URI]
+      def domain_includes
+        Array(@attributes[:domainIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
+      end
+
+      # Accessor for {#rangeIncludes}
+      # @return [RDF::URI]
+      def range_includes
+        Array(@attributes[:rangeIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
+      end
+
+      # @!method comment
+      #   @return [String]
+      # @!method label
+      #   @return [String]
+      # @!method type
+      #   @return [RDF::URI]
+      # @!method subClassOf
+      #   @return [RDF::URI]
+      # @!method subPropertyOf
+      #   @return [RDF::URI]
+      # @!method domain
+      #   @return [RDF::URI]
+      # @!method range
+      #   @return [RDF::URI]
+      # @!method inverseOf
+      #   @return [RDF::URI]
+      # @!method domainIncludes
+      #   @return [RDF::URI]
+      # @!method rangeIncludes
+      #   @return [RDF::URI]
     protected
       # Implement accessor to symbol attributes
       def method_missing(method, *args, &block)
@@ -627,13 +698,13 @@ module RDF
           @attributes.fetch(method, "")
         when :label
           @attributes.fetch(method, to_s.split(/[\/\#]/).last)
-        when :type, :subClassOf, :subPropertyOf, :domain, :range
+        when :type, :subClassOf, :subPropertyOf, :domain, :range, :inverseOf, :domainIncludes, :rangeIncludes
           Array(@attributes[method]).map {|v| RDF::Vocabulary.expand_pname(v)}
         else
           super
         end
       end
-    end
+    end # Term
   end # Vocabulary
 
   # Represents an RDF Vocabulary. The difference from {RDF::Vocabulary} is that
@@ -654,7 +725,7 @@ module RDF
       ##
       # Returns the URI for the term `property` in this vocabulary.
       #
-      # @param  [#to_s] property
+      # @param  [#to_s] name
       # @return [RDF::URI]
       # @raise [KeyError] if property not defined in vocabulary
       def [](name)
