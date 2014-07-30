@@ -46,8 +46,10 @@ module RDF
       case pattern
         # A basic graph pattern (BGP) query:
         when Query
+          solutions = RDF::Query::Solutions.new
+          block = lambda {|solution| solutions << solution} unless block_given?
           before_query(pattern) if respond_to?(:before_query)
-          solutions = if method(:query_execute).arity == 1
+          if method(:query_execute).arity == 1
             query_execute(pattern, &block)
           else
             query_execute(pattern, options, &block)
