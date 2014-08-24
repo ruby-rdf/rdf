@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version      = '>= 1.9.2'
   gem.requirements               = []
-  gem.add_development_dependency 'rdf-spec',    '~> 1.1'
+  gem.add_development_dependency 'rdf-spec',    '~> 1.1', '>= 1.1.4'
   gem.add_development_dependency 'rdf-rdfxml',  '~> 1.1'
   gem.add_development_dependency 'rdf-rdfa',    '~> 1.1'
   gem.add_development_dependency 'rdf-turtle',  '~> 1.1'

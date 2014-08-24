@@ -244,6 +244,48 @@ describe RDF::NQuads::Writer do
     end
   end
 
+  context "Writing a Graph" do
+    let(:graph) {
+      g = RDF::Graph.new
+      g << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')]
+      g << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'), RDF::URI('c')]
+      g
+    }
+    it "#insert" do
+      expect do
+        @writer_class.new.insert(graph)
+      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+    end
+
+    it "#write_graph (DEPRECATED)" do
+      expect do
+        expect do
+          @writer_class.new.write_graph(graph)
+        end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+      end.to write('[DEPRECATION]').to(:error)
+    end
+  end
+
+  context "Writing a Statements" do
+    let(:statements) {[
+      RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')),
+      RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'))
+    ]}
+    it "#insert" do
+      expect do
+        @writer_class.new.insert(*statements)
+      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+    end
+
+    it "#write_statements (DEPRECATED)" do
+      expect do
+        expect do
+          @writer_class.new.write_statements(*statements)
+        end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+      end.to write('[DEPRECATION]').to(:error)
+    end
+  end
+
   context "Nodes" do
     let(:statement) {RDF::Statement(RDF::Node("a"), RDF.type, RDF::Node("b"), context: RDF::Node("c"))}
     it "uses node lables by default" do

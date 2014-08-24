@@ -12,8 +12,6 @@ describe RDF::Enumerable do
   include RDF_Enumerable
 
   context "Examples" do
-    before(:each) {$stdout = StringIO.new}
-    after(:each) {$stdout = STDOUT}
     subject {@enumerable}
 
     context "Checking whether any statements exist" do
@@ -40,33 +38,33 @@ describe RDF::Enumerable do
     end
 
     it "Enumerating all statements" do
-      subject.each_statement {|statement| $stdout.puts statement.inspect}
-      $stdout.rewind
-      expect($stdout.read).not_to be_empty
+      expect {
+        subject.each_statement {|statement| $stdout.puts statement.inspect}
+      }.to write(:something)
     end
 
     it "Enumerating all statements in the form of triples" do
-      subject.each_triple do |subject, predicate, object|
-        $stdout.puts [subject, predicate, object].inspect
-      end
-      $stdout.rewind
-      expect($stdout.read).not_to be_empty
+      expect {
+        subject.each_triple do |subject, predicate, object|
+          $stdout.puts [subject, predicate, object].inspect
+        end
+      }.to write(:something)
     end
 
     it "Enumerating all statements in the form of quads" do
-      subject.each_quad do |subject, predicate, object, context|
-        $stdout.puts [subject, predicate, object, context].inspect
-      end
-      $stdout.rewind
-      expect($stdout.read).not_to be_empty
+      expect {
+        subject.each_quad do |subject, predicate, object, context|
+          $stdout.puts [subject, predicate, object, context].inspect
+        end
+      }.to write(:something)
     end
 
     context "Enumerating all terms" do
       %w(each_subject each_predicate each_object each_context).each do |method|
         it "##{method}" do
-          subject.send(method.to_sym) {|term| $stdout.puts term.inspect}
-          $stdout.rewind
-          expect($stdout.read).not_to be_empty
+          expect {
+            subject.send(method.to_sym) {|term| $stdout.puts term.inspect}
+          }.to write(:something)
         end
       end
     end

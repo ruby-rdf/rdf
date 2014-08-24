@@ -5,16 +5,10 @@ require 'rdf/ntriples'
 require 'fileutils'
 
 describe 'README' do
-  before :each do
-    @stdout, $stdout = $stdout, StringIO.new
-    @olddir, @tmpdir = Dir.pwd, File.join(File.dirname(__FILE__), '..', 'tmp')
-    FileUtils.mkdir_p(@tmpdir)
-    Dir.chdir(@tmpdir) # FIXME: chdir causing warnings
-  end
-
-  after :each do
-    $stdout = @stdout
-    Dir.chdir(@olddir) # FIXME: chdir causing warnings
+  around(:example) do |example|
+    tmpdir = File.join(File.dirname(__FILE__), '..', 'tmp')
+    FileUtils.mkdir_p(tmpdir)
+    Dir.chdir(tmpdir, &example)
   end
 
   context "the 'Writing RDF data using the N-Triples format' example" do
@@ -40,7 +34,7 @@ describe 'README' do
         before(:each) {code.call}
         it {expect {code.call}.not_to raise_error}
         it "should not have output" do
-          expect($stdout.string.lines.to_a).to be_empty
+          expect {code.call}.not_to write.to(:error)
         end
         it "should produce a hello.nt file" do
           expect(File).to exist('hello.nt')
@@ -75,7 +69,7 @@ describe 'README' do
       }
     }.each do |example, code|
       context example do
-        before(:each) {
+        subject {
           if example == :example0
             expect(RDF::Util::File).to receive(:open_file).
               with("http://ruby-rdf.github.com/rdf/etc/doap.nt", {}).
@@ -84,14 +78,8 @@ describe 'README' do
           end
           code.call
         }
-        it {expect {code.call}.not_to raise_error}
         it "should have output" do
-          expect($stdout.string.lines.to_a).to_not be_empty
-        end
-        it "should output inspected statements" do
-          $stdout.string.each_line do |line|
-            expect(line).to match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
-          end
+          expect {subject}.to write(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
         end
       end
     end
@@ -118,7 +106,7 @@ describe 'README' do
       }
     }.each do |example, code|
       context example do
-        before(:each) {
+        subject {
           if example == :example0
             expect(RDF::Util::File).to receive(:open_file).
               with("http://ruby-rdf.github.com/rdf/etc/doap.nq", {:base_uri=>"http://ruby-rdf.github.com/rdf/etc/doap.nq", :format=>:nquads}).
@@ -127,14 +115,8 @@ describe 'README' do
           end
           code.call
         }
-        it {expect {code.call}.not_to raise_error}
-        it "should have output" do
-          expect($stdout.string.lines.to_a).to_not be_empty
-        end
         it "should output inspected statements" do
-          $stdout.string.each_line do |line|
-            expect(line).to match(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
-          end
+          expect {subject}.to write(/^\#<RDF::Statement:0x[\da-fA-F]+\(.*?\)>\Z/)
         end
       end
     end
@@ -160,17 +142,18 @@ describe 'README' do
       },
     }.each do |example, code|
       context example do
-        before(:each) {code.call}
-        it {expect {code.call}.not_to raise_error}
+        subject {code.call}
         it "should not have output" do
-          expect($stdout.string.lines.to_a).to be_empty
+          expect {subject}.not_to write(:anything)
         end
         it "should produce a hello.nq file" do
+          subject
           expect(File).to exist('hello.nq')
           expect(File.stat('hello.nq')).to be_file
         end
 
         it "should produce the expected data" do
+          subject
           expect(File.read('hello.nq')).to eq %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
         end
       end
@@ -178,7 +161,7 @@ describe 'README' do
   end
 
   context "the 'Using pre-defined RDF vocabularies' example" do
-    def example3
+    subject do
       RDF::DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
       RDF::FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
       RDF.type           #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
@@ -189,12 +172,8 @@ describe 'README' do
     end
 
     it "should not raise errors" do
-      expect { example3 }.not_to raise_error
+      expect { subject }.not_to raise_error
     end
-
-    before(:each) { example3 }
-
-    # TODO
   end
 
   context "the 'Querying RDF data using basic graph patterns (BGPs)' example" do
@@ -215,13 +194,15 @@ describe 'README' do
         query.execute(graph) do |solution|
           puts "name=#{solution.name} email=#{solution.email}"
         end
-        $stdout.string
       }
-
-      it {should =~ /name=Arto Bendiken/}
-      it {should =~ /name=Ben Lavender/}
-      it {should =~ /name=Gregg Kellogg/}
-      it {should =~ /email=/}
+      [
+        "name=Arto Bendiken",
+        "name=Ben Lavender",
+        "name=Gregg Kellogg",
+        "email="
+      ].each do |re|
+        specify { expect {subject}.to write(re)}
+      end
     end
 
     context "using graph" do
@@ -229,13 +210,16 @@ describe 'README' do
         graph.query(query) do |solution|
           puts "name=#{solution.name} email=#{solution.email}"
         end
-        $stdout.string
       }
 
-      it {should =~ /name=Arto Bendiken/}
-      it {should =~ /name=Ben Lavender/}
-      it {should =~ /name=Gregg Kellogg/}
-      it {should =~ /email=/}
+      [
+        "name=Arto Bendiken",
+        "name=Ben Lavender",
+        "name=Gregg Kellogg",
+        "email="
+      ].each do |re|
+        specify { expect {subject}.to write(re)}
+      end
     end
   end
 

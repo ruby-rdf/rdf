@@ -165,9 +165,11 @@ module RDF::NTriples
       ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
 
       # Decode \uXXXX\uXXXX surrogate pairs:
+      # XXX: This block should be removed in RDF.rb 2.0
       while
         (string.sub!(ESCAPE_SURROGATE) do
           if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
+            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in a future release."
             s = [$1, $2].pack('H*H*')
             s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8)
           else

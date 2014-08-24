@@ -2,15 +2,6 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/cli'
 
 describe RDF::CLI do
-  def capture_stdout
-    old, $stdout = $stdout, StringIO.new
-    yield
-    $stdout.rewind
-    out = $stdout.read
-    $stdout = old
-    out
-  end
-  
   TEST_FILES = {
     :nt => fixture_path('test.nt'),
     :nq => fixture_path('test.nq'),
@@ -18,28 +9,21 @@ describe RDF::CLI do
 
   describe "#serialize" do
     it "serializes to NTriples" do
-      out = capture_stdout do
-        RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]])
-      end
-      expect(out).not_to be_empty
+      expect {RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]])}.to write.to(:output)
     end
 
     it "serializes to NQuads" do
-      out = capture_stdout do
+      expect {
         RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]], :output_format => :nquads)
-      end
-      expect(out).not_to be_empty
+      }.to write.to(:output)
     end
   end
 
   describe "#count" do
     TEST_FILES.each do |fmt, file|
       it "counts #{fmt}" do
-        out = capture_stdout do
-          RDF::CLI.exec_command("count", [file])
-        end
         g = RDF::Repository.load(file)
-        expect(out).to match /Parsed #{g.count} statements/
+        expect {RDF::CLI.exec_command("count", [file])}.to write(/Parsed #{g.count} statements/)
       end
     end
   end
@@ -47,10 +31,7 @@ describe RDF::CLI do
   describe "#subjects" do
     TEST_FILES.each do |fmt, file|
       it "gets subjects #{fmt}" do
-        out = capture_stdout do
-          RDF::CLI.exec_command("subjects", [file])
-        end
-        expect(out).not_to be_empty
+        expect {RDF::CLI.exec_command("subjects", [file])}.to write(:something)
       end
     end
   end
@@ -58,10 +39,7 @@ describe RDF::CLI do
   describe "#objects" do
     TEST_FILES.each do |fmt, file|
       it "gets objects #{fmt}" do
-        out = capture_stdout do
-          RDF::CLI.exec_command("objects", [file])
-        end
-        expect(out).not_to be_empty
+        expect {RDF::CLI.exec_command("objects", [file])}.to write(:anything)
       end
     end
   end
@@ -69,10 +47,7 @@ describe RDF::CLI do
   describe "#predicates" do
     TEST_FILES.each do |fmt, file|
       it "gets predicates #{fmt}" do
-        out = capture_stdout do
-          RDF::CLI.exec_command("predicates", [file])
-        end
-        expect(out).not_to be_empty
+        expect {RDF::CLI.exec_command("predicates", [file])}.to write(:something)
       end
     end
   end
@@ -80,10 +55,7 @@ describe RDF::CLI do
   describe "#lenghts" do
     TEST_FILES.each do |fmt, file|
       it "gets lenghts #{fmt}" do
-        out = capture_stdout do
-          RDF::CLI.exec_command("lenghts", [file])
-        end
-        expect(out).not_to be_empty
+        expect {RDF::CLI.exec_command("lenghts", [file])}.to write(:something)
       end
     end
   end

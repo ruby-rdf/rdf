@@ -106,14 +106,10 @@ describe RDF::Format do
 
   context "Examples" do
     require 'rdf/ntriples'
-    before(:each) {$stdout = StringIO.new}
-    after(:each) {$stdout = STDOUT}
     subject {RDF::Format}
 
     its(:each) do
-      RDF::Format.each {|klass| $stdout.puts klass.name}
-      $stdout.rewind
-      expect($stdout.read).not_to be_empty
+      expect {RDF::Format.each {|klass| $stdout.puts klass.name}}.to write(:something)
     end
 
     its(:"for") do

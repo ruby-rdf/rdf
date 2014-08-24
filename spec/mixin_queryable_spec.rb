@@ -14,8 +14,7 @@ describe RDF::Queryable do
   include RDF_Queryable
 
   context "Examples" do
-    before(:each) {@queryable.insert(*RDF::Spec.quads); $stdout = StringIO.new}
-    after(:each) {$stdout = STDOUT}
+    before(:each) {@queryable.insert(*RDF::Spec.quads)}
     subject {@queryable}
 
     context "Querying for statements having a given predicate" do
