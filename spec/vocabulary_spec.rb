@@ -51,10 +51,10 @@ describe RDF::Vocabulary do
     end
 
     it "yields rdfs:label" do
-      expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.label_for("comment")))
+      expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
     end
     it "yields rdfs:comment" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment_for("comment")))
+      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment.comment))
     end
     it "yields rdfs:isDefinedBy" do
       expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
@@ -210,8 +210,8 @@ describe RDF::Vocabulary do
     it "should support VOID" do
       expect(RDF::VOID).to be_a_vocabulary("http://rdfs.org/ns/void#")
       expect(RDF::VOID).to have_properties("http://rdfs.org/ns/void#", %w(Dataset DatasetDescription Linkset TechnicalFeature dataDump objectsTarget subjectsTarget target uriSpace linkPredicate class classPartition classes distinctObjects distinctSubjects exampleResource feature uriRegexPattern sparqlEndpoint uriLookupEndpoint subset inDataset documents entities properties triples openSearchDescription property propertyPartition rootResource vocabulary uriSpace))
-      expect(RDF::VOID.label_for("property")).to eq "property"
-      expect(RDF::VOID.comment_for("property")).to eq %(The rdf:Property that is the predicate of all triples in a property-based partition.)
+      expect(RDF::VOID.property.label).to eq "property"
+      expect(RDF::VOID.property.comment).to eq %(The rdf:Property that is the predicate of all triples in a property-based partition.)
     end
 
     it "should support W3C Media Annotation Ontology" do
@@ -266,12 +266,16 @@ describe RDF::Vocabulary do
       expect(test_vocab.Class).to be_a(RDF::URI)
     end
 
-    it "should respond to label_for from base RDFS" do
-      expect(test_vocab.label_for("prop2")).to eql "Test property label"
+    it "should respond to label_for from base RDFS (DEPRECATED)" do
+      expect {
+        expect(test_vocab.label_for("prop2")).to eql "Test property label"
+      }.to write('[DEPRECATION]').to(:error)
     end
 
-    it "should respond to comment_for from base RDFS" do
-      expect(test_vocab.comment_for(:prop2)).to eql " Test property comment"
+    it "should respond to comment_for from base RDFS (DEPRECATED)" do
+      expect {
+        expect(test_vocab.comment_for(:prop2)).to eql " Test property comment"
+      }.to write('[DEPRECATION]').to(:error)
     end
 
     it "should not enumerate from RDF::Vocabulary.each" do
@@ -386,8 +390,8 @@ describe RDF::Vocabulary do
     specify {should_not be_class}
     specify {should_not be_datatype}
     specify {should_not be_other}
-    its(:label) {should eq RDF::RDFS.label_for("comment")}
-    its(:comment) {should eq RDF::RDFS.comment_for("comment")}
+    its(:label) {should eq "comment"}
+    its(:comment) {should eq "A description of the subject resource."}
     its(:vocab) {should eql RDF::RDFS}
 
     context RDF::FOAF.Person do

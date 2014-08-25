@@ -48,11 +48,11 @@ describe RDF::StrictVocabulary do
     expect(test_vocab.Class).to be_a(RDF::URI)
   end
 
-  it "should respond to label_for from base RDFS" do
-    expect(test_vocab.label_for("prop2")).to eql "Test property label"
+  it "should respond to label from base RDFS" do
+    expect(test_vocab["prop2"].label).to eql "Test property label"
   end
 
-  it "should respond to comment_for from base RDFS" do
-    expect(test_vocab.comment_for(:prop2)).to eql "Test property comment"
+  it "should respond to comment from base RDFS" do
+    expect(test_vocab[:prop2].comment).to eql "Test property comment"
   end
 end

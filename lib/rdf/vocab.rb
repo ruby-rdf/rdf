@@ -238,6 +238,7 @@ module RDF
       # @return [String] The label for the named property
       # @deprecated Use {RDF::Vocabulary::Term#label}
       def label_for(name)
+        warn "[DEPRECATION] `Vocabulary.label_for is deprecated. Please use Vocabulary::Term#label instead."
         self[name].label || ''
       end
 
@@ -245,6 +246,7 @@ module RDF
       # @return [String] The comment for the named property
       # @deprecated Use {RDF::Vocabulary::Term#comment}
       def comment_for(name)
+        warn "[DEPRECATION] `Vocabulary.comment_for is deprecated. Please use Vocabulary::Term#comment instead."
         self[name].comment || ''
       end
 

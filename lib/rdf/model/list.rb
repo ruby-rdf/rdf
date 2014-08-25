@@ -69,6 +69,10 @@ module RDF
       @graph   = graph   || RDF::Graph.new
       is_empty = @graph.query(:subject => subject, :predicate => RDF.first).empty?
 
+      if @subject.uri? && @subject != RDF.nil
+        warn "[DEPRECATION] `List subject as a URI is deprecated. Please use a Node instead."
+      end
+
       if subject && is_empty
         # An empty list with explicit subject and value initializers
         @subject = RDF.nil

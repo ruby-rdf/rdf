@@ -1,6 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::List do
+
   let(:empty) {RDF::List::NIL}
   let(:abc) {RDF::List[RDF::Literal.new('a'), RDF::Literal.new('b'), RDF::Literal.new('c')]}
   let(:ten) {RDF::List[*(1..10)]}
@@ -125,10 +126,12 @@ describe RDF::List do
 
       it "Uses subject with values" do
         n = RDF::URI("foo")
-        l = RDF::List.new(n, graph, %w(a b c))
-        expect(l.subject).to eq(n)
-        expect(l.first).to eq(RDF::Literal("a"))
-        expect(l.last).to eq(RDF::Literal("c"))
+        expect {
+          l = RDF::List.new(n, graph, %w(a b c))
+          expect(l.subject).to eq(n)
+          expect(l.first).to eq(RDF::Literal("a"))
+          expect(l.last).to eq(RDF::Literal("c"))
+        }.to write('[DEPRECATION]').to(:error)
       end
 
       it "Prepends values with new subject if existing list" do

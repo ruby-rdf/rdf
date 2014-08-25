@@ -159,31 +159,30 @@ module RDF::NTriples
     # @see    http://blog.grayproductions.net/articles/understanding_m17n
     # @see    http://yehudakatz.com/2010/05/17/encodings-unabridged/
     def self.unescape(string)
-      string = string.dup.force_encoding(Encoding::ASCII_8BIT)
+      string = string.dup.force_encoding(Encoding::UTF_8)
 
       # Decode \t|\n|\r|\"|\\ character escapes:
       ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
 
       # Decode \uXXXX\uXXXX surrogate pairs:
+      # XXX: This block should be removed in RDF.rb 2.0
       while
         (string.sub!(ESCAPE_SURROGATE) do
           if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
+            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in a future release."
             s = [$1, $2].pack('H*H*')
             s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8)
           else
-            s = [$1.hex].pack('U*') << '\u' << $2
+            [$1.hex].pack('U*') << '\u' << $2
           end
-          s.force_encoding(Encoding::ASCII_8BIT)
         end)
       end
 
       # Decode \uXXXX and \UXXXXXXXX code points:
       string.gsub!(ESCAPE_CHAR) do
-        s = [($1 || $2).hex].pack('U*')
-        s.force_encoding(Encoding::ASCII_8BIT)
+        [($1 || $2).hex].pack('U*')
       end
 
-      string.force_encoding(Encoding::UTF_8)
       string
     end
 
