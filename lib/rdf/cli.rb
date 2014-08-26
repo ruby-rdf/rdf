@@ -43,6 +43,7 @@ module RDF
         end
       end,
       "objects"     => lambda do |argv, opts|
+        $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             $stdout.puts statement.object.to_ntriples
@@ -50,6 +51,7 @@ module RDF
         end
       end,
       "predicates"   => lambda do |argv, opts|
+        $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             $stdout.puts statement.predicate.to_ntriples
@@ -59,6 +61,7 @@ module RDF
       "serialize" => lambda do |argv, opts|
         writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
         out = opts[:output] || $stdout
+        out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
         opts = opts.merge(:prefixes => {})
         writer_opts = opts.merge(:standard_prefixes => true)
         self.parse(argv, opts) do |reader|
@@ -68,6 +71,7 @@ module RDF
         end
       end,
       "subjects"   => lambda do |argv, opts|
+        $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             $stdout.puts statement.subject.to_ntriples
@@ -183,6 +187,7 @@ module RDF
       if files.empty?
         # If files are empty, either use options[:execute]
         input = options[:evaluate] ? StringIO.new(options[:evaluate]) : STDIN
+        input.set_encoding(options.fetch(:encoding, Encoding::UTF_8))
         RDF::Reader.for(options[:format] || :ntriples).new(input, options) do |reader|
           yield(reader)
         end
