@@ -55,8 +55,7 @@ module RDF
     #     Any values which are not terms are coerced to `RDF::Literal`.
     #   @yield  [list]
     #   @yieldparam [RDF::List] list
-    #   @deprecated Subject should be an {RDF::Node}, not a {RDF::URI}. A
-    #               future release will remove support for URI subjects
+    #   @deprecated Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
     # @overload initialize(subject = nil, graph = nil, values = nil, &block)
     #   @param  [RDF::Node]         subject (RDF.nil)
     #   @param  [RDF::Graph]        graph (RDF::Graph.new)
@@ -68,10 +67,6 @@ module RDF
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
       is_empty = @graph.query(:subject => subject, :predicate => RDF.first).empty?
-
-      if @subject.uri? && @subject != RDF.nil
-        warn "[DEPRECATION] `List subject as a URI is deprecated. Please use a Node instead."
-      end
 
       if subject && is_empty
         # An empty list with explicit subject and value initializers
@@ -112,7 +107,10 @@ module RDF
     # @return [Boolean]
     def valid?
       li = subject
+      list_nodes = []
       while li != RDF.nil do
+        return false if list_nodes.include?(li)
+        list_nodes << li
         rest = nil
         firsts = rests = 0
         @graph.query(:subject => li) do |st|
