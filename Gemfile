@@ -5,6 +5,7 @@ gemspec
 group :develop do
   gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
   gem 'linkeddata',     git: "git://github.com/ruby-rdf/linkeddata.git", branch: "develop"
+  gem 'rdf-n3',         git: "git://github.com/ruby-rdf/rdf-n3.git", branch: "develop"
   gem "rdf-rdfxml",     git: "git://github.com/ruby-rdf/rdf-rdfxml.git", branch: "develop"
   gem 'rdf-rdfa',       git: "git://github.com/ruby-rdf/rdf-rdfa.git", branch: "develop"
   gem 'rdf-turtle',     git: "git://github.com/ruby-rdf/rdf-turtle.git", branch: "develop"

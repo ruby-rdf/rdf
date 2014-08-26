@@ -126,12 +126,10 @@ describe RDF::List do
 
       it "Uses subject with values" do
         n = RDF::URI("foo")
-        expect {
-          l = RDF::List.new(n, graph, %w(a b c))
-          expect(l.subject).to eq(n)
-          expect(l.first).to eq(RDF::Literal("a"))
-          expect(l.last).to eq(RDF::Literal("c"))
-        }.to write('[DEPRECATION]').to(:error)
+        l = RDF::List.new(n, graph, %w(a b c))
+        expect(l.subject).to eq(n)
+        expect(l.first).to eq(RDF::Literal("a"))
+        expect(l.last).to eq(RDF::Literal("c"))
       end
 
       it "Prepends values with new subject if existing list" do
@@ -150,6 +148,75 @@ describe RDF::List do
         l = RDF::List.new(n, graph)
         expect(l).not_to be_valid
         expect(l.subject).to eq(n)
+      end
+    end
+  end
+
+  describe "#valid?" do
+    context "valid cases" do
+      {
+        "empty list" => RDF::List(),
+        "empty list with nil subject" => RDF::List.new(RDF.nil),
+        "list with literals" => RDF::List(%w(a b c)),
+        "list with other properties on head" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node1, RDF.type, RDF::OWL.Class),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+        ],
+        "list with other properties within" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+          RDF::Statement(:node2, RDF.type, RDF::OWL.Class),
+        ],
+      }.each do |name, list|
+        it name do
+          if list.is_a?(Array)
+            graph = RDF::Graph.new.insert(*list)
+            list = RDF::List.new(list.first.subject, graph)
+          end
+          expect(list).to be_valid
+          expect(list).not_to be_invalid
+        end
+      end
+    end
+
+    context "invalid cases" do
+      {
+        "empty list with IRI subject" => RDF::List.new(RDF::URI("http://example/a")),
+        "non-empty list with IRI subject" => RDF::List.new(RDF::URI("http://example/a"), RDF::Graph.new, %w(a b c)),
+        "list with muliple first" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.first, "a1"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+        ],
+        "list with muliple rest" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node1, RDF.rest, :node3),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+        ],
+        "list with loop" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, :node1),
+        ],
+      }.each do |name, list|
+        it name do
+          if list.is_a?(Array)
+            graph = RDF::Graph.new.insert(*list)
+            list = RDF::List.new(list.first.subject, graph)
+          end
+          expect(list).to be_invalid
+          expect(list).not_to be_valid
+        end
       end
     end
   end
