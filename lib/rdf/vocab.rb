@@ -624,7 +624,8 @@ module RDF
               when :comment
                 prop = RDFS.comment
               else
-                value = RDF::Vocabulary.expand_pname(value)
+                v = RDF::Vocabulary.expand_pname(value)
+                value = v.valid? ? v : RDF::Literal(value)
               end
               block.call RDF::Statement(self, prop, value)
             rescue KeyError
