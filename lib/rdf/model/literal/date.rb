@@ -6,8 +6,8 @@ module RDF; class Literal
   # @since 0.2.1
   class Date < Literal
     DATATYPE = XSD.date
-    GRAMMAR  = %r(\A-?\d{4}-\d{2}-\d{2}(([\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%Y-%m-%d%Z'.freeze
+    GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2})((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    FORMAT   = '%Y-%m-%d'.freeze
 
     ##
     # @param  [Date] value
@@ -26,10 +26,12 @@ module RDF; class Literal
     ##
     # Converts this literal into its canonical lexical representation.
     #
+    # Note that the timezone is recoverable for xsd:date, where it is not for xsd:dateTime and xsd:time, which are both transformed relative to Z, if a timezone is provided.
+    #
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#date
     def canonicalize!
-      @string = @object.strftime(FORMAT).sub(/\+00:00|UTC|GMT/, 'Z') if self.valid?
+      @string = @object.strftime(FORMAT) + self.tz.to_s if self.valid?
       self
     end
 
@@ -46,11 +48,34 @@ module RDF; class Literal
     end
 
     ##
+    # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
+    #
+    # @return [Boolean]
+    # @since 1.1.6
+    def has_timezone?
+      md = self.to_s.match(GRAMMAR)
+      md && !!md[2]
+    end
+    alias_method :has_tz?, :has_timezone?
+
+    ##
     # Returns the value as a string.
     #
     # @return [String]
     def to_s
-      @string || @object.strftime(FORMAT).sub(/\+00:00|UTC|GMT/, 'Z')
+      @string || @object.strftime(FORMAT)
+    end
+
+    ##
+    # Returns the timezone part of arg as a simple literal. Returns the empty string if there is no timezone.
+    #
+    # @return [RDF::Literal]
+    # @since 1.1.6
+    def tz
+      md = self.to_s.match(GRAMMAR)
+      zone =  md[2].to_s
+      zone = "Z" if zone == "+00:00"
+      RDF::Literal(zone)
     end
 
     ##

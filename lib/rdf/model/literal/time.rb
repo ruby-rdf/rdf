@@ -11,7 +11,8 @@ module RDF; class Literal
   # @since 0.2.1
   class Time < Literal
     DATATYPE = XSD.time
-    GRAMMAR  = %r(\A\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    GRAMMAR  = %r(\A(\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    FORMAT   = '%H:%M:%SZ'.freeze
 
     ##
     # @param  [Time] value
@@ -41,7 +42,13 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#time
     def canonicalize!
-      @string = @object.utc.strftime('%H:%M:%SZ') if self.valid?
+      if self.valid?
+        @string = if has_timezone?
+          @object.utc.strftime(FORMAT)
+        else
+          @object.strftime(FORMAT[0..-2])
+        end
+      end
       self
     end
 
@@ -58,19 +65,23 @@ module RDF; class Literal
     end
 
     ##
+    # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
+    #
+    # @return [Boolean]
+    # @since 1.1.6
+    def has_timezone?
+      md = self.to_s.match(GRAMMAR)
+      md && !!md[2]
+    end
+    alias_method :has_tz?, :has_timezone?
+
+    ##
     # Returns the value as a string.
     # Does not normalize timezone
     #
     # @return [String]
     def to_s
-      @string || if RUBY_PLATFORM != 'java'
-        @object.strftime('%H:%M:%S%:z').
-        sub(/\+00:00|UTC|GMT/, 'Z')
-      else
-        # JRuby doesn't do timezone's properly, use utc_offset
-        off = @object.utc_offset == 0 ? "Z" : ("%0.2d:00" % (@object.utc_offset/3600))
-        @object.strftime("%H:%M:%S#{off}")
-      end
+      @string || @object.strftime('%H:%M:%S%:z').sub("+00:00", 'Z')
     end
 
     ##
