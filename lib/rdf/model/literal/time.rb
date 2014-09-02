@@ -22,9 +22,9 @@ module RDF; class Literal
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   ||= value if value.is_a?(String)
       @object   = case
-        when value.is_a?(::Time)         then value
-        when value.respond_to?(:to_time) then value.to_time rescue ::Time.parse(value.to_s)
-        else ::Time.parse(value.to_s)
+        when value.is_a?(::DateTime)         then value
+        when value.respond_to?(:to_datetime) then value.to_datetime rescue ::DateTime.parse(value.to_s)
+        else ::DateTime.parse(value.to_s)
       end rescue nil
     end
 
@@ -44,12 +44,23 @@ module RDF; class Literal
     def canonicalize!
       if self.valid?
         @string = if has_timezone?
-          @object.utc.strftime(FORMAT)
+          @object.new_offset.strftime(FORMAT)
         else
           @object.strftime(FORMAT[0..-2])
         end
       end
       self
+    end
+
+    ##
+    # Returns the timezone part of arg as a simple literal. Returns the empty string if there is no timezone.
+    #
+    # @return [RDF::Literal]
+    # @see http://www.w3.org/TR/sparql11-query/#func-tz
+    def tz
+      zone =  has_timezone? ? object.zone : ""
+      zone = "Z" if zone == "+00:00"
+      RDF::Literal(zone)
     end
 
     ##
@@ -95,7 +106,7 @@ module RDF; class Literal
         return super unless other.valid?
         # Compare as strings, as time includes a date portion, and adjusting for UTC
         # can create a mismatch in the date portion.
-        self.object.utc.strftime('%H%M%S') == other.object.utc.strftime('%H%M%S')
+        self.object.new_offset.strftime('%H%M%S') == other.object.new_offset.strftime('%H%M%S')
       when Literal::DateTime, Literal::Date
         false
       else

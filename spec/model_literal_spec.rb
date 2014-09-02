@@ -424,9 +424,9 @@ describe RDF::Literal do
       literal(:false)    => false,
       literal(:long)     => 9223372036854775807,
       literal(:double)   => 3.1415,
-      literal(:date)     => Date.new(2010),
-      literal(:datetime) => DateTime.new(2011),
-      literal(:time)     => Time.parse('01:02:03Z')
+      literal(:date)     => ::Date.new(2010),
+      literal(:datetime) => ::DateTime.new(2011),
+      literal(:time)     => ::DateTime.parse('01:02:03Z')
     }.each_pair do |args, value|
       it "returns object for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
@@ -804,14 +804,42 @@ describe RDF::Literal do
     end
   end
 
+  describe RDF::Literal::Date do
+    describe "#tz" do
+      {
+        "2010-06-21Z"      => "Z",
+        "2010-12-21-08:00" => "-08:00",
+        "2008-06-20Z"      => "Z",
+        "2011-02-01"       => "",
+      }.each do |l, r|
+        it "#{l} => #{r}" do
+          expect(RDF::Literal::Date.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
+    end
+  end
+
   describe RDF::Literal::Time do
     subject {
       double("time", :to_s => "05:50:00")
     }
-    it "parses as string if #to_time raises an error" do
-      expect(subject).to receive(:to_time).at_least(:once).and_raise(StandardError)
+    it "parses as string if #to_datetime raises an error" do
+      expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)
       expect {RDF::Literal::Time.new(subject)}.not_to raise_error
-      expect(RDF::Literal::Time.new(subject).object).to eq ::Time.parse(subject.to_s)
+      expect(RDF::Literal::Time.new(subject).object).to eq ::DateTime.parse(subject.to_s)
+    end
+
+    describe "#tz" do
+      {
+        "11:28:01Z"      => "Z",
+        "15:38:02-08:00" => "-08:00",
+        "23:59:00Z"      => "Z",
+        "01:02:03"       => "",
+      }.each do |l, r|
+        it "#{l} => #{r}" do
+          expect(RDF::Literal::Time.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
     end
   end
 
