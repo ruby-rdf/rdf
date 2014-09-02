@@ -67,6 +67,23 @@ module RDF; class Literal
     end
 
     ##
+    # Returns a human-readable value for the literal
+    #
+    # @return [String]
+    # @since 1.1.6
+    def humanize(lang = :en)
+      d = object.strftime("%A, %d %B %Y")
+      if has_timezone?
+        d += if self.tz == 'Z'
+          " UTC"
+        else
+          " #{self.tz}"
+        end
+      end
+      d
+    end
+
+    ##
     # Returns the timezone part of arg as a simple literal. Returns the empty string if there is no timezone.
     #
     # @return [RDF::Literal]

@@ -103,6 +103,24 @@ module RDF; class Literal
     end
 
     ##
+    # Returns a human-readable value for the literal
+    #
+    # @return [String]
+    # @since 1.1.6
+    def humanize(lang = :en)
+      d = object.strftime("%r on %A, %d %B %Y")
+      if has_timezone?
+        zone = if self.tz == 'Z'
+          "UTC"
+        else
+          self.tz
+        end
+        d.sub!(" on ", " #{zone} on ")
+      end
+      d
+    end
+
+    ##
     # Equal compares as DateTime objects
     def ==(other)
       # If lexically invalid, use regular literal testing

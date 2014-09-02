@@ -137,6 +137,10 @@ describe RDF::Literal do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: true).to_s).to eq str
         end
 
+        it "humanizes decimal '#{value}' to '#{str}'" do
+          expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: false).humanize).to eq value
+        end
+
         it "instantiates '#{value}' as RDF::Literal::Decimal" do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: true)).to be_a(RDF::Literal::Decimal)
         end
@@ -165,6 +169,10 @@ describe RDF::Literal do
 
         it "normalizes double '#{value}' to '#{str}'" do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: true).to_s).to eq str
+        end
+
+        it "humanizes double '#{value}' to '#{str}'" do
+          expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: false).humanize).to eq value
         end
 
         it "instantiates '#{value}' as RDF::Literal::Double" do
@@ -213,6 +221,16 @@ describe RDF::Literal do
         end
       end
 
+      {
+        "2014-09-01T12:13:14.567"       => "12:13:14 PM on Monday, 01 September 2014",
+        "2014-09-01T12:13:14.567Z"      => "12:13:14 PM UTC on Monday, 01 September 2014",
+        "2014-09-01T12:13:14.567-08:00" => "12:13:14 PM -08:00 on Monday, 01 September 2014",
+      }.each_pair do |value, str|
+        it "humanizes dateTime '#{value}' to '#{str}'" do
+          expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: false).humanize).to eq str
+        end
+      end
+
       # Date
       {
         "2010-01-01Z"      => "2010-01-01Z",
@@ -240,6 +258,16 @@ describe RDF::Literal do
         end
       end
 
+      {
+        "2014-09-01"       => "Monday, 01 September 2014",
+        "2014-09-01Z"      => "Monday, 01 September 2014 UTC",
+        "2014-09-01-08:00" => "Monday, 01 September 2014 -08:00",
+      }.each_pair do |value, str|
+        it "humanizes date '#{value}' to '#{str}'" do
+          expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: false).humanize).to eq str
+        end
+      end
+
       # Time
       {
         "00:00:00Z"      => "00:00:00Z",
@@ -264,6 +292,16 @@ describe RDF::Literal do
 
         it "causes normalized '#{value}' to be == '#{str}'" do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.time, canonicalize: false)
+        end
+      end
+
+      {
+        "12:13:14.567"       => "12:13:14 PM",
+        "12:13:14.567Z"      => "12:13:14 PM UTC",
+        "12:13:14.567-08:00" => "12:13:14 PM -08:00",
+      }.each_pair do |value, str|
+        it "humanizes time '#{value}' to '#{str}'" do
+          expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: false).humanize).to eq str
         end
       end
     end
