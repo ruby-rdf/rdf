@@ -192,6 +192,9 @@ describe RDF::Literal do
         "2010-01-01T01:00:00+01:00" => "2010-01-01T00:00:00Z",
         "2009-12-31T23:00:00-01:00" => "2010-01-01T00:00:00Z",
         "-2010-01-01T00:00:00Z"     => "-2010-01-01T00:00:00Z",
+        "2014-09-01T12:13:14"       => "2014-09-01T12:13:14",
+        "2014-09-01T12:13:14Z"      => "2014-09-01T12:13:14Z",
+        "2014-09-01T12:13:14-08:00" => "2014-09-01T20:13:14Z",
       }.each_pair do |value, str|
         it "does not normalize dateTime '#{value}' by default" do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: false).to_s).to eq value
@@ -218,6 +221,7 @@ describe RDF::Literal do
         "2010-01-01+01:00" => "2010-01-01+01:00",
         "2009-12-31-01:00" => "2009-12-31-01:00",
         "-2010-01-01Z"     => "-2010-01-01Z",
+        "2014-09-03-08:00" => "2014-09-03-08:00"
       }.each_pair do |value, str|
         it "does not normalize date '#{value}' by default" do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: false).to_s).to eq value
@@ -244,6 +248,7 @@ describe RDF::Literal do
         "00:00:00+00:00" => "00:00:00Z",
         "01:00:00+01:00" => "00:00:00Z",
         "23:00:00-01:00" => "00:00:00Z",
+        "12:13:14-08:00" => "20:13:14Z"
       }.each_pair do |value, str|
         it "does not normalize dateTime '#{value}' by default" do
           expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: false).to_s).to eq value
