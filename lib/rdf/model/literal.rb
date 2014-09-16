@@ -402,6 +402,15 @@ module RDF
     end
 
     ##
+    # Returns a human-readable value for the literal
+    #
+    # @return [String]
+    # @since 1.1.6
+    def humanize(lang = :en)
+      to_s
+    end
+
+    ##
     # Returns a developer-friendly representation of `self`.
     #
     # @return [String]

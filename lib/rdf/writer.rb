@@ -145,6 +145,7 @@ module RDF
     # @raise [ArgumentError] if no block is provided
     def self.buffer(*args, &block)
       options = args.last.is_a?(Hash) ? args.last : {}
+      options[:encoding] ||= Encoding::UTF_8 if RUBY_PLATFORM == "java"
       raise ArgumentError, "block expected" unless block_given?
 
       StringIO.open do |buffer|

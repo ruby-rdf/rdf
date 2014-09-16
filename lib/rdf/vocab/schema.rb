@@ -291,6 +291,7 @@ module RDF
     term :Blog,
       comment: %(A blog).freeze,
       label: "Blog".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :BlogPosting,
       comment: %(A blog post.).freeze,
@@ -1968,7 +1969,13 @@ module RDF
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
     term :Offer,
-      comment: %(An offer to transfer some rights to an item or to provide a service&#x2014;for example, an offer to sell tickets to an event, to rent the DVD of a movie, to stream a TV show over the internet, to repair a motorcycle, or to loan a book.).freeze,
+      comment: %(An offer to transfer some rights to an item or to provide a service&#x2014;for example, an offer to sell tickets to an event, to rent the DVD of a movie, to stream a TV show over the internet, to repair a motorcycle, or to loan a book.
+      <br/><br/>
+      For <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GTIN</a>-related fields, see
+      <a href="http://www.gs1.org/barcodes/support/check_digit_calculator">Check Digit calculator</a>
+      and <a href="http://www.gs1us.org/resources/standards/gtin-validation-guide">validation guide</a>
+      from <a href="http://www.gs1.org/">GS1</a>.
+      ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsProperties).freeze,
       label: "Offer".freeze,
       subClassOf: "schema:Intangible".freeze,
@@ -3283,7 +3290,7 @@ module RDF
       domainIncludes: "schema:Muscle".freeze,
       label: "action".freeze,
       rangeIncludes: "schema:Text".freeze,
-      "schema:supercededBy" => %(schema:muscleAction).freeze,
+      "schema:supersededBy" => %(schema:muscleAction).freeze,
       type: "rdf:Property".freeze
     property :actionStatus,
       comment: %(Indicates the current disposition of the Action.).freeze,
@@ -3320,7 +3327,7 @@ module RDF
       domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:TVEpisode".freeze, "schema:Series".freeze, "schema:TVSeries".freeze, "schema:RadioEpisode".freeze, "schema:RadioSeries".freeze],
       label: "actors".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:actor).freeze,
+      "schema:supersededBy" => %(schema:actor).freeze,
       type: "rdf:Property".freeze
     property :addOn,
       comment: %(An additional offer that can only be obtained in combination with the first base offer \(e.g. supplements and extensions that are available for a surcharge\).).freeze,
@@ -3429,7 +3436,7 @@ module RDF
       domainIncludes: "schema:MusicGroup".freeze,
       label: "albums".freeze,
       rangeIncludes: "schema:MusicAlbum".freeze,
-      "schema:supercededBy" => %(schema:album).freeze,
+      "schema:supersededBy" => %(schema:album).freeze,
       type: "rdf:Property".freeze
     property :alcoholWarning,
       comment: %(Any precaution, guidance, contraindication, etc. related to consumption of alcohol while taking this drug.).freeze,
@@ -3660,7 +3667,7 @@ module RDF
       domainIncludes: "schema:Event".freeze,
       label: "attendees".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
-      "schema:supercededBy" => %(schema:attendees).freeze,
+      "schema:supersededBy" => %(schema:attendees).freeze,
       type: "rdf:Property".freeze
     property :audience,
       comment: %(The intended audience of the item, i.e. the group for whom the item was created.).freeze,
@@ -3778,7 +3785,7 @@ module RDF
       domainIncludes: ["schema:CreativeWork".freeze, "schema:Person".freeze],
       label: "awards".freeze,
       rangeIncludes: "schema:Text".freeze,
-      "schema:supercededBy" => %(schema:award).freeze,
+      "schema:supersededBy" => %(schema:award).freeze,
       type: "rdf:Property".freeze
     property :background,
       comment: %(Descriptive information establishing a historical perspective on the supplement. May include the rationale for the name, the population where the supplement first came to prominence, etc.).freeze,
@@ -3845,7 +3852,7 @@ module RDF
       domainIncludes: "schema:Blog".freeze,
       label: "blogPosts".freeze,
       rangeIncludes: "schema:BlogPosting".freeze,
-      "schema:supercededBy" => %(schema:blogPost).freeze,
+      "schema:supersededBy" => %(schema:blogPost).freeze,
       type: "rdf:Property".freeze
     property :bloodSupply,
       comment: %(The blood vessel that carries blood from the heart to the muscle.).freeze,
@@ -3882,7 +3889,7 @@ module RDF
       domainIncludes: "schema:Reservation".freeze,
       label: "bookingAgent".freeze,
       rangeIncludes: ["schema:Person".freeze, "schema:Organization".freeze],
-      "schema:supercededBy" => %(schema:broker).freeze,
+      "schema:supersededBy" => %(schema:broker).freeze,
       type: "rdf:Property".freeze
     property :bookingTime,
       comment: %(The date and time the reservation was booked.).freeze,
@@ -4012,7 +4019,7 @@ module RDF
       domainIncludes: ["schema:ParcelDelivery".freeze, "schema:Flight".freeze],
       label: "carrier".freeze,
       rangeIncludes: "schema:Organization".freeze,
-      "schema:supercededBy" => %(schema:provider).freeze,
+      "schema:supersededBy" => %(schema:provider).freeze,
       type: "rdf:Property".freeze
     property :carrierRequirements,
       comment: %(Specifies specific carrier\(s\) requirements for the application \(e.g. an application may only work on a specific carrier network\).).freeze,
@@ -4152,7 +4159,7 @@ module RDF
       domainIncludes: "schema:Person".freeze,
       label: "colleagues".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:colleague).freeze,
+      "schema:supersededBy" => %(schema:colleague).freeze,
       type: "rdf:Property".freeze
     property :collection,
       comment: %(A sub property of object. The collection target of the action.).freeze,
@@ -4226,7 +4233,7 @@ module RDF
       domainIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
       label: "contactPoints".freeze,
       rangeIncludes: "schema:ContactPoint".freeze,
-      "schema:supercededBy" => %(schema:contactPoint).freeze,
+      "schema:supersededBy" => %(schema:contactPoint).freeze,
       type: "rdf:Property".freeze
     property :contactType,
       comment: %(A person or organization can have different contact points, for different purposes. For example, a sales contact point, a PR contact point and so on. This property is used to specify the kind of contact point.).freeze,
@@ -4573,7 +4580,7 @@ module RDF
       domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:TVEpisode".freeze, "schema:Series".freeze, "schema:TVSeries".freeze, "schema:RadioEpisode".freeze, "schema:RadioSeries".freeze],
       label: "directors".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:director).freeze,
+      "schema:supersededBy" => %(schema:director).freeze,
       type: "rdf:Property".freeze
     property :discount,
       comment: %(Any discount applied \(to an Order\).).freeze,
@@ -4832,7 +4839,7 @@ module RDF
       domainIncludes: "schema:Organization".freeze,
       label: "employees".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:employee).freeze,
+      "schema:supersededBy" => %(schema:employee).freeze,
       type: "rdf:Property".freeze
     property :employmentType,
       comment: %(Type of employment \(e.g. full-time, part-time, contract, temporary, seasonal, internship\).).freeze,
@@ -4869,7 +4876,7 @@ module RDF
       domainIncludes: "schema:CreativeWork".freeze,
       label: "encodings".freeze,
       rangeIncludes: "schema:MediaObject".freeze,
-      "schema:supercededBy" => %(schema:encoding).freeze,
+      "schema:supersededBy" => %(schema:encoding).freeze,
       type: "rdf:Property".freeze
     property :endDate,
       comment: %(The end date and time of the role, event or item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
@@ -4930,7 +4937,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:Season".freeze, "schema:TVSeason".freeze, "schema:Series".freeze, "schema:TVSeries".freeze, "schema:RadioSeason".freeze, "schema:RadioSeries".freeze],
       label: "episodes".freeze,
       rangeIncludes: "schema:Episode".freeze,
-      "schema:supercededBy" => %(schema:episode).freeze,
+      "schema:supersededBy" => %(schema:episode).freeze,
       type: "rdf:Property".freeze
     property :equal,
       comment: %(This ordering relation for qualitative values indicates that the subject is equal to the object.).freeze,
@@ -4967,7 +4974,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:Organization".freeze, "schema:Place".freeze],
       label: "events".freeze,
       rangeIncludes: "schema:Event".freeze,
-      "schema:supercededBy" => %(schema:event).freeze,
+      "schema:supersededBy" => %(schema:event).freeze,
       type: "rdf:Property".freeze
     property :evidenceLevel,
       comment: %(Strength of evidence of the data used to formulate the guideline \(enumerated\).).freeze,
@@ -5148,7 +5155,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Organization".freeze,
       label: "founders".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:founder).freeze,
+      "schema:supersededBy" => %(schema:founder).freeze,
       type: "rdf:Property".freeze
     property :foundingDate,
       comment: %(The date that this organization was founded.).freeze,
@@ -5236,19 +5243,19 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:QualitativeValue".freeze,
       type: "rdf:Property".freeze
     property :gtin13,
-      comment: %(The GTIN-13 code of the product, or the product to which the offer refers. This is equivalent to 13-digit ISBN codes and EAN UCC-13. Former 12-digit UPC codes can be converted into a GTIN-13 code by simply adding a preceeding zero.).freeze,
+      comment: %(The <a href="http://apps.gs1.org/GDD/glossary/Pages/GTIN-13.aspx">GTIN-13</a> code of the product, or the product to which the offer refers. This is equivalent to 13-digit ISBN codes and EAN UCC-13. Former 12-digit UPC codes can be converted into a GTIN-13 code by simply adding a preceeding zero. See <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GS1 GTIN Summary</a> for more details.).freeze,
       domainIncludes: ["schema:Offer".freeze, "schema:Product".freeze, "schema:Demand".freeze],
       label: "gtin13".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :gtin14,
-      comment: %(The GTIN-14 code of the product, or the product to which the offer refers.).freeze,
+      comment: %(The <a href="http://apps.gs1.org/GDD/glossary/Pages/GTIN-14.aspx">GTIN-14</a> code of the product, or the product to which the offer refers. See <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GS1 GTIN Summary</a> for more details.).freeze,
       domainIncludes: ["schema:Offer".freeze, "schema:Product".freeze, "schema:Demand".freeze],
       label: "gtin14".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :gtin8,
-      comment: %(The GTIN-8 code of the product, or the product to which the offer refers. This code is also known as EAN/UCC-8 or 8-digit EAN.).freeze,
+      comment: %(The <a href="http://apps.gs1.org/GDD/glossary/Pages/GTIN-8.aspx">GTIN-8</a> code of the product, or the product to which the offer refers. This code is also known as EAN/UCC-8 or 8-digit EAN. See <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GS1 GTIN Summary</a> for more details.).freeze,
       domainIncludes: ["schema:Offer".freeze, "schema:Product".freeze, "schema:Demand".freeze],
       label: "gtin8".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -5406,7 +5413,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Person".freeze,
       type: "rdf:Property".freeze
     property :image,
-      comment: %(URL of an image of the item.).freeze,
+      comment: %(An image of the item. This can be a <a href="http://schema.org/URL">URL</a> or a fully described <a href="http://schema.org/ImageObject">ImageObject</a>.).freeze,
       domainIncludes: "schema:Thing".freeze,
       label: "image".freeze,
       rangeIncludes: ["schema:URL".freeze, "schema:ImageObject".freeze],
@@ -5816,6 +5823,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:Organization".freeze, "schema:Place".freeze, "schema:Product".freeze, "schema:Brand".freeze],
       label: "logo".freeze,
       rangeIncludes: ["schema:ImageObject".freeze, "schema:URL".freeze],
+      subPropertyOf: "schema:image".freeze,
       type: "rdf:Property".freeze
     property :longitude,
       comment: %(The longitude of a location. For example <code>-122.08585</code>.).freeze,
@@ -5859,7 +5867,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Place".freeze,
       label: "map".freeze,
       rangeIncludes: "schema:URL".freeze,
-      "schema:supercededBy" => %(schema:hasMap).freeze,
+      "schema:supersededBy" => %(schema:hasMap).freeze,
       type: "rdf:Property".freeze
     property :mapType,
       comment: %(Indicates the kind of Map, from the MapCategoryType Enumeration.).freeze,
@@ -5872,7 +5880,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Place".freeze,
       label: "maps".freeze,
       rangeIncludes: "schema:URL".freeze,
-      "schema:supercededBy" => %(schema:hasMap).freeze,
+      "schema:supersededBy" => %(schema:hasMap).freeze,
       type: "rdf:Property".freeze
     property :maxPrice,
       comment: %(The highest price if the price is a range.).freeze,
@@ -5935,7 +5943,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:Organization".freeze, "schema:ProgramMembership".freeze],
       label: "members".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
-      "schema:supercededBy" => %(schema:member).freeze,
+      "schema:supersededBy" => %(schema:member).freeze,
       type: "rdf:Property".freeze
     property :membershipNumber,
       comment: %(A unique identifier for the membership.).freeze,
@@ -5966,7 +5974,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Order".freeze,
       label: "merchant".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
-      "schema:supercededBy" => %(schema:seller).freeze,
+      "schema:supersededBy" => %(schema:seller).freeze,
       type: "rdf:Property".freeze
     property :minPrice,
       comment: %(The lowest price if the price is a range.).freeze,
@@ -6021,7 +6029,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:MusicGroup".freeze,
       label: "musicGroupMember".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:member).freeze,
+      "schema:supersededBy" => %(schema:member).freeze,
       type: "rdf:Property".freeze
     property :naics,
       comment: %(The North American Industry Classification System \(NAICS\) code for a particular organization or business person.).freeze,
@@ -6324,7 +6332,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Person".freeze,
       label: "parents".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:parent).freeze,
+      "schema:supersededBy" => %(schema:parent).freeze,
       type: "rdf:Property".freeze
     property :partOfEpisode,
       comment: %(The episode to which this clip belongs.).freeze,
@@ -6361,7 +6369,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:TVEpisode".freeze, "schema:TVSeason".freeze, "schema:TVClip".freeze],
       label: "partOfTVSeries".freeze,
       rangeIncludes: "schema:TVSeries".freeze,
-      "schema:supercededBy" => %(schema:partOfSeries).freeze,
+      "schema:supersededBy" => %(schema:partOfSeries).freeze,
       type: "rdf:Property".freeze
     property :participant,
       comment: %(Other co-agents that participated in the action indirectly. e.g. John wrote a book with *Steve*.).freeze,
@@ -6428,7 +6436,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Event".freeze,
       label: "performers".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
-      "schema:supercededBy" => %(schema:performer).freeze,
+      "schema:supersededBy" => %(schema:performer).freeze,
       type: "rdf:Property".freeze
     property :permissions,
       comment: %(Permission\(s\) required to run the app \(for example, a mobile app may require full internet access or may run only on wifi\).).freeze,
@@ -6453,13 +6461,14 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Place".freeze,
       label: "photo".freeze,
       rangeIncludes: ["schema:ImageObject".freeze, "schema:Photograph".freeze],
+      subPropertyOf: "schema:image".freeze,
       type: "rdf:Property".freeze
     property :photos,
       comment: %(Photographs of this place \(legacy spelling; see singular form, photo\).).freeze,
       domainIncludes: "schema:Place".freeze,
       label: "photos".freeze,
       rangeIncludes: ["schema:ImageObject".freeze, "schema:Photograph".freeze],
-      "schema:supercededBy" => %(schema:photo).freeze,
+      "schema:supersededBy" => %(schema:photo).freeze,
       type: "rdf:Property".freeze
     property :physiologicalBenefits,
       comment: %(Specific physiologic benefits associated to the plan.).freeze,
@@ -6594,7 +6603,28 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
     property :price,
-      comment: %(The offer price of a product, or of a price component when attached to PriceSpecification and its subtypes.).freeze,
+      comment: %(The offer price of a product, or of a price component when attached to PriceSpecification and its subtypes.
+<br />
+<br />
+      Usage guidelines:
+<br />
+<ul>
+<li>Use the <a href="/priceCurrency">priceCurrency</a> property \(with <a href="http://en.wikipedia.org/wiki/ISO_4217#Active_codes">ISO 4217 codes</a> e.g. "USD"\) instead of
+      including <a href="http://en.wikipedia.org/wiki/Dollar_sign#Currencies_that_use_the_dollar_or_peso_sign">ambiguous symbols</a> such as '$' in the value.
+</li>
+<li>
+      Use '.' \(Unicode 'FULL STOP' \(U+002E\)\) rather than ',' to indicate a decimal point. Avoid using these symbols as a readability separator.
+</li>
+<li>
+      Note that both <a href="http://www.w3.org/TR/xhtml-rdfa-primer/#using-the-content-attribute">RDFa</a> and Microdata syntax allow the use of a "content=" attribute for publishing simple machine-readable values
+      alongside more human-friendly formatting.
+</li>
+<li>
+      Use values from 0123456789 \(Unicode 'DIGIT ZERO' \(U+0030\) to 'DIGIT NINE' \(U+0039\)\) rather than superficially similiar Unicode symbols.
+</li>
+</ul>
+
+      ).freeze,
       domainIncludes: ["schema:Offer".freeze, "schema:PriceSpecification".freeze, "schema:TradeAction".freeze],
       label: "price".freeze,
       rangeIncludes: ["schema:Number".freeze, "schema:Text".freeze],
@@ -7134,7 +7164,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze, "schema:Place".freeze, "schema:Offer".freeze, "schema:Product".freeze],
       label: "reviews".freeze,
       rangeIncludes: "schema:Review".freeze,
-      "schema:supercededBy" => %(schema:review).freeze,
+      "schema:supersededBy" => %(schema:review).freeze,
       type: "rdf:Property".freeze
     property :riskFactor,
       comment: %(A modifiable or non-modifiable factor that increases the risk of a patient contracting this condition, e.g. age,  coexisting condition.).freeze,
@@ -7220,7 +7250,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:Series".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze],
       label: "seasons".freeze,
       rangeIncludes: "schema:Season".freeze,
-      "schema:supercededBy" => %(schema:season).freeze,
+      "schema:supersededBy" => %(schema:season).freeze,
       type: "rdf:Property".freeze
     property :seatNumber,
       comment: %(The location of the reserved seat \(e.g., 27\).).freeze,
@@ -7367,7 +7397,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Person".freeze,
       label: "siblings".freeze,
       rangeIncludes: "schema:Person".freeze,
-      "schema:supercededBy" => %(schema:sibling).freeze,
+      "schema:supersededBy" => %(schema:sibling).freeze,
       type: "rdf:Property".freeze
     property :signDetected,
       comment: %(A sign detected by the test.).freeze,
@@ -7398,7 +7428,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:WebPage".freeze,
       label: "significantLinks".freeze,
       rangeIncludes: "schema:URL".freeze,
-      "schema:supercededBy" => %(schema:significantLink).freeze,
+      "schema:supersededBy" => %(schema:significantLink).freeze,
       type: "rdf:Property".freeze
     property :skills,
       comment: %(Skills required to fulfill this role.).freeze,
@@ -7597,7 +7627,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Event".freeze,
       label: "subEvents".freeze,
       rangeIncludes: "schema:Event".freeze,
-      "schema:supercededBy" => %(schema:subEvent).freeze,
+      "schema:supersededBy" => %(schema:subEvent).freeze,
       type: "rdf:Property".freeze
     property :subOrganization,
       comment: %(A relationship between two organizations where the first includes the second, e.g., as a subsidiary. See also: the more specific 'department' property.).freeze,
@@ -7677,10 +7707,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "superEvent".freeze,
       rangeIncludes: "schema:Event".freeze,
       type: "rdf:Property".freeze
-    property :supercededBy,
-      comment: %(Relates a property to one that supercedes it.).freeze,
+    property :supersededBy,
+      comment: %(Relates a property to one that supersedes it.).freeze,
       domainIncludes: "schema:Property".freeze,
-      label: "supercededBy".freeze,
+      label: "supersededBy".freeze,
       rangeIncludes: "schema:Property".freeze,
       type: "rdf:Property".freeze
     property :supplyTo,
@@ -7851,7 +7881,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:MusicPlaylist".freeze, "schema:MusicGroup".freeze],
       label: "tracks".freeze,
       rangeIncludes: "schema:MusicRecording".freeze,
-      "schema:supercededBy" => %(schema:track).freeze,
+      "schema:supersededBy" => %(schema:track).freeze,
       type: "rdf:Property".freeze
     property :trailer,
       comment: %(The trailer of a movie or tv/radio series, season, or episode.).freeze,
@@ -8062,7 +8092,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:BuyAction".freeze,
       label: "vendor".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
-      "schema:supercededBy" => %(schema:seller).freeze,
+      "schema:supersededBy" => %(schema:seller).freeze,
       subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :version,

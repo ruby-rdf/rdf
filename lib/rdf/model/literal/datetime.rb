@@ -6,7 +6,8 @@ module RDF; class Literal
   # @since 0.2.1
   class DateTime < Literal
     DATATYPE = XSD.dateTime
-    GRAMMAR  = %r(\A-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(([\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    FORMAT   = '%Y-%m-%dT%H:%M:%SZ'.freeze
 
     ##
     # @param  [DateTime] value
@@ -15,9 +16,6 @@ module RDF; class Literal
       @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   ||= value if value.is_a?(String)
-      @has_timezone = @string.nil? || if md = @string.match(GRAMMAR)
-        !!md[2] # If lexical value contains timezone
-      end
       @object   = case
         when value.is_a?(::DateTime)         then value
         when value.respond_to?(:to_datetime) then value.to_datetime
@@ -32,7 +30,13 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema-2/#dateTime
     def canonicalize!
-      @string = @object.new_offset(0).strftime('%Y-%m-%dT%H:%M:%SZ') if self.valid?
+      if self.valid?
+        @string = if has_timezone?
+          @object.new_offset.strftime(FORMAT)
+        else
+          @object.strftime(FORMAT[0..-2])
+        end
+      end
       self
     end
 
@@ -42,7 +46,7 @@ module RDF; class Literal
     # @return [RDF::Literal]
     # @see http://www.w3.org/TR/sparql11-query/#func-tz
     def tz
-      zone =  @has_timezone ? object.zone : ""
+      zone =  has_timezone? ? object.zone : ""
       zone = "Z" if zone == "+00:00"
       RDF::Literal(zone)
     end
@@ -61,7 +65,7 @@ module RDF; class Literal
         hour = hour.to_i
         min = min.to_i
         res = "#{plus_minus}PT#{hour}H#{"#{min}M" if min > 0}"
-        RDF::Literal(res, :datatype => RDF::XSD.dayTimeDuration)
+        RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
       end
     end
 
@@ -78,13 +82,42 @@ module RDF; class Literal
     end
 
     ##
+    # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
+    #
+    # @return [Boolean]
+    # @since 1.1.6
+    def has_timezone?
+      md = self.to_s.match(GRAMMAR)
+      md && !!md[2]
+    end
+    alias_method :has_tz?, :has_timezone?
+
+    ##
     # Returns the `timezone` of the literal. If the
     ##
     # Returns the value as a string.
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%Y-%m-%dT%H:%M:%S%:z').sub(/\+00:00|UTC|GMT/, 'Z')
+      @string || @object.strftime(FORMAT).sub("+00:00", 'Z')
+    end
+
+    ##
+    # Returns a human-readable value for the literal
+    #
+    # @return [String]
+    # @since 1.1.6
+    def humanize(lang = :en)
+      d = object.strftime("%r on %A, %d %B %Y")
+      if has_timezone?
+        zone = if self.tz == 'Z'
+          "UTC"
+        else
+          self.tz
+        end
+        d.sub!(" on ", " #{zone} on ")
+      end
+      d
     end
 
     ##
