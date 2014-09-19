@@ -1,5 +1,6 @@
 require 'net/http'
 require 'openssl'
+require 'link_header'
 require 'time'
 
 module RDF; module Util
@@ -37,8 +38,8 @@ module RDF; module Util
     #   options are passed to `Kernel.open`.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open.
-    # @return [IO, Reader] File stream with no block, and the block return otherwise
-    # @yield [IO, StringIO] File stream
+    # @return [IO, RemoteDocument] File stream with no block, and the block return otherwise
+    # @yield [IO, RemoteDocument] File stream
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       if filename_or_url.to_s =~ /^https?/
@@ -69,11 +70,12 @@ module RDF; module Util
                 # found object
 
                 # If a Location is returned, it defines the base resource for this file, not it's actual ending location
-
                 document_options = {
-                  :content_type => response.content_type,
-                  :charset => "utf-8",
-                  :base_uri => RDF::URI(response["Location"] ? response["Location"] : base_uri)
+                  base_uri:     RDF::URI(response["Location"] ? response["Location"] : base_uri),
+                  charset:      Encoding::UTF_8,
+                  code:         response.code.to_i,
+                  content_type: response.content_type,
+                  headers:      response.to_hash
                 }.merge(response.type_params)
                 document_options[:last_modified] = DateTime.parse(response["Last-Modified"]) if response["Last-Modified"]
 
@@ -108,12 +110,35 @@ module RDF; module Util
       end
     end
 
+    ##
+    # A RemoteDocument contains the body and headers of a remote resource.
+    #
+    # Link headers are parsed using the `LinkHeader` gem
+    # @see https://github.com/asplake/link_header
     class RemoteDocument < StringIO
+      # Base URI based on resource location or returned Location header.
+      # @return [String]
       attr_reader :base_uri
+
+      # Content-Type of the returned resource
+      # @return [String]
       attr_reader :content_type
+
+      # Encoding of resource (from header), also applied to content
+      # @return [Encoding}]
       attr_reader :charset
-      attr_reader :content_encoding
+
+      # Last-Modified time from headers
+      # @return [DateTime]
       attr_reader :last_modified
+
+      # Raw headers from response
+      # @return [Hash{String => Object}]
+      attr_reader :headers
+
+      # Response code
+      # @return [Integer]
+      attr_reader :code
 
       ##
       # Set content
@@ -121,10 +146,41 @@ module RDF; module Util
         super(body)
         options.each do |key, value|
           # de-quote charset
-          value = $1 if key == "charset" && value =~ /^["'](.*)["']$/
+          matchdata = value.match(/^["'](.*)["']$/.freeze) if key == "charset"
+          value = matchdata[1] if matchdata
           instance_variable_set(:"@#{key}", value)
         end
+        @headers ||= {}
         set_encoding Encoding.find(@charset) if @charset
+      end
+
+      ##
+      # Content encoding, based on {#charset} normalized to lower-case
+      # @return [String]
+      def content_encoding
+        charset.to_s.downcase
+      end
+
+      ##
+      # Return links from the Link header.
+      #
+      # Links can be returned in array form, or searched.
+      #
+      # @example
+      #
+      #     d = RemoteDocument.new(...)
+      #     describedby = links.find_link('rel' => 'describedby)
+      #
+      # @return [::LinkHeader]
+      def links
+        @links ||= LinkHeader.parse(Array(@headers['link']).join(','))
+      end
+
+      ##
+      # ETag from headers
+      # @return [String]
+      def etag
+        Array(@headers['etag']).first
       end
     end
   end # File
