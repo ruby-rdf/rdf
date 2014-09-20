@@ -176,11 +176,11 @@ describe RDF::Util::File do
         end
       end
 
-      it "follows 303 and keeps original location" do
+      it "follows 303 and uses new location" do
         WebMock.stub_request(:get, uri).to_return({status: 303, headers: {"Location" => "http://example/"}})
         WebMock.stub_request(:get, "http://example/").to_return({body: "foo"})
         RDF::Util::File.open_file(uri) do |f|
-          expect(f.base_uri).to eq uri
+          expect(f.base_uri).to eq "http://example/"
           expect(f.read).to eq "foo"
           opened.opened
         end

@@ -95,8 +95,7 @@ module RDF; module Util
 
                 parsed_url = ::URI.parse(response["Location"])
 
-                # If response is not a status 303, update base_uri too
-                base_uri = parsed_url.to_s unless response.code == "303"
+                base_uri = parsed_url.to_s
               else
                 raise IOError, "<#{parsed_url}>: #{response.msg}(#{response.code})"
               end
