@@ -34,7 +34,11 @@ This is a pure-Ruby library for working with [Resource Description Framework
 
 ### HTTP requests
 
-RDF.rb uses [RestClient][] to retrieve remote resources. Clients may also consider using [RestClient Components][] to enable client-side caching of HTTP results using [Rack::Cache][] or other Rack middleware.
+RDF.rb uses `Net::HTTP` for retrieving HTTP and HTTPS resources. If the
+[RestClient][] gem is included, that will be used instead to retrieve remote
+resources. Clients may also consider using [RestClient Components][] to enable
+client-side caching of HTTP results using [Rack::Cache][] or other Rack
+middleware.
 
 ## Differences between RDF 1.0 and RDF 1.1
 
@@ -355,6 +359,8 @@ from BNode identity (i.e., they each entail the other)
 ## Dependencies
 
 * [Ruby](http://ruby-lang.org/) (>= 1.9.2)
+* [LinkHeader][] (>= 0.0.8)
+* Soft dependency on [RestClient][] (>= 1.7)
 
 ## Installation
 
