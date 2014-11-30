@@ -32,6 +32,10 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
 
+### HTTP requests
+
+RDF.rb uses [RestClient][] to retrieve remote resources. Clients may also consider using [RestClient Components][] to enable client-side caching of HTTP results using [Rack::Cache][] or other Rack middleware.
+
 ## Differences between RDF 1.0 and RDF 1.1
 
 This version of RDF.rb is fully compatible with [RDF 1.1][], but it creates some
@@ -462,3 +466,6 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::Raptor]:      http://ruby-rdf.github.com/rdf-raptor
 [LinkedData]:       http://ruby-rdf.github.com/linkeddata
 [JSON::LD]:         http://gkellogg.github.com/json-ld
+[RestClient]:       https://rubygems.org/gems/rest-client
+[RestClient Components]: https://rubygems.org/gems/rest-client-components
+[Rack::Cache]:      http://rtomayko.github.io/rack-cache/

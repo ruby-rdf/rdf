@@ -87,7 +87,7 @@ describe RDF::Util::File do
 
     it "used provided Accept header" do
       WebMock.stub_request(:get, uri).with do |request|
-        expect(request.headers['Accept']).to include('a/b')
+        expect(request.headers["Accept"]).to include('a/b')
       end.to_return(body: "foo")
       RDF::Util::File.open_file(uri, headers: {"Accept" => "a/b"}) do |f|
         opened.opened
@@ -134,7 +134,7 @@ describe RDF::Util::File do
     it "sets arbitrary header" do
       WebMock.stub_request(:get, uri).to_return(body: "foo", headers: {"Foo" => "Bar"})
       RDF::Util::File.open_file(uri) do |f|
-        expect(f.headers).to include("foo" => %w(Bar))
+        expect(f.headers).to include(:foo => %(Bar))
         opened.opened
       end
     end
@@ -185,6 +185,22 @@ describe RDF::Util::File do
           opened.opened
         end
       end
+    end
+  end
+
+  context "https" do
+    let(:uri) {"https://some/secure/uri"}
+
+    it "returns an htts URL" do
+      WebMock.stub_request(:get, uri).
+        to_return(body: "foo",
+                  status: 200,
+                  headers: { 'Content-Type' => RDF::NTriples::Format.content_type.first})
+      f = RDF::Util::File.open_file(uri)
+      expect(f).to respond_to(:read)
+      expect(f.content_type).to eq RDF::NTriples::Format.content_type.first
+      expect(f.code).to eq 200
+      opened.opened
     end
   end
 
