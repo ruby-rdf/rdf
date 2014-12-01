@@ -79,10 +79,11 @@ module RDF; module Util
 
               remote_document = RemoteDocument.new(response.body, document_options)
             when 300..399
+              # Document base is redirected location
               base_uri = response.headers[:location].to_s
               response.follow_redirection(request, res, &blk)
             else
-              raise IOError, "<#{base_uri}>: #{response.msg}(#{response.code})"
+              raise IOError, "<#{base_uri}>: #{response.code}"
             end
           end
         else
@@ -129,7 +130,7 @@ module RDF; module Util
 
                   base_uri = parsed_url.to_s
                 else
-                  raise IOError, "<#{parsed_url}>: #{response.msg}(#{response.code})"
+                  raise IOError, "<#{parsed_url}>: #{response.message}(#{response.code})"
                 end
               end
             end

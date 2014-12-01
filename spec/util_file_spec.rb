@@ -160,7 +160,7 @@ describe RDF::Util::File do
               end
             end
 
-            it "follows 301" do
+            it "follows 301 and uses new location" do
               WebMock.stub_request(:get, uri).to_return({status: 301, headers: {"Location" => "http://example/"}})
               WebMock.stub_request(:get, "http://example/").to_return({body: "foo"})
               RDF::Util::File.open_file(uri, use_net_http: with_net_http) do |f|
@@ -170,7 +170,7 @@ describe RDF::Util::File do
               end
             end
 
-            it "follows 302" do
+            it "follows 302 and uses new location" do
               WebMock.stub_request(:get, uri).to_return({status: 302, headers: {"Location" => "http://example/"}})
               WebMock.stub_request(:get, "http://example/").to_return({body: "foo"})
               RDF::Util::File.open_file(uri, use_net_http: with_net_http) do |f|
@@ -182,6 +182,16 @@ describe RDF::Util::File do
 
             it "follows 303 and uses new location" do
               WebMock.stub_request(:get, uri).to_return({status: 303, headers: {"Location" => "http://example/"}})
+              WebMock.stub_request(:get, "http://example/").to_return({body: "foo"})
+              RDF::Util::File.open_file(uri, use_net_http: with_net_http) do |f|
+                expect(f.base_uri).to eq "http://example/"
+                expect(f.read).to eq "foo"
+                opened.opened
+              end
+            end
+
+            it "follows 307 and uses new location" do
+              WebMock.stub_request(:get, uri).to_return({status: 307, headers: {"Location" => "http://example/"}})
               WebMock.stub_request(:get, "http://example/").to_return({body: "foo"})
               RDF::Util::File.open_file(uri, use_net_http: with_net_http) do |f|
                 expect(f.base_uri).to eq "http://example/"
