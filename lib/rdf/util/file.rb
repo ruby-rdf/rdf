@@ -1,5 +1,4 @@
 require 'net/http'
-require 'rest_client'
 require 'link_header'
 require 'time'
 
