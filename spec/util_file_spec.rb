@@ -56,6 +56,7 @@ describe RDF::Util::File do
 
     context "HTTP(s)" do
       [true, false].each do |with_net_http|
+        require 'rest-client' unless with_net_http
         context with_net_http ? "using NET::HTTP" : "using RestClient" do
           it "returns an http URL" do
             WebMock.stub_request(:get, uri).
