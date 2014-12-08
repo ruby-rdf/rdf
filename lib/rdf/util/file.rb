@@ -45,6 +45,8 @@ module RDF; module Util
     #   options are passed to `Kernel.open`.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open.
+    # @option options [Boolean] :verify_none (false)
+    #   Don't verify SSL certificates
     # @return [IO, RemoteDocument, Object] A {RemoteDocument} or `IO` for local files. If a block is given, the result of evaluating the block is returned.
     # @yield [IO, RemoteDocument] A {RemoteDocument} or `IO` for local files
     # @yieldreturn [Object] returned from open_file
@@ -61,10 +63,12 @@ module RDF; module Util
 
         remote_document = nil
         base_uri = filename_or_url.to_s
+        ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         if defined?(RestClient) && !options[:use_net_http]
           # If RestClient is loaded, prefer it
-          RestClient.get(base_uri, headers) do |response, request, res, &blk|
+          client = RestClient::Resource.new(base_uri, verify_ssl: ssl_verify)
+          client.get(headers) do |response, request, res, &blk|
             case response.code
             when 200..299
               # found object
@@ -97,7 +101,7 @@ module RDF; module Util
             Net::HTTP::start(parsed_url.host, parsed_url.port,
                             open_timeout: 60 * 1000,
                             use_ssl: parsed_url.scheme == 'https',
-                            verify_mode: OpenSSL::SSL::VERIFY_NONE
+                            verify_mode: ssl_verify
             ) do |http|
               request = Net::HTTP::Get.new(parsed_url.request_uri, headers)
               http.request(request) do |response|
