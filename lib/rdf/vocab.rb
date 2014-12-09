@@ -657,7 +657,7 @@ module RDF
       end
 
       # Implement accessor to symbol attributes
-      def respond_to?(method)
+      def respond_to?(method, include_all = false)
         @attributes.has_key?(method) || super
       end
 
