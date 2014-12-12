@@ -147,6 +147,8 @@ module RDF
         datatype: {},
         other: {}
       }
+
+      # FIXME: This can try to resolve referenced terms against the previous version of this vocabulary, which may be strict, and fail if the referenced term hasn't been created yet.
       vocab.each.to_a.sort.each do |term|
         name = term.to_s[uri.length..-1].to_sym
         kind = case term.type.to_s
