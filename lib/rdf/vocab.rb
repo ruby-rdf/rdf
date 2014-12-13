@@ -338,7 +338,7 @@ module RDF
 
           value = if statement.object.uri?
             statement.object.pname
-          elsif statement.object.literal? && (statement.object.language || :en) == :en
+          elsif statement.object.literal? && (statement.object.language || :en).to_s =~ /^en-?/
             statement.object.to_s
           end
 
