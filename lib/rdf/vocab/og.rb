@@ -7,7 +7,7 @@ module RDF
     # Property definitions
     property :audio,
       label: "audio".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"audio:album",
@@ -20,7 +20,7 @@ module RDF
       type: "rdf:Property".freeze
     property :"audio:secure_url",
       label: "audio:secure_url".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"audio:title",
@@ -29,7 +29,7 @@ module RDF
       type: "rdf:Property".freeze
     property :"audio:type",
       label: "audio:type".freeze,
-      range: "http://ogp.me/ns/class#mime_type_str".freeze,
+      range: "ogc:mime_type_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"country-name",
@@ -39,13 +39,13 @@ module RDF
       type: "rdf:Property".freeze
     property :description,
       label: "description".freeze,
-      range: "http://ogp.me/ns/class#string".freeze,
+      range: "ogc:string".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       subPropertyOf: "rdfs:comment".freeze,
       type: "rdf:Property".freeze
     property :determiner,
       label: "determiner".freeze,
-      range: "http://ogp.me/ns/class#determiner_str".freeze,
+      range: "ogc:determiner_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :email,
@@ -60,29 +60,29 @@ module RDF
       type: "rdf:Property".freeze
     property :image,
       label: "image".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       "rdfs:seeAlso" => %(foaf:depiction).freeze,
       type: "rdf:Property".freeze
     property :"image:height",
       label: "image:height".freeze,
-      range: "http://ogp.me/ns/class#integer_str".freeze,
+      range: "ogc:integer_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"image:secure_url",
       label: "image:secure_url".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       "rdfs:seeAlso" => %(foaf:depiction).freeze,
       type: "rdf:Property".freeze
     property :"image:type",
       label: "image:type".freeze,
-      range: "http://ogp.me/ns/class#mime_type_str".freeze,
+      range: "ogc:mime_type_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"image:width",
       label: "image:width".freeze,
-      range: "http://ogp.me/ns/class#integer_str".freeze,
+      range: "ogc:integer_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :isbn,
@@ -97,7 +97,7 @@ module RDF
       type: "rdf:Property".freeze
     property :locale,
       label: "locale".freeze,
-      range: "http://ogp.me/ns/class#string".freeze,
+      range: "ogc:string".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :locality,
@@ -127,7 +127,7 @@ module RDF
       type: "rdf:Property".freeze
     property :site_name,
       label: "site_name".freeze,
-      range: "http://ogp.me/ns/class#string".freeze,
+      range: "ogc:string".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"street-address",
@@ -137,13 +137,13 @@ module RDF
       type: "rdf:Property".freeze
     property :title,
       label: "title".freeze,
-      range: "http://ogp.me/ns/class#string".freeze,
+      range: "ogc:string".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       subPropertyOf: "rdfs:label".freeze,
       type: "rdf:Property".freeze
     property :type,
       label: "type".freeze,
-      range: "http://ogp.me/ns/class#string".freeze,
+      range: "ogc:string".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       "rdfs:seeAlso" => %(rdf:type).freeze,
       type: "rdf:Property".freeze
@@ -153,33 +153,33 @@ module RDF
       type: "rdf:Property".freeze
     property :url,
       label: "url".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       "rdfs:seeAlso" => [%(dc11:identifier).freeze, %(foaf:homepage).freeze],
       type: "rdf:Property".freeze
     property :video,
       label: "video".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"video:height",
       label: "video:height".freeze,
-      range: "http://ogp.me/ns/class#integer_str".freeze,
+      range: "ogc:integer_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"video:secure_url",
       label: "video:secure_url".freeze,
-      range: "http://ogp.me/ns/class#url".freeze,
+      range: "ogc:url".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"video:type",
       label: "video:type".freeze,
-      range: "http://ogp.me/ns/class#mime_type_str".freeze,
+      range: "ogc:mime_type_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
     property :"video:width",
       label: "video:width".freeze,
-      range: "http://ogp.me/ns/class#integer_str".freeze,
+      range: "ogc:integer_str".freeze,
       "rdfs:isDefinedBy" => %(og:).freeze,
       type: "rdf:Property".freeze
   end

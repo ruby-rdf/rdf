@@ -54,6 +54,7 @@ vocab_sources = {
   ma:     {uri: "http://www.w3.org/ns/ma-ont#", source: "http://www.w3.org/ns/ma-ont.rdf"},
   mo:     {uri: "http://purl.org/ontology/mo/"},
   og:     {uri: "http://ogp.me/ns#"},
+  ogc:    {uri: "http://ogp.me/ns/class#", source: "http://ogp.me/ns"},
   owl:    {uri: "http://www.w3.org/2002/07/owl#"},
   prov:   {uri: "http://www.w3.org/ns/prov#"},
   rdfs:   {uri: "http://www.w3.org/2000/01/rdf-schema#"},
