@@ -41,8 +41,8 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    ESCAPE_PLAIN = /\A[\x20-\x21\x23-\x5B\x5D-\x7E]*\z/m.freeze
-    ESCAPE_ASCII = /\A[\x00-\x7F]*\z/m.freeze
+    ESCAPE_PLAIN = /\A[\x20-\x21\x23-\x5B\x5D-\x7E]*\Z/m.freeze
+    ESCAPE_ASCII = /\A[\x00-\x7F]*\Z/m.freeze
 
     ##
     # Escape Literal and URI content. If encoding is ASCII, all unicode

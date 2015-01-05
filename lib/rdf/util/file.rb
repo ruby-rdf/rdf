@@ -236,7 +236,7 @@ module RDF; module Util
       # @example
       #
       #     d = RemoteDocument.new(...)
-      #     describedby = links.find_link('rel' => 'describedby)
+      #     describedby = links.find_link(['rel', 'describedby']).href
       #
       # @return [::LinkHeader]
       def links

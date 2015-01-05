@@ -44,6 +44,7 @@ vocab_sources = {
   cert:   {uri: "http://www.w3.org/ns/auth/cert#"},
   dc:     {uri: "http://purl.org/dc/terms/"},
   dc11:   {uri: "http://purl.org/dc/elements/1.1/"},
+  dcat:   {uri: "http://www.w3.org/ns/dcat#"},
   doap:   {uri: "http://usefulinc.com/ns/doap#"},
   exif:   {uri: "http://www.w3.org/2003/12/exif/ns#"},
   foaf:   {uri: "http://xmlns.com/foaf/0.1/"},

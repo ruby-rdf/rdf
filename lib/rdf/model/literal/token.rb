@@ -6,7 +6,7 @@ module RDF; class Literal
   # @since 0.2.3
   class Token < Literal
     DATATYPE = XSD.token
-    GRAMMAR  = /\A[^\x0D\x0A\x09]+\z/i.freeze # FIXME
+    GRAMMAR  = /\A[^\x0D\x0A\x09]+\Z/i.freeze # FIXME
 
     ##
     # @param  [Symbol, #to_s]  value
