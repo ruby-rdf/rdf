@@ -148,7 +148,7 @@ module RDF; module Util
         end
       else
         # Open as a file, passing any options
-        Kernel.open(filename_or_url, "r", options, &block)
+        Kernel.open(filename_or_url, "r:utf-8", options, &block)
       end
     end
 
