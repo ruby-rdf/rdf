@@ -16,7 +16,7 @@ module RDF
       subClassOf: "schema:WebPage".freeze,
       type: "rdfs:Class".freeze
     term :AcceptAction,
-      comment: %(The act of committing to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/RejectAction">RejectAction</a>: The antagonym of AcceptAction.</li></ul>).freeze,
+      comment: %(The act of committing to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/RejectAction">RejectAction</a>: The antagonym of AcceptAction</li></ul>.).freeze,
       label: "AcceptAction".freeze,
       subClassOf: "schema:AllocateAction".freeze,
       type: "rdfs:Class".freeze
@@ -33,7 +33,7 @@ module RDF
     term :Action,
       comment: %(An action performed by a direct agent and indirect     participants upon a direct object. Optionally happens at a location     with the help of an inanimate instrument. The execution of the action     may produce a result. Specific action sub-type documentation specifies     the exact expectation of each argument/role.
       <br/><br/>See also <a href="http://blog.schema.org/2014/04/announcing-schemaorg-actions.html">blog post</a>
-      and <a href="http://schema.org/docs/actions.html">Actions overview document.</a>).freeze,
+      and <a href="http://schema.org/docs/actions.html">Actions overview document</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_ActionCollabClass).freeze,
       label: "Action".freeze,
       subClassOf: "schema:Thing".freeze,
@@ -138,7 +138,7 @@ module RDF
       subClassOf: "schema:InsertAction".freeze,
       type: "rdfs:Class".freeze
     term :ApplyAction,
-      comment: %(The act of registering to an organization/service without the guarantee to receive it. NOTE\(goto\): should this be under InteractAction instead?<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, ApplyAction has no guarantees that the application will be accepted.</li></ul>).freeze,
+      comment: %(The act of registering to an organization/service without the guarantee to receive it. <p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, ApplyAction has no guarantees that the application will be accepted</li></ul>.).freeze,
       label: "ApplyAction".freeze,
       subClassOf: "schema:OrganizeAction".freeze,
       type: "rdfs:Class".freeze
@@ -172,13 +172,13 @@ module RDF
     term :Article,
       comment: %(An article, such as a news article or piece of investigative report. Newspapers and magazines have articles of many different types and this is intended to cover them all.
 
-      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>).freeze,
+      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
       label: "Article".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :AskAction,
-      comment: %(The act of posing a question / favor to someone.<p>Related actions:</p><ul><li><a href="http://schema.org/ReplyAction">ReplyAction</a>: Appears generally as a response to AskAction.</li></ul>).freeze,
+      comment: %(The act of posing a question / favor to someone.<p>Related actions:</p><ul><li><a href="http://schema.org/ReplyAction">ReplyAction</a>: Appears generally as a response to AskAction</li></ul>.).freeze,
       label: "AskAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
@@ -288,7 +288,7 @@ module RDF
       subClassOf: "schema:LodgingBusiness".freeze,
       type: "rdfs:Class".freeze
     term :BefriendAction,
-      comment: %(The act of forming a personal connection with someone \(object\) mutually/bidirectionally/symmetrically.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, BefriendAction implies that the connection is reciprocal.</li></ul>).freeze,
+      comment: %(The act of forming a personal connection with someone \(object\) mutually/bidirectionally/symmetrically.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, BefriendAction implies that the connection is reciprocal</li></ul>.).freeze,
       label: "BefriendAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -298,7 +298,7 @@ module RDF
       subClassOf: "schema:Store".freeze,
       type: "rdfs:Class".freeze
     term :Blog,
-      comment: %(A blog).freeze,
+      comment: %(A blog.).freeze,
       label: "Blog".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
@@ -355,7 +355,7 @@ module RDF
       subClassOf: "schema:DataType".freeze,
       type: "rdfs:Class".freeze
     term :BorrowAction,
-      comment: %(The act of obtaining an object under an agreement to return it at a later date. Reciprocal of LendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/LendAction">LendAction</a>: Reciprocal of BorrowAction.</li></ul>).freeze,
+      comment: %(The act of obtaining an object under an agreement to return it at a later date. Reciprocal of LendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/LendAction">LendAction</a>: Reciprocal of BorrowAction</li></ul>.).freeze,
       label: "BorrowAction".freeze,
       subClassOf: "schema:TransferAction".freeze,
       type: "rdfs:Class".freeze
@@ -481,12 +481,12 @@ module RDF
       subClassOf: "schema:CivicStructure".freeze,
       type: "rdfs:Class".freeze
     term :Canal,
-      comment: %(A canal, like the Panama Canal).freeze,
+      comment: %(A canal, like the Panama Canal.).freeze,
       label: "Canal".freeze,
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
     term :CancelAction,
-      comment: %(The act of asserting that a future event/action is no longer going to happen.<p>Related actions:</p><ul><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: The antagonym of CancelAction.</li></ul>).freeze,
+      comment: %(The act of asserting that a future event/action is no longer going to happen.<p>Related actions:</p><ul><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: The antagonym of CancelAction</li></ul>.).freeze,
       label: "CancelAction".freeze,
       subClassOf: "schema:PlanAction".freeze,
       type: "rdfs:Class".freeze
@@ -516,12 +516,12 @@ module RDF
       subClassOf: "schema:FindAction".freeze,
       type: "rdfs:Class".freeze
     term :CheckInAction,
-      comment: %(The act of an agent communicating \(service provider, social media, etc\) their arrival by registering/confirming for a previously reserved service \(e.g. flight check in\) or at a place \(e.g. hotel\), possibly resulting in a result \(boarding pass, etc\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckOutAction">CheckOutAction</a>: The antagonym of CheckInAction.</li><li><a href="http://schema.org/ArriveAction">ArriveAction</a>: Unlike ArriveAction, CheckInAction implies that the agent is informing/confirming the start of a previously reserved service.</li><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: Unlike ConfirmAction, CheckInAction implies that the agent is informing/confirming the *start* of a previously reserved service rather than its validity/existence.</li></ul>).freeze,
+      comment: %(The act of an agent communicating \(service provider, social media, etc\) their arrival by registering/confirming for a previously reserved service \(e.g. flight check in\) or at a place \(e.g. hotel\), possibly resulting in a result \(boarding pass, etc\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckOutAction">CheckOutAction</a>: The antagonym of CheckInAction.</li><li><a href="http://schema.org/ArriveAction">ArriveAction</a>: Unlike ArriveAction, CheckInAction implies that the agent is informing/confirming the start of a previously reserved service.</li><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: Unlike ConfirmAction, CheckInAction implies that the agent is informing/confirming the *start* of a previously reserved service rather than its validity/existence</li></ul>.).freeze,
       label: "CheckInAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
     term :CheckOutAction,
-      comment: %(The act of an agent communicating \(service provider, social media, etc\) their departure of a previously reserved service \(e.g. flight check in\) or place \(e.g. hotel\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckInAction">CheckInAction</a>: The antagonym of CheckOutAction.</li><li><a href="http://schema.org/DepartAction">DepartAction</a>: Unlike DepartAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li><li><a href="http://schema.org/CancelAction">CancelAction</a>: Unlike CancelAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li></ul>).freeze,
+      comment: %(The act of an agent communicating \(service provider, social media, etc\) their departure of a previously reserved service \(e.g. flight check in\) or place \(e.g. hotel\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckInAction">CheckInAction</a>: The antagonym of CheckOutAction.</li><li><a href="http://schema.org/DepartAction">DepartAction</a>: Unlike DepartAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li><li><a href="http://schema.org/CancelAction">CancelAction</a>: Unlike CancelAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service</li></ul>.).freeze,
       label: "CheckOutAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
@@ -626,7 +626,7 @@ module RDF
       subClassOf: "schema:Store".freeze,
       type: "rdfs:Class".freeze
     term :ConfirmAction,
-      comment: %(The act of notifying someone that a future event/action is going to happen as expected.<p>Related actions:</p><ul><li><a href="http://schema.org/CancelAction">CancelAction</a>: The antagonym of ConfirmAction.</li></ul>).freeze,
+      comment: %(The act of notifying someone that a future event/action is going to happen as expected.<p>Related actions:</p><ul><li><a href="http://schema.org/CancelAction">CancelAction</a>: The antagonym of ConfirmAction</li></ul>.).freeze,
       label: "ConfirmAction".freeze,
       subClassOf: "schema:InformAction".freeze,
       type: "rdfs:Class".freeze
@@ -646,7 +646,7 @@ module RDF
       subClassOf: "schema:StructuredValue".freeze,
       type: "rdfs:Class".freeze
     term :ContactPointOption,
-      comment: %(Enumerated options related to a ContactPoint).freeze,
+      comment: %(Enumerated options related to a ContactPoint.).freeze,
       label: "ContactPointOption".freeze,
       subClassOf: "schema:Enumeration".freeze,
       type: "rdfs:Class".freeze
@@ -738,14 +738,14 @@ module RDF
       comment: %(A collection of datasets.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "DataCatalog".freeze,
-      "owl:equivalentClass" => %(http://www.w3.org/ns/dcat#DataCatalog).freeze,
+      "owl:equivalentClass" => %(dcat:DataCatalog).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :DataDownload,
       comment: %(A dataset in downloadable form.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "DataDownload".freeze,
-      "owl:equivalentClass" => %(http://www.w3.org/ns/dcat#Distribution).freeze,
+      "owl:equivalentClass" => %(dcat:Distribution).freeze,
       subClassOf: "schema:MediaObject".freeze,
       type: "rdfs:Class".freeze
     term :DataType,
@@ -756,7 +756,7 @@ module RDF
       comment: %(A body of structured information describing some topic\(s\) of interest.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "Dataset".freeze,
-      "owl:equivalentClass" => [%(http://www.w3.org/ns/dcat#Dataset).freeze, %(void:Dataset).freeze, %(http://purl.org/dc/dcmitype/Dataset).freeze],
+      "owl:equivalentClass" => [%(dcat:Dataset).freeze, %(void:Dataset).freeze, %(http://purl.org/dc/dcmitype/Dataset).freeze],
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :Date,
@@ -901,7 +901,7 @@ module RDF
       subClassOf: "schema:ReactAction".freeze,
       type: "rdfs:Class".freeze
     term :Distance,
-      comment: %(Properties that take Distances as values are of the form '&lt;Number&gt; &lt;Length unit of measure&gt;'. E.g., '7 ft').freeze,
+      comment: %(Properties that take Distances as values are of the form '&lt;Number&gt; &lt;Length unit of measure&gt;'. E.g., '7 ft'.).freeze,
       label: "Distance".freeze,
       subClassOf: "schema:Quantity".freeze,
       type: "rdfs:Class".freeze
@@ -995,7 +995,7 @@ module RDF
       subClassOf: "schema:Event".freeze,
       type: "rdfs:Class".freeze
     term :EducationalAudience,
-      comment: %(An EducationalAudience).freeze,
+      comment: %(An EducationalAudience.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_LRMIClass).freeze,
       label: "EducationalAudience".freeze,
       subClassOf: "schema:Audience".freeze,
@@ -1051,7 +1051,7 @@ module RDF
       subClassOf: "schema:ReactAction".freeze,
       type: "rdfs:Class".freeze
     term :Energy,
-      comment: %(Properties that take Energy as values are of the form '&lt;Number&gt; &lt;Energy unit of measure&gt;').freeze,
+      comment: %(Properties that take Energy as values are of the form '&lt;Number&gt; &lt;Energy unit of measure&gt;'.).freeze,
       label: "Energy".freeze,
       subClassOf: "schema:Quantity".freeze,
       type: "rdfs:Class".freeze
@@ -1098,7 +1098,7 @@ module RDF
       subClassOf: "schema:CivicStructure".freeze,
       type: "rdfs:Class".freeze
     term :ExerciseAction,
-      comment: %(The act of participating in exertive activity for the purposes of improving health and fitness).freeze,
+      comment: %(The act of participating in exertive activity for the purposes of improving health and fitness.).freeze,
       label: "ExerciseAction".freeze,
       subClassOf: "schema:PlayAction".freeze,
       type: "rdfs:Class".freeze
@@ -1134,7 +1134,7 @@ module RDF
       subClassOf: "schema:LocalBusiness".freeze,
       type: "rdfs:Class".freeze
     term :FindAction,
-      comment: %(The act of finding an object.<p>Related actions:</p><ul><li><a href="http://schema.org/SearchAction">SearchAction</a>: FindAction is generally lead by a SearchAction, but not necessarily.</li></ul>).freeze,
+      comment: %(The act of finding an object.<p>Related actions:</p><ul><li><a href="http://schema.org/SearchAction">SearchAction</a>: FindAction is generally lead by a SearchAction, but not necessarily</li></ul>.).freeze,
       label: "FindAction".freeze,
       subClassOf: "schema:Action".freeze,
       type: "rdfs:Class".freeze
@@ -1164,7 +1164,7 @@ module RDF
       subClassOf: "schema:Store".freeze,
       type: "rdfs:Class".freeze
     term :FollowAction,
-      comment: %(The act of forming a personal connection with someone/something \(object\) unidirectionally/asymmetrically to get updates polled from.<p>Related actions:</p><ul><li><a href="http://schema.org/BefriendAction">BefriendAction</a>: Unlike BefriendAction, FollowAction implies that the connection is *not* necessarily reciprocal.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, FollowAction implies that the follower acts as an active agent constantly/actively polling for updates.</li><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, FollowAction implies that the agent is interested in continuing receiving updates from the object.</li><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, FollowAction implies that the agent is interested in getting updates from the object.</li><li><a href="http://schema.org/TrackAction">TrackAction</a>: Unlike TrackAction, FollowAction refers to the polling of updates of all aspects of animate objects rather than the location of inanimate objects \(e.g. you track a package, but you don't follow it\).</li></ul>).freeze,
+      comment: %(The act of forming a personal connection with someone/something \(object\) unidirectionally/asymmetrically to get updates polled from.<p>Related actions:</p><ul><li><a href="http://schema.org/BefriendAction">BefriendAction</a>: Unlike BefriendAction, FollowAction implies that the connection is *not* necessarily reciprocal.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, FollowAction implies that the follower acts as an active agent constantly/actively polling for updates.</li><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, FollowAction implies that the agent is interested in continuing receiving updates from the object.</li><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, FollowAction implies that the agent is interested in getting updates from the object.</li><li><a href="http://schema.org/TrackAction">TrackAction</a>: Unlike TrackAction, FollowAction refers to the polling of updates of all aspects of animate objects rather than the location of inanimate objects \(e.g. you track a package, but you don't follow it\)</li></ul>.).freeze,
       label: "FollowAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -1244,7 +1244,7 @@ module RDF
       subClassOf: "schema:StructuredValue".freeze,
       type: "rdfs:Class".freeze
     term :GiveAction,
-      comment: %(The act of transferring ownership of an object to a destination. Reciprocal of TakeAction.<p>Related actions:</p><ul><li><a href="http://schema.org/TakeAction">TakeAction</a>: Reciprocal of GiveAction.</li><li><a href="http://schema.org/SendAction">SendAction</a>: Unlike SendAction, GiveAction implies that ownership is being transferred \(e.g. I may send my laptop to you, but that doesn't mean I'm giving it to you\).</li></ul>).freeze,
+      comment: %(The act of transferring ownership of an object to a destination. Reciprocal of TakeAction.<p>Related actions:</p><ul><li><a href="http://schema.org/TakeAction">TakeAction</a>: Reciprocal of GiveAction.</li><li><a href="http://schema.org/SendAction">SendAction</a>: Unlike SendAction, GiveAction implies that ownership is being transferred \(e.g. I may send my laptop to you, but that doesn't mean I'm giving it to you\)</li></ul>.).freeze,
       label: "GiveAction".freeze,
       subClassOf: "schema:TransferAction".freeze,
       type: "rdfs:Class".freeze
@@ -1354,7 +1354,7 @@ module RDF
       subClassOf: ["schema:HomeAndConstructionBusiness".freeze, "schema:ProfessionalService".freeze],
       type: "rdfs:Class".freeze
     term :IceCreamShop,
-      comment: %(An ice cream shop).freeze,
+      comment: %(An ice cream shop.).freeze,
       label: "IceCreamShop".freeze,
       subClassOf: "schema:FoodEstablishment".freeze,
       type: "rdfs:Class".freeze
@@ -1443,6 +1443,11 @@ module RDF
       label: "InviteAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
+    term :Invoice,
+      comment: %(A statement of the money due for goods or services; a bill.).freeze,
+      label: "Invoice".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
     term :ItemAvailability,
       comment: %(A list of possible product availability options.).freeze,
       label: "ItemAvailability".freeze,
@@ -1474,7 +1479,7 @@ module RDF
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :JoinAction,
-      comment: %(An agent joins an event/group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, JoinAction refers to joining a group/team of people.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, JoinAction does not imply that you'll be receiving updates.</li><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, JoinAction does not imply that you'll be polling for updates.</li></ul>).freeze,
+      comment: %(An agent joins an event/group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, JoinAction refers to joining a group/team of people.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, JoinAction does not imply that you'll be receiving updates.</li><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, JoinAction does not imply that you'll be polling for updates</li></ul>.).freeze,
       label: "JoinAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -1505,7 +1510,7 @@ module RDF
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :LeaveAction,
-      comment: %(An agent leaves an event / group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: The antagonym of LeaveAction.</li><li><a href="http://schema.org/UnRegisterAction">UnRegisterAction</a>: Unlike UnRegisterAction, LeaveAction implies leaving a group/team of people rather than a service.</li></ul>).freeze,
+      comment: %(An agent leaves an event / group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: The antagonym of LeaveAction.</li><li><a href="http://schema.org/UnRegisterAction">UnRegisterAction</a>: Unlike UnRegisterAction, LeaveAction implies leaving a group/team of people rather than a service</li></ul>.).freeze,
       label: "LeaveAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -1515,7 +1520,7 @@ module RDF
       subClassOf: "schema:GovernmentBuilding".freeze,
       type: "rdfs:Class".freeze
     term :LendAction,
-      comment: %(The act of providing an object under an agreement that it will be returned at a later date. Reciprocal of BorrowAction.<p>Related actions:</p><ul><li><a href="http://schema.org/BorrowAction">BorrowAction</a>: Reciprocal of LendAction.</li></ul>).freeze,
+      comment: %(The act of providing an object under an agreement that it will be returned at a later date. Reciprocal of BorrowAction.<p>Related actions:</p><ul><li><a href="http://schema.org/BorrowAction">BorrowAction</a>: Reciprocal of LendAction</li></ul>.).freeze,
       label: "LendAction".freeze,
       subClassOf: "schema:TransferAction".freeze,
       type: "rdfs:Class".freeze
@@ -1613,7 +1618,7 @@ module RDF
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
     term :Mass,
-      comment: %(Properties that take Mass as values are of the form '&lt;Number&gt; &lt;Mass unit of measure&gt;'. E.g., '7 kg').freeze,
+      comment: %(Properties that take Mass as values are of the form '&lt;Number&gt; &lt;Mass unit of measure&gt;'. E.g., '7 kg'.).freeze,
       label: "Mass".freeze,
       subClassOf: "schema:Quantity".freeze,
       type: "rdfs:Class".freeze
@@ -1907,12 +1912,12 @@ module RDF
       subClassOf: "schema:AutomotiveBusiness".freeze,
       type: "rdfs:Class".freeze
     term :Mountain,
-      comment: %(A mountain, like Mount Whitney or Mount Everest).freeze,
+      comment: %(A mountain, like Mount Whitney or Mount Everest.).freeze,
       label: "Mountain".freeze,
       subClassOf: "schema:Landform".freeze,
       type: "rdfs:Class".freeze
     term :MoveAction,
-      comment: %(The act of an agent relocating to a place.<p>Related actions:</p><ul><li><a href="http://schema.org/TransferAction">TransferAction</a>: Unlike TransferAction, the subject of the move is a living Person or Organization rather than an inanimate object.</li></ul>).freeze,
+      comment: %(The act of an agent relocating to a place.<p>Related actions:</p><ul><li><a href="http://schema.org/TransferAction">TransferAction</a>: Unlike TransferAction, the subject of the move is a living Person or Organization rather than an inanimate object</li></ul>.).freeze,
       label: "MoveAction".freeze,
       subClassOf: "schema:Action".freeze,
       type: "rdfs:Class".freeze
@@ -2043,7 +2048,7 @@ module RDF
       subClassOf: "schema:AnatomicalStructure".freeze,
       type: "rdfs:Class".freeze
     term :NewsArticle,
-      comment: %(A news article).freeze,
+      comment: %(A news article.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
       label: "NewsArticle".freeze,
       subClassOf: "schema:Article".freeze,
@@ -2079,8 +2084,7 @@ module RDF
       For <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GTIN</a>-related fields, see
       <a href="http://www.gs1.org/barcodes/support/check_digit_calculator">Check Digit calculator</a>
       and <a href="http://www.gs1us.org/resources/standards/gtin-validation-guide">validation guide</a>
-      from <a href="http://www.gs1.org/">GS1</a>.
-      ).freeze,
+      from <a href="http://www.gs1.org/">GS1</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsProperties).freeze,
       label: "Offer".freeze,
       subClassOf: "schema:Intangible".freeze,
@@ -2187,7 +2191,7 @@ module RDF
       subClassOf: "schema:DeliveryMethod".freeze,
       type: "rdfs:Class".freeze
     term :ParentAudience,
-      comment: %(A set of characteristics describing parents, who can be interested in viewing some content).freeze,
+      comment: %(A set of characteristics describing parents, who can be interested in viewing some content.).freeze,
       label: "ParentAudience".freeze,
       subClassOf: "schema:PeopleAudience".freeze,
       type: "rdfs:Class".freeze
@@ -2270,8 +2274,7 @@ module RDF
     term :Periodical,
       comment: %(A publication in any medium issued in successive parts bearing numerical or chronological designations and intended, such as a magazine, scholarly journal, or newspaper to continue indefinitely.
 
-      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>
-      ).freeze,
+      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       label: "Periodical".freeze,
       "owl:equivalentClass" => %(http://purl.org/ontology/bibo/Periodical).freeze,
@@ -2354,7 +2357,7 @@ module RDF
       subClassOf: "schema:OrganizeAction".freeze,
       type: "rdfs:Class".freeze
     term :PlayAction,
-      comment: %(The act of playing/exercising/training/performing for enjoyment, leisure, recreation, Competition or exercise.<p>Related actions:</p><ul><li><a href="http://schema.org/ListenAction">ListenAction</a>: Unlike ListenAction \(which is under ConsumeAction\), PlayAction refers to performing for an audience or at an event, rather than consuming music.</li><li><a href="http://schema.org/WatchAction">WatchAction</a>: Unlike WatchAction \(which is under ConsumeAction\), PlayAction refers to showing/displaying for an audience or at an event, rather than consuming visual content.</li></ul>).freeze,
+      comment: %(The act of playing/exercising/training/performing for enjoyment, leisure, recreation, Competition or exercise.<p>Related actions:</p><ul><li><a href="http://schema.org/ListenAction">ListenAction</a>: Unlike ListenAction \(which is under ConsumeAction\), PlayAction refers to performing for an audience or at an event, rather than consuming music.</li><li><a href="http://schema.org/WatchAction">WatchAction</a>: Unlike WatchAction \(which is under ConsumeAction\), PlayAction refers to showing/displaying for an audience or at an event, rather than consuming visual content</li></ul>.).freeze,
       label: "PlayAction".freeze,
       subClassOf: "schema:Action".freeze,
       type: "rdfs:Class".freeze
@@ -2374,7 +2377,7 @@ module RDF
       subClassOf: ["schema:CivicStructure".freeze, "schema:EmergencyService".freeze],
       type: "rdfs:Class".freeze
     term :Pond,
-      comment: %(A pond).freeze,
+      comment: %(A pond.).freeze,
       label: "Pond".freeze,
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
@@ -2475,8 +2478,7 @@ module RDF
     term :PublicationIssue,
       comment: %(A part of a successively published publication such as a periodical or publication volume, often numbered, usually containing a grouping of works such as articles.
 
-      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>
-      ).freeze,
+      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       label: "PublicationIssue".freeze,
       "owl:equivalentClass" => %(http://purl.org/ontology/bibo/Issue).freeze,
@@ -2485,8 +2487,7 @@ module RDF
     term :PublicationVolume,
       comment: %(A part of a successively published publication such as a periodical or multi-volume work, often numbered. It may represent a time span, such as a year.
 
-      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>
-      ).freeze,
+      <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       label: "PublicationVolume".freeze,
       subClassOf: "schema:CreativeWork".freeze,
@@ -2497,7 +2498,7 @@ module RDF
       subClassOf: "schema:WebPage".freeze,
       type: "rdfs:Class".freeze
     term :QualitativeValue,
-      comment: %(A predefined value for a product characteristic, e.g. the the power cord plug type "US" or the garment sizes "S", "M", "L", and "XL").freeze,
+      comment: %(A predefined value for a product characteristic, e.g. the power cord plug type "US" or the garment sizes "S", "M", "L", and "XL".).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "QualitativeValue".freeze,
       subClassOf: "schema:Enumeration".freeze,
@@ -2581,7 +2582,7 @@ module RDF
       subClassOf: "schema:LocalBusiness".freeze,
       type: "rdfs:Class".freeze
     term :ReceiveAction,
-      comment: %(The act of physically/electronically taking delivery of an object thathas been transferred from an origin to a destination. Reciprocal of SendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/SendAction">SendAction</a>: The reciprocal of ReceiveAction.</li><li><a href="http://schema.org/TakeAction">TakeAction</a>: Unlike TakeAction, ReceiveAction does not imply that the ownership has been transfered \(e.g. I can receive a package, but it does not mean the package is now mine\).</li></ul>).freeze,
+      comment: %(The act of physically/electronically taking delivery of an object thathas been transferred from an origin to a destination. Reciprocal of SendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/SendAction">SendAction</a>: The reciprocal of ReceiveAction.</li><li><a href="http://schema.org/TakeAction">TakeAction</a>: Unlike TakeAction, ReceiveAction does not imply that the ownership has been transfered \(e.g. I can receive a package, but it does not mean the package is now mine\)</li></ul>.).freeze,
       label: "ReceiveAction".freeze,
       subClassOf: "schema:TransferAction".freeze,
       type: "rdfs:Class".freeze
@@ -2601,12 +2602,12 @@ module RDF
       subClassOf: "schema:LocalBusiness".freeze,
       type: "rdfs:Class".freeze
     term :RegisterAction,
-      comment: %(The act of registering to be a user of a service, product or web page.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, RegisterAction implies you are registering to be a user of a service, *not* a group/team of people.</li><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, RegisterAction doesn't imply that the agent is expecting to poll for updates from the object.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, RegisterAction doesn't imply that the agent is expecting updates from the object.</li></ul>).freeze,
+      comment: %(The act of registering to be a user of a service, product or web page.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, RegisterAction implies you are registering to be a user of a service, *not* a group/team of people.</li><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, RegisterAction doesn't imply that the agent is expecting to poll for updates from the object.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, RegisterAction doesn't imply that the agent is expecting updates from the object</li></ul>.).freeze,
       label: "RegisterAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
     term :RejectAction,
-      comment: %(The act of rejecting to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/AcceptAction">AcceptAction</a>: The antagonym of RejectAction.</li></ul>).freeze,
+      comment: %(The act of rejecting to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/AcceptAction">AcceptAction</a>: The antagonym of RejectAction</li></ul>.).freeze,
       label: "RejectAction".freeze,
       subClassOf: "schema:AllocateAction".freeze,
       type: "rdfs:Class".freeze
@@ -2626,7 +2627,7 @@ module RDF
       subClassOf: "schema:UpdateAction".freeze,
       type: "rdfs:Class".freeze
     term :ReplyAction,
-      comment: %(The act of responding to a question/message asked/sent by the object. Related to <a href="AskAction">AskAction</a>.<p>Related actions:</p><ul><li><a href="http://schema.org/AskAction">AskAction</a>: Appears generally as an origin of a ReplyAction.</li></ul>).freeze,
+      comment: %(The act of responding to a question/message asked/sent by the object. Related to <a href="AskAction">AskAction</a>.<p>Related actions:</p><ul><li><a href="http://schema.org/AskAction">AskAction</a>: Appears generally as an origin of a ReplyAction</li></ul>.).freeze,
       label: "ReplyAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
@@ -2651,7 +2652,7 @@ module RDF
       subClassOf: "schema:Enumeration".freeze,
       type: "rdfs:Class".freeze
     term :ReserveAction,
-      comment: %(Reserving a concrete object.<p>Related actions:</p><ul><li><a href="http://schema.org/ScheduleAction">ScheduleAction</a>: Unlike ScheduleAction, ReserveAction reserves concrete objects \(e.g. a table, a hotel\) towards a time slot / spatial allocation.</li></ul>).freeze,
+      comment: %(Reserving a concrete object.<p>Related actions:</p><ul><li><a href="http://schema.org/ScheduleAction">ScheduleAction</a>: Unlike ScheduleAction, ReserveAction reserves concrete objects \(e.g. a table, a hotel\) towards a time slot / spatial allocation</li></ul>.).freeze,
       label: "ReserveAction".freeze,
       subClassOf: "schema:PlanAction".freeze,
       type: "rdfs:Class".freeze
@@ -2698,8 +2699,7 @@ module RDF
     term :Role,
       comment: %(Represents additional information about a relationship or property. For example a Role can be used to say that a 'member' role linking some SportsTeam to a player occurred during a particular time period. Or that a Person's 'actor' role in a Movie was for some particular characterName. Such properties can be attached to a Role entity, which is then associated with the main entities using ordinary properties like 'member' or 'actor'.
 
-      <br/><br/>See also <a href="http://blog.schema.org/2014/06/introducing-role.html">blog post</a>
-    ).freeze,
+      <br/><br/>See also <a href="http://blog.schema.org/2014/06/introducing-role.html">blog post</a>.).freeze,
       label: "Role".freeze,
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
@@ -2724,7 +2724,7 @@ module RDF
       subClassOf: "schema:Event".freeze,
       type: "rdfs:Class".freeze
     term :ScheduleAction,
-      comment: %(Scheduling future actions, events, or tasks.<p>Related actions:</p><ul><li><a href="http://schema.org/ReserveAction">ReserveAction</a>: Unlike ReserveAction, ScheduleAction allocates future actions \(e.g. an event, a task, etc\) towards a time slot / spatial allocation.</li></ul>).freeze,
+      comment: %(Scheduling future actions, events, or tasks.<p>Related actions:</p><ul><li><a href="http://schema.org/ReserveAction">ReserveAction</a>: Unlike ReserveAction, ScheduleAction allocates future actions \(e.g. an event, a task, etc\) towards a time slot / spatial allocation</li></ul>.).freeze,
       label: "ScheduleAction".freeze,
       subClassOf: "schema:PlanAction".freeze,
       type: "rdfs:Class".freeze
@@ -2749,7 +2749,7 @@ module RDF
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
     term :SearchAction,
-      comment: %(The act of searching for an object.<p>Related actions:</p><ul><li><a href="http://schema.org/FindAction">FindAction</a>: SearchAction generally leads to a FindAction, but not necessarily.</li></ul>).freeze,
+      comment: %(The act of searching for an object.<p>Related actions:</p><ul><li><a href="http://schema.org/FindAction">FindAction</a>: SearchAction generally leads to a FindAction, but not necessarily</li></ul>.).freeze,
       label: "SearchAction".freeze,
       subClassOf: "schema:Action".freeze,
       type: "rdfs:Class".freeze
@@ -2779,7 +2779,7 @@ module RDF
       subClassOf: "schema:TradeAction".freeze,
       type: "rdfs:Class".freeze
     term :SendAction,
-      comment: %(The act of physically/electronically dispatching an object for transfer from an origin to a destination.<p>Related actions:</p><ul><li><a href="http://schema.org/ReceiveAction">ReceiveAction</a>: The reciprocal of SendAction.</li><li><a href="http://schema.org/GiveAction">GiveAction</a>: Unlike GiveAction, SendAction does not imply the transfer of ownership \(e.g. I can send you my laptop, but I'm not necessarily giving it to you\).</li></ul>).freeze,
+      comment: %(The act of physically/electronically dispatching an object for transfer from an origin to a destination.<p>Related actions:</p><ul><li><a href="http://schema.org/ReceiveAction">ReceiveAction</a>: The reciprocal of SendAction.</li><li><a href="http://schema.org/GiveAction">GiveAction</a>: Unlike GiveAction, SendAction does not imply the transfer of ownership \(e.g. I can send you my laptop, but I'm not necessarily giving it to you\)</li></ul>.).freeze,
       label: "SendAction".freeze,
       subClassOf: "schema:TransferAction".freeze,
       type: "rdfs:Class".freeze
@@ -2806,8 +2806,7 @@ module RDF
 
           It is common for properties applicable to an item from the series to be usefully applied to the containing group.
           Schema.org attempts to anticipate some of these cases, but publishers should be free to apply
-          properties of the series parts to the series as a whole wherever they seem appropriate.
-          ).freeze,
+          properties of the series parts to the series as a whole wherever they seem appropriate.).freeze,
       label: "Series".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
@@ -2923,7 +2922,7 @@ module RDF
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :SubscribeAction,
-      comment: %(The act of forming a personal connection with someone/something \(object\) unidirectionally/asymmetrically to get updates pushed to.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, SubscribeAction implies that the subscriber acts as a passive agent being constantly/actively pushed for updates.</li><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, SubscribeAction implies that the agent is interested in continuing receiving updates from the object.</li><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, SubscribeAction implies that the agent is interested in continuing receiving updates from the object.</li></ul>).freeze,
+      comment: %(The act of forming a personal connection with someone/something \(object\) unidirectionally/asymmetrically to get updates pushed to.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, SubscribeAction implies that the subscriber acts as a passive agent being constantly/actively pushed for updates.</li><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Unlike RegisterAction, SubscribeAction implies that the agent is interested in continuing receiving updates from the object.</li><li><a href="http://schema.org/JoinAction">JoinAction</a>: Unlike JoinAction, SubscribeAction implies that the agent is interested in continuing receiving updates from the object</li></ul>.).freeze,
       label: "SubscribeAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -2974,7 +2973,7 @@ module RDF
       subClassOf: "schema:WebPageElement".freeze,
       type: "rdfs:Class".freeze
     term :TakeAction,
-      comment: %(The act of gaining ownership of an object from an origin. Reciprocal of GiveAction.<p>Related actions:</p><ul><li><a href="http://schema.org/GiveAction">GiveAction</a>: The reciprocal of TakeAction.</li><li><a href="http://schema.org/ReceiveAction">ReceiveAction</a>: Unlike ReceiveAction, TakeAction implies that ownership has been transfered.</li></ul>).freeze,
+      comment: %(The act of gaining ownership of an object from an origin. Reciprocal of GiveAction.<p>Related actions:</p><ul><li><a href="http://schema.org/GiveAction">GiveAction</a>: The reciprocal of TakeAction.</li><li><a href="http://schema.org/ReceiveAction">ReceiveAction</a>: Unlike ReceiveAction, TakeAction implies that ownership has been transfered</li></ul>.).freeze,
       label: "TakeAction".freeze,
       subClassOf: "schema:TransferAction".freeze,
       type: "rdfs:Class".freeze
@@ -3079,7 +3078,7 @@ module RDF
       subClassOf: "schema:Store".freeze,
       type: "rdfs:Class".freeze
     term :TrackAction,
-      comment: %(An agent tracks an object for updates.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, TrackAction refers to the interest on the location of innanimates objects.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, TrackAction refers to  the interest on the location of innanimate objects.</li></ul>).freeze,
+      comment: %(An agent tracks an object for updates.<p>Related actions:</p><ul><li><a href="http://schema.org/FollowAction">FollowAction</a>: Unlike FollowAction, TrackAction refers to the interest on the location of innanimates objects.</li><li><a href="http://schema.org/SubscribeAction">SubscribeAction</a>: Unlike SubscribeAction, TrackAction refers to  the interest on the location of innanimate objects</li></ul>.).freeze,
       label: "TrackAction".freeze,
       subClassOf: "schema:FindAction".freeze,
       type: "rdfs:Class".freeze
@@ -3136,7 +3135,7 @@ module RDF
       subClassOf: "schema:Text".freeze,
       type: "rdfs:Class".freeze
     term :UnRegisterAction,
-      comment: %(The act of un-registering from a service.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Antagonym of UnRegisterAction.</li><li><a href="http://schema.org/Leave">Leave</a>: Unlike LeaveAction, UnRegisterAction implies that you are unregistering from a service you werer previously registered, rather than leaving a team/group of people.</li></ul>).freeze,
+      comment: %(The act of un-registering from a service.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Antagonym of UnRegisterAction.</li><li><a href="http://schema.org/Leave">Leave</a>: Unlike LeaveAction, UnRegisterAction implies that you are unregistering from a service you werer previously registered, rather than leaving a team/group of people</li></ul>.).freeze,
       label: "UnRegisterAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -3178,7 +3177,7 @@ module RDF
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserInteraction,
-      comment: %(A user interacting with a page).freeze,
+      comment: %(A user interacting with a page.).freeze,
       label: "UserInteraction".freeze,
       subClassOf: "schema:Event".freeze,
       type: "rdfs:Class".freeze
@@ -3264,6 +3263,12 @@ module RDF
       label: "VisualArtsEvent".freeze,
       subClassOf: "schema:Event".freeze,
       type: "rdfs:Class".freeze
+    term :VisualArtwork,
+      comment: %(A work of art that is primarily visual in character.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_VisualArtworkClass).freeze,
+      label: "VisualArtwork".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
     term :Volcano,
       comment: %(A volcano, like Fuji san.).freeze,
       label: "Volcano".freeze,
@@ -3324,7 +3329,7 @@ module RDF
       subClassOf: "schema:ConsumeAction".freeze,
       type: "rdfs:Class".freeze
     term :Waterfall,
-      comment: %(A waterfall, like Niagara).freeze,
+      comment: %(A waterfall, like Niagara.).freeze,
       label: "Waterfall".freeze,
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
@@ -3339,12 +3344,12 @@ module RDF
       subClassOf: "schema:SoftwareApplication".freeze,
       type: "rdfs:Class".freeze
     term :WebPage,
-      comment: %(A web page. Every web page is implicitly assumed to be declared to be of type WebPage, so the various properties about that webpage, such as <code>breadcrumb</code> may be used. We recommend explicit declaration if these properties are specified, but if they are found outside of an itemscope, they will be assumed to be about the page).freeze,
+      comment: %(A web page. Every web page is implicitly assumed to be declared to be of type WebPage, so the various properties about that webpage, such as <code>breadcrumb</code> may be used. We recommend explicit declaration if these properties are specified, but if they are found outside of an itemscope, they will be assumed to be about the page.).freeze,
       label: "WebPage".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :WebPageElement,
-      comment: %(A web page element, like a table or an image).freeze,
+      comment: %(A web page element, like a table or an image.).freeze,
       label: "WebPageElement".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
@@ -3418,8 +3423,7 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :accessibilityAPI,
-      comment: %(Indicates that the resource is compatible with the referenced accessibility API \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\).
-         ).freeze,
+      comment: %(Indicates that the resource is compatible with the referenced accessibility API \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\).).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "accessibilityAPI".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -3437,9 +3441,15 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :accessibilityHazard,
-      comment: %(A characteristic of the described resource that is physiologically dangerous to some users. Related to WCAG 2.0 guideline 2.3. \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\)).freeze,
+      comment: %(A characteristic of the described resource that is physiologically dangerous to some users. Related to WCAG 2.0 guideline 2.3 \(<a href="http://www.w3.org/wiki/WebSchemas/Accessibility">WebSchemas wiki lists possible values</a>\).).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "accessibilityHazard".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :accountId,
+      comment: %(The identifier for the account the payment will be applied to.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "accountId".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :accountablePerson,
@@ -3728,7 +3738,7 @@ module RDF
       rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
       type: "rdf:Property".freeze
     property :applicationSuite,
-      comment: %(The name of the application suite to which the application belongs \(e.g. Excel belongs to Office\)).freeze,
+      comment: %(The name of the application suite to which the application belongs \(e.g. Excel belongs to Office\).).freeze,
       domainIncludes: "schema:SoftwareApplication".freeze,
       label: "applicationSuite".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -3752,7 +3762,7 @@ module RDF
       rangeIncludes: "schema:Place".freeze,
       type: "rdf:Property".freeze
     property :areaServed,
-      comment: %(The location served by this contact point \(e.g., a phone number intended for Europeans vs. North Americans or only within the United States.\)).freeze,
+      comment: %(The location served by this contact point \(e.g., a phone number intended for Europeans vs. North Americans or only within the United States\).).freeze,
       domainIncludes: "schema:ContactPoint".freeze,
       label: "areaServed".freeze,
       rangeIncludes: "schema:AdministrativeArea".freeze,
@@ -3799,11 +3809,23 @@ module RDF
       label: "arrivalTime".freeze,
       rangeIncludes: "schema:DateTime".freeze,
       type: "rdf:Property".freeze
+    property :artEdition,
+      comment: %(The number of copies when multiple copies of a piece of artwork are produced - e.g. for a limited edition of 20 prints, 'artEdition' refers to the total number of copies \(in this example "20"\).).freeze,
+      domainIncludes: "schema:VisualArtwork".freeze,
+      label: "artEdition".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:Integer".freeze],
+      type: "rdf:Property".freeze
     property :arterialBranch,
       comment: %(The branches that comprise the arterial structure.).freeze,
       domainIncludes: "schema:Artery".freeze,
       label: "arterialBranch".freeze,
       rangeIncludes: "schema:AnatomicalStructure".freeze,
+      type: "rdf:Property".freeze
+    property :artform,
+      comment: %(e.g. Painting, Drawing, Sculpture, Print, Photograph, Assemblage, Collage, etc.).freeze,
+      domainIncludes: "schema:VisualArtwork".freeze,
+      label: "artform".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
       type: "rdf:Property".freeze
     property :articleBody,
       comment: %(The actual body of the article.).freeze,
@@ -3824,13 +3846,13 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :assembly,
-      comment: %(Library file name e.g., mscorlib.dll, system.web.dll).freeze,
+      comment: %(Library file name e.g., mscorlib.dll, system.web.dll.).freeze,
       domainIncludes: "schema:APIReference".freeze,
       label: "assembly".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :assemblyVersion,
-      comment: %(Associated product/technology version. e.g., .NET Framework 4.5).freeze,
+      comment: %(Associated product/technology version. e.g., .NET Framework 4.5.).freeze,
       domainIncludes: "schema:APIReference".freeze,
       label: "assemblyVersion".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -3860,7 +3882,7 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :athlete,
-      comment: %(A person that acts as performing member of a sports team; a player as opposed to a coach).freeze,
+      comment: %(A person that acts as performing member of a sports team; a player as opposed to a coach.).freeze,
       domainIncludes: "schema:SportsTeam".freeze,
       label: "athlete".freeze,
       rangeIncludes: "schema:Person".freeze,
@@ -3885,10 +3907,7 @@ module RDF
       rangeIncludes: "schema:Audience".freeze,
       type: "rdf:Property".freeze
     property :audienceType,
-      comment: %(The target group associated with a given audience \(e.g. veterans, car owners, musicians, etc.\)
-          domain: Audience
-          Range: Text
-        ).freeze,
+      comment: %(The target group associated with a given audience \(e.g. veterans, car owners, musicians, etc.\).).freeze,
       domainIncludes: "schema:Audience".freeze,
       label: "audienceType".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -3930,7 +3949,7 @@ module RDF
       rangeIncludes: "schema:Place".freeze,
       type: "rdf:Property".freeze
     property :availableChannel,
-      comment: %(A means of accessing the service \(e.g. a phone bank, a web site, a location, etc.\)).freeze,
+      comment: %(A means of accessing the service \(e.g. a phone bank, a web site, a location, etc.\).).freeze,
       domainIncludes: "schema:Service".freeze,
       label: "availableChannel".freeze,
       rangeIncludes: "schema:ServiceChannel".freeze,
@@ -4038,6 +4057,12 @@ module RDF
       domainIncludes: "schema:UnitPriceSpecification".freeze,
       label: "billingIncrement".freeze,
       rangeIncludes: "schema:Number".freeze,
+      type: "rdf:Property".freeze
+    property :billingPeriod,
+      comment: %(The time interval used to compute the invoice.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "billingPeriod".freeze,
+      rangeIncludes: "schema:Duration".freeze,
       type: "rdf:Property".freeze
     property :biomechnicalClass,
       comment: %(The biomechanical properties of the bone.).freeze,
@@ -4170,7 +4195,7 @@ module RDF
       type: "rdf:Property".freeze
     property :broker,
       comment: %(An entity that arranges for an exchange between a buyer and a seller.  In most cases a broker never acquires or releases ownership of a product or service involved in an exchange.  If it is not clear whether an entity is a broker, seller, or buyer, the latter two terms are preferred.).freeze,
-      domainIncludes: ["schema:Reservation".freeze, "schema:Order".freeze],
+      domainIncludes: ["schema:Reservation".freeze, "schema:Order".freeze, "schema:Invoice".freeze],
       label: "broker".freeze,
       rangeIncludes: ["schema:Person".freeze, "schema:Organization".freeze],
       type: "rdf:Property".freeze
@@ -4212,7 +4237,7 @@ module RDF
       rangeIncludes: "schema:MusicGroup".freeze,
       type: "rdf:Property".freeze
     property :calories,
-      comment: %(The number of calories).freeze,
+      comment: %(The number of calories.).freeze,
       domainIncludes: "schema:NutritionInformation".freeze,
       label: "calories".freeze,
       rangeIncludes: "schema:Energy".freeze,
@@ -4264,7 +4289,7 @@ module RDF
       type: "rdf:Property".freeze
     property :category,
       comment: %(A category for the item. Greater signs or slashes can be used to informally indicate a category hierarchy.).freeze,
-      domainIncludes: ["schema:Offer".freeze, "schema:PhysicalActivity".freeze],
+      domainIncludes: ["schema:Offer".freeze, "schema:Invoice".freeze, "schema:PhysicalActivity".freeze],
       label: "category".freeze,
       rangeIncludes: ["schema:PhysicalActivityCategory".freeze, "schema:Text".freeze, "schema:Thing".freeze],
       type: "rdf:Property".freeze
@@ -4317,13 +4342,13 @@ module RDF
       rangeIncludes: "schema:DateTime".freeze,
       type: "rdf:Property".freeze
     property :childMaxAge,
-      comment: %(Maximal age of the child).freeze,
+      comment: %(Maximal age of the child.).freeze,
       domainIncludes: "schema:ParentAudience".freeze,
       label: "childMaxAge".freeze,
       rangeIncludes: "schema:Number".freeze,
       type: "rdf:Property".freeze
     property :childMinAge,
-      comment: %(Minimal age of the child).freeze,
+      comment: %(Minimal age of the child.).freeze,
       domainIncludes: "schema:ParentAudience".freeze,
       label: "childMinAge".freeze,
       rangeIncludes: "schema:Number".freeze,
@@ -4355,7 +4380,13 @@ module RDF
     property :clincalPharmacology,
       comment: %(Description of the absorption and elimination of drugs, including their concentration \(pharmacokinetics, pK\) and biological effects \(pharmacodynamics, pD\).).freeze,
       domainIncludes: "schema:Drug".freeze,
-      label: "clincalPharmacology".freeze,
+      label: "clinicalPharmacology".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :clinicalPharmacology,
+      comment: %(Description of the absorption and elimination of drugs, including their concentration \(pharmacokinetics, pK\) and biological effects \(pharmacodynamics, pD\).).freeze,
+      domainIncludes: "schema:Drug".freeze,
+      label: "clinicalPharmacology".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :clipNumber,
@@ -4384,7 +4415,7 @@ module RDF
       rangeIncludes: "schema:MedicalCode".freeze,
       type: "rdf:Property".freeze
     property :codeRepository,
-      comment: %(Link to the repository where the un-compiled, human readable code and related code is located \(SVN, github, CodePlex\)).freeze,
+      comment: %(Link to the repository where the un-compiled, human readable code and related code is located \(SVN, github, CodePlex\).).freeze,
       domainIncludes: "schema:Code".freeze,
       label: "codeRepository".freeze,
       rangeIncludes: "schema:URL".freeze,
@@ -4471,8 +4502,8 @@ module RDF
       rangeIncludes: ["schema:AnatomicalStructure".freeze, "schema:AnatomicalSystem".freeze],
       type: "rdf:Property".freeze
     property :confirmationNumber,
-      comment: %(A number that confirms the given order.).freeze,
-      domainIncludes: "schema:Order".freeze,
+      comment: %(A number that confirms the given order or payment has been received.).freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:Invoice".freeze],
       label: "confirmationNumber".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
@@ -4483,7 +4514,7 @@ module RDF
       rangeIncludes: "schema:AnatomicalStructure".freeze,
       type: "rdf:Property".freeze
     property :contactOption,
-      comment: %(An option available on this contact point \(e.g. a toll-free number or support for hearing-impaired callers.\)).freeze,
+      comment: %(An option available on this contact point \(e.g. a toll-free number or support for hearing-impaired callers\).).freeze,
       domainIncludes: "schema:ContactPoint".freeze,
       label: "contactOption".freeze,
       rangeIncludes: "schema:ContactPointOption".freeze,
@@ -4538,7 +4569,7 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :contentUrl,
-      comment: %(Actual bytes of the media object, for example the image file or video file. \(previous spelling: contentURL\)).freeze,
+      comment: %(Actual bytes of the media object, for example the image file or video file.).freeze,
       domainIncludes: "schema:MediaObject".freeze,
       label: "contentUrl".freeze,
       rangeIncludes: "schema:URL".freeze,
@@ -4654,8 +4685,8 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :customer,
-      comment: %(Party placing the order.).freeze,
-      domainIncludes: "schema:Order".freeze,
+      comment: %(Party placing the order or paying the invoice.).freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:Invoice".freeze],
       label: "customer".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
       type: "rdf:Property".freeze
@@ -4738,8 +4769,8 @@ module RDF
       rangeIncludes: "schema:QuantitativeValue".freeze,
       type: "rdf:Property".freeze
     property :deliveryMethod,
-      comment: %(A sub property of instrument. The method of delivery).freeze,
-      domainIncludes: ["schema:ReceiveAction".freeze, "schema:SendAction".freeze, "schema:TrackAction".freeze],
+      comment: %(A sub property of instrument. The method of delivery.).freeze,
+      domainIncludes: ["schema:OrderAction".freeze, "schema:ReceiveAction".freeze, "schema:SendAction".freeze, "schema:TrackAction".freeze],
       label: "deliveryMethod".freeze,
       rangeIncludes: "schema:DeliveryMethod".freeze,
       subPropertyOf: "schema:instrument".freeze,
@@ -4805,8 +4836,8 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :depth,
-      comment: %(The depth of the product.).freeze,
-      domainIncludes: "schema:Product".freeze,
+      comment: %(The depth of the item.).freeze,
+      domainIncludes: ["schema:Product".freeze, "schema:VisualArtwork".freeze],
       label: "depth".freeze,
       rangeIncludes: ["schema:Distance".freeze, "schema:QuantitativeValue".freeze],
       type: "rdf:Property".freeze
@@ -5054,7 +5085,7 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :educationalRole,
-      comment: %(An educationalRole of an EducationalAudience).freeze,
+      comment: %(An educationalRole of an EducationalAudience.).freeze,
       domainIncludes: "schema:EducationalAudience".freeze,
       label: "educationalRole".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -5108,7 +5139,7 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :embedUrl,
-      comment: %(A URL pointing to a player for a specific video. In general, this is the information in the <code>src</code> element of an <code>embed</code> tag and should not be the same as the content of the <code>loc</code> tag. \(previous spelling: embedURL\)).freeze,
+      comment: %(A URL pointing to a player for a specific video. In general, this is the information in the <code>src</code> element of an <code>embed</code> tag and should not be the same as the content of the <code>loc</code> tag.).freeze,
       domainIncludes: "schema:MediaObject".freeze,
       label: "embedUrl".freeze,
       rangeIncludes: "schema:URL".freeze,
@@ -5172,8 +5203,7 @@ module RDF
     property :endTime,
       comment: %(The endTime of something. For a reserved event or service \(e.g. FoodEstablishmentReservation\), the time that it is expected to end. For actions that span a period of time, when the action was performed. e.g. John wrote a book from January to *December*.
 
-Note that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions.
-).freeze,
+Note that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions.).freeze,
       domainIncludes: ["schema:Action".freeze, "schema:FoodEstablishmentReservation".freeze],
       label: "endTime".freeze,
       rangeIncludes: "schema:DateTime".freeze,
@@ -5490,7 +5520,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A sub property of location. The original location of the object or the agent before the action.).freeze,
       domainIncludes: ["schema:MoveAction".freeze, "schema:TransferAction".freeze, "schema:ExerciseAction".freeze],
       label: "fromLocation".freeze,
-      rangeIncludes: ["schema:Number".freeze, "schema:Place".freeze],
+      rangeIncludes: "schema:Place".freeze,
       subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :function,
@@ -5654,20 +5684,20 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:CreativeWork".freeze,
       type: "rdf:Property".freeze
     property :headline,
-      comment: %(Headline of the article).freeze,
+      comment: %(Headline of the article.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "headline".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :healthCondition,
-      comment: %(Expectations for health conditions of target audience).freeze,
+      comment: %(Expectations for health conditions of target audience.).freeze,
       domainIncludes: "schema:PeopleAudience".freeze,
       label: "healthCondition".freeze,
       rangeIncludes: "schema:MedicalCondition".freeze,
       type: "rdf:Property".freeze
     property :height,
-      comment: %(The height of the item or person.).freeze,
-      domainIncludes: ["schema:MediaObject".freeze, "schema:Product".freeze, "schema:Person".freeze],
+      comment: %(The height of the item.).freeze,
+      domainIncludes: ["schema:MediaObject".freeze, "schema:Product".freeze, "schema:Person".freeze, "schema:VisualArtwork".freeze],
       label: "height".freeze,
       rangeIncludes: ["schema:Distance".freeze, "schema:QuantitativeValue".freeze],
       type: "rdf:Property".freeze
@@ -5739,7 +5769,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :iataCode,
-      comment: %(IATA identifier for an airline or airport).freeze,
+      comment: %(IATA identifier for an airline or airport.).freeze,
       domainIncludes: ["schema:Airline".freeze, "schema:Airport".freeze],
       label: "iataCode".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -5787,7 +5817,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:MusicAlbum".freeze,
       type: "rdf:Property".freeze
     property :inLanguage,
-      comment: %(The language of the content. please use one of the language codes from the <a href='http://tools.ietf.org/html/bcp47'>IETF BCP 47 standard.</a>).freeze,
+      comment: %(The language of the content. please use one of the language codes from the <a href='http://tools.ietf.org/html/bcp47'>IETF BCP 47 standard</a>.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "inLanguage".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -5932,7 +5962,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Boolean".freeze,
       type: "rdf:Property".freeze
     property :isBasedOnUrl,
-      comment: %(A resource that was used in the creation of this resource. This term can be repeated for multiple sources. For example, http://example.com/great-multiplication-intro.html).freeze,
+      comment: %(A resource that was used in the creation of this resource. This term can be repeated for multiple sources. For example, http://example.com/great-multiplication-intro.html.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "isBasedOnUrl".freeze,
       rangeIncludes: "schema:URL".freeze,
@@ -6055,7 +6085,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:OfferItemCondition".freeze,
       type: "rdf:Property".freeze
     property :itemListElement,
-      comment: %(For itemListElement values, you can use simple strings \(e.g. "Peter", "Paul, "Mary"\), existing entities, or use ListItem.
+      comment: %(For itemListElement values, you can use simple strings \(e.g. "Peter", "Paul", "Mary"\), existing entities, or use ListItem.
     <br/><br/>
     Text values are best if the elements in the list are plain strings. Existing entities are best for a simple, unordered list of existing things in your data. ListItem is used with ordered lists when you want to provide additional context about the element in that list or when the same item might be in different places in different lists.
     <br/><br/>
@@ -6282,6 +6312,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:URL".freeze,
       "schema:supersededBy" => %(schema:hasMap).freeze,
       type: "rdf:Property".freeze
+    property :material,
+      comment: %(e.g. Oil, Watercolour, Acrylic, Linoprint, Marble, Cyanotype, Digital, Lithograph, DryPoint, Intaglio, Pastel, Woodcut, Pencil, Mixed Media, etc.).freeze,
+      domainIncludes: "schema:VisualArtwork".freeze,
+      label: "material".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
     property :maxPrice,
       comment: %(The highest price if the price is a range.).freeze,
       domainIncludes: "schema:PriceSpecification".freeze,
@@ -6388,6 +6424,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "minValue".freeze,
       rangeIncludes: "schema:Number".freeze,
       type: "rdf:Property".freeze
+    property :minimumPaymentDue,
+      comment: %(The minimum payment required at this time.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "minimumPaymentDue".freeze,
+      rangeIncludes: "schema:PriceSpecification".freeze,
+      type: "rdf:Property".freeze
     property :model,
       comment: %(The model of the product. Use with the URL of a ProductModel or a textual representation of the model identifier. The URL of the ProductModel can be from an external source. It is recommended to additionally provide strong product identifiers via the gtin8/gtin13/gtin14 and mpn properties.).freeze,
       domainIncludes: "schema:Product".freeze,
@@ -6426,13 +6468,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:MusicComposition".freeze,
       type: "rdf:Property".freeze
     property :musicBy,
-      comment: %(The composer of the movie or TV/radio soundtrack.).freeze,
-      domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze],
+      comment: %(The composer of the soundtrack.).freeze,
+      domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze, "schema:Clip".freeze, "schema:MovieSeries".freeze, "schema:VideoGame".freeze, "schema:VideoGameSeries".freeze, "schema:VideoObject".freeze],
       label: "musicBy".freeze,
       rangeIncludes: ["schema:MusicGroup".freeze, "schema:Person".freeze],
       type: "rdf:Property".freeze
     property :musicCompositionForm,
-      comment: %(The type of composition \(e.g. overture, sonata, symphony, etc.\)).freeze,
+      comment: %(The type of composition \(e.g. overture, sonata, symphony, etc.\).).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#MBZ).freeze,
       domainIncludes: "schema:MusicComposition".freeze,
       label: "musicCompositionForm".freeze,
@@ -6550,6 +6592,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "numTracks".freeze,
       rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
+    property :numberOfEmployees,
+      comment: %(The size of business by number of employees.).freeze,
+      domainIncludes: "schema:BusinessAudience".freeze,
+      label: "numberOfEmployees".freeze,
+      rangeIncludes: "schema:QuantitativeValue".freeze,
+      type: "rdf:Property".freeze
     property :numberOfEpisodes,
       comment: %(The number of episodes in this season or series.).freeze,
       domainIncludes: ["schema:Season".freeze, "schema:TVSeries".freeze, "schema:VideoGameSeries".freeze, "schema:RadioSeries".freeze],
@@ -6586,12 +6634,6 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "numberedPosition".freeze,
       rangeIncludes: "schema:Number".freeze,
       type: "rdf:Property".freeze
-    property :numberofEmployees,
-      comment: %(The size of business by number of employees.).freeze,
-      domainIncludes: "schema:BusinessAudience".freeze,
-      label: "numberofEmployees".freeze,
-      rangeIncludes: "schema:QuantitativeValue".freeze,
-      type: "rdf:Property".freeze
     property :nutrition,
       comment: %(Nutrition information about the recipe.).freeze,
       domainIncludes: "schema:Recipe".freeze,
@@ -6618,7 +6660,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :offers,
       comment: %(An offer to provide this item&#x2014;for example, an offer to sell a product, rent the DVD of a movie, or give away tickets to an event.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Event".freeze, "schema:Product".freeze],
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Event".freeze, "schema:Product".freeze, "schema:AggregateOffer".freeze],
       label: "offers".freeze,
       rangeIncludes: "schema:Offer".freeze,
       type: "rdf:Property".freeze
@@ -6800,6 +6842,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Episode".freeze,
       subPropertyOf: "schema:isPartOf".freeze,
       type: "rdf:Property".freeze
+    property :partOfInvoice,
+      comment: %(The order is being paid as part of the referenced Invoice.).freeze,
+      domainIncludes: "schema:Order".freeze,
+      label: "partOfInvoice".freeze,
+      rangeIncludes: "schema:Invoice".freeze,
+      type: "rdf:Property".freeze
     property :partOfOrder,
       comment: %(The overall order the items in this delivery were included in.).freeze,
       domainIncludes: "schema:ParcelDelivery".freeze,
@@ -6829,7 +6877,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       subPropertyOf: "schema:isPartOf".freeze,
       type: "rdf:Property".freeze
     property :partOfTVSeries,
-      comment: %(The TV series to which this episode or season belongs. \(legacy form; partOfSeries is preferred\)).freeze,
+      comment: %(The TV series to which this episode or season belongs.).freeze,
       domainIncludes: ["schema:TVEpisode".freeze, "schema:TVSeason".freeze, "schema:TVClip".freeze],
       label: "partOfTVSeries".freeze,
       rangeIncludes: "schema:TVSeries".freeze,
@@ -6862,20 +6910,26 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :paymentDue,
       comment: %(The date that payment is due.).freeze,
-      domainIncludes: "schema:Order".freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:Invoice".freeze],
       label: "paymentDue".freeze,
       rangeIncludes: "schema:DateTime".freeze,
       type: "rdf:Property".freeze
     property :paymentMethod,
       comment: %(The name of the credit card or other method of payment for the order.).freeze,
-      domainIncludes: "schema:Order".freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:Invoice".freeze],
       label: "paymentMethod".freeze,
       rangeIncludes: "schema:PaymentMethod".freeze,
       type: "rdf:Property".freeze
     property :paymentMethodId,
       comment: %(An identifier for the method of payment used \(e.g. the last 4 digits of the credit card\).).freeze,
-      domainIncludes: "schema:Order".freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:Invoice".freeze],
       label: "paymentMethodId".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :paymentStatus,
+      comment: %(The status of payment; whether the invoice has been paid or not.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "paymentStatus".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :paymentUrl,
@@ -7106,7 +7160,6 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       Use values from 0123456789 \(Unicode 'DIGIT ZERO' \(U+0030\) to 'DIGIT NINE' \(U+0039\)\) rather than superficially similiar Unicode symbols.
 </li>
 </ul>
-
       ).freeze,
       domainIncludes: ["schema:Offer".freeze, "schema:PriceSpecification".freeze, "schema:TradeAction".freeze],
       label: "price".freeze,
@@ -7126,7 +7179,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :priceSpecification,
       comment: %(One or more detailed price specifications, indicating the unit price and delivery or payment charges.).freeze,
-      domainIncludes: ["schema:Offer".freeze, "schema:Demand".freeze],
+      domainIncludes: ["schema:Offer".freeze, "schema:Demand".freeze, "schema:TradeAction".freeze],
       label: "priceSpecification".freeze,
       rangeIncludes: "schema:PriceSpecification".freeze,
       type: "rdf:Property".freeze
@@ -7204,9 +7257,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :producer,
       comment: %(The person or organization who produced the work \(e.g. music album, movie, tv/radio series etc.\).).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze],
+      domainIncludes: "schema:CreativeWork".freeze,
       label: "producer".freeze,
-      rangeIncludes: "schema:Person".freeze,
+      rangeIncludes: ["schema:Person".freeze, "schema:Organization".freeze],
       type: "rdf:Property".freeze
     property :produces,
       comment: %(The tangible thing generated by the service, e.g. a passport, permit, etc.).freeze,
@@ -7276,7 +7329,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :provider,
       comment: %(The service provider, service operator, or service performer; the goods producer. Another party \(a seller\) may offer those services or goods on behalf of the provider. A provider may also serve as the seller.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Service".freeze, "schema:Reservation".freeze, "schema:Flight".freeze, "schema:ParcelDelivery".freeze, "schema:TrainTrip".freeze, "schema:BusTrip".freeze],
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Service".freeze, "schema:Invoice".freeze, "schema:Reservation".freeze, "schema:Flight".freeze, "schema:ParcelDelivery".freeze, "schema:TrainTrip".freeze, "schema:BusTrip".freeze],
       label: "provider".freeze,
       rangeIncludes: ["schema:Person".freeze, "schema:Organization".freeze],
       type: "rdf:Property".freeze
@@ -7471,6 +7524,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       inverseOf: "schema:recordedAs".freeze,
       label: "recordingOf".freeze,
       rangeIncludes: "schema:MusicComposition".freeze,
+      type: "rdf:Property".freeze
+    property :referencesOrder,
+      comment: %(The Order\(s\) related to this Invoice. One or more Orders may be combined into a single Invoice.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "referencesOrder".freeze,
+      rangeIncludes: "schema:Order".freeze,
       type: "rdf:Property".freeze
     property :regionDrained,
       comment: %(The anatomical or organ system drained by this vessel; generally refers to a specific part of an organ.).freeze,
@@ -7737,7 +7796,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Vessel".freeze,
       type: "rdf:Property".freeze
     property :runtime,
-      comment: %(Runtime platform or script interpreter dependencies \(Example - Java v1, Python2.3, .Net Framework 3.0\)).freeze,
+      comment: %(Runtime platform or script interpreter dependencies \(Example - Java v1, Python2.3, .Net Framework 3.0\).).freeze,
       domainIncludes: "schema:Code".freeze,
       label: "runtime".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -7771,6 +7830,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:NutritionInformation".freeze,
       label: "saturatedFatContent".freeze,
       rangeIncludes: "schema:Mass".freeze,
+      type: "rdf:Property".freeze
+    property :scheduledPaymentDate,
+      comment: %(The date the invoice is scheduled to be paid.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "scheduledPaymentDate".freeze,
+      rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
     property :scheduledTime,
       comment: %(The time the object is scheduled to.).freeze,
@@ -8121,8 +8186,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
     property :startTime,
       comment: %(The startTime of something. For a reserved event or service \(e.g. FoodEstablishmentReservation\), the time that it is expected to start. For actions that span a period of time, when the action was performed. e.g. John wrote a book from *January* to December.
 
-Note that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions.
-).freeze,
+Note that Event uses startDate/endDate instead of startTime/endTime, even when describing dates with times. This situation may be clarified in future revisions.).freeze,
       domainIncludes: ["schema:Action".freeze, "schema:FoodEstablishmentReservation".freeze],
       label: "startTime".freeze,
       rangeIncludes: "schema:DateTime".freeze,
@@ -8296,6 +8360,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "supplyTo".freeze,
       rangeIncludes: "schema:AnatomicalStructure".freeze,
       type: "rdf:Property".freeze
+    property :surface,
+      comment: %(e.g. Canvas, Paper, Wood, Board, etc.).freeze,
+      domainIncludes: "schema:VisualArtwork".freeze,
+      label: "surface".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
     property :target,
       comment: %(Indicates a target EntryPoint for an Action.).freeze,
       domainIncludes: "schema:Action".freeze,
@@ -8420,8 +8490,14 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A sub property of location. The final location of the object or the agent after the action.).freeze,
       domainIncludes: ["schema:InsertAction".freeze, "schema:MoveAction".freeze, "schema:TransferAction".freeze, "schema:ExerciseAction".freeze],
       label: "toLocation".freeze,
-      rangeIncludes: ["schema:Number".freeze, "schema:Place".freeze],
+      rangeIncludes: "schema:Place".freeze,
       subPropertyOf: "schema:location".freeze,
+      type: "rdf:Property".freeze
+    property :totalPaymentDue,
+      comment: %(The total amount due.).freeze,
+      domainIncludes: "schema:Invoice".freeze,
+      label: "totalPaymentDue".freeze,
+      rangeIncludes: "schema:PriceSpecification".freeze,
       type: "rdf:Property".freeze
     property :totalPrice,
       comment: %(The total price for the reservation or ticket, including applicable taxes, shipping, etc.).freeze,
@@ -8436,7 +8512,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Duration".freeze,
       type: "rdf:Property".freeze
     property :track,
-      comment: %(A music recording \(track\)&#x2014;usually a single song. If an ItemList is given, the list should contain items of type MusicRecording).freeze,
+      comment: %(A music recording \(track\)&#x2014;usually a single song. If an ItemList is given, the list should contain items of type MusicRecording.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#MBZ).freeze,
       domainIncludes: ["schema:MusicPlaylist".freeze, "schema:MusicGroup".freeze],
       label: "track".freeze,
@@ -8463,7 +8539,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :trailer,
       comment: %(The trailer of a movie or tv/radio series, season, episode, etc.).freeze,
-      domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:Season".freeze, "schema:VideoGame".freeze, "schema:VideoGameSeries".freeze, "schema:MovieGameSeries".freeze, "schema:RadioSeries".freeze, "schema:TVSeries".freeze],
+      domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:Season".freeze, "schema:VideoGame".freeze, "schema:VideoGameSeries".freeze, "schema:MovieSeries".freeze, "schema:RadioSeries".freeze, "schema:TVSeries".freeze],
       label: "trailer".freeze,
       rangeIncludes: "schema:VideoObject".freeze,
       type: "rdf:Property".freeze
@@ -8651,7 +8727,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Specifies a regular expression for testing literal values according to the HTML spec.).freeze,
       domainIncludes: "schema:PropertyValueSpecification".freeze,
       label: "valuePattern".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :valueReference,
       comment: %(A pointer to a secondary value that provides additional information on the original value, e.g. a reference temperature.).freeze,
@@ -8750,7 +8826,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :width,
       comment: %(The width of the item.).freeze,
-      domainIncludes: ["schema:MediaObject".freeze, "schema:Product".freeze],
+      domainIncludes: ["schema:MediaObject".freeze, "schema:Product".freeze, "schema:VisualArtwork".freeze],
       label: "width".freeze,
       rangeIncludes: ["schema:Distance".freeze, "schema:QuantitativeValue".freeze],
       type: "rdf:Property".freeze
@@ -8826,7 +8902,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
 
     # Extra definitions
     term :Abdomen,
-      comment: %(Abdomen).freeze,
+      comment: %(Abdomen.).freeze,
       label: "Abdomen".freeze,
       type: "schema:PhysicalExam".freeze
     term :ActiveActionStatus,
@@ -8855,7 +8931,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "Anesthesia".freeze,
       type: "schema:MedicalSpecialty".freeze
     term :Appearance,
-      comment: %(Appearance).freeze,
+      comment: %(Appearance.).freeze,
       label: "Appearance".freeze,
       type: "schema:PhysicalExam".freeze
     term :Ayurvedic,
@@ -8885,7 +8961,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "Cardiovascular".freeze,
       type: "schema:MedicalSpecialty".freeze
     term :CardiovascularExam,
-      comment: %(Cardiovascular).freeze,
+      comment: %(Cardiovascular.).freeze,
       label: "CardiovascularExam".freeze,
       type: "schema:PhysicalExam".freeze
     term :CaseSeries,
@@ -8997,7 +9073,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "EPRelease".freeze,
       type: "schema:MusicAlbumReleaseType".freeze
     term :Ear,
-      comment: %(Ear).freeze,
+      comment: %(Ear.).freeze,
       label: "Ear".freeze,
       type: "schema:PhysicalExam".freeze
     term :Emergency,
@@ -9021,7 +9097,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "EventPostponed".freeze,
       type: "schema:EventStatusType".freeze
     term :EventRescheduled,
-      comment: %(The event has been rescheduled. The event's previousStartDate should be set to the old date and the startDate should be set to the event's new date. \(If the event has been rescheduled multiple times, the previousStartDate property may be repeated.\)).freeze,
+      comment: %(The event has been rescheduled. The event's previousStartDate should be set to the old date and the startDate should be set to the event's new date. \(If the event has been rescheduled multiple times, the previousStartDate property may be repeated\).).freeze,
       label: "EventRescheduled".freeze,
       type: "schema:EventStatusType".freeze
     term :EventScheduled,
@@ -9041,7 +9117,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "EvidenceLevelC".freeze,
       type: "schema:MedicalEvidenceLevel".freeze
     term :Eye,
-      comment: %(Eye).freeze,
+      comment: %(Eye.).freeze,
       label: "Eye".freeze,
       type: "schema:PhysicalExam".freeze
     term :FDAcategoryA,
@@ -9073,7 +9149,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "FailedActionStatus".freeze,
       type: "schema:ActionStatusType".freeze
     term :False,
-      comment: %(The boolean value false).freeze,
+      comment: %(The boolean value false.).freeze,
       label: "False".freeze,
       subClassOf: "schema:Boolean".freeze,
       type: "schema:Boolean".freeze
@@ -9090,7 +9166,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "Genetic".freeze,
       type: "schema:MedicalSpecialty".freeze
     term :Genitourinary,
-      comment: %(Genitourinary).freeze,
+      comment: %(Genitourinary.).freeze,
       label: "Genitourinary".freeze,
       type: "schema:PhysicalExam".freeze
     term :Geriatric,
@@ -9106,7 +9182,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "Hardcover".freeze,
       type: "schema:BookFormatType".freeze
     term :Head,
-      comment: %(Head).freeze,
+      comment: %(Head.).freeze,
       label: "Head".freeze,
       type: "schema:PhysicalExam".freeze
     term :HearingImpairedSupported,
@@ -9176,7 +9252,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "Longitudinal".freeze,
       type: "schema:MedicalObservationalStudyDesign".freeze
     term :Lung,
-      comment: %(Lung).freeze,
+      comment: %(Lung.).freeze,
       label: "Lung".freeze,
       type: "schema:PhysicalExam".freeze
     term :MRI,
@@ -9206,23 +9282,23 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "schema:GamePlayMode".freeze
     term :Musculoskeletal,
       comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of muscles, ligaments and skeletal system.).freeze,
-      label: "Musculoskeletal".freeze,
+      label: "Musculoskeletal.".freeze,
       type: "schema:MedicalSpecialty".freeze
     term :MusculoskeletalExam,
-      comment: %(Musculoskeletal).freeze,
+      comment: %(Musculoskeletal.).freeze,
       label: "MusculoskeletalExam".freeze,
       type: "schema:PhysicalExam".freeze
     term :Neck,
-      comment: %(Neck).freeze,
+      comment: %(Neck.).freeze,
       label: "Neck".freeze,
       type: "schema:PhysicalExam".freeze
     term :Neuro,
-      comment: %(Neuro).freeze,
+      comment: %(Neuro.).freeze,
       label: "Neuro".freeze,
       type: "schema:PhysicalExam".freeze
     term :Neurologic,
       comment: %(A specific branch of medical science that studies the nerves and nervous system and its respective disease states.).freeze,
-      label: "Neurologic".freeze,
+      label: "Neurologic.".freeze,
       type: "schema:MedicalSpecialty".freeze
     term :NewCondition,
       comment: %(Indicates that the item is new.).freeze,
@@ -9233,7 +9309,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "NoninvasiveProcedure".freeze,
       type: "schema:MedicalProcedureType".freeze
     term :Nose,
-      comment: %(Nose).freeze,
+      comment: %(Nose.).freeze,
       label: "Nose".freeze,
       type: "schema:PhysicalExam".freeze
     term :NotYetRecruiting,
@@ -9527,7 +9603,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "SingleRelease".freeze,
       type: "schema:MusicAlbumReleaseType".freeze
     term :Skin,
-      comment: %(Skin).freeze,
+      comment: %(Skin.).freeze,
       label: "Skin".freeze,
       type: "schema:PhysicalExam".freeze
     term :SoldOut,
@@ -9578,7 +9654,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "Therapeutic".freeze,
       type: "schema:MedicalDevicePurpose".freeze
     term :Throat,
-      comment: %(Throat).freeze,
+      comment: %(Throat.).freeze,
       label: "Throat".freeze,
       type: "schema:PhysicalExam".freeze
     term :TollFree,
@@ -9602,7 +9678,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "TripleBlindedTrial".freeze,
       type: "schema:MedicalTrialDesign".freeze
     term :True,
-      comment: %(The boolean value true).freeze,
+      comment: %(The boolean value true.).freeze,
       label: "True".freeze,
       subClassOf: "schema:Boolean".freeze,
       type: "schema:Boolean".freeze
@@ -9628,7 +9704,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "VinylFormat".freeze,
       type: "schema:MusicReleaseFormatType".freeze
     term :VitalSign,
-      comment: %(VitalSign).freeze,
+      comment: %(VitalSign.).freeze,
       label: "VitalSign".freeze,
       type: "schema:PhysicalExam".freeze
     term :WesternConventional,
