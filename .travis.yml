@@ -13,4 +13,6 @@ rvm:
 cache: bundler
 matrix:
   allow_failures:
-    - rvm: 2.2
+    - rvm:
+      - 2.2
+      - jruby
