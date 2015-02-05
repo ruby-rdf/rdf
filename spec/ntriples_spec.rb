@@ -741,7 +741,7 @@ describe RDF::NTriples do
     end
 
     it "should correctly format URI references" do
-      expect(@writer.new.format_uri(RDF::URI('http://rdf.rubyforge.org/'))).to eq '<http://rdf.rubyforge.org/>'
+      expect(@writer.new.format_uri(RDF::URI('http://rubygems.org/gems/rdf'))).to eq '<http://rubygems.org/gems/rdf>'
     end
 
     it "should correctly format plain literals" do

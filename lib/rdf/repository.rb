@@ -140,7 +140,7 @@ module RDF
     #
     # @example
     #   repository.transaction do |tx|
-    #     tx.insert [RDF::URI("http://rdf.rubyforge.org/"), RDF::DC.title, "RDF.rb"]
+    #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.title, "RDF.rb"]
     #   end
     #
     # @param  [RDF::Resource] context
