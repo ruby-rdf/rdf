@@ -200,6 +200,19 @@ describe RDF::Util::File do
               end
             end
           end
+
+          context "proxy" do
+            it "requests through proxy" do
+              WebMock.stub_request(:get, uri).
+                to_return(body: File.read(File.expand_path("../../etc/doap.nt", __FILE__)),
+                          status: 200,
+                          headers: { 'Content-Type' => RDF::NTriples::Format.content_type.first})
+              RDF::Util::File.open_file(uri, use_net_http: with_net_http, proxy: "http://proxy.example.com") do |f|
+                opened.opened
+              end
+              expect(WebMock).to have_requested(:get, uri)
+            end
+          end
         end
 
         context "https" do

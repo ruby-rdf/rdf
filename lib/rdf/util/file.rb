@@ -23,6 +23,8 @@ module RDF; module Util
     # Adds Accept header based on available reader content types to allow
     # for content negotiation based on available readers.
     #
+    # HTTP resources may be retrieved via proxy using the `proxy` option. If `RestClient` is loaded, they will use the proxy globally by setting something like the following:
+    #     `RestClient.proxy = "http://proxy.example.com/"`.
     # When retrieving documents over HTTP(S), use the mechanism described in [Providing and Discovering URI Documentation](http://www.w3.org/2001/tag/awwsw/issue57/latest/) to pass the appropriate `base_uri` to the block or as the return.
     #
     # Applications needing HTTP caching may consider
@@ -43,6 +45,8 @@ module RDF; module Util
     #   to override this implementation to provide more control over HTTP
     #   headers and redirect following. If opening as a file,
     #   options are passed to `Kernel.open`.
+    # @option options [String] :proxy
+    #   HTTP Proxy to use for requests.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open.
     # @option options [Boolean] :verify_none (false)
@@ -67,6 +71,7 @@ module RDF; module Util
 
         if defined?(RestClient) && !options[:use_net_http]
           # If RestClient is loaded, prefer it
+          RestClient.proxy = options[:proxy].to_s if options[:proxy]
           client = RestClient::Resource.new(base_uri, verify_ssl: ssl_verify)
           client.get(headers) do |response, request, res, &blk|
             case response.code
@@ -96,9 +101,11 @@ module RDF; module Util
           max_redirects = 5
           remote_document = nil
           parsed_url = ::URI.parse(filename_or_url.to_s)
+          parsed_proxy = ::URI.parse(options[:proxy].to_s)
           base_uri = parsed_url.to_s
           until remote_document do
             Net::HTTP::start(parsed_url.host, parsed_url.port,
+                            parsed_proxy.host, parsed_proxy.port,
                             open_timeout: 60 * 1000,
                             use_ssl: parsed_url.scheme == 'https',
                             verify_mode: ssl_verify
