@@ -1,5 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'webmock/rspec'
+require 'rdf/ntriples'
 
 describe RDF::Util::File do
   let(:uri) {"http://ruby-rdf.github.com/rdf/etc/doap.nt"}
