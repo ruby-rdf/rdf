@@ -5,7 +5,7 @@ describe RDF::URI do
   let(:new) {Proc.new { |*args| RDF::URI.new(*args) }}
 
   it "should be instantiable" do
-    expect { new.call('http://rdf.rubyforge.org/') }.not_to raise_error
+    expect { new.call('http://rubygems.org/gems/rdf') }.not_to raise_error
   end
 
   describe ".intern" do
@@ -198,14 +198,14 @@ describe RDF::URI do
 
   describe "#hash" do
     it "should have a consistent hash code" do
-      hash1 = new.call('http://rdf.rubyforge.org/').hash
-      hash2 = new.call('http://rdf.rubyforge.org/').hash
+      hash1 = new.call('http://rubygems.org/gems/rdf').hash
+      hash2 = new.call('http://rubygems.org/gems/rdf').hash
       expect(hash1).to eq hash2
     end
   end
 
   describe "#dup" do
-    let!(:uri1) {new.call('http://rdf.rubyforge.org/')}
+    let!(:uri1) {new.call('http://rubygems.org/gems/rdf')}
     let!(:uri2) {uri1.dup}
     
     describe "original" do
@@ -568,7 +568,7 @@ describe RDF::URI do
     {
       "http://example/"                       => "http://example/",
       "http://example/foo"                    => "http://example/",
-      'http://rdf.rubyforge.org/RDF/URI.html' => 'http://rdf.rubyforge.org/',
+      'http://rubygems.org/gems/rdf'          => 'http://rubygems.org/',
       "mailto:gregg@greggkellogg.net"         => "mailto:gregg@greggkellogg.net",
       "urn:isbn:12345"                        => "urn:isbn:12345"
     }.each do |uri, root|
@@ -584,7 +584,7 @@ describe RDF::URI do
       "http://example/"                       => nil,
       "http://example/foo"                    => "http://example/",
       "http://example/foo/bar"                => "http://example/foo/",
-      'http://rdf.rubyforge.org/RDF/URI.html' => 'http://rdf.rubyforge.org/RDF/',
+      'http://rubygems.org/gems/rdf'          => 'http://rubygems.org/gems/',
       "mailto:gregg@greggkellogg.net"         => nil,
       "urn:isbn:12345"                        => nil
     }.each do |uri, parent|

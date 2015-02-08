@@ -7,16 +7,17 @@ module RDF
   # Also compatible with International Resource Identifier (IRI)
   #
   # @example Creating a URI reference (1)
-  #   uri = RDF::URI.new("http://rdf.rubyforge.org/")
+  #   uri = RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating a URI reference (2)
-  #   uri = RDF::URI.new(:scheme => 'http', :host => 'rdf.rubyforge.org', :path => '/')
+  #   uri = RDF::URI.new(:scheme => 'http', host: 'rubygems.org', path: '/rdf')
+  #     #=> RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating an interned URI reference
-  #   uri = RDF::URI.intern("http://rdf.rubyforge.org/")
+  #   uri = RDF::URI.intern("http://rubygems.org/gems/rdf")
   #
   # @example Getting the string representation of a URI
-  #   uri.to_s #=> "http://rdf.rubyforge.org/"
+  #   uri.to_s #=> "http://rubygems.org/gems/rdf"
   #
   # http://en.wikipedia.org/wiki/Internationalized_Resource_Identifier
   # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier

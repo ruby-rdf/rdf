@@ -148,14 +148,18 @@ module RDF
         other: {}
       }
 
-      # FIXME: This can try to resolve referenced terms against the previous version of this vocabulary, which may be strict, and fail if the referenced term hasn't been created yet.
       vocab.each.to_a.sort.each do |term|
         name = term.to_s[uri.length..-1].to_sym
-        kind = case term.type.to_s
-        when /Class/    then :class
-        when /Property/ then :property
-        when /Datatype/ then :datatype
-        else                 :other
+        kind = begin
+          case term.type.to_s
+          when /Class/    then :class
+          when /Property/ then :property
+          when /Datatype/ then :datatype
+          else                 :other
+          end
+        rescue KeyError
+          # This can try to resolve referenced terms against the previous version of this vocabulary, which may be strict, and fail if the referenced term hasn't been created yet.
+          :other
         end
         term_nodes[kind][name] = term.attributes
       end

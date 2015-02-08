@@ -23,6 +23,8 @@ module RDF; module Util
     # Adds Accept header based on available reader content types to allow
     # for content negotiation based on available readers.
     #
+    # HTTP resources may be retrieved via proxy using the `proxy` option. If `RestClient` is loaded, they will use the proxy globally by setting something like the following:
+    #     `RestClient.proxy = "http://proxy.example.com/"`.
     # When retrieving documents over HTTP(S), use the mechanism described in [Providing and Discovering URI Documentation](http://www.w3.org/2001/tag/awwsw/issue57/latest/) to pass the appropriate `base_uri` to the block or as the return.
     #
     # Applications needing HTTP caching may consider
@@ -43,15 +45,19 @@ module RDF; module Util
     #   to override this implementation to provide more control over HTTP
     #   headers and redirect following. If opening as a file,
     #   options are passed to `Kernel.open`.
+    # @option options [String] :proxy
+    #   HTTP Proxy to use for requests.
     # @option options [Array, String] :headers
     #   HTTP Request headers, passed to Kernel.open.
     # @option options [Boolean] :verify_none (false)
     #   Don't verify SSL certificates
-    # @return [IO, RemoteDocument, Object] A {RemoteDocument} or `IO` for local files. If a block is given, the result of evaluating the block is returned.
-    # @yield [IO, RemoteDocument] A {RemoteDocument} or `IO` for local files
+    # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
+    # @yield [ RemoteDocument] A {RemoteDocument} for local files
     # @yieldreturn [Object] returned from open_file
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
+      remote_document = nil
+
       if filename_or_url.to_s =~ /^https?/
         # Open as a URL with Net::HTTP
         headers = options.fetch(:headers, {})
@@ -61,12 +67,12 @@ module RDF; module Util
         end
         headers['Accept'] ||= (reader_types + %w(*/*;q=0.1)).join(", ")
 
-        remote_document = nil
         base_uri = filename_or_url.to_s
         ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         if defined?(RestClient) && !options[:use_net_http]
           # If RestClient is loaded, prefer it
+          RestClient.proxy = options[:proxy].to_s if options[:proxy]
           client = RestClient::Resource.new(base_uri, verify_ssl: ssl_verify)
           client.get(headers) do |response, request, res, &blk|
             case response.code
@@ -94,11 +100,12 @@ module RDF; module Util
           # Otherwise, fallback to Net::HTTP
           redirect_count = 0
           max_redirects = 5
-          remote_document = nil
           parsed_url = ::URI.parse(filename_or_url.to_s)
+          parsed_proxy = ::URI.parse(options[:proxy].to_s)
           base_uri = parsed_url.to_s
           until remote_document do
             Net::HTTP::start(parsed_url.host, parsed_url.port,
+                            parsed_proxy.host, parsed_proxy.port,
                             open_timeout: 60 * 1000,
                             use_ssl: parsed_url.scheme == 'https',
                             verify_mode: ssl_verify
@@ -140,15 +147,29 @@ module RDF; module Util
             end
           end
         end
-
-        if block_given?
-          yield remote_document
-        else
-          remote_document
-        end
       else
+        # Fake content type based on found format
+        format = RDF::Format.for(filename_or_url.to_s)
+        content_type = format ? format.content_type.first : 'text/plain'
         # Open as a file, passing any options
-        Kernel.open(filename_or_url, "r", options, &block)
+        Kernel.open(filename_or_url, "r:utf-8", options) do |file|
+          document_options = {
+            base_uri:     filename_or_url.to_s,
+            charset:      file.external_encoding,
+            code:         200,
+            content_type: content_type,
+            last_modified:file.mtime,
+            headers:      {'Content-Type' => content_type, 'Last-Modified' => file.mtime.xmlschema}
+          }
+
+          remote_document = RemoteDocument.new(file.read, document_options)
+        end
+      end
+
+      if block_given?
+        yield remote_document
+      else
+        remote_document
       end
     end
 
@@ -193,6 +214,7 @@ module RDF; module Util
 
       ##
       # Set content
+      # @param [String] body entiry content of request.
       def initialize(body, options = {})
         super(body)
         options.each do |key, value|
@@ -236,7 +258,7 @@ module RDF; module Util
       # @example
       #
       #     d = RemoteDocument.new(...)
-      #     describedby = links.find_link('rel' => 'describedby)
+      #     describedby = links.find_link(['rel', 'describedby']).href
       #
       # @return [::LinkHeader]
       def links

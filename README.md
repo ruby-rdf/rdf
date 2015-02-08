@@ -302,10 +302,10 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Mutable}
   * {RDF::Durable}
 * {RDF::Transaction}
-* [RDF::AllegroGraph](http://rubydoc.info/github/emk/rdf-agraph/master/frames) (extension)
-* [RDF::Mongo](http://rubydoc.info/github/pius/rdf-mongo/master/frames) (extension)
-* [RDF::DataObjects](http://rubydoc.info/github/ruby-rdf/rdf-do/frames) (extension)
-* [RDF::Sesame](http://rdf.rubyforge.org/sesame/) (extension)
+* [RDF::AllegroGraph](http://rubydoc.info/github/ruby-rdf/rdf-agraph) (extension)
+* [RDF::Mongo](http://rubydoc.info/github/ruby-rdf/rdf-mongo) (extension)
+* [RDF::DataObjects](http://rubydoc.info/github/ruby-rdf/rdf-do) (extension)
+* [RDF::Sesame](http://www.rubydoc.info/github/ruby-rdf/rdf-sesame) (extension)
 
 ### RDF Querying
 
@@ -315,7 +315,7 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
-* [SPARQL](http://rubydoc.info/github/ruby-rdf/sparql/frames) (extension)
+* [SPARQL](http://rubydoc.info/github/ruby-rdf/sparql) (extension)
 
 
 ### RDF Vocabularies

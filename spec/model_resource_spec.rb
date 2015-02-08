@@ -10,8 +10,8 @@ describe RDF::Resource do
   end
 
   it "should instantiate URIs" do
-    resource = subject.call('http://rdf.rubyforge.org/')
+    resource = subject.call('http://rubygems.org/gems/rdf')
     expect(resource).to be_a_uri
-    expect(resource.to_s).to eq 'http://rdf.rubyforge.org/'
+    expect(resource.to_s).to eq 'http://rubygems.org/gems/rdf'
   end
 end

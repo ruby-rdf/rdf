@@ -1,5 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'webmock/rspec'
+require 'rdf/ntriples'
 
 describe RDF::Util::File do
   let(:uri) {"http://ruby-rdf.github.com/rdf/etc/doap.nt"}
@@ -198,6 +199,19 @@ describe RDF::Util::File do
                 expect(f.read).to eq "foo"
                 opened.opened
               end
+            end
+          end
+
+          context "proxy" do
+            it "requests through proxy" do
+              WebMock.stub_request(:get, uri).
+                to_return(body: File.read(File.expand_path("../../etc/doap.nt", __FILE__)),
+                          status: 200,
+                          headers: { 'Content-Type' => RDF::NTriples::Format.content_type.first})
+              RDF::Util::File.open_file(uri, use_net_http: with_net_http, proxy: "http://proxy.example.com") do |f|
+                opened.opened
+              end
+              expect(WebMock).to have_requested(:get, uri)
             end
           end
         end

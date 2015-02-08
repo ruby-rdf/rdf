@@ -13,18 +13,12 @@ module RDF
   # a projection of an underlying {RDF::Repository} supporting contexts.
   #
   # @example Creating an empty unnamed graph
-  #   graph = Graph.new
+  #   graph = RDF::Graph.new
   #
   # @example Loading graph data from a URL
-  #   graph = Graph.new("http://rubygems.org/")
+  #   graph = RDF::Graph.load("http://ruby-rdf.github.io/rdf/etc/doap.nt")
   #
-  # @example Loading graph data from a URL (1)
-  #   require 'rdf/rdfxml'  # for RDF/XML support
-  #   
-  #   graph = RDF::Graph.new("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
-  #   graph.load!
-  #
-  # @example Loading graph data from a URL (2)
+  # @example Loading graph data from a URL
   #   require 'rdf/rdfxml'  # for RDF/XML support
   #   
   #   graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
@@ -32,8 +26,8 @@ module RDF
   # @example Accessing a specific named graph within a {RDF::Repository}
   #   require 'rdf/trig'  # for TriG support
   #
-  #   repository = RDF::Repository.load("https://raw.github.com/ruby-rdf/rdf-trig/master/etc/doap.trig")
-  #   graph = RDF::Graph.new(:data => repository, :context => RDF::URI("http://greggkellogg.net/foaf#me"))
+  #   repository = graph = RDF::Repository.load("https://raw.githubusercontent.com/ruby-rdf/rdf-trig/develop/etc/doap.trig", format: :trig))
+  #   graph = RDF::Graph.new(data: repository, context: RDF::URI("http://greggkellogg.net/foaf#me"))
   class Graph
     include RDF::Value
     include RDF::Countable

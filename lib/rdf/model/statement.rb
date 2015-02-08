@@ -219,7 +219,7 @@ module RDF
     # @param  [Object] other
     # @return [Boolean]
     def ==(other)
-      to_a == other.to_a
+      to_a == Array(other)
     end
 
     ##
