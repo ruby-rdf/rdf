@@ -8,7 +8,7 @@ module RDF; class Literal
   #   RDF::Literal(Math::PI) * 2              #=> RDF::Literal(Math::PI * 2)
   #   RDF::Literal(Math::PI) / 2              #=> RDF::Literal(Math::PI / 2)
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#double
+  # @see   http://www.w3.org/TR/xmlschema11-2/#double
   # @since 0.2.1
   class Double < Numeric
     DATATYPE = XSD.double
@@ -38,7 +38,7 @@ module RDF; class Literal
     # Converts this literal into its canonical lexical representation.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#double
+    # @see    http://www.w3.org/TR/xmlschema11-2/#double
     def canonicalize!
       # Can't use simple %f transformation due to special requirements from
       # N3 tests in representation

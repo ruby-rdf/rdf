@@ -2,7 +2,7 @@ module RDF; class Literal
   ##
   # A token literal.
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#token
+  # @see   http://www.w3.org/TR/xmlschema11-2/#token
   # @since 0.2.3
   class Token < Literal
     DATATYPE = XSD.token
@@ -22,7 +22,7 @@ module RDF; class Literal
     # Converts this literal into its canonical lexical representation.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#boolean
+    # @see    http://www.w3.org/TR/xmlschema11-2/#boolean
     def canonicalize!
       @string = @object.to_s if @object
       self

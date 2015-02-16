@@ -8,7 +8,7 @@ module RDF; class Literal
   #   RDF::Literal(6) * 7                     #=> RDF::Literal(42)
   #   RDF::Literal(84) / 2                    #=> RDF::Literal(42)
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#integer
+  # @see   http://www.w3.org/TR/xmlschema11-2/#integer
   # @see   http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#integer
   # @since 0.2.1
   class Integer < Decimal
@@ -34,7 +34,7 @@ module RDF; class Literal
     # Converts this literal into its canonical lexical representation.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#integer
+    # @see    http://www.w3.org/TR/xmlschema11-2/#integer
     def canonicalize!
       @string = @object.to_s if @object
       self

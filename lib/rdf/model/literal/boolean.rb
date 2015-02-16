@@ -2,7 +2,7 @@ module RDF; class Literal
   ##
   # A boolean literal.
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#boolean
+  # @see   http://www.w3.org/TR/xmlschema11-2/#boolean
   # @since 0.2.1
   class Boolean < Literal
     DATATYPE = XSD.boolean
@@ -30,7 +30,7 @@ module RDF; class Literal
     # Converts this literal into its canonical lexical representation.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#boolean-canonical-representation
+    # @see    http://www.w3.org/TR/xmlschema11-2/#boolean-canonical-representation
     def canonicalize!
       @string = (@object ? :true : :false).to_s
       self

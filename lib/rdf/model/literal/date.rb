@@ -2,7 +2,7 @@ module RDF; class Literal
   ##
   # A date literal.
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#date
+  # @see   http://www.w3.org/TR/xmlschema11-2/#date
   # @since 0.2.1
   class Date < Literal
     DATATYPE = XSD.date
@@ -29,7 +29,7 @@ module RDF; class Literal
     # Note that the timezone is recoverable for xsd:date, where it is not for xsd:dateTime and xsd:time, which are both transformed relative to Z, if a timezone is provided.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#date
+    # @see    http://www.w3.org/TR/xmlschema11-2/#date
     def canonicalize!
       @string = @object.strftime(FORMAT) + self.tz.to_s if self.valid?
       self
