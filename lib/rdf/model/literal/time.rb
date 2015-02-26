@@ -7,7 +7,7 @@ module RDF; class Literal
   # representation for `xsd:dateTime`: "hh:mm:ss.sss" with an optional
   # following time zone indicator.
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#time
+  # @see   http://www.w3.org/TR/xmlschema11-2/#time
   # @since 0.2.1
   class Time < Literal
     DATATYPE = XSD.time
@@ -40,7 +40,7 @@ module RDF; class Literal
     # Additionally, the canonical representation for midnight is 00:00:00.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#time
+    # @see    http://www.w3.org/TR/xmlschema11-2/#time
     def canonicalize!
       if self.valid?
         @string = if has_timezone?

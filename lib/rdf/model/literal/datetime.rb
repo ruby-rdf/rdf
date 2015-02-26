@@ -2,7 +2,7 @@ module RDF; class Literal
   ##
   # A date/time literal.
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#dateTime
+  # @see   http://www.w3.org/TR/xmlschema11-2/#dateTime#boolean
   # @since 0.2.1
   class DateTime < Literal
     DATATYPE = XSD.dateTime
@@ -28,7 +28,7 @@ module RDF; class Literal
     # with date and time normalized to UTC.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#dateTime
+    # @see    http://www.w3.org/TR/xmlschema11-2/#dateTime
     def canonicalize!
       if self.valid?
         @string = if has_timezone?

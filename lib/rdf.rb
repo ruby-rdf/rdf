@@ -198,8 +198,8 @@ module RDF
 
   ##
   # respond to module or RDFV
-  def self.respond_to?(method)
-    super || RDF::RDFV.respond_to?(method)
+  def self.respond_to?(method, include_all = false)
+    super || RDF::RDFV.respond_to?(method, include_all)
   end
 
   ##

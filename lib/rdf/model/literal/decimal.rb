@@ -8,7 +8,7 @@ module RDF; class Literal
   #   RDF::Literal(BigDecimal('1.0')) * 0.5   #=> RDF::Literal(BigDecimal('0.5'))
   #   RDF::Literal(BigDecimal('1.0')) / 0.5   #=> RDF::Literal(BigDecimal('2.0'))
   #
-  # @see   http://www.w3.org/TR/xmlschema-2/#decimal
+  # @see   http://www.w3.org/TR/xmlschema11-2/#decimal
   # @since 0.2.1
   class Decimal < Numeric
     DATATYPE = XSD.decimal
@@ -31,7 +31,7 @@ module RDF; class Literal
     # Converts this literal into its canonical lexical representation.
     #
     # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema-2/#decimal
+    # @see    http://www.w3.org/TR/xmlschema11-2/#decimal
     def canonicalize!
       # Can't use simple %f transformation due to special requirements from
       # N3 tests in representation
