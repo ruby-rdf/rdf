@@ -21,7 +21,7 @@ group :debug do
   gem "wirble"
   gem "redcarpet", :platforms => :ruby
   gem "debugger", :platforms => :mri_19
-  gem "byebug", :platforms => [:mri_20, :mri_21]
+  gem "byebug", :platforms => :mri
   gem "ruby-debug", :platforms => :jruby
   gem "pry", :platforms => :rbx
   gem 'guard-rspec'
