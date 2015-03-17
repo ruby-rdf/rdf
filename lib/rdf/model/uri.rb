@@ -312,6 +312,18 @@ module RDF
     # A URI is relative when it does not have a scheme
     # @return [Boolean] `true` or `false`
     def relative?; !absolute?; end
+    
+    # Attempt to make this URI relative to the provided `base_uri`. If successful, returns a relative URI, otherwise the original URI
+    # @param [#to_s] base_uri
+    # @return [RDF::URI]
+    def relativize(base_uri)
+      if base_uri.to_s.end_with?("/", "#") &&
+         self.to_s.start_with?(base_uri.to_s)
+        RDF::URI(self.to_s[base_uri.to_s.length..-1])
+      else
+        self
+      end
+    end
 
     ##
     # Returns the string length of this URI.
