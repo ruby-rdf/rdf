@@ -2,7 +2,7 @@ module RDF
   ##
   # A {Vocabulary} represents an RDFS or OWL vocabulary.
   #
-  # A {Vocabulary} can also serve as a Domain Specific Language (DSL) for generating an RDF Graph definition for the vocabulary (see {RDF::Vocabulary#to_graph}).
+  # A {Vocabulary} can also serve as a Domain Specific Language (DSL) for generating an RDF Graph definition for the vocabulary (see {RDF::Vocabulary#to_enum}).
   #
   # ### Defining a vocabulary using the DSL
   # Vocabularies can be defined based on {RDF::Vocabulary} or {RDF::StrictVocabulary} using a simple Domain Specific Language (DSL). Terms of the vocabulary are specified using either `property` or `term` (alias), with the attributes of the term listed in a hash. See {property} for description of the hash.
@@ -61,7 +61,7 @@ module RDF
   #   foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
   #
   # @example Generating RDF from a vocabulary definition
-  #   graph = RDF::RDFS.to_graph
+  #   graph = RDF::Graph.new << RDF::RDFS.to_enum
   #   graph.dump(:ntriples)
   #
   # @example Defining a simple vocabulary
@@ -273,7 +273,6 @@ module RDF
         end
       end
       alias_method :to_enum, :enum_for
-
       ##
       # Enumerate each statement constructed from the defined vocabulary terms
       #

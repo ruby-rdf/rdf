@@ -2,10 +2,8 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::URI do
-  let(:new) {Proc.new { |*args| RDF::URI.new(*args) }}
-
   it "should be instantiable" do
-    expect { new.call('http://rubygems.org/gems/rdf') }.not_to raise_error
+    expect { described_class.new('http://rubygems.org/gems/rdf') }.not_to raise_error
   end
 
   describe ".intern" do
@@ -30,7 +28,7 @@ describe RDF::URI do
     it "should recognize URNs" do
       urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
       urns.each do |urn|
-        uri = new.call(urn)
+        uri = described_class.new(urn)
         expect(uri).to be_a_uri
         expect(uri).to respond_to(:urn?)
         expect(uri).to be_a_urn
@@ -41,7 +39,7 @@ describe RDF::URI do
     it "should recognize URLs" do
       urls = %w(mailto:jhacker@example.org http://example.org/ ftp://example.org/)
       urls.each do |url|
-        uri = new.call(url)
+        uri = described_class.new(url)
         expect(uri).to be_a_uri
         expect(uri).to respond_to(:url?)
         expect(uri).to be_a_url
@@ -198,14 +196,14 @@ describe RDF::URI do
 
   describe "#hash" do
     it "should have a consistent hash code" do
-      hash1 = new.call('http://rubygems.org/gems/rdf').hash
-      hash2 = new.call('http://rubygems.org/gems/rdf').hash
+      hash1 = described_class.new('http://rubygems.org/gems/rdf').hash
+      hash2 = described_class.new('http://rubygems.org/gems/rdf').hash
       expect(hash1).to eq hash2
     end
   end
 
   describe "#dup" do
-    let!(:uri1) {new.call('http://rubygems.org/gems/rdf')}
+    let!(:uri1) {described_class.new('http://rubygems.org/gems/rdf')}
     let!(:uri2) {uri1.dup}
     
     describe "original" do
@@ -227,7 +225,7 @@ describe RDF::URI do
 
   describe "#anonymous?" do
     it "should not be #anonymous?" do
-      expect(new.call('http://example.org')).not_to be_anonymous
+      expect(described_class.new('http://example.org')).not_to be_anonymous
     end
   end
 
@@ -546,7 +544,7 @@ describe RDF::URI do
       "urn:isbn:12345"                => false
     }.each do |uri, is_hier|
       it uri do
-        expect(new.call(uri).hier?).to eq is_hier
+        expect(described_class.new(uri).hier?).to eq is_hier
       end
     end
   end
@@ -559,7 +557,7 @@ describe RDF::URI do
       "urn:isbn:12345"                => true
     }.each do |uri, is_hier|
       it uri do
-        expect(new.call(uri).root?).to eq is_hier
+        expect(described_class.new(uri).root?).to eq is_hier
       end
     end
   end
@@ -573,8 +571,8 @@ describe RDF::URI do
       "urn:isbn:12345"                        => "urn:isbn:12345"
     }.each do |uri, root|
       it uri do
-        expect(new.call(uri).root).to be_a_uri
-        expect(new.call(uri).root).to eq root
+        expect(described_class.new(uri).root).to be_a_uri
+        expect(described_class.new(uri).root).to eq root
       end
     end
   end
@@ -590,10 +588,10 @@ describe RDF::URI do
     }.each do |uri, parent|
       it uri do
         if parent
-          expect(new.call(uri).parent).to be_a_uri
-          expect(new.call(uri).parent).to eq parent
+          expect(described_class.new(uri).parent).to be_a_uri
+          expect(described_class.new(uri).parent).to eq parent
         else
-          expect(new.call(uri).parent).to be_nil
+          expect(described_class.new(uri).parent).to be_nil
         end
       end
     end
@@ -610,9 +608,9 @@ describe RDF::URI do
     }.each do |uri, result|
       it uri do
         if result
-          expect(new.call(uri).query).to eq result
+          expect(described_class.new(uri).query).to eq result
         else
-          expect(new.call(uri).query).to be_nil
+          expect(described_class.new(uri).query).to be_nil
         end
       end
     end
@@ -633,9 +631,9 @@ describe RDF::URI do
     }.each do |uri, result|
       it uri do
         if result
-          expect(new.call(uri).query_values).to eq result
+          expect(described_class.new(uri).query_values).to eq result
         else
-          expect(new.call(uri).query_values).to be_nil
+          expect(described_class.new(uri).query_values).to be_nil
         end
       end
     end
@@ -650,7 +648,7 @@ describe RDF::URI do
         "?one=two&one=three&one=four" => [['one', 'two'], ['one', 'three'], ['one', 'four']],
       }.each do |uri, result|
         it uri do
-          expect(new.call(uri).query_values(Array)).to eq result
+          expect(described_class.new(uri).query_values(Array)).to eq result
         end
       end
     end
@@ -665,13 +663,44 @@ describe RDF::URI do
       nil => nil,
     }.each do |result, values|
       it values do
-        u = new.call("")
+        u = described_class.new("")
         u.query_values = values
         if result
           expect(u.query).to eq result
         else
           expect(u.query).to be_nil
         end
+      end
+    end
+  end
+
+  describe "#absolute?" do
+    {
+      "" => false,
+      "http://example.org/foo" => true,
+      "//example.org/foo" => false,
+      "foo" => false,
+    }.each do |uri, value|
+      it "<#{uri}>: #{value}" do
+        if value
+          expect(described_class.new(uri)).to be_absolute
+          expect(described_class.new(uri)).not_to be_relative
+        else
+          expect(described_class.new(uri)).not_to be_absolute
+          expect(described_class.new(uri)).to be_relative
+        end
+      end
+    end
+  end
+
+  describe "#relativize" do
+    {
+      "prefix with #" => ["http://example.com/#", "http://example.com/#foo", "foo"],
+      "prefix with /" => ["http://example.com/", "http://example.com/#foo", "#foo"],
+      "prefix without / or #" => ["http://example.com/f", "http://example.com/foo", "http://example.com/foo"],
+    }.each do |name, (base_uri,orig,result)|
+      it "<#{base_uri}> + <#{orig}>: <#{result}>" do
+        expect(described_class.new(orig).relativize(base_uri)).to eq result
       end
     end
   end
@@ -688,9 +717,9 @@ describe RDF::URI do
     }.each do |uri, result|
       it uri do
         if result
-          expect(new.call(uri).request_uri).to eq result
+          expect(described_class.new(uri).request_uri).to eq result
         else
-          expect(new.call(uri).request_uri).to be_nil
+          expect(described_class.new(uri).request_uri).to be_nil
         end
       end
     end

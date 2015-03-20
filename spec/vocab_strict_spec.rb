@@ -1,5 +1,5 @@
 require 'rdf'
-require 'rdf/vocab'
+require 'rdf/vocabulary'
 
 describe RDF::StrictVocabulary do
   subject :test_vocab do
