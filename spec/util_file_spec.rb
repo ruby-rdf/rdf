@@ -24,6 +24,29 @@ describe RDF::Util::File do
     end
   end
 
+  describe RDF::Util::File::FaradayAdapter do
+    let(:http_adapter) { RDF::Util::File::FaradayAdapter }
+    require 'faraday'
+    require 'faraday_middleware'
+
+    describe ".conn=" do
+      after do
+        http_adapter.conn = nil
+      end
+
+      it "should set the Faraday connection" do
+        custom_connection = Faraday.new
+        http_adapter.conn = custom_connection
+        expect(http_adapter.conn).to eq custom_connection
+      end
+    end
+
+    describe ".conn" do
+      it "should return a Faraday connection that follows redirects" do
+        expect(http_adapter.conn.builder.handlers).to include FaradayMiddleware::FollowRedirects
+      end
+    end
+  end
   describe ".open_file" do
     let(:uri) {"http://ruby-rdf.github.com/rdf/etc/doap.nt"}
     let(:opened) {double("opened")}
@@ -325,6 +348,13 @@ describe RDF::Util::File do
       context "using RestClient" do
         let(:http_adapter) { RDF::Util::File::RestClientAdapter }
         require 'rest_client'
+        it_behaves_like "using a HTTP client"
+      end
+
+      context "using Faraday" do
+        let(:http_adapter) { RDF::Util::File::FaradayAdapter }
+        require 'faraday'
+        require 'faraday_middleware'
         it_behaves_like "using a HTTP client"
       end
     end
