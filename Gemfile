@@ -15,6 +15,7 @@ group :develop do
   gem 'sparql',         git: "git://github.com/ruby-rdf/sparql.git", branch: "develop"
   gem 'sparql-client',  git: "git://github.com/ruby-rdf/sparql-client.git", branch: "develop"
   gem 'sxp',            git: "git://github.com/gkellogg/sxp-ruby.git"
+  gem 'rest-client-components'
 end
 
 group :debug do
