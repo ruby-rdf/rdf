@@ -41,7 +41,14 @@ module RDF; module Util
       def self.default_accept_header
         # Receive text/html and text/plain at a lower priority than other formats
         reader_types = RDF::Format.reader_types.map do |t|
-          t.to_s =~ /text\/(?:plain|html)/  ? "#{t};q=0.5" : t
+          case t.to_s
+          when /text\/(?:plain|html)/
+            "#{t};q=0.5"
+          when /application\/xhtml\+xml/
+            "#{t};q=0.7"
+          else
+            t
+          end
         end
 
         (reader_types + %w(*/*;q=0.1)).join(", ")
