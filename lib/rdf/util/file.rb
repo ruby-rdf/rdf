@@ -173,6 +173,59 @@ module RDF; module Util
       end
     end
 
+    ##
+    # Use Faraday for retrieving resources
+    # @since 1.2
+    class FaradayAdapter < HttpAdapter
+      class <<self
+        ##
+        # Set the Faraday::Connection to use for retrieving RDF resources
+        def conn= conn
+          @conn = conn
+        end
+
+        ##
+        # Get the Faraday::Connection to use for retrieving RDF resources,
+        # or a default connect that follows redirects.
+        def conn
+          @conn ||= Faraday.new do |conn|
+            conn.use FaradayMiddleware::FollowRedirects
+            conn.adapter Faraday.default_adapter
+          end
+        end
+      end
+
+      # @see HttpAdapter.open_url
+      # @param [String] base_uri to open
+      # @param  [Hash{Symbol => Object}] options
+      # @return [RemoteDocument, Object] A {RemoteDocument}.
+      def self.open_url base_uri, options
+        response = conn.get do |req|
+          req.url base_uri
+          headers(options).each do |k,v|
+            req.headers[k] = v
+          end
+        end
+
+        case response.status
+        when 200..299
+          # found object
+
+          # If a Location is returned, it defines the base resource for this file, not it's actual ending location
+          document_options = {
+            base_uri:     RDF::URI(response.headers.fetch(:location, response.env.url)),
+            charset:      Encoding::UTF_8,
+            code:         response.status,
+            headers:      response.headers
+          }
+
+          remote_document = RemoteDocument.new(response.body, document_options)
+        else
+          raise IOError, "<#{base_uri}>: #{response.code}"
+        end
+      end
+    end
+
     class <<self
       ##
       # Set the HTTP adapter
