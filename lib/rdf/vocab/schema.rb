@@ -738,7 +738,7 @@ module RDF
       comment: %(A collection of datasets.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "DataCatalog".freeze,
-      "owl:equivalentClass" => %(dcat:DataCatalog).freeze,
+      "owl:equivalentClass" => %(dcat:Catalog).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :DataDownload,
