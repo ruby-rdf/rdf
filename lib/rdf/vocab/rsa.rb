@@ -43,7 +43,7 @@ module RDF
    ).freeze,
       domain: "rsa:RSAKey".freeze,
       label: "modulus".freeze,
-      range: "cert:int".freeze,
+      range: ["xsd:base64Binary".freeze, "xsd:hexBinary".freeze],
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :private_exponent,
@@ -55,7 +55,7 @@ module RDF
     ).freeze,
       domain: "rsa:RSAPrivateKey".freeze,
       label: "private".freeze,
-      range: "cert:int".freeze,
+      range: "xsd:nonNegativeInteger".freeze,
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(unstable).freeze
     property :public_exponent,
@@ -65,7 +65,7 @@ module RDF
     ).freeze,
       domain: "rsa:RSAPublicKey".freeze,
       label: "public_exponent".freeze,
-      range: "cert:int".freeze,
+      range: "xsd:nonNegativeInteger".freeze,
       type: "owl:DatatypeProperty".freeze,
       "vs:term_status" => %(unstable).freeze
   end
