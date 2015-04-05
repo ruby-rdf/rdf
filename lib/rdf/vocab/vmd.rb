@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from etc/data-vocab.ttl
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::VMD` from the rdf-vocab gem instead
   class VMD < RDF::StrictVocabulary("http://data-vocabulary.org/")
 
     # Class definitions

@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://xmlns.com/wot/0.1/index.rdf
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::WOT` from the rdf-vocab gem instead
   class WOT < RDF::StrictVocabulary("http://xmlns.com/wot/0.1/")
 
     # Class definitions

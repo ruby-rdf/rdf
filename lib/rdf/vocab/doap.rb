@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://usefulinc.com/ns/doap#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::DOAP` from the rdf-vocab gem instead
   class DOAP < RDF::StrictVocabulary("http://usefulinc.com/ns/doap#")
 
     # Class definitions

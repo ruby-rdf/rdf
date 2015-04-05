@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/auth/cert#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::CERT` from the rdf-vocab gem instead
   class CERT < RDF::StrictVocabulary("http://www.w3.org/ns/auth/cert#")
 
     # Class definitions

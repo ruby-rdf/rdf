@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://purl.org/ontology/mo/
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::MO` from the rdf-vocab gem instead
   class MO < RDF::StrictVocabulary("http://purl.org/ontology/mo/")
 
     # Class definitions

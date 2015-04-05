@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/12/exif/ns#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::EXIF` from the rdf-vocab gem instead
   class EXIF < RDF::StrictVocabulary("http://www.w3.org/2003/12/exif/ns#")
 
     # Class definitions

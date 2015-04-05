@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/1999/xhtml/vocab#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::XHV` from the rdf-vocab gem instead
   class XHV < RDF::Vocabulary("http://www.w3.org/1999/xhtml/vocab#")
 
     # Property definitions

@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://purl.org/dc/terms/
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::DC` from the rdf-vocab gem instead
   class DC < RDF::StrictVocabulary("http://purl.org/dc/terms/")
 
     # Class definitions

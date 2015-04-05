@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/ma-ont.rdf
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::MA` from the rdf-vocab gem instead
   class MA < RDF::StrictVocabulary("http://www.w3.org/ns/ma-ont#")
 
     # Class definitions

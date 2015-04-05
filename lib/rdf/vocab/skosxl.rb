@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/TR/skos-reference/skos-xl.rdf
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::SKOSXL` from the rdf-vocab gem instead
   class SKOSXL < RDF::StrictVocabulary("http://www.w3.org/2008/05/skos-xl#")
 
     # Class definitions

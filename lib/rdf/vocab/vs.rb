@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/06/sw-vocab-status/ns#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::VS` from the rdf-vocab gem instead
   class VS < RDF::StrictVocabulary("http://www.w3.org/2003/06/sw-vocab-status/ns#")
 
     # Property definitions

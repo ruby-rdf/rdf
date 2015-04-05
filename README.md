@@ -321,6 +321,15 @@ from BNode identity (i.e., they each entail the other)
 ### RDF Vocabularies
 
 * {RDF}         - Resource Description Framework (RDF)
+* {RDF::OWL}    - Web Ontology Language (OWL)
+* {RDF::RDFS}   - RDF Schema (RDFS)
+* {RDF::RDFV}   - RDF Vocabulary (RDFV)
+* {RDF::XSD}    - XML Schema (XSD)
+
+#### Deprecated Vocabularies
+
+The following vocabularies will be deprecated in RDF.rb 2.0 and moved to the rdf-vocab gem.
+
 * {RDF::CC}     - Creative Commons (CC)
 * {RDF::CERT}   - W3 Authentication Certificate (CERT)
 * {RDF::DC}     - Dublin Core (DC)
@@ -335,10 +344,7 @@ from BNode identity (i.e., they each entail the other)
 * {RDF::MA}     - Media Resources (MA)
 * {RDF::MO}     - Music Ontology (MO)
 * {RDF::OG}     - Open Graph protocol (OG)
-* {RDF::OWL}    - Web Ontology Language (OWL)
 * {RDF::PROV}   - Provenance on the web (PROV)
-* {RDF::RDFS}   - RDF Schema (RDFS)
-* {RDF::RDFV}   - RDF Vocabulary (RDFV)
 * {RDF::RSA}    - W3 RSA Keys (RSA)
 * {RDF::RSS}    - RDF Site Summary (RSS)
 * {RDF::SCHEMA} - Schema.org (SCHEMA)
@@ -354,7 +360,6 @@ from BNode identity (i.e., they each entail the other)
 * {RDF::WOT}    - Web of Trust (WOT)
 * {RDF::XHTML}  - Extensible HyperText Markup Language (XHTML)
 * {RDF::XHV}    - XHTML Vocabulary (XHV)
-* {RDF::XSD}    - XML Schema (XSD)
 
 ## Dependencies
 

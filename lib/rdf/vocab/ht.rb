@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2011/http#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::HT` from the rdf-vocab gem instead
   class HT < RDF::StrictVocabulary("http://www.w3.org/2011/http#")
 
     # Class definitions

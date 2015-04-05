@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://creativecommons.org/ns#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::CC` from the rdf-vocab gem instead
   class CC < RDF::StrictVocabulary("http://creativecommons.org/ns#")
 
     # Class definitions

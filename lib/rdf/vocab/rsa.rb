@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/auth/rsa#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::RSA` from the rdf-vocab gem instead
   class RSA < RDF::StrictVocabulary("http://www.w3.org/ns/auth/rsa#")
 
     # Class definitions

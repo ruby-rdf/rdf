@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.heppnetz.de/ontologies/goodrelations/v1.owl
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::GR` from the rdf-vocab gem instead
   class GR < RDF::StrictVocabulary("http://purl.org/goodrelations/v1#")
 
     # Class definitions

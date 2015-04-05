@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2002/12/cal/icaltzd#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::ICAL` from the rdf-vocab gem instead
   class ICAL < RDF::StrictVocabulary("http://www.w3.org/2002/12/cal/icaltzd#")
 
     # Class definitions

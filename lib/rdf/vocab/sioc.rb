@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://rdfs.org/sioc/ns#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::SIOC` from the rdf-vocab gem instead
   class SIOC < RDF::StrictVocabulary("http://rdfs.org/sioc/ns#")
 
     # Class definitions
