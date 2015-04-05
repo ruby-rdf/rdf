@@ -39,7 +39,7 @@ module RDF
     property :deprecatedOn,
       domain: "cc:License".freeze,
       label: "deprecatedOn".freeze,
-      range: "http://www.w3.org/2001/XMLSchema-datatypes#date".freeze,
+      range: "xsd:date".freeze,
       type: "rdf:Property".freeze
     property :jurisdiction,
       domain: "cc:License".freeze,
