@@ -167,7 +167,7 @@ module RDF
       label: "landing page".freeze,
       range: "foaf:Document".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
-      subPropertyOf: "foaf:Page".freeze,
+      subPropertyOf: "foaf:page".freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :mediaType,
       comment: %(This property SHOULD be used when the media type of the distribution is defined 
