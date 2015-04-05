@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://creativecommons.org/ns#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::CC` from the rdf-vocab gem instead
   class CC < RDF::StrictVocabulary("http://creativecommons.org/ns#")
 
     # Class definitions
@@ -39,7 +40,7 @@ module RDF
     property :deprecatedOn,
       domain: "cc:License".freeze,
       label: "deprecatedOn".freeze,
-      range: "http://www.w3.org/2001/XMLSchema-datatypes#date".freeze,
+      range: "xsd:date".freeze,
       type: "rdf:Property".freeze
     property :jurisdiction,
       domain: "cc:License".freeze,

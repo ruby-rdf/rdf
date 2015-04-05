@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/12/exif/ns#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::EXIF` from the rdf-vocab gem instead
   class EXIF < RDF::StrictVocabulary("http://www.w3.org/2003/12/exif/ns#")
 
     # Class definitions
@@ -815,19 +816,19 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       comment: %(DateTime subseconds).freeze,
       "exif:tagNumber" => %(37520).freeze,
       label: "SubSecTime".freeze,
-      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subsecond".freeze],
+      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subseconds".freeze],
       type: "rdf:Property".freeze
     property :subSecTimeDigitized,
       comment: %(DateTimeDigitized subseconds).freeze,
       "exif:tagNumber" => %(37522).freeze,
       label: "SubSecTimeDigitized".freeze,
-      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subsecond".freeze],
+      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subseconds".freeze],
       type: "rdf:Property".freeze
     property :subSecTimeOriginal,
       comment: %(DateTimeOriginal subseconds).freeze,
       "exif:tagNumber" => %(37521).freeze,
       label: "SubSecTimeOriginal".freeze,
-      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subsecond".freeze],
+      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subseconds".freeze],
       type: "rdf:Property".freeze
     property :subjectArea,
       comment: %(The location and area of the main subject in the overall scene.).freeze,

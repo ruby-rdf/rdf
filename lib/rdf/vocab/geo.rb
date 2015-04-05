@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2003/01/geo/wgs84_pos#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::GEO` from the rdf-vocab gem instead
   class GEO < RDF::StrictVocabulary("http://www.w3.org/2003/01/geo/wgs84_pos#")
 
     # Class definitions

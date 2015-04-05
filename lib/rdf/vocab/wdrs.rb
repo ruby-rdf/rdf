@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2007/05/powder-s#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::WRDS` from the rdf-vocab gem instead
   class WDRS < RDF::StrictVocabulary("http://www.w3.org/2007/05/powder-s#")
 
     # Class definitions

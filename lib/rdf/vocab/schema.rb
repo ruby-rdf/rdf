@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://schema.org/docs/schema_org_rdfa.html
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::SCHEMA` from the rdf-vocab gem instead
   class SCHEMA < RDF::StrictVocabulary("http://schema.org/")
 
     # Class definitions
@@ -738,7 +739,7 @@ module RDF
       comment: %(A collection of datasets.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "DataCatalog".freeze,
-      "owl:equivalentClass" => %(dcat:DataCatalog).freeze,
+      "owl:equivalentClass" => %(dcat:Catalog).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :DataDownload,

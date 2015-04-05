@@ -50,7 +50,7 @@ vocab_sources = {
   foaf:   {uri: "http://xmlns.com/foaf/0.1/"},
   geo:    {uri: "http://www.w3.org/2003/01/geo/wgs84_pos#"},
   gr:     {uri: "http://purl.org/goodrelations/v1#", source: "http://www.heppnetz.de/ontologies/goodrelations/v1.owl"},
-  ht:     {uri: "http://www.w3.org/2006/http#"},
+  ht:     {uri: "http://www.w3.org/2011/http#"},
   ical:   {uri: "http://www.w3.org/2002/12/cal/icaltzd#"},
   ma:     {uri: "http://www.w3.org/ns/ma-ont#", source: "http://www.w3.org/ns/ma-ont.rdf"},
   mo:     {uri: "http://purl.org/ontology/mo/"},

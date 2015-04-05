@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/auth/cert#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::CERT` from the rdf-vocab gem instead
   class CERT < RDF::StrictVocabulary("http://www.w3.org/ns/auth/cert#")
 
     # Class definitions
@@ -132,7 +133,7 @@ module RDF
  <p>The only difference is that the octet string is then encoded using either xsd:base64Binary or xsd:hexBinary. Currently for all usages of this relation, the xsd:hexBinary datatype should be used until the SPARQL working group specifies specifies in its <a href="http://www.w3.org/TR/sparql11-entailment/#DEntRegime">D-Entailment</a> that those two types are equivalent.</p>
  <p>It would have been better had there been a hexInteger datatype that was standard and supported by all tools.</p>
    ).freeze,
-      domain: ["cert:DSAKey".freeze, "cert:RSAKey".freeze],
+      domain: ["cert:RSAKey".freeze],
       label: "modulus".freeze,
       range: ["xsd:base64Binary".freeze, "xsd:hexBinary".freeze],
       "rdfs:isDefinedBy" => %(cert:).freeze,
@@ -145,7 +146,7 @@ module RDF
           public_exponent*private_exponent = 1 modulo totient\(p*q\)
        The private exponent is often named 'd'
     ).freeze,
-      domain: "cert:RSAPrivateKey".freeze,
+      domain: "cert:PrivateKey".freeze,
       label: "private".freeze,
       range: "xsd:nonNegativeInteger".freeze,
       "rdfs:isDefinedBy" => %(cert:).freeze,

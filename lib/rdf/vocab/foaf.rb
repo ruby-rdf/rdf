@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://xmlns.com/foaf/0.1/
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::FOAF` from the rdf-vocab gem instead
   class FOAF < RDF::StrictVocabulary("http://xmlns.com/foaf/0.1/")
 
     # Class definitions

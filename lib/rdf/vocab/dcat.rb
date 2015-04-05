@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/ns/dcat#
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::DCAT` from the rdf-vocab gem instead
   class DCAT < RDF::StrictVocabulary("http://www.w3.org/ns/dcat#")
 
     # Class definitions
@@ -50,22 +51,22 @@ module RDF
       comment: %(represents a downloadable distribution of a dataset. This term has been deprecated).freeze,
       label: "Download (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
-      subClassOf: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
+      subClassOf: "dcat:Distribution".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze]
     term :Feed,
       comment: %(represents availability of a dataset as a feed. This term has been deprecated).freeze,
       label: "Feed (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
-      subClassOf: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
+      subClassOf: "dcat:Distribution".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze]
     term :WebService,
       comment: %(represents a web service that enables access to the data of a dataset. This term has been deprecated).freeze,
       label: "Web Service (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
-      subClassOf: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
+      subClassOf: "dcat:Distribution".freeze,
       type: ["rdfs:Class".freeze, "owl:Class".freeze]
 
     # Property definitions
@@ -73,7 +74,7 @@ module RDF
       comment: %(Could be any kind of URL that gives access to a distribution of the dataset. E.g. landing page, 
           download, feed URL, SPARQL endpoint. Use when your catalog does not have information on which it 
           is or when it is definitely not a download.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      domain: "dcat:Distribution".freeze,
       "http://purl.org/vocab/vann/usageNote" => %(The value is a URL.
           If the distribution\(s\) are accessible only through a landing page \(i.e. direct download URLs are 
           not known\), then the landing page link should be duplicated as accessURL on a distribution.).freeze,
@@ -83,7 +84,7 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :byteSize,
       comment: %(The size of a distribution in bytes.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      domain: "dcat:Distribution".freeze,
       "http://purl.org/vocab/vann/usageNote" => %(The size in bytes can be approximated when the precise size is not known. 
           The literal value of dcat:byteSize should by typed as xsd:decimal).freeze,
       label: "byte size".freeze,
@@ -92,52 +93,52 @@ module RDF
       type: ["rdf:Property".freeze, "owl:DatatypeProperty".freeze]
     property :bytes,
       comment: %(describe size of resource in bytes. This term has been deprecated).freeze,
-      domain: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      domain: "dcat:Distribution".freeze,
       label: "size in bytes (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
       range: "xsd:integer".freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
       type: ["rdf:Property".freeze, "owl:DatatypeProperty".freeze]
     property :contactPoint,
       comment: %(Links a dataset to relevant contact information which is provided using VCard.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       label: "contact point".freeze,
       range: "vcard:Kind".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :dataDictionary,
       comment: %(links a dataset to a dictionary that helps interpreting the data. This term has been deprecated).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       label: "data dictionary (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
       type: "rdf:Property".freeze
     property :dataQuality,
       comment: %(describes the quality of data e.g. precision. This should not be used to describe the data collection characteristics, other more specialized statistical properties can be used instead. This term has been deprecated).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       label: "data quality (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
       type: "rdf:Property".freeze
     property :dataset,
       comment: %(Links a catalog to a dataset that is part of the catalog.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Catalog".freeze,
+      domain: "dcat:Catalog".freeze,
       label: "dataset".freeze,
-      range: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      range: "dcat:Dataset".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
       subPropertyOf: "dc:hasPart".freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :distribution,
       comment: %(Connects a dataset to one of its available distributions.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       label: "distribution".freeze,
-      range: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      range: "dcat:Distribution".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :downloadURL,
       comment: %(This is a direct link to a downloadable file in a given format. E.g. CSV file or RDF file. The 
           format is described by the distribution's dc:format and/or dcat:mediaType).freeze,
-      domain: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      domain: "dcat:Distribution".freeze,
       "http://purl.org/vocab/vann/usageNote" => %(The value is a URL.).freeze,
       label: "download URL".freeze,
       range: "rdfs:Resource".freeze,
@@ -145,14 +146,14 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :granularity,
       comment: %(describes the level of granularity of data in a dataset. The granularity can be in time, place etc. This term has been deprecated).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       label: "granularity (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
       type: "rdf:Property".freeze
     property :keyword,
       comment: %(A keyword or tag describing the dataset.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       label: "keyword".freeze,
       range: "rdfs:Literal".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
@@ -160,18 +161,18 @@ module RDF
       type: ["rdf:Property".freeze, "owl:DatatypeProperty".freeze]
     property :landingPage,
       comment: %(A Web page that can be navigated to in a Web browser to gain access to the dataset, its distributions and/or additional information.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       "http://purl.org/vocab/vann/usageNote" => %(If the distribution\(s\) are accessible only through a landing page \(i.e. direct download 
           URLs are not known\), then the landing page link should be duplicated as accessURL on a distribution.).freeze,
       label: "landing page".freeze,
       range: "foaf:Document".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
-      subPropertyOf: "foaf:Page".freeze,
+      subPropertyOf: "foaf:page".freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :mediaType,
       comment: %(This property SHOULD be used when the media type of the distribution is defined 
           in IANA, otherwise dct:format MAY be used with different values.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      domain: "dcat:Distribution".freeze,
       label: "media type".freeze,
       range: "dc:MediaTypeOrExtent".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
@@ -179,22 +180,22 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :record,
       comment: %(Links a catalog to its records.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Catalog".freeze,
+      domain: "dcat:Catalog".freeze,
       label: "record".freeze,
-      range: "http://www.w3.org/ns/dcat#CatalogRecord".freeze,
+      range: "dcat:CatalogRecord".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :size,
       comment: %(the size of a distribution. This term has been deprecated).freeze,
-      domain: "http://www.w3.org/ns/dcat#Distribution".freeze,
+      domain: "dcat:Distribution".freeze,
       label: "size (Deprecated)".freeze,
       "owl:deprecated" => %(true).freeze,
-      "rdfs:isDefinedBy" => %(http://www.w3.org/ns/dcat#).freeze,
+      "rdfs:isDefinedBy" => %(dcat:).freeze,
       subPropertyOf: "dc:extent".freeze,
       type: "rdf:Property".freeze
     property :theme,
       comment: %(The main category of the dataset. A dataset can have multiple themes.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Dataset".freeze,
+      domain: "dcat:Dataset".freeze,
       "http://purl.org/vocab/vann/usageNote" => %(The set of skos:Concepts used to categorize the datasets are organized in 
           a skos:ConceptScheme describing all the categories and their relations in the catalog.).freeze,
       label: "theme".freeze,
@@ -204,7 +205,7 @@ module RDF
       type: ["rdf:Property".freeze, "owl:ObjectProperty".freeze]
     property :themeTaxonomy,
       comment: %(The knowledge organization system \(KOS\) used to classify catalog's datasets.).freeze,
-      domain: "http://www.w3.org/ns/dcat#Catalog".freeze,
+      domain: "dcat:Catalog".freeze,
       label: "theme taxonomy".freeze,
       range: "skos:ConceptScheme".freeze,
       "rdfs:isDefinedBy" => %(http://www.w3.org/TR/vocab-dcat/).freeze,

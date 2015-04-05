@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://ogp.me/ns
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::OGC` from the rdf-vocab gem instead
   class OGC < RDF::StrictVocabulary("http://ogp.me/ns/class#")
 
     # Datatype definitions

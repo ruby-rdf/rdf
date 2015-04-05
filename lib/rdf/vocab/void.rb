@@ -2,6 +2,7 @@
 # This file generated automatically using vocab-fetch from http://vocab.deri.ie/void.rdf
 require 'rdf'
 module RDF
+  # @deprecated Please use `RDF::Vocab::VOID` from the rdf-vocab gem instead
   class VOID < RDF::StrictVocabulary("http://rdfs.org/ns/void#")
 
     # Class definitions
