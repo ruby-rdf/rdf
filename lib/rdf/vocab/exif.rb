@@ -816,19 +816,19 @@ Interoperability IFD may be defined dependently to each Interoperability rule.).
       comment: %(DateTime subseconds).freeze,
       "exif:tagNumber" => %(37520).freeze,
       label: "SubSecTime".freeze,
-      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subsecond".freeze],
+      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subseconds".freeze],
       type: "rdf:Property".freeze
     property :subSecTimeDigitized,
       comment: %(DateTimeDigitized subseconds).freeze,
       "exif:tagNumber" => %(37522).freeze,
       label: "SubSecTimeDigitized".freeze,
-      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subsecond".freeze],
+      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subseconds".freeze],
       type: "rdf:Property".freeze
     property :subSecTimeOriginal,
       comment: %(DateTimeOriginal subseconds).freeze,
       "exif:tagNumber" => %(37521).freeze,
       label: "SubSecTimeOriginal".freeze,
-      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subsecond".freeze],
+      subPropertyOf: ["exif:dateAndOrTime".freeze, "exif:subseconds".freeze],
       type: "rdf:Property".freeze
     property :subjectArea,
       comment: %(The location and area of the main subject in the overall scene.).freeze,
