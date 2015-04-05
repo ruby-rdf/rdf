@@ -732,6 +732,8 @@ module RDF
       # @raise [KeyError] if property not defined in vocabulary
       def [](name)
         props.fetch(name.to_sym)
+      rescue KeyError => e
+        raise KeyError, "#{name} not found in vocabulary #{self.__name__}"
       end
     end
   end # StrictVocabulary
