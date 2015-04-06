@@ -270,6 +270,24 @@ describe RDF::Util::File do
               opened.opened
             end
           end
+
+          it "raises an IOError for HTTP 4xx status codes" do
+            opened.opened
+
+            WebMock.stub_request(:get, uri).to_return({status: 404})
+            expect do
+              RDF::Util::File.open_file(uri)
+            end.to raise_exception IOError
+          end
+
+          it "raises an IOError for HTTP 5xx status codes" do
+            opened.opened
+
+            WebMock.stub_request(:get, uri).to_return({status: 500})
+            expect do
+              RDF::Util::File.open_file(uri)
+            end.to raise_exception IOError
+          end
         end
 
         context "proxy" do
