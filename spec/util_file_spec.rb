@@ -209,7 +209,7 @@ describe RDF::Util::File do
         it "sets arbitrary header" do
           WebMock.stub_request(:get, uri).to_return(body: "foo", headers: {"Foo" => "Bar"})
           RDF::Util::File.open_file(uri) do |f|
-            expect(f.headers).to include(:foo => %(Bar))
+            expect(f.headers[:foo]).to eq %(Bar)
             opened.opened
           end
         end
@@ -392,6 +392,12 @@ describe RDF::Util::File do
         let(:http_adapter) { RDF::Util::File::FaradayAdapter }
         require 'faraday'
         require 'faraday_middleware'
+        it_behaves_like "using a HTTP client"
+      end
+
+      context "using Hurley" do
+        let(:http_adapter) { RDF::Util::File::HurleyAdapter }
+        require 'hurley'
         it_behaves_like "using a HTTP client"
       end
     end
