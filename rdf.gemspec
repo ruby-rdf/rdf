@@ -40,6 +40,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'yard',        '~> 0.8'
   gem.add_development_dependency 'faraday',     '~> 0.9'
   gem.add_development_dependency 'faraday_middleware', '~> 0.9'
+  gem.add_development_dependency 'hurley'
 
   gem.post_install_message       = nil
 end
