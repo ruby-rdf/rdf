@@ -313,8 +313,8 @@ module RDF
       unless context.nil?
         if patterns.empty?
           patterns = [Pattern.new(nil, nil, nil, :context => context)]
-        elsif patterns.first.context.nil?
-          patterns.first.context = context
+        else
+          apply_context
         end
       end
 
@@ -429,6 +429,11 @@ module RDF
     # @return [RDF::IRI, RDF::Query::Variable]
     def context
       options[:context]
+    end
+
+    # Apply the context to all patterns that have no context
+    def apply_context
+      patterns.each {|pattern| pattern.context = context if pattern.context.nil?} unless context.nil?
     end
 
     # Query has no patterns
