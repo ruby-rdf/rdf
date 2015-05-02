@@ -64,7 +64,6 @@ module RDF
   #   _:a foaf:name "Alice" .
   #   _:a foaf:mbox <mailto:alice@work.example.org> .
   #
-  #   
   # @see http://www.w3.org/TR/rdf-sparql-query/#rdfDataset
   # @since 0.3.0
   class Query
@@ -314,7 +313,7 @@ module RDF
         if patterns.empty?
           patterns = [Pattern.new(nil, nil, nil, :context => context)]
         else
-          apply_context
+          apply_context(context)
         end
       end
 
@@ -431,9 +430,26 @@ module RDF
       options[:context]
     end
 
-    # Apply the context to all patterns that have no context
-    def apply_context
+    # Apply the context specified (or configured) to all patterns that have no context
+    # @param [RDF::IRI, RDF::Query::Variable] context (self.context)
+    def apply_context(context = options[:context])
       patterns.each {|pattern| pattern.context = context if pattern.context.nil?} unless context.nil?
+    end
+
+    ##
+    # Returns `true` if any pattern contains a variable.
+    #
+    # @return [Boolean]
+    def variable?
+      patterns.any?(&:variable?) || context && context.variable?
+    end
+
+    ##
+    # Returns `true` if any pattern contains a blank node.
+    #
+    # @return [Boolean]
+    def has_blank_nodes?
+      patterns.any?(&:has_blank_nodes?) || context && context.node?
     end
 
     # Query has no patterns
