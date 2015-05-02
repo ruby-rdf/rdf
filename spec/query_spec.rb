@@ -805,6 +805,33 @@ describe RDF::Query do
     end
   end
 
+  describe "#each_solution" do
+    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    it "enumerates solutions" do
+      query = RDF::Query.new do
+        pattern [:person, RDF.type, FOAF.Person]
+      end
+      query.execute(graph)
+      expect {|b| query.each_solution(&b)}.to yield_control.at_least(3)
+      query.each_solution do |solution|
+        expect(solution).to be_a(RDF::Query::Solution)
+      end
+    end
+  end
+
+  describe "#each_statement" do
+    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    it "enumerates solutions" do
+      query = RDF::Query.new do
+        pattern [:person, RDF.type, FOAF.Person]
+      end
+      expect {|b| query.each_statement(&b)}.to yield_control.once
+      query.each_statement do |pattern|
+        expect(pattern).to be_a(RDF::Query::Pattern)
+      end
+    end
+  end
+
   context "Examples" do
     let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
     subject {

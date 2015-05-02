@@ -67,6 +67,7 @@ module RDF
   # @see http://www.w3.org/TR/rdf-sparql-query/#rdfDataset
   # @since 0.3.0
   class Query
+    include Enumerable
     autoload :Pattern,   'rdf/query/pattern'
     autoload :Solution,  'rdf/query/solution'
     autoload :Solutions, 'rdf/query/solutions'
@@ -468,6 +469,17 @@ module RDF
       @solutions.each(&block)
     end
     alias_method :each, :each_solution
+
+    ##
+    # Enumerates over each statement (pattern).
+    #
+    # @yield  [RDF::Query::Pattern]
+    # @yieldparam [::Query::Pattern] pattern
+    # @return [Enumerator]
+    def each_statement(&block)
+      apply_context
+      patterns.each(&block)
+    end
 
     ##
     # Duplicate query, including patterns and solutions
