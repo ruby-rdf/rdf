@@ -21,7 +21,7 @@ describe RDF::Query::Pattern do
         expect(RDF::Query::Pattern.from(:subject => :s, :predicate => :p, :object => :o, :context => :c)).to eq RDF::Query::Pattern.new(:s, :p, :o, :context => :c)
       end
     end
-    
+
     it "should not have variables" do
       expect(subject.variables?).to be_falsey
       expect(subject.variable_count).to eq 0
@@ -51,6 +51,10 @@ describe RDF::Query::Pattern do
   context "with one bound variable" do
     let(:s) {RDF::Query::Variable.new(:s, true)}
     subject {RDF::Query::Pattern.new(s)}
+
+    specify {expect(subject).not_to be_constant}
+    specify {expect(subject).to be_variable}
+    specify {expect(subject).to be_bound}
 
     it "should have one variable" do
       expect(subject.variables?).to be_truthy
@@ -85,6 +89,10 @@ describe RDF::Query::Pattern do
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
     subject {RDF::Query::Pattern.new(s, p, o)}
+
+    specify {expect(subject).not_to be_constant}
+    specify {expect(subject).to be_variable}
+    specify {expect(subject).to be_bound}
 
     it "should have three variables" do
       expect(subject.variables?).to be_truthy
@@ -129,6 +137,29 @@ describe RDF::Query::Pattern do
     end
   end
   
+  context "with unbound variables" do
+    let(:s) {RDF::Query::Variable.new(:s)}
+    let(:p) {RDF::Query::Variable.new(:p)}
+    let(:o) {RDF::Query::Variable.new(:o)}
+    subject {RDF::Query::Pattern.new(s, p, o)}
+
+    specify {expect(subject).not_to be_constant}
+    specify {expect(subject).to be_variable}
+    specify {expect(subject).not_to be_bound}
+
+    describe "#bind" do
+      context "complete solution" do
+        let(:solution) {RDF::Query::Solution.new(s: RDF::URI("s"), p: RDF::URI("p"), o: RDF::URI("o"))}
+        specify {expect(subject.bind(solution)).not_to be_variable}
+      end
+      context "incomplete solution" do
+        let(:solution) {RDF::Query::Solution.new(s: RDF::URI("s"), p: RDF::URI("p"))}
+        specify {expect(subject.bind(solution)).to be_variable}
+        specify {expect(subject.bind(solution)).not_to be_bound}
+      end
+    end
+  end
+
   context "with one bound and one unbound variable" do
     it "needs a spec" # TODO
   end
