@@ -64,10 +64,10 @@ module RDF
   #   _:a foaf:name "Alice" .
   #   _:a foaf:mbox <mailto:alice@work.example.org> .
   #
-  #   
   # @see http://www.w3.org/TR/rdf-sparql-query/#rdfDataset
   # @since 0.3.0
   class Query
+    include Enumerable
     autoload :Pattern,   'rdf/query/pattern'
     autoload :Solution,  'rdf/query/solution'
     autoload :Solutions, 'rdf/query/solutions'
@@ -313,8 +313,8 @@ module RDF
       unless context.nil?
         if patterns.empty?
           patterns = [Pattern.new(nil, nil, nil, :context => context)]
-        elsif patterns.first.context.nil?
-          patterns.first.context = context
+        else
+          apply_context(context)
         end
       end
 
@@ -431,6 +431,28 @@ module RDF
       options[:context]
     end
 
+    # Apply the context specified (or configured) to all patterns that have no context
+    # @param [RDF::IRI, RDF::Query::Variable] context (self.context)
+    def apply_context(context = options[:context])
+      patterns.each {|pattern| pattern.context = context if pattern.context.nil?} unless context.nil?
+    end
+
+    ##
+    # Returns `true` if any pattern contains a variable.
+    #
+    # @return [Boolean]
+    def variable?
+      patterns.any?(&:variable?) || context && context.variable?
+    end
+
+    ##
+    # Returns `true` if any pattern contains a blank node.
+    #
+    # @return [Boolean]
+    def has_blank_nodes?
+      patterns.any?(&:has_blank_nodes?) || context && context.node?
+    end
+
     # Query has no patterns
     # @return [Boolean]
     def empty?
@@ -447,6 +469,17 @@ module RDF
       @solutions.each(&block)
     end
     alias_method :each, :each_solution
+
+    ##
+    # Enumerates over each statement (pattern).
+    #
+    # @yield  [RDF::Query::Pattern]
+    # @yieldparam [::Query::Pattern] pattern
+    # @return [Enumerator]
+    def each_statement(&block)
+      apply_context
+      patterns.each(&block)
+    end
 
     ##
     # Duplicate query, including patterns and solutions

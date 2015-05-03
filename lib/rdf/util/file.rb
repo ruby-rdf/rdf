@@ -228,7 +228,7 @@ module RDF; module Util
 
           remote_document = RemoteDocument.new(response.body, document_options)
         else
-          raise IOError, "<#{base_uri}>: #{response.code}"
+          raise IOError, "<#{base_uri}>: #{response.status}"
         end
       end
     end

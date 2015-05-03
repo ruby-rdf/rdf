@@ -37,7 +37,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Statement}.
+    # Is this a {RDF::Statement}?
     #
     # @return [Boolean]
     def statement?
@@ -45,7 +45,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::List}.
+    # Is this a {RDF::List}?
     #
     # @return [Boolean]
     def list?
@@ -53,7 +53,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Term}.
+    # Is this a {RDF::Term}?
     #
     # @return [Boolean]
     def term?
@@ -61,7 +61,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Resource}.
+    # Is this a {RDF::Resource}?
     #
     # @return [Boolean]
     def resource?
@@ -69,7 +69,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Literal}.
+    # Is this a {RDF::Literal}?
     #
     # @return [Boolean]
     def literal?
@@ -77,7 +77,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Node}.
+    # Is this a {RDF::Node}, or does it contain a node?
     #
     # @return [Boolean]
     def node?
@@ -85,7 +85,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is an IRI reference.
+    # Is this an {RDF::IRI}?
     #
     # By default this is simply an alias for {RDF::Value#uri?}.
     #
@@ -95,7 +95,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::URI}.
+    # Is this an {RDF::URI}?
     #
     # @return [Boolean]
     def uri?
@@ -103,7 +103,7 @@ module RDF
     end
 
     ##
-    # Returns `true` this value is a {RDF::Query::Variable}, or is contains a variable.
+    # Is this a {RDF::Query::Variable}, or does it contain a variable?
     #
     # @return [Boolean]
     # @since  0.1.7
@@ -112,7 +112,9 @@ module RDF
     end
 
     ##
-    # Returns `true` if this value is constant.
+    # Is this constant, or are all of its components constant?
+    #
+    # Same as `!variable?`
     #
     # @return [Boolean] `true` or `false`
     # @see    #variable?
@@ -121,7 +123,7 @@ module RDF
     end
 
     ##
-    # Is this an anonymous value?
+    # Is this value named?
     #
     # @return [Boolean] `true` or `false`
     def anonymous?
@@ -129,7 +131,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if the value has a valid representation
+    # Is this value valid, and composed only of valid components?
     #
     # @return [Boolean] `true` or `false`
     # @since  0.3.9
@@ -138,7 +140,7 @@ module RDF
     end
 
     ##
-    # Returns `true` if value is not valid
+    # Is this value invalid, or is it composed of any invalid components?
     #
     # @return [Boolean] `true` or `false`
     # @since  0.2.1

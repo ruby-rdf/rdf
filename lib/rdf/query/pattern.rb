@@ -232,6 +232,20 @@ module RDF; class Query
     end
 
     ##
+    # Binds the pattern to a solution, making it no longer variable if all variables are resolved to bound variables
+    #
+    # @param [RDF::Query::Solution] solution
+    # @return [self]
+    def bind(solution)
+      self.to_quad.each_with_index do |term, index|
+        if term && term.variable? && solution[term]
+          self[index] = solution[term] 
+        end
+      end
+      self
+    end
+
+    ##
     # Returns `true` if this pattern contains bindings.
     #
     # @return [Boolean] `true` or `false`
