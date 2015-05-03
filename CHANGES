@@ -1,8 +1,0 @@
-Release 2.0.0
-=============
-
-* A new class `RDF::Changeset` has been added. This is meant to replace any
-  previous use of `RDF::Transaction`, which in fact used to in RDF.rb 1.x
-  represent more of a buffered changeset than a genuine transaction scope.
-
-  Instead of `RDF::Transaction#execute`, use `RDF::Changeset#apply`.
