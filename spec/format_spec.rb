@@ -20,13 +20,11 @@ class RDF::Format::BarFormat < RDF::Format
 end
 
 describe RDF::Format do
-  before(:each) do
-    @format_class = RDF::Format
-  end
-  
+  let(:format_class) { RDF::Format }
+
   # @see lib/rdf/spec/format.rb in rdf-spec
-  include RDF_Format
-  
+  it_behaves_like 'an RDF::Format'
+
   # If there are multiple formats that assert the same type or extension,
   # Format.for should yield to return a sample used for detection
   describe ".for" do
@@ -133,7 +131,7 @@ describe RDF::Format do
         class RDF::NTriples::Format < RDF::Format
           content_type     'application/n-triples', :extension => :nt
           content_encoding 'utf-8'
-          
+
           reader RDF::NTriples::Reader
           writer RDF::NTriples::Writer
         end

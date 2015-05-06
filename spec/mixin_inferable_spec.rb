@@ -3,5 +3,5 @@ require 'rdf/spec/inferable'
 
 describe RDF::Inferable do
   # @see lib/rdf/spec/enumerable.rb in rdf-spec
-  include RDF_Inferable
+  it_behaves_like 'an RDF::Inferable'
 end

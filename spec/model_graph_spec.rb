@@ -102,11 +102,9 @@ describe RDF::Graph do
 
   context "as repository" do
     require 'rdf/spec/repository'
-    before :each do
-      @repository = @new.call
-    end
+    let(:repository) { @new.call }
 
-    include RDF_Repository
+    it_behaves_like 'an RDF::Repository'
   end
 
   context "Examples" do

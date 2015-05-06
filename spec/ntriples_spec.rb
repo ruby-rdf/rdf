@@ -6,14 +6,12 @@ require 'rdf/spec/reader'
 require 'rdf/spec/writer'
 
 describe RDF::NTriples::Format do
-  before(:each) do
-    @format_class = RDF::NTriples::Format
-  end
-  
-  # @see lib/rdf/spec/format.rb in rdf-spec
-  include RDF_Format
+  let(:format_class) { RDF::NTriples::Format }
 
-  subject {@format_class}
+  # @see lib/rdf/spec/format.rb in rdf-spec
+  it_behaves_like 'an RDF::Format'
+
+  subject { format_class }
 
   describe ".for" do
     formats = [
@@ -47,7 +45,7 @@ describe RDF::NTriples::Format do
   describe "#name" do
     specify {expect(subject.name).to eq "N-Triples"}
   end
-  
+
   describe ".detect" do
     {
       :ntriples => "<a> <b> <c> .",
@@ -78,14 +76,14 @@ end
 describe RDF::NTriples::Reader do
   let!(:doap) {File.expand_path("../../etc/doap.nt", __FILE__)}
   let!(:doap_count) {File.open(doap).each_line.to_a.length}
-  before(:each) do
-    @reader = RDF::NTriples::Reader.new
-    @reader_input = File.read(doap)
-    @reader_count = doap_count
-  end
-  
+
+  let(:reader_class) { RDF::NTriples::Reader }
+  let(:reader) { RDF::NTriples::Reader.new }
+  let(:reader_input) { File.read(doap) }
+  let(:reader_count) { doap_count }
+
   # @see lib/rdf/spec/reader.rb in rdf-spec
-  include RDF_Reader
+  it_behaves_like 'an RDF::Reader'
 
   describe ".for" do
     formats = [
@@ -116,8 +114,8 @@ describe RDF::NTriples::Reader do
   end
 
   it "should return :ntriples for to_sym" do
-    expect(@reader.class.to_sym).to eq :ntriples
-    expect(@reader.to_sym).to eq :ntriples
+    expect(reader.class.to_sym).to eq :ntriples
+    expect(reader.to_sym).to eq :ntriples
   end
 
   describe ".initialize" do
@@ -154,7 +152,7 @@ describe RDF::NTriples::Reader do
     }.each do |sp, l|
       it "unescapes #{sp} to #{l.inspect}" do
         expect do
-          expect(@reader_class.unescape(sp)).to eq l
+          expect(reader_class.unescape(sp)).to eq l
         end.to write('[DEPRECATION]').to(:error)
       end
     end
@@ -162,12 +160,10 @@ describe RDF::NTriples::Reader do
 end
 
 describe RDF::NTriples::Writer do
-  before(:each) do
-    @writer_class = RDF::NTriples::Writer
-    @writer = RDF::NTriples::Writer.new
-  end
+  let(:writer_class) { RDF::NTriples::Writer }
+  let(:writer) { RDF::NTriples::Writer.new }
 
-  subject {@writer}
+  subject { writer }
 
   describe ".for" do
     formats = [
@@ -185,7 +181,7 @@ describe RDF::NTriples::Writer do
   end
 
   # @see lib/rdf/spec/writer.rb in rdf-spec
-  include RDF_Writer
+  it_behaves_like 'an RDF::Writer'
 
   it "defaults validation to be true" do
     expect(subject).to be_validate
@@ -204,14 +200,14 @@ describe RDF::NTriples::Writer do
     }
     it "#insert" do
       expect do
-        @writer_class.new($stdout, validate: false).insert(graph)
+        writer_class.new($stdout, validate: false).insert(graph)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
 
     it "#write_graph (DEPRECATED)" do
       expect do
         expect do
-          @writer_class.new($stdout, validate: false).write_graph(graph)
+          writer_class.new($stdout, validate: false).write_graph(graph)
         end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
       end.to write('[DEPRECATION]').to(:error)
     end
@@ -224,14 +220,14 @@ describe RDF::NTriples::Writer do
     ]}
     it "#insert" do
       expect do
-        @writer_class.new($stdout, validate: false).insert(*statements)
+        writer_class.new($stdout, validate: false).insert(*statements)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
 
     it "#write_statements (DEPRECATED)" do
       expect do
         expect do
-          @writer_class.new($stdout, validate: false).write_statements(*statements)
+          writer_class.new($stdout, validate: false).write_statements(*statements)
         end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
       end.to write('[DEPRECATION]').to(:error)
     end
@@ -240,11 +236,11 @@ describe RDF::NTriples::Writer do
   context "Nodes" do
     let(:statement) {RDF::Statement(RDF::Node("a"), RDF.type, RDF::Node("b"))}
     it "uses node lables by default" do
-      expect(@writer_class.buffer {|w| w << statement}).to match %r(_:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:b \.)
+      expect(writer_class.buffer {|w| w << statement}).to match %r(_:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:b \.)
     end
 
     it "uses unique labels if :unique_bnodes is true" do
-      expect(@writer_class.buffer(unique_bnodes:true) {|w| w << statement}).to match %r(_:g\w+ <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:g\w+ \.)
+      expect(writer_class.buffer(unique_bnodes:true) {|w| w << statement}).to match %r(_:g\w+ <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:g\w+ \.)
     end
   end
 
@@ -559,7 +555,7 @@ describe RDF::NTriples do
         expect(stmt.subject).to eq stmt.object
         expect(stmt.subject).to be_eql(stmt.object)
       end
-      
+
       it "should read two named nodes in different instances as different nodes" do
         stmt1 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze)
         stmt2 = @reader.unserialize("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze)
@@ -567,7 +563,7 @@ describe RDF::NTriples do
         expect(stmt1.subject).not_to be_eql(stmt2.subject)
       end
     end
-    
+
     describe "with literal encodings" do
       {
         'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',

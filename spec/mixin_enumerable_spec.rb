@@ -2,17 +2,15 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/spec/enumerable'
 
 describe RDF::Enumerable do
-  before :each do
-    # The available reference implementations are `RDF::Repository` and
-    # `RDF::Graph`, but a plain Ruby array will do fine as well:
-    @enumerable = RDF::Spec.quads.extend(RDF::Enumerable)
-  end
+  # The available reference implementations are `RDF::Repository` and
+  # `RDF::Graph`, but a plain Ruby array will do fine as well:
+  let(:enumerable) { RDF::Spec.quads.extend(RDF::Enumerable) }
 
   # @see lib/rdf/spec/enumerable.rb in rdf-spec
-  include RDF_Enumerable
+  it_behaves_like 'an RDF::Enumerable'
 
   context "Examples" do
-    subject {@enumerable}
+    subject { enumerable }
 
     context "Checking whether any statements exist" do
       subject {[].extend(RDF::Enumerable)}
