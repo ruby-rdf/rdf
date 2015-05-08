@@ -146,9 +146,9 @@ module RDF
       when Literal
         # If other is a Literal, reverse test to consolodate complex type checking logic
         other == self
-      else 
+      else
         other.respond_to?(:node?) && other.node? &&
-          self.hash == other.hash &&
+          self.hash == other.to_term.hash &&
           other.respond_to?(:id) && @id == other.id
       end
     end
