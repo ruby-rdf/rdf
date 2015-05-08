@@ -6,14 +6,12 @@ require 'rdf/spec/reader'
 require 'rdf/spec/writer'
 
 describe RDF::NQuads::Format do
-  before(:each) do
-    @format_class = RDF::NQuads::Format
-  end
-  
-  # @see lib/rdf/spec/format.rb in rdf-spec
-  include RDF_Format
+  let(:format_class) { RDF::NQuads::Format }
 
-  subject {@format_class}
+  # @see lib/rdf/spec/format.rb in rdf-spec
+  it_behaves_like 'an RDF::Format'
+
+  subject { format_class }
 
   describe ".for" do
     formats = [
@@ -91,15 +89,13 @@ describe RDF::NQuads::Reader do
   let(:testfile) {fixture_path('test.nq')}
   let!(:test_count) {File.open(testfile).each_line.to_a.reject {|l| l.sub(/#.*$/, '').strip.empty?}.length}
 
-  before(:each) do
-    @reader_class = RDF::NQuads::Reader
-    @reader = RDF::NQuads::Reader.new
-    @reader_input = File.read(testfile)
-    @reader_count = test_count
-  end
-  
+  let(:reader_class) { RDF::NQuads::Reader }
+  let(:reader) { RDF::NQuads::Reader.new }
+  let(:reader_input) { File.read(testfile) }
+  let(:reader_count) { test_count }
+
   # @see lib/rdf/spec/reader.rb in rdf-spec
-  include RDF_Reader
+  it_behaves_like 'an RDF::Reader'
 
   describe ".for" do
     formats = [
@@ -118,15 +114,15 @@ describe RDF::NQuads::Reader do
 
   context "when created" do
     it "should accept files" do
-      expect { @reader_class.new(File.open(testfile)) }.to_not raise_error
+      expect { reader_class.new(File.open(testfile)) }.to_not raise_error
     end
 
     it "should accept IO streams" do
-      expect { @reader_class.new(StringIO.new('')) }.to_not raise_error
+      expect { reader_class.new(StringIO.new('')) }.to_not raise_error
     end
 
     it "should accept strings" do
-      expect { @reader_class.new('') }.to_not raise_error
+      expect { reader_class.new('') }.to_not raise_error
     end
   end
 
@@ -136,15 +132,15 @@ describe RDF::NQuads::Reader do
     end
 
     it "should accept files" do
-      expect { @reader_class.new(File.open(@testfile)) }.to_not raise_error
+      expect { reader_class.new(File.open(@testfile)) }.to_not raise_error
     end
 
     it "should accept IO streams" do
-      expect { @reader_class.new(StringIO.new('')) }.to_not raise_error
+      expect { reader_class.new(StringIO.new('')) }.to_not raise_error
     end
 
     it "should accept strings" do
-      expect { @reader_class.new('') }.to_not raise_error
+      expect { reader_class.new('') }.to_not raise_error
     end
   end
 
@@ -156,13 +152,13 @@ describe RDF::NQuads::Reader do
       ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
-        graph = RDF::Graph.new << @reader_class.new(str)
+        graph = RDF::Graph.new << reader_class.new(str)
         expect(graph.size).to eq 1
         expect(graph.statements.first).to eq statement
       end
     end
   end
-  
+
   context "with simple quads" do
     [
       ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::URI("d"))],
@@ -170,15 +166,15 @@ describe RDF::NQuads::Reader do
       ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::Literal("d"))],
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
-        graph = RDF::Graph.new << @reader_class.new(str)
+        graph = RDF::Graph.new << reader_class.new(str)
         expect(graph.size).to eq 1
         expect(graph.statements.first).to eq statement
       end
-      
+
       it "serializes #{statement.inspect}" do
         expect(RDF::NQuads.serialize(statement).chomp).to eq str
       end
-      
+
       it "unserializes #{str.inspect}" do
         expect(RDF::NQuads.unserialize(str)).to eq statement
       end
@@ -186,17 +182,15 @@ describe RDF::NQuads::Reader do
   end
 
   it "should parse W3C's test data" do
-    expect(@reader_class.new(File.open(testfile)).to_a.size).to eq 19
+    expect(reader_class.new(File.open(testfile)).to_a.size).to eq 19
   end
 end
 
 describe RDF::NQuads::Writer do
-  before(:each) do
-    @writer_class = RDF::NQuads::Writer
-    @writer = RDF::NQuads::Writer.new
-  end
+  let(:writer_class) { RDF::NQuads::Writer }
+  let(:writer) { RDF::NQuads::Writer.new }
 
-  subject {@writer}
+  subject { writer}
 
   describe ".for" do
     formats = [
@@ -211,10 +205,10 @@ describe RDF::NQuads::Writer do
       end
     end
   end
-  
+
   # @see lib/rdf/spec/writer.rb in rdf-spec
-  include RDF_Writer
-  
+  it_behaves_like 'an RDF::Writer'
+
   context "#initialize" do
     describe "writing statements" do
       context "with simple triples" do
@@ -225,7 +219,7 @@ describe RDF::NQuads::Writer do
           ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
-            expect(@writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
+            expect(writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
           end
         end
       end
@@ -237,7 +231,7 @@ describe RDF::NQuads::Writer do
           ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), context: RDF::Literal("d"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
-            expect(@writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
+            expect(writer_class.buffer {|w| w << statement}).to eq "#{str}\n"
           end
         end
       end
@@ -253,14 +247,14 @@ describe RDF::NQuads::Writer do
     }
     it "#insert" do
       expect do
-        @writer_class.new.insert(graph)
+        writer_class.new.insert(graph)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
 
     it "#write_graph (DEPRECATED)" do
       expect do
         expect do
-          @writer_class.new.write_graph(graph)
+          writer_class.new.write_graph(graph)
         end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
       end.to write('[DEPRECATION]').to(:error)
     end
@@ -273,14 +267,14 @@ describe RDF::NQuads::Writer do
     ]}
     it "#insert" do
       expect do
-        @writer_class.new.insert(*statements)
+        writer_class.new.insert(*statements)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
 
     it "#write_statements (DEPRECATED)" do
       expect do
         expect do
-          @writer_class.new.write_statements(*statements)
+          writer_class.new.write_statements(*statements)
         end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
       end.to write('[DEPRECATION]').to(:error)
     end
@@ -289,11 +283,11 @@ describe RDF::NQuads::Writer do
   context "Nodes" do
     let(:statement) {RDF::Statement(RDF::Node("a"), RDF.type, RDF::Node("b"), context: RDF::Node("c"))}
     it "uses node lables by default" do
-      expect(@writer_class.buffer {|w| w << statement}).to match %r(_:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:b _:c \.)
+      expect(writer_class.buffer {|w| w << statement}).to match %r(_:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:b _:c \.)
     end
 
     it "uses unique labels if :unique_bnodes is true" do
-      expect(@writer_class.buffer(unique_bnodes:true) {|w| w << statement}).to match %r(_:g\w+ <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:g\w+ _:g\w+ \.)
+      expect(writer_class.buffer(unique_bnodes:true) {|w| w << statement}).to match %r(_:g\w+ <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:g\w+ _:g\w+ \.)
     end
   end
 
