@@ -44,7 +44,7 @@ describe RDF::Vocabulary do
   describe "#to_enum" do
     subject {RDF::RDFS.to_enum}
     it {should be_enumerable}
-    its(:count) {should >= 30}
+    its(:count) {is_expected.to be >= 30}
     it "enumerates statements" do
       expect {|b| subject.each(&b)}.to yield_control.at_least(30).times
       subject.each {|s| expect(s).to be_statement}
@@ -74,7 +74,7 @@ describe RDF::Vocabulary do
     STRICT_VOCABS.map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
       context vocab do
         subject {vocab}
-        specify {should be_strict}
+        specify {is_expected.to be_strict}
 
         it "raises error on unknown property" do
           expect {vocab._unknown_}.to raise_error(NoMethodError)
@@ -87,7 +87,7 @@ describe RDF::Vocabulary do
     (VOCABS - STRICT_VOCABS).map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
       context vocab do
         subject {vocab}
-        specify {should_not be_strict}
+        specify {is_expected.not_to be_strict}
       end
 
       it "allows unknown property" do
@@ -170,8 +170,8 @@ describe RDF::Vocabulary do
       expect(test_vocab["not_a_prop"]).to be_a(RDF::URI)
     end
 
-    its(:property) {should eq RDF::URI("http://example.com/test#property")}
-    its(:properties) {should include("http://example.com/test#Class", "http://example.com/test#prop", "http://example.com/test#prop2")}
+    its(:property) {is_expected.to eq RDF::URI("http://example.com/test#property")}
+    its(:properties) {is_expected.to include("http://example.com/test#Class", "http://example.com/test#prop", "http://example.com/test#prop2")}
 
     it "should respond to methods for which a property has been defined explicitly" do
       expect(test_vocab.prop).to be_a(RDF::URI)
@@ -251,7 +251,7 @@ describe RDF::Vocabulary do
     }.each do |v, r|
       context v.to_uri do
         subject {v}
-        its(:imports) {should eq r}
+        its(:imports) {is_expected.to eq r}
       end
     end
 
@@ -266,7 +266,7 @@ describe RDF::Vocabulary do
     }.each do |v, r|
       context v.to_uri do
         subject {v}
-        its(:imported_from) {should eq r}
+        its(:imported_from) {is_expected.to eq r}
       end
     end
 
@@ -294,37 +294,37 @@ describe RDF::Vocabulary do
 
   describe RDF::Vocabulary::Term do
     subject {RDF::RDFS.comment}
-    specify {should be_uri}
-    specify {should respond_to(:vocab)}
-    specify {should respond_to(:type)}
-    specify {should respond_to(:label)}
-    specify {should respond_to(:comment)}
-    specify {should respond_to(:domain)}
-    specify {should respond_to(:range)}
-    specify {should be_property}
-    specify {should_not be_class}
-    specify {should_not be_datatype}
-    specify {should_not be_other}
-    its(:label) {should eq "comment"}
-    its(:comment) {should eq "A description of the subject resource."}
-    its(:vocab) {should eql RDF::RDFS}
+    specify {is_expected.to be_uri}
+    specify {is_expected.to respond_to(:vocab)}
+    specify {is_expected.to respond_to(:type)}
+    specify {is_expected.to respond_to(:label)}
+    specify {is_expected.to respond_to(:comment)}
+    specify {is_expected.to respond_to(:domain)}
+    specify {is_expected.to respond_to(:range)}
+    specify {is_expected.to be_property}
+    specify {is_expected.not_to be_class}
+    specify {is_expected.not_to be_datatype}
+    specify {is_expected.not_to be_other}
+    its(:label) {is_expected.to eq "comment"}
+    its(:comment) {is_expected.to eq "A description of the subject resource."}
+    its(:vocab) {is_expected.to eql RDF::RDFS}
 
     context RDF::RDFS.Class do
       subject {RDF::RDFS.Class}
-      specify {should_not be_property}
-      specify {should be_class}
-      specify {should_not be_datatype}
-      specify {should_not be_other}
-      its(:vocab) {should eql RDF::RDFS}
+      specify {is_expected.not_to be_property}
+      specify {is_expected.to be_class}
+      specify {is_expected.not_to be_datatype}
+      specify {is_expected.not_to be_other}
+      its(:vocab) {is_expected.to eql RDF::RDFS}
     end
 
     context RDF::XSD.integer do
       subject {RDF::XSD.integer}
-      specify {should_not be_property}
-      specify {should_not be_class}
-      specify {should be_datatype}
-      specify {should_not be_other}
-      its(:vocab) {should eql RDF::XSD}
+      specify {is_expected.not_to be_property}
+      specify {is_expected.not_to be_class}
+      specify {is_expected.to be_datatype}
+      specify {is_expected.not_to be_other}
+      its(:vocab) {is_expected.to eql RDF::XSD}
     end
 
     context "#initialize" do
@@ -338,11 +338,11 @@ describe RDF::Vocabulary do
                                     "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
                                   })
           }
-      its(:label) {should eq "foo"}
-      its(:domain) {should include(RDF::RDFS.Resource)}
-      its(:range) {should include(RDF::RDFS.Resource, RDF::RDFS.Class)}
-      its(:attributes) {should include("schema:domainIncludes" => RDF::RDFS.Resource)}
-      its(:attributes) {should include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+      its(:label) {is_expected.to eq "foo"}
+      its(:domain) {is_expected.to include(RDF::RDFS.Resource)}
+      its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      its(:attributes) {is_expected.to include("schema:domainIncludes" => RDF::RDFS.Resource)}
+      its(:attributes) {is_expected.to include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
     end
   end
 end

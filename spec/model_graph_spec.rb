@@ -44,16 +44,16 @@ describe RDF::Graph do
       expect { described_class.new("http://rubygems.org/gems/rdf") }.to raise_error
     end
 
-    its(:named?) {should be_truthy}
-    its(:unnamed?) {should be_falsey}
-    its(:name) {should_not be_nil}
-    its(:context) {should_not be_nil}
+    its(:named?) {is_expected.to be_truthy}
+    its(:unnamed?) {is_expected.to be_falsey}
+    its(:name) {is_expected.not_to be_nil}
+    its(:context) {is_expected.not_to be_nil}
     its(:contexts) {expect(subject.contexts.size).to eq 1}
-    it {should_not be_anonymous}
+    it {is_expected.not_to be_anonymous}
 
     context "with anonymous context" do
       subject {described_class.new(RDF::Node.new, :data => RDF::Repository.new)}
-      it {should be_anonymous}
+      it {is_expected.to be_anonymous}
     end
   end
 

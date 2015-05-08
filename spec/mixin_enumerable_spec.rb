@@ -14,25 +14,25 @@ describe RDF::Enumerable do
 
     context "Checking whether any statements exist" do
       subject {[].extend(RDF::Enumerable)}
-      it {should be_empty}
+      it {is_expected.to be_empty}
     end
 
     context "Checking how many statements exist" do
-      its(:count) {should == subject.size}
+      its(:count) {is_expected.to eq subject.size}
     end
 
     context "Checking whether a specific statement exists" do
       let(:statement) {subject.detect {|s| s.to_a.none?(&:node?)}}
-      it {should have_statement(statement)}
-      it {should have_triple(statement.to_a)}
-      xit {should have_quad(statement.to_a)}
+      it {is_expected.to have_statement(statement)}
+      it {is_expected.to have_triple(statement.to_a)}
+      xit {is_expected.to have_quad(statement.to_a)}
     end
 
     context "Checking whether a specific value exists" do
-      it {should have_subject(RDF::URI("http://rubygems.org/gems/rdf"))}
-      it {should have_predicate(RDF::DC.creator)}
-      it {should have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))}
-      it {should have_context(RDF::URI("http://ar.to/#self"))}
+      it {is_expected.to have_subject(RDF::URI("http://rubygems.org/gems/rdf"))}
+      it {is_expected.to have_predicate(RDF::DC.creator)}
+      it {is_expected.to have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))}
+      it {is_expected.to have_context(RDF::URI("http://ar.to/#self"))}
     end
 
     it "Enumerating all statements" do

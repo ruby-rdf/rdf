@@ -84,11 +84,11 @@ describe RDF::URI do
           :query => "query=value",
           :fragment => "fragment"
         }.each do |method, value|
-          its(method) {should == value}
-          its("normalized_#{method}".to_sym) {should == value}
+          its(method) {is_expected.to eq value}
+          its("normalized_#{method}".to_sym) {is_expected.to eq value}
         end
 
-        its(:value) {should == "http://user:password@example.com:8080/path?query=value#fragment"}
+        its(:value) {is_expected.to eq "http://user:password@example.com:8080/path?query=value#fragment"}
       end
 
       {
@@ -118,7 +118,7 @@ describe RDF::URI do
       :query => "a=%31",
       :fragment => "1%323"
     }.each do |method, value|
-      its(method) {should == value}
+      its(method) {is_expected.to eq value}
     end
 
     {
@@ -133,10 +133,10 @@ describe RDF::URI do
       :query => "a=1",
       :fragment => "123"
     }.each do |method, value|
-      its("normalized_#{method}".to_sym) {should == value}
+      its("normalized_#{method}".to_sym) {is_expected.to eq value}
     end
 
-    its(:value) {should == "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323"}
+    its(:value) {is_expected.to eq "HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323"}
     it "encoding should be UTF-8" do
       expect(subject.value.encoding).to eq Encoding::UTF_8
     end
@@ -208,18 +208,18 @@ describe RDF::URI do
     
     describe "original" do
       subject {uri1}
-      its(:path) {should == uri2.path}
-      it {should_not be_equal(uri2)}
-      it {should be_eql(uri2)}
-      it {should == uri2}
+      its(:path) {is_expected.to eq uri2.path}
+      it {is_expected.not_to equal(uri2)}
+      it {is_expected.to eql(uri2)}
+      it {is_expected.to eq uri2}
     end
 
     describe "with altered path" do
       subject {uri1.path = '/rdf/'; uri1}
-      its(:path) {should_not == uri2.path}
-      it {should_not be_equal(uri2)}
-      it {should_not be_eql(uri2)}
-      it {should_not == uri2}
+      its(:path) {is_expected.not_to eq uri2.path}
+      it {is_expected.not_to equal(uri2)}
+      it {is_expected.not_to eql(uri2)}
+      it {is_expected.not_to eq uri2}
     end
   end
 

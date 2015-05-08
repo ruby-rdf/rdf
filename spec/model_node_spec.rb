@@ -37,8 +37,8 @@ describe RDF::Node do
     specify {expect(subject.dup).to eql subject}
   end
 
-  its(:to_base) {should == "_:foo"}
-  its(:to_unique_base) {should =~ /^_:g/}
+  its(:to_base) {is_expected.to eq "_:foo"}
+  its(:to_unique_base) {is_expected.to match /^_:g/}
 
   {
     "" => true,

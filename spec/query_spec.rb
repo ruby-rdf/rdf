@@ -39,21 +39,21 @@ describe RDF::Query do
   describe "#empty?" do
     context "A query with no patterns" do
       subject {RDF::Query.new}
-      it {should be_empty}
+      it {is_expected.to be_empty}
     end
 
     context "A query with patterns" do
       subject {RDF::Query.new(RDF::URI("a") => { RDF::URI("b")  => "c" })}
-      it {should_not be_empty}
+      it {is_expected.not_to be_empty}
     end
   end
 
   describe "#dup" do
     let(:orig) {RDF::Query.new { pattern [RDF::URI("a"), RDF::URI("b"), "c"] }}
     subject {orig.dup}
-    it {should_not be_equal orig}
-    its(:patterns) {should_not be_equal orig.patterns}
-    its(:patterns) {should == orig.patterns}
+    it {is_expected.not_to equal orig}
+    its(:patterns) {is_expected.not_to equal orig.patterns}
+    its(:patterns) {is_expected.to eq orig.patterns}
   end
 
   context "BGPs" do
