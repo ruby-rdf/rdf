@@ -123,24 +123,26 @@ describe RDF::Util::File do
     require 'rdf/spec/http_adapter'
 
     context "using Net::HTTP" do
-      let(:http_adapter) { RDF::Util::File::NetHttpAdapter }
-
-      it_behaves_like 'an RDF::HttpAdapter'
+      it_behaves_like 'an RDF::HttpAdapter' do
+        let(:http_adapter) { RDF::Util::File::NetHttpAdapter }
+      end
     end
 
     context "using RestClient" do
       require 'rest_client'
-      let(:http_adapter) { RDF::Util::File::RestClientAdapter }
 
-      it_behaves_like 'an RDF::HttpAdapter'
+      it_behaves_like 'an RDF::HttpAdapter' do
+        let(:http_adapter) { RDF::Util::File::RestClientAdapter }
+      end
     end
 
     context "using Faraday" do
       require 'faraday'
       require 'faraday_middleware'
-      let(:http_adapter) { RDF::Util::File::FaradayAdapter }
 
-      it_behaves_like 'an RDF::HttpAdapter'
+      it_behaves_like 'an RDF::HttpAdapter' do
+        let(:http_adapter) { RDF::Util::File::FaradayAdapter }
+      end
     end
   end
 end

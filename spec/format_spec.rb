@@ -20,10 +20,11 @@ class RDF::Format::BarFormat < RDF::Format
 end
 
 describe RDF::Format do
-  let(:format_class) { RDF::Format }
 
   # @see lib/rdf/spec/format.rb in rdf-spec
-  it_behaves_like 'an RDF::Format'
+  it_behaves_like 'an RDF::Format' do
+    let(:format_class) { described_class }
+  end
 
   # If there are multiple formats that assert the same type or extension,
   # Format.for should yield to return a sample used for detection
