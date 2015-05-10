@@ -97,6 +97,17 @@ module RDF; class Query
     end
 
     ##
+    # Is this pattern composed only of valid components?
+    #
+    # @return [Boolean] `true` or `false`
+    def valid?
+      (has_subject?   ? (subject.resource? || subject.variable?) && subject.valid? : true) && 
+      (has_predicate? ? (predicate.uri? || predicate.variable?) && predicate.valid? : true) &&
+      (has_object?    ? (object.term? || object.variable?) && object.valid? : true) &&
+      (has_context?   ? (context.resource? || context.variable?) && context.valid? : true )
+    end
+
+    ##
     # Executes this query pattern on the given `queryable` object.
     #
     # Values are matched using using Queryable#query_pattern.
