@@ -491,6 +491,17 @@ module RDF
     end
 
     ##
+    # Determine if the URI is a valid according to RFC3987
+    #
+    # @return [Boolean] `true` or `false`
+    # @since 0.3.9
+    def valid?
+      !!validate!
+    rescue
+      false
+    end
+
+    ##
     # Validate this query, making sure it can be executed by our query engine.
     # This method is public so that it may be called by implementations of
     # RDF::Queryable#query_execute that bypass our built-in query engine.

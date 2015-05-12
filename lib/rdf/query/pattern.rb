@@ -105,6 +105,8 @@ module RDF; class Query
       (has_predicate? ? (predicate.uri? || predicate.variable?) && predicate.valid? : true) &&
       (has_object?    ? (object.term? || object.variable?) && object.valid? : true) &&
       (has_context?   ? (context.resource? || context.variable?) && context.valid? : true )
+    rescue NoMethodError
+      false
     end
 
     ##
