@@ -103,11 +103,12 @@ module RDF
 
     ##
     # Default validate! implementation, overridden in concrete classes
-    # @return [RDF::Literal] `self`
+    # @return [RDF::Enumerable] `self`
     # @raise  [ArgumentError] if the value is invalid
     # @since  0.3.9
     def validate!
       raise ArgumentError if supports?(:validity) && invalid?
+      self
     end
     alias_method :validate, :validate!
 
