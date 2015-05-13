@@ -20,13 +20,12 @@ class RDF::Format::BarFormat < RDF::Format
 end
 
 describe RDF::Format do
-  before(:each) do
-    @format_class = RDF::Format
-  end
-  
+
   # @see lib/rdf/spec/format.rb in rdf-spec
-  include RDF_Format
-  
+  it_behaves_like 'an RDF::Format' do
+    let(:format_class) { described_class }
+  end
+
   # If there are multiple formats that assert the same type or extension,
   # Format.for should yield to return a sample used for detection
   describe ".for" do
@@ -99,8 +98,8 @@ describe RDF::Format do
       let(:file_extensions) {
         RDF::Format.file_extensions.map {|ext, f| ext if f.include?(format)}.compact
       }
-      its(:content_type) {should match content_types}
-      its(:file_extension) {should match file_extensions}
+      its(:content_type) {is_expected.to match content_types}
+      its(:file_extension) {is_expected.to match file_extensions}
     end
   end
 
@@ -124,16 +123,19 @@ describe RDF::Format do
       end
     end
 
-    # FIXME: stack overflow with rspec 3.0
-    its(:content_types) {pending "RSpec 3.0 stack overflow"; should include({"application/n-triples" => [RDF::NTriples::Format]})}
-    its(:file_extensions) {pending "RSpec 3.0 stack overflow"; should include({:nt => [RDF::NTriples::Format]})}
+    it "has content-type application/n-triples" do
+      expect(subject.content_types["application/n-triples"]).to include(RDF::NTriples::Format)
+    end
+    it "has file extension .nt" do
+      expect(subject.file_extensions[:nt]).to include(RDF::NTriples::Format)
+    end
 
     it "Defining a new RDF serialization format class" do
       expect {
         class RDF::NTriples::Format < RDF::Format
           content_type     'application/n-triples', :extension => :nt
           content_encoding 'utf-8'
-          
+
           reader RDF::NTriples::Reader
           writer RDF::NTriples::Writer
         end

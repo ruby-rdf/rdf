@@ -11,6 +11,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 
 [![Gem Version](https://badge.fury.io/rb/rdf.png)](http://badge.fury.io/rb/rdf)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf)
+[![Join the chat at https://gitter.im/ruby-rdf/rdf](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-rdf/rdf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Features
 
@@ -419,6 +420,7 @@ follows:
 * [Pius Uzamere](http://github.com/pius) - <http://pius.me/>
 * [Judson Lester](https://github.com/nyarly) - <https://github.com/nyarly>
 * [Peter Vandenabeele](https://github.com/petervandenabeele) - <https://github.com/petervandenabeele>
+* [Tom Johnson](https://github.com/no-reply) - <https://github.com/no-reply>
 
 ## Contributing
 

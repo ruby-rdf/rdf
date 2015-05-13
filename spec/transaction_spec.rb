@@ -3,5 +3,5 @@ require 'rdf/spec/transaction'
 
 describe RDF::Transaction do
   # @see lib/rdf/spec/transaction.rb in rdf-spec
-  it_behaves_like "RDF_Transaction", RDF::Transaction
+  it_behaves_like "an RDF::Transaction", RDF::Transaction
 end

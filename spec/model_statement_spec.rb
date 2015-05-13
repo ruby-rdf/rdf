@@ -65,49 +65,49 @@ describe RDF::Statement do
       expect { RDF::Statement.new }.not_to raise_error
     end
 
-    it {should have_subject}
-    its(:subject) {should_not be_nil}
+    it {is_expected.to have_subject}
+    its(:subject) {is_expected.not_to be_nil}
     it {expect(subject.has_predicate?).to be_truthy}
-    its(:predicate) {should_not be_nil}
-    it {should have_object}
-    its(:object) {should_not be_nil}
-    it {should be_asserted}
-    it {should_not be_quoted}
-    it {should be_statement}
+    its(:predicate) {is_expected.not_to be_nil}
+    it {is_expected.to have_object}
+    its(:object) {is_expected.not_to be_nil}
+    it {is_expected.to be_asserted}
+    it {is_expected.not_to be_quoted}
+    it {is_expected.to be_statement}
   end
 
   context "when created with a blank node subject" do
     subject {RDF::Statement.new(RDF::Node.new, p, o)}
-    it {should have_blank_nodes}
+    it {is_expected.to have_blank_nodes}
   end
 
   context "when created with a blank node object" do
     subject {RDF::Statement.new(s, p, RDF::Node.new)}
-    it {should have_blank_nodes}
+    it {is_expected.to have_blank_nodes}
   end
 
   context "when created without a context" do
     subject {RDF::Statement.new(s, p, o, :context => nil)}
-    its(:context) {should be_nil}
-    it {should_not have_context}
+    its(:context) {is_expected.to be_nil}
+    it {is_expected.not_to have_context}
   end
 
   context "when created with a context" do
     subject {RDF::Statement.new(s, p, o, :context => s)}
-    it {should have_context}
-    its(:context) {should_not be_nil}
-    it {should eq stmt}
-    it {should_not eql stmt}
+    it {is_expected.to have_context}
+    its(:context) {is_expected.not_to be_nil}
+    it {is_expected.to eq stmt}
+    it {is_expected.not_to eql stmt}
   end
 
   context "when created with a default context" do
     subject {RDF::Statement.new(s, p, o, :context => false)}
     let(:stmtc) {RDF::Statement.new(s, p, o, :context => s)}
-    it {should_not have_context}
-    its(:context) {should == false}
-    it {should == stmt}
-    it {should == stmtc}
-    it {should_not eql stmtc}
+    it {is_expected.not_to have_context}
+    its(:context) {is_expected.to eq false}
+    it {is_expected.to eq stmt}
+    it {is_expected.to eq stmtc}
+    it {is_expected.to_not eql stmtc}
   end
 
   context "when used with symbols" do
@@ -124,10 +124,10 @@ describe RDF::Statement do
   end
 
   context "when used like an Array" do
-    it {should respond_to(:to_a)}
-    it {should respond_to(:[])}
-    it {should respond_to(:[]=)}
-    its(:to_a) {should eql([stmt.subject, stmt.predicate, stmt.object])}
+    it {is_expected.to respond_to(:to_a)}
+    it {is_expected.to respond_to(:[])}
+    it {is_expected.to respond_to(:[]=)}
+    its(:to_a) {is_expected.to eql([stmt.subject, stmt.predicate, stmt.object])}
 
     it "should support #[] for the subject" do
       expect(subject[0]).to equal(subject.subject)
@@ -170,18 +170,18 @@ describe RDF::Statement do
     end
   end
 
-  it {should respond_to(:to_hash)}
+  it {is_expected.to respond_to(:to_hash)}
   its(:to_hash) do
-    should eql({
-            :subject   => stmt.subject,
-            :predicate => stmt.predicate,
-            :object    => stmt.object,
-            :context   => stmt.context,
-          })
+    is_expected.to eql({
+      :subject   => stmt.subject,
+      :predicate => stmt.predicate,
+      :object    => stmt.object,
+      :context   => stmt.context,
+    })
   end
 
-  it {should respond_to(:to_s)}
-  its(:to_s) {should eql "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."}
+  it {is_expected.to respond_to(:to_s)}
+  its(:to_s) {is_expected.to eql "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."}
 
   context "when comparing equality" do
     let(:c) {RDF::URI.parse("http://example.org/context")}
@@ -204,7 +204,6 @@ describe RDF::Statement do
     end
 
     it "should only equals? with object equality" do
-      @same_stmt = RDF::Statement.new s, p, o
       expect(subject).not_to equal RDF::Statement.new s, p, o
       expect(subject).to equal subject
     end
