@@ -881,7 +881,7 @@ describe RDF::List do
 
     context "Turtle List construction" do
       subject {RDF::List.new(nil, nil, %w(a))}
-      its(:length) {should == 1}
+      its(:length) {is_expected.to eq 1}
     end
   end
 

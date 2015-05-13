@@ -6,7 +6,7 @@ describe RDF::Node do
   it "should be instantiable" do
     expect { new.call }.not_to raise_error
   end
-  
+
   describe ".intern" do
     before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
     it "caches Node instance" do
@@ -19,10 +19,23 @@ describe RDF::Node do
     end
   end
 
-  describe "#eq" do
+  describe "#==" do
     specify {expect(new.call("a")).to eq new.call("a")}
     specify {expect(new.call(:a)).to eq new.call("a")}
     specify {expect(new.call("a")).not_to eq new.call("b")}
+    specify {expect(new.call("a")).not_to eq Object.new}
+
+    it 'does not equal non-nodes' do
+      other = new.call(:a)
+      allow(other).to receive(:node?).and_return(false)
+      expect(new.call(:a)).not_to eq other
+    end
+
+    it 'does not equal nodes with a different term hash' do
+      other = new.call(:a)
+      allow(other.to_term).to receive(:hash).and_return('fake-hash')
+      expect(new.call(:a)).not_to eq other
+    end
   end
 
   describe "#eql" do
@@ -37,8 +50,8 @@ describe RDF::Node do
     specify {expect(subject.dup).to eql subject}
   end
 
-  its(:to_base) {should == "_:foo"}
-  its(:to_unique_base) {should =~ /^_:g/}
+  its(:to_base) {is_expected.to eq "_:foo"}
+  its(:to_unique_base) {is_expected.to match /^_:g/}
 
   {
     "" => true,

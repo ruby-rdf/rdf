@@ -132,7 +132,7 @@ describe RDF::Query::Solutions do
 
   describe "#order_by" do
     subject {solutions.order_by(:updated, lambda {|a, b| b <=> a})}
-    it {should be_a(RDF::Query::Solutions)}
+    it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains solutions in specified order" do
       expect(subject).to include(lit, uri)
     end
@@ -141,7 +141,7 @@ describe RDF::Query::Solutions do
   describe "#select" do
     context "one variable" do
       subject {solutions.select(:title)}
-      it {should be_a(RDF::Query::Solutions)}
+      it {is_expected.to be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
           RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
@@ -152,7 +152,7 @@ describe RDF::Query::Solutions do
 
     context "two variables" do
       subject {solutions.select(:title, :description)}
-      it {should be_a(RDF::Query::Solutions)}
+      it {is_expected.to be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
           RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1"), :description => RDF::Literal("Description")),
@@ -164,7 +164,7 @@ describe RDF::Query::Solutions do
 
   describe "#project" do
     subject {solutions.project(:title)}
-    it {should be_a(RDF::Query::Solutions)}
+    it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains particular variables only" do
       expect(subject).to include(
         RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
@@ -175,7 +175,7 @@ describe RDF::Query::Solutions do
 
   describe "#distinct" do
     subject {RDF::Query::Solutions(solutions.to_a << uri).distinct}
-    it {should be_a(RDF::Query::Solutions)}
+    it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains distinct solutions" do
       expect(subject).to include(uri, lit)
     end
@@ -195,8 +195,8 @@ describe RDF::Query::Solutions do
 
   describe "#offset" do
     subject {solutions.offset(20)}
-    it {should be_a(RDF::Query::Solutions)}
-    it {should be_empty}
+    it {is_expected.to be_a(RDF::Query::Solutions)}
+    it {is_expected.to be_empty}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -213,7 +213,7 @@ describe RDF::Query::Solutions do
 
   describe "#limit" do
     subject {solutions.limit(1)}
-    it {should be_a(RDF::Query::Solutions)}
+    it {is_expected.to be_a(RDF::Query::Solutions)}
 
     describe "has stable count and size" do
       subject {solutions.offset(1)}
@@ -230,12 +230,12 @@ describe RDF::Query::Solutions do
 
   describe "#offset+#limit" do
     subject {solutions.offset(20).limit(20)}
-    it {should be_a(RDF::Query::Solutions)}
-    it {should be_empty}
+    it {is_expected.to be_a(RDF::Query::Solutions)}
+    it {is_expected.to be_empty}
   end
 
   describe "#count" do
-    its(:count) {should == 2}
+    its(:count) {is_expected.to eq 2}
     it "Counting the number of matching solutions" do
       expect(subject.count { |solution| solution.price < 30.5 }).to eq 1
     end

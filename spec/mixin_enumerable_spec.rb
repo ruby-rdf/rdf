@@ -2,39 +2,37 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/spec/enumerable'
 
 describe RDF::Enumerable do
-  before :each do
+  # @see lib/rdf/spec/enumerable.rb in rdf-spec
+  it_behaves_like 'an RDF::Enumerable' do
     # The available reference implementations are `RDF::Repository` and
     # `RDF::Graph`, but a plain Ruby array will do fine as well:
-    @enumerable = RDF::Spec.quads.extend(RDF::Enumerable)
+    let(:enumerable) { RDF::Spec.quads.extend(described_class) }
   end
 
-  # @see lib/rdf/spec/enumerable.rb in rdf-spec
-  include RDF_Enumerable
-
   context "Examples" do
-    subject {@enumerable}
+    subject { RDF::Spec.quads.extend(described_class) }
 
     context "Checking whether any statements exist" do
       subject {[].extend(RDF::Enumerable)}
-      it {should be_empty}
+      it {is_expected.to be_empty}
     end
 
     context "Checking how many statements exist" do
-      its(:count) {should == subject.size}
+      its(:count) {is_expected.to eq subject.size}
     end
 
     context "Checking whether a specific statement exists" do
       let(:statement) {subject.detect {|s| s.to_a.none?(&:node?)}}
-      it {should have_statement(statement)}
-      it {should have_triple(statement.to_a)}
-      xit {should have_quad(statement.to_a)}
+      it {is_expected.to have_statement(statement)}
+      it {is_expected.to have_triple(statement.to_a)}
+      xit {is_expected.to have_quad(statement.to_a)}
     end
 
     context "Checking whether a specific value exists" do
-      it {should have_subject(RDF::URI("http://rubygems.org/gems/rdf"))}
-      it {should have_predicate(RDF::DC.creator)}
-      it {should have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))}
-      it {should have_context(RDF::URI("http://ar.to/#self"))}
+      it {is_expected.to have_subject(RDF::URI("http://rubygems.org/gems/rdf"))}
+      it {is_expected.to have_predicate(RDF::DC.creator)}
+      it {is_expected.to have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))}
+      it {is_expected.to have_context(RDF::URI("http://ar.to/#self"))}
     end
 
     it "Enumerating all statements" do

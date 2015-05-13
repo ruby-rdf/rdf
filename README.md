@@ -419,6 +419,7 @@ follows:
 * [Pius Uzamere](http://github.com/pius) - <http://pius.me/>
 * [Judson Lester](https://github.com/nyarly) - <https://github.com/nyarly>
 * [Peter Vandenabeele](https://github.com/petervandenabeele) - <https://github.com/petervandenabeele>
+* [Tom Johnson](https://github.com/no-reply) - <https://github.com/no-reply>
 
 ## Contributing
 

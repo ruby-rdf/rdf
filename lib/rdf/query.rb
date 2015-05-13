@@ -491,31 +491,35 @@ module RDF
     end
 
     ##
+    # Determine if the URI is a valid according to RFC3987
+    #
+    # @return [Boolean] `true` or `false`
+    # @since 0.3.9
+    def valid?
+      !!validate!
+    rescue
+      false
+    end
+
+    ##
     # Validate this query, making sure it can be executed by our query engine.
     # This method is public so that it may be called by implementations of
     # RDF::Queryable#query_execute that bypass our built-in query engine.
     #
-    # @return [void]
+    # @return [RDF::Query] `self`
     # @raise [ArgumentError] This query cannot be executed.
     def validate!
-      # Our first pattern, if it exists, cannot be an optional pattern.
-      if @patterns.length > 0 && @patterns[0].optional?
-        raise ArgumentError.new("Query must not begin with an optional pattern")
-      end
+      # All patterns must be valid
+      @patterns.each(&:validate!)
 
-      # All optional patterns must appear after the regular patterns.  We
-      # could test this more cleanly using Ruby 1.9-specific features, but
-      # we want to run under Ruby 1.8, too.
-      i = 0
-      i += 1 while i < @patterns.length && !@patterns[i].optional?
-      while i < @patterns.length
-        unless @patterns[i].optional?
+      # All optional patterns must appear after the regular patterns.
+      if i = @patterns.find_index(&:optional?)
+        unless @patterns[i..-1].all?(&:optional?)
           raise ArgumentError.new("Optional patterns must appear at end of query")
         end
-        i += 1
       end
 
-      nil
+      self
     end
 
   protected

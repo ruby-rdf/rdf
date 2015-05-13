@@ -2,23 +2,23 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Query::Pattern do
   context "without any variables" do
-    subject {RDF::Query::Pattern.new}
+    subject {described_class.new}
 
     describe ".from" do
       it "creates using triple array" do
-        expect(RDF::Query::Pattern.from([:s, :p, :o])).to eq RDF::Query::Pattern.new(:s, :p, :o)
+        expect(described_class.from([:s, :p, :o])).to eq described_class.new(:s, :p, :o)
       end
 
       it "creates using hash" do
-        expect(RDF::Query::Pattern.from(:subject => :s, :predicate => :p, :object => :o)).to eq RDF::Query::Pattern.new(:s, :p, :o)
+        expect(described_class.from(:subject => :s, :predicate => :p, :object => :o)).to eq described_class.new(:s, :p, :o)
       end
 
       it "creates using quad array" do
-        expect(RDF::Query::Pattern.from([:s, :p, :o, :c])).to eq RDF::Query::Pattern.new(:s, :p, :o, :context => :c)
+        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(:s, :p, :o, :context => :c)
       end
 
       it "creates using hash" do
-        expect(RDF::Query::Pattern.from(:subject => :s, :predicate => :p, :object => :o, :context => :c)).to eq RDF::Query::Pattern.new(:s, :p, :o, :context => :c)
+        expect(described_class.from(:subject => :s, :predicate => :p, :object => :o, :context => :c)).to eq described_class.new(:s, :p, :o, :context => :c)
       end
     end
 
@@ -50,7 +50,7 @@ describe RDF::Query::Pattern do
 
   context "with one bound variable" do
     let(:s) {RDF::Query::Variable.new(:s, true)}
-    subject {RDF::Query::Pattern.new(s)}
+    subject {described_class.new(s)}
 
     specify {expect(subject).not_to be_constant}
     specify {expect(subject).to be_variable}
@@ -88,7 +88,7 @@ describe RDF::Query::Pattern do
     let(:s) {RDF::Query::Variable.new(:s, true)}
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
-    subject {RDF::Query::Pattern.new(s, p, o)}
+    subject {described_class.new(s, p, o)}
 
     specify {expect(subject).not_to be_constant}
     specify {expect(subject).to be_variable}
@@ -127,12 +127,12 @@ describe RDF::Query::Pattern do
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
     it "uses a variable for a symbol" do
-      pattern = RDF::Query::Pattern.new(s, p, o, :context => :c)
+      pattern = described_class.new(s, p, o, :context => :c)
       expect(pattern.context).to eq RDF::Query::Variable.new(:c)
     end
     
     it "uses a constant for :default" do
-      pattern = RDF::Query::Pattern.new(s, p, o, :context => false)
+      pattern = described_class.new(s, p, o, :context => false)
       expect(pattern.context).to eq false
     end
   end
@@ -141,7 +141,7 @@ describe RDF::Query::Pattern do
     let(:s) {RDF::Query::Variable.new(:s)}
     let(:p) {RDF::Query::Variable.new(:p)}
     let(:o) {RDF::Query::Variable.new(:o)}
-    subject {RDF::Query::Pattern.new(s, p, o)}
+    subject {described_class.new(s, p, o)}
 
     specify {expect(subject).not_to be_constant}
     specify {expect(subject).to be_variable}
@@ -160,6 +160,37 @@ describe RDF::Query::Pattern do
     end
   end
 
+  context "validataion" do
+    {
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(nil, RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil) => true,
+      described_class.new(:var, RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), :var, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var) => true,
+      described_class.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => false,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
+    }.each do |st, valid|
+      context "given #{st}" do
+        if valid
+          specify {expect(st).to be_valid}
+          specify {expect(st).not_to be_invalid}
+          describe "#validate!" do
+            specify {expect {st.validate!}.not_to raise_error}
+          end
+        else
+          specify {expect(st).not_to be_valid}
+          specify {expect(st).to be_invalid}
+          describe "#validate!" do
+            specify {expect {st.validate!}.to raise_error(ArgumentError)}
+          end
+        end
+      end
+    end
+  end
+
   context "with one bound and one unbound variable" do
     it "needs a spec" # TODO
   end
@@ -167,7 +198,7 @@ describe RDF::Query::Pattern do
   context "Examples" do
     let!(:repo) {RDF::Repository.new {|r| r.insert(*RDF::Spec.triples)}}
     let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}
-    let(:pattern) {RDF::Query::Pattern.new(:s, :p, :o)}
+    let(:pattern) {described_class.new(:s, :p, :o)}
     subject {pattern}
     describe "#execute" do
       it "executes query against repo" do
@@ -184,14 +215,14 @@ describe RDF::Query::Pattern do
 
     describe "#variable_terms" do
       it "has term" do
-        expect(RDF::Query::Pattern.new(RDF::Node.new, :p, 123).variable_terms).to eq([:predicate])
+        expect(described_class.new(RDF::Node.new, :p, 123).variable_terms).to eq([:predicate])
       end
     end
 
     describe "#optional" do
       specify {
-        expect(RDF::Query::Pattern.new(:s, :p, :o)).to_not be_optional
-        expect(RDF::Query::Pattern.new(:s, :p, :o, :optional => true)).to be_optional
+        expect(described_class.new(:s, :p, :o)).to_not be_optional
+        expect(described_class.new(:s, :p, :o, :optional => true)).to be_optional
       }
     end
   end

@@ -12,12 +12,12 @@ describe RDF::Util::File do
       hide_const("RestClient")
       expect(RDF::Util::File.http_adapter).to eq RDF::Util::File::NetHttpAdapter
     end
-    
+
     it "returns RestClient if rest-client is available" do
       require 'rest-client'
       expect(RDF::Util::File.http_adapter).to eq RDF::Util::File::RestClientAdapter
     end
-    
+
     it "return Net::HTTP if explicitly requested" do
       require 'rest-client'
       expect(RDF::Util::File.http_adapter(true)).to eq RDF::Util::File::NetHttpAdapter
@@ -96,7 +96,7 @@ describe RDF::Util::File do
       end
       expect(r).to be_a(RDF::Reader)
     end
-    
+
     it "yields a file URL" do
       r = RDF::Util::File.open_file("file:" + fixture_path("test.nt")) do |f|
         expect(f).to respond_to(:read)
@@ -123,30 +123,26 @@ describe RDF::Util::File do
     require 'rdf/spec/http_adapter'
 
     context "using Net::HTTP" do
-      before do
-        @http_adapter = RDF::Util::File::NetHttpAdapter
+      it_behaves_like 'an RDF::HttpAdapter' do
+        let(:http_adapter) { RDF::Util::File::NetHttpAdapter }
       end
-
-      include RDF_HttpAdapter
     end
-    
-    context "using RestClient" do
-      before do
-        require 'rest_client'
-        @http_adapter = RDF::Util::File::RestClientAdapter
-      end
 
-      include RDF_HttpAdapter
+    context "using RestClient" do
+      require 'rest_client'
+
+      it_behaves_like 'an RDF::HttpAdapter' do
+        let(:http_adapter) { RDF::Util::File::RestClientAdapter }
+      end
     end
 
     context "using Faraday" do
-      before do
-        require 'faraday'
-        require 'faraday_middleware'
-        @http_adapter = RDF::Util::File::FaradayAdapter
-      end
+      require 'faraday'
+      require 'faraday_middleware'
 
-      include RDF_HttpAdapter
+      it_behaves_like 'an RDF::HttpAdapter' do
+        let(:http_adapter) { RDF::Util::File::FaradayAdapter }
+      end
     end
   end
 end

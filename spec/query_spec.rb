@@ -39,21 +39,21 @@ describe RDF::Query do
   describe "#empty?" do
     context "A query with no patterns" do
       subject {RDF::Query.new}
-      it {should be_empty}
+      it {is_expected.to be_empty}
     end
 
     context "A query with patterns" do
       subject {RDF::Query.new(RDF::URI("a") => { RDF::URI("b")  => "c" })}
-      it {should_not be_empty}
+      it {is_expected.not_to be_empty}
     end
   end
 
   describe "#dup" do
     let(:orig) {RDF::Query.new { pattern [RDF::URI("a"), RDF::URI("b"), "c"] }}
     subject {orig.dup}
-    it {should_not be_equal orig}
-    its(:patterns) {should_not be_equal orig.patterns}
-    its(:patterns) {should == orig.patterns}
+    it {is_expected.not_to equal orig}
+    its(:patterns) {is_expected.not_to equal orig.patterns}
+    its(:patterns) {is_expected.to eq orig.patterns}
   end
 
   context "BGPs" do
@@ -76,31 +76,31 @@ describe RDF::Query do
 
     context "querying for a specific statement" do
       let!(:graph) {
-        RDF::Graph.new do |graph|
-          graph << [EX.x1, EX.p1, EX.x2]
+        RDF::Graph.new do |g|
+          g << [EX.x1, EX.p1, EX.x2]
         end
       }
 
       it "returns an empty solution sequence if the statement does not exist" do
-        query = RDF::Query.new do |query|
-          query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
+        query = RDF::Query.new do |q|
+          q << [EX.x1, EX.p2, EX.x2] # nonexistent statement
         end
         expect(query.execute(graph)).to be_empty
         expect(graph.query(query)).to be_empty
       end
 
       it "returns an empty solution sequence if the statement does not exist as part of a multi-pattern bgp" do
-        query = RDF::Query.new do |query|
-          query << [EX.x1, EX.p2, EX.x2] # nonexistent statement
-          query << [:s, :p, :o]
+        query = RDF::Query.new do |q|
+          q << [EX.x1, EX.p2, EX.x2] # nonexistent statement
+          q << [:s, :p, :o]
         end
         expect(query.execute(graph)).to be_empty
         expect(graph.query(query)).to be_empty
       end
 
       it "should return a solution sequence with a single empty set if the statement exists" do
-        query = RDF::Query.new do |query|
-          query << [EX.x1, EX.p1, EX.x2]
+        query = RDF::Query.new do |q|
+          q << [EX.x1, EX.p1, EX.x2]
         end
         expect(query.execute(graph).map(&:to_hash)).to eq [{}]
         expect(graph.query(query).map(&:to_hash)).to eq [{}]
@@ -109,11 +109,11 @@ describe RDF::Query do
 
     context "querying for a literal" do
       it "should return a sequence with an existing literal" do
-        graph = RDF::Graph.new do |graph|
-          graph << [EX.x1, EX.p1, 123.0]
+        graph = RDF::Graph.new do |g|
+          g << [EX.x1, EX.p1, 123.0]
         end
-        query = RDF::Query.new do |query|
-          query << [:s, EX.p1, 123.0]
+        query = RDF::Query.new do |q|
+          q << [:s, EX.p1, 123.0]
         end
         expect(query.execute(graph).map(&:to_hash)).to eq [{:s => EX.x1}]
         expect(graph.query(query).map(&:to_hash)).to eq [{:s => EX.x1}]
@@ -199,16 +199,16 @@ describe RDF::Query do
       }
 
       it "?s p o" do
-        query = RDF::Query.new do |query|
-          query << [:s, EX.p, 1]
+        query = RDF::Query.new do |q|
+          q << [:s, EX.p, 1]
         end
         expect(query.execute(graph)).to have_result_set([{ :s => EX.x1 }])
         expect(graph.query(query)).to have_result_set([{ :s => EX.x1 }])
       end
 
       it "s ?p o" do
-        query = RDF::Query.new do |query|
-          query << [EX.x2, :p, 2]
+        query = RDF::Query.new do |q|
+          q << [EX.x2, :p, 2]
         end
         expect(query.execute(graph)).to have_result_set [ { :p => EX.p } ]
         expect(graph.query(query)).to have_result_set [ { :p => EX.p } ]
@@ -828,6 +828,59 @@ describe RDF::Query do
       expect {|b| query.each_statement(&b)}.to yield_control.once
       query.each_statement do |pattern|
         expect(pattern).to be_a(RDF::Query::Pattern)
+      end
+    end
+  end
+
+  context "validation" do
+    {
+      "query with no patterns" => [
+        described_class.new,
+        true
+      ],
+      "query with valid pattern" => [
+        described_class.new {pattern [RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var]},
+        true
+      ],
+      "query with invalid pattern" => [
+        described_class.new {pattern [RDF::URI("http://rubygems.org/gems/rdf"), "creator", :var]},
+        false
+      ],
+      "query with optional pattern" => [
+        described_class.new {
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var, optional: true)
+        },
+        true
+      ],
+      "query with required and optional patterns" => [
+        described_class.new {
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::DC.creator, :var, optional: true)
+        },
+        true
+      ],
+      "query with optional and required patterns" => [
+        described_class.new {
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::DC.creator, :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var)
+        },
+        false
+      ],
+    }.each do |title, (query, valid)|
+      context title do
+        if valid
+          specify {expect(query).to be_valid}
+          specify {expect(query).not_to be_invalid}
+          describe "#validate!" do
+            specify {expect {query.validate!}.not_to raise_error}
+          end
+        else
+          specify {expect(query).not_to be_valid}
+          specify {expect(query).to be_invalid}
+          describe "#validate!" do
+            specify {expect {query.validate!}.to raise_error(ArgumentError)}
+          end
+        end
       end
     end
   end
