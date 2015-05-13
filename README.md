@@ -1,5 +1,7 @@
 # RDF.rb: Linked Data for Ruby
 
+[![Join the chat at https://gitter.im/ruby-rdf/rdf](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-rdf/rdf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
