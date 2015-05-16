@@ -94,7 +94,7 @@ describe RDF::NQuads::Reader do
   it_behaves_like 'an RDF::Reader' do
     let(:reader) { RDF::NQuads::Reader.new }
     let(:reader_input) { File.read(testfile) }
-    let(:reader_count) { 19 }
+    let(:reader_count) { test_count }
   end
 
   describe ".for" do

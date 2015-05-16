@@ -182,7 +182,9 @@ describe RDF::NTriples::Writer do
   end
 
   # @see lib/rdf/spec/writer.rb in rdf-spec
-  it_behaves_like 'an RDF::Writer'
+  it_behaves_like 'an RDF::Writer' do
+    let(:writer) { RDF::NTriples::Writer.new }
+  end
 
   it "defaults validation to be true" do
     expect(subject).to be_validate
