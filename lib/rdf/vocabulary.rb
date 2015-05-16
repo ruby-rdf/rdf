@@ -138,7 +138,8 @@ module RDF
           Term.cache.delete(uri_str)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)
           props[name.to_sym] = prop
-          (class << self; self; end).send(:define_method, name) { prop } unless name.to_s == "property"
+          # Define an accessor, except for problematic properties
+          (class << self; self; end).send(:define_method, name) { prop } unless %w(property hash).include?(name.to_s)
           prop
         end
       end
