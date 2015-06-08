@@ -11,4 +11,12 @@ describe RDF::Writable do
 
   # @see lib/rdf/spec/writable.rb in rdf-spec
   include RDF_Writable
+
+  describe "#freeze" do
+    it "should make the object no longer writable" do
+      @writable.freeze
+
+      expect(@writable).not_to be_writable
+    end
+  end
 end
