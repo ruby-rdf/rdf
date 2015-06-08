@@ -738,16 +738,19 @@ describe RDF::Literal do
     it "recognizes INF" do
       expect(@inf).to be_infinite
       expect(RDF::Literal.new('INF', datatype: RDF::Literal::Double::DATATYPE)).to eq @inf
+      expect {@inf.canonicalize}.not_to raise_error
     end
 
     it "recognizes -INF" do
-      expect(@inf).to be_infinite
+      expect(-@inf).to be_infinite
       expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq -@inf
+      expect {-@inf.canonicalize}.not_to raise_error
     end
 
     it "recognizes NaN" do
       expect(@nan).to be_nan
       expect(RDF::Literal.new('NaN', datatype: RDF::Literal::Double::DATATYPE)).to be_nan
+      expect {@nan.canonicalize}.not_to raise_error
     end
 
     [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|

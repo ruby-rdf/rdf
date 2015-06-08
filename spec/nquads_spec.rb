@@ -92,7 +92,7 @@ describe RDF::NQuads::Reader do
 
   # @see lib/rdf/spec/reader.rb in rdf-spec
   it_behaves_like 'an RDF::Reader' do
-    let(:reader) { described_class.new }
+    let(:reader) { RDF::NQuads::Reader.new }
     let(:reader_input) { File.read(testfile) }
     let(:reader_count) { test_count }
   end
@@ -187,7 +187,7 @@ describe RDF::NQuads::Reader do
 end
 
 describe RDF::NQuads::Writer do
-  subject { described_class.new}
+  subject { RDF::NQuads::Writer.new }
 
   describe ".for" do
     formats = [
@@ -205,7 +205,7 @@ describe RDF::NQuads::Writer do
 
   # @see lib/rdf/spec/writer.rb in rdf-spec
   it_behaves_like 'an RDF::Writer' do
-    let(:writer) { described_class.new }
+    let(:writer) { RDF::NQuads::Writer.new }
   end
 
   context "#initialize" do
