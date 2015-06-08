@@ -53,7 +53,14 @@ module RDF; class Literal
           e.sub!(/^(?:\+|(\-))?0+(\d+)$/, '\1\2') # remove the optional leading '+' sign and any extra leading zeroes
           "#{i}.#{f}E#{e}"
       end
-      @object = Float(@string) unless @object.nil?
+
+      @object = case @string
+      when 'NaN'  then 0/0.0
+      when 'INF'  then 1/0.0
+      when '-INF' then -1/0.0
+      else             Float(@string)
+      end
+
       self
     end
 

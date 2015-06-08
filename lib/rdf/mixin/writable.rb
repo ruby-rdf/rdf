@@ -14,7 +14,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see    RDF::Readable#readable?
     def writable?
-      true
+      !frozen?
     end
 
     ##

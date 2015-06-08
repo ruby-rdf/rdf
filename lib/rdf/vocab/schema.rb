@@ -17,7 +17,7 @@ module RDF
       subClassOf: "schema:WebPage".freeze,
       type: "rdfs:Class".freeze
     term :AcceptAction,
-      comment: %(The act of committing to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/RejectAction">RejectAction</a>: The antagonym of AcceptAction</li></ul>.).freeze,
+      comment: %(The act of committing to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/RejectAction">RejectAction</a>: The antonym of AcceptAction</li></ul>.).freeze,
       label: "AcceptAction".freeze,
       subClassOf: "schema:AllocateAction".freeze,
       type: "rdfs:Class".freeze
@@ -126,7 +126,7 @@ module RDF
       comment: %(An answer offered to a question; perhaps correct, perhaps opinionated or wrong.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_QAStackExchange).freeze,
       label: "Answer".freeze,
-      subClassOf: "schema:CreativeWork".freeze,
+      subClassOf: "schema:Comment".freeze,
       type: "rdfs:Class".freeze
     term :ApartmentComplex,
       comment: %(Residence type: Apartment complex.).freeze,
@@ -314,6 +314,11 @@ module RDF
       label: "BloodTest".freeze,
       subClassOf: "schema:MedicalTest".freeze,
       type: "rdfs:Class".freeze
+    term :BoardingPolicyType,
+      comment: %(A type of boarding policy used by an airline.).freeze,
+      label: "BoardingPolicyType".freeze,
+      subClassOf: "schema:Enumeration".freeze,
+      type: "rdfs:Class".freeze
     term :BodyOfWater,
       comment: %(A body of water, such as a sea, ocean, or lake.).freeze,
       label: "BodyOfWater".freeze,
@@ -338,7 +343,7 @@ module RDF
     term :BookSeries,
       comment: %(A series of books. Included books can be indicated with the hasPart property.).freeze,
       label: "BookSeries".freeze,
-      subClassOf: "schema:Series".freeze,
+      subClassOf: "schema:CreativeWorkSeries".freeze,
       type: "rdfs:Class".freeze
     term :BookStore,
       comment: %(A bookstore.).freeze,
@@ -353,8 +358,7 @@ module RDF
     term :Boolean,
       comment: %(Boolean: True or False.).freeze,
       label: "Boolean".freeze,
-      subClassOf: "schema:DataType".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "schema:DataType".freeze]
     term :BorrowAction,
       comment: %(The act of obtaining an object under an agreement to return it at a later date. Reciprocal of LendAction.<p>Related actions:</p><ul><li><a href="http://schema.org/LendAction">LendAction</a>: Reciprocal of BorrowAction</li></ul>.).freeze,
       label: "BorrowAction".freeze,
@@ -379,7 +383,15 @@ module RDF
       type: "rdfs:Class".freeze
     term :BreadcrumbList,
       comment: %(
-      A BreadcrumbList is an ItemList consisting of a chain of linked Web pages, typically described using at least their URL and their name, ending with the current page.).freeze,
+      A BreadcrumbList is an ItemList consisting of a chain of linked Web pages, typically described using at least their URL and their name, and typically ending with the current page.
+      <br />
+      <br />
+      The 'position' property is used to reconstruct the order of the items in a BreadcrumbList.
+      The convention is that a breadcrumb list has an itemListOrder of ItemListOrderAscending \(lower values listed first\), and that the
+      first items in this list correspond to the "top" or beginning of the breadcrumb trail, e.g. with a site or section homepage.
+      The specific values of 'position' are not assigned meaning for a BreadcrumbList, but they should be integers, e.g. beginning
+      with '1' for the first item in the list.
+      ).freeze,
       label: "BreadcrumbList".freeze,
       subClassOf: "schema:ItemList".freeze,
       type: "rdfs:Class".freeze
@@ -387,6 +399,11 @@ module RDF
       comment: %(Brewery.).freeze,
       label: "Brewery".freeze,
       subClassOf: "schema:FoodEstablishment".freeze,
+      type: "rdfs:Class".freeze
+    term :BroadcastChannel,
+      comment: %(A unique instance of a BroadcastService on a CableOrSatelliteService lineup.).freeze,
+      label: "BroadcastChannel".freeze,
+      subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :BroadcastEvent,
       comment: %(An over the air or online broadcast event.).freeze,
@@ -420,7 +437,7 @@ module RDF
       type: "rdfs:Class".freeze
     term :BusTrip,
       comment: %(A trip on a commercial bus line.).freeze,
-      label: "Bus Trip".freeze,
+      label: "BusTrip".freeze,
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :BusinessAudience,
@@ -430,13 +447,13 @@ module RDF
       type: "rdfs:Class".freeze
     term :BusinessEntityType,
       comment: %(A business entity type is a conceptual entity representing the legal form, the size, the main line of business, the position in the value chain, or any combination thereof, of an organization or business person.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#Business
-    http://purl.org/goodrelations/v1#Enduser
-    http://purl.org/goodrelations/v1#PublicInstitution
-    http://purl.org/goodrelations/v1#Reseller
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#Business <br />
+    http://purl.org/goodrelations/v1#Enduser <br />
+    http://purl.org/goodrelations/v1#PublicInstitution <br />
+    http://purl.org/goodrelations/v1#Reseller <br />
 
         ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
@@ -450,17 +467,17 @@ module RDF
       type: "rdfs:Class".freeze
     term :BusinessFunction,
       comment: %(The business function specifies the type of activity or access \(i.e., the bundle of rights\) offered by the organization or business person through the offer. Typical are sell, rental or lease, maintenance or repair, manufacture / produce, recycle / dispose, engineering / construction, or installation. Proprietary specifications of access rights are also instances of this class.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#ConstructionInstallation
-    http://purl.org/goodrelations/v1#Dispose
-    http://purl.org/goodrelations/v1#LeaseOut
-    http://purl.org/goodrelations/v1#Maintain
-    http://purl.org/goodrelations/v1#ProvideService
-    http://purl.org/goodrelations/v1#Repair
-    http://purl.org/goodrelations/v1#Sell
-    http://purl.org/goodrelations/v1#Buy
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#ConstructionInstallation <br />
+    http://purl.org/goodrelations/v1#Dispose <br />
+    http://purl.org/goodrelations/v1#LeaseOut <br />
+    http://purl.org/goodrelations/v1#Maintain <br />
+    http://purl.org/goodrelations/v1#ProvideService <br />
+    http://purl.org/goodrelations/v1#Repair <br />
+    http://purl.org/goodrelations/v1#Sell <br />
+    http://purl.org/goodrelations/v1#Buy <br />
         ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "BusinessFunction".freeze,
@@ -470,6 +487,11 @@ module RDF
       comment: %(The act of giving money to a seller in exchange for goods or services rendered. An agent buys an object, product, or service from a seller for a price. Reciprocal of SellAction.).freeze,
       label: "BuyAction".freeze,
       subClassOf: "schema:TradeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :CableOrSatelliteService,
+      comment: %(A service which provides access to media programming like TV or radio. Access may be via cable or satellite.).freeze,
+      label: "CableOrSatelliteService".freeze,
+      subClassOf: "schema:Service".freeze,
       type: "rdfs:Class".freeze
     term :CafeOrCoffeeShop,
       comment: %(A cafe or coffee shop.).freeze,
@@ -487,14 +509,21 @@ module RDF
       subClassOf: "schema:BodyOfWater".freeze,
       type: "rdfs:Class".freeze
     term :CancelAction,
-      comment: %(The act of asserting that a future event/action is no longer going to happen.<p>Related actions:</p><ul><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: The antagonym of CancelAction</li></ul>.).freeze,
+      comment: %(The act of asserting that a future event/action is no longer going to happen.<p>Related actions:</p><ul><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: The antonym of CancelAction</li></ul>.).freeze,
       label: "CancelAction".freeze,
       subClassOf: "schema:PlanAction".freeze,
       type: "rdfs:Class".freeze
     term :Car,
-      comment: %(An automobile.).freeze,
+      comment: %(A car is a wheeled, self-powered motor vehicle used for transportation.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
       label: "Car".freeze,
       subClassOf: "schema:Vehicle".freeze,
+      type: "rdfs:Class".freeze
+    term :CarUsageType,
+      comment: %(A value indicating a special usage of a car, e.g. commercial rental, driving school, or as a taxi.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "CarUsageType".freeze,
+      subClassOf: "schema:QualitativeValue".freeze,
       type: "rdfs:Class".freeze
     term :Casino,
       comment: %(A casino.).freeze,
@@ -517,12 +546,12 @@ module RDF
       subClassOf: "schema:FindAction".freeze,
       type: "rdfs:Class".freeze
     term :CheckInAction,
-      comment: %(The act of an agent communicating \(service provider, social media, etc\) their arrival by registering/confirming for a previously reserved service \(e.g. flight check in\) or at a place \(e.g. hotel\), possibly resulting in a result \(boarding pass, etc\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckOutAction">CheckOutAction</a>: The antagonym of CheckInAction.</li><li><a href="http://schema.org/ArriveAction">ArriveAction</a>: Unlike ArriveAction, CheckInAction implies that the agent is informing/confirming the start of a previously reserved service.</li><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: Unlike ConfirmAction, CheckInAction implies that the agent is informing/confirming the *start* of a previously reserved service rather than its validity/existence</li></ul>.).freeze,
+      comment: %(The act of an agent communicating \(service provider, social media, etc\) their arrival by registering/confirming for a previously reserved service \(e.g. flight check in\) or at a place \(e.g. hotel\), possibly resulting in a result \(boarding pass, etc\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckOutAction">CheckOutAction</a>: The antonym of CheckInAction.</li><li><a href="http://schema.org/ArriveAction">ArriveAction</a>: Unlike ArriveAction, CheckInAction implies that the agent is informing/confirming the start of a previously reserved service.</li><li><a href="http://schema.org/ConfirmAction">ConfirmAction</a>: Unlike ConfirmAction, CheckInAction implies that the agent is informing/confirming the *start* of a previously reserved service rather than its validity/existence</li></ul>.).freeze,
       label: "CheckInAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
     term :CheckOutAction,
-      comment: %(The act of an agent communicating \(service provider, social media, etc\) their departure of a previously reserved service \(e.g. flight check in\) or place \(e.g. hotel\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckInAction">CheckInAction</a>: The antagonym of CheckOutAction.</li><li><a href="http://schema.org/DepartAction">DepartAction</a>: Unlike DepartAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li><li><a href="http://schema.org/CancelAction">CancelAction</a>: Unlike CancelAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service</li></ul>.).freeze,
+      comment: %(The act of an agent communicating \(service provider, social media, etc\) their departure of a previously reserved service \(e.g. flight check in\) or place \(e.g. hotel\).<p>Related actions:</p><ul><li><a href="http://schema.org/CheckInAction">CheckInAction</a>: The antonym of CheckOutAction.</li><li><a href="http://schema.org/DepartAction">DepartAction</a>: Unlike DepartAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service.</li><li><a href="http://schema.org/CancelAction">CancelAction</a>: Unlike CancelAction, CheckOutAction implies that the agent is informing/confirming the end of a previously reserved service</li></ul>.).freeze,
       label: "CheckOutAction".freeze,
       subClassOf: "schema:CommunicateAction".freeze,
       type: "rdfs:Class".freeze
@@ -584,6 +613,7 @@ module RDF
     term :Code,
       comment: %(Computer programming source code. Example: Full \(compile ready\) solutions, code snippet samples, scripts, templates.).freeze,
       label: "Code".freeze,
+      "schema:supersededBy" => %(schema:SoftwareSourceCode).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :CollectionPage,
@@ -627,7 +657,7 @@ module RDF
       subClassOf: "schema:Store".freeze,
       type: "rdfs:Class".freeze
     term :ConfirmAction,
-      comment: %(The act of notifying someone that a future event/action is going to happen as expected.<p>Related actions:</p><ul><li><a href="http://schema.org/CancelAction">CancelAction</a>: The antagonym of ConfirmAction</li></ul>.).freeze,
+      comment: %(The act of notifying someone that a future event/action is going to happen as expected.<p>Related actions:</p><ul><li><a href="http://schema.org/CancelAction">CancelAction</a>: The antonym of ConfirmAction</li></ul>.).freeze,
       label: "ConfirmAction".freeze,
       subClassOf: "schema:InformAction".freeze,
       type: "rdfs:Class".freeze
@@ -698,17 +728,49 @@ module RDF
       label: "CreativeWork".freeze,
       subClassOf: "schema:Thing".freeze,
       type: "rdfs:Class".freeze
+    term :CreativeWorkSeason,
+      comment: %(A media season e.g. tv, radio, video game etc.).freeze,
+      label: "CreativeWorkSeason".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :CreativeWorkSeries,
+      comment: %(
+          A CreativeWorkSeries in schema.org is a group of related items, typically but not necessarily of the same kind.
+          CreativeWorkSeries are usually organized into some order, often chronological. Unlike <a href="/ItemList">ItemList</a> which
+          is a general purpose data structure for lists of things, the emphasis with
+          CreativeWorkSeries is on published materials \(written e.g. books and periodicals,
+          or media such as tv, radio and games\).
+
+          <br/><br/>
+
+          Specific subtypes are available for describing <a href="/TVSeries">TVSeries</a>, <a href="/RadioSeries">RadioSeries</a>,
+          <a href="/MovieSeries">MovieSeries</a>,
+          <a href="/BookSeries">BookSeries</a>,
+          <a href="/Periodical">Periodical</a>
+          and <a href="/VideoGameSeries">VideoGameSeries</a>. In each case,
+          the <a href="/hasPart">hasPart</a> / <a href="/isPartOf">isPartOf</a> properties
+          can be used to relate the CreativeWorkSeries to its parts. The general CreativeWorkSeries type serves largely
+          just to organize these more specific and practical subtypes.
+
+          <br/><br/>
+
+          It is common for properties applicable to an item from the series to be usefully applied to the containing group.
+          Schema.org attempts to anticipate some of these cases, but publishers should be free to apply
+          properties of the series parts to the series as a whole wherever they seem appropriate.).freeze,
+      label: "CreativeWorkSeries".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
     term :CreditCard,
       comment: %(A credit or debit card type as a standardized procedure for transferring the monetary amount for a purchase.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#AmericanExpress
-    http://purl.org/goodrelations/v1#DinersClub
-    http://purl.org/goodrelations/v1#Discover
-    http://purl.org/goodrelations/v1#JCB
-    http://purl.org/goodrelations/v1#MasterCard
-    http://purl.org/goodrelations/v1#VISA
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#AmericanExpress <br />
+    http://purl.org/goodrelations/v1#DinersClub <br />
+    http://purl.org/goodrelations/v1#Discover <br />
+    http://purl.org/goodrelations/v1#JCB <br />
+    http://purl.org/goodrelations/v1#MasterCard <br />
+    http://purl.org/goodrelations/v1#VISA <br />
         ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "CreditCard".freeze,
@@ -752,23 +814,22 @@ module RDF
     term :DataType,
       comment: %(The basic data types such as Integers, Strings, etc.).freeze,
       label: "DataType".freeze,
+      subClassOf: "rdfs:Class".freeze,
       type: "rdfs:Class".freeze
     term :Dataset,
       comment: %(A body of structured information describing some topic\(s\) of interest.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_DatasetClass).freeze,
       label: "Dataset".freeze,
-      "owl:equivalentClass" => [%(dcat:Dataset).freeze, %(void:Dataset).freeze, %(http://purl.org/dc/dcmitype/Dataset).freeze],
+      "owl:equivalentClass" => [%(dcat:Dataset).freeze, %(void:Dataset).freeze, %(dcmitype:Dataset).freeze],
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :Date,
       comment: %(A date value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>.).freeze,
       label: "Date".freeze,
-      subClassOf: "schema:DataType".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "schema:DataType".freeze]
     term :DateTime,
       comment: %(A combination of date and time of day in the form [-]CCYY-MM-DDThh:mm:ss[Z|\(+|-\)hh:mm] \(see Chapter 5.4 of ISO 8601\).).freeze,
       label: "DateTime".freeze,
-      subClassOf: "schema:DataType".freeze,
       type: "rdfs:Class".freeze
     term :DatedMoneySpecification,
       comment: %(A DatedMoneySpecification represents monetary values with optional start and end dates. For example, this could represent an employee's salary over a specific period of time.).freeze,
@@ -777,17 +838,17 @@ module RDF
       type: "rdfs:Class".freeze
     term :DayOfWeek,
       comment: %(The day of the week, e.g. used to specify to which day the opening hours of an OpeningHoursSpecification refer.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#Monday
-    http://purl.org/goodrelations/v1#Tuesday
-    http://purl.org/goodrelations/v1#Wednesday
-    http://purl.org/goodrelations/v1#Thursday
-    http://purl.org/goodrelations/v1#Friday
-    http://purl.org/goodrelations/v1#Saturday
-    http://purl.org/goodrelations/v1#Sunday
-    http://purl.org/goodrelations/v1#PublicHolidays
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#Monday <br />
+    http://purl.org/goodrelations/v1#Tuesday <br />
+    http://purl.org/goodrelations/v1#Wednesday <br />
+    http://purl.org/goodrelations/v1#Thursday <br />
+    http://purl.org/goodrelations/v1#Friday <br />
+    http://purl.org/goodrelations/v1#Saturday <br />
+    http://purl.org/goodrelations/v1#Sunday <br />
+    http://purl.org/goodrelations/v1#PublicHolidays <br />
         ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "DayOfWeek".freeze,
@@ -826,17 +887,17 @@ module RDF
       type: "rdfs:Class".freeze
     term :DeliveryMethod,
       comment: %(A delivery method is a standardized procedure for transferring the product or service to the destination of fulfillment chosen by the customer. Delivery methods are characterized by the means of transportation used, and by the organization or group that is the contracting party for the sending organization or person.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#DeliveryModeDirectDownload
-    http://purl.org/goodrelations/v1#DeliveryModeFreight
-    http://purl.org/goodrelations/v1#DeliveryModeMail
-    http://purl.org/goodrelations/v1#DeliveryModeOwnFleet
-    http://purl.org/goodrelations/v1#DeliveryModePickUp
-    http://purl.org/goodrelations/v1#DHL
-    http://purl.org/goodrelations/v1#FederalExpress
-    http://purl.org/goodrelations/v1#UPS
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#DeliveryModeDirectDownload <br />
+    http://purl.org/goodrelations/v1#DeliveryModeFreight <br />
+    http://purl.org/goodrelations/v1#DeliveryModeMail <br />
+    http://purl.org/goodrelations/v1#DeliveryModeOwnFleet <br />
+    http://purl.org/goodrelations/v1#DeliveryModePickUp <br />
+    http://purl.org/goodrelations/v1#DHL <br />
+    http://purl.org/goodrelations/v1#FederalExpress <br />
+    http://purl.org/goodrelations/v1#UPS <br />
         ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "DeliveryMethod".freeze,
@@ -930,6 +991,12 @@ module RDF
       comment: %(The act of swallowing liquids.).freeze,
       label: "DrinkAction".freeze,
       subClassOf: "schema:ConsumeAction".freeze,
+      type: "rdfs:Class".freeze
+    term :DriveWheelConfigurationValue,
+      comment: %(A value indicating which roadwheels will receive torque.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "DriveWheelConfigurationValue".freeze,
+      subClassOf: "schema:QualitativeValue".freeze,
       type: "rdfs:Class".freeze
     term :Drug,
       comment: %(A chemical or biologic substance, used as a medical therapy, that has a physiological effect on an organism.).freeze,
@@ -1056,6 +1123,12 @@ module RDF
       label: "Energy".freeze,
       subClassOf: "schema:Quantity".freeze,
       type: "rdfs:Class".freeze
+    term :EngineSpecification,
+      comment: %(Information about the engine of the vehicle. A vehicle can have multiple engines represented by multiple engine specification entities.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "EngineSpecification".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
+      type: "rdfs:Class".freeze
     term :EntertainmentBusiness,
       comment: %(A business providing entertainment.).freeze,
       label: "EntertainmentBusiness".freeze,
@@ -1080,7 +1153,7 @@ module RDF
     term :Event,
       comment: %(An event happening at a certain time and location, such as a concert, lecture, or festival. Ticketing information may be added via the 'offers' property. Repeated events may be structured as separate Event objects.).freeze,
       label: "Event".freeze,
-      "owl:equivalentClass" => %(http://purl.org/dc/dcmitype/Event).freeze,
+      "owl:equivalentClass" => %(dcmitype:Event).freeze,
       subClassOf: "schema:Thing".freeze,
       type: "rdfs:Class".freeze
     term :EventReservation,
@@ -1239,7 +1312,7 @@ module RDF
       subClassOf: "schema:StructuredValue".freeze,
       type: "rdfs:Class".freeze
     term :GeoShape,
-      comment: %(The geographic shape of a place.).freeze,
+      comment: %(The geographic shape of a place. A GeoShape can be described using several properties whose values are based on latitude/longitude pairs. Either whitespace or commas can be used to separate latitude and longitude; whitespace should be used when writing a list of several such points.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
       label: "GeoShape".freeze,
       subClassOf: "schema:StructuredValue".freeze,
@@ -1372,7 +1445,7 @@ module RDF
     term :ImageObject,
       comment: %(An image file.).freeze,
       label: "ImageObject".freeze,
-      "owl:equivalentClass" => %(http://purl.org/dc/dcmitype/Image).freeze,
+      "owl:equivalentClass" => %(dcmitype:Image).freeze,
       subClassOf: "schema:MediaObject".freeze,
       type: "rdfs:Class".freeze
     term :ImagingTest,
@@ -1511,7 +1584,7 @@ module RDF
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :LeaveAction,
-      comment: %(An agent leaves an event / group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: The antagonym of LeaveAction.</li><li><a href="http://schema.org/UnRegisterAction">UnRegisterAction</a>: Unlike UnRegisterAction, LeaveAction implies leaving a group/team of people rather than a service</li></ul>.).freeze,
+      comment: %(An agent leaves an event / group with participants/friends at a location.<p>Related actions:</p><ul><li><a href="http://schema.org/JoinAction">JoinAction</a>: The antonym of LeaveAction.</li><li><a href="http://schema.org/UnRegisterAction">UnRegisterAction</a>: Unlike UnRegisterAction, LeaveAction implies leaving a group/team of people rather than a service</li></ul>.).freeze,
       label: "LeaveAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -1927,6 +2000,11 @@ module RDF
       label: "Movie".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
+    term :MovieClip,
+      comment: %(A short segment/part of a movie.).freeze,
+      label: "MovieClip".freeze,
+      subClassOf: "schema:Clip".freeze,
+      type: "rdfs:Class".freeze
     term :MovieRentalStore,
       comment: %(A movie rental store.).freeze,
       label: "MovieRentalStore".freeze,
@@ -1935,7 +2013,7 @@ module RDF
     term :MovieSeries,
       comment: %(A series of movies. Included movies can be indicated with the hasPart property.).freeze,
       label: "MovieSeries".freeze,
-      subClassOf: "schema:Series".freeze,
+      subClassOf: "schema:CreativeWorkSeries".freeze,
       type: "rdfs:Class".freeze
     term :MovieTheater,
       comment: %(A movie theater.).freeze,
@@ -2067,8 +2145,7 @@ module RDF
     term :Number,
       comment: %(Data type: Number.).freeze,
       label: "Number".freeze,
-      subClassOf: "schema:DataType".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "schema:DataType".freeze]
     term :NutritionInformation,
       comment: %(Nutritional information about the recipe.).freeze,
       label: "NutritionInformation".freeze,
@@ -2126,6 +2203,11 @@ module RDF
       label: "OrderAction".freeze,
       subClassOf: "schema:TradeAction".freeze,
       type: "rdfs:Class".freeze
+    term :OrderItem,
+      comment: %(An order item is a line of an order. It includes the quantity and shipping details of a bought offer.).freeze,
+      label: "OrderItem".freeze,
+      subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
     term :OrderStatus,
       comment: %(Enumerated status values for Order.).freeze,
       label: "OrderStatus".freeze,
@@ -2180,12 +2262,12 @@ module RDF
       type: "rdfs:Class".freeze
     term :ParcelService,
       comment: %(A private parcel service as the delivery mode available for a certain offer.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#DHL
-    http://purl.org/goodrelations/v1#FederalExpress
-    http://purl.org/goodrelations/v1#UPS
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#DHL <br />
+    http://purl.org/goodrelations/v1#FederalExpress <br />
+    http://purl.org/goodrelations/v1#UPS <br />
       ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "ParcelService".freeze,
@@ -2230,18 +2312,18 @@ module RDF
       type: "rdfs:Class".freeze
     term :PaymentMethod,
       comment: %(A payment method is a standardized procedure for transferring the monetary amount for a purchase. Payment methods are characterized by the legal and technical structures used, and by the organization or group carrying out the transaction.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#ByBankTransferInAdvance
-    http://purl.org/goodrelations/v1#ByInvoice
-    http://purl.org/goodrelations/v1#Cash
-    http://purl.org/goodrelations/v1#CheckInAdvance
-    http://purl.org/goodrelations/v1#COD
-    http://purl.org/goodrelations/v1#DirectDebit
-    http://purl.org/goodrelations/v1#GoogleCheckout
-    http://purl.org/goodrelations/v1#PayPal
-    http://purl.org/goodrelations/v1#PaySwarm
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#ByBankTransferInAdvance <br />
+    http://purl.org/goodrelations/v1#ByInvoice <br />
+    http://purl.org/goodrelations/v1#Cash <br />
+    http://purl.org/goodrelations/v1#CheckInAdvance <br />
+    http://purl.org/goodrelations/v1#COD <br />
+    http://purl.org/goodrelations/v1#DirectDebit <br />
+    http://purl.org/goodrelations/v1#GoogleCheckout <br />
+    http://purl.org/goodrelations/v1#PayPal <br />
+    http://purl.org/goodrelations/v1#PaySwarm <br />
         ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "PaymentMethod".freeze,
@@ -2279,7 +2361,7 @@ module RDF
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       label: "Periodical".freeze,
       "owl:equivalentClass" => %(http://purl.org/ontology/bibo/Periodical).freeze,
-      subClassOf: "schema:Series".freeze,
+      subClassOf: "schema:CreativeWorkSeries".freeze,
       type: "rdfs:Class".freeze
     term :Permit,
       comment: %(A permit issued by an organization, e.g. a parking pass.).freeze,
@@ -2442,13 +2524,22 @@ module RDF
       type: "rdfs:Class".freeze
     term :ProgramMembership,
       comment: %(Used to describe membership in a loyalty programs \(e.g. "StarAliance"\), traveler clubs \(e.g. "AAA"\), purchase clubs \("Safeway Club"\), etc.).freeze,
-      label: "Program Membership".freeze,
+      label: "ProgramMembership".freeze,
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :Property,
       comment: %(A property, used to indicate attributes and relationships of some Thing; equivalent to rdf:Property.).freeze,
       label: "Property".freeze,
       subClassOf: "schema:Intangible".freeze,
+      type: "rdfs:Class".freeze
+    term :PropertyValue,
+      comment: %(A property-value pair, e.g. representing a feature of a product or place. Use the 'name' property for the name of the property. If there is an additional human-readable version of the value, put that into the 'description' property.
+        <br/><br/>
+        Always use specific schema.org properties when a\) they exist and b\) you can populate them. Using PropertyValue as a substitute will typically not trigger the same effect as using the original, specific property.
+    ).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
+      label: "PropertyValue".freeze,
+      subClassOf: "schema:StructuredValue".freeze,
       type: "rdfs:Class".freeze
     term :PropertyValueSpecification,
       comment: %(A Property value specification.).freeze,
@@ -2537,6 +2628,11 @@ module RDF
       label: "RadiationTherapy".freeze,
       subClassOf: "schema:MedicalTherapy".freeze,
       type: "rdfs:Class".freeze
+    term :RadioChannel,
+      comment: %(A unique instance of a radio BroadcastService on a CableOrSatelliteService lineup.).freeze,
+      label: "RadioChannel".freeze,
+      subClassOf: "schema:BroadcastChannel".freeze,
+      type: "rdfs:Class".freeze
     term :RadioClip,
       comment: %(A short radio program or a segment/part of a radio program.).freeze,
       label: "RadioClip".freeze,
@@ -2550,12 +2646,12 @@ module RDF
     term :RadioSeason,
       comment: %(Season dedicated to radio broadcast and associated online delivery.).freeze,
       label: "RadioSeason".freeze,
-      subClassOf: "schema:Season".freeze,
+      subClassOf: "schema:CreativeWorkSeason".freeze,
       type: "rdfs:Class".freeze
     term :RadioSeries,
-      comment: %(Series dedicated to radio broadcast and associated online delivery.).freeze,
+      comment: %(CreativeWorkSeries dedicated to radio broadcast and associated online delivery.).freeze,
       label: "RadioSeries".freeze,
-      subClassOf: "schema:Series".freeze,
+      subClassOf: "schema:CreativeWorkSeries".freeze,
       type: "rdfs:Class".freeze
     term :RadioStation,
       comment: %(A radio station.).freeze,
@@ -2608,7 +2704,7 @@ module RDF
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
     term :RejectAction,
-      comment: %(The act of rejecting to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/AcceptAction">AcceptAction</a>: The antagonym of RejectAction</li></ul>.).freeze,
+      comment: %(The act of rejecting to/adopting an object.<p>Related actions:</p><ul><li><a href="http://schema.org/AcceptAction">AcceptAction</a>: The antonym of RejectAction</li></ul>.).freeze,
       label: "RejectAction".freeze,
       subClassOf: "schema:AllocateAction".freeze,
       type: "rdfs:Class".freeze
@@ -2739,6 +2835,11 @@ module RDF
       label: "School".freeze,
       subClassOf: "schema:EducationalOrganization".freeze,
       type: "rdfs:Class".freeze
+    term :ScreeningEvent,
+      comment: %(A screening of a movie or other video.).freeze,
+      label: "ScreeningEvent".freeze,
+      subClassOf: "schema:Event".freeze,
+      type: "rdfs:Class".freeze
     term :Sculpture,
       comment: %(A piece of sculpture.).freeze,
       label: "Sculpture".freeze,
@@ -2762,6 +2863,7 @@ module RDF
     term :Season,
       comment: %(A media season e.g. tv, radio, video game etc.).freeze,
       label: "Season".freeze,
+      "schema:supersededBy" => %(schema:CreativeWorkSeason).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :Seat,
@@ -2786,29 +2888,9 @@ module RDF
       type: "rdfs:Class".freeze
     term :Series,
       comment: %(
-          A Series in schema.org is a group of related items, typically but not necessarily of the same kind.
-          Series are usually organized into some order, often chronological. Unlike <a href="/ItemList">ItemList</a> which
-          is a general purpose data structure for lists of things, the emphasis with Series
-          is on published materials \(written e.g. books and periodicals, or media such as
-          tv, radio and games\).
-
-          <br/><br/>
-
-          Specific subtypes are available for describing <a href="/TVSeries">TVSeries</a>, <a href="/RadioSeries">RadioSeries</a>,
-          <a href="/MovieSeries">MovieSeries</a>,
-          <a href="/BookSeries">BookSeries</a>,
-          <a href="/Periodical">Periodical</a>
-          and <a href="/VideoGameSeries">VideoGameSeries</a>. In each case,
-          the <a href="/hasPart">hasPart</a> / <a href="/isPartOf">isPartOf</a> properties
-          can be used to relate the Series to its parts. The general Series type serves largely
-          just to organize these more specific and practical subtypes.
-
-          <br/><br/>
-
-          It is common for properties applicable to an item from the series to be usefully applied to the containing group.
-          Schema.org attempts to anticipate some of these cases, but publishers should be free to apply
-          properties of the series parts to the series as a whole wherever they seem appropriate.).freeze,
+          A Series in schema.org is a group of related items, typically but not necessarily of the same kind. ).freeze,
       label: "Series".freeze,
+      "schema:supersededBy" => %(schema:CreativeWorkSeries).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :Service,
@@ -2859,6 +2941,11 @@ module RDF
     term :SoftwareApplication,
       comment: %(A software application.).freeze,
       label: "SoftwareApplication".freeze,
+      subClassOf: "schema:CreativeWork".freeze,
+      type: "rdfs:Class".freeze
+    term :SoftwareSourceCode,
+      comment: %(Computer programming source code. Example: Full \(compile ready\) solutions, code snippet samples, scripts, templates.).freeze,
+      label: "SoftwareSourceCode".freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :SomeProducts,
@@ -2912,13 +2999,19 @@ module RDF
       label: "State".freeze,
       subClassOf: "schema:AdministrativeArea".freeze,
       type: "rdfs:Class".freeze
+    term :SteeringPositionValue,
+      comment: %(A value indicating a steering position.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "SteeringPositionValue".freeze,
+      subClassOf: "schema:QualitativeValue".freeze,
+      type: "rdfs:Class".freeze
     term :Store,
       comment: %(A retail good store.).freeze,
       label: "Store".freeze,
       subClassOf: "schema:LocalBusiness".freeze,
       type: "rdfs:Class".freeze
     term :StructuredValue,
-      comment: %(Structured values are strings&#x2014;for example, addresses&#x2014;that have certain constraints on their structure.).freeze,
+      comment: %(Structured values are used when the value of a property has a more complex structure than simply being a textual value or a reference to another thing.).freeze,
       label: "StructuredValue".freeze,
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
@@ -2961,12 +3054,12 @@ module RDF
     term :TVSeason,
       comment: %(Season dedicated to TV broadcast and associated online delivery.).freeze,
       label: "TVSeason".freeze,
-      subClassOf: ["schema:CreativeWork".freeze, "schema:Season".freeze],
+      subClassOf: ["schema:CreativeWork".freeze, "schema:CreativeWorkSeason".freeze],
       type: "rdfs:Class".freeze
     term :TVSeries,
-      comment: %(Series dedicated to TV broadcast and associated online delivery.).freeze,
+      comment: %(CreativeWorkSeries dedicated to TV broadcast and associated online delivery.).freeze,
       label: "TVSeries".freeze,
-      subClassOf: ["schema:CreativeWork".freeze, "schema:Series".freeze],
+      subClassOf: ["schema:CreativeWork".freeze, "schema:CreativeWorkSeries".freeze],
       type: "rdfs:Class".freeze
     term :Table,
       comment: %(A table on a Web page.).freeze,
@@ -2986,12 +3079,18 @@ module RDF
     term :Taxi,
       comment: %(A taxi.).freeze,
       label: "Taxi".freeze,
+      "schema:supersededBy" => %(schema:TaxiService).freeze,
       subClassOf: "schema:Service".freeze,
       type: "rdfs:Class".freeze
     term :TaxiReservation,
       comment: %(A reservation for a taxi.Note: This type is for information about actual reservations, e.g. in confirmation emails or HTML pages with individual confirmations of reservations. For offers of tickets, use http://schema.org/Offer.).freeze,
       label: " TaxiReservation".freeze,
       subClassOf: "schema:Reservation".freeze,
+      type: "rdfs:Class".freeze
+    term :TaxiService,
+      comment: %(A service for a vehicle for hire with a driver for local travel. Fares are usually calculated based on distance traveled.).freeze,
+      label: "TaxiService".freeze,
+      subClassOf: "schema:Service".freeze,
       type: "rdfs:Class".freeze
     term :TaxiStand,
       comment: %(A taxi stand.).freeze,
@@ -3002,6 +3101,11 @@ module RDF
       comment: %(A technical article - Example: How-to \(task\) topics, step-by-step, procedural troubleshooting, specifications, etc.).freeze,
       label: "TechArticle".freeze,
       subClassOf: "schema:Article".freeze,
+      type: "rdfs:Class".freeze
+    term :TelevisionChannel,
+      comment: %(A unique instance of a television BroadcastService on a CableOrSatelliteService lineup.).freeze,
+      label: "TelevisionChannel".freeze,
+      subClassOf: "schema:BroadcastChannel".freeze,
       type: "rdfs:Class".freeze
     term :TelevisionStation,
       comment: %(A television station.).freeze,
@@ -3016,8 +3120,7 @@ module RDF
     term :Text,
       comment: %(Data type: Text.).freeze,
       label: "Text".freeze,
-      subClassOf: "schema:DataType".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "schema:DataType".freeze]
     term :TheaterEvent,
       comment: %(Event type: Theater performance.).freeze,
       label: "TheaterEvent".freeze,
@@ -3051,8 +3154,7 @@ module RDF
     term :Time,
       comment: %(A point in time recurring on multiple days in the form hh:mm:ss[Z|\(+|-\)hh:mm] \(see <a href="http://www.w3.org/TR/xmlschema-2/#time">XML schema for details</a>\).).freeze,
       label: "Time".freeze,
-      subClassOf: "schema:DataType".freeze,
-      type: "rdfs:Class".freeze
+      type: ["rdfs:Class".freeze, "schema:DataType".freeze]
     term :TipAction,
       comment: %(The act of giving money voluntarily to a beneficiary in recognition of services rendered.).freeze,
       label: "TipAction".freeze,
@@ -3100,7 +3202,7 @@ module RDF
       type: "rdfs:Class".freeze
     term :TrainTrip,
       comment: %(A trip on a commercial train line.).freeze,
-      label: "Train Trip".freeze,
+      label: "TrainTrip".freeze,
       subClassOf: "schema:Intangible".freeze,
       type: "rdfs:Class".freeze
     term :TransferAction,
@@ -3136,7 +3238,7 @@ module RDF
       subClassOf: "schema:Text".freeze,
       type: "rdfs:Class".freeze
     term :UnRegisterAction,
-      comment: %(The act of un-registering from a service.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: Antagonym of UnRegisterAction.</li><li><a href="http://schema.org/Leave">Leave</a>: Unlike LeaveAction, UnRegisterAction implies that you are unregistering from a service you werer previously registered, rather than leaving a team/group of people</li></ul>.).freeze,
+      comment: %(The act of un-registering from a service.<p>Related actions:</p><ul><li><a href="http://schema.org/RegisterAction">RegisterAction</a>: antonym of UnRegisterAction.</li><li><a href="http://schema.org/Leave">Leave</a>: Unlike LeaveAction, UnRegisterAction implies that you are unregistering from a service you werer previously registered, rather than leaving a team/group of people</li></ul>.).freeze,
       label: "UnRegisterAction".freeze,
       subClassOf: "schema:InteractAction".freeze,
       type: "rdfs:Class".freeze
@@ -3157,58 +3259,78 @@ module RDF
       subClassOf: "schema:ConsumeAction".freeze,
       type: "rdfs:Class".freeze
     term :UserBlocks,
-      comment: %(User interaction: Block this content.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserBlocks".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserCheckins,
-      comment: %(User interaction: Check-in at a place.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserCheckins".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserComments,
-      comment: %(The UserInteraction event in which a user comments on an item.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_rNews).freeze,
       label: "UserComments".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserDownloads,
-      comment: %(User interaction: Download of an item.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserDownloads".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserInteraction,
-      comment: %(A user interacting with a page.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserInteraction".freeze,
       subClassOf: "schema:Event".freeze,
       type: "rdfs:Class".freeze
     term :UserLikes,
-      comment: %(User interaction: Like an item.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserLikes".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserPageVisits,
-      comment: %(User interaction: Visit to a web page.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserPageVisits".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserPlays,
-      comment: %(User interaction: Play count of an item, for example a video or a song.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserPlays".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserPlusOnes,
-      comment: %(User interaction: +1.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserPlusOnes".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :UserTweets,
-      comment: %(User interaction: Tweets.).freeze,
+      comment: %(UserInteraction and its subtypes is an old way of talking about users interacting with pages. It is generally better to use
+          <a href="/Action">Action</a>-based vocabulary, alongside types such as <a href="/Comment">Comment</a>.
+      ).freeze,
       label: "UserTweets".freeze,
       subClassOf: "schema:UserInteraction".freeze,
       type: "rdfs:Class".freeze
     term :Vehicle,
-      comment: %(A vehicle.).freeze,
+      comment: %(A vehicle is a device that is designed or used to transport people or cargo over land, water, air, or through space.).freeze,
       label: "Vehicle".freeze,
       subClassOf: "schema:Product".freeze,
       type: "rdfs:Class".freeze
@@ -3239,10 +3361,15 @@ module RDF
       label: "VideoGame".freeze,
       subClassOf: ["schema:SoftwareApplication".freeze, "schema:Game".freeze],
       type: "rdfs:Class".freeze
+    term :VideoGameClip,
+      comment: %(A short segment/part of a video game.).freeze,
+      label: "VideoGameClip".freeze,
+      subClassOf: "schema:Clip".freeze,
+      type: "rdfs:Class".freeze
     term :VideoGameSeries,
       comment: %(A <a href="/VideoGame">video game</a> series.).freeze,
       label: "VideoGameSeries".freeze,
-      subClassOf: "schema:Series".freeze,
+      subClassOf: "schema:CreativeWorkSeries".freeze,
       type: "rdfs:Class".freeze
     term :VideoObject,
       comment: %(A video file.).freeze,
@@ -3313,12 +3440,12 @@ module RDF
       type: "rdfs:Class".freeze
     term :WarrantyScope,
       comment: %(A range of of services that will be provided to a customer free of charge in case of a defect or malfunction of a product.
-
-    Commonly used values:
-
-    http://purl.org/goodrelations/v1#Labor-BringIn
-    http://purl.org/goodrelations/v1#PartsAndLabor-BringIn
-    http://purl.org/goodrelations/v1#PartsAndLabor-PickUp
+<br />
+    Commonly used values:<br />
+<br />
+    http://purl.org/goodrelations/v1#Labor-BringIn <br />
+    http://purl.org/goodrelations/v1#PartsAndLabor-BringIn <br />
+    http://purl.org/goodrelations/v1#PartsAndLabor-PickUp <br />
       ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_GoodRelationsClass).freeze,
       label: "WarrantyScope".freeze,
@@ -3472,6 +3599,19 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       "schema:supersededBy" => %(schema:muscleAction).freeze,
       type: "rdf:Property".freeze
+    property :actionApplication,
+      comment: %(An application that can complete the request.).freeze,
+      domainIncludes: "schema:EntryPoint".freeze,
+      label: "actionApplication".freeze,
+      rangeIncludes: "schema:SoftwareApplication".freeze,
+      type: "rdf:Property".freeze
+    property :actionOption,
+      comment: %(A sub property of object. The options subject to this action.).freeze,
+      domainIncludes: "schema:ChooseAction".freeze,
+      label: "actionOption".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:Thing".freeze],
+      subPropertyOf: "schema:object".freeze,
+      type: "rdf:Property".freeze
     property :actionStatus,
       comment: %(Indicates the current disposition of the Action.).freeze,
       domainIncludes: "schema:Action".freeze,
@@ -3498,7 +3638,7 @@ module RDF
       type: "rdf:Property".freeze
     property :actor,
       comment: %(An actor, e.g. in tv, radio, movie, video games etc. Actors can be associated with individual items or with a series, episode, clip.).freeze,
-      domainIncludes: ["schema:Movie".freeze, "schema:VideoObject".freeze, "schema:VideoGame".freeze, "schema:Episode".freeze, "schema:RadioSeries".freeze, "schema:MovieSeries".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:Clip".freeze],
+      domainIncludes: ["schema:Movie".freeze, "schema:VideoObject".freeze, "schema:VideoGame".freeze, "schema:Episode".freeze, "schema:CreativeWorkSeason".freeze, "schema:RadioSeries".freeze, "schema:MovieSeries".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:Clip".freeze],
       label: "actor".freeze,
       rangeIncludes: "schema:Person".freeze,
       type: "rdf:Property".freeze
@@ -3526,6 +3666,15 @@ module RDF
       domainIncludes: "schema:RsvpAction".freeze,
       label: "additionalNumberOfGuests".freeze,
       rangeIncludes: "schema:Number".freeze,
+      type: "rdf:Property".freeze
+    property :additionalProperty,
+      comment: %(A property-value pair representing an additional characteristics of the entitity, e.g. a product feature or another characteristic for which there is no matching property in schema.org. <br /><br />
+
+Note: Publishers should be aware that applications designed to use specific schema.org properties \(e.g. http://schema.org/width, http://schema.org/color, http://schema.org/gtin13, ...\) will typically expect such data to be provided using those properties, rather than using the generic property/value mechanism.
+).freeze,
+      domainIncludes: ["schema:Product".freeze, "schema:Place".freeze, "schema:QualitativeValue".freeze, "schema:QuantitativeValue".freeze],
+      label: "additionalProperty".freeze,
+      rangeIncludes: "schema:PropertyValue".freeze,
       type: "rdf:Property".freeze
     property :additionalType,
       comment: %(An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.).freeze,
@@ -3602,7 +3751,7 @@ module RDF
       type: "rdf:Property".freeze
     property :aggregateRating,
       comment: %(The overall rating, based on a collection of reviews or ratings, of the item.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze, "schema:Place".freeze, "schema:Offer".freeze, "schema:Product".freeze],
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Event".freeze, "schema:Brand".freeze, "schema:Service".freeze, "schema:Organization".freeze, "schema:Place".freeze, "schema:Offer".freeze, "schema:Product".freeze],
       label: "aggregateRating".freeze,
       rangeIncludes: "schema:AggregateRating".freeze,
       type: "rdf:Property".freeze
@@ -3725,6 +3874,7 @@ module RDF
       domainIncludes: "schema:EntryPoint".freeze,
       label: "application".freeze,
       rangeIncludes: "schema:SoftwareApplication".freeze,
+      "schema:supersededBy" => %(schema:actionApplication).freeze,
       type: "rdf:Property".freeze
     property :applicationCategory,
       comment: %(Type of software application, e.g. "Game, Multimedia".).freeze,
@@ -3761,6 +3911,7 @@ module RDF
       domainIncludes: "schema:BroadcastService".freeze,
       label: "area".freeze,
       rangeIncludes: "schema:Place".freeze,
+      "schema:supersededBy" => %(schema:serviceArea).freeze,
       type: "rdf:Property".freeze
     property :areaServed,
       comment: %(The location served by this contact point \(e.g., a phone number intended for Europeans vs. North Americans or only within the United States\).).freeze,
@@ -3771,7 +3922,7 @@ module RDF
     property :arrivalAirport,
       comment: %(The airport where the flight terminates.).freeze,
       domainIncludes: "schema:Flight".freeze,
-      label: "departureAirport".freeze,
+      label: "arrivalAirport".freeze,
       rangeIncludes: "schema:Airport".freeze,
       type: "rdf:Property".freeze
     property :arrivalBusStop,
@@ -3816,6 +3967,12 @@ module RDF
       label: "artEdition".freeze,
       rangeIncludes: ["schema:Text".freeze, "schema:Integer".freeze],
       type: "rdf:Property".freeze
+    property :artMedium,
+      comment: %(The material used. \(e.g. Oil, Watercolour, Acrylic, Linoprint, Marble, Cyanotype, Digital, Lithograph, DryPoint, Intaglio, Pastel, Woodcut, Pencil, Mixed Media, etc.\)).freeze,
+      domainIncludes: "schema:VisualArtwork".freeze,
+      label: "artMedium".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
     property :arterialBranch,
       comment: %(The branches that comprise the arterial structure.).freeze,
       domainIncludes: "schema:Artery".freeze,
@@ -3840,6 +3997,12 @@ module RDF
       label: "articleSection".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
+    property :artworkSurface,
+      comment: %(The supporting materials for the artwork, e.g. Canvas, Paper, Wood, Board, etc.).freeze,
+      domainIncludes: "schema:VisualArtwork".freeze,
+      label: "artworkSurface".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
     property :aspect,
       comment: %(An aspect of medical practice that is considered on the page, such as 'diagnosis', 'treatment', 'causes', 'prognosis', 'etiology', 'epidemiology', etc.).freeze,
       domainIncludes: "schema:MedicalWebPage".freeze,
@@ -3851,6 +4014,7 @@ module RDF
       domainIncludes: "schema:APIReference".freeze,
       label: "assembly".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:executableLibraryName).freeze,
       type: "rdf:Property".freeze
     property :assemblyVersion,
       comment: %(Associated product/technology version. e.g., .NET Framework 4.5.).freeze,
@@ -3902,7 +4066,7 @@ module RDF
       "schema:supersededBy" => %(schema:attendee).freeze,
       type: "rdf:Property".freeze
     property :audience,
-      comment: %(The intended audience of the item, i.e. the group for whom the item was created.).freeze,
+      comment: %(An intended audience, i.e. a group for whom something was created.).freeze,
       domainIncludes: ["schema:CreativeWork".freeze, "schema:Product".freeze, "schema:PlayAction".freeze],
       label: "audience".freeze,
       rangeIncludes: "schema:Audience".freeze,
@@ -3979,6 +4143,12 @@ module RDF
       label: "availableLanguage".freeze,
       rangeIncludes: "schema:Language".freeze,
       type: "rdf:Property".freeze
+    property :availableOnDevice,
+      comment: %(Device required to run the application. Used in cases where a specific make/model is required to run the application.).freeze,
+      domainIncludes: "schema:SoftwareApplication".freeze,
+      label: "availableOnDevice".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
     property :availableService,
       comment: %(A medical service available from this provider.).freeze,
       domainIncludes: ["schema:Hospital".freeze, "schema:MedicalClinic".freeze, "schema:Physician".freeze],
@@ -4004,14 +4174,14 @@ module RDF
       rangeIncludes: "schema:DateTime".freeze,
       type: "rdf:Property".freeze
     property :award,
-      comment: %(An award won by this person or for this creative work.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Person".freeze],
+      comment: %(An award won by or for this item.).freeze,
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze, "schema:Person".freeze, "schema:Product".freeze],
       label: "award".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :awards,
-      comment: %(Awards won by this person or for this creative work.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Person".freeze],
+      comment: %(Awards won by or for this item.).freeze,
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze, "schema:Person".freeze, "schema:Product".freeze],
       label: "awards".freeze,
       rangeIncludes: "schema:Text".freeze,
       "schema:supersededBy" => %(schema:award).freeze,
@@ -4040,6 +4210,7 @@ module RDF
       domainIncludes: "schema:JobPosting".freeze,
       label: "benefits".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:jobBenefits).freeze,
       type: "rdf:Property".freeze
     property :bestRating,
       comment: %(The highest value allowed in this rating system. If bestRating is omitted, 5 is assumed.).freeze,
@@ -4114,6 +4285,12 @@ module RDF
       label: "boardingGroup".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
+    property :boardingPolicy,
+      comment: %(The type of boarding policy used by the airline \(e.g. zone-based or group-based\).).freeze,
+      domainIncludes: ["schema:Airline".freeze, "schema:Flight".freeze],
+      label: "boardingPolicy".freeze,
+      rangeIncludes: "schema:BoardingPolicyType".freeze,
+      type: "rdf:Property".freeze
     property :bodyLocation,
       comment: %(Location in the body of the anatomical structure.).freeze,
       domainIncludes: "schema:AnatomicalStructure".freeze,
@@ -4153,7 +4330,7 @@ module RDF
       subPropertyOf: "schema:participant".freeze,
       type: "rdf:Property".freeze
     property :box,
-      comment: %(A polygon is the area enclosed by a point-to-point path for which the starting and ending points are the same. A polygon is expressed as a series of four or more space delimited points where the first and final points are identical.).freeze,
+      comment: %(A box is the area enclosed by the rectangle formed by two points. The first point is the lower corner, the second point is the upper corner. A box is expressed as two points separated by a space character.).freeze,
       domainIncludes: "schema:GeoShape".freeze,
       label: "box".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -4169,6 +4346,7 @@ module RDF
       domainIncludes: "schema:LocalBusiness".freeze,
       label: "branchOf".freeze,
       rangeIncludes: "schema:Organization".freeze,
+      "schema:supersededBy" => %(schema:parentOrganization).freeze,
       type: "rdf:Property".freeze
     property :brand,
       comment: %(The brand\(s\) associated with a product or service, or the brand\(s\) maintained by an organization or business person.).freeze,
@@ -4186,6 +4364,36 @@ module RDF
       comment: %(Any precaution, guidance, contraindication, etc. related to this drug's use by breastfeeding mothers.).freeze,
       domainIncludes: "schema:Drug".freeze,
       label: "breastfeedingWarning".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :broadcastAffiliateOf,
+      comment: %(The media network\(s\) whose content is broadcast on this station.).freeze,
+      domainIncludes: "schema:BroadcastService".freeze,
+      label: "broadcastAffiliateOf".freeze,
+      rangeIncludes: "schema:Organization".freeze,
+      type: "rdf:Property".freeze
+    property :broadcastChannelId,
+      comment: %(The unique address by which the BroadcastService can be identified in a provider lineup. In US, this is typically a number.).freeze,
+      domainIncludes: "schema:BroadcastChannel".freeze,
+      label: "broadcastChannelId".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :broadcastDisplayName,
+      comment: %(The name displayed in the channel guide. For many US affiliates, it is the network name.).freeze,
+      domainIncludes: "schema:BroadcastService".freeze,
+      label: "broadcastDisplayName".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :broadcastServiceTier,
+      comment: %(The type of service required to have access to the channel \(e.g. Standard or Premium\).).freeze,
+      domainIncludes: "schema:BroadcastChannel".freeze,
+      label: "broadcastServiceTier".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :broadcastTimezone,
+      comment: %(The timezone in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format</a> for which the service bases its broadcasts.).freeze,
+      domainIncludes: "schema:BroadcastService".freeze,
+      label: "timezone".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :broadcaster,
@@ -4262,6 +4470,16 @@ module RDF
       label: "carbohydrateContent".freeze,
       rangeIncludes: "schema:Mass".freeze,
       type: "rdf:Property".freeze
+    property :cargoVolume,
+      comment: %(The available volume for cargo or luggage. For automobiles, this is usually the trunk volume.<br />
+Typical unit code\(s\): LTR for liters, FTQ for cubic foot/feet<br />
+
+Note: You can use <a href="minValue">minValue</a> and <a href="maxValue">maxValue</a> to indicate ranges.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "cargoVolume".freeze,
+      rangeIncludes: "schema:QuantitativeValue".freeze,
+      type: "rdf:Property".freeze
     property :carrier,
       comment: %('carrier' is an out-dated term indicating the 'provider' for parcel delivery and flights.).freeze,
       domainIncludes: ["schema:ParcelDelivery".freeze, "schema:Flight".freeze],
@@ -4280,6 +4498,7 @@ module RDF
       domainIncludes: "schema:Dataset".freeze,
       label: "catalog".freeze,
       rangeIncludes: "schema:DataCatalog".freeze,
+      "schema:supersededBy" => %(schema:includedDataCatalog).freeze,
       type: "rdf:Property".freeze
     property :catalogNumber,
       comment: %(The catalog number for the release.).freeze,
@@ -4290,7 +4509,7 @@ module RDF
       type: "rdf:Property".freeze
     property :category,
       comment: %(A category for the item. Greater signs or slashes can be used to informally indicate a category hierarchy.).freeze,
-      domainIncludes: ["schema:Offer".freeze, "schema:Invoice".freeze, "schema:PhysicalActivity".freeze],
+      domainIncludes: ["schema:Product".freeze, "schema:Offer".freeze, "schema:Invoice".freeze, "schema:PhysicalActivity".freeze],
       label: "category".freeze,
       rangeIncludes: ["schema:PhysicalActivityCategory".freeze, "schema:Text".freeze, "schema:Thing".freeze],
       type: "rdf:Property".freeze
@@ -4383,6 +4602,7 @@ module RDF
       domainIncludes: "schema:Drug".freeze,
       label: "clinicalPharmacology".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:clinicalPharmacology).freeze,
       type: "rdf:Property".freeze
     property :clinicalPharmacology,
       comment: %(Description of the absorption and elimination of drugs, including their concentration \(pharmacokinetics, pK\) and biological effects \(pharmacodynamics, pD\).).freeze,
@@ -4417,9 +4637,15 @@ module RDF
       type: "rdf:Property".freeze
     property :codeRepository,
       comment: %(Link to the repository where the un-compiled, human readable code and related code is located \(SVN, github, CodePlex\).).freeze,
-      domainIncludes: "schema:Code".freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
       label: "codeRepository".freeze,
       rangeIncludes: "schema:URL".freeze,
+      type: "rdf:Property".freeze
+    property :codeSampleType,
+      comment: %(Full \(compile ready\) solution, code snippet, inline code, scripts, template.).freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
+      label: "codeSampleType".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :codeValue,
       comment: %(The actual code.).freeze,
@@ -4451,6 +4677,7 @@ module RDF
       domainIncludes: "schema:UpdateAction".freeze,
       label: "collection".freeze,
       rangeIncludes: "schema:Thing".freeze,
+      "schema:supersededBy" => %(schema:targetCollection).freeze,
       subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :color,
@@ -4460,10 +4687,10 @@ module RDF
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :comment,
-      comment: %(Comments, typically from users, on this CreativeWork.).freeze,
-      domainIncludes: "schema:CreativeWork".freeze,
+      comment: %(Comments, typically from users.).freeze,
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:RsvpAction".freeze],
       label: "comment".freeze,
-      rangeIncludes: ["schema:UserComments".freeze, "schema:Comment".freeze],
+      rangeIncludes: "schema:Comment".freeze,
       type: "rdf:Property".freeze
     property :commentCount,
       comment: %(The number of comments this CreativeWork \(e.g. Article, Question or Answer\) has received. This is most applicable to works published in Web sites with commenting system; additional comments may exist elsewhere.).freeze,
@@ -4545,8 +4772,15 @@ module RDF
       label: "containedIn".freeze,
       rangeIncludes: "schema:Place".freeze,
       type: "rdf:Property".freeze
+    property :containsSeason,
+      comment: %(A season that is part of the media series.).freeze,
+      domainIncludes: ["schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze],
+      label: "containsSeason".freeze,
+      rangeIncludes: "schema:CreativeWorkSeason".freeze,
+      subPropertyOf: "schema:hasPart".freeze,
+      type: "rdf:Property".freeze
     property :contentLocation,
-      comment: %(The location of the content.).freeze,
+      comment: %(The location depicted or described in the content. For example, the location in a photograph or painting.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "contentLocation".freeze,
       rangeIncludes: "schema:Place".freeze,
@@ -4658,10 +4892,11 @@ module RDF
       domainIncludes: "schema:ExerciseAction".freeze,
       label: "course".freeze,
       rangeIncludes: "schema:Place".freeze,
+      "schema:supersededBy" => %(schema:exerciseCourse).freeze,
       subPropertyOf: "schema:location".freeze,
       type: "rdf:Property".freeze
     property :creator,
-      comment: %(The creator/author of this CreativeWork or UserComments. This is the same as the Author property for CreativeWork.).freeze,
+      comment: %(The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.).freeze,
       domainIncludes: ["schema:CreativeWork".freeze, "schema:UserComments".freeze],
       label: "creator".freeze,
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
@@ -4697,6 +4932,12 @@ module RDF
       label: "dataset".freeze,
       rangeIncludes: "schema:Dataset".freeze,
       type: "rdf:Property".freeze
+    property :datasetTimeInterval,
+      comment: %(The range of temporal applicability of a dataset, e.g. for a 2011 census dataset, the year 2011 \(in ISO 8601 time interval format\).).freeze,
+      domainIncludes: "schema:Dataset".freeze,
+      label: "datasetTimeInterval".freeze,
+      rangeIncludes: "schema:DateTime".freeze,
+      type: "rdf:Property".freeze
     property :dateCreated,
       comment: %(The date on which the CreativeWork was created.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
@@ -4725,6 +4966,13 @@ module RDF
       comment: %(Date of first broadcast/publication.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "datePublished".freeze,
+      rangeIncludes: "schema:Date".freeze,
+      type: "rdf:Property".freeze
+    property :dateVehicleFirstRegistered,
+      comment: %(The date of the first registration of the vehicle with the respective public authorities.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "dateVehicleFirstRegistered".freeze,
       rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
     property :dateline,
@@ -4854,6 +5102,7 @@ module RDF
       domainIncludes: "schema:SoftwareApplication".freeze,
       label: "device".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:availableOnDevice).freeze,
       type: "rdf:Property".freeze
     property :diagnosis,
       comment: %(One or more alternative conditions considered in the differential diagnosis process.).freeze,
@@ -4872,6 +5121,7 @@ module RDF
       domainIncludes: "schema:ExerciseAction".freeze,
       label: "diet".freeze,
       rangeIncludes: "schema:Diet".freeze,
+      "schema:supersededBy" => %(schema:exerciseRelatedDiet).freeze,
       subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :dietFeatures,
@@ -4888,7 +5138,7 @@ module RDF
       type: "rdf:Property".freeze
     property :director,
       comment: %(A director of e.g. tv, radio, movie, video games etc. content. Directors can be associated with individual items or with a series, episode, clip.).freeze,
-      domainIncludes: ["schema:Movie".freeze, "schema:VideoObject".freeze, "schema:VideoGame".freeze, "schema:Episode".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze, "schema:MovieSeries".freeze, "schema:Clip".freeze],
+      domainIncludes: ["schema:Movie".freeze, "schema:VideoObject".freeze, "schema:VideoGame".freeze, "schema:Episode".freeze, "schema:CreativeWorkSeason".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze, "schema:MovieSeries".freeze, "schema:Clip".freeze],
       label: "director".freeze,
       rangeIncludes: "schema:Person".freeze,
       type: "rdf:Property".freeze
@@ -4996,8 +5246,8 @@ module RDF
       rangeIncludes: "schema:URL".freeze,
       type: "rdf:Property".freeze
     property :downvoteCount,
-      comment: %(The number of downvotes this question has received from the community.).freeze,
-      domainIncludes: ["schema:Question".freeze, "schema:Answer".freeze, "schema:Comment".freeze],
+      comment: %(The number of downvotes this question, answer or comment has received from the community.).freeze,
+      domainIncludes: ["schema:Question".freeze, "schema:Comment".freeze],
       label: "downvoteCount".freeze,
       rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
@@ -5006,6 +5256,13 @@ module RDF
       domainIncludes: "schema:Vein".freeze,
       label: "drainsTo".freeze,
       rangeIncludes: "schema:Vessel".freeze,
+      type: "rdf:Property".freeze
+    property :driveWheelConfiguration,
+      comment: %(The drive wheel configuration, i.e. which roadwheels will receive torque from the vehicle's engine via the drivetrain.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "driveWheelConfiguration".freeze,
+      rangeIncludes: ["schema:DriveWheelConfigurationValue".freeze, "schema:Text".freeze],
       type: "rdf:Property".freeze
     property :dropoffLocation,
       comment: %(Where a rental car can be dropped off.).freeze,
@@ -5122,10 +5379,10 @@ module RDF
       rangeIncludes: "schema:QuantitativeValue".freeze,
       type: "rdf:Property".freeze
     property :eligibleRegion,
-      comment: %(The ISO 3166-1 \(ISO 3166-1 alpha-2\) or ISO 3166-2 code, or the GeoShape for the geo-political region\(s\) for which the offer or delivery charge specification is valid.).freeze,
+      comment: %(The ISO 3166-1 \(ISO 3166-1 alpha-2\) or ISO 3166-2 code, the place, or the GeoShape for the geo-political region\(s\) for which the offer or delivery charge specification is valid.).freeze,
       domainIncludes: ["schema:Offer".freeze, "schema:DeliveryChargeSpecification".freeze, "schema:Demand".freeze],
       label: "eligibleRegion".freeze,
-      rangeIncludes: ["schema:GeoShape".freeze, "schema:Text".freeze],
+      rangeIncludes: ["schema:GeoShape".freeze, "schema:Place".freeze, "schema:Text".freeze],
       type: "rdf:Property".freeze
     property :eligibleTransactionVolume,
       comment: %(The transaction volume, in a monetary unit, for which the offer or price specification is valid, e.g. for indicating a minimal purchasing volume, to express free shipping above a certain order volume, or to limit the acceptance of credit cards to purchases to a certain minimal amount.).freeze,
@@ -5197,7 +5454,7 @@ module RDF
       type: "rdf:Property".freeze
     property :endDate,
       comment: %(The end date and time of the item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
-      domainIncludes: ["schema:Role".freeze, "schema:Event".freeze, "schema:Season".freeze, "schema:Series".freeze, "schema:DatedMoneySpecification".freeze],
+      domainIncludes: ["schema:Role".freeze, "schema:Event".freeze, "schema:CreativeWorkSeason".freeze, "schema:CreativeWorkSeries".freeze, "schema:DatedMoneySpecification".freeze],
       label: "endDate".freeze,
       rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
@@ -5237,7 +5494,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :episode,
       comment: %(An episode of a tv, radio or game media within a series or season.).freeze,
-      domainIncludes: ["schema:Season".freeze, "schema:RadioSeries".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze],
+      domainIncludes: ["schema:CreativeWorkSeason".freeze, "schema:RadioSeries".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze],
       label: "episode".freeze,
       rangeIncludes: "schema:Episode".freeze,
       subPropertyOf: "schema:hasPart".freeze,
@@ -5251,7 +5508,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :episodes,
       comment: %(An episode of a TV/radio series or season.).freeze,
-      domainIncludes: ["schema:Season".freeze, "schema:RadioSeries".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze],
+      domainIncludes: ["schema:CreativeWorkSeason".freeze, "schema:RadioSeries".freeze, "schema:VideoGameSeries".freeze, "schema:TVSeries".freeze],
       label: "episodes".freeze,
       rangeIncludes: "schema:Episode".freeze,
       "schema:supersededBy" => %(schema:episode).freeze,
@@ -5319,11 +5576,31 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "exampleOfWork".freeze,
       rangeIncludes: "schema:CreativeWork".freeze,
       type: "rdf:Property".freeze
+    property :executableLibraryName,
+      comment: %(Library file name e.g., mscorlib.dll, system.web.dll.).freeze,
+      domainIncludes: "schema:APIReference".freeze,
+      label: "executableLibraryName".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :exerciseCourse,
+      comment: %(A sub property of location. The course where this action was taken.).freeze,
+      domainIncludes: "schema:ExerciseAction".freeze,
+      label: "exerciseCourse".freeze,
+      rangeIncludes: "schema:Place".freeze,
+      subPropertyOf: "schema:location".freeze,
+      type: "rdf:Property".freeze
     property :exercisePlan,
       comment: %(A sub property of instrument. The exercise plan used on this action.).freeze,
       domainIncludes: "schema:ExerciseAction".freeze,
       label: "exercisePlan".freeze,
       rangeIncludes: "schema:ExercisePlan".freeze,
+      subPropertyOf: "schema:instrument".freeze,
+      type: "rdf:Property".freeze
+    property :exerciseRelatedDiet,
+      comment: %(A sub property of instrument. The diet used in this action.).freeze,
+      domainIncludes: "schema:ExerciseAction".freeze,
+      label: "exerciseRelatedDiet".freeze,
+      rangeIncludes: "schema:Diet".freeze,
       subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :exerciseType,
@@ -5336,7 +5613,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(exif data for this object.).freeze,
       domainIncludes: "schema:ImageObject".freeze,
       label: "exifData".freeze,
-      rangeIncludes: "schema:Text".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:PropertyValue".freeze],
       type: "rdf:Property".freeze
     property :expectedArrivalFrom,
       comment: %(The earliest date the package may arrive.).freeze,
@@ -5510,6 +5787,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:PublicationEvent".freeze,
       label: "free".freeze,
       rangeIncludes: "schema:Boolean".freeze,
+      "schema:supersededBy" => %(schema:isAccessibleForFree).freeze,
       type: "rdf:Property".freeze
     property :frequency,
       comment: %(How often the dose is taken, e.g. 'daily'.).freeze,
@@ -5523,6 +5801,35 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "fromLocation".freeze,
       rangeIncludes: "schema:Place".freeze,
       subPropertyOf: "schema:location".freeze,
+      type: "rdf:Property".freeze
+    property :fuelConsumption,
+      comment: %(The amount of fuel consumed for traveling a particular distance or temporal duration with the given vehicle \(e.g. liters per 100 km\).<br />
+Note 1: There are unfortunately no standard unit codes for liters per 100 km.<br />
+Use <a href="unitText">unitText</a> to indicate the unit of measurement, e.g. L/100 km.
+Note 2: There are two ways of indicating the fuel consumption, <a href="fuelConsumption">fuelConsumption</a> \(e.g. 8 liters per 100 km\) and <a href="fuelEfficiency">fuelEfficiency</a> \(e.g. 30 miles per gallon\). They are reciprocal.<br />
+Note 3: Often, the absolute value is useful only when related to driving speed \("at 80 km/h"\) or usage pattern \("city traffic"\). You can use <a href="valueReference">valueReference</a> to link the value for the fuel consumption to another value.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "fuelConsumption".freeze,
+      rangeIncludes: "schema:QuantitativeValue".freeze,
+      type: "rdf:Property".freeze
+    property :fuelEfficiency,
+      comment: %(The distance traveled per unit of fuel used; most commonly miles per gallon \(mpg\) or kilometers per liter \(km/L\).<br />
+Note 1: There are unfortunately no standard unit codes for miles per gallon or kilometers per liter.<br />
+Use <a href="unitText">unitText</a> to indicate the unit of measurement, e.g. mpg or km/L.
+Note 2: There are two ways of indicating the fuel consumption, <a href="fuelConsumption">fuelConsumption</a> \(e.g. 8 liters per 100 km\) and <a href="fuelEfficiency">fuelEfficiency</a> \(e.g. 30 miles per gallon\). They are reciprocal.<br />
+Note 3: Often, the absolute value is useful only when related to driving speed \("at 80 km/h"\) or usage pattern \("city traffic"\). You can use <a href="valueReference">valueReference</a> to link the value for the fuel economy to another value.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "fuelEfficiency".freeze,
+      rangeIncludes: "schema:QuantitativeValue".freeze,
+      type: "rdf:Property".freeze
+    property :fuelType,
+      comment: %(The type of fuel suitable for the engine or engines of the vehicle. If the vehicle has only one engine, this property can be attached directly to the vehicle.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: ["schema:Vehicle".freeze, "schema:EngineSpecification".freeze],
+      label: "fuelType".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:QualitativeValue".freeze, "schema:URL".freeze],
       type: "rdf:Property".freeze
     property :function,
       comment: %(Function of the anatomical structure.).freeze,
@@ -5551,7 +5858,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :gameLocation,
       comment: %(Real or fictional location of the game \(or part of game\).).freeze,
-      domainIncludes: "schema:Game".freeze,
+      domainIncludes: ["schema:Game".freeze, "schema:VideoGameSeries".freeze],
       label: "gameLocation".freeze,
       rangeIncludes: ["schema:URL".freeze, "schema:Place".freeze, "schema:PostalAddress".freeze],
       type: "rdf:Property".freeze
@@ -5605,7 +5912,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :globalLocationNumber,
-      comment: %(The Global Location Number \(GLN, sometimes also referred to as International Location Number or ILN\) of the respective organization, person, or place. The GLN is a 13-digit number used to identify parties and physical locations.).freeze,
+      comment: %(The <a href="http://www.gs1.org/gln">Global Location Number</a> \(GLN, sometimes also referred to as International Location Number or ILN\) of the respective organization, person, or place. The GLN is a 13-digit number used to identify parties and physical locations.).freeze,
       domainIncludes: ["schema:Organization".freeze, "schema:Place".freeze, "schema:Person".freeze],
       label: "globalLocationNumber".freeze,
       rangeIncludes: "schema:Text".freeze,
@@ -5621,6 +5928,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:QualitativeValue".freeze,
       label: "greaterOrEqual".freeze,
       rangeIncludes: "schema:QualitativeValue".freeze,
+      type: "rdf:Property".freeze
+    property :gtin12,
+      comment: %(The <a href="http://apps.gs1.org/GDD/glossary/Pages/GTIN-12.aspx">GTIN-12</a> code of the product, or the product to which the offer refers. The GTIN-12 is the 12-digit GS1 Identification Key composed of a U.P.C. Company Prefix, Item Reference, and Check Digit used to identify trade items. See <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GS1 GTIN Summary</a> for more details.).freeze,
+      domainIncludes: ["schema:Offer".freeze, "schema:Product".freeze, "schema:Demand".freeze],
+      label: "gtin12".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :gtin13,
       comment: %(The <a href="http://apps.gs1.org/GDD/glossary/Pages/GTIN-13.aspx">GTIN-13</a> code of the product, or the product to which the offer refers. This is equivalent to 13-digit ISBN codes and EAN UCC-13. Former 12-digit UPC codes can be converted into a GTIN-13 code by simply adding a preceeding zero. See <a href="http://www.gs1.org/barcodes/technical/idkeys/gtin">GS1 GTIN Summary</a> for more details.).freeze,
@@ -5817,11 +6130,17 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "inAlbum".freeze,
       rangeIncludes: "schema:MusicAlbum".freeze,
       type: "rdf:Property".freeze
+    property :inBroadcastLineup,
+      comment: %(The CableOrSatelliteService offering the channel.).freeze,
+      domainIncludes: "schema:BroadcastChannel".freeze,
+      label: "inBroadcastLineup".freeze,
+      rangeIncludes: "schema:CableOrSatelliteService".freeze,
+      type: "rdf:Property".freeze
     property :inLanguage,
-      comment: %(The language of the content. please use one of the language codes from the <a href='http://tools.ietf.org/html/bcp47'>IETF BCP 47 standard</a>.).freeze,
-      domainIncludes: "schema:CreativeWork".freeze,
+      comment: %(The language of the content or performance or used in an action. Please use one of the language codes from the <a href='http://tools.ietf.org/html/bcp47'>IETF BCP 47 standard</a>.).freeze,
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Event".freeze, "schema:CommunicateAction".freeze, "schema:WriteAction".freeze],
       label: "inLanguage".freeze,
-      rangeIncludes: "schema:Text".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:Language".freeze],
       type: "rdf:Property".freeze
     property :inPlaylist,
       comment: %(The playlist to which this recording belongs.).freeze,
@@ -5829,11 +6148,18 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "inPlaylist".freeze,
       rangeIncludes: "schema:MusicPlaylist".freeze,
       type: "rdf:Property".freeze
+    property :incentiveCompensation,
+      comment: %(Description of bonus and commission compensation aspects of the job.).freeze,
+      domainIncludes: "schema:JobPosting".freeze,
+      label: "incentiveCompensation".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
     property :incentives,
       comment: %(Description of bonus and commission compensation aspects of the job.).freeze,
       domainIncludes: "schema:JobPosting".freeze,
       label: "incentives".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:incentiveCompensation).freeze,
       type: "rdf:Property".freeze
     property :includedComposition,
       comment: %(Smaller compositions included in this work \(e.g. a movement in a symphony\).).freeze,
@@ -5841,6 +6167,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:MusicComposition".freeze,
       label: "includedComposition".freeze,
       rangeIncludes: "schema:MusicComposition".freeze,
+      type: "rdf:Property".freeze
+    property :includedDataCatalog,
+      comment: %(A data catalog contained in the dataset.).freeze,
+      domainIncludes: "schema:Dataset".freeze,
+      label: "includedDataCatalog".freeze,
+      rangeIncludes: "schema:DataCatalog".freeze,
       type: "rdf:Property".freeze
     property :includedRiskFactor,
       comment: %(A modifiable or non-modifiable risk factor included in the calculation, e.g. age, coexisting condition.).freeze,
@@ -5873,10 +6205,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :ineligibleRegion,
-      comment: %(The place\(s\) from which the offer cannot be obtained \(e.g. a region where the transaction is not allowed\).).freeze,
-      domainIncludes: "schema:Offer".freeze,
+      comment: %(The ISO 3166-1 \(ISO 3166-1 alpha-2\) or ISO 3166-2 code, the place, or the GeoShape for the geo-political region\(s\) for which the offer or delivery charge specification is not valid, e.g. a region where the transaction is not allowed.).freeze,
+      domainIncludes: ["schema:Offer".freeze, "schema:DeliveryChargeSpecification".freeze, "schema:Demand".freeze],
       label: "ineligibleRegion".freeze,
-      rangeIncludes: "schema:Place".freeze,
+      rangeIncludes: ["schema:GeoShape".freeze, "schema:Place".freeze, "schema:Text".freeze],
       type: "rdf:Property".freeze
     property :infectiousAgent,
       comment: %(The actual infectious agent, such as a specific bacterium.).freeze,
@@ -5891,10 +6223,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:InfectiousAgentClass".freeze,
       type: "rdf:Property".freeze
     property :ingredients,
-      comment: %(An ingredient used in the recipe.).freeze,
+      comment: %(A single ingredient used in the recipe, e.g. sugar, flour or garlic.).freeze,
       domainIncludes: "schema:Recipe".freeze,
       label: "ingredients".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:recipeIngredient).freeze,
       type: "rdf:Property".freeze
     property :insertion,
       comment: %(The place of attachment of a muscle, or what the muscle moves.).freeze,
@@ -5927,10 +6260,8 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Drug".freeze,
       type: "rdf:Property".freeze
     property :interactionCount,
-      comment: %(A count of a specific user interactions with this item&#x2014;for example, <code>20 UserLikes</code>, <code>5 UserComments</code>, or <code>300 UserDownloads</code>. The user interaction type should be one of the sub types of <a href='UserInteraction'>UserInteraction</a>.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze, "schema:Place".freeze, "schema:Person".freeze],
+      comment: %(This property is deprecated, alongside the UserInteraction types on which it depended.).freeze,
       label: "interactionCount".freeze,
-      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :interactivityType,
       comment: %(The predominant mode of learning supported by the learning resource. Acceptable values are 'active', 'expositive', or 'mixed'.).freeze,
@@ -5949,6 +6280,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Property".freeze,
       label: "inverseOf".freeze,
       rangeIncludes: "schema:Property".freeze,
+      type: "rdf:Property".freeze
+    property :isAcccessibleForFree,
+      comment: %(A flag to signal that the publication is accessible for free.).freeze,
+      domainIncludes: "schema:PublicationEvent".freeze,
+      label: "isAccessibleForFree".freeze,
+      rangeIncludes: "schema:Boolean".freeze,
       type: "rdf:Property".freeze
     property :isAccessoryOrSparePartFor,
       comment: %(A pointer to another product \(or multiple products\) for which this product is an accessory or spare part.).freeze,
@@ -5984,6 +6321,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Was the offer accepted as a gift for someone other than the buyer.).freeze,
       domainIncludes: "schema:Order".freeze,
       label: "isGift".freeze,
+      rangeIncludes: "schema:Boolean".freeze,
+      type: "rdf:Property".freeze
+    property :isLiveBroadcast,
+      comment: %(True is the broadcast is of a live event.).freeze,
+      domainIncludes: "schema:BroadcastEvent".freeze,
+      label: "isLiveBroadcast".freeze,
       rangeIncludes: "schema:Boolean".freeze,
       type: "rdf:Property".freeze
     property :isPartOf,
@@ -6119,6 +6462,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "itemShipped".freeze,
       rangeIncludes: "schema:Product".freeze,
       type: "rdf:Property".freeze
+    property :jobBenefits,
+      comment: %(Description of benefits associated with the job.).freeze,
+      domainIncludes: "schema:JobPosting".freeze,
+      label: "jobBenefits".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
     property :jobLocation,
       comment: %(A \(typically single\) geographic location associated with the job position.).freeze,
       domainIncludes: "schema:JobPosting".freeze,
@@ -6135,6 +6484,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas.).freeze,
       domainIncludes: "schema:CreativeWork".freeze,
       label: "keywords".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :knownVehicleDamages,
+      comment: %(A textual description of known damages, both repaired and unrepaired.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "knownVehicleDamages".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :knows,
@@ -6161,6 +6517,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:CommunicateAction".freeze, "schema:WriteAction".freeze],
       label: "language".freeze,
       rangeIncludes: "schema:Language".freeze,
+      "schema:supersededBy" => %(schema:inLanguage).freeze,
       subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :lastReviewed,
@@ -6281,6 +6638,47 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "mainContentOfPage".freeze,
       rangeIncludes: "schema:WebPageElement".freeze,
       type: "rdf:Property".freeze
+    property :mainEntity,
+      comment: %(Indicates the primary entity described in some page or other CreativeWork.).freeze,
+      domainIncludes: "schema:CreativeWork".freeze,
+      inverseOf: "schema:mainEntityOfPage".freeze,
+      label: "mainEntity".freeze,
+      rangeIncludes: "schema:Thing".freeze,
+      type: "rdf:Property".freeze
+    property :mainEntityOfPage,
+      comment: %(Indicates a page \(or other CreativeWork\) for which this thing is the main entity being described.
+      <br /><br />
+      Many \(but not all\) pages have a fairly clear primary topic, some entity or thing that the page describes. For
+      example a restaurant's home page might be primarily about that Restaurant, or an event listing page might
+      represent a single event. The mainEntity and mainEntityOfPage properties allow you to explicitly express the relationship
+      between the page and the primary entity.
+      <br /><br />
+
+      Related properties include sameAs, about, and url.
+      <br /><br />
+
+      The sameAs and url properties are both similar to mainEntityOfPage. The url property should be reserved to refer to more
+      official or authoritative web pages, such as the item’s official website. The sameAs property also relates a thing
+      to a page that indirectly identifies it. Whereas sameAs emphasises well known pages, the mainEntityOfPage property
+      serves more to clarify which of several entities is the main one for that page.
+      <br /><br />
+
+      mainEntityOfPage can be used for any page, including those not recognized as authoritative for that entity. For example,
+      for a product, sameAs might refer to a page on the manufacturer’s official site with specs for the product, while
+      mainEntityOfPage might be used on pages within various retailers’ sites giving details for the same product.
+      <br /><br />
+
+      about is similar to mainEntity, with two key differences. First, about can refer to multiple entities/topics,
+      while mainEntity should be used for only the primary one. Second, some pages have a primary entity that itself
+      describes some other entity. For example, one web page may display a news article about a particular person.
+      Another page may display a product review for a particular product. In these cases, mainEntity for the pages
+      should refer to the news article or review, respectively, while about would more properly refer to the person or product.
+      ).freeze,
+      domainIncludes: "schema:Thing".freeze,
+      inverseOf: "schema:mainEntity".freeze,
+      label: "mainEntityOfPage".freeze,
+      rangeIncludes: ["schema:CreativeWork".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
     property :makesOffer,
       comment: %(A pointer to products or services offered by the organization or person.).freeze,
       domainIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
@@ -6318,6 +6716,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:VisualArtwork".freeze,
       label: "material".freeze,
       rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      "schema:supersededBy" => %(schema:artMedium).freeze,
       type: "rdf:Property".freeze
     property :maxPrice,
       comment: %(The highest price if the price is a range.).freeze,
@@ -6327,7 +6726,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :maxValue,
       comment: %(The upper value of some characteristic or property.).freeze,
-      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:PropertyValueSpecification".freeze],
+      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:PropertyValue".freeze, "schema:PropertyValueSpecification".freeze],
       label: "maxValue".freeze,
       rangeIncludes: "schema:Number".freeze,
       type: "rdf:Property".freeze
@@ -6413,6 +6812,14 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
       "schema:supersededBy" => %(schema:seller).freeze,
       type: "rdf:Property".freeze
+    property :mileageFromOdometer,
+      comment: %(The total distance travelled by the particular vehicle since its initial production, as read from its odometer.<br />
+Typical unit code\(s\): KMT for kilometers, SMI for statute miles).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "mileageFromOdometer".freeze,
+      rangeIncludes: "schema:QuantitativeValue".freeze,
+      type: "rdf:Property".freeze
     property :minPrice,
       comment: %(The lowest price if the price is a range.).freeze,
       domainIncludes: "schema:PriceSpecification".freeze,
@@ -6421,7 +6828,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :minValue,
       comment: %(The lower value of some characteristic or property.).freeze,
-      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:PropertyValueSpecification".freeze],
+      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:PropertyValue".freeze, "schema:PropertyValueSpecification".freeze],
       label: "minValue".freeze,
       rangeIncludes: "schema:Number".freeze,
       type: "rdf:Property".freeze
@@ -6579,13 +6986,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(The number of adults staying in the unit.).freeze,
       domainIncludes: "schema:LodgingReservation".freeze,
       label: "numAdults".freeze,
-      rangeIncludes: ["schema:Number".freeze, "schema:QuantitativeValue".freeze],
+      rangeIncludes: ["schema:Integer".freeze, "schema:QuantitativeValue".freeze],
       type: "rdf:Property".freeze
     property :numChildren,
       comment: %(The number of children staying in the unit.).freeze,
       domainIncludes: "schema:LodgingReservation".freeze,
       label: "numChildren".freeze,
-      rangeIncludes: ["schema:Number".freeze, "schema:QuantitativeValue".freeze],
+      rangeIncludes: ["schema:Integer".freeze, "schema:QuantitativeValue".freeze],
       type: "rdf:Property".freeze
     property :numTracks,
       comment: %(The number of tracks in this album or playlist.).freeze,
@@ -6593,23 +7000,54 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "numTracks".freeze,
       rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
+    property :numberOfAirbags,
+      comment: %(The number or type of airbags in the vehicle.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "numberOfAirbags".freeze,
+      rangeIncludes: ["schema:Number".freeze, "schema:Text".freeze],
+      type: "rdf:Property".freeze
+    property :numberOfAxles,
+      comment: %(The number of axles.<br />
+Typical unit code\(s\): C62).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "numberOfAxles".freeze,
+      rangeIncludes: ["schema:QuantitativeValue".freeze, "schema:Number".freeze],
+      type: "rdf:Property".freeze
+    property :numberOfDoors,
+      comment: %(The number of doors.<br />
+Typical unit code\(s\): C62).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "numberOfDoors".freeze,
+      rangeIncludes: ["schema:QuantitativeValue".freeze, "schema:Number".freeze],
+      type: "rdf:Property".freeze
     property :numberOfEmployees,
-      comment: %(The size of business by number of employees.).freeze,
-      domainIncludes: "schema:BusinessAudience".freeze,
+      comment: %(The number of employees in an organization e.g. business.).freeze,
+      domainIncludes: ["schema:BusinessAudience".freeze, "schema:Organization".freeze],
       label: "numberOfEmployees".freeze,
       rangeIncludes: "schema:QuantitativeValue".freeze,
       type: "rdf:Property".freeze
     property :numberOfEpisodes,
       comment: %(The number of episodes in this season or series.).freeze,
-      domainIncludes: ["schema:Season".freeze, "schema:TVSeries".freeze, "schema:VideoGameSeries".freeze, "schema:RadioSeries".freeze],
+      domainIncludes: ["schema:CreativeWorkSeason".freeze, "schema:TVSeries".freeze, "schema:VideoGameSeries".freeze, "schema:RadioSeries".freeze],
       label: "numberOfEpisodes".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Integer".freeze,
+      type: "rdf:Property".freeze
+    property :numberOfForwardGears,
+      comment: %(The total number of forward gears available for the transmission system of the vehicle.<br />
+Typical unit code\(s\): C62).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "numberOfForwardGears".freeze,
+      rangeIncludes: ["schema:QuantitativeValue".freeze, "schema:Number".freeze],
       type: "rdf:Property".freeze
     property :numberOfItems,
-      comment: %(The number of items in an ItemList. Note that some descriptions might not full describe all items in a list \(e.g. multi-page pagination\).).freeze,
+      comment: %(The number of items in an ItemList. Note that some descriptions might not fully describe all items in a list \(e.g., multi-page pagination\); in such cases, the numberOfItems would be for the entire list.).freeze,
       domainIncludes: "schema:ItemList".freeze,
       label: "numberOfItems".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
     property :numberOfPages,
       comment: %(The number of pages in the book.).freeze,
@@ -6623,11 +7061,19 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "numberOfPlayers".freeze,
       rangeIncludes: "schema:QuantitativeValue".freeze,
       type: "rdf:Property".freeze
+    property :numberOfPreviousOwners,
+      comment: %(The number of owners of the vehicle, including the current one.<br />
+Typical unit code\(s\): C62).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "numberOfPreviousOwners".freeze,
+      rangeIncludes: ["schema:QuantitativeValue".freeze, "schema:Number".freeze],
+      type: "rdf:Property".freeze
     property :numberOfSeasons,
       comment: %(The number of seasons in this series.).freeze,
       domainIncludes: ["schema:TVSeries".freeze, "schema:RadioSeries".freeze, "schema:VideoGameSeries".freeze],
       label: "numberOfSeasons".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
     property :numberedPosition,
       comment: %(A number associated with a role in an organization, for example, the number on an athlete's jersey.).freeze,
@@ -6669,7 +7115,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(The opening hours for a business. Opening hours can be specified as a weekly time range, starting with days, then times per day. Multiple days can be listed with commas ',' separating each day. Day or time ranges are specified using a hyphen '-'.<br />- Days are specified using the following two-letter combinations: <code>Mo</code>, <code>Tu</code>, <code>We</code>, <code>Th</code>, <code>Fr</code>, <code>Sa</code>, <code>Su</code>.<br />- Times are specified using 24:00 time. For example, 3pm is specified as <code>15:00</code>. <br />- Here is an example: <code>&lt;time itemprop=&quot;openingHours&quot; datetime=&quot;Tu,Th 16:00-20:00&quot;&gt;Tuesdays and Thursdays 4-8pm&lt;/time&gt;</code>. <br />- If a business is open 7 days a week, then it can be specified as <code>&lt;time itemprop=&quot;openingHours&quot; datetime=&quot;Mo-Su&quot;&gt;Monday through Sunday, all day&lt;/time&gt;</code>.).freeze,
       domainIncludes: ["schema:LocalBusiness".freeze, "schema:CivicStructure".freeze],
       label: "openingHours".freeze,
-      rangeIncludes: "schema:Duration".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :openingHoursSpecification,
       comment: %(The opening hours of a certain place.).freeze,
@@ -6701,6 +7147,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:ChooseAction".freeze,
       label: "option".freeze,
       rangeIncludes: ["schema:Text".freeze, "schema:Thing".freeze],
+      "schema:supersededBy" => %(schema:actionOption).freeze,
       subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :orderDate,
@@ -6709,11 +7156,35 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "orderDate".freeze,
       rangeIncludes: "schema:DateTime".freeze,
       type: "rdf:Property".freeze
+    property :orderDelivery,
+      comment: %(The delivery of the parcel related to this order or order item.).freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:OrderItem".freeze],
+      label: "orderDelivery".freeze,
+      rangeIncludes: "schema:ParcelDelivery".freeze,
+      type: "rdf:Property".freeze
+    property :orderItemNumber,
+      comment: %(The identifier of the order item.).freeze,
+      domainIncludes: "schema:OrderItem".freeze,
+      label: "orderItemNumber".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :orderItemStatus,
+      comment: %(The current status of the order item.).freeze,
+      domainIncludes: "schema:OrderItem".freeze,
+      label: "orderItemStatus".freeze,
+      rangeIncludes: "schema:OrderStatus".freeze,
+      type: "rdf:Property".freeze
     property :orderNumber,
       comment: %(The identifier of the transaction.).freeze,
       domainIncludes: "schema:Order".freeze,
       label: "orderNumber".freeze,
       rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :orderQuantity,
+      comment: %(The number of the item ordered. If the property is not set, assume the quantity is one.).freeze,
+      domainIncludes: "schema:OrderItem".freeze,
+      label: "orderQuantity".freeze,
+      rangeIncludes: "schema:Number".freeze,
       type: "rdf:Property".freeze
     property :orderStatus,
       comment: %(The current status of the order.).freeze,
@@ -6723,9 +7194,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :orderedItem,
       comment: %(The item ordered.).freeze,
-      domainIncludes: "schema:Order".freeze,
+      domainIncludes: ["schema:Order".freeze, "schema:OrderItem".freeze],
       label: "orderedItem".freeze,
-      rangeIncludes: "schema:Product".freeze,
+      rangeIncludes: ["schema:Product".freeze, "schema:OrderItem".freeze],
       type: "rdf:Property".freeze
     property :organizer,
       comment: %(An organizer of an Event.).freeze,
@@ -6819,9 +7290,15 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :parentItem,
       comment: %(The parent of a question, answer or item in general.).freeze,
-      domainIncludes: ["schema:Answer".freeze, "schema:Comment".freeze],
+      domainIncludes: "schema:Comment".freeze,
       label: "parentItem".freeze,
       rangeIncludes: "schema:Question".freeze,
+      type: "rdf:Property".freeze
+    property :parentOrganization,
+      comment: %(The larger organization that this local business is a branch of, if any.).freeze,
+      domainIncludes: "schema:LocalBusiness".freeze,
+      label: "parentOrganization".freeze,
+      rangeIncludes: "schema:Organization".freeze,
       type: "rdf:Property".freeze
     property :parentService,
       comment: %(A broadcast service to which the broadcast service may belong to such as regional variations of a national channel.).freeze,
@@ -6860,14 +7337,14 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(The season to which this episode belongs.).freeze,
       domainIncludes: ["schema:Episode".freeze, "schema:Clip".freeze],
       label: "partOfSeason".freeze,
-      rangeIncludes: "schema:Season".freeze,
+      rangeIncludes: "schema:CreativeWorkSeason".freeze,
       subPropertyOf: "schema:isPartOf".freeze,
       type: "rdf:Property".freeze
     property :partOfSeries,
       comment: %(The series to which this episode or season belongs.).freeze,
-      domainIncludes: ["schema:Episode".freeze, "schema:Season".freeze, "schema:Clip".freeze],
+      domainIncludes: ["schema:Episode".freeze, "schema:CreativeWorkSeason".freeze, "schema:Clip".freeze],
       label: "partOfSeries".freeze,
-      rangeIncludes: "schema:Series".freeze,
+      rangeIncludes: "schema:CreativeWorkSeries".freeze,
       subPropertyOf: "schema:isPartOf".freeze,
       type: "rdf:Property".freeze
     property :partOfSystem,
@@ -6895,7 +7372,19 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Number of people the reservation should accommodate.).freeze,
       domainIncludes: ["schema:FoodEstablishmentReservation".freeze, "schema:TaxiReservation".freeze],
       label: "partySize".freeze,
-      rangeIncludes: ["schema:Number".freeze, "schema:QuantitativeValue".freeze],
+      rangeIncludes: ["schema:Integer".freeze, "schema:QuantitativeValue".freeze],
+      type: "rdf:Property".freeze
+    property :passengerPriorityStatus,
+      comment: %(The priority status assigned to a passenger for security or boarding \(e.g. FastTrack or Priority\).).freeze,
+      domainIncludes: "schema:FlightReservation".freeze,
+      label: "passengerPriorityStatus".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:QualitativeValue".freeze],
+      type: "rdf:Property".freeze
+    property :passengerSequenceNumber,
+      comment: %(The passenger's sequence number as assigned by the airline.).freeze,
+      domainIncludes: "schema:FlightReservation".freeze,
+      label: "passengerSequenceNumber".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :pathophysiology,
       comment: %(Changes in the normal mechanical, physical, and biochemical functions that are associated with this activity or condition.).freeze,
@@ -7024,7 +7513,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Number of players on the server.).freeze,
       domainIncludes: "schema:GameServer".freeze,
       label: "playersOnline".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
     property :polygon,
       comment: %(A polygon is the area enclosed by a point-to-point path for which the starting and ending points are the same. A polygon is expressed as a series of four or more space delimited points where the first and final points are identical.).freeze,
@@ -7267,6 +7756,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Service".freeze,
       label: "produces".freeze,
       rangeIncludes: "schema:Thing".freeze,
+      "schema:supersededBy" => %(schema:serviceOutput).freeze,
       type: "rdf:Property".freeze
     property :productID,
       comment: %(The product identifier, such as ISBN. For example: <code>&lt;meta itemprop='productID' content='isbn:123-456-789'/&gt;</code>.).freeze,
@@ -7282,9 +7772,16 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :productionCompany,
       comment: %(The production company or studio responsible for the item e.g. series, video game, episode etc.).freeze,
-      domainIncludes: ["schema:MediaObject".freeze, "schema:Movie".freeze, "schema:Episode".freeze, "schema:Season".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze, "schema:MovieSeries".freeze, "schema:VideoGameSeries".freeze],
+      domainIncludes: ["schema:MediaObject".freeze, "schema:Movie".freeze, "schema:Episode".freeze, "schema:CreativeWorkSeason".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze, "schema:MovieSeries".freeze, "schema:VideoGameSeries".freeze],
       label: "productionCompany".freeze,
       rangeIncludes: "schema:Organization".freeze,
+      type: "rdf:Property".freeze
+    property :productionDate,
+      comment: %(The date of production of the item, e.g. vehicle.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: ["schema:Vehicle".freeze, "schema:Product".freeze],
+      label: "productionDate".freeze,
+      rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
     property :proficiencyLevel,
       comment: %(Proficiency needed for this content; expected values: 'Beginner', 'Expert'.).freeze,
@@ -7306,15 +7803,24 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :programmingLanguage,
       comment: %(The computer programming language.).freeze,
-      domainIncludes: "schema:Code".freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
       label: "programmingLanguage".freeze,
-      rangeIncludes: "schema:Thing".freeze,
+      rangeIncludes: "schema:Language".freeze,
       type: "rdf:Property".freeze
     property :programmingModel,
       comment: %(Indicates whether API is managed or unmanaged.).freeze,
       domainIncludes: "schema:APIReference".freeze,
       label: "programmingModel".freeze,
       rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :propertyID,
+      comment: %(A commonly used identifier for the characteristic represented by the property, e.g. a manufacturer or a standard code for a property. propertyID can be
+\(1\) a prefixed string, mainly meant to be used with standards for product properties; \(2\) a site-specific, non-prefixed string \(e.g. the primary key of the property or the vendor-specific id of the property\), or \(3\)
+a URL indicating the type of the property, either pointing to an external vocabulary, or a Web resource that describes the property \(e.g. a glossary entry\).
+Standards bodies should promote a standard prefix for the identifiers of properties from their standards.).freeze,
+      domainIncludes: "schema:PropertyValue".freeze,
+      label: "propertyID".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
       type: "rdf:Property".freeze
     property :proprietaryName,
       comment: %(Proprietary name given to the diet plan, typically by its originator or creator.).freeze,
@@ -7334,6 +7840,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "provider".freeze,
       rangeIncludes: ["schema:Person".freeze, "schema:Organization".freeze],
       type: "rdf:Property".freeze
+    property :providesBroadcastService,
+      comment: %(The BroadcastService offered on this channel.).freeze,
+      domainIncludes: "schema:BroadcastChannel".freeze,
+      label: "providesBroadcastService".freeze,
+      rangeIncludes: "schema:BroadcastService".freeze,
+      type: "rdf:Property".freeze
     property :providesService,
       comment: %(The service provided by this channel.).freeze,
       domainIncludes: "schema:ServiceChannel".freeze,
@@ -7341,8 +7853,8 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Service".freeze,
       type: "rdf:Property".freeze
     property :publication,
-      comment: %(A publication event associated with the episode, clip or media object.).freeze,
-      domainIncludes: ["schema:MediaObject".freeze, "schema:Episode".freeze, "schema:Clip".freeze],
+      comment: %(A publication event associated with the item.).freeze,
+      domainIncludes: "schema:CreativeWork".freeze,
       label: "publication".freeze,
       rangeIncludes: "schema:PublicationEvent".freeze,
       type: "rdf:Property".freeze
@@ -7370,6 +7882,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "publishingPrinciples".freeze,
       rangeIncludes: "schema:URL".freeze,
       type: "rdf:Property".freeze
+    property :purchaseDate,
+      comment: %(The date the item e.g. vehicle was purchased by the current owner.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: ["schema:Vehicle".freeze, "schema:Product".freeze],
+      label: "purchaseDate".freeze,
+      rangeIncludes: "schema:Date".freeze,
+      type: "rdf:Property".freeze
     property :purpose,
       comment: %(A goal towards an action is taken. Can be concrete or abstract.).freeze,
       domainIncludes: ["schema:MedicalDevice".freeze, "schema:AllocateAction".freeze, "schema:PayAction".freeze],
@@ -7386,7 +7905,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A sub property of instrument. The query used on this action.).freeze,
       domainIncludes: "schema:SearchAction".freeze,
       label: "query".freeze,
-      rangeIncludes: ["schema:Class".freeze, "schema:Text".freeze],
+      rangeIncludes: "schema:Text".freeze,
       subPropertyOf: "schema:instrument".freeze,
       type: "rdf:Property".freeze
     property :quest,
@@ -7399,7 +7918,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A sub property of object. A question.).freeze,
       domainIncludes: "schema:AskAction".freeze,
       label: "question".freeze,
-      rangeIncludes: "schema:Text".freeze,
+      rangeIncludes: "schema:Question".freeze,
       subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :rangeIncludes,
@@ -7412,7 +7931,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(The count of total number of ratings.).freeze,
       domainIncludes: "schema:AggregateRating".freeze,
       label: "ratingCount".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
     property :ratingValue,
       comment: %(The rating for the content.).freeze,
@@ -7452,11 +7971,17 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "recipeCuisine".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
+    property :recipeIngredient,
+      comment: %(A single ingredient used in the recipe, e.g. sugar, flour or garlic.).freeze,
+      domainIncludes: "schema:Recipe".freeze,
+      label: "recipeIngredient".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
     property :recipeInstructions,
-      comment: %(The steps to make the dish.).freeze,
+      comment: %(A step or instruction involved in making the recipe.).freeze,
       domainIncludes: "schema:Recipe".freeze,
       label: "recipeInstructions".freeze,
-      rangeIncludes: "schema:Text".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:ItemList".freeze],
       type: "rdf:Property".freeze
     property :recipeYield,
       comment: %(The quantity produced by the recipe \(for example, number of people served, number of servings, etc\).).freeze,
@@ -7494,6 +8019,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#MBZ).freeze,
       domainIncludes: "schema:MusicRelease".freeze,
       label: "recordLabel".freeze,
+      "owl:equivalentProperty" => %(mo:label).freeze,
       rangeIncludes: "schema:Organization".freeze,
       type: "rdf:Property".freeze
     property :recordedAs,
@@ -7673,6 +8199,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:SoftwareApplication".freeze,
       label: "requirements".freeze,
       rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      "schema:supersededBy" => %(schema:softwareRequirements).freeze,
       type: "rdf:Property".freeze
     property :requiresSubscription,
       comment: %(Indicates if use of the media require a subscription  \(either paid or free\). Allowed values are <code>true</code> or <code>false</code> \(note that an earlier version had 'yes', 'no'\).).freeze,
@@ -7722,6 +8249,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "result".freeze,
       rangeIncludes: "schema:Thing".freeze,
       type: "rdf:Property".freeze
+    property :resultComment,
+      comment: %(A sub property of result. The Comment created or sent as a result of this action.).freeze,
+      domainIncludes: ["schema:CommentAction".freeze, "schema:ReplyAction".freeze],
+      label: "resultComment".freeze,
+      rangeIncludes: "schema:Comment".freeze,
+      subPropertyOf: "schema:result".freeze,
+      type: "rdf:Property".freeze
     property :resultReview,
       comment: %(A sub property of result. The review that resulted in the performing of the action.).freeze,
       domainIncludes: "schema:ReviewAction".freeze,
@@ -7731,7 +8265,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :review,
       comment: %(A review of the item.).freeze,
-      domainIncludes: ["schema:CreativeWork".freeze, "schema:Organization".freeze, "schema:Place".freeze, "schema:Offer".freeze, "schema:Product".freeze],
+      domainIncludes: ["schema:CreativeWork".freeze, "schema:Event".freeze, "schema:Brand".freeze, "schema:Service".freeze, "schema:Organization".freeze, "schema:Place".freeze, "schema:Offer".freeze, "schema:Product".freeze],
       label: "review".freeze,
       rangeIncludes: "schema:Review".freeze,
       type: "rdf:Property".freeze
@@ -7745,7 +8279,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(The count of total number of reviews.).freeze,
       domainIncludes: "schema:AggregateRating".freeze,
       label: "reviewCount".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
     property :reviewRating,
       comment: %(The rating given in this review. Note that reviews can themselves be rated. The <code>reviewRating</code> applies to rating given by the review. The <code>aggregateRating</code> property applies to the review itself, as a creative work.).freeze,
@@ -7798,8 +8332,15 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :runtime,
       comment: %(Runtime platform or script interpreter dependencies \(Example - Java v1, Python2.3, .Net Framework 3.0\).).freeze,
-      domainIncludes: "schema:Code".freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
       label: "runtime".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:runtimePlatform).freeze,
+      type: "rdf:Property".freeze
+    property :runtimePlatform,
+      comment: %(Runtime platform or script interpreter dependencies \(Example - Java v1, Python2.3, .Net Framework 3.0\).).freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
+      label: "runtimePlatform".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :safetyConsideration,
@@ -7822,9 +8363,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :sampleType,
       comment: %(Full \(compile ready\) solution, code snippet, inline code, scripts, template.).freeze,
-      domainIncludes: "schema:Code".freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
       label: "sampleType".freeze,
       rangeIncludes: "schema:Text".freeze,
+      "schema:supersededBy" => %(schema:codeSampleType).freeze,
       type: "rdf:Property".freeze
     property :saturatedFatContent,
       comment: %(The number of grams of saturated fat.).freeze,
@@ -7844,6 +8386,18 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "scheduledTime".freeze,
       rangeIncludes: "schema:DateTime".freeze,
       type: "rdf:Property".freeze
+    property :schemaVersion,
+      comment: %(Indicates \(by URL or string\) a particular version of a schema used in some CreativeWork. For example, a document could declare a schemaVersion using an URL such as http://schema.org/version/2.0/ if precise indication of schema version was required by some application. ).freeze,
+      domainIncludes: "schema:CreativeWork".freeze,
+      label: "schemaVersion".freeze,
+      rangeIncludes: ["schema:URL".freeze, "schema:Text".freeze],
+      type: "rdf:Property".freeze
+    property :screenCount,
+      comment: %(The number of screens in the movie theater.).freeze,
+      domainIncludes: "schema:MovieTheater".freeze,
+      label: "screenCount".freeze,
+      rangeIncludes: "schema:Number".freeze,
+      type: "rdf:Property".freeze
     property :screenshot,
       comment: %(A link to a screenshot image of the app.).freeze,
       domainIncludes: "schema:SoftwareApplication".freeze,
@@ -7854,12 +8408,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A season in a media series.).freeze,
       domainIncludes: ["schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze],
       label: "season".freeze,
-      rangeIncludes: "schema:Season".freeze,
+      rangeIncludes: "schema:CreativeWorkSeason".freeze,
+      "schema:supersededBy" => %(schema:containsSeason).freeze,
       subPropertyOf: "schema:hasPart".freeze,
       type: "rdf:Property".freeze
     property :seasonNumber,
       comment: %(Position of the season within an ordered group of seasons.).freeze,
-      domainIncludes: "schema:Season".freeze,
+      domainIncludes: "schema:CreativeWorkSeason".freeze,
       label: "seasonNumber".freeze,
       rangeIncludes: ["schema:Integer".freeze, "schema:Text".freeze],
       subPropertyOf: "schema:position".freeze,
@@ -7868,7 +8423,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A season in a media series.).freeze,
       domainIncludes: ["schema:VideoGameSeries".freeze, "schema:TVSeries".freeze, "schema:RadioSeries".freeze],
       label: "seasons".freeze,
-      rangeIncludes: "schema:Season".freeze,
+      rangeIncludes: "schema:CreativeWorkSeason".freeze,
       "schema:supersededBy" => %(schema:season).freeze,
       type: "rdf:Property".freeze
     property :seatNumber,
@@ -7900,6 +8455,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:MedicalCondition".freeze,
       label: "secondaryPrevention".freeze,
       rangeIncludes: "schema:MedicalTherapy".freeze,
+      type: "rdf:Property".freeze
+    property :securityScreening,
+      comment: %(The type of security screening the passenger is subject to.).freeze,
+      domainIncludes: "schema:FlightReservation".freeze,
+      label: "securityScreening".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :seeks,
       comment: %(A pointer to products or services sought by the organization or person \(demand\).).freeze,
@@ -7962,6 +8523,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Service".freeze,
       label: "serviceAudience".freeze,
       rangeIncludes: "schema:Audience".freeze,
+      "schema:supersededBy" => %(schema:audience).freeze,
       type: "rdf:Property".freeze
     property :serviceLocation,
       comment: %(The location \(e.g. civic structure, local business, etc.\) where a person can go to access the service.).freeze,
@@ -7974,6 +8536,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:GovernmentService".freeze,
       label: "serviceOperator".freeze,
       rangeIncludes: "schema:Organization".freeze,
+      type: "rdf:Property".freeze
+    property :serviceOutput,
+      comment: %(The tangible thing generated by the service, e.g. a passport, permit, etc.).freeze,
+      domainIncludes: "schema:Service".freeze,
+      label: "serviceOutput".freeze,
+      rangeIncludes: "schema:Thing".freeze,
       type: "rdf:Property".freeze
     property :servicePhone,
       comment: %(The phone number to use to access the service.).freeze,
@@ -8085,6 +8653,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "softwareHelp".freeze,
       rangeIncludes: "schema:CreativeWork".freeze,
       type: "rdf:Property".freeze
+    property :softwareRequirements,
+      comment: %(Component dependency requirements for application. This includes runtime environments and shared libraries that are not included in the application distribution package, but required to run the application \(Examples: DirectX, Java or .NET runtime\).).freeze,
+      domainIncludes: "schema:SoftwareApplication".freeze,
+      label: "softwareRequirements".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
     property :softwareVersion,
       comment: %(Version of the software instance.).freeze,
       domainIncludes: "schema:SoftwareApplication".freeze,
@@ -8180,7 +8754,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :startDate,
       comment: %(The start date and time of the item \(in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 date format</a>\).).freeze,
-      domainIncludes: ["schema:Role".freeze, "schema:Event".freeze, "schema:Season".freeze, "schema:Series".freeze, "schema:DatedMoneySpecification".freeze],
+      domainIncludes: ["schema:Role".freeze, "schema:Event".freeze, "schema:CreativeWorkSeason".freeze, "schema:CreativeWorkSeries".freeze, "schema:DatedMoneySpecification".freeze],
       label: "startDate".freeze,
       rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
@@ -8197,6 +8771,13 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:MedicalStudy".freeze,
       label: "status".freeze,
       rangeIncludes: "schema:MedicalStudyStatus".freeze,
+      type: "rdf:Property".freeze
+    property :steeringPosition,
+      comment: %(The position of the steering wheel or similar device \(mostly for cars\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "steeringPosition".freeze,
+      rangeIncludes: "schema:SteeringPositionValue".freeze,
       type: "rdf:Property".freeze
     property :stepValue,
       comment: %(The stepValue attribute indicates the granularity that is expected \(and required\) of the value in a PropertyValueSpecification.).freeze,
@@ -8301,6 +8882,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "subTest".freeze,
       rangeIncludes: "schema:MedicalTest".freeze,
       type: "rdf:Property".freeze
+    property :subtitleLanguage,
+      comment: %(Languages in which subtitles/captions are available, in <a href='http://tools.ietf.org/html/bcp47'>IETF BCP 47 standard format.</a>).freeze,
+      domainIncludes: ["schema:Movie".freeze, "schema:ScreeningEvent".freeze, "schema:TVEpisode".freeze],
+      label: "subtitleLanguage".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:Language".freeze],
+      type: "rdf:Property".freeze
     property :subtype,
       comment: %(A more specific type of the condition, where applicable, for example 'Type 1 Diabetes', 'Type 2 Diabetes', or 'Gestational Diabetes' for Diabetes.).freeze,
       domainIncludes: "schema:MedicalCondition".freeze,
@@ -8350,10 +8937,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Event".freeze,
       type: "rdf:Property".freeze
     property :supersededBy,
-      comment: %(Relates a property to one that supersedes it.).freeze,
-      domainIncludes: "schema:Property".freeze,
+      comment: %(Relates a term \(i.e. a property, class or enumeration\) to one that supersedes it.).freeze,
+      domainIncludes: ["schema:Property".freeze, "schema:Class".freeze, "schema:Enumeration".freeze],
       label: "supersededBy".freeze,
-      rangeIncludes: "schema:Property".freeze,
+      rangeIncludes: ["schema:Property".freeze, "schema:Class".freeze, "schema:Enumeration".freeze],
       type: "rdf:Property".freeze
     property :supplyTo,
       comment: %(The area to which the artery supplies blood.).freeze,
@@ -8366,12 +8953,20 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:VisualArtwork".freeze,
       label: "surface".freeze,
       rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      "schema:supersededBy" => %(schema:artworkSurface).freeze,
       type: "rdf:Property".freeze
     property :target,
       comment: %(Indicates a target EntryPoint for an Action.).freeze,
       domainIncludes: "schema:Action".freeze,
       label: "target".freeze,
       rangeIncludes: "schema:EntryPoint".freeze,
+      type: "rdf:Property".freeze
+    property :targetCollection,
+      comment: %(A sub property of object. The collection target of the action.).freeze,
+      domainIncludes: "schema:UpdateAction".freeze,
+      label: "targetCollection".freeze,
+      rangeIncludes: "schema:Thing".freeze,
+      subPropertyOf: "schema:object".freeze,
       type: "rdf:Property".freeze
     property :targetDescription,
       comment: %(The description of a node in an established educational framework.).freeze,
@@ -8399,7 +8994,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :targetProduct,
       comment: %(Target Operating System / Product to which the code applies.  If applies to several versions, just the product name can be used.).freeze,
-      domainIncludes: "schema:Code".freeze,
+      domainIncludes: "schema:SoftwareSourceCode".freeze,
       label: "targetProduct".freeze,
       rangeIncludes: "schema:SoftwareApplication".freeze,
       type: "rdf:Property".freeze
@@ -8426,6 +9021,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:Dataset".freeze,
       label: "temporal".freeze,
       rangeIncludes: "schema:DateTime".freeze,
+      "schema:supersededBy" => %(schema:datasetTimeInterval).freeze,
       type: "rdf:Property".freeze
     property :text,
       comment: %(The textual content of this CreativeWork.).freeze,
@@ -8540,7 +9136,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :trailer,
       comment: %(The trailer of a movie or tv/radio series, season, episode, etc.).freeze,
-      domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:Season".freeze, "schema:VideoGame".freeze, "schema:VideoGameSeries".freeze, "schema:MovieSeries".freeze, "schema:RadioSeries".freeze, "schema:TVSeries".freeze],
+      domainIncludes: ["schema:Movie".freeze, "schema:Episode".freeze, "schema:CreativeWorkSeason".freeze, "schema:VideoGame".freeze, "schema:VideoGameSeries".freeze, "schema:MovieSeries".freeze, "schema:RadioSeries".freeze, "schema:TVSeries".freeze],
       label: "trailer".freeze,
       rangeIncludes: "schema:VideoObject".freeze,
       type: "rdf:Property".freeze
@@ -8617,9 +9213,16 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: ["schema:Person".freeze, "schema:Organization".freeze],
       type: "rdf:Property".freeze
     property :unitCode,
-      comment: %(The unit of measurement given using the UN/CEFACT Common Code \(3 characters\).).freeze,
-      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:TypeAndQuantityNode".freeze, "schema:UnitPriceSpecification".freeze],
+      comment: %(The unit of measurement given using the UN/CEFACT Common Code \(3 characters\) or a URL. Other codes than the UN/CEFACT Common Code may be used with a prefix followed by a colon.).freeze,
+      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:TypeAndQuantityNode".freeze, "schema:UnitPriceSpecification".freeze, "schema:PropertyValue".freeze],
       label: "unitCode".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:URL".freeze],
+      type: "rdf:Property".freeze
+    property :unitText,
+      comment: %(A string or text indicating the unit of measurement. Useful if you cannot provide a standard unit code for
+<a href='unitCode'>unitCode</a>.).freeze,
+      domainIncludes: ["schema:PropertyValue".freeze, "schema:QuantitativeValue".freeze, "schema:TypeAndQuantityNode".freeze, "schema:UnitPriceSpecification".freeze],
+      label: "unitText".freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :unsaturatedFatContent,
@@ -8635,8 +9238,8 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
     property :upvoteCount,
-      comment: %(The number of upvotes this question has received from the community.).freeze,
-      domainIncludes: ["schema:Question".freeze, "schema:Answer".freeze, "schema:Comment".freeze],
+      comment: %(The number of upvotes this question, answer or comment has received from the community.).freeze,
+      domainIncludes: ["schema:Question".freeze, "schema:Comment".freeze],
       label: "upvoteCount".freeze,
       rangeIncludes: "schema:Integer".freeze,
       type: "rdf:Property".freeze
@@ -8695,10 +9298,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       rangeIncludes: "schema:Date".freeze,
       type: "rdf:Property".freeze
     property :value,
-      comment: %(The value of the product characteristic.).freeze,
-      domainIncludes: "schema:QuantitativeValue".freeze,
+      comment: %(The value of the quantitative value or property value node. For QuantitativeValue, the recommended type for values is 'Number'. For PropertyValue, it can be 'Text;', 'Number', 'Boolean', or 'StructuredValue'.).freeze,
+      domainIncludes: ["schema:QuantitativeValue".freeze, "schema:PropertyValue".freeze],
       label: "value".freeze,
-      rangeIncludes: "schema:Number".freeze,
+      rangeIncludes: ["schema:Number".freeze, "schema:Text".freeze, "schema:Boolean".freeze, "schema:StructuredValue".freeze],
       type: "rdf:Property".freeze
     property :valueAddedTaxIncluded,
       comment: %(Specifies whether the applicable value-added tax \(VAT\) is included in the price specification or not.).freeze,
@@ -8732,9 +9335,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       type: "rdf:Property".freeze
     property :valueReference,
       comment: %(A pointer to a secondary value that provides additional information on the original value, e.g. a reference temperature.).freeze,
-      domainIncludes: ["schema:QualitativeValue".freeze, "schema:QuantitativeValue".freeze],
+      domainIncludes: ["schema:QualitativeValue".freeze, "schema:QuantitativeValue".freeze, "schema:PropertyValue".freeze],
       label: "valueReference".freeze,
-      rangeIncludes: ["schema:Enumeration".freeze, "schema:StructuredValue".freeze],
+      rangeIncludes: ["schema:Enumeration".freeze, "schema:StructuredValue".freeze, "schema:PropertyValue".freeze, "schema:QualitativeValue".freeze, "schema:QuantitativeValue".freeze],
       type: "rdf:Property".freeze
     property :valueRequired,
       comment: %(Whether the property must be filled in to complete the action.  Default is false.).freeze,
@@ -8747,6 +9350,68 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:Organization".freeze, "schema:Person".freeze],
       label: "vatID".freeze,
       rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleConfiguration,
+      comment: %(A short text indicating the configuration of the vehicle, e.g. '5dr hatchback ST 2.5 MT 225 hp' or 'limited edition'.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleConfiguration".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleEngine,
+      comment: %(Information about the engine or engines of the vehicle.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleEngine".freeze,
+      rangeIncludes: "schema:EngineSpecification".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleIdentificationNumber,
+      comment: %(The Vehicle Identification Number \(VIN\) is a unique serial number used by the automotive industry to identify individual motor vehicles.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vin".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      subPropertyOf: "schema:serialNumber".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleInteriorColor,
+      comment: %(The color or color combination of the interior of the vehicle.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleInteriorColor".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleInteriorType,
+      comment: %(The type or material of the interior of the vehicle \(e.g. synthetic fabric, leather, wood, etc.\). While most interior types are characterized by the material used, an interior type can also be based on vehicle usage or target audience.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleInteriorType".freeze,
+      rangeIncludes: "schema:Text".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleModelDate,
+      comment: %(The release date of a vehicle model \(often used to differentiate versions of the same make and model\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleModelDate".freeze,
+      rangeIncludes: "schema:Date".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleSeatingCapacity,
+      comment: %(The number of passengers that can be seated in the vehicle, both in terms of the physical space available, and in terms of limitations set by law.<br />
+Typical unit code\(s\): C62 for persons ).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleSeatingCapacity".freeze,
+      rangeIncludes: ["schema:QuantitativeValue".freeze, "schema:Number".freeze],
+      type: "rdf:Property".freeze
+    property :vehicleSpecialUsage,
+      comment: %(Indicates whether the vehicle has been used for special purposes, like commercial rental, driving school, or as a taxi. The legislation in many countries requires this information to be revealed when offering a car for sale.).freeze,
+      label: "vehicleSpecialUsage".freeze,
+      type: "rdf:Property".freeze
+    property :vehicleTransmission,
+      comment: %(The type of component used for transmitting the power from a rotating power source to the wheels or other relevant component\(s\) \("gearbox" for cars\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      domainIncludes: "schema:Vehicle".freeze,
+      label: "vehicleTransmission".freeze,
+      rangeIncludes: ["schema:Text".freeze, "schema:QualitativeValue".freeze, "schema:URL".freeze],
       type: "rdf:Property".freeze
     property :vendor,
       comment: %('vendor' is an earlier term for 'seller'.).freeze,
@@ -8767,6 +9432,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: "schema:CreativeWork".freeze,
       label: "video".freeze,
       rangeIncludes: "schema:VideoObject".freeze,
+      type: "rdf:Property".freeze
+    property :videoFormat,
+      comment: %(The type of screening or video broadcast used \(e.g. IMAX, 3D, SD, HD, etc.\).).freeze,
+      domainIncludes: ["schema:ScreeningEvent".freeze, "schema:TelevisionStation".freeze],
+      label: "videoFormat".freeze,
+      rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :videoFrameSize,
       comment: %(The frame size of the video.).freeze,
@@ -8806,6 +9477,7 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       domainIncludes: ["schema:BuyAction".freeze, "schema:SellAction".freeze],
       label: "warrantyPromise".freeze,
       rangeIncludes: "schema:WarrantyPromise".freeze,
+      "schema:supersededBy" => %(schema:warranty).freeze,
       type: "rdf:Property".freeze
     property :warrantyScope,
       comment: %(The scope of the warranty promise.).freeze,
@@ -8870,6 +9542,12 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       label: "workPerformed".freeze,
       rangeIncludes: "schema:CreativeWork".freeze,
       type: "rdf:Property".freeze
+    property :workPresented,
+      comment: %(The movie presented during this event.).freeze,
+      domainIncludes: "schema:ScreeningEvent".freeze,
+      label: "workPresented".freeze,
+      rangeIncludes: "schema:Movie".freeze,
+      type: "rdf:Property".freeze
     property :workload,
       comment: %(Quantitative measure of the physiologic output of the exercise; also referred to as energy expenditure.).freeze,
       domainIncludes: "schema:ExercisePlan".freeze,
@@ -8923,6 +9601,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#MBZ).freeze,
       label: "AlbumRelease".freeze,
       type: "schema:MusicAlbumReleaseType".freeze
+    term :AllWheelDriveConfiguration,
+      comment: %(All-wheel Drive is a transmission layout where the engine drives all four wheels.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "AllWheelDriveConfiguration".freeze,
+      type: "schema:DriveWheelConfigurationValue".freeze
     term :AnaerobicActivity,
       comment: %(Physical activity that is of high-intensity which utilizes the anaerobic metabolism of the body.).freeze,
       label: "AnaerobicActivity".freeze,
@@ -9064,6 +9747,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A trial design in which neither the researcher nor the patient knows the details of the treatment the patient was randomly assigned to.).freeze,
       label: "DoubleBlindedTrial".freeze,
       type: "schema:MedicalTrialDesign".freeze
+    term :DrivingSchoolVehicleUsage,
+      comment: %(Indicates the usage of the vehicle for driving school.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "DrivingSchoolVehicleUsage".freeze,
+      type: "schema:CarUsageType".freeze
     term :EBook,
       comment: %(Book format: Ebook.).freeze,
       label: "EBook".freeze,
@@ -9152,12 +9840,21 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
     term :False,
       comment: %(The boolean value false.).freeze,
       label: "False".freeze,
-      subClassOf: "schema:Boolean".freeze,
       type: "schema:Boolean".freeze
     term :Flexibility,
       comment: %(Physical activity that is engaged in to improve joint and muscle flexibility.).freeze,
       label: "Flexibility".freeze,
       type: "schema:PhysicalActivityCategory".freeze
+    term :FourWheelDriveConfiguration,
+      comment: %(Four-wheel drive is a transmission layout where the engine primarily drives two wheels with a part-time four-wheel drive capability.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "FourWheelDriveConfiguration".freeze,
+      type: "schema:DriveWheelConfigurationValue".freeze
+    term :FrontWheelDriveConfiguration,
+      comment: %(Front-wheel drive is a transmission layout where the engine drives the front wheels.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "FrontWheelDriveConfiguration".freeze,
+      type: "schema:DriveWheelConfigurationValue".freeze
     term :Gastroenterologic,
       comment: %(A specific branch of medical science that pertains to diagnosis and treatment of disorders of digestive system.).freeze,
       label: "Gastroenterologic".freeze,
@@ -9174,6 +9871,10 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A specific branch of medical science that is concerned with the diagnosis and treatment of diseases, debilities and provision of care to the aged.).freeze,
       label: "Geriatric".freeze,
       type: "schema:MedicalSpecialty".freeze
+    term :GroupBoardingPolicy,
+      comment: %(The airline boards by groups based on check-in time, priority, etc.).freeze,
+      label: "GroupBoardingPolicy".freeze,
+      type: "schema:BoardingPolicyType".freeze
     term :Gynecologic,
       comment: %(A specific branch of medical science that pertains to the health care of women, particularly in the diagnosis and treatment of disorders affecting the female reproductive system.).freeze,
       label: "Gynecologic".freeze,
@@ -9235,6 +9936,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#MBZ).freeze,
       label: "LaserDiscFormat".freeze,
       type: "schema:MusicReleaseFormatType".freeze
+    term :LeftHandDriving,
+      comment: %(The steering position is on the left side of the vehicle \(viewed from the main direction of driving\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "LeftHandDriving".freeze,
+      type: "schema:SteeringPositionValue".freeze
     term :LeisureTimeActivity,
       comment: %(Any physical activity engaged in for recreational purposes. Examples may include ballroom dancing, roller skating, canoeing, fishing, etc.).freeze,
       label: "LeisureTimeActivity".freeze,
@@ -9505,6 +10211,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A randomized trial design.).freeze,
       label: "RandomizedTrial".freeze,
       type: "schema:MedicalTrialDesign".freeze
+    term :RearWheelDriveConfiguration,
+      comment: %(Real-wheel drive is a transmission layout where the engine drives the rear wheels.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "RearWheelDriveConfiguration".freeze,
+      type: "schema:DriveWheelConfigurationValue".freeze
     term :Recruiting,
       comment: %(Recruiting participants.).freeze,
       label: "Recruiting".freeze,
@@ -9530,6 +10241,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A specific branch of medical science that pertains to the study of the kidneys and its respective disease states.).freeze,
       label: "Renal".freeze,
       type: "schema:MedicalSpecialty".freeze
+    term :RentalVehicleUsage,
+      comment: %(Indicates the usage of the vehicle as a rental car.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "RentalVehicleUsage".freeze,
+      type: "schema:CarUsageType".freeze
     term :Researcher,
       comment: %(Researchers.).freeze,
       label: "Researcher".freeze,
@@ -9570,6 +10286,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(A specific branch of medical science that deals with the study and treatment of rheumatic, autoimmune or joint diseases.).freeze,
       label: "Rheumatologic".freeze,
       type: "schema:MedicalSpecialty".freeze
+    term :RightHandDriving,
+      comment: %(The steering position is on the right side of the vehicle \(viewed from the main direction of driving\).).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "RightHandDriving".freeze,
+      type: "schema:SteeringPositionValue".freeze
     term :RsvpResponseMaybe,
       comment: %(The invitee may or may not attend.).freeze,
       label: "RsvpResponseMaybe".freeze,
@@ -9646,6 +10367,11 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(Suspended.).freeze,
       label: "Suspended".freeze,
       type: "schema:MedicalStudyStatus".freeze
+    term :TaxiVehicleUsage,
+      comment: %(Indicates the usage of the car as a taxi.).freeze,
+      "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#Automotive_Ontology_Working_Group).freeze,
+      label: "TaxiVehicleUsage".freeze,
+      type: "schema:CarUsageType".freeze
     term :Terminated,
       comment: %(Terminated.).freeze,
       label: "Terminated".freeze,
@@ -9681,7 +10407,6 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
     term :True,
       comment: %(The boolean value true.).freeze,
       label: "True".freeze,
-      subClassOf: "schema:Boolean".freeze,
       type: "schema:Boolean".freeze
     term :Ultrasound,
       comment: %(Ultrasound imaging.).freeze,
@@ -9724,5 +10449,9 @@ Note that Event uses startDate/endDate instead of startTime/endTime, even when d
       comment: %(X-ray imaging.).freeze,
       label: "XRay".freeze,
       type: "schema:MedicalImagingTechnique".freeze
+    term :ZoneBoardingPolicy,
+      comment: %(The airline boards by zones of the plane.).freeze,
+      label: "ZoneBoardingPolicy".freeze,
+      type: "schema:BoardingPolicyType".freeze
   end
 end
