@@ -82,6 +82,11 @@ describe RDF::Util::File do
       expect(r).to be_a(RDF::Reader)
     end
 
+    it "raises IOError on missing local file" do
+      expect {RDF::Util::File.open_file(fixture_path("not-here"))}.to raise_error IOError
+      opened.opened
+    end
+
     it "yields an RemoteDocument and returns yieldreturn" do
       WebMock.stub_request(:get, uri).
         to_return(body: File.read(File.expand_path("../../etc/doap.nt", __FILE__)),
@@ -115,6 +120,11 @@ describe RDF::Util::File do
     it "returns a file URL" do
       f = RDF::Util::File.open_file("file:" + fixture_path("test.nt"))
       expect(f).to respond_to(:read)
+      opened.opened
+    end
+
+    it "raises IOError on missing file URL" do
+      expect {RDF::Util::File.open_file("file:" + fixture_path("not-here"))}.to raise_error IOError
       opened.opened
     end
   end
