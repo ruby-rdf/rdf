@@ -19,6 +19,7 @@ group :develop do
 end
 
 group :debug do
+  gem 'psych', :platforms => [:mri, :rbx]
   gem "wirble"
   gem "redcarpet", :platforms => :ruby
   gem "debugger", :platforms => :mri_19
