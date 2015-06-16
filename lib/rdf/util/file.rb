@@ -108,7 +108,8 @@ module RDF; module Util
             remote_document = RemoteDocument.new(response.body, document_options)
           when 300..399
             # Document base is redirected location
-            base_uri = response.headers[:location].to_s
+            # Location may be relative
+            base_uri = ::URI.join(base_uri, response.headers[:location].to_s).to_s
             response.follow_redirection(request, res, &blk)
           else
             raise IOError, "<#{base_uri}>: #{response.code}"
@@ -170,7 +171,8 @@ module RDF; module Util
                 # Follow redirection
                 raise IOError, "Too many redirects" if (redirect_count += 1) > max_redirects
 
-                parsed_url = ::URI.parse(response["Location"])
+                # Location may be relative
+                parsed_url = ::URI.join(base_uri, response["Location"])
 
                 base_uri = parsed_url.to_s
               else
