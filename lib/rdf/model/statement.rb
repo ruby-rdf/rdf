@@ -103,7 +103,6 @@ module RDF
       @subject   = case @subject
         when nil      then nil
         when Symbol   then Node.intern(@subject)
-        when Term     then @subject
         when Value    then @subject.to_term
         else          raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
       end
@@ -111,7 +110,6 @@ module RDF
       @object    = case @object
         when nil    then nil
         when Symbol then Node.intern(@object)
-        when Term   then @object
         when Value  then @object.to_term
         else Literal.new(@object)
       end
