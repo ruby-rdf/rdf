@@ -17,6 +17,11 @@ describe RDF::Vocabulary do
       expect(subject.foo).to be_a(RDF::Vocabulary::Term)
     end
 
+    it "camelizes on method_missing" do
+      expect(subject.foo_bar).to be_a(RDF::Vocabulary::Term)
+      expect(subject.foo_bar).to eq (subject.to_uri / 'fooBar')
+    end
+
     it "should allow []" do
       expect {subject["foo"]}.not_to raise_error
       expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
@@ -91,7 +96,7 @@ describe RDF::Vocabulary do
       end
 
       it "allows unknown property" do
-        expect(vocab._unknown_).to eq "#{vocab.to_uri}_unknown_"
+        expect(vocab.unknown_property).to eq "#{vocab.to_uri}unknownProperty"
       end
     end
   end
@@ -160,14 +165,19 @@ describe RDF::Vocabulary do
       expect {test_vocab.a_missing_method}.not_to raise_error
     end
 
+    it "camelizes on method_missing" do
+      expect(test_vocab.a_missing_method)
+        .to eq (test_vocab.to_uri / 'aMissingMethod')
+    end
+
     it "should respond to [] with properties that have been defined" do
       expect(test_vocab[:prop]).to be_a(RDF::URI)
       expect(test_vocab["prop2"]).to be_a(RDF::URI)
     end
 
     it "should respond to [] with properties that have not been defined" do
-      expect(test_vocab[:not_a_prop]).to be_a(RDF::URI)
-      expect(test_vocab["not_a_prop"]).to be_a(RDF::URI)
+      expect(test_vocab[:not_a_prop]).to eq (test_vocab.to_uri / 'not_a_prop')
+      expect(test_vocab["not_a_prop"]).to eq (test_vocab.to_uri / 'not_a_prop')
     end
 
     its(:property) {is_expected.to eq RDF::URI("http://example.com/test#property")}
