@@ -27,7 +27,7 @@ module RDF
   #   require 'rdf/trig'  # for TriG support
   #
   #   repository = graph = RDF::Repository.load("https://raw.githubusercontent.com/ruby-rdf/rdf-trig/develop/etc/doap.trig", format: :trig))
-  #   graph = RDF::Graph.new(data: repository, context: RDF::URI("http://greggkellogg.net/foaf#me"))
+  #   graph = RDF::Graph.new(RDF::URI("http://greggkellogg.net/foaf#me"), data: repository)
   class Graph
     include RDF::Value
     include RDF::Countable
