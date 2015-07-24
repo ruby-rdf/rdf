@@ -4,15 +4,14 @@ script: "bundle exec rspec spec"
 env:
   - CI=true
 rvm:
-  - 1.9.3
   - 2.0
   - 2.1
   - 2.2
-  - jruby
+  - jruby-20mode
   - rbx-2
 cache: bundler
 sudo: false
 matrix:
   allow_failures:
     - rvm: 2.2
-    - rvm: jruby
+    - rvm: jruby-20mode

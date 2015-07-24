@@ -151,7 +151,7 @@ module RDF
     #
     # @param  [RDF::List] other
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000469
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-26
     def &(other)
       RDF::List[*(to_a & other.to_a)]
     end
@@ -169,7 +169,7 @@ module RDF
     #
     # @param  [RDF::List] other
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000470
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-7C
     def |(other)
       RDF::List[*(to_a | other.to_a)]
     end
@@ -182,7 +182,7 @@ module RDF
     #
     # @param  [RDF::List] other
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000466
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-2B
     def +(other)
       RDF::List[*(to_a + other.to_a)]
     end
@@ -196,7 +196,7 @@ module RDF
     #
     # @param  [RDF::List] other
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000468
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-2D
     def -(other)
       RDF::List[*(to_a - other.to_a)]
     end
@@ -225,7 +225,7 @@ module RDF
     #   @return [RDF::List]
     #
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000467
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-2A
     def *(int_or_str)
       case int_or_str
         when Integer then RDF::List[*(to_a * int_or_str)]
@@ -241,7 +241,7 @@ module RDF
     #
     # @param  [Integer] index
     # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000417
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-5B-5D
     def [](index)
       at(index)
     end
@@ -255,7 +255,7 @@ module RDF
     # @param  [RDF::Term, Array<RDF::Term>] value
     #   A non-RDF::Term is coerced to a Literal
     # @return [RDF::List]
-    # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-unshift
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-unshift
     #
     def unshift(value)
       value = case value
@@ -282,7 +282,7 @@ module RDF
     #   RDF::List[1,2,3].shift              #=> 1
     #
     # @return [RDF::Term]
-    # @see    http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-shift
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-shift
     def shift
       return nil if empty?
 
@@ -303,7 +303,7 @@ module RDF
     #   RDF::List[1, 2, 2, 3].clear    #=> RDF::List[]
     #
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9.3/classes/Array.html#method-i-clear
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-clear
     def clear
       until empty?
         shift
@@ -319,7 +319,7 @@ module RDF
     #
     # @param  [RDF::Term] value
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000424
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-3C-3C
     def <<(value)
       value = case value
         when nil         then RDF.nil
@@ -352,7 +352,7 @@ module RDF
     #
     # @param  [RDF::List] other
     # @return [Integer]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000461
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-3C-3D-3E
     def <=>(other)
       to_a <=> other.to_a # TODO: optimize this
     end
@@ -365,7 +365,7 @@ module RDF
     #   RDF::List[1, 2, 3].empty?               #=> false
     #
     # @return [Boolean]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000434
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-empty-3F
     def empty?
       graph.query(:subject => subject, :predicate => RDF.first).empty?
     end
@@ -378,7 +378,7 @@ module RDF
     #   RDF::List[1, 2, 3].length               #=> 3
     #
     # @return [Integer]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000433
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-length
     def length
       each.count
     end
@@ -395,7 +395,7 @@ module RDF
     #
     # @param  [RDF::Term] value
     # @return [Integer]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000436
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-index
     def index(value)
       each.with_index do |v, i|
         return i if v == value
@@ -412,7 +412,7 @@ module RDF
     #     RDF::List[1, 2, 3].slice(0..2) #=> RDF::List[1, 2, 3]
     #
     # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000462
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-slice
     def slice(*args)
       case argc = args.size
         when 2 then slice_with_start_and_length(*args)
@@ -447,7 +447,7 @@ module RDF
     #   RDF::List[1, 2, 3].fetch(4) { |n| n*n } #=> 16
     #
     # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000420
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-fetch
     def fetch(index, default = UNSET, &block)
       each.with_index do |v, i|
         return v if i == index
@@ -468,7 +468,7 @@ module RDF
     #   RDF::List[1, 2, 3].at(4)                #=> nil
     #
     # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000419
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-at
     def at(index)
       each.with_index do |v, i|
         return v if i == index
@@ -595,7 +595,7 @@ module RDF
     #   RDF::List[*(1..10)].last                 #=> RDF::Literal(10)
     #
     # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000422
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-last
     def last
       graph.first_object(:subject => last_subject, :predicate => RDF.first)
     end
@@ -687,7 +687,7 @@ module RDF
     #   end
     #
     # @return [Enumerator]
-    # @see    http://ruby-doc.org/core-1.9/classes/Enumerable.html
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-each
     def each(&block)
       return to_enum unless block_given?
 
@@ -727,7 +727,7 @@ module RDF
     #
     # @param  [String] sep
     # @return [String]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000438
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-join
     def join(sep = $,)
       map(&:to_s).join(sep)
     end
@@ -739,7 +739,7 @@ module RDF
     #   RDF::List[1, 2, 3].reverse              #=> RDF::List[3, 2, 1]
     #
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000439
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-reverse
     def reverse
       RDF::List[*to_a.reverse]
     end
@@ -751,7 +751,7 @@ module RDF
     #   RDF::List[2, 3, 1].sort                 #=> RDF::List[1, 2, 3]
     #
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Enumerable.html#M003038
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-sort
     def sort(&block)
       RDF::List[*super]
     end
@@ -763,7 +763,7 @@ module RDF
     #   RDF::List[2, 3, 1].sort_by(&:to_i)      #=> RDF::List[1, 2, 3]
     #
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Enumerable.html#M003039
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-sort_by
     def sort_by(&block)
       RDF::List[*super]
     end
@@ -775,7 +775,7 @@ module RDF
     #   RDF::List[1, 2, 2, 3].uniq              #=> RDF::List[1, 2, 3]
     #
     # @return [RDF::List]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000471
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-uniq
     def uniq
       RDF::List[*to_a.uniq]
     end
