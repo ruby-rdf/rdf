@@ -41,7 +41,7 @@ describe RDF::Graph do
     end
 
     it "should not be instantiable by default" do
-      expect { described_class.new("http://rubygems.org/gems/rdf") }.to raise_error
+      expect { described_class.new("http://rubygems.org/gems/rdf") }.to raise_error(ArgumentError)
     end
 
     its(:named?) {is_expected.to be_truthy}

@@ -59,6 +59,16 @@ module RDF
   #   foaf.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
   #   foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
   #   foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
+  # 
+  # @example Method calls are converted to the typical RDF camelcase convention
+  #   foaf = RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")
+  #   foaf.family_name    #=> RDF::URI("http://xmlns.com/foaf/0.1/familyName")
+  #   owl.same_as         #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
+  #   # []-style access is left as is
+  #   foaf['family_name'] #=> RDF::URI("http://xmlns.com/foaf/0.1/family_name")
+  #   foaf[:family_name]  #=> RDF::URI("http://xmlns.com/foaf/0.1/family_name")
+  #
+  #
   #
   # @example Generating RDF from a vocabulary definition
   #   graph = RDF::Graph.new << RDF::RDFS.to_enum
@@ -399,6 +409,7 @@ module RDF
       end
 
       def method_missing(property, *args, &block)
+        property = RDF::Vocabulary.camelize(property.to_s)
         if %w(to_ary).include?(property.to_s)
           super
         elsif args.empty? && !to_s.empty?
@@ -409,6 +420,7 @@ module RDF
       end
 
     private
+
       def props; @properties ||= {}; end
     end
 
@@ -472,6 +484,7 @@ module RDF
     end
 
     def method_missing(property, *args, &block)
+      property = self.class.camelize(property.to_s)
       if %w(to_ary).include?(property.to_s)
         super
       elsif args.empty?
@@ -479,6 +492,12 @@ module RDF
       else
         super
       end
+    end
+
+    def self.camelize(str)
+      str.split('_').inject([]) do |buffer, e| 
+        buffer.push(buffer.empty? ? e : e.capitalize)
+      end.join
     end
 
   private
