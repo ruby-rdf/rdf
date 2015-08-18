@@ -340,6 +340,22 @@ describe RDF::List do
       expect(empty[0]).to be_nil
       expect(ten[20]).to be_nil
     end
+
+    context "with start index and a length" do
+      it "accepts two arguments" do
+        expect { ten[0, 9] }.not_to raise_error
+      end
+
+      it "returns a value" do
+        expect(ten[0, 9]).to be_a_value
+      end
+    end
+
+    context "with a range" do
+      it "accepts one argument" do
+        expect { ten[0..9] }.not_to raise_error
+      end
+    end
   end
 
   describe "#[]=" do
@@ -606,29 +622,31 @@ describe RDF::List do
     end
   end
 
-  describe "#slice using an element index" do
-    it "accepts one argument" do
-      expect { ten.slice(0) }.not_to raise_error
+  describe "#slice" do
+    context "with element index" do
+      it "accepts one argument" do
+        expect { ten.slice(0) }.not_to raise_error
+      end
+
+      it "returns a value" do
+        expect(ten.slice(0)).to be_a_value
+      end
     end
 
-    it "returns a value" do
-      expect(ten.slice(0)).to be_a_value
-    end
-  end
+    context "with start index and a length" do
+      it "accepts two arguments" do
+        expect { ten.slice(0, 9) }.not_to raise_error
+      end
 
-  describe "#slice using a start index and a length" do
-    it "accepts two arguments" do
-      expect { ten.slice(0, 9) }.not_to raise_error
+      it "returns a value" do
+        expect(ten.slice(0, 9)).to be_a_value
+      end
     end
 
-    it "returns a value" do
-      expect(ten.slice(0, 9)).to be_a_value
-    end
-  end
-
-  describe "#slice using a range" do
-    it "accepts one argument" do
-      expect { ten.slice(0..9) }.not_to raise_error
+    context "with a range" do
+      it "accepts one argument" do
+        expect { ten.slice(0..9) }.not_to raise_error
+      end
     end
   end
 

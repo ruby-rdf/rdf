@@ -234,19 +234,6 @@ module RDF
     end
 
     ##
-    # Returns the element at `index`.
-    #
-    # @example
-    #   RDF::List[1, 2, 3][0]                   #=> RDF::Literal(1)
-    #
-    # @param  [Integer] index
-    # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000417
-    def [](index)
-      at(index)
-    end
-
-    ##
     # Element Assignment — Sets the element at `index`, or replaces a subarray from the `start` index for `length` elements, or replaces a subarray specified by the `range` of indices.
     # 
     # If indices are greater than the current capacity of the array, the array grows automatically. Elements are inserted into the array at `start` if length is zero.
@@ -507,6 +494,7 @@ module RDF
         else raise ArgumentError, "wrong number of arguments (#{argc} for 2)"
       end
     end
+    alias :[] :slice
 
     ##
     # @private
