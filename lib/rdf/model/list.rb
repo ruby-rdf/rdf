@@ -72,10 +72,10 @@ module RDF
         # An empty list with explicit subject and value initializers
         @subject = RDF.nil
         first, *values = Array(values)
-        if first
+        if first || values.length > 0
           # Intantiate the list from values, and insert the first value using subject.
           values.reverse_each {|value| self.unshift(value)}
-          graph.insert RDF::Statement(subject, RDF.first, first)
+          graph.insert RDF::Statement(subject, RDF.first, first || RDF.nil)
           graph.insert RDF::Statement(subject, RDF.rest, @subject)
         end
         @subject = subject
@@ -247,12 +247,98 @@ module RDF
     end
 
     ##
+    # Element Assignment — Sets the element at `index`, or replaces a subarray from the `start` index for `length` elements, or replaces a subarray specified by the `range` of indices.
+    #
+    # If indices are greater than the current capacity of the array, the array grows automatically. Elements are inserted into the array at `start` if length is zero.
+    #
+    # Negative indices will count backward from the end of the array. For `start` and `range` cases the starting index is just before an element.
+    #
+    # An `IndexError` is raised if a negative index points past the beginning of the array.
+    #
+    # (see #unshift).
+    #
+    # @example
+    #     a = RDF::List.new
+    #     a[4] = "4";                 #=> [rdf:nil, rdf:nil, rdf:nil, rdf:nil, "4"]
+    #     a[0, 3] = [ 'a', 'b', 'c' ] #=> ["a", "b", "c", rdf:nil, "4"]
+    #     a[1..2] = [ 1, 2 ]          #=> ["a", 1, 2, rdf:nil, "4"]
+    #     a[0, 2] = "?"               #=> ["?", 2, rdf:nil, "4"]
+    #     a[0..2] = "A"               #=> ["A", "4"]
+    #     a[-1]   = "Z"               #=> ["A", "Z"]
+    #     a[1..-1] = nil              #=> ["A", rdf:nil]
+    #     a[1..-1] = []               #=> ["A"]
+    #     a[0, 0] = [ 1, 2 ]          #=> [1, 2, "A"]
+    #     a[3, 0] = "B"               #=> [1, 2, "A", "B"]
+    #
+    # @overload []=(index, term)
+    #   Replaces the element at `index` with `term`. 
+    #   @param [Integer] index
+    #   @param [RDF::Term] term
+    #     A non-RDF::Term is coerced to a Literal.
+    #   @return [RDF::Term]
+    #   @raise [IndexError]
+    #
+    # @overload []=(start, length, value)
+    #   Replaces a subarray from the `start` index for `length` elements with `value`. Value is a {RDF::Term}, Array of {RDF::Term}, or {RDF::List}.
+    #   @param [Integer] start
+    #   @param [Integer] length
+    #   @param [RDF::Term, Array<RDF::Term>, RDF::List] value
+    #     A non-RDF::Term is coerced to a Literal.
+    #   @return [RDF::Term, RDF::List]
+    #   @raise [IndexError]
+    #
+    # @overload []=(range, value)
+    #   Replaces a subarray from the `start` index for `length` elements with `value`. Value is a {RDF::Term}, Array of {RDF::Term}, or {RDF::List}.
+    #   @param [Range] range
+    #   @param [RDF::Term, Array<RDF::Term>, RDF::List] value
+    #     A non-RDF::Term is coerced to a Literal.
+    #   @return [RDF::Term, RDF::List]
+    #   @raise [IndexError]
+    # @since 1.1.15
+    def []=(*args)
+      start, length = 0, 0
+
+      ary = self.to_a
+
+      value = case args.last
+      when Array then args.last
+      when RDF::List then args.last.to_a
+      else [args.last]
+      end
+
+      ret = case args.length
+      when 3
+        start, length = args[0], args[1]
+        ary[start, length] = value
+      when 2
+        case args.first
+        when Integer
+          raise ArgumentError, "Index form of []= takes a single term" if args.last.is_a?(Array)
+          ary[args.first] = args.last.is_a?(RDF::List) ? args.last.subject : args.last
+        when Range
+          ary[args.first] = value
+        else
+          raise ArgumentError, "Index form of must use an integer or range"
+        end
+      else
+        raise ArgumentError, "List []= takes one or two index values"
+      end
+
+      # Clear the list and create a new list using the existing subject
+      subject = @subject unless @subject == RDF.nil
+      self.clear
+      new_list = RDF::List.new(subject, @graph, ary)
+      @subject = new_list.subject
+      ret # Returns inserted values
+    end
+
+    ##
     # Appends an element to the head of this list. Existing references are not updated, as the list subject changes as a side-effect.
     #
     # @example
     #   RDF::List[].unshift(1).unshift(2).unshift(3) #=> RDF::List[3, 2, 1]
     #
-    # @param  [RDF::Term, Array<RDF::Term>] value
+    # @param  [RDF::Term, Array<RDF::Term>, RDF::List] value
     #   A non-RDF::Term is coerced to a Literal
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-unshift
@@ -421,6 +507,7 @@ module RDF
         else raise ArgumentError, "wrong number of arguments (#{argc} for 2)"
       end
     end
+    alias :[] :slice
 
     ##
     # @private
