@@ -235,13 +235,13 @@ module RDF
 
     ##
     # Element Assignment — Sets the element at `index`, or replaces a subarray from the `start` index for `length` elements, or replaces a subarray specified by the `range` of indices.
-    # 
+    #
     # If indices are greater than the current capacity of the array, the array grows automatically. Elements are inserted into the array at `start` if length is zero.
-    # 
+    #
     # Negative indices will count backward from the end of the array. For `start` and `range` cases the starting index is just before an element.
-    # 
+    #
     # An `IndexError` is raised if a negative index points past the beginning of the array.
-    # 
+    #
     # (see #unshift).
     #
     # @example
@@ -312,10 +312,10 @@ module RDF
       end
 
       # Clear the list and create a new list using the existing subject
-      subject = @subject
+      subject = @subject unless @subject == RDF.nil
       self.clear
-      RDF::List.new(subject, @graph, ary)
-      @subject = subject
+      new_list = RDF::List.new(subject, @graph, ary)
+      @subject = new_list.subject
       ret # Returns inserted values
     end
 
