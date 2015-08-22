@@ -436,12 +436,26 @@ describe RDF::List do
           value: "B",
           result: [1, 2, "A", "B"]
         },
+        "lorem[0, 5] = []" => {
+          initial: ['lorem' 'ipsum' 'dolor' 'sit' 'amet'],
+          start: 0,
+          length: 5,
+          value: [],
+          result: []
+        },
       }.each do |name, props|
         it name do
           list = RDF::List[*props[:initial]]
           list[props[:start], props[:length]] = props[:value]
           expect(list).to eq RDF::List[*props[:result]]
         end
+      end
+
+      it "sets subject to rdf:nil when list is emptied" do
+        list = RDF::List[%(lorem ipsum dolor sit amet)]
+        list[0,5] = []
+        expect(list).to eq RDF::List[]
+        expect(list.subject).to eq RDF.nil
       end
     end
 
@@ -546,7 +560,9 @@ describe RDF::List do
       expect(ten).to eql(ten)
     end
 
-    it "needs work"
+    it "returns true when comparing a list to its contents" do
+      expect(ten).to eql ten.to_a
+    end
   end
 
   describe "#<=>" do
@@ -567,18 +583,10 @@ describe RDF::List do
     it "returns true when given the same list" do
       expect(ten).to eq ten
     end
-  end
 
-  describe "#===" do
-    it "requires an argument" do
-      expect { empty.send(:===) }.to raise_error(ArgumentError)
+    it "returns true when comparing a list to its contents" do
+      expect(ten).to eq ten.to_a
     end
-
-    it "returns true when given the same list" do
-      expect(ten).to eq ten
-    end
-
-    it "needs work"
   end
 
   describe "#empty?" do

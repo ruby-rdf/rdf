@@ -325,7 +325,7 @@ module RDF
       end
 
       # Clear the list and create a new list using the existing subject
-      subject = @subject unless @subject == RDF.nil
+      subject = @subject unless ary.empty? || @subject == RDF.nil
       self.clear
       new_list = RDF::List.new(subject, @graph, ary)
       @subject = new_list.subject
@@ -426,6 +426,20 @@ module RDF
       graph.insert([new_subject, RDF.rest, RDF.nil])
 
       self
+    end
+
+    ##
+    # Compares this list to `other` using eql? on each component.
+    #
+    # @example
+    #   RDF::List[1, 2, 3].eql? RDF::List[1, 2, 3]  #=> true
+    #   RDF::List[1, 2, 3].eql? [1, 2, 3]           #=> true
+    #
+    # @param  [RDF::List] other
+    # @return [Integer]
+    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-3C-3D-3E
+    def eql?(other)
+      to_a.eql? other.to_a # TODO: optimize this
     end
 
     ##
