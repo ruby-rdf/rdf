@@ -340,10 +340,159 @@ describe RDF::List do
       expect(empty[0]).to be_nil
       expect(ten[20]).to be_nil
     end
+
+    context "with start index and a length" do
+      it "accepts two arguments" do
+        expect { ten[0, 9] }.not_to raise_error
+      end
+
+      it "returns a value" do
+        expect(ten[0, 9]).to be_a_value
+      end
+    end
+
+    context "with a range" do
+      it "accepts one argument" do
+        expect { ten[0..9] }.not_to raise_error
+      end
+    end
   end
 
   describe "#[]=" do
-    it "needs work"
+    it "accepts one integer argument" do
+      expect { ten[0] = 0 }.not_to raise_error
+    end
+
+    it "accepts two integer arguments" do
+      expect { ten[0, 0] = 0 }.not_to raise_error
+    end
+
+    it "accepts a range argument" do
+      expect { ten[0..1] = 0 }.not_to raise_error
+    end
+
+    it "rejects fewer arguments" do
+      expect { ten[] = 0 }.to raise_error(ArgumentError)
+    end
+
+    it "rejects extra arguments" do
+      expect { ten[0, 1, 2] = 0 }.to raise_error(ArgumentError)
+    end
+
+    context "with index" do
+      it "rejects string index" do
+        expect { ten["1"] = 0 }.to raise_error(ArgumentError)
+      end
+
+      {
+        "a[4] = '4'" => {
+          initial: [],
+          index: 4,
+          value: "4",
+          result: [nil, nil, nil, nil, "4"]
+        },
+        "a[-1]   = 'Z'" => {
+          initial: ["A", "4"],
+          index: -1,
+          value: "Z",
+          result: ["A", "Z"]
+        },
+      }.each do |name, props|
+        it name do
+          list = RDF::List[*props[:initial]]
+          list[props[:index]] = props[:value]
+          expect(list).to eq RDF::List[*props[:result]]
+        end
+      end
+    end
+
+    context "with start and length" do
+      {
+        "a[0, 3] = [ 'a', 'b', 'c' ]" => {
+          initial: [nil, nil, nil, nil, "4"],
+          start: 0,
+          length: 3,
+          value: [ 'a', 'b', 'c' ],
+          result: ["a", "b", "c", nil, "4"]
+        },
+        "a[0, 2] = '?'" => {
+          initial: ["a", 1, 2, nil, "4"],
+          start: 0,
+          length: 2,
+          value: "?",
+          result: ["?", 2, nil, "4"]
+        },
+        "a[0, 0] = [ 1, 2 ]" => {
+          initial: ["A"],
+          start: 0,
+          length: 0,
+          value: [ 1, 2 ],
+          result: [1, 2, "A"]
+        },
+        "a[3, 0] = 'B'" => {
+          initial: [1, 2, "A"],
+          start: 3,
+          length: 0,
+          value: "B",
+          result: [1, 2, "A", "B"]
+        },
+        "lorem[0, 5] = []" => {
+          initial: ['lorem' 'ipsum' 'dolor' 'sit' 'amet'],
+          start: 0,
+          length: 5,
+          value: [],
+          result: []
+        },
+      }.each do |name, props|
+        it name do
+          list = RDF::List[*props[:initial]]
+          list[props[:start], props[:length]] = props[:value]
+          expect(list).to eq RDF::List[*props[:result]]
+        end
+      end
+
+      it "sets subject to rdf:nil when list is emptied" do
+        list = RDF::List[%(lorem ipsum dolor sit amet)]
+        list[0,5] = []
+        expect(list).to eq RDF::List[]
+        expect(list.subject).to eq RDF.nil
+      end
+    end
+
+    context "with range" do
+      {
+        "a[1..2] = [ 1, 2 ]" => {
+          initial: ["a", "b", "c", nil, "4"],
+          range: (1..2),
+          value: [ 1, 2 ],
+          result: ["a", 1, 2, nil, "4"]
+        },
+        "a[0..2] = 'A'" => {
+          initial: ["?", 2, nil, "4"],
+          range: (0..2),
+          value: "A",
+          result: ["A", "4"]
+        },
+        "a[1..-1] = nil" => {
+          initial: ["A", "Z"],
+          range: (1..-1),
+          value: nil,
+          result: ["A", nil]
+        },
+        "a[1..-1] = []" => {
+          initial: ["A", nil],
+          range: (1..-1),
+          value: [],
+          result: ["A"]
+        },
+      }.each do |name, props|
+        it name do
+          list = RDF::List[*props[:initial]]
+          list[props[:range]] = props[:value]
+          expect(list).to eq RDF::List[*props[:result]]
+        end
+      end
+    end
   end
 
   describe "#<<" do
@@ -411,7 +560,9 @@ describe RDF::List do
       expect(ten).to eql(ten)
     end
 
-    it "needs work"
+    it "returns true when comparing a list to its contents" do
+      expect(ten).to eql ten.to_a
+    end
   end
 
   describe "#<=>" do
@@ -432,18 +583,10 @@ describe RDF::List do
     it "returns true when given the same list" do
       expect(ten).to eq ten
     end
-  end
 
-  describe "#===" do
-    it "requires an argument" do
-      expect { empty.send(:===) }.to raise_error(ArgumentError)
+    it "returns true when comparing a list to its contents" do
+      expect(ten).to eq ten.to_a
     end
-
-    it "returns true when given the same list" do
-      expect(ten).to eq ten
-    end
-
-    it "needs work"
   end
 
   describe "#empty?" do
@@ -487,29 +630,31 @@ describe RDF::List do
     end
   end
 
-  describe "#slice using an element index" do
-    it "accepts one argument" do
-      expect { ten.slice(0) }.not_to raise_error
+  describe "#slice" do
+    context "with element index" do
+      it "accepts one argument" do
+        expect { ten.slice(0) }.not_to raise_error
+      end
+
+      it "returns a value" do
+        expect(ten.slice(0)).to be_a_value
+      end
     end
 
-    it "returns a value" do
-      expect(ten.slice(0)).to be_a_value
-    end
-  end
+    context "with start index and a length" do
+      it "accepts two arguments" do
+        expect { ten.slice(0, 9) }.not_to raise_error
+      end
 
-  describe "#slice using a start index and a length" do
-    it "accepts two arguments" do
-      expect { ten.slice(0, 9) }.not_to raise_error
+      it "returns a value" do
+        expect(ten.slice(0, 9)).to be_a_value
+      end
     end
 
-    it "returns a value" do
-      expect(ten.slice(0, 9)).to be_a_value
-    end
-  end
-
-  describe "#slice using a range" do
-    it "accepts one argument" do
-      expect { ten.slice(0..9) }.not_to raise_error
+    context "with a range" do
+      it "accepts one argument" do
+        expect { ten.slice(0..9) }.not_to raise_error
+      end
     end
   end
 
@@ -694,7 +839,7 @@ describe RDF::List do
 
     it "adds statements to separate graph" do
       g = RDF::Graph.new << ten
-      expect(g.count) == ten.count
+      expect(g.count).to eql ten.count * 2
       expect(RDF::List.new(g.subjects.first, g)).to eq ten
     end
   end

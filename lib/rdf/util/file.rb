@@ -68,7 +68,8 @@ module RDF; module Util
       # @option options [Boolean] :verify_none (false)
       #   Don't verify SSL certificates
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
-      def self.open_url base_uri, options
+      # @raise [IOError] if not found
+      def self.open_url(base_uri, options)
         raise NoMethodError.new("#{self.inspect} does not implement required method `open_url` for ", "open_url")
       end
     end
@@ -84,7 +85,8 @@ module RDF; module Util
       # @param [String] base_uri to open
       # @param  [Hash{Symbol => Object}] options
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
-      def self.open_url base_uri, options
+      # @raise [IOError] if not found
+      def self.open_url(base_uri, options)
         ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         # If RestClient is loaded, prefer it
@@ -106,7 +108,8 @@ module RDF; module Util
             remote_document = RemoteDocument.new(response.body, document_options)
           when 300..399
             # Document base is redirected location
-            base_uri = response.headers[:location].to_s
+            # Location may be relative
+            base_uri = ::URI.join(base_uri, response.headers[:location].to_s).to_s
             response.follow_redirection(request, res, &blk)
           else
             raise IOError, "<#{base_uri}>: #{response.code}"
@@ -123,7 +126,8 @@ module RDF; module Util
       # @param [String] base_uri to open
       # @param  [Hash{Symbol => Object}] options
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
-      def self.open_url base_uri, options
+      # @raise [IOError] if not found
+      def self.open_url(base_uri, options)
         ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         redirect_count = 0
@@ -167,7 +171,8 @@ module RDF; module Util
                 # Follow redirection
                 raise IOError, "Too many redirects" if (redirect_count += 1) > max_redirects
 
-                parsed_url = ::URI.parse(response["Location"])
+                # Location may be relative
+                parsed_url = ::URI.join(base_uri, response["Location"])
 
                 base_uri = parsed_url.to_s
               else
@@ -206,7 +211,7 @@ module RDF; module Util
       # @param [String] base_uri to open
       # @param  [Hash{Symbol => Object}] options
       # @return [RemoteDocument, Object] A {RemoteDocument}.
-      def self.open_url base_uri, options
+      def self.open_url(base_uri, options)
         response = conn.get do |req|
           req.url base_uri
           headers(options).each do |k,v|
@@ -233,7 +238,7 @@ module RDF; module Util
       end
     end
 
-    class <<self
+    class << self
       ##
       # Set the HTTP adapter
       # @see .http_adapter
@@ -252,7 +257,7 @@ module RDF; module Util
       #      adapters have been configured
       # @return [HttpAdapter]
       # @since 1.2
-      def http_adapter use_net_http = false
+      def http_adapter(use_net_http = false)
         if use_net_http
           NetHttpAdapter
         else
@@ -305,6 +310,7 @@ module RDF; module Util
     # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
     # @yield [ RemoteDocument] A {RemoteDocument} for local files
     # @yieldreturn [Object] returned from open_file
+    # @raise [IOError] if not found
     def self.open_file(filename_or_url, options = {}, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       remote_document = nil
@@ -318,17 +324,21 @@ module RDF; module Util
         format = RDF::Format.for(filename_or_url.to_s)
         content_type = format ? format.content_type.first : 'text/plain'
         # Open as a file, passing any options
-        Kernel.open(filename_or_url, "r:utf-8", options) do |file|
-          document_options = {
-            base_uri:     filename_or_url.to_s,
-            charset:      file.external_encoding,
-            code:         200,
-            content_type: content_type,
-            last_modified:file.mtime,
-            headers:      {'Content-Type' => content_type, 'Last-Modified' => file.mtime.xmlschema}
-          }
+        begin
+          Kernel.open(filename_or_url, "r:utf-8", options) do |file|
+            document_options = {
+              base_uri:     filename_or_url.to_s,
+              charset:      file.external_encoding,
+              code:         200,
+              content_type: content_type,
+              last_modified:file.mtime,
+              headers:      {'Content-Type' => content_type, 'Last-Modified' => file.mtime.xmlschema}
+            }
 
-          remote_document = RemoteDocument.new(file.read, document_options)
+            remote_document = RemoteDocument.new(file.read, document_options)
+          end
+        rescue Errno::ENOENT => e
+          raise IOError, e.message
         end
       end
 
