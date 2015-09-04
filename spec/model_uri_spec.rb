@@ -530,6 +530,14 @@ describe RDF::URI do
       %w(http://foo/bar# /a) => "<http://foo/a>",
       %w(http://foo/bar# #a) => "<http://foo/bar#a>",
 
+      %w(http://a/bb/ccc/.. g:h) => "<g:h>",
+      %w(http://a/bb/ccc/.. g) => "<http://a/bb/ccc/g>",
+      %w(http://a/bb/ccc/.. ./g) => "<http://a/bb/ccc/g>",
+      %w(http://a/bb/ccc/.. g/) => "<http://a/bb/ccc/g/>",
+      %w(http://a/bb/ccc/.. ?y) => "<http://a/bb/ccc/..?y>",
+      %w(http://a/bb/ccc/.. g?y) => "<http://a/bb/ccc/g?y>",
+      %w(http://a/bb/ccc/.. #s) => "<http://a/bb/ccc/..#s>",
+      %w(http://a/bb/ccc/.. g#s) => "<http://a/bb/ccc/g#s>",
     }.each_pair do |(lhs, rhs), result|
       it "creates #{result} from <#{lhs}> and '#{rhs}'" do
         expect(RDF::URI.new(lhs).join(rhs.to_s).to_base).to eq result
