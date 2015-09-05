@@ -858,7 +858,6 @@ module RDF
       parts = {}
       if matchdata = value.to_s.match(IRI_PARTS)
         scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
-        authority = nil if authority.to_s.empty?
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)
@@ -1135,7 +1134,7 @@ module RDF
     def normalized_authority
       if authority
         (userinfo ? "#{normalized_userinfo}@" : "") +
-        normalized_host +
+        normalized_host.to_s +
         (normalized_port ? ":#{normalized_port}" : "")
       end
     end
