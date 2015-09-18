@@ -162,7 +162,7 @@ module RDF
     ##
     # Resolve paths to their simplest form.
     #
-    # TODO: This process is correct, but overly iterative. It could be better done with a single regexp which handled most of the segment collapses all at once. Parent segments would still require iteration.
+    # @todo This process is correct, but overly iterative. It could be better done with a single regexp which handled most of the segment collapses all at once. Parent segments would still require iteration.
     #
     # @param [String] path
     # @return [String] normalized path
@@ -196,7 +196,7 @@ module RDF
         end
       end
 
-      output.sub(/\/+/, '/').force_encoding(Encoding::UTF_8)
+      output.force_encoding(Encoding::UTF_8)
     end
 
     ##
@@ -379,7 +379,7 @@ module RDF
       @object = {
         :scheme => normalized_scheme,
         :authority => normalized_authority,
-        :path => normalized_path,
+        :path => normalized_path.sub(/\/+/, '/'),
         :query => normalized_query,
         :fragment => normalized_fragment
       }
@@ -432,10 +432,8 @@ module RDF
           joined_parts[:path] = self.class.normalize_path(uri.path)
           joined_parts[:query] = uri.query
         else
-          base_path = self.class.normalize_path(path.to_s)
-
           # Merge path segments from section 5.2.3
-          base_path.sub!(/\/[^\/]*$/, '/')
+          base_path = path.to_s.sub(/\/[^\/]*$/, '/')
           joined_parts[:path] = self.class.normalize_path(base_path + uri.path)
           joined_parts[:query] = uri.query
         end
@@ -860,7 +858,6 @@ module RDF
       parts = {}
       if matchdata = value.to_s.match(IRI_PARTS)
         scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
-        authority = nil if authority.to_s.empty?
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)
@@ -1137,7 +1134,7 @@ module RDF
     def normalized_authority
       if authority
         (userinfo ? "#{normalized_userinfo}@" : "") +
-        normalized_host +
+        normalized_host.to_s +
         (normalized_port ? ":#{normalized_port}" : "")
       end
     end
