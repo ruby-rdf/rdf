@@ -142,8 +142,7 @@ module RDF
     # @return [Boolean]
     # @see http://www.w3.org/TR/rdf-sparql-query/#func-RDFterm-equal
     def ==(other)
-      case other
-      when Literal
+      if other.is_a?(Literal)
         # If other is a Literal, reverse test to consolodate complex type checking logic
         other == self
       else

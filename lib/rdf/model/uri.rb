@@ -873,10 +873,6 @@ module RDF
         parts[:path] = (path.to_s.force_encoding(Encoding::UTF_8) unless path.empty?)
         parts[:query] = (query[1..-1].force_encoding(Encoding::UTF_8) if query)
         parts[:fragment] = (fragment[1..-1].force_encoding(Encoding::UTF_8) if fragment)
-
-        parts.each_key do |k|
-          parts[k].force_encoding(Encoding::UTF_8) if parts[k].respond_to?(:encoding)
-        end
       end
       
       parts
@@ -884,7 +880,11 @@ module RDF
 
     ##
     # @return [String]
-    def scheme; object.fetch(:scheme, nil); end
+    def scheme
+      object.fetch(:scheme) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
@@ -1014,7 +1014,11 @@ module RDF
 
     ##
     # @return [String]
-    def path; object.fetch(:path, nil); end
+    def path
+      object.fetch(:path) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
@@ -1071,7 +1075,11 @@ module RDF
 
     ##
     # @return [String]
-    def query; object.fetch(:query, nil); end
+    def query
+      object.fetch(:query) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
@@ -1091,7 +1099,11 @@ module RDF
 
     ##
     # @return [String]
-    def fragment; object.fetch(:fragment, nil); end
+    def fragment
+      object.fetch(:fragment) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value

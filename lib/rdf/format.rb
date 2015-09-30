@@ -205,7 +205,7 @@ module RDF
     #
     # @return [Array<String>]
     def self.reader_types
-      reader_symbols.map {|s| RDF::Format.for(s).content_type}.flatten.uniq
+      reader_symbols.flat_map {|s| RDF::Format.for(s).content_type}.uniq
     end
 
     ##
@@ -231,7 +231,7 @@ module RDF
     #
     # @return [Array<String>]
     def self.writer_types
-      writer_symbols.map {|s| RDF::Format.for(s).content_type}.flatten.uniq
+      writer_symbols.flat_map {|s| RDF::Format.for(s).content_type}.uniq
     end
 
     ##
