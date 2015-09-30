@@ -79,17 +79,16 @@ module RDF
     #   @option options [RDF::Term]  :context   (nil)
     #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
-      case subject
-        when Hash
-          @options   = subject.dup
-          @subject   = @options.delete(:subject)
-          @predicate = @options.delete(:predicate)
-          @object    = @options.delete(:object)
-        else
-          @options   = !options.empty? ? options.dup : {}
-          @subject   = subject
-          @predicate = predicate
-          @object    = object
+      if subject.is_a?(Hash)
+        @options   = Hash[subject] # faster subject.dup
+        @subject   = @options.delete(:subject)
+        @predicate = @options.delete(:predicate)
+        @object    = @options.delete(:object)
+      else
+        @options   = !options.empty? ? Hash[options] : {}
+        @subject   = subject
+        @predicate = predicate
+        @object    = object
       end
       @id      = @options.delete(:id) if @options.has_key?(:id)
       @context = @options.delete(:context)
