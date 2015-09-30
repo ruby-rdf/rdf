@@ -100,9 +100,9 @@ class RDF::Query
     # @yield  [variable]
     # @yieldparam [Variable]
     # @return [Enumerator]
-    def each_variable(&block)
+    def each_variable
       @bindings.each do |name, value|
-        block.call(Variable.new(name, value))
+        yield Variable.new(name, value)
       end
     end
 

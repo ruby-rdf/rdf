@@ -536,13 +536,13 @@ module RDF
     #
     # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000420
-    def fetch(index, default = UNSET, &block)
+    def fetch(index, default = UNSET)
       each.with_index do |v, i|
         return v if i == index
       end
 
       case
-        when block_given?         then block.call(index)
+        when block_given?         then yield index
         when !default.eql?(UNSET) then default
         else raise IndexError, "index #{index} not in the list #{self.inspect}"
       end
@@ -753,16 +753,16 @@ module RDF
     #
     # @return [Enumerator]
     # @see    RDF::Enumerable#each
-    def each_subject(&block)
+    def each_subject
       return enum_subject unless block_given?
 
       subject = self.subject
-      block.call(subject)
+      yield subject
 
       loop do
         rest = graph.first_object(:subject => subject, :predicate => RDF.rest)
         break if rest.nil? || rest.eql?(RDF.nil)
-        block.call(subject = rest)
+        yield subject = rest
       end
     end
 
@@ -776,12 +776,12 @@ module RDF
     #
     # @return [Enumerator]
     # @see    http://ruby-doc.org/core-1.9/classes/Enumerable.html
-    def each(&block)
+    def each
       return to_enum unless block_given?
 
       each_subject do |subject|
         if value = graph.first_object(:subject => subject, :predicate => RDF.first)
-          block.call(value) # FIXME
+          yield value # FIXME
         end
       end
     end

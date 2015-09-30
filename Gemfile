@@ -32,6 +32,7 @@ end
 group :test do
   gem "rake"
   gem "equivalent-xml"
+  gem 'fasterer'
 end
 
 platforms :rbx do
