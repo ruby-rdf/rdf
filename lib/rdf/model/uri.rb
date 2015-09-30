@@ -884,7 +884,11 @@ module RDF
 
     ##
     # @return [String]
-    def scheme; object.fetch(:scheme, nil); end
+    def scheme
+      object.fetch(:scheme) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
@@ -1014,7 +1018,11 @@ module RDF
 
     ##
     # @return [String]
-    def path; object.fetch(:path, nil); end
+    def path
+      object.fetch(:path) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
@@ -1071,7 +1079,11 @@ module RDF
 
     ##
     # @return [String]
-    def query; object.fetch(:query, nil); end
+    def query
+      object.fetch(:query) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
@@ -1091,7 +1103,11 @@ module RDF
 
     ##
     # @return [String]
-    def fragment; object.fetch(:fragment, nil); end
+    def fragment
+      object.fetch(:fragment) do
+        nil
+      end
+    end
 
     ##
     # @param [String, #to_s] value
