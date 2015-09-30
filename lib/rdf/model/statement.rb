@@ -99,18 +99,24 @@ module RDF
     # @private
     def initialize!
       @context   = Node.intern(@context)   if @context.is_a?(Symbol)
-      @subject   = case @subject
-        when nil      then nil
-        when Symbol   then Node.intern(@subject)
-        when Value    then @subject.to_term
-        else          raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
+      @subject   = if @subject.is_a?(Value)
+        @subject.to_term
+      elsif @subject.is_a?(Symbol)
+        Node.intern(@subject)
+      elsif @subject.nil?
+        nil
+      else
+        raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
       end
       @predicate = Node.intern(@predicate) if @predicate.is_a?(Symbol)
-      @object    = case @object
-        when nil    then nil
-        when Symbol then Node.intern(@object)
-        when Value  then @object.to_term
-        else Literal.new(@object)
+      @object    = if @object.is_a?(Value)
+        @object.to_term
+      elsif @object.is_a?(Symbol)
+        Node.intern(@object)
+      elsif @object.nil?
+        nil
+      else
+        Literal.new(@object)
       end
     end
 
