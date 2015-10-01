@@ -322,7 +322,7 @@ module RDF
 
         old_solutions, @solutions = @solutions, Query::Solutions()
 
-        options[:bindings].keys.each do |variable|
+        options[:bindings].each_key do |variable|
           if pattern.variables.include?(variable)
             unbound_solutions, old_solutions = old_solutions, Query::Solutions()
             options[:bindings][variable].each do |binding|

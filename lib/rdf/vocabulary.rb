@@ -607,7 +607,7 @@ module RDF
       #
       # @yield statement
       # @yieldparam [RDF::Statement]
-      def each_statement(&block)
+      def each_statement
         attributes.reject {|p| p == :vocab}.each do |prop, values|
           prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
           next unless prop
@@ -646,7 +646,7 @@ module RDF
                 v = RDF::Vocabulary.expand_pname(value)
                 value = v.valid? ? v : RDF::Literal(value)
               end
-              block.call RDF::Statement(self, prop, value)
+              yield RDF::Statement(self, prop, value)
             rescue KeyError
               # Skip things eroneously defined in the vocabulary
             end

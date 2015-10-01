@@ -57,6 +57,7 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Enumerable
+    autoload :Enumerator, 'rdf/mixin/enumerator'
     extend  RDF::Util::Aliasing::LateBound
     include ::Enumerable
     include RDF::Countable # NOTE: must come after ::Enumerable
@@ -217,10 +218,10 @@ module RDF
     #
     # @return [void]
     # @see    #enum_triple
-    def each_triple(&block)
+    def each_triple
       if block_given?
         each_statement do |statement|
-          block.call(*statement.to_triple)
+          yield *statement.to_triple
         end
       end
       enum_triple
@@ -280,10 +281,10 @@ module RDF
     #
     # @return [void]
     # @see    #enum_quad
-    def each_quad(&block)
+    def each_quad
       if block_given?
         each_statement do |statement|
-          block.call(*statement.to_quad)
+          yield *statement.to_quad
         end
       end
       enum_quad
@@ -345,14 +346,14 @@ module RDF
     #
     # @return [void]
     # @see    #enum_subject
-    def each_subject(&block)
+    def each_subject
       if block_given?
         values = {}
         each_statement do |statement|
           value = statement.subject
           unless value.nil? || values.include?(value.to_s)
             values[value.to_s] = true
-            block.call(value)
+            yield value
           end
         end
       end
@@ -413,14 +414,14 @@ module RDF
     #
     # @return [void]
     # @see    #enum_predicate
-    def each_predicate(&block)
+    def each_predicate
       if block_given?
         values = {}
         each_statement do |statement|
           value = statement.predicate
           unless value.nil? || values.include?(value.to_s)
             values[value.to_s] = true
-            block.call(value)
+            yield value
           end
         end
       end
@@ -481,14 +482,14 @@ module RDF
     #
     # @return [void]
     # @see    #enum_object
-    def each_object(&block) # FIXME: deduplication
+    def each_object # FIXME: deduplication
       if block_given?
         values = {}
         each_statement do |statement|
           value = statement.object
           unless value.nil? || values.include?(value)
             values[value] = true
-            block.call(value)
+            yield value
           end
         end
       end
@@ -550,14 +551,14 @@ module RDF
     #
     # @return [void]
     # @see    #enum_context
-    def each_context(&block)
+    def each_context
       if block_given?
         values = {}
         each_statement do |statement|
           value = statement.context
           unless value.nil? || values.include?(value)
             values[value] = true
-            block.call(value)
+            yield value
           end
         end
       end
@@ -594,11 +595,11 @@ module RDF
     # @return [void]
     # @see    #enum_graph
     # @since  0.1.9
-    def each_graph(&block)
+    def each_graph
       if block_given?
-        block.call(RDF::Graph.new(nil, :data => self))
+        yield RDF::Graph.new(nil, :data => self)
         each_context do |context|
-          block.call(RDF::Graph.new(context, :data => self))
+          yield RDF::Graph.new(context, :data => self)
         end
       end
       enum_graph
@@ -709,16 +710,5 @@ module RDF
       end
     end
     alias_method :to_enum, :enum_for
-
-    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
-    class Enumerator < ::Enumerator
-      include Queryable
-      include Enumerable
-
-      # Make sure returned arrays are also queryable
-      def to_a
-        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
-      end
-    end
   end # Enumerable
 end # RDF

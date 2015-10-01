@@ -9,6 +9,7 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Queryable
+    autoload :Enumerator, 'rdf/mixin/enumerator'
     include ::Enumerable
 
     ##
@@ -302,17 +303,5 @@ module RDF
       end
     end
     alias_method :to_enum, :enum_for
-
-
-    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
-    class Enumerator < ::Enumerator
-      include Queryable
-      include Enumerable
-
-      # Make sure returned arrays are also queryable
-      def to_a
-        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
-      end
-    end
   end # Queryable
 end # RDF

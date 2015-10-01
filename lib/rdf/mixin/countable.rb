@@ -2,6 +2,7 @@ module RDF
   ##
   # @since 0.2.0
   module Countable
+    autoload :Enumerator, 'rdf/mixin/enumerator'
     extend RDF::Util::Aliasing::LateBound
 
     ##
@@ -37,10 +38,5 @@ module RDF
       end
     end
     alias_method :to_enum, :enum_for
-
-    # Extends Enumerator with {Countable}, which is used by {Countable#enum_for}
-    class Enumerator < ::Enumerator
-      include Countable
-    end
   end # Countable
 end # RDF

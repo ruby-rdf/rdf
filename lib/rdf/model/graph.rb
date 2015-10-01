@@ -312,8 +312,12 @@ module RDF
     # @private
     # @see    RDF::Enumerable#each_graph
     # @since  0.2.0
-    def each_graph(&block)
-      block_given? ? block.call(self) : enum_graph
+    def each_graph
+      if block_given?
+        yield self
+      else
+        enum_graph
+      end
     end
   end
 end
