@@ -38,7 +38,7 @@ module RDF
     # @yieldparam  [RDF::Statement, RDF::Query::Solution] statement
     #   Statement or Solution
     # @yieldreturn [void] ignored
-    # @return [Enumerator, Query::Solutions]
+    # @return [Enumerator, Query::Solutions::Enumerator]
     #   Returns an enumerator over statements or query solutions, if passed an {RDF::Query}
     # @see    RDF::Queryable#query_pattern
     def query(pattern, options = {}, &block)
@@ -47,17 +47,20 @@ module RDF
       case pattern
         # A basic graph pattern (BGP) query:
         when Query
-          solutions = RDF::Query::Solutions.new
-          block = lambda {|solution| solutions << solution} unless block_given?
-          before_query(pattern) if respond_to?(:before_query)
-          if method(:query_execute).arity == 1
-            query_execute(pattern, &block)
-          else
-            query_execute(pattern, options, &block)
+          if block_given?
+            before_query(pattern) if respond_to?(:before_query)
+            if method(:query_execute).arity == 1
+              query_execute(pattern, &block)
+            else
+              query_execute(pattern, options, &block)
+            end
+            after_query(pattern) if respond_to?(:after_query)
           end
-          after_query(pattern) if respond_to?(:after_query)
-          # Returns the solutions, not an enumerator
-          solutions
+
+          # Return a Solutions enumerator for this query
+          Query::Solutions::Enumerator.new do |yielder|
+            self.query(pattern, options) {|solution| yielder << solution}
+          end
  
         # A simple triple/quad pattern query:
         else

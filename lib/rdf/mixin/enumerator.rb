@@ -33,4 +33,17 @@ module RDF
       end
     end
   end
+
+  module Query::Solutions
+
+    # Extends Enumerator with {Solutions}
+    class Enumerator < Queryable::Enumerator
+      include Query::Solutions
+
+      # Make sure returned arrays are also queryable
+      def to_a
+        return super.to_a.extend(Query::Solutions)
+      end
+    end
+  end
 end

@@ -1,7 +1,7 @@
 module RDF; class Query
   ##
   # An RDF basic graph pattern (BGP) query solution sequence.
-  #
+   #
   # @example Filtering solutions using a hash
   #   solutions.filter(:author  => RDF::URI("http://ar.to/#self"))
   #   solutions.filter(:author  => "Gregg Kellogg")
@@ -40,8 +40,9 @@ module RDF; class Query
   #   solutions.each { |solution| puts solution.inspect }
   #
   # @since 0.3.0
-  class Solutions < Array
-    alias_method :each_solution, :each
+  module Solutions
+    autoload :Enumerator, 'rdf/mixin/enumerator'
+    extend RDF::Util::Aliasing::LateBound
 
     ##
     # Returns the number of matching query solutions.
@@ -58,6 +59,22 @@ module RDF; class Query
     # @return [Integer]
     def count(&block)
       super
+    rescue
+      0
+    end
+
+    def size
+      (super rescue nil) || to_a.size
+    end
+
+    ##
+    # Determines if these solutions are empty
+    # @return [Integer]
+    def empty?
+      each {return false}
+      true
+    rescue StopIteration
+      true
     end
 
     ##
@@ -66,7 +83,7 @@ module RDF; class Query
     #
     # @return [Array<Symbol>]
     def variable_names
-      variables = self.inject({}) do |result, solution|
+      variables = Array(self).inject({}) do |result, solution|
         solution.each_name do |name|
           result[name] ||= true
         end
@@ -106,32 +123,33 @@ module RDF; class Query
     end
     
     ##
-    # Filters this solution sequence by the given `criteria`.
+    # Filters this solution sequence by the given `criteria`, returning
     #
     # @param  [Hash{Symbol => Object}] criteria
     # @yield  [solution]
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [Boolean]
-    # @return [void] `self`
+    # @return [RDF::Query::Solutions::Enumerator]
     def filter(criteria = {})
-      if block_given?
-        self.reject! do |solution|
-          !yield(solution.is_a?(Solution) ? solution : Solution.new(solution))
-        end
-      else
-        self.reject! do |solution|
-          solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
-          results = criteria.map do |name, value|
-            case value
-            when Array then value.any? {|v| solution[name] == v}
-            when Regexp then solution[name].to_s.match(value)
-            else solution[name] == value
+      Solutions::Enumerator.new do |yielder|
+        if block_given?
+          self.each do |solution|
+            solution = Solution.new(solution) unless solution.is_a?(Solution)
+            yielder << solution if yield solution
+          end
+        else
+          self.each do |solution|
+            solution = solution.is_a?(Solution) ? solution : Solution.new(solution)
+            yielder << solution if criteria.all? do |name, value|
+              case value
+              when Array then value.any? {|v| solution[name] == v}
+              when Regexp then solution[name].to_s.match(value)
+              else solution[name] == value
+              end
             end
           end
-          !results.all?
         end
       end
-      self
     end
     alias_method :filter!, :filter
 
@@ -144,13 +162,14 @@ module RDF; class Query
     # @return [RDF::Query::Solutions] a new solution set
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
     def minus(other)
-      self.dup.filter! do |soln|
+      self.filter do |soln|
         !other.any? {|soln2| soln.compatible?(soln2) && !soln.disjoint?(soln2)}
       end
     end
 
     ##
     # Reorders this solution sequence by the given `variables`.
+    # returning a new Enumerator.
     #
     # Variables may be symbols or {Query::Variable} instances.
     # A variable may also be a Procedure/Lambda, compatible with `::Enumerable#sort`.
@@ -164,12 +183,11 @@ module RDF; class Query
     # @yieldparam  [RDF::Query::Solution] q
     # @yieldparam  [RDF::Query::Solution] b
     # @yieldreturn [Integer] -1, 0, or 1 depending on value of comparator
-    # @return [void] `self`
+    # @return [self]
     def order(*variables)
-      if variables.empty? && !block_given?
-        raise ArgumentError, "wrong number of arguments (0 for 1)"
-      else
-        self.sort! do |a, b|
+      raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty? && !block_given?
+      Solutions::Enumerator.new do |yielder|
+        Array(self).sort do |a, b|
           if block_given?
             yield((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
           else
@@ -181,9 +199,10 @@ module RDF; class Query
               end
             end || 0
           end
+        end.each do |solution|
+          yielder << solution
         end
       end
-      self
     end
     alias_method :order_by, :order
 
@@ -191,27 +210,48 @@ module RDF; class Query
     # Restricts this solution sequence to the given `variables` only.
     #
     # @param  [Array<Symbol, #to_sym>] variables
-    # @return [void] `self`
+    # @yield solution
+    # @yieldparam [Solution] solution
+    # @return [RDF::Query::Solutions::Enumerator]
     def project(*variables)
-      if variables.empty?
-        raise ArgumentError, "wrong number of arguments (0 for 1)"
-      else
-        variables.map!(&:to_sym)
-        self.each do |solution|
-          solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
-        end
+      raise ArgumentError, "wrong number of arguments (0 for 1)" if variables.empty?
+      return Solutions::Enumerator.new do |yielder|
+        self.project(*variables) {|y| yielder << y}
+      end unless block_given?
+
+      variables.map!(&:to_sym)
+      self.each do |solution|
+        bindings = solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
+        yield RDF::Query::Solution.new(bindings)
       end
-      self
     end
-    alias_method :select, :project
+
+    ##
+    # Either project the solution set or perform select as implemented
+    # by a superclass
+    # @yield solution
+    # @yieldparam [Solution] solution
+    # @return [RDF::Query::Solutions]
+    def select(*variables, &block)
+      if block_given?
+        super
+      else
+        project(*variables, &block)
+      end
+    end
 
     ##
     # Ensures that the solutions in this solution sequence are unique.
     #
-    # @return [void] `self`
-    def distinct
-      self.uniq!
-      self
+    # @yield solution
+    # @yieldparam [Solution] solution
+    # @return [RDF::Query::Solutions]
+    def distinct(&block)
+      return Solutions::Enumerator.new do |yielder|
+        self.distinct {|y| yielder << y}
+      end unless block_given?
+
+      Array(self).uniq.each(&block)
     end
     alias_method :distinct!, :distinct
     alias_method :reduced,   :distinct
@@ -223,13 +263,15 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] start
     #   zero or a positive or negative integer
-    # @return [void] `self`
-    def offset(start)
-      case start = start.to_i
-        when 0 then nil
-        else self.slice!(0...start)
-      end
-      self
+    # @return [RDF::Query::Solutions]
+    def offset(start, &block)
+      start = start.to_i
+      raise ArgumentError, "expected zero or a positive integer, got #{start}" if start < 0
+      return Solutions::Enumerator.new do |yielder|
+        self.offset(start) {|y| yielder << y}
+      end unless block_given?
+
+      (Array(self)[start..-1] || []).each(&block)
     end
     alias_method :offset!, :offset
 
@@ -239,17 +281,29 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] length
     #   zero or a positive integer
-    # @return [void] `self`
+    # @return [RDF::Query::Solutions]
     # @raise  [ArgumentError] if `length` is negative
-    def limit(length)
+    def limit(length, &block)
       length = length.to_i
       raise ArgumentError, "expected zero or a positive integer, got #{length}" if length < 0
-      case length
-        when 0 then self.clear
-        else self.slice!(length..-1) if length < self.size
-      end
-      self
+      return Solutions::Enumerator.new do |yielder|
+        self.limit(length) {|y| yielder << y}
+      end unless block_given?
+
+      (Array(self)[0, length] || []).each(&block)
     end
     alias_method :limit!, :limit
+
+    ##
+    # Duplicate the object, re-applying this module
+    #
+    # @return [RDF::Query::Solutions::Enumerator]
+    def dup
+      case self
+      when Solutions::Enumerator then self
+      else
+        Solutions::Enumerator.new {|yielder| Array(self).each {|e| yielder << e}}
+      end
+    end
   end # Solutions
 end; end # RDF::Query
