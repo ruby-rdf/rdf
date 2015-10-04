@@ -7,6 +7,10 @@ module RDF
       include Queryable
       include Enumerable
 
+      def method_missing(method, *args)
+        self.to_a if method.to_sym == :to_ary
+      end
+
       # Make sure returned arrays are also queryable
       def to_a
         return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
@@ -26,6 +30,10 @@ module RDF
     class Enumerator < ::Enumerator
       include Queryable
       include Enumerable
+
+      def method_missing(method, *args)
+        self.to_a if method.to_sym == :to_ary
+      end
 
       # Make sure returned arrays are also queryable
       def to_a

@@ -236,6 +236,11 @@ describe RDF::Query::Solutions do
     it {is_expected.to be_empty}
   end
 
+  describe "#variable_names" do
+    subject {solutions.variable_names}
+    specify {is_expected.to include(:author, :age, :name, :description, :updated, :created, :title, :price, :date)}
+  end
+
   its(:count) {is_expected.to eq 2}
 
   describe "#each" do
