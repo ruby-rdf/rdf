@@ -26,14 +26,16 @@ module RDF
   #   repository.each_statement { |statement| statement.inspect! }
   #
   # @example Inserting statements into a repository
-  #   repository.insert(*statements)
+  #   repository.insert(*statements) # poor performance if lots of statements!
+  #   repository.insertn(statements) # prefer this form if lots of statements.
   #   repository.insert(statement)
   #   repository.insert([subject, predicate, object])
   #   repository << statement
   #   repository << [subject, predicate, object]
   #
   # @example Deleting statements from a repository
-  #   repository.delete(*statements)
+  #   repository.delete(*statements) # poor performance if lots of statements!
+  #   repository.deleten(statements) # prefer this form if lots of statements.
   #   repository.delete(statement)
   #   repository.delete([subject, predicate, object])
   #

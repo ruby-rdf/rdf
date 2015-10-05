@@ -44,11 +44,26 @@ module RDF
     end
 
     ##
-    # Inserts RDF statements into `self`.
+    # Inserts multiple RDF statements into `self`.
+    #
+    # Warning: using splat argument syntax with a lot of arguments provided
+    # significantly affects performance. Consider using RDF::Writable#insertn
+    # to insert all statements in an efficient manner.
     #
     # @param  [Array<RDF::Statement>] statements
     # @return [RDF::Writable] `self`
+    # @see    RDF::Writable#insertn
     def insert(*statements)
+      insertn(statements)
+    end
+    alias_method :insert!, :insert
+
+    ##
+    # Efficiently inserts a single Array of RDF statements into `self`.
+    #
+    # @param  [Array<RDF::Statement>] statements
+    # @return [RDF::Writable] `self`
+    def insertn(statements)
       statements.map! do |value|
         case
           when value.respond_to?(:each_statement)
@@ -65,7 +80,6 @@ module RDF
 
       return self
     end
-    alias_method :insert!, :insert
 
   protected
 

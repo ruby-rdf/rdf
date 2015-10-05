@@ -12,7 +12,7 @@ describe RDF::Queryable do
   end
 
   context "Examples" do
-    subject { RDF::Repository.new.insert(*RDF::Spec.quads) }
+    subject { RDF::Repository.new.insertn(RDF::Spec.quads) }
 
     context "Querying for statements having a given predicate" do
       it "with array" do

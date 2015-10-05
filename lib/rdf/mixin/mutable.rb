@@ -72,7 +72,7 @@ module RDF
     end
 
     ##
-    # Inserts RDF statements into `self`.
+    # Inserts multiple RDF statements into `self`.
     #
     # @param  [Array<RDF::Statement>] statements
     # @raise  [TypeError] if `self` is immutable
@@ -85,7 +85,24 @@ module RDF
     end
 
     ##
-    # Updates RDF statements in `self`.
+    # Efficiently inserts a single Array of RDF statements into `self`.
+    #
+    # @param  [Array<RDF::Statement>] statements
+    # @raise  [TypeError] if `self` is immutable
+    # @return [Mutable]
+    # @see    RDF::Writable#insertn
+    def insertn(statements)
+      raise TypeError.new("#{self} is immutable") if immutable?
+
+      super # RDF::Writable#insertn
+    end
+
+    ##
+    # Updates multiple RDF statements in `self`.
+    #
+    # Warning: using splat argument syntax with a lot of arguments provided
+    # significantly affects performance. Consider using RDF::Mutable#updaten
+    # to update all statements in an efficient manner.
     #
     # `#update([subject, predicate, object])` is equivalent to
     # `#delete([subject, predicate, nil])` followed by
@@ -94,7 +111,20 @@ module RDF
     # @param  [Enumerable<RDF::Statement>] statements
     # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
+    # @see    RDF::Mutable#updaten
     def update(*statements)
+      updaten(statements)
+    end
+
+    alias_method :update!, :update
+
+    ##
+    # Efficiently updates a single Array of RDF statements in `self`.
+    #
+    # @param  [Enumerable<RDF::Statement>] statements
+    # @raise  [TypeError] if `self` is immutable
+    # @return [Mutable]
+    def updaten(statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
       statements.each do |statement|
@@ -105,10 +135,28 @@ module RDF
       end
     end
 
-    alias_method :update!, :update
+    ##
+    # Deletes multiple RDF statements from `self`.
+    # If any statement contains a {Query::Variable}, it is
+    # considered to be a pattern, and used to query
+    # self to find matching statements to delete.
+    #
+    # Warning: using splat argument syntax with a lot of arguments provided
+    # significantly affects performance. Consider using RDF::Mutable#deleten
+    # to update all statements in an efficient manner.
+    #
+    # @param  [Enumerable<RDF::Statement>] statements
+    # @raise  [TypeError] if `self` is immutable
+    # @return [Mutable]
+    # @see    RDF::Mutable#deleten
+    def delete(*statements)
+      deleten(statements)
+    end
+
+    alias_method :delete!, :delete
 
     ##
-    # Deletes RDF statements from `self`.
+    # Efficiently deletes a single Array of RDF statements from `self`.
     # If any statement contains a {Query::Variable}, it is
     # considered to be a pattern, and used to query
     # self to find matching statements to delete.
@@ -116,7 +164,7 @@ module RDF
     # @param  [Enumerable<RDF::Statement>] statements
     # @raise  [TypeError] if `self` is immutable
     # @return [Mutable]
-    def delete(*statements)
+    def deleten(statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
       statements.map! do |value|
@@ -136,8 +184,6 @@ module RDF
 
       return self
     end
-
-    alias_method :delete!, :delete
 
     ##
     # Deletes all RDF statements from `self`.

@@ -175,7 +175,7 @@ describe RDF::List do
       }.each do |name, list|
         it name do
           if list.is_a?(Array)
-            graph = RDF::Graph.new.insert(*list)
+            graph = RDF::Graph.new.insertn(list)
             list = RDF::List.new(list.first.subject, graph)
           end
           expect(list).to be_valid
@@ -211,7 +211,7 @@ describe RDF::List do
       }.each do |name, list|
         it name do
           if list.is_a?(Array)
-            graph = RDF::Graph.new.insert(*list)
+            graph = RDF::Graph.new.insertn(list)
             list = RDF::List.new(list.first.subject, graph)
           end
           expect(list).to be_invalid
