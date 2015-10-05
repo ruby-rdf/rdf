@@ -806,7 +806,7 @@ describe RDF::Query do
   end
 
   describe "#each_solution" do
-    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    let!(:graph) {RDF::Graph.new.insertn(RDF::Spec.triples)}
     it "enumerates solutions" do
       query = RDF::Query.new do
         pattern [:person, RDF.type, FOAF.Person]
@@ -820,7 +820,7 @@ describe RDF::Query do
   end
 
   describe "#each_statement" do
-    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    let!(:graph) {RDF::Graph.new.insertn(RDF::Spec.triples)}
     it "enumerates solutions" do
       query = RDF::Query.new do
         pattern [:person, RDF.type, FOAF.Person]
@@ -886,7 +886,7 @@ describe RDF::Query do
   end
 
   context "Examples" do
-    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    let!(:graph) {RDF::Graph.new.insertn(RDF::Spec.triples)}
     subject {
       query = RDF::Query.new do
         pattern [:person, RDF.type,  FOAF.Person]

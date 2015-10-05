@@ -270,6 +270,12 @@ describe RDF::NQuads::Writer do
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
 
+    it "#insertn" do
+      expect do
+        described_class.new.insertn(statements)
+      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+    end
+
     it "#write_statements (DEPRECATED)" do
       expect do
         expect do
