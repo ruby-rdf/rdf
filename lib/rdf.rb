@@ -44,7 +44,8 @@ module RDF
   autoload :NQuads,      'rdf/nquads'
 
   # RDF storage
-  autoload :Dataset,     'rdf/model/repository'
+  autoload :Changeset,   'rdf/changeset'
+  autoload :Dataset,     'rdf/model/dataset'
   autoload :Repository,  'rdf/repository'
   autoload :Transaction, 'rdf/transaction'
 

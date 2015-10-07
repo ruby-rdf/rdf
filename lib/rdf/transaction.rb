@@ -65,7 +65,9 @@ module RDF
     # Initializes this transaction.
     #
     # @param  [Hash{Symbol => Object}]  options
-    # @option options [RDF::Resource]   :context  (nil)
+    # @option options [Boolean]         :mutable (false)
+    #    Whether this is a read-only or read/write transaction.
+    # @option options [RDF::Resource]   :context (nil)
     #   Name of named graph to be affected if `inserts` or `deletes`
     #   do not have a `context`.
     # @option options [RDF::Resource]   :graph  (nil)
@@ -76,9 +78,10 @@ module RDF
     # @yieldparam [RDF::Transaction] tx
     def initialize(options = {}, &block)
       @options = options.dup
-      @context = @options.delete(:graph)  || @options.delete(:context)
-      @inserts = @options.delete(:insert) || RDF::Graph.new
-      @deletes = @options.delete(:delete) || RDF::Graph.new
+      @mutable = @options.delete(:mutable) || false
+      @context = @options.delete(:graph)   || @options.delete(:context)
+      @inserts = @options.delete(:insert)  || RDF::Graph.new
+      @deletes = @options.delete(:delete)  || RDF::Graph.new
       @inserts.extend(RDF::Enumerable) unless @inserts.kind_of?(RDF::Enumerable)
       @deletes.extend(RDF::Enumerable) unless @deletes.kind_of?(RDF::Enumerable)
 
@@ -91,6 +94,15 @@ module RDF
     end
 
     ##
+    # Returns `true` if this is a read/write transaction, `false` otherwise.
+    #
+    # @return [Boolean]
+    # @see     RDF::Writable#writable?
+    def writable?
+      @mutable
+    end
+
+    ##
     # Returns `false` to indicate that this transaction is append-only.
     #
     # Transactions do not support the `RDF::Enumerable` protocol directly.
@@ -100,7 +112,7 @@ module RDF
     # @return [Boolean]
     # @see    RDF::Readable#readable?
     def readable?
-      false
+      false # TODO: support RDF::Enumerable and RDF::Queryable.
     end
 
     ##
@@ -147,6 +159,7 @@ module RDF
     end
 
     protected
+
     ##
     # Appends an RDF statement to the sequence to insert when executed.
     #

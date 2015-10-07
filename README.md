@@ -28,8 +28,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby Ruby 1.9.2, Ruby 2.0, Rubinius and JRuby 1.7+.
-* Compatible with older Ruby versions with the help of the [Backports][] gem.
+* Compatible with Ruby Ruby 2.x, Rubinius and JRuby 1.7+ (in Ruby 2.0 mode).
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
 
@@ -364,7 +363,7 @@ The following vocabularies will be deprecated in RDF.rb 2.0 and moved to the rdf
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 1.9.2)
+* [Ruby](http://ruby-lang.org/) (>= 2.0)
 * [LinkHeader][] (>= 0.0.8)
 * Soft dependency on [RestClient][] (>= 1.7)
 
@@ -373,7 +372,7 @@ The following vocabularies will be deprecated in RDF.rb 2.0 and moved to the rdf
 The recommended installation method is via [RubyGems](http://rubygems.org/).
 To install the latest official release of RDF.rb, do:
 
-    % [sudo] gem install rdf             # Ruby 1.9.2+
+    % [sudo] gem install rdf             # Ruby 2+
 
 ## Download
 
@@ -452,7 +451,6 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD]:             http://yardoc.org/
 [YARD-GS]:          http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[Backports]:        http://rubygems.org/gems/backports
 [JSONLD doc]:       http://rubydoc.info/github/ruby-rdf/json-ld/frames
 [LinkedData doc]:   http://rubydoc.info/github/datagraph/linkeddata/master/frames
 [Microdata doc]:    http://rubydoc.info/github/ruby-rdf/rdf-microdata/frames

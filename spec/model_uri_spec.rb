@@ -415,7 +415,7 @@ describe RDF::URI do
         expect(u1).to eq u1
       end
     end
-    it "#canonicalize! alters resource", :ruby => "1.9" do
+    it "#canonicalize! alters resource" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")
       expect(u1.canonicalize!.to_s).to eq u2.to_s
