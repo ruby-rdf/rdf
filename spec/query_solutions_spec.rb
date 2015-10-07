@@ -126,12 +126,13 @@ describe RDF::Query::Solutions do
         expect(left.minus(right)).to be_a(Enumerable)
         expect(left.minus(right)).to be_a(RDF::Query::Solutions)
         expect(left.minus(right).to_a).to eq result.to_a
-       end
+      end
     end
   end
 
   describe "#order_by" do
     subject {solutions.order_by(:updated, lambda {|a, b| b <=> a})}
+    it {is_expected.to be_a(Enumerable)}
     it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains solutions in specified order" do
       expect(subject).to include(lit, uri)
@@ -141,6 +142,7 @@ describe RDF::Query::Solutions do
   describe "#select" do
     context "one variable" do
       subject {solutions.select(:title)}
+      it {is_expected.to be_a(Enumerable)}
       it {is_expected.to be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
@@ -152,6 +154,7 @@ describe RDF::Query::Solutions do
 
     context "two variables" do
       subject {solutions.select(:title, :description)}
+      it {is_expected.to be_a(Enumerable)}
       it {is_expected.to be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
@@ -164,6 +167,7 @@ describe RDF::Query::Solutions do
 
   describe "#project" do
     subject {solutions.project(:title)}
+    it {is_expected.to be_a(Enumerable)}
     it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains particular variables only" do
       expect(subject).to include(
@@ -175,6 +179,7 @@ describe RDF::Query::Solutions do
 
   describe "#distinct" do
     subject {RDF::Query::Solutions(solutions.to_a << uri).distinct}
+    it {is_expected.to be_a(Enumerable)}
     it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains distinct solutions" do
       expect(subject).to include(uri, lit)
@@ -195,6 +200,7 @@ describe RDF::Query::Solutions do
 
   describe "#offset" do
     subject {solutions.offset(20)}
+    it {is_expected.to be_a(Enumerable)}
     it {is_expected.to be_a(RDF::Query::Solutions)}
     it {is_expected.to be_empty}
 
@@ -213,6 +219,7 @@ describe RDF::Query::Solutions do
 
   describe "#limit" do
     subject {solutions.limit(1)}
+    it {is_expected.to be_a(Enumerable)}
     it {is_expected.to be_a(RDF::Query::Solutions)}
 
     describe "has stable count and size" do
@@ -230,8 +237,14 @@ describe RDF::Query::Solutions do
 
   describe "#offset+#limit" do
     subject {solutions.offset(20).limit(20)}
+    it {is_expected.to be_a(Enumerable)}
     it {is_expected.to be_a(RDF::Query::Solutions)}
     it {is_expected.to be_empty}
+  end
+
+  describe "#variable_names" do
+    subject {solutions.variable_names}
+    specify {is_expected.to include(:author, :age, :name, :description, :updated, :created, :title, :price, :date)}
   end
 
   describe "#count" do
