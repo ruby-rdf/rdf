@@ -43,9 +43,9 @@ module RDF
   class Repository
     include RDF::Countable
     include RDF::Enumerable
-    include RDF::Queryable
     include RDF::Mutable
     include RDF::Durable
+    include RDF::Queryable
 
     ##
     # Returns the options passed to this repository when it was constructed.
@@ -319,29 +319,33 @@ module RDF
       # Match elements with eql?, not ==
       # Context of `false` matches default context. Unbound variable matches non-false context
       # @private
-      # @see RDF::Queryable#query
-      def query_pattern(pattern)
-        context   = pattern.context
-        subject   = pattern.subject
-        predicate = pattern.predicate
-        object    = pattern.object
+      # @see RDF::Queryable#query_pattern
+      def query_pattern(pattern, options = {})
+        if block_given?
+          context   = pattern.context
+          subject   = pattern.subject
+          predicate = pattern.predicate
+          object    = pattern.object
 
-        cs = @data.has_key?(context) ? {context => @data[context]} : @data.dup
-        cs.each do |c, ss|
-          next unless context.nil? || context == false && !c || context.eql?(c)
-          ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
-          ss.each do |s, ps|
-            next unless subject.nil? || subject.eql?(s)
-            ps = ps.has_key?(predicate) ? {predicate => ps[predicate]} : ps.dup
-            ps.each do |p, os|
-              next unless predicate.nil? || predicate.eql?(p)
-              os = os.dup # TODO: is this really needed?
-              os.each do |o|
-                next unless object.nil? || object.eql?(o)
-                yield(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
+          cs = @data.has_key?(context) ? {context => @data[context]} : @data.dup
+          cs.each do |c, ss|
+            next unless context.nil? || context == false && !c || context.eql?(c)
+            ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
+            ss.each do |s, ps|
+              next unless subject.nil? || subject.eql?(s)
+              ps = ps.has_key?(predicate) ? {predicate => ps[predicate]} : ps.dup
+              ps.each do |p, os|
+                next unless predicate.nil? || predicate.eql?(p)
+                os = os.dup # TODO: is this really needed?
+                os.each do |o|
+                  next unless object.nil? || object.eql?(o)
+                  yield(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
+                end
               end
             end
           end
+        else
+          enum_for(:query_pattern, pattern, options)
         end
       end
 

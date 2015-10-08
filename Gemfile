@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gemspec
 
 group :develop do
-  gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
+  gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "feature/enumerables"
   gem 'linkeddata',     git: "git://github.com/ruby-rdf/linkeddata.git", branch: "develop"
   gem 'rdf-n3',         git: "git://github.com/ruby-rdf/rdf-n3.git", branch: "develop"
   gem "rdf-rdfxml",     git: "git://github.com/ruby-rdf/rdf-rdfxml.git", branch: "develop"

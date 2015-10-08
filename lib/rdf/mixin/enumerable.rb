@@ -117,11 +117,11 @@ module RDF
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<RDF::Statement>]
+    # @return [Array<RDF::Statement>]
     # @see    #each_statement
     # @see    #enum_statement
     def statements(options = {})
-      enum_statement
+      Array(enum_statement)
     end
 
     ##
@@ -149,9 +149,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_statement
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Statement>]
     #
-    # @return [void]
     # @see    #enum_statement
     def each_statement(&block)
       if block_given?
@@ -166,7 +165,7 @@ module RDF
     # FIXME: enum_for doesn't seem to be working properly
     # in JRuby 1.7, so specs are marked pending
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Statement>]
     # @see    #each_statement
     def enum_statement
       # Ensure that statements are queryable, countable and enumerable
@@ -181,11 +180,11 @@ module RDF
     # Returns all RDF triples.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
+    # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     # @see    #enum_triple
     def triples(options = {})
-      enum_statement.map(&:to_triple).to_enum # TODO: optimize
+      enum_statement.map(&:to_triple) # TODO: optimize
     end
 
     ##
@@ -214,9 +213,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_triple
-    #   @return [Enumerator]
+    #   @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     #
-    # @return [void]
     # @see    #enum_triple
     def each_triple
       if block_given?
@@ -230,7 +228,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_triple}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     def enum_triple
       Countable::Enumerator.new do |yielder|
@@ -243,11 +241,11 @@ module RDF
     # Returns all RDF quads.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
+    # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
     def quads(options = {})
-      enum_statement.map(&:to_quad).to_enum # TODO: optimize
+      enum_statement.map(&:to_quad) # TODO: optimize
     end
 
     ##
@@ -277,9 +275,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_quad
-    #   @return [Enumerator]
+    #   @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     #
-    # @return [void]
     # @see    #enum_quad
     def each_quad
       if block_given?
@@ -293,7 +290,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_quad}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     def enum_quad
       Countable::Enumerator.new do |yielder|
@@ -307,14 +304,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::Resource>]
+    # @return [Array<RDF::Resource>]
     # @see    #each_subject
     # @see    #enum_subject
     def subjects(options = {})
       if options[:unique] == false
-        enum_statement.map(&:subject).to_enum # TODO: optimize
+        enum_statement.map(&:subject).uniq # TODO: optimize
       else
-        enum_subject
+        Array(enum_subject)
       end
     end
 
@@ -342,9 +339,7 @@ module RDF
     #   @return [void]
     #
     # @overload each_subject
-    #   @return [Enumerator]
-    #
-    # @return [void]
+    #   @return [Enumerator<RDF::Resource>]
     # @see    #enum_subject
     def each_subject
       if block_given?
@@ -363,7 +358,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_subject}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Resource>]
     # @see    #each_subject
     def enum_subject
       enum_for(:each_subject)
@@ -375,14 +370,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::URI>]
+    # @return [Array<RDF::URI>]
     # @see    #each_predicate
     # @see    #enum_predicate
     def predicates(options = {})
       if options[:unique] == false
-        enum_statement.map(&:predicate).to_enum # TODO: optimize
+        enum_statement.map(&:predicate).uniq # TODO: optimize
       else
-        enum_predicate
+        Array(enum_predicate)
       end
     end
 
@@ -410,9 +405,7 @@ module RDF
     #   @return [void]
     #
     # @overload each_predicate
-    #   @return [Enumerator]
-    #
-    # @return [void]
+    #   @return [Enumerator<RDF::URI>]
     # @see    #enum_predicate
     def each_predicate
       if block_given?
@@ -431,7 +424,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_predicate}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::URI>]
     # @see    #each_predicate
     def enum_predicate
       enum_for(:each_predicate)
@@ -443,14 +436,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::Term>]
+    # @return [Array<RDF::Term>]
     # @see    #each_object
     # @see    #enum_object
     def objects(options = {})
       if options[:unique] == false
-        enum_statement.map(&:object).to_enum # TODO: optimize
+        enum_statement.map(&:object).uniq # TODO: optimize
       else
-        enum_object
+        Array(enum_object)
       end
     end
 
@@ -478,9 +471,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_object
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Term>]
     #
-    # @return [void]
     # @see    #enum_object
     def each_object # FIXME: deduplication
       if block_given?
@@ -499,7 +491,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_object}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Term>]
     # @see    #each_object
     def enum_object
       enum_for(:each_object)
@@ -511,14 +503,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::Resource>]
+    # @return [Array<RDF::Resource>]
     # @see    #each_context
     # @see    #enum_context
     def contexts(options = {})
       if options[:unique] == false
-        enum_statement.map(&:context).compact.to_enum # TODO: optimize
+        enum_statement.map(&:context).uniq.compact # TODO: optimize
       else
-        enum_context
+        Array(enum_context)
       end
     end
 
@@ -547,9 +539,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_context
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Resource>]
     #
-    # @return [void]
     # @see    #enum_context
     def each_context
       if block_given?
@@ -568,7 +559,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_context}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Resource>]
     # @see    #each_context
     def enum_context
       enum_for(:each_context)
@@ -590,9 +581,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_graph
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Graph>]
     #
-    # @return [void]
     # @see    #enum_graph
     # @since  0.1.9
     def each_graph
@@ -608,7 +598,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_graph}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Graph>]
     # @see    #each_graph
     # @since  0.1.9
     def enum_graph
@@ -691,7 +681,7 @@ module RDF
     def method_missing(meth, *args)
       writer = RDF::Writer.for(meth.to_s[3..-1].to_sym) if meth.to_s[0,3] == "to_"
       if writer
-        writer.buffer(:standard_prefixes => true) {|w| w << self}
+        writer.buffer(standard_prefixes: true) {|w| w << self}
       else
         super
       end

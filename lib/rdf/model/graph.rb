@@ -181,7 +181,7 @@ module RDF
     #
     # @return [Enumerator<RDF::Resource>]
     def contexts(options = {})
-      (named? ? [context] : []).to_enum.extend(RDF::Countable)
+      (named? ? [context] : []).extend(RDF::Countable)
     end
 
     ##
@@ -263,8 +263,8 @@ module RDF
 
     ##
     # @private
-    # @see RDF::Queryable#query
-    def query_pattern(pattern, &block)
+    # @see RDF::Queryable#query_pattern
+    def query_pattern(pattern, options = {}, &block)
       pattern = pattern.dup
       pattern.context = context || false
       @data.query(pattern, &block)
@@ -305,7 +305,7 @@ module RDF
     # @see    RDF::Enumerable#graphs
     # @since  0.2.0
     def graphs
-      enum_graph
+      Array(enum_graph)
     end
 
     ##

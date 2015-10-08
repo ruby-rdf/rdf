@@ -130,7 +130,7 @@ module RDF; class Query
     #   each matching statement
     # @yieldparam [RDF::Statement] statement
     #   an RDF statement matching this pattern
-    # @return [Enumerator]
+    # @return [Enumerable<RDF::Query::Pattern>]
     #   an enumerator yielding matching statements
     # @see    RDF::Queryable#query
     # @since  0.3.0
@@ -156,12 +156,13 @@ module RDF; class Query
           terms = variable_terms(name)
           break terms if terms.size > 1
         end
-        queryable.query(query) do |statement|
+        queryable.query(query).select do |statement|
           # Only yield those matching statements where the variable
           # constraint is also satisfied:
           # FIXME: `Array#uniq` uses `#eql?` and `#hash`, not `#==`
-          if matches = terms.map { |term| statement.send(term) }.uniq.size.equal?(1)
-            block.call(statement)
+          if terms.map { |term| statement.send(term) }.uniq.size.equal?(1)
+            yield statement if block_given?
+            true
           end
         end
       end
