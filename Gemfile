@@ -12,7 +12,7 @@ group :develop do
   gem 'rdf-microdata',  git: "git://github.com/ruby-rdf/rdf-microdata.git", branch: "develop"
   gem "rdf-xsd",        git: "git://github.com/ruby-rdf/rdf-xsd.git", branch: "develop"
   gem 'json-ld',        git: "git://github.com/ruby-rdf/json-ld.git", branch: "develop"
-  gem 'sparql',         git: "git://github.com/ruby-rdf/sparql.git", branch: "develop"
+  gem 'sparql',         git: "git://github.com/ruby-rdf/sparql.git", branch: "feature/solution-enumerators"
   gem 'sparql-client',  git: "git://github.com/ruby-rdf/sparql-client.git", branch: "develop"
   gem 'sxp',            git: "git://github.com/gkellogg/sxp-ruby.git"
   gem 'rest-client-components'
