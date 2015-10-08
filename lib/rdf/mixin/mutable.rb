@@ -74,9 +74,20 @@ module RDF
     ##
     # Inserts RDF statements into `self`.
     #
-    # @param  [Array<RDF::Statement>] statements
-    # @raise  [TypeError] if `self` is immutable
-    # @return [Mutable]
+    # @note using splat argument syntax with excessive arguments provided
+    # significantly affects performance. Use Enumerator form for large
+    # numbers of statements.
+    #
+    # @overload insert(*statements)
+    #   @param  [Array<RDF::Statement>] statements
+    #   @raise  [TypeError] if `self` is immutable
+    #   @return [self]
+    #
+    # @overload insert(statements)
+    #   @param  [Enumerable<RDF::Statement>] statements
+    #   @raise  [TypeError] if `self` is immutable
+    #   @return [self]
+    #
     # @see    RDF::Writable#insert
     def insert(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
@@ -91,11 +102,22 @@ module RDF
     # `#delete([subject, predicate, nil])` followed by
     # `#insert([subject, predicate, object])` unless `object` is `nil`.
     #
-    # @param  [Enumerable<RDF::Statement>] statements
-    # @raise  [TypeError] if `self` is immutable
-    # @return [Mutable]
+    # @note using splat argument syntax with excessive arguments provided
+    # significantly affects performance. Use Enumerator form for large
+    # numbers of statements.
+    #
+    # @overload update(*statements)
+    #   @param  [Array<RDF::Statement>] statements
+    #   @raise  [TypeError] if `self` is immutable
+    #   @return [self]
+    #
+    # @overload update(statements)
+    #   @param  [Enumerable<RDF::Statement>] statements
+    #   @raise  [TypeError] if `self` is immutable
+    #   @return [self]
     def update(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
+      statements = statements[0] if statements.length == 1 && statements[0].is_a?(Enummerable)
 
       statements.each do |statement|
         if (statement = Statement.from(statement))
@@ -113,9 +135,19 @@ module RDF
     # considered to be a pattern, and used to query
     # self to find matching statements to delete.
     #
-    # @param  [Enumerable<RDF::Statement>] statements
-    # @raise  [TypeError] if `self` is immutable
-    # @return [Mutable]
+    # @note using splat argument syntax with excessive arguments provided
+    # significantly affects performance. Use Enumerator form for large
+    # numbers of statements.
+    #
+    # @overload delete(*statements)
+    #   @param  [Array<RDF::Statement>] statements
+    #   @raise  [TypeError] if `self` is immutable
+    #   @return [self]
+    #
+    # @overload delete(statements)
+    #   @param  [Enumerable<RDF::Statement>] statements
+    #   @raise  [TypeError] if `self` is immutable
+    #   @return [self]
     def delete(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
