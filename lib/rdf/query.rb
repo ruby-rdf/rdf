@@ -335,7 +335,6 @@ module RDF
 
         old_solutions.each do |solution|
           found_match = false
-          require 'byebug'; byebug unless solution.is_a?(Solution)
           pattern.execute(queryable, solution) do |statement|
             found_match = true
             solutions << solution.merge(pattern.solution(statement))
