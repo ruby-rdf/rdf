@@ -274,7 +274,7 @@ module RDF
       ##
       # @private
       # @see RDF::Enumerable#each_statement
-      def each_statement
+      def each_statement(&block)
         if block_given?
           # Note that to iterate in a more consistent fashion despite
           # possible concurrent mutations to `@data`, we use `#dup` to make
@@ -284,7 +284,8 @@ module RDF
             ss.dup.each do |s, ps|
               ps.dup.each do |p, os|
                 os.dup.each do |o|
-                  yield(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
+                  # FIXME: yield has better performance, but broken in MRI 2.2: See https://bugs.ruby-lang.org/issues/11451.
+                  block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
                 end
               end
             end
@@ -320,7 +321,7 @@ module RDF
       # Context of `false` matches default context. Unbound variable matches non-false context
       # @private
       # @see RDF::Queryable#query
-      def query_pattern(pattern)
+      def query_pattern(pattern, &block)
         context   = pattern.context
         subject   = pattern.subject
         predicate = pattern.predicate
@@ -338,7 +339,7 @@ module RDF
               os = os.dup # TODO: is this really needed?
               os.each do |o|
                 next unless object.nil? || object.eql?(o)
-                yield(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
+                block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
               end
             end
           end
