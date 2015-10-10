@@ -10,7 +10,7 @@ end
 
 describe RDF::Query do
   EX = RDF::Vocabulary.new('http://example.org/')
-  FOAF = RDF::FOAF
+  FOAF = RDF::Vocab::FOAF
 
   context "when created" do
     let(:pattern) {RDF::Query::Pattern.new(RDF::URI("a"), RDF::URI("b"), "c")}
@@ -839,7 +839,7 @@ describe RDF::Query do
         true
       ],
       "query with valid pattern" => [
-        described_class.new {pattern [RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var]},
+        described_class.new {pattern [RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var]},
         true
       ],
       "query with invalid pattern" => [
@@ -848,21 +848,21 @@ describe RDF::Query do
       ],
       "query with optional pattern" => [
         described_class.new {
-          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var, optional: true)
         },
         true
       ],
       "query with required and optional patterns" => [
         described_class.new {
-          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var)
-          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::DC.creator, :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::URI("http://purl.org/dc/terms/creator"), :var, optional: true)
         },
         true
       ],
       "query with optional and required patterns" => [
         described_class.new {
-          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::DC.creator, :var, optional: true)
-          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::URI("http://purl.org/dc/terms/creator"), :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var)
         },
         false
       ],

@@ -19,8 +19,8 @@ module RDF
     # actual lower-level query pattern matching implementation.
     #
     # @example Querying for statements having a given predicate
-    #     queryable.query([nil, RDF::DOAP.developer, nil])
-    #     queryable.query(:predicate => RDF::DOAP.developer) do |statement|
+    #     queryable.query([nil, RDF::Vocab::DOAP.developer, nil])
+    #     queryable.query(:predicate => RDF::Vocab::DOAP.developer) do |statement|
     #       puts statement.inspect
     #     end
     #

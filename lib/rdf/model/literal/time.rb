@@ -10,7 +10,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#time
   # @since 0.2.1
   class Time < Literal
-    DATATYPE = XSD.time
+    DATATYPE = RDF::XSD.time
     GRAMMAR  = %r(\A(\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
     FORMAT   = '%H:%M:%SZ'.freeze
 

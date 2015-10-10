@@ -11,7 +11,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#double
   # @since 0.2.1
   class Double < Numeric
-    DATATYPE = XSD.double
+    DATATYPE = RDF::XSD.double
     GRAMMAR  = /^NaN|(?:[\+\-]?(?:INF|(?:\d+(\.\d*)?([eE][\+\-]?\d+)?)))$/.freeze
 
     ##

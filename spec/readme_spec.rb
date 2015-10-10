@@ -20,13 +20,13 @@ describe 'README' do
 
         RDF::Writer.open("hello.nt") do |writer|
           writer << RDF::Graph.new do |graph|
-            graph << [:hello, RDF::DC.title, "Hello, world!"]
+            graph << [:hello, RDF::RDFS.label, "Hello, world!"]
           end
         end
       },
       :example2 => lambda {
         require 'rdf/ntriples'
-        graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
+        graph = RDF::Graph.new << [:hello, RDF::RDFS.label, "Hello, world!"]
         File.open("hello.nt", "w") {|f| f << graph.dump(:ntriples)}
       }
     }.each do |example, code|
@@ -42,7 +42,7 @@ describe 'README' do
         end
 
         it "should produce the expected data" do
-          expect(File.read('hello.nt')).to eq %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" .\n)
+          expect(File.read('hello.nt')).to eq %Q(_:hello <http://www.w3.org/2000/01/rdf-schema#label> "Hello, world!" .\n)
         end
       end
     end
@@ -131,13 +131,13 @@ describe 'README' do
 
         RDF::Writer.open("hello.nq") do |writer|
           writer << RDF::Repository.new do |repo|
-            repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+            repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
           end
         end
       },
       :example2 => lambda {
         require 'rdf/nquads'
-        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
         File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
       },
     }.each do |example, code|
@@ -154,7 +154,7 @@ describe 'README' do
 
         it "should produce the expected data" do
           subject
-          expect(File.read('hello.nq')).to eq %Q(_:hello <http://purl.org/dc/terms/title> "Hello, world!" <context> .\n)
+          expect(File.read('hello.nq')).to eq %Q(_:hello <http://www.w3.org/2000/01/rdf-schema#label> "Hello, world!" <context> .\n)
         end
       end
     end
@@ -162,11 +162,8 @@ describe 'README' do
 
   context "the 'Using pre-defined RDF vocabularies' example" do
     subject do
-      RDF::DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
-      RDF::FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
       RDF.type           #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
       RDF::RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
-      RDF::RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
       RDF::OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
       RDF::XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
     end
@@ -182,9 +179,9 @@ describe 'README' do
     let(:query) do
       RDF::Query.new({
         :person => {
-          RDF.type  => RDF::FOAF.Person,
-          RDF::FOAF.name => :name,
-          RDF::FOAF.mbox => :email,
+          RDF.type  => RDF::Vocab::FOAF.Person,
+          RDF::Vocab::FOAF.name => :name,
+          RDF::Vocab::FOAF.mbox => :email,
         }
       })
     end
@@ -231,7 +228,7 @@ describe 'README' do
     }.each do |example, code|
       context example do
         it {expect {code.call}.not_to raise_error}
-        it {expect(code.call).to eq RDF::FOAF.knows}
+        it {expect(code.call).to eq RDF::Vocab::FOAF.knows}
       end
     end
   end

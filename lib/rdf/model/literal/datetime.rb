@@ -5,7 +5,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#dateTime#boolean
   # @since 0.2.1
   class DateTime < Literal
-    DATATYPE = XSD.dateTime
+    DATATYPE = RDF::XSD.dateTime
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
     FORMAT   = '%Y-%m-%dT%H:%M:%SZ'.freeze
 

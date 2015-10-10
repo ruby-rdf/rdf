@@ -55,7 +55,19 @@ module RDF
   autoload :Vocabulary,  'rdf/vocabulary'
   autoload :StrictVocabulary,  'rdf/vocabulary'
   VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
-  VOCABS.each { |v| autoload v.to_s.upcase.to_sym, "rdf/vocab/#{v}" unless v == :rdf }
+
+  # Use const_missing instead of autoload to load most vocabularies so we can provide deprecation messages
+  def self.const_missing(constant)
+    if VOCABS.include?(constant.to_s.downcase.to_sym)
+      warn %([DEPRECATION] the #{constant} vocabulary will be moved to the rdf-vocab gem
+        for the RDF.rb 2.0 release. Use as RDF::Vocab::#{constant}, or include RDF::Vocab in the RDF module.
+      ).gsub(/^\s+/, '') unless [:OWL, :RDFS, :RDFV, :XSD].include?(constant)
+      require "rdf/vocab/#{constant.to_s.downcase}"
+      const_get(constant)
+    else
+      super
+    end
+  end
 
   # Utilities
   autoload :Util,        'rdf/util'
@@ -203,7 +215,7 @@ module RDF
   end
 
   ##
-  # Delegate other methods to RDF::RDF
+  # Delegate other methods to RDF::RDFV
   def self.method_missing(property, *args, &block)
     if args.empty?
       # Special-case rdf:_n for all integers

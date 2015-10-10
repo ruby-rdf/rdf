@@ -92,7 +92,7 @@ operations on RDF files using available readers and writers.
 ### Writing RDF data using the [N-Triples][] format
 
     require 'rdf/ntriples'
-    graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
+    graph = RDF::Graph.new << [:hello, RDF::RDFS.label, "Hello, world!"]
     graph.dump(:ntriples)
     
 or
@@ -146,7 +146,7 @@ appropriate writer to use.
 
     RDF::Writer.open("hello.nq", :format => :nquads) do |writer|
       writer << RDF::Repository.new do |repo|
-        repo << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+        repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
       end
     end
 
@@ -154,14 +154,14 @@ A specific sub-type of Writer can also be invoked directly:
 
     require 'rdf/nquads'
 
-    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::DC.title, "Hello, world!", :context => RDF::URI("context"))
+    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
     File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods
 {RDF::Enumerable} implements `to_{format}` for each available instance of {RDF::Reader}.
 For example, if `rdf/turtle` is loaded, this allows the following:
 
-    graph = RDF::Graph.new << [:hello, RDF::DC.title, "Hello, world!"]
+    graph = RDF::Graph.new << [:hello, RDF::RDFS.label, "Hello, world!"]
     graph.to_ttl
 
 Similarly, {RDF::Mutable} implements `from_{format}` for each available instance

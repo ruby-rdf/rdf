@@ -162,14 +162,14 @@ describe RDF::Query::Pattern do
 
   context "validataion" do
     {
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(nil, RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
       described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, nil) => true,
-      described_class.new(:var, RDF::DC.creator, RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => true,
+      described_class.new(:var, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
       described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), :var, RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.creator, :var) => true,
-      described_class.new(RDF::Literal("literal"), RDF::DC.creator, RDF::URI("http://ar.to/#self")) => false,
+      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var) => true,
+      described_class.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
       described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
       described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
     }.each do |st, valid|

@@ -13,8 +13,8 @@ module RDF
   #   repository = ...
   #   RDF::Transaction.execute(repository) do |tx|
   #     subject = RDF::URI("http://example.org/article")
-  #     tx.delete [subject, RDF::DC.title, "Old title"]
-  #     tx.insert [subject, RDF::DC.title, "New title"]
+  #     tx.delete [subject, RDF::RDFS.label, "Old title"]
+  #     tx.insert [subject, RDF::RDFS.label, "New title"]
   #   end
   #
   # @since 0.3.0

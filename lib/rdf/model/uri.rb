@@ -616,9 +616,9 @@ module RDF
     # Returns a qualified name (QName) for this URI based on available vocabularies, if possible.
     #
     # @example
-    #   RDF::URI('http://purl.org/dc/terms/').qname             #=> [:dc, nil]
-    #   RDF::URI('http://purl.org/dc/terms/title').qname        #=> [:dc, :title]
-    #   RDF::DC.title.qname                                     #=> [:dc, :title]
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname       #=> [:rdfs, nil]
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname  #=> [:rdfs, :label]
+    #   RDF::RDFS.label.qname                                         #=> [:rdfs, :label]
     #
     # @return [Array(Symbol, Symbol)] or `nil` if no QName found
     def qname
@@ -710,9 +710,9 @@ module RDF
     # Checks whether this URI the same term as `other`.
     #
     # @example
-    #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/')) #=> true
-    #   RDF::URI('http://t.co/').eql?('http://t.co/')           #=> false
-    #   RDF::URI('http://purl.org/dc/terms/').eql?(RDF::DC)     #=> false
+    #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/'))    #=> true
+    #   RDF::URI('http://t.co/').eql?('http://t.co/')              #=> false
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#').eql?(RDF::RDFS) #=> false
     #
     # @param  [RDF::URI] other
     # @return [Boolean] `true` or `false`
@@ -728,7 +728,7 @@ module RDF
     # @example
     #   RDF::URI('http://t.co/') == RDF::URI('http://t.co/')    #=> true
     #   RDF::URI('http://t.co/') == 'http://t.co/'              #=> true
-    #   RDF::URI('http://purl.org/dc/terms/') == RDF::DC        #=> true
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#') == RDF::RDFS        #=> true
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
@@ -752,7 +752,7 @@ module RDF
     #   RDF::URI('http://example.org/') === /foobar/            #=> false
     #   RDF::URI('http://t.co/') === RDF::URI('http://t.co/')   #=> true
     #   RDF::URI('http://t.co/') === 'http://t.co/'             #=> true
-    #   RDF::URI('http://purl.org/dc/terms/') === RDF::DC       #=> true
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#') === RDF::RDFS       #=> true
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`

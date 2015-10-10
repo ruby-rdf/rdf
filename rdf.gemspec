@@ -32,6 +32,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-rdfxml',  '~> 1.1'
   gem.add_development_dependency 'rdf-rdfa',    '~> 1.1'
   gem.add_development_dependency 'rdf-turtle',  '~> 1.1'
+  gem.add_development_dependency 'rdf-vocab',   '~> 0.8'
   gem.add_development_dependency 'rdf-xsd',     '~> 1.1'
   gem.add_development_dependency 'rest-client', '~> 1.7'
   gem.add_development_dependency 'rspec',       '~> 3.2.0'

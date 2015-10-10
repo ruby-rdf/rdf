@@ -36,8 +36,8 @@ describe RDF::Vocabulary do
 
   describe "#each" do
     it "inumerates pre-defined vocabularies" do
-      expect {|b| RDF::Vocabulary.each(&b)}.to yield_control.at_least(10).times
-      expect(RDF::Vocabulary.each.to_a).to include(RDF, RDF::CC, RDF::DC, RDF::RDFS)
+      expect {|b| RDF::Vocabulary.each(&b)}.to yield_control.at_least(3).times
+      expect(RDF::Vocabulary.each.to_a).to include(RDF, RDF::RDFS, RDF::OWL)
     end
 
     it "inumerates properties of a subclass" do
@@ -256,8 +256,8 @@ describe RDF::Vocabulary do
 
   describe ".imports" do
     {
-      RDF::FOAF => [],
-      RDF::WOT => [RDF::RDFS, RDF::OWL]
+      RDF::Vocab::FOAF => [],
+      RDF::Vocab::WOT => [RDF::RDFS, RDF::OWL]
     }.each do |v, r|
       context v.to_uri do
         subject {v}
@@ -265,14 +265,14 @@ describe RDF::Vocabulary do
       end
     end
 
-    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
+    specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
   end
 
   describe ".imported_from" do
     {
-      RDF::FOAF => [RDF::DOAP, RDF::MO],
-      RDF::RDFS => [RDF::WOT],
-      RDF::OWL => [RDF::WOT]
+      RDF::Vocab::FOAF => [RDF::Vocab::DOAP, RDF::Vocab::MO],
+      RDF::RDFS => [RDF::Vocab::WOT],
+      RDF::OWL => [RDF::Vocab::WOT]
     }.each do |v, r|
       context v.to_uri do
         subject {v}

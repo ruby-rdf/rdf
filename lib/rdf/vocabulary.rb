@@ -12,45 +12,17 @@ module RDF
   # The following vocabularies are pre-defined for your convenience:
   #
   # * {RDF}         - Resource Description Framework (RDF)
-  # * {RDF::CC}     - Creative Commons (CC)
-  # * {RDF::CERT}   - W3 Authentication Certificate (CERT)
-  # * {RDF::DC}     - Dublin Core (DC)
-  # * {RDF::DC11}   - Dublin Core 1.1 (DC11) _deprecated_
-  # * {RDF::DOAP}   - Description of a Project (DOAP)
-  # * {RDF::EXIF}   - Exchangeable Image File Format (EXIF)
-  # * {RDF::FOAF}   - Friend of a Friend (FOAF)
-  # * {RDF::GEO}    - WGS84 Geo Positioning (GEO)
-  # * {RDF::GR}     - Good Relations
-  # * {RDF::HT}   - Hypertext Transfer Protocol (HTTP)
-  # * {RDF::ICAL}   - iCal
-  # * {RDF::MA}     - W3C Meda Annotations
-  # * {RDF::OG}     - FaceBook OpenGraph
   # * {RDF::OWL}    - Web Ontology Language (OWL)
-  # * {RDF::PROV}   - W3C Provenance Ontology
   # * {RDF::RDFS}   - RDF Schema (RDFS)
-  # * {RDF::RSA}    - W3 RSA Keys (RSA)
-  # * {RDF::RSS}    - RDF Site Summary (RSS)
-  # * {RDF::SCHEMA} - Schema.org
-  # * {RDF::SIOC}   - Semantically-Interlinked Online Communities (SIOC)
-  # * {RDF::SKOS}   - Simple Knowledge Organization System (SKOS)
-  # * {RDF::SKOSXL} - SKOS Simple Knowledge Organization System eXtension for Labels (SKOS-XL)
-  # * {RDF::V}      - Data Vocabulary
-  # * {RDF::VCARD}  - vCard vocabulary
-  # * {RDF::VOID}   - Vocabulary of Interlinked Datasets (VoID)
-  # * {RDF::WDRS}   - Protocol for Web Description Resources (POWDER)
-  # * {RDF::WOT}    - Web of Trust (WOT)
-  # * {RDF::XHTML}  - Extensible HyperText Markup Language (XHTML)
-  # * {RDF::XHV}    - W3C XHTML Vocabulary
   # * {RDF::XSD}    - XML Schema (XSD)
+  #
+  # Other vocabularies are defined in the [rdf-vocab](http://rubygems.org/gems/rdf-vocab) gem
   #
   # @example Using pre-defined RDF vocabularies
   #   include RDF
   #
-  #   DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
-  #   FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
   #   RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
   #   RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
-  #   RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
   #   OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
   #   XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
   #

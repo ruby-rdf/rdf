@@ -4,7 +4,7 @@ module RDF
   #
   # @example Creating an RDF statement
   #   s = RDF::URI.new("http://rubygems.org/gems/rdf")
-  #   p = RDF::DC.creator
+  #   p = RDF::Vocab::DC.creator
   #   o = RDF::URI.new("http://ar.to/#self")
   #   RDF::Statement(s, p, o)
   #
@@ -15,7 +15,7 @@ module RDF
   # @example Creating an RDF statement from a `Hash`
   #   RDF::Statement({
   #     :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
-  #     :predicate => RDF::DC.creator,
+  #     :predicate => RDF::Vocab::DC.creator,
   #     :object    => RDF::URI.new("http://ar.to/#self"),
   #   })
   #
