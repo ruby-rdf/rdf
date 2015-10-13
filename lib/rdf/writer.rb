@@ -363,7 +363,7 @@ module RDF
     # @return [void] `self`
     # @deprecated Please use {RDF::Writable#insert_graph} instead 
     def write_graph(graph)
-      warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead."
+      warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       graph.each_triple { |*triple| write_triple(*triple) }
       self
     end
@@ -373,7 +373,7 @@ module RDF
     # @return [void] `self`
     # @deprecated replace by `RDF::Writable#insert`
     def write_statements(*statements)
-      warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead."
+      warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       statements.each { |statement| write_statement(statement) }
       self
     end

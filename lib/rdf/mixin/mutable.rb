@@ -41,7 +41,7 @@ module RDF
     # @return [void]
     def load(filename, options = {})
       if options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead."
+        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
       raise TypeError.new("#{self} is immutable") if immutable?

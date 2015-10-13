@@ -61,6 +61,7 @@ module RDF
     if VOCABS.include?(constant.to_s.downcase.to_sym)
       warn %([DEPRECATION] the #{constant} vocabulary will be moved to the rdf-vocab gem
         for the RDF.rb 2.0 release. Use as RDF::Vocab::#{constant}, or include RDF::Vocab in the RDF module.
+        Called from #{Gem.location_of_caller.join(':')}
       ).gsub(/^\s+/, '') unless [:OWL, :RDFS, :RDFV, :XSD].include?(constant)
       require "rdf/vocab/#{constant.to_s.downcase}"
       const_get(constant)

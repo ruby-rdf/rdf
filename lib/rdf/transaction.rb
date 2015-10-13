@@ -42,13 +42,13 @@ module RDF
 
     # @deprecated Use {graph_name}, {context} is deprecated in RDF.rb 2.0.
     def context
-      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0"
+      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	  graph_name
     end
 
     # @deprecated Use {#graph_name=}, {#context=} is deprecated in RDF.rb 2.0.
     def context=(value)
-      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0"
+      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	  self.graph_name = value
     end
 
@@ -91,7 +91,7 @@ module RDF
     def initialize(options = {}, &block)
       @options = options.dup
       if @options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead."
+        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         @options[:graph_name] ||= @options.delete(:context)
       end
       @graph_name = @options.delete(:graph) || @options.delete(:graph_name)

@@ -105,7 +105,7 @@ module RDF
     # @yieldparam [Repository] repository
     def initialize(options = {}, &block)
       if options[:with_context]
-        warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead."
+        warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:with_context)
       end
       @options = {with_graph_name: true}.merge(options)
@@ -237,7 +237,7 @@ module RDF
         case feature.to_sym
           #statement named graphs
           when :context
-            warn "[DEPRECATION] the :context feature is deprecated in RDF.rb 2.0; use :graph_name instead"
+            warn "[DEPRECATION] the :context feature is deprecated in RDF.rb 2.0; use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
             @options[:with_context] || @options[:with_graph_name]
           when :graph_name   then @options[:with_graph_name]
           when :inference then false  # forward-chaining inference
@@ -309,7 +309,7 @@ module RDF
       # @see RDF::Enumerable#has_context?
       # @deprecated Use {has_graph?} instead.
       def has_context?(value)
-       warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead."
+       warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}"
        has_graph?(value)
       end
 
@@ -331,7 +331,7 @@ module RDF
       # @see RDF::Enumerable#each_context
       # @deprecated Use {each_graph} instead.
       def each_context(&block)
-        warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead."
+        warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}"
         if block_given?
           contexts = @data.keys
           contexts.delete(DEFAULT_GRAPH)

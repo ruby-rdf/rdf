@@ -511,7 +511,7 @@ module RDF
     # @see    #enum_context
     # @deprecated use {graph_names}, {contexts} is deprecated in RDF.rb 2.0.
     def contexts(options = {})
-      warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0"
+      warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if options[:unique] == false
         enum_statement.map(&:context).compact.to_enum # TODO: optimize
       else
@@ -543,7 +543,7 @@ module RDF
     # @return [Boolean]
     # @deprecated Use {has_graph?}, {has_context?} is deprecated in RDF.rb 2.0.
     def has_context?(value)
-      warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0"
+      warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       has_graph?(value)
     end
 
@@ -567,7 +567,7 @@ module RDF
     # @see    #enum_context
     # @deprecated Use {each_graph}, {each_context} is deprecated in RDF.rb 2.0.
     def each_context
-      warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0"
+      warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if block_given?
         values = {}
         each_statement do |statement|
@@ -588,7 +588,7 @@ module RDF
     # @see    #each_context
     # @deprecated Use {enum_graph}, {enum_context} is deprecated in RDF.rb 2.0.
     def enum_context
-      warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0"
+      warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       enum_for(:each_context)
     end
     alias_method :enum_contexts, :enum_context

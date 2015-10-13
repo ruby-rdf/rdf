@@ -169,7 +169,7 @@ module RDF::NTriples
       while
         (string.sub!(ESCAPE_SURROGATE) do
           if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
-            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in a future release."
+            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
             s = [$1, $2].pack('H*H*')
             s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8)
           else

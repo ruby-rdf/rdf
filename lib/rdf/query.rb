@@ -185,7 +185,7 @@ module RDF
     def initialize(*patterns, &block)
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
       if @options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Query#initialize is deprecated in RDF.rb 2.0, use :graph_name instead."
+        warn "[DEPRECATION] the :contexts option to Query#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         @options[:graph_name] ||= options.delete(:context)
       end
       patterns << @options if patterns.empty?
@@ -303,7 +303,7 @@ module RDF
       validate!
       options = options.dup
       if options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Query#execute is deprecated in RDF.rb 2.0, use :graph_name instead."
+        warn "[DEPRECATION] the :contexts option to Query#execute is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
 
@@ -438,7 +438,7 @@ module RDF
     # @return [RDF::IRI, RDF::Query::Variable]
     # @deprecated {#context=} is removed in in RDF.rb 2.0, use {#graph_name=} instead.
     def context=(value)
-      warn "[DEPRECATION] Query#context= is deprecated in RDF.rb 2.0, use Query#graph_name= instead."
+      warn "[DEPRECATION] Query#context= is deprecated in RDF.rb 2.0, use Query#graph_name= instead. Called from #{Gem.location_of_caller.join(':')}"
       self.graph_name = value
     end
 
@@ -453,7 +453,7 @@ module RDF
     # @return [RDF::IRI, RDF::Query::Variable]
     # @deprecated {context} is removin in RDF.rb 2.0, use {graph_name} instead.
     def context
-      warn "[DEPRECATION] Query#context is deprecated in RDF.rb 2.0, use Query#graph_name instead."
+      warn "[DEPRECATION] Query#context is deprecated in RDF.rb 2.0, use Query#graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
       graph_name
     end
 
@@ -466,7 +466,7 @@ module RDF
     # Apply the context specified (or configured) to all patterns that have no context
     # @param [RDF::IRI, RDF::Query::Variable] context (self.context)
     def apply_context(context = options[:context])
-      warn "[DEPRECATION] Query#apply_context is deprecated in RDF.rb 2.0, use Query#apply_graph_name instead."
+      warn "[DEPRECATION] Query#apply_context is deprecated in RDF.rb 2.0, use Query#apply_graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
       apply_graph_name(context)
     end
 
