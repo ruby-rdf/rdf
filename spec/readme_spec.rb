@@ -131,13 +131,13 @@ describe 'README' do
 
         RDF::Writer.open("hello.nq") do |writer|
           writer << RDF::Repository.new do |repo|
-            repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
+            repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("context"))
           end
         end
       },
       :example2 => lambda {
         require 'rdf/nquads'
-        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
+        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("context"))
         File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
       },
     }.each do |example, code|

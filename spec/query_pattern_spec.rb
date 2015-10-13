@@ -14,11 +14,11 @@ describe RDF::Query::Pattern do
       end
 
       it "creates using quad array" do
-        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(:s, :p, :o, :context => :c)
+        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(:s, :p, :o, :graph_name => :c)
       end
 
       it "creates using hash" do
-        expect(described_class.from(:subject => :s, :predicate => :p, :object => :o, :context => :c)).to eq described_class.new(:s, :p, :o, :context => :c)
+        expect(described_class.from(:subject => :s, :predicate => :p, :object => :o, :graph_name => :c)).to eq described_class.new(:s, :p, :o, :graph_name => :c)
       end
     end
 
@@ -122,18 +122,18 @@ describe RDF::Query::Pattern do
     end
   end
 
-  context "with a context" do
+  context "with a graph_name" do
     let(:s) {RDF::Query::Variable.new(:s, true)}
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
     it "uses a variable for a symbol" do
-      pattern = described_class.new(s, p, o, :context => :c)
-      expect(pattern.context).to eq RDF::Query::Variable.new(:c)
+      pattern = described_class.new(s, p, o, :graph_name => :c)
+      expect(pattern.graph_name).to eq RDF::Query::Variable.new(:c)
     end
-    
+
     it "uses a constant for :default" do
-      pattern = described_class.new(s, p, o, :context => false)
-      expect(pattern.context).to eq false
+      pattern = described_class.new(s, p, o, :graph_name => false)
+      expect(pattern.graph_name).to eq false
     end
   end
   

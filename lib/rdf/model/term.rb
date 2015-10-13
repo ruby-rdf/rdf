@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF term.
   #
-  # Terms can be used as subjects, predicates, objects, and contexts of
+  # Terms can be used as subjects, predicates, objects, and graph names of
   # statements.
   #
   # @since 0.3.0

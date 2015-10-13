@@ -35,13 +35,25 @@ module RDF
 
     ##
     # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] context
+    # @!attribute [rw] graph_name
     # @return [RDF::Resource]
     # @since 1.1.0
-    attr_accessor :context
+    attr_accessor :graph_name
 
-    alias_method :graph, :context
-    alias_method :graph=, :context=
+    # @deprecated Use {graph_name}, {context} is deprecated in RDF.rb 2.0.
+    def context
+      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0"
+	  graph_name
+    end
+
+    # @deprecated Use {#graph_name=}, {#context=} is deprecated in RDF.rb 2.0.
+    def context=(value)
+      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0"
+	  self.graph_name = value
+    end
+
+    alias_method :graph, :graph_name
+    alias_method :graph=, :graph_name=
 
     ##
     # RDF statements to delete when executed.
@@ -66,19 +78,25 @@ module RDF
     #
     # @param  [Hash{Symbol => Object}]  options
     # @option options [RDF::Resource]   :context  (nil)
+    #   Alias for `:graph_name`. Deprected in RDF.rb 2.0.
+    # @option options [RDF::Resource]   :graph_name (nil)
     #   Name of named graph to be affected if `inserts` or `deletes`
-    #   do not have a `context`.
+    #   do not have a `graph_name`.
     # @option options [RDF::Resource]   :graph  (nil)
-    #   Alias for `:context`.
+    #   Alias for `:graph_name`.
     # @option options [RDF::Enumerable] :insert (RDF::Graph.new)
     # @option options [RDF::Enumerable] :delete (RDF::Graph.new)
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
     def initialize(options = {}, &block)
       @options = options.dup
-      @context = @options.delete(:graph)  || @options.delete(:context)
-      @inserts = @options.delete(:insert) || RDF::Graph.new
-      @deletes = @options.delete(:delete) || RDF::Graph.new
+      if @options.has_key?(:context)
+        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead."
+        @options[:graph_name] ||= @options.delete(:context)
+      end
+      @graph_name = @options.delete(:graph) || @options.delete(:graph_name)
+      @inserts = @options.delete(:insert)   || RDF::Graph.new
+      @deletes = @options.delete(:delete)   || RDF::Graph.new
       @inserts.extend(RDF::Enumerable) unless @inserts.kind_of?(RDF::Enumerable)
       @deletes.extend(RDF::Enumerable) unless @deletes.kind_of?(RDF::Enumerable)
 
@@ -114,13 +132,13 @@ module RDF
 
       deletes.each_statement do |statement|
         statement = statement.dup
-        statement.context ||= graph
+        statement.graph_name ||= graph_name
         repository.delete(statement)
       end
 
       inserts.each_statement do |statement|
         statement = statement.dup
-        statement.context ||= graph
+        statement.graph_name ||= graph_name
         repository.insert(statement)
       end
 

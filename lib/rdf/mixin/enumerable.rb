@@ -14,13 +14,13 @@ module RDF
   # @example Checking whether a specific statement exists
   #   enumerable.has_statement?(RDF::Statement(subject, predicate, object))
   #   enumerable.has_triple?([subject, predicate, object])
-  #   enumerable.has_quad?([subject, predicate, object, context])
+  #   enumerable.has_quad?([subject, predicate, object, graph_name])
   #
   # @example Checking whether a specific value exists
   #   enumerable.has_subject?(RDF::URI("http://rubygems.org/gems/rdf"))
   #   enumerable.has_predicate?(RDF::RDFS.label)
   #   enumerable.has_object?(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))
-  #   enumerable.has_context?(RDF::URI("http://ar.to/#self"))
+  #   enumerable.has_graph?(RDF::URI("http://ar.to/#self"))
   #
   # @example Enumerating all statements
   #   enumerable.each_statement do |statement|
@@ -33,26 +33,26 @@ module RDF
   #   end
   #
   # @example Enumerating all statements in the form of quads
-  #   enumerable.each_quad do |subject, predicate, object, context|
-  #     puts [subject, predicate, object, context].inspect
+  #   enumerable.each_quad do |subject, predicate, object, graph_name|
+  #     puts [subject, predicate, object, graph_name].inspect
   #   end
   #
   # @example Enumerating all terms
   #   enumerable.each_subject   { |term| puts term.inspect }
   #   enumerable.each_predicate { |term| puts term.inspect }
   #   enumerable.each_object    { |term| puts term.inspect }
-  #   enumerable.each_context   { |term| puts term.inspect }
+  #   enumerable.each_graph_name{ |term| puts term.inspect }
   #
   # @example Obtaining all statements
   #   enumerable.statements  #=> [RDF::Statement(subject1, predicate1, object1), ...]
   #   enumerable.triples     #=> [[subject1, predicate1, object1], ...]
-  #   enumerable.quads       #=> [[subject1, predicate1, object1, context1], ...]
+  #   enumerable.quads       #=> [[subject1, predicate1, object1, graph_name1], ...]
   #
   # @example Obtaining all unique values
   #   enumerable.subjects    #=> [subject1, subject2, subject3, ...]
   #   enumerable.predicates  #=> [predicate1, predicate2, predicate3, ...]
   #   enumerable.objects     #=> [object1, object2, object3, ...]
-  #   enumerable.contexts    #=> [context1, context2, context3, ...]
+  #   enumerable.graph_names #=> [graph_name1, graph_name2, graph_name3, ...]
   #
   # @see RDF::Graph
   # @see RDF::Repository
@@ -66,7 +66,8 @@ module RDF
     # Returns `true` if this repository supports the given `feature`.
     #
     # Supported features include:
-    #   * `:context` supports statements with a context, allowing multiple contexts
+    #   * `:graph_name` supports statements with a graph_name, allowing multiple named graphs
+    #   * `:context` supports statements with a context, allowing multiple contexts (DEPRECATED, use graph_name. `context` will be removed in RDF.rb 2.0)
     #   * `:inference` supports RDFS inferrence of queryable contents.
     #   * `:validity` allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.
     #   * `:skolemize` supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an `Enumerable`. Implementations supporting this feature must implement a `#skolemize` method, taking a base URI used for minting URIs for BNodes as stable identifiers and a `#deskolemize` method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.
@@ -267,19 +268,18 @@ module RDF
     # The order in which quads are yielded is undefined.
     #
     # @overload each_quad
-    #   @yield  [subject, predicate, object, context]
+    #   @yield  [subject, predicate, object, graph_name]
     #     each quad
     #   @yieldparam [RDF::Resource] subject
     #   @yieldparam [RDF::URI]      predicate
     #   @yieldparam [RDF::Term]     object
-    #   @yieldparam [RDF::Resource] context
+    #   @yieldparam [RDF::Resource] graph_name
     #   @yieldreturn [void] ignored
     #   @return [void]
     #
     # @overload each_quad
-    #   @return [Enumerator]
+    #   @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     #
-    # @return [void]
     # @see    #enum_quad
     def each_quad
       if block_given?
@@ -342,9 +342,7 @@ module RDF
     #   @return [void]
     #
     # @overload each_subject
-    #   @return [Enumerator]
-    #
-    # @return [void]
+    #   @return [Enumerator<RDF::Resource>]
     # @see    #enum_subject
     def each_subject
       if block_given?
@@ -363,7 +361,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_subject}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Resource>]
     # @see    #each_subject
     def enum_subject
       enum_for(:each_subject)
@@ -375,7 +373,7 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::URI>]
+    # @return [Array<RDF::URI>]
     # @see    #each_predicate
     # @see    #enum_predicate
     def predicates(options = {})
@@ -410,9 +408,7 @@ module RDF
     #   @return [void]
     #
     # @overload each_predicate
-    #   @return [Enumerator]
-    #
-    # @return [void]
+    #   @return [Enumerator<RDF::URI>]
     # @see    #enum_predicate
     def each_predicate
       if block_given?
@@ -431,7 +427,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_predicate}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::URI>]
     # @see    #each_predicate
     def enum_predicate
       enum_for(:each_predicate)
@@ -478,9 +474,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_object
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Term>]
     #
-    # @return [void]
     # @see    #enum_object
     def each_object # FIXME: deduplication
       if block_given?
@@ -499,7 +494,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_object}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Term>]
     # @see    #each_object
     def enum_object
       enum_for(:each_object)
@@ -514,11 +509,29 @@ module RDF
     # @return [Enumerator<RDF::Resource>]
     # @see    #each_context
     # @see    #enum_context
+    # @deprecated use {graph_names}, {contexts} is deprecated in RDF.rb 2.0.
     def contexts(options = {})
+      warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0"
       if options[:unique] == false
         enum_statement.map(&:context).compact.to_enum # TODO: optimize
       else
         enum_context
+      end
+    end
+
+    ##
+    # Returns all unique RDF graph names, other than the default graph.
+    #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
+    # @return [Array<RDF::Resource>]
+    # @see    #each_graph
+    # @see    #enum_graph
+    def graph_names(options = {})
+      if options[:unique] == false
+        enum_statement.map(&:graph_name).compact # TODO: optimize
+      else
+        enum_graph.map(&:graph_name).compact
       end
     end
 
@@ -528,8 +541,10 @@ module RDF
     # @param  [RDF::Resource, false] value
     #   Use value `false` to query for the default context
     # @return [Boolean]
+    # @deprecated Use {has_graph?}, {has_context?} is deprecated in RDF.rb 2.0.
     def has_context?(value)
-      enum_context.include?(value)
+      warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0"
+      has_graph?(value)
     end
 
     ##
@@ -549,9 +564,10 @@ module RDF
     # @overload each_context
     #   @return [Enumerator]
     #
-    # @return [void]
     # @see    #enum_context
+    # @deprecated Use {each_graph}, {each_context} is deprecated in RDF.rb 2.0.
     def each_context
+      warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0"
       if block_given?
         values = {}
         each_statement do |statement|
@@ -570,10 +586,22 @@ module RDF
     #
     # @return [Enumerator]
     # @see    #each_context
+    # @deprecated Use {enum_graph}, {enum_context} is deprecated in RDF.rb 2.0.
     def enum_context
+      warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0"
       enum_for(:each_context)
     end
     alias_method :enum_contexts, :enum_context
+
+    ##
+    # Returns `true` if `self` contains the given RDF graph_name.
+    #
+    # @param  [RDF::Resource, false] graph_name
+    #   Use value `false` to query for the default graph_name
+    # @return [Boolean]
+    def has_graph?(graph_name)
+      enum_statement.any? {|s| s.graph_name == graph_name}
+    end
 
     ##
     # Iterates the given block for each RDF graph in `self`.
@@ -590,16 +618,16 @@ module RDF
     #   @return [void]
     #
     # @overload each_graph
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Graph>]
     #
-    # @return [void]
     # @see    #enum_graph
     # @since  0.1.9
     def each_graph
       if block_given?
-        yield RDF::Graph.new(nil, :data => self)
-        each_context do |context|
-          yield RDF::Graph.new(context, :data => self)
+        yield RDF::Graph.new(nil, data: self)
+        # FIXME: brute force, repositories should override behavior
+        enum_statement.map(&:graph_name).uniq.compact do |graph_name|
+          yield RDF::Graph.new(graph_name, data: self)
         end
       end
       enum_graph
@@ -608,7 +636,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_graph}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Graph>]
     # @see    #each_graph
     # @since  0.1.9
     def enum_graph
@@ -691,7 +719,7 @@ module RDF
     def method_missing(meth, *args)
       writer = RDF::Writer.for(meth.to_s[3..-1].to_sym) if meth.to_s[0,3] == "to_"
       if writer
-        writer.buffer(:standard_prefixes => true) {|w| w << self}
+        writer.buffer(standard_prefixes: true) {|w| w << self}
       else
         super
       end

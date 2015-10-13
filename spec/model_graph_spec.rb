@@ -26,9 +26,9 @@ describe RDF::Graph do
       expect(subject).not_to be_named
     end
 
-    it "should not have a context" do
-      expect(subject.context).to be_nil
-      expect(subject.contexts.size).to eq 0
+    it "should not have a graph_name" do
+      expect(subject.graph_name).to be_nil
+      expect(subject.graph_names.size).to eq 0
     end
   end
 
@@ -47,12 +47,12 @@ describe RDF::Graph do
     its(:named?) {is_expected.to be_truthy}
     its(:unnamed?) {is_expected.to be_falsey}
     its(:name) {is_expected.not_to be_nil}
-    its(:context) {is_expected.not_to be_nil}
-    its(:contexts) {expect(subject.contexts.size).to eq 1}
+    its(:graph_name) {is_expected.not_to be_nil}
+    its(:graph_names) {expect(subject.graph_names.size).to eq 1}
     it {is_expected.not_to be_anonymous}
 
-    context "with anonymous context" do
-      subject {described_class.new(RDF::Node.new, :data => RDF::Repository.new)}
+    context "with anonymous graph_name" do
+      subject {described_class.new(RDF::Node.new, data: RDF::Repository.new)}
       it {is_expected.to be_anonymous}
     end
   end

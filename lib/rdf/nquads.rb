@@ -58,15 +58,7 @@ module RDF
 
     class Reader < NTriples::Reader
       ##
-      # @param  [String] input
-      # @return [RDF::Term]
-      # @since  0.4.0
-      def self.parse_context(input)
-        parse_uri(input) || parse_node(input) || parse_literal(input)
-      end
-
-      ##
-      # Read a Quad, where the context is optional
+      # Read a Quad, where the graph_name is optional
       #
       # @return [Array]
       # @see    http://sw.deri.org/2008/07/n-quads/#grammar
@@ -81,11 +73,11 @@ module RDF
               subject   = read_uriref || read_node || fail_subject
               predicate = read_uriref(:intern => true) || fail_predicate
               object    = read_uriref || read_node || read_literal || fail_object
-              context    = read_uriref || read_node
+              graph_name    = read_uriref || read_node
               if validate? && !read_eos
                 raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})")
               end
-              return [subject, predicate, object, {:context => context}]
+              return [subject, predicate, object, {graph_name: graph_name}]
             end
           rescue RDF::ReaderError => e
             @line = line  # this allows #read_value to work
@@ -113,8 +105,8 @@ module RDF
       # @param  [RDF::URI]      predicate
       # @param  [RDF::Term]     object
       # @return [void]
-      def write_quad(subject, predicate, object, context)
-        puts format_quad(subject, predicate, object, context, @options)
+      def write_quad(subject, predicate, object, graph_name)
+        puts format_quad(subject, predicate, object, graph_name, @options)
       end
 
       ##
@@ -134,12 +126,12 @@ module RDF
       # @param  [RDF::Resource] subject
       # @param  [RDF::URI]      predicate
       # @param  [RDF::Term]     object
-      # @param  [RDF::Term]     context
+      # @param  [RDF::Term]     graph_name
       # @param  [Hash{Symbol => Object}] options = ({})
       # @return [String]
-      def format_quad(subject, predicate, object, context, options = {})
+      def format_quad(subject, predicate, object, graph_name, options = {})
         s = "%s %s %s " % [subject, predicate, object].map { |value| format_term(value, options) }
-        s += format_term(context, options) + " " if context
+        s += format_term(graph_name, options) + " " if graph_name
         s + "."
       end
     end # Writer

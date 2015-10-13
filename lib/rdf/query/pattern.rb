@@ -6,10 +6,14 @@ module RDF; class Query
     # @private
     # @since 0.2.2
     def self.from(pattern, options = {})
+      if options.has_key?(:context)
+        warn "[DEPRECATION] the :contexts option to Pattern.from is deprecated in RDF.rb 2.0, use :graph_name instead."
+        options[:graph_name] ||= options.delete(:context)
+      end
       case pattern
         when Pattern then pattern
         when Array, Statement
-          self.new(pattern[0], pattern[1], pattern[2], options.merge(:context => pattern[3]))
+          self.new(pattern[0], pattern[1], pattern[2], options.merge(graph_name: pattern[3]))
         when Hash    then self.new(options.merge(pattern))
         else raise ArgumentError, "expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}"
       end
@@ -23,6 +27,9 @@ module RDF; class Query
     #   @option options [Variable, Term, Symbol, nil]     :object    (nil)
     #   @option options [Variable, Resource, Symbol, nil, false] :context   (nil)
     #     A context of nil matches any context, a context of false, matches only the default context.
+    #     The :context option is deprecated in RDF.rb 2.0. Use :graph_name instead.
+    #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
+    #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
@@ -32,20 +39,27 @@ module RDF; class Query
     #   @param  [Hash{Symbol => Object}]          options
     #   @option options [Variable, Resource, Symbol, nil, false] :context   (nil)
     #     A context of nil matches any context, a context of false, matches only the default context.
+    #     The :context option is deprecated in RDF.rb 2.0. Use :graph_name instead.
+    #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
+    #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
     #   @option options [Boolean]                 :optional  (false)
     #
     # @note {Statement} treats symbols as interned {Node} instances, in a {Pattern}, they are treated as {Variable}.
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
+      if options.has_key?(:context)
+        warn "[DEPRECATION] the :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead."
+        options[:graph_name] ||= options.delete(:context)
+      end
       super
     end
 
     ##
     # @private
     def initialize!
-      @context   = Variable.new(@context)   if @context.is_a?(Symbol)
-      @subject   = Variable.new(@subject)   if @subject.is_a?(Symbol)
-      @predicate = Variable.new(@predicate) if @predicate.is_a?(Symbol)
-      @object    = Variable.new(@object)    if @object.is_a?(Symbol)
+      @graph_name = Variable.new(@graph_name) if @graph_name.is_a?(Symbol)
+      @subject    = Variable.new(@subject)    if @subject.is_a?(Symbol)
+      @predicate  = Variable.new(@predicate)  if @predicate.is_a?(Symbol)
+      @object     = Variable.new(@object)     if @object.is_a?(Symbol)
       super
     end
 
@@ -67,7 +81,7 @@ module RDF; class Query
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def blank?
-      subject.nil? && predicate.nil? && object.nil? && context.nil?
+      subject.nil? && predicate.nil? && object.nil? && graph_name.nil?
     end
 
     ##
@@ -79,7 +93,7 @@ module RDF; class Query
       subject.is_a?(Variable) ||
         predicate.is_a?(Variable) ||
         object.is_a?(Variable) ||
-        context.is_a?(Variable)
+        graph_name.is_a?(Variable)
     end
     alias_method :variables?, :has_variables?
 
@@ -104,7 +118,7 @@ module RDF; class Query
       (has_subject?   ? (subject.resource? || subject.variable?) && subject.valid? : true) && 
       (has_predicate? ? (predicate.uri? || predicate.variable?) && predicate.valid? : true) &&
       (has_object?    ? (object.term? || object.variable?) && object.valid? : true) &&
-      (has_context?   ? (context.resource? || context.variable?) && context.valid? : true )
+      (has_graph?     ? (graph_name.resource? || graph_name.variable?) && graph_name.valid? : true )
     rescue NoMethodError
       false
     end
@@ -117,7 +131,7 @@ module RDF; class Query
     # If the optional `bindings` are given, variables will be substituted with their values
     # when executing the query.
     #
-    # To match triples only in the default context, set context to `false`.
+    # To match triples only in the default graph, set graph_name to `false`.
     #
     # @example
     #   Pattern.new(:s, :p, :o).execute(RDF::Repository.load('etc/doap.nt'))
@@ -130,16 +144,16 @@ module RDF; class Query
     #   each matching statement
     # @yieldparam [RDF::Statement] statement
     #   an RDF statement matching this pattern
-    # @return [Enumerator]
+    # @return [Enumerable<RDF::Query::Pattern>]
     #   an enumerator yielding matching statements
     # @see    RDF::Queryable#query
     # @since  0.3.0
     def execute(queryable, bindings = {}, &block)
       query = {
-        :subject   => subject.is_a?(Variable)   && bindings[subject.to_sym]   ? bindings[subject.to_sym]   : subject,
-        :predicate => predicate.is_a?(Variable) && bindings[predicate.to_sym] ? bindings[predicate.to_sym] : predicate,
-        :object    => object.is_a?(Variable)    && bindings[object.to_sym]    ? bindings[object.to_sym]    : object,
-        :context   => context.is_a?(Variable)   && bindings[context.to_sym]   ? bindings[context.to_sym]   : context,
+        subject:    subject.is_a?(Variable)     && bindings[subject.to_sym]     ? bindings[subject.to_sym]    : subject,
+        predicate:  predicate.is_a?(Variable)   && bindings[predicate.to_sym]   ? bindings[predicate.to_sym]  : predicate,
+        object:     object.is_a?(Variable)      && bindings[object.to_sym]      ? bindings[object.to_sym]     : object,
+        graph_name: graph_name.is_a?(Variable)  && bindings[graph_name.to_sym]  ? bindings[graph_name.to_sym] : graph_name,
       }.delete_if{|k,v| v.nil?}
 
       # Do all the variable terms refer to distinct variables?
@@ -185,10 +199,10 @@ module RDF; class Query
     # @since  0.3.0
     def solution(statement)
       RDF::Query::Solution.new do |solution|
-        solution[subject.to_sym]   = statement.subject   if subject.is_a?(Variable)
-        solution[predicate.to_sym] = statement.predicate if predicate.is_a?(Variable)
-        solution[object.to_sym]    = statement.object    if object.is_a?(Variable)
-        solution[context.to_sym]   = statement.context   if context.is_a?(Variable)
+        solution[subject.to_sym]    = statement.subject    if subject.is_a?(Variable)
+        solution[predicate.to_sym]  = statement.predicate  if predicate.is_a?(Variable)
+        solution[object.to_sym]     = statement.object     if object.is_a?(Variable)
+        solution[graph_name.to_sym] = statement.graph_name if graph_name.is_a?(Variable)
       end
     end
 
@@ -204,10 +218,10 @@ module RDF; class Query
     # @since  0.3.0
     def variable_terms(name = nil)
       terms = []
-      terms << :subject   if subject.is_a?(Variable)   && (!name || name.eql?(subject.name))
-      terms << :predicate if predicate.is_a?(Variable) && (!name || name.eql?(predicate.name))
-      terms << :object    if object.is_a?(Variable)    && (!name || name.eql?(object.name))
-      terms << :context   if context.is_a?(Variable)   && (!name || name.eql?(context.name))
+      terms << :subject    if subject.is_a?(Variable)    && (!name || name.eql?(subject.name))
+      terms << :predicate  if predicate.is_a?(Variable)  && (!name || name.eql?(predicate.name))
+      terms << :object     if object.is_a?(Variable)     && (!name || name.eql?(object.name))
+      terms << :graph_name if graph_name.is_a?(Variable) && (!name || name.eql?(graph_name.name))
       terms
     end
 
@@ -223,7 +237,7 @@ module RDF; class Query
       count += 1 if subject.is_a?(Variable)
       count += 1 if predicate.is_a?(Variable)
       count += 1 if object.is_a?(Variable)
-      count += 1 if context.is_a?(Variable)
+      count += 1 if graph_name.is_a?(Variable)
       count
     end
     alias_method :cardinality, :variable_count
@@ -237,10 +251,10 @@ module RDF; class Query
     # @return [Hash{Symbol => Variable}]
     def variables
       variables = {}
-      variables.merge!(subject.variables)   if subject.is_a?(Variable)
-      variables.merge!(predicate.variables) if predicate.is_a?(Variable)
-      variables.merge!(object.variables)    if object.is_a?(Variable)
-      variables.merge!(context.variables)   if context.is_a?(Variable)
+      variables.merge!(subject.variables)    if subject.is_a?(Variable)
+      variables.merge!(predicate.variables)  if predicate.is_a?(Variable)
+      variables.merge!(object.variables)     if object.is_a?(Variable)
+      variables.merge!(graph_name.variables) if graph_name.is_a?(Variable)
       variables
     end
 
@@ -280,10 +294,10 @@ module RDF; class Query
     # @return [Hash{Symbol => RDF::Term}]
     def bindings
       bindings = {}
-      bindings.merge!(subject.bindings)   if subject.is_a?(Variable)
-      bindings.merge!(predicate.bindings) if predicate.is_a?(Variable)
-      bindings.merge!(object.bindings)    if object.is_a?(Variable)
-      bindings.merge!(context.bindings)   if context.is_a?(Variable)
+      bindings.merge!(subject.bindings)    if subject.is_a?(Variable)
+      bindings.merge!(predicate.bindings)  if predicate.is_a?(Variable)
+      bindings.merge!(object.bindings)     if object.is_a?(Variable)
+      bindings.merge!(graph_name.bindings) if graph_name.is_a?(Variable)
       bindings
     end
 
@@ -329,10 +343,10 @@ module RDF; class Query
         buffer << [subject, predicate, object].map do |r|
           r.is_a?(RDF::Query::Variable) ? r.to_s : RDF::NTriples.serialize(r)
         end.join(" ")
-        buffer << case context
+        buffer << case graph_name
           when nil, false then " ."
-          when Variable then " #{context.to_s} ."
-          else " #{RDF::NTriples.serialize(context)} ."
+          when Variable then " #{graph_name.to_s} ."
+          else " #{RDF::NTriples.serialize(graph_name)} ."
         end
         buffer.string
       end

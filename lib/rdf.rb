@@ -164,7 +164,9 @@ module RDF
   #   @option options [RDF::URI]       :predicate (nil)
   #   @option options [RDF::Term]      :object    (nil)
   #   @option options [RDF::Resource]  :context   (nil)
-  #     Note, in RDF 1.1, a context MUST be an IRI.
+  #     Alias for :graph_name, :context is deprecated in RDF.rb.
+  #   @option options [RDF::Resource]  :graph_name   (nil)
+  #     Note, a graph_name MUST be an IRI or BNode.
   #   @return [RDF::Statement]
   #
   # @overload Statement(subject, predicate, object, options = {})
@@ -172,7 +174,7 @@ module RDF
   #   @param  [RDF::URI]               predicate
   #   @param  [RDF::Term]              object
   #   @param  [Hash{Symbol => Object}] options
-  #   @option options [RDF::Resource]  :context   (nil)
+  #   @option options [RDF::Resource]  :graph_name   (nil)
   #   @return [RDF::Statement]
   #
   def self.Statement(*args)
