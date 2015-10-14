@@ -191,7 +191,7 @@ module RDF
       patterns << @options if patterns.empty?
       @variables = {}
       @solutions = Query::Solutions(@options.delete(:solutions))
-      self.graph_name = @options.fetch(:graph_name, @options.fetch(:name, nil))
+      graph_name = @options.fetch(:graph_name, @options.fetch(:name, nil))
       @options.delete(:graph_name)
       @options.delete(:name)
 
