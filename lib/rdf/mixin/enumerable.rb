@@ -41,7 +41,7 @@ module RDF
   #   enumerable.each_subject   { |term| puts term.inspect }
   #   enumerable.each_predicate { |term| puts term.inspect }
   #   enumerable.each_object    { |term| puts term.inspect }
-  #   enumerable.each_graph_name{ |term| puts term.inspect }
+  #   enumerable.each_graph     { |term| puts term.inspect }
   #
   # @example Obtaining all statements
   #   enumerable.statements  #=> [RDF::Statement(subject1, predicate1, object1), ...]
