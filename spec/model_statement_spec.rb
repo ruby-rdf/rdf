@@ -86,12 +86,6 @@ describe RDF::Statement do
     it {is_expected.to have_blank_nodes}
   end
 
-  context "when created without a context" do
-    subject {RDF::Statement.new(s, p, o, :context => nil)}
-    its(:context) {is_expected.to be_nil}
-    it {is_expected.not_to have_context}
-  end
-
   context "when created without a graph_name" do
     subject {RDF::Statement.new(s, p, o, graph_name: nil)}
     its(:graph_name) {is_expected.to be_nil}
@@ -145,10 +139,6 @@ describe RDF::Statement do
 
     it "should support #[] for the object" do
       expect(subject[2]).to equal(subject.object)
-    end
-
-    it "should support #[] for the context" do
-      expect(subject[3]).to equal(subject.context)
     end
 
     it "should support #[] for the graph_name" do
@@ -286,10 +276,6 @@ describe RDF::Statement do
       expect(RDF::Statement.new(s, p, o)).to be_a_statement
     end
 
-    it "Creating an RDF statement with a context" do
-      expect(RDF::Statement.new(s, p, o, :context => uri).context).to eq uri
-    end
-
     it "Creating an RDF statement from a Hash" do
       expect(RDF::Statement.new({
         :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
@@ -299,7 +285,7 @@ describe RDF::Statement do
     end
 
     it "Creating an RDF statement with a graph_name" do
-      expect(RDF::Statement.new(s, p, o, graph_name: uri).context).to eq uri
+      expect(RDF::Statement.new(s, p, o, graph_name: uri).graph_name).to eq uri
     end
 
     it "Creating an RDF statement from a Hash" do

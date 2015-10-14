@@ -144,7 +144,7 @@ describe RDF::Query do
 
        context "with default graph" do
          it "returns statement from default graph" do
-           subject.context = false
+           subject.graph_name = false
            expect(subject.execute(repo).map(&:to_hash)).to eq [
              {s: EX.s1, p: EX.p1, o: EX.o1}]
            expect(repo.query(subject).map(&:to_hash)).to eq [
@@ -745,24 +745,6 @@ describe RDF::Query do
         subject.limit(10)
         subject.count == 10
       end
-    end
-  end
-
-  context "#context" do
-    it "returns nil by default" do
-      expect(subject.context).to be_nil
-    end
-    
-    it "sets and returns a context" do
-      subject.context = RDF.first
-      expect(subject.context).to eq RDF.first
-    end
-  end
-
-  context "#context=" do
-    it "returns set context" do
-      expect((subject.context = RDF::URI("c"))).to eq RDF::URI("c")
-      expect((subject.context = :default)).to eq :default
     end
   end
 

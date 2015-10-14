@@ -128,7 +128,7 @@ module RDF
       @data    = @options.delete(:data) || RDF::Repository.new(with_graph_name: false)
 
       raise ArgumentError, "Can't apply graph_name unless initialized with `data` supporting graph_names" if
-        @graph_name && !(@data.supports?(:graph_name) || @data.supports?(:context))
+        @graph_name && !@data.supports?(:graph_name)
 
       if block_given?
         case block.arity
