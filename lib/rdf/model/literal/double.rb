@@ -18,11 +18,13 @@ module RDF; class Literal
     # @param  [Float, #to_f] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
+      #require 'byebug'; byebug
       @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(::String) then case value
+          when '+INF'  then 1/0.0
           when 'INF'  then 1/0.0
           when '-INF' then -1/0.0
           when 'NaN'  then 0/0.0
