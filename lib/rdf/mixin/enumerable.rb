@@ -509,7 +509,7 @@ module RDF
     # @return [Enumerator<RDF::Resource>]
     # @see    #each_context
     # @see    #enum_context
-    # @deprecated use {graph_names}, {contexts} is deprecated in RDF.rb 2.0.
+    # @deprecated use {#graph_names} instead.
     def contexts(options = {})
       warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if options[:unique] == false
@@ -541,7 +541,7 @@ module RDF
     # @param  [RDF::Resource, false] value
     #   Use value `false` to query for the default context
     # @return [Boolean]
-    # @deprecated Use {has_graph?}, {has_context?} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#has_graph?} instead.
     def has_context?(value)
       warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       has_graph?(value)
@@ -565,7 +565,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @see    #enum_context
-    # @deprecated Use {each_graph}, {each_context} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#each_graph} instead.
     def each_context
       warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if block_given?
@@ -586,7 +586,7 @@ module RDF
     #
     # @return [Enumerator]
     # @see    #each_context
-    # @deprecated Use {enum_graph}, {enum_context} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#enum_graph} instead.
     def enum_context
       warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       enum_for(:each_context)

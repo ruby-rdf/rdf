@@ -124,14 +124,6 @@ describe RDF::List do
         expect(RDF::List.new(n, graph)).to be_valid
       end
 
-      it "Uses subject with values" do
-        n = RDF::URI("foo")
-        l = RDF::List.new(n, graph, %w(a b c))
-        expect(l.subject).to eq(n)
-        expect(l.first).to eq(RDF::Literal("a"))
-        expect(l.last).to eq(RDF::Literal("c"))
-      end
-
       it "Prepends values with new subject if existing list" do
         n = RDF::Node.new
         graph.insert(RDF::Statement(n, RDF.first, "foo"))

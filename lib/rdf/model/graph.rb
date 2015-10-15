@@ -57,7 +57,7 @@ module RDF
     # @!attribute [rw] graph_name
     # @return [RDF::Resource]
     # @since 1.1.0
-    # @deprecated Use {graph_name}, {context} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#graph_name} instead.
     def context
       warn "[DEPRECATION] Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	    graph_name
@@ -190,7 +190,7 @@ module RDF
     # Returns all unique RDF contexts for this graph.
     #
     # @return [Enumerator<RDF::Resource>]
-    # @deprecated use {graph_names}, {contexts} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#graph_names} instead.
     def contexts(options = {})
       warn "[DEPRECATION] Graph#contexts is being replaced with Graph#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       (named? ? [context] : []).to_enum.extend(RDF::Countable)

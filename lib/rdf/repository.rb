@@ -307,7 +307,7 @@ module RDF
       ##
       # @private
       # @see RDF::Enumerable#has_context?
-      # @deprecated Use {has_graph?} instead.
+      # @deprecated Use {#has_graph?} instead.
       def has_context?(value)
        warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}"
        has_graph?(value)
@@ -329,7 +329,7 @@ module RDF
       ##
       # @private
       # @see RDF::Enumerable#each_context
-      # @deprecated Use {each_graph} instead.
+      # @deprecated Use {#each_graph} instead.
       def each_context(&block)
         warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}"
         if block_given?

@@ -53,7 +53,7 @@ module RDF
     # @!attribute [rw] graph_name
     # @return [RDF::Resource]
     # @since 1.1.0
-    # @deprecated Use {graph_name}, {context} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#graph_name} instead.
     def context
       warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       graph_name
@@ -64,7 +64,7 @@ module RDF
     # @!attribute [rw] graph_name
     # @return [RDF::Resource]
     # @since 1.1.0
-    # @deprecated Use {graph_name}, {context} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#graph_name=} instead.
     def context=(value)
       warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       self.graph_name = value
@@ -213,7 +213,7 @@ module RDF
 
     ##
     # @return [Boolean]
-    # @deprecated Use {has_graph?}.
+    # @deprecated Use {#has_graph?} instead.
     def has_context?
       warn "[DEPRECATION] Statement#has_context? is being replaced with Statement#has_grap in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
      !!context
@@ -236,12 +236,21 @@ module RDF
     def has_object?
       !!object
     end
+    ##
+    # Returns `true` if any resource of this statement is a blank node.
+    #
+    # @return [Boolean]
+    # @deprecated Use {#node?} instead.
+    def has_blank_nodes?
+      warn "[DEPRECATION] Statement#has_blank_nodes? is deprecated in RDF.rb 2.0, use Statement#node? instead. Called from #{Gem.location_of_caller.join(':')}"
+      node?
+    end
 
     ##
     # Returns `true` if any resource of this statement is a blank node.
     #
     # @return [Boolean]
-    def has_blank_nodes?
+    def node?
       to_quad.compact.any?(&:node?)
     end
 

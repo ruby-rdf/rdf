@@ -78,12 +78,12 @@ describe RDF::Statement do
 
   context "when created with a blank node subject" do
     subject {RDF::Statement.new(RDF::Node.new, p, o)}
-    it {is_expected.to have_blank_nodes}
+    it {is_expected.to be_node}
   end
 
   context "when created with a blank node object" do
     subject {RDF::Statement.new(s, p, RDF::Node.new)}
-    it {is_expected.to have_blank_nodes}
+    it {is_expected.to be_node}
   end
 
   context "when created without a graph_name" do

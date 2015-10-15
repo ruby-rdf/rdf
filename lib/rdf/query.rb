@@ -436,7 +436,7 @@ module RDF
     # Scope the query to named graphs matching value
     # @param [RDF::IRI, RDF::Query::Variable] value
     # @return [RDF::IRI, RDF::Query::Variable]
-    # @deprecated {#context=} is removed in in RDF.rb 2.0, use {#graph_name=} instead.
+    # @deprecated Use {#graph_name=} instead.
     def context=(value)
       warn "[DEPRECATION] Query#context= is deprecated in RDF.rb 2.0, use Query#graph_name= instead. Called from #{Gem.location_of_caller.join(':')}"
       self.graph_name = value
@@ -451,7 +451,7 @@ module RDF
 
     # Scope of this query, if any
     # @return [RDF::IRI, RDF::Query::Variable]
-    # @deprecated {context} is removin in RDF.rb 2.0, use {graph_name} instead.
+    # @deprecated Use {#graph_name} instead.
     def context
       warn "[DEPRECATION] Query#context is deprecated in RDF.rb 2.0, use Query#graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
       graph_name
@@ -488,8 +488,18 @@ module RDF
     # Returns `true` if any pattern contains a blank node.
     #
     # @return [Boolean]
+    # @deprecated Use {#node?} instead.
     def has_blank_nodes?
-      patterns.any?(&:has_blank_nodes?) || graph_name && graph_name.node?
+      warn "[DEPRECATION] Query#has_blank_nodes? is deprecated in RDF.rb 2.0, use Query#node? instead. Called from #{Gem.location_of_caller.join(':')}"
+      node?
+    end
+
+    ##
+    # Returns `true` if any pattern contains a blank node.
+    #
+    # @return [Boolean]
+    def node?
+      patterns.any?(&:node?) || graph_name && graph_name.node?
     end
 
     # Query has no patterns

@@ -40,13 +40,13 @@ module RDF
     # @since 1.1.0
     attr_accessor :graph_name
 
-    # @deprecated Use {graph_name}, {context} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#graph_name} instead.
     def context
       warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	  graph_name
     end
 
-    # @deprecated Use {#graph_name=}, {#context=} is deprecated in RDF.rb 2.0.
+    # @deprecated Use {#graph_name=} instead.
     def context=(value)
       warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	  self.graph_name = value

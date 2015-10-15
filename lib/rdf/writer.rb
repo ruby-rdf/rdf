@@ -206,7 +206,7 @@ module RDF
     #   the base URI to use when constructing relative URIs (not supported
     #   by all writers)
     # @option options [Boolean]  :unique_bnodes   (false)
-    #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples#format_node}
+    #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples::Writer#format_node}
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
@@ -361,7 +361,7 @@ module RDF
     ##
     # @param  [RDF::Graph] graph
     # @return [void] `self`
-    # @deprecated Please use {RDF::Writable#insert_graph} instead 
+    # @deprecated Use {RDF::Writable#insert_graph} instead .
     def write_graph(graph)
       warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       graph.each_triple { |*triple| write_triple(*triple) }
@@ -371,7 +371,7 @@ module RDF
     ##
     # @param  [Array<RDF::Statement>] statements
     # @return [void] `self`
-    # @deprecated replace by `RDF::Writable#insert`
+    # @deprecated Use {RDF::Writable#insert} instead.
     def write_statements(*statements)
       warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       statements.each { |statement| write_statement(statement) }
@@ -427,7 +427,15 @@ module RDF
         else nil
       end
     end
-    alias_method :format_value, :format_term # @deprecated
+
+    ##
+    # @param  [RDF::Term] term
+    # @return [String]
+    # @since  0.3.0
+    # @deprecated Use {#format_term} instead
+    def format_value(term, options = {})
+      format_term(term, options)
+    end
 
     ##
     # @param  [RDF::Node] value
