@@ -434,6 +434,7 @@ module RDF
     # @since  0.3.0
     # @deprecated Use {#format_term} instead
     def format_value(term, options = {})
+      warn "[DEPRECATION] Writer#format_value is being replaced with Writer#format_term in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       format_term(term, options)
     end
 
