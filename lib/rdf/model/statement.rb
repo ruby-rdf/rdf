@@ -250,6 +250,7 @@ module RDF
     # Returns `true` if any resource of this statement is a blank node.
     #
     # @return [Boolean]
+    # @since 2.0
     def node?
       to_quad.compact.any?(&:node?)
     end

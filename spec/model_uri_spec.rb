@@ -229,6 +229,28 @@ describe RDF::URI do
     end
   end
 
+  describe "#compatible?" do
+    {
+      %(<abc>) => {
+        %("b") => false,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => false,
+        %("b"@ja) => false,
+        %(<a>) => false,
+        %(_:a) => false,
+      },
+    }.each do |l1, props|
+      props.each do |l2, res|
+        it "#{l1} should #{'not ' unless res}be compatible with #{l2}" do
+          if res
+            expect(RDF::NTriples::Reader.parse_object l1).to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          else
+            expect(RDF::NTriples::Reader.parse_object l1).not_to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          end
+        end
+      end
+    end
+  end
+
   context "validation" do
     subject {RDF::URI("http://example/for/validation")}
 

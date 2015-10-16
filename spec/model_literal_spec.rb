@@ -246,6 +246,44 @@ describe RDF::Literal do
     end
   end
 
+
+  describe "#compatible?" do
+    {
+      %("abc") => {
+        %("b") => true,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => true,
+        %("b"@ja) => false,
+        %("b"@en) => false,
+        %(<a>) => false,
+        %(_:a) => false,
+      },
+      %("abc^^<http://www.w3.org/2001/XMLSchema#string>") => {
+        %("b") => true,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => true,
+        %("b"@en) => false
+      },
+      %("abc"@en) => {
+        %("b") => true,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => true,
+        %("b"@en) => true,
+        %("b"@ja) => false
+      },
+      %("abc"@fr) => {
+        %("b"@ja) => false
+      },
+    }.each do |l1, props|
+      props.each do |l2, res|
+        it "#{l1} should #{'not ' unless res}be compatible with #{l2}" do
+          if res
+            expect(RDF::NTriples::Reader.parse_object l1).to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          else
+            expect(RDF::NTriples::Reader.parse_object l1).not_to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          end
+        end
+      end
+    end
+  end
+
   describe RDF::Literal::Boolean do
     it_behaves_like 'RDF::Literal with datatype and grammar', "true", RDF::XSD.boolean
     it_behaves_like 'RDF::Literal equality', "true", true

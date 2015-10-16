@@ -527,6 +527,7 @@ module RDF
     # @return [Array<RDF::Resource>]
     # @see    #each_graph
     # @see    #enum_graph
+    # @since 2.0
     def graph_names(options = {})
       if options[:unique] == false
         enum_statement.map(&:graph_name).compact # TODO: optimize

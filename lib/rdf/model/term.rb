@@ -80,6 +80,15 @@ module RDF
       self
     end
 
+    ##
+    # Term compatibility according to SPARQL
+    #
+    # @see http://www.w3.org/TR/sparql11-query/#func-arg-compatibility
+    # @since 2.0
+    def compatible?(other)
+      false
+    end
+
     protected
     ##
     # Escape a term using standard character escapes

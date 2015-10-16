@@ -498,6 +498,7 @@ module RDF
     # Returns `true` if any pattern contains a blank node.
     #
     # @return [Boolean]
+    # @since 2.0
     def node?
       patterns.any?(&:node?) || graph_name && graph_name.node?
     end
