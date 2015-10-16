@@ -12,7 +12,7 @@ module RDF::NTriples
   #   RDF::Writer.for("etc/test.nt")
   #   RDF::Writer.for(:file_name      => "etc/test.nt")
   #   RDF::Writer.for(:file_extension => "nt")
-  #   RDF::Writer.for(:content_type   => "text/plain")
+  #   RDF::Writer.for(:content_type   => "application/n-triples")
   #
   # @example Serializing RDF statements into an NTriples file
   #   RDF::NTriples::Writer.open("etc/test.nt") do |writer|

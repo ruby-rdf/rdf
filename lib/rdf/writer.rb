@@ -14,7 +14,7 @@ module RDF
   #   RDF::Writer.for("spec/data/output.nt")
   #   RDF::Writer.for(:file_name      => "spec/data/output.nt")
   #   RDF::Writer.for(:file_extension => "nt")
-  #   RDF::Writer.for(:content_type   => "text/plain")
+  #   RDF::Writer.for(:content_type   => "application/n-triples")
   #
   # @example Instantiating an RDF writer class
   #   RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }

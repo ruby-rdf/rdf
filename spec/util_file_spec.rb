@@ -28,13 +28,10 @@ describe RDF::Util::File do
     describe ".default_accept_header" do
       subject { RDF::Util::File::HttpAdapter.default_accept_header.split(", ") }
       before do
-        allow(RDF::Format).to receive(:reader_types).and_return(["text/html", "text/plain", "application/xhtml+xml"])
+        allow(RDF::Format).to receive(:reader_types).and_return(["text/html", "application/xhtml+xml"])
       end
       it "should demote text/html to q=0.5" do
         expect(subject).to include "text/html;q=0.5"
-      end
-      it "should demote text/plain to q=0.5" do
-        expect(subject).to include "text/plain;q=0.5"
       end
       it "should demote application/xhtml+xml to q=0.7" do
         expect(subject).to include "application/xhtml+xml;q=0.7"

@@ -8,7 +8,7 @@ module RDF::NTriples
   #   RDF::Reader.for("etc/doap.nt")
   #   RDF::Reader.for(:file_name      => "etc/doap.nt")
   #   RDF::Reader.for(:file_extension => "nt")
-  #   RDF::Reader.for(:content_type   => "text/plain")
+  #   RDF::Reader.for(:content_type   => "application/n-triples")
   #
   # @example Parsing RDF statements from an NTriples file
   #   RDF::NTriples::Reader.open("etc/doap.nt") do |reader|
