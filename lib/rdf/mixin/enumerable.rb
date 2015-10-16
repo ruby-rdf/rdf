@@ -41,7 +41,6 @@ module RDF
   #   enumerable.each_subject   { |term| puts term.inspect }
   #   enumerable.each_predicate { |term| puts term.inspect }
   #   enumerable.each_object    { |term| puts term.inspect }
-  #   enumerable.each_graph     { |term| puts term.inspect }
   #
   # @example Obtaining all statements
   #   enumerable.statements  #=> [RDF::Statement(subject1, predicate1, object1), ...]
@@ -49,10 +48,10 @@ module RDF
   #   enumerable.quads       #=> [[subject1, predicate1, object1, graph_name1], ...]
   #
   # @example Obtaining all unique values
-  #   enumerable.subjects    #=> [subject1, subject2, subject3, ...]
-  #   enumerable.predicates  #=> [predicate1, predicate2, predicate3, ...]
-  #   enumerable.objects     #=> [object1, object2, object3, ...]
-  #   enumerable.graph_names #=> [graph_name1, graph_name2, graph_name3, ...]
+  #   enumerable.subjects(unique: true)    #=> [subject1, subject2, subject3, ...]
+  #   enumerable.predicates(unique: true)  #=> [predicate1, predicate2, predicate3, ...]
+  #   enumerable.objects(unique: true)     #=> [object1, object2, object3, ...]
+  #   enumerable.graph_names(unique: true) #=> [graph_name1, graph_name2, graph_name3, ...]
   #
   # @see RDF::Graph
   # @see RDF::Repository
