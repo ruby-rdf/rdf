@@ -242,7 +242,7 @@ module RDF
     #
     # @return [Fixnum]
     def hash
-      @hash ||= to_s.hash
+      @hash ||= [to_s, datatype, language].hash
     end
 
 
