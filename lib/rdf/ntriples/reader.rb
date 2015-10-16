@@ -144,9 +144,9 @@ module RDF::NTriples
     def self.parse_literal(input)
       case input
         when LITERAL_WITH_LANGUAGE
-          RDF::Literal.new(unescape($1), :language => $2)
+          RDF::Literal.new(unescape($1), language: $4)
         when LITERAL_WITH_DATATYPE
-          RDF::Literal.new(unescape($1), :datatype => $2)
+          RDF::Literal.new(unescape($1), datatype: $4)
         when LITERAL_PLAIN
           RDF::Literal.new(unescape($1))
       end
