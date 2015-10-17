@@ -236,15 +236,6 @@ module RDF
     def has_object?
       !!object
     end
-    ##
-    # Returns `true` if any resource of this statement is a blank node.
-    #
-    # @return [Boolean]
-    # @deprecated Use {#node?} instead.
-    def has_blank_nodes?
-      warn "[DEPRECATION] Statement#has_blank_nodes? is deprecated in RDF.rb 2.0, use Statement#node? instead. Called from #{Gem.location_of_caller.join(':')}"
-      node?
-    end
 
     ##
     # Returns `true` if any resource of this statement is a blank node.
@@ -254,6 +245,7 @@ module RDF
     def node?
       to_quad.compact.any?(&:node?)
     end
+    alias_method :has_blank_nodes?, :node?
 
     ##
     # @param  [Statement] other

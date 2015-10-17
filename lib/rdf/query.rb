@@ -488,16 +488,6 @@ module RDF
     # Returns `true` if any pattern contains a blank node.
     #
     # @return [Boolean]
-    # @deprecated Use {#node?} instead.
-    def has_blank_nodes?
-      warn "[DEPRECATION] Query#has_blank_nodes? is deprecated in RDF.rb 2.0, use Query#node? instead. Called from #{Gem.location_of_caller.join(':')}"
-      node?
-    end
-
-    ##
-    # Returns `true` if any pattern contains a blank node.
-    #
-    # @return [Boolean]
     # @since 2.0
     def node?
       patterns.any?(&:node?) || graph_name && graph_name.node?
@@ -508,6 +498,7 @@ module RDF
     def empty?
       patterns.empty?
     end
+    alias_method :has_blank_nodes?, :node?
 
     ##
     # Enumerates over each matching query solution.
