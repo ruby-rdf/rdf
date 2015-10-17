@@ -20,7 +20,7 @@ module RDF
     #
     # @example Querying for statements having a given predicate
     #     queryable.query([nil, RDF::Vocab::DOAP.developer, nil])
-    #     queryable.query(:predicate => RDF::Vocab::DOAP.developer) do |statement|
+    #     queryable.query(predicate: RDF::Vocab::DOAP.developer) do |statement|
     #       puts statement.inspect
     #     end
     #

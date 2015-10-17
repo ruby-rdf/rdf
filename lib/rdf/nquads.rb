@@ -13,14 +13,14 @@ module RDF
     # @example Obtaining an NQuads format class
     #   RDF::Format.for(:nquads)     #=> RDF::NQuads::Format
     #   RDF::Format.for("etc/doap.nq")
-    #   RDF::Format.for(:file_name      => "etc/doap.nq")
-    #   RDF::Format.for(:file_extension => "nq")
-    #   RDF::Format.for(:content_type   => "application/n-quads")
+    #   RDF::Format.for(file_name:      "etc/doap.nq")
+    #   RDF::Format.for(file_extension: "nq")
+    #   RDF::Format.for(content_type:   "application/n-quads")
     #
     # @see http://www.w3.org/TR/n-quads/
     # @since  0.4.0
     class Format < RDF::Format
-      content_type     'application/n-quads', :extension => :nq
+      content_type     'application/n-quads', extension: :nq
       content_encoding 'utf-8'
 
       reader { RDF::NQuads::Reader }
@@ -70,7 +70,7 @@ module RDF
           begin
             unless blank? || read_comment
               subject   = read_uriref || read_node || fail_subject
-              predicate = read_uriref(:intern => true) || fail_predicate
+              predicate = read_uriref(intern: true) || fail_predicate
               object    = read_uriref || read_node || read_literal || fail_object
               graph_name    = read_uriref || read_node
               if validate? && !read_eos

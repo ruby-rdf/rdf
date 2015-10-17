@@ -3,8 +3,8 @@ require 'rdf/cli'
 
 describe RDF::CLI do
   TEST_FILES = {
-    :nt => fixture_path('test.nt'),
-    :nq => fixture_path('test.nq'),
+    nt: fixture_path('test.nt'),
+    nq: fixture_path('test.nq'),
   }
 
   describe "#serialize" do
@@ -14,7 +14,7 @@ describe RDF::CLI do
 
     it "serializes to NQuads" do
       expect {
-        RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]], :output_format => :nquads)
+        RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]], output_format: :nquads)
       }.to write.to(:output)
     end
   end

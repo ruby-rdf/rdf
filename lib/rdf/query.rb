@@ -20,7 +20,7 @@ module RDF
   #
   # @example Constructing a basic graph pattern query (2)
   #   query = RDF::Query.new({
-  #     :person => {
+  #     person: {
   #       RDF.type  => FOAF.Person,
   #       FOAF.name => :name,
   #       FOAF.mbox => :email,
@@ -40,7 +40,7 @@ module RDF
   #
   # @example Constructing and executing a query in one go (2)
   #   solutions = RDF::Query.execute(graph, {
-  #     :person => {
+  #     person: {
   #       RDF.type => FOAF.Person,
   #     }
   #   })
@@ -536,7 +536,7 @@ module RDF
     # @return [RDF::Query]
     def dup
       patterns = @patterns.map {|p| p.dup}
-      patterns << @options.merge(:solutions => @solutions.dup)
+      patterns << @options.merge(solutions: @solutions.dup)
       Query.new(*patterns)
     end
 

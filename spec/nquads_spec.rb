@@ -18,9 +18,9 @@ describe RDF::NQuads::Format do
     formats = [
       :nquads,
       'etc/doap.nq',
-      {:file_name      => 'etc/doap.nq'},
-      {:file_extension => 'nq'},
-      {:content_type   => 'application/n-quads'},
+      {file_name:      'etc/doap.nq'},
+      {file_extension: 'nq'},
+      {content_type:   'application/n-quads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Format.for(arg)).to eq subject
@@ -28,9 +28,9 @@ describe RDF::NQuads::Format do
     end
 
     {
-      :nquads => "<a> <b> <c> <d> . ",
-      :literal => '<a> <b> "literal" <d> .',
-      :multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
+      nquads: "<a> <b> <c> <d> . ",
+      literal: '<a> <b> "literal" <d> .',
+      multi_line: %(<a>\n  <b>\n  "literal"\n <d>\n .),
     }.each do |sym, str|
       it "detects #{sym}" do
         expect(subject.for {str}).to eq subject
@@ -38,9 +38,9 @@ describe RDF::NQuads::Format do
     end
 
     {
-      :ntriples => "<a> <b> <c> .",
-      :nt_literal => '<a> <b> "literal" .',
-      :nt_multi_line => %(<a>\n  <b>\n  "literal"\n .),
+      ntriples: "<a> <b> <c> .",
+      nt_literal: '<a> <b> "literal" .',
+      nt_multi_line: %(<a>\n  <b>\n  "literal"\n .),
     }.each do |sym, str|
       it "does not detect #{sym}" do
         expect(subject.for {str}).not_to eq subject
@@ -58,10 +58,10 @@ describe RDF::NQuads::Format do
 
   describe ".detect" do
     {
-      :nquads => "<a> <b> <c> <d> . ",
-      :literal => '<a> <b> "literal" <d> .',
-      :bnode => '<a> <b> "literal" _:graph .',
-      :multi_line => %(<a>\n  <b>\n  "literal"\n <d> .),
+      nquads: "<a> <b> <c> <d> . ",
+      literal: '<a> <b> "literal" <d> .',
+      bnode: '<a> <b> "literal" _:graph .',
+      multi_line: %(<a>\n  <b>\n  "literal"\n <d> .),
     }.each do |sym, str|
       it "detects #{sym}" do
         expect(subject.detect(str)).to be_truthy
@@ -69,14 +69,14 @@ describe RDF::NQuads::Format do
     end
 
     {
-      :ntriples  => "<a> <b> <c> .",
-      :turtle    => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :trig      => "{<a> <b> <c> .}",
-      :rdfxml    => '<rdf:RDF about="foo"></rdf:RDF>',
-      :n3        => '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
-      :jsonld    => '{"@context" => "foo"}',
-      :rdfa      => '<div about="foo"></div>',
-      :microdata => '<div itemref="bar"></div>',
+      ntriples:  "<a> <b> <c> .",
+      turtle:    "@prefix foo: <bar> .\n foo:a foo:b <c> .",
+      trig:      "{<a> <b> <c> .}",
+      rdfxml:    '<rdf:RDF about="foo"></rdf:RDF>',
+      n3:        '@prefix foo: <bar> .\nfoo:bar = {<a> <b> <c>} .',
+      jsonld:    '{"@context" => "foo"}',
+      rdfa:      '<div about="foo"></div>',
+      microdata: '<div itemref="bar"></div>',
     }.each do |sym, str|
       it "does not detect #{sym}" do
         expect(subject.detect(str)).to be_falsey
@@ -100,9 +100,9 @@ describe RDF::NQuads::Reader do
     formats = [
       :nquads,
       'etc/doap.nq',
-      {:file_name      => 'etc/doap.nq'},
-      {:file_extension => 'nq'},
-      {:content_type   => 'application/n-quads'},
+      {file_name:      'etc/doap.nq'},
+      {file_extension: 'nq'},
+      {content_type:   'application/n-quads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Reader.for(arg)).to eq RDF::NQuads::Reader
@@ -191,9 +191,9 @@ describe RDF::NQuads::Writer do
     formats = [
       :nquads,
       'etc/doap.nq',
-      {:file_name      => 'etc/doap.nq'},
-      {:file_extension => 'nq'},
-      {:content_type   => 'application/n-quads'},
+      {file_name:      'etc/doap.nq'},
+      {file_extension: 'nq'},
+      {content_type:   'application/n-quads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Writer.for(arg)).to eq RDF::NQuads::Writer

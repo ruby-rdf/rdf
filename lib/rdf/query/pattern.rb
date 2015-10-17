@@ -102,7 +102,7 @@ module RDF; class Query
     #
     # @example
     #   Pattern.new(:s, :p, :o).optional?                     #=> false
-    #   Pattern.new(:s, :p, :o, :optional => true).optional?  #=> true
+    #   Pattern.new(:s, :p, :o, optional: true).optional?  #=> true
     #
     # @return [Boolean] `true` or `false`
     # @since  0.3.0

@@ -114,13 +114,13 @@ or
 
 ### Reading RDF data in other formats
 {RDF::Reader.open} and {RDF::Repository.load} use a number of mechanisms to determine the appropriate reader
-to use when loading a file. The specific format to use can be forced using, e.g. `:format => :ntriples`
+to use when loading a file. The specific format to use can be forced using, e.g. `format: :ntriples`
 option where the specific format symbol is determined by the available readers. Both also use
 MimeType or file extension, where available.
 
     require 'rdf/nquads'
     
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", :format => :nquads)
+    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
 
 A specific sub-type of Reader can also be invoked directly:
 
@@ -144,9 +144,9 @@ appropriate writer to use.
 
     require 'linkeddata'
 
-    RDF::Writer.open("hello.nq", :format => :nquads) do |writer|
+    RDF::Writer.open("hello.nq", format: :nquads) do |writer|
       writer << RDF::Repository.new do |repo|
-        repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
+        repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", context: RDF::URI("context"))
       end
     end
 
@@ -154,7 +154,7 @@ A specific sub-type of Writer can also be invoked directly:
 
     require 'rdf/nquads'
 
-    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", :context => RDF::URI("context"))
+    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", context: RDF::URI("context"))
     File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods
@@ -172,7 +172,7 @@ of {RDF::Writer}. For example:
 
 Note that no prefixes are loaded automatically, however they can be provided as arguments:
 
-    graph.from_ttl("[ a rdf:Resource]", :prefixes => {:rdf => RDF.to_uri})
+    graph.from_ttl("[ a rdf:Resource]", prefixes: {rdf: RDF.to_uri})
 
 ### Querying RDF data using basic graph patterns (BGPs)
 
@@ -180,7 +180,7 @@ Note that no prefixes are loaded automatically, however they can be provided as 
     
     graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
     query = RDF::Query.new({
-      :person => {
+      person: {
         RDF.type  => FOAF.Person,
         FOAF.name => :name,
         FOAF.mbox => :email,

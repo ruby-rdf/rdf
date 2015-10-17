@@ -15,7 +15,7 @@ describe 'README' do
     after(:each) { File.delete('hello.nt') }
 
     {
-      :example1 => lambda {
+      example1: lambda {
         require 'rdf/ntriples'
 
         RDF::Writer.open("hello.nt") do |writer|
@@ -24,7 +24,7 @@ describe 'README' do
           end
         end
       },
-      :example2 => lambda {
+      example2: lambda {
         require 'rdf/ntriples'
         graph = RDF::Graph.new << [:hello, RDF::RDFS.label, "Hello, world!"]
         File.open("hello.nt", "w") {|f| f << graph.dump(:ntriples)}
@@ -50,7 +50,7 @@ describe 'README' do
 
   context "the 'Reading RDF data in the N-Triples format' example" do
     {
-      :example0 => lambda {
+      example0: lambda {
         require 'rdf/ntriples'
         RDF::NTriples::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
           reader.each_statement do |statement|
@@ -58,7 +58,7 @@ describe 'README' do
           end
         end
       },
-      :example1 => lambda {
+      example1: lambda {
         require 'rdf/ntriples'
 
         RDF::NTriples::Reader.open(File.expand_path("../../etc/doap.nt", __FILE__)) do |reader|
@@ -87,15 +87,15 @@ describe 'README' do
 
   context "the 'Reading RDF data in other formats' example" do
     {
-      :example0 => lambda {
+      example0: lambda {
         require 'rdf/nquads'
 
-        graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", :format => :nquads)
+        graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
         graph.each_statement do |statement|
           puts statement.inspect
         end
       },
-      :example1 => lambda {
+      example1: lambda {
         require 'rdf/nquads'
 
         RDF::NQuads::Reader.open(File.expand_path("../../etc/doap.nq", __FILE__)) do |reader|
@@ -126,7 +126,7 @@ describe 'README' do
     after(:each) { File.delete('hello.nq') }
 
     {
-      :example1 => lambda {
+      example1: lambda {
         require 'rdf/nquads'
 
         RDF::Writer.open("hello.nq") do |writer|
@@ -135,7 +135,7 @@ describe 'README' do
           end
         end
       },
-      :example2 => lambda {
+      example2: lambda {
         require 'rdf/nquads'
         repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("context"))
         File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
@@ -178,7 +178,7 @@ describe 'README' do
     let(:graph) {RDF::Graph.load(File.expand_path("../../etc/doap.nt", __FILE__))}
     let(:query) do
       RDF::Query.new({
-        :person => {
+        person: {
           RDF.type  => RDF::Vocab::FOAF.Person,
           RDF::Vocab::FOAF.name => :name,
           RDF::Vocab::FOAF.mbox => :email,
@@ -222,9 +222,9 @@ describe 'README' do
 
   context "the 'Using ad-hoc RDF vocabularies' example" do
     {
-      :method => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/").knows},
-      :symbol => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")[:knows]},
-      :string => lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")['knows']}
+      method: lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/").knows},
+      symbol: lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")[:knows]},
+      string: lambda {RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")['knows']}
     }.each do |example, code|
       context example do
         it {expect {code.call}.not_to raise_error}

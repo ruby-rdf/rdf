@@ -10,7 +10,7 @@ module RDF
   #   uri = RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating a URI reference (2)
-  #   uri = RDF::URI.new(:scheme => 'http', host: 'rubygems.org', path: '/rdf')
+  #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/rdf')
   #     #=> RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating an interned URI reference
@@ -377,11 +377,11 @@ module RDF
     # @since  0.3.0
     def canonicalize!
       @object = {
-        :scheme => normalized_scheme,
-        :authority => normalized_authority,
-        :path => normalized_path.sub(/\/+/, '/'),
-        :query => normalized_query,
-        :fragment => normalized_fragment
+        scheme: normalized_scheme,
+        authority: normalized_authority,
+        path: normalized_path.sub(/\/+/, '/'),
+        query: normalized_query,
+        fragment: normalized_fragment
       }
       @value = nil
       self
@@ -421,7 +421,7 @@ module RDF
 
         case
         when uri.scheme
-          joined_parts = uri.object.merge(:path => self.class.normalize_path(uri.path))
+          joined_parts = uri.object.merge(path: self.class.normalize_path(uri.path))
         when uri.authority
           joined_parts[:authority] = uri.authority
           joined_parts[:path] = self.class.normalize_path(uri.path)
@@ -572,7 +572,7 @@ module RDF
         self
       else
         RDF::URI.new(
-          object.merge(:path => '/').
+          object.merge(path: '/').
           keep_if {|k, v| [:scheme, :authority, :path].include?(k)})
       end
     end
@@ -1218,7 +1218,7 @@ module RDF
     # An empty Hash or Array will result in an empty query string.
     #
     # @example
-    #   uri.query_values = {:a => "a", :b => ["c", "d", "e"]}
+    #   uri.query_values = {a: "a", b: ["c", "d", "e"]}
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
     #   uri.query_values = [['a', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e']]

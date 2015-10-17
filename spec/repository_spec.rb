@@ -9,7 +9,7 @@ describe RDF::Repository do
   end
 
   it "should maintain arbitrary options" do
-    repository = RDF::Repository.new(:foo => :bar)
+    repository = RDF::Repository.new(foo: :bar)
     expect(repository.options).to have_key(:foo)
     expect(repository.options[:foo]).to eq :bar
   end
@@ -17,7 +17,7 @@ describe RDF::Repository do
   context "A non-validatable repository" do
     # @see lib/rdf/spec/repository.rb in rdf-spec
     it_behaves_like 'an RDF::Repository' do
-      let(:repository) { RDF::Repository.new(:with_validity => false) }
+      let(:repository) { RDF::Repository.new(with_validity: false) }
     end
   end
 end

@@ -58,7 +58,7 @@ module RDF; class Literal
     # @return [RDF::Literal]
     def timezone
       if tz == 'Z'
-        RDF::Literal("PT0S", :datatype => RDF::XSD.dayTimeDuration)
+        RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration)
       elsif md = tz.to_s.match(/^([+-])?(\d+):(\d+)?$/)
         plus_minus, hour, min = md[1,3]
         plus_minus = nil unless plus_minus == "-"

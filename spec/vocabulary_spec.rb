@@ -157,7 +157,7 @@ describe RDF::Vocabulary do
       Class.new(RDF::Vocabulary.create("http://example.com/test#")) do
         property :Class
         property :prop
-        property :prop2, :label => "Test property label", :comment => " Test property comment"
+        property :prop2, label: "Test property label", comment: " Test property comment"
       end
     end
 

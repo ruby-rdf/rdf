@@ -9,14 +9,14 @@ describe RDF::Statement do
 
   context "when initializing" do
     it "should be instantiable with a hash argument" do
-      expect { RDF::Statement.new(:subject => s,
-                                  :predicate => p,
-                                  :object => o) }.not_to raise_error
+      expect { RDF::Statement.new(subject: s,
+                                  predicate: p,
+                                  object: o) }.not_to raise_error
 
     end
 
     it "should not alter a hash argument" do
-      hash = { :subject => s, :predicate => p, :object => o }
+      hash = { subject: s, predicate: p, object: o }
       original_hash = hash.dup
       RDF::Statement.new(hash)
       expect(original_hash).to eq hash
@@ -278,9 +278,9 @@ describe RDF::Statement do
 
     it "Creating an RDF statement from a Hash" do
       expect(RDF::Statement.new({
-        :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
-        :predicate => RDF::URI("http://purl.org/dc/terms/creator"),
-        :object    => RDF::URI.new("http://ar.to/#self"),
+        subject:   RDF::URI.new("http://rubygems.org/gems/rdf"),
+        predicate: RDF::URI("http://purl.org/dc/terms/creator"),
+        object:    RDF::URI.new("http://ar.to/#self"),
       })).to be_a_statement
     end
 

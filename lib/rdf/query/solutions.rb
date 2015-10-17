@@ -3,10 +3,10 @@ module RDF; class Query
   # An RDF basic graph pattern (BGP) query solution sequence.
   #
   # @example Filtering solutions using a hash
-  #   solutions.filter(:author  => RDF::URI("http://ar.to/#self"))
-  #   solutions.filter(:author  => "Gregg Kellogg")
-  #   solutions.filter(:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"])
-  #   solutions.filter(:updated => RDF::Literal(Date.today))
+  #   solutions.filter(author:  RDF::URI("http://ar.to/#self"))
+  #   solutions.filter(author:  "Gregg Kellogg")
+  #   solutions.filter(author:  [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"])
+  #   solutions.filter(updated: RDF::Literal(Date.today))
   #
   # @example Filtering solutions using a block
   #   solutions.filter { |solution| solution.author.literal? }

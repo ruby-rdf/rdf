@@ -12,9 +12,9 @@ module RDF
   # @example Obtaining an RDF writer class
   #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer
   #   RDF::Writer.for("spec/data/output.nt")
-  #   RDF::Writer.for(:file_name      => "spec/data/output.nt")
-  #   RDF::Writer.for(:file_extension => "nt")
-  #   RDF::Writer.for(:content_type   => "application/n-triples")
+  #   RDF::Writer.for(file_name:      "spec/data/output.nt")
+  #   RDF::Writer.for(file_extension: "nt")
+  #   RDF::Writer.for(content_type:   "application/n-triples")
   #
   # @example Instantiating an RDF writer class
   #   RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }
@@ -78,7 +78,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {})
-      options = options.merge(:has_writer => true) if options.is_a?(Hash)
+      options = options.merge(has_writer: true) if options.is_a?(Hash)
       if format = self.format || Format.for(options)
         format.writer
       end
@@ -115,7 +115,7 @@ module RDF
       if io.is_a?(String)
         io = File.open(io, 'w')
       elsif io.respond_to?(:external_encoding) && io.external_encoding
-        options = {:encoding => io.external_encoding}.merge(options)
+        options = {encoding: io.external_encoding}.merge(options)
       end
       io.set_encoding(options[:encoding]) if io.respond_to?(:set_encoding) && options[:encoding]
       method = data.respond_to?(:each_statement) ? :each_statement : :each
@@ -260,7 +260,7 @@ module RDF
     #
     # @example
     #   writer.prefixes = {
-    #     :dc => RDF::URI('http://purl.org/dc/terms/'),
+    #     dc: RDF::URI('http://purl.org/dc/terms/'),
     #   }
     #
     # @param  [Hash{Symbol => RDF::URI}] prefixes

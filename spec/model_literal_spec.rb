@@ -629,7 +629,7 @@ describe RDF::Literal do
       )
 
     subject {
-      double("time", :to_s => "05:50:00")
+      double("time", to_s: "05:50:00")
     }
     it "parses as string if #to_datetime raises an error" do
       expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)

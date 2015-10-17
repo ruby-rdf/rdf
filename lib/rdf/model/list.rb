@@ -66,7 +66,7 @@ module RDF
     def initialize(subject = nil, graph = nil, values = nil, &block)
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
-      is_empty = @graph.query(:subject => subject, :predicate => RDF.first).empty?
+      is_empty = @graph.query(subject: subject, predicate: RDF.first).empty?
 
       if subject && is_empty
         # An empty list with explicit subject and value initializers
@@ -113,7 +113,7 @@ module RDF
         list_nodes << li
         rest = nil
         firsts = rests = 0
-        @graph.query(:subject => li) do |st|
+        @graph.query(subject: li) do |st|
           return false unless st.subject.node?
           case st.predicate
           when RDF.first
@@ -454,7 +454,7 @@ module RDF
     # @return [Boolean]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000434
     def empty?
-      graph.query(:subject => subject, :predicate => RDF.first).empty?
+      graph.query(subject: subject, predicate: RDF.first).empty?
     end
 
     ##
@@ -574,7 +574,7 @@ module RDF
     #
     # @return [RDF::Term]
     def first
-      graph.first_object(:subject => first_subject, :predicate => RDF.first)
+      graph.first_object(subject: first_subject, predicate: RDF.first)
     end
 
     ##
@@ -685,7 +685,7 @@ module RDF
     # @return [RDF::Term]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000422
     def last
-      graph.first_object(:subject => last_subject, :predicate => RDF.first)
+      graph.first_object(subject: last_subject, predicate: RDF.first)
     end
 
     ##
@@ -729,7 +729,7 @@ module RDF
     #
     # @return [RDF::Resource]
     def rest_subject
-      graph.first_object(:subject => subject, :predicate => RDF.rest)
+      graph.first_object(subject: subject, predicate: RDF.rest)
     end
 
     ##
@@ -760,7 +760,7 @@ module RDF
       yield subject
 
       loop do
-        rest = graph.first_object(:subject => subject, :predicate => RDF.rest)
+        rest = graph.first_object(subject: subject, predicate: RDF.rest)
         break if rest.nil? || rest.eql?(RDF.nil)
         yield subject = rest
       end
@@ -780,7 +780,7 @@ module RDF
       return to_enum unless block_given?
 
       each_subject do |subject|
-        if value = graph.first_object(:subject => subject, :predicate => RDF.first)
+        if value = graph.first_object(subject: subject, predicate: RDF.first)
           yield value # FIXME
         end
       end
@@ -800,7 +800,7 @@ module RDF
       return enum_statement unless block_given?
 
       each_subject do |subject|
-        graph.query(:subject => subject, &block)
+        graph.query(subject: subject, &block)
       end
     end
     alias_method :to_rdf, :each_statement

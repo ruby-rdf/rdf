@@ -11,9 +11,9 @@ module RDF
   # @example Obtaining an RDF reader class
   #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
   #   RDF::Reader.for("etc/doap.nt")
-  #   RDF::Reader.for(:file_name      => "etc/doap.nt")
-  #   RDF::Reader.for(:file_extension => "nt")
-  #   RDF::Reader.for(:content_type   => "application/n-triples")
+  #   RDF::Reader.for(file_name:      "etc/doap.nt")
+  #   RDF::Reader.for(file_extension: "nt")
+  #   RDF::Reader.for(content_type:   "application/n-triples")
   #
   # @example Instantiating an RDF reader class
   #   RDF::Reader.for(:ntriples).new($stdin) { |reader| ... }
@@ -87,7 +87,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {}, &block)
-      options = options.merge(:has_reader => true) if options.is_a?(Hash)
+      options = options.merge(has_reader: true) if options.is_a?(Hash)
       if format = self.format || Format.for(options, &block)
         format.reader
       end
@@ -246,7 +246,7 @@ module RDF
     #
     # @example
     #   reader.prefixes = {
-    #     :dc => RDF::URI('http://purl.org/dc/terms/'),
+    #     dc: RDF::URI('http://purl.org/dc/terms/'),
     #   }
     #
     # @param  [Hash{Symbol => RDF::URI}] prefixes

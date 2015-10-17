@@ -4,13 +4,13 @@ require 'rdf/spec/enumerable'
 describe RDF::Graph do
   describe ".load" do
     it "creates an unnamed graph" do
-      expect(described_class).to receive(:new).with(:base_uri => "http://example/")
-      described_class.load("http://example/", :base_uri => "http://example/")
+      expect(described_class).to receive(:new).with(base_uri: "http://example/")
+      described_class.load("http://example/", base_uri: "http://example/")
     end
 
     it "loads into an unnamed graph" do
-      expect_any_instance_of(described_class).to receive(:load).with("http://example/", :base_uri => "http://example/")
-      described_class.load("http://example/", :base_uri => "http://example/")
+      expect_any_instance_of(described_class).to receive(:load).with("http://example/", base_uri: "http://example/")
+      described_class.load("http://example/", base_uri: "http://example/")
     end
   end
 
@@ -34,7 +34,7 @@ describe RDF::Graph do
 
   context "named graphs" do
     subject {
-      described_class.new("http://ruby-rdf.github.com/rdf/etc/doap.nt", :data => RDF::Repository.new)
+      described_class.new("http://ruby-rdf.github.com/rdf/etc/doap.nt", data: RDF::Repository.new)
     }
     it "should be instantiable" do
       expect { subject }.to_not raise_error
@@ -65,32 +65,32 @@ describe RDF::Graph do
       r
     }
     it "should access default graph" do
-      graph = described_class.new(nil, :data => repo)
+      graph = described_class.new(nil, data: repo)
       expect(graph.count).to eq 1
       expect(graph.statements.first.object).to eq RDF::URI('o1')
     end
 
     it "should access named graph" do
-      graph = described_class.new(RDF::URI('c'), :data => repo)
+      graph = described_class.new(RDF::URI('c'), data: repo)
       expect(graph.count).to eq 1
       expect(graph.statements.first.object).to eq RDF::URI('o2')
     end
 
     it "should not load! default graph" do
-      graph = described_class.new(nil, :data => repo)
+      graph = described_class.new(nil, data: repo)
       expect {graph.load!}.to raise_error(ArgumentError)
     end
 
     it "should reload named graph" do
-      graph = described_class.new(RDF::URI("http://example/doc.nt"), :data => repo)
-      expect(graph).to receive(:load).with("http://example/doc.nt", :base_uri => "http://example/doc.nt")
+      graph = described_class.new(RDF::URI("http://example/doc.nt"), data: repo)
+      expect(graph).to receive(:load).with("http://example/doc.nt", base_uri: "http://example/doc.nt")
       graph.load!
     end
   end
 
   it "should maintain arbitrary options" do
-    graph = described_class.new(nil, :foo => :bar)
-    expect(graph.options).to include(:foo => :bar)
+    graph = described_class.new(nil, foo: :bar)
+    expect(graph.options).to include(foo: :bar)
   end
 
   context "as repository" do
@@ -111,14 +111,14 @@ describe RDF::Graph do
     end
 
     it "Creating an empty named graph" do
-      expect {described_class.new("http://rubygems.org/", :data => RDF::Repository.new)}.not_to raise_error
+      expect {described_class.new("http://rubygems.org/", data: RDF::Repository.new)}.not_to raise_error
     end
 
     it "Loading graph data from a URL (1)" do
       expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
-      graph = described_class.new("http://www.bbc.co.uk/programmes/b0081dq5.rdf", :data => RDF::Repository.new)
+      graph = described_class.new("http://www.bbc.co.uk/programmes/b0081dq5.rdf", data: RDF::Repository.new)
       graph.load!
       expect(graph).not_to be_empty
     end

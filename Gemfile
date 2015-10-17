@@ -20,13 +20,13 @@ group :develop do
 end
 
 group :debug do
-  gem 'psych', :platforms => [:mri, :rbx]
+  gem 'psych', platforms: [:mri, :rbx]
   gem "wirble"
-  gem "redcarpet", :platforms => :ruby
-  gem "debugger", :platforms => :mri_19
-  gem "byebug", :platforms => :mri
-  gem "ruby-debug", :platforms => :jruby
-  gem "pry", :platforms => :rbx
+  gem "redcarpet", platforms: :ruby
+  gem "debugger", platforms: :mri_19
+  gem "byebug", platforms: :mri
+  gem "ruby-debug", platforms: :jruby
+  gem "pry", platforms: :rbx
   gem 'guard-rspec'
 end
 

@@ -24,17 +24,17 @@ module RDF
   #   value.plain?                                   #=> true`
   #
   # @example Creating a language-tagged literal (1)
-  #   value = RDF::Literal.new("Hello!", :language => :en)
+  #   value = RDF::Literal.new("Hello!", language: :en)
   #   value.has_language?                            #=> true
   #   value.language                                 #=> :en
   #
   # @example Creating a language-tagged literal (2)
-  #   RDF::Literal.new("Wazup?", :language => :"en-US")
-  #   RDF::Literal.new("Hej!",   :language => :sv)
-  #   RDF::Literal.new("¡Hola!", :language => :es)
+  #   RDF::Literal.new("Wazup?", language: :"en-US")
+  #   RDF::Literal.new("Hej!",   language: :sv)
+  #   RDF::Literal.new("¡Hola!", language: :es)
   #
   # @example Creating an explicitly datatyped literal
-  #   value = RDF::Literal.new("2009-12-31", :datatype => RDF::XSD.date)
+  #   value = RDF::Literal.new("2009-12-31", datatype: RDF::XSD.date)
   #   value.has_datatype?                            #=> true
   #   value.datatype                                 #=> RDF::XSD.date
   #

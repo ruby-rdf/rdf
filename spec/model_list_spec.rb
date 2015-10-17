@@ -58,7 +58,7 @@ describe RDF::List do
       end
 
       it "accepts literal arguments" do
-        expect { RDF::List[RDF::Literal.new("Hello, world!", :language => :en)] }.not_to raise_error
+        expect { RDF::List[RDF::Literal.new("Hello, world!", language: :en)] }.not_to raise_error
       end
 
       it "accepts boolean arguments" do
@@ -1191,19 +1191,19 @@ describe RDF::List do
 
     context "offsets" do
       {
-        :first => 1,
-        :second => 2,
-        :third => 3,
-        :fourth => 4,
-        :fifth => 5,
-        :sixth => 6,
-        :seventh => 7,
-        :eighth => 8,
-        :ninth => 9,
-        :tenth => 10,
-        :last => 10,
-        :rest => RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10],
-        :tail => RDF::List[10],
+        first: 1,
+        second: 2,
+        third: 3,
+        fourth: 4,
+        fifth: 5,
+        sixth: 6,
+        seventh: 7,
+        eighth: 8,
+        ninth: 9,
+        tenth: 10,
+        last: 10,
+        rest: RDF::List[2, 3, 4, 5, 6, 7, 8, 9, 10],
+        tail: RDF::List[10],
       }.each do |method, value|
         describe "##{method}" do
           it do
@@ -1218,7 +1218,7 @@ describe RDF::List do
       it "BNode of first subject" do
         r = subject.first_subject
         expect(r).to be_a_node
-        expect(subject.graph.first_object(:subject => r, :predicate => RDF.first)).to eq RDF::Literal(1)
+        expect(subject.graph.first_object(subject: r, predicate: RDF.first)).to eq RDF::Literal(1)
       end
     end
 
@@ -1226,7 +1226,7 @@ describe RDF::List do
       it "BNode of rest subject" do
         r = subject.rest_subject
         expect(r).to be_a_node
-        expect(subject.graph.first_object(:subject => r, :predicate => RDF.first)).to eq RDF::Literal(2)
+        expect(subject.graph.first_object(subject: r, predicate: RDF.first)).to eq RDF::Literal(2)
       end
     end
 
@@ -1234,7 +1234,7 @@ describe RDF::List do
       it "BNode of last subject" do
         r = subject.last_subject
         expect(r).to be_a_node
-        expect(subject.graph.first_object(:subject => r, :predicate => RDF.rest)).to eq RDF.nil
+        expect(subject.graph.first_object(subject: r, predicate: RDF.rest)).to eq RDF.nil
       end
     end
 

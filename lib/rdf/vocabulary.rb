@@ -115,7 +115,7 @@ module RDF
           Term.intern("#{self}property", attributes: {label: "property", vocab: self})
         else
           name, options = args
-          options = {:label => name.to_s, vocab: self}.merge(options || {})
+          options = {label: name.to_s, vocab: self}.merge(options || {})
           uri_str = [to_s, name.to_s].join('')
           Term.cache.delete(uri_str)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)

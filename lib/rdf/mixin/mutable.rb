@@ -46,7 +46,7 @@ module RDF
       end
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      Reader.open(filename, {:base_uri => filename}.merge(options)) do |reader|
+      Reader.open(filename, {base_uri: filename}.merge(options)) do |reader|
         if options[:graph_name]
           statements = []
           reader.each_statement do |statement|

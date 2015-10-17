@@ -10,15 +10,15 @@ describe RDF::Query::Pattern do
       end
 
       it "creates using hash" do
-        expect(described_class.from(:subject => :s, :predicate => :p, :object => :o)).to eq described_class.new(:s, :p, :o)
+        expect(described_class.from(subject: :s, predicate: :p, object: :o)).to eq described_class.new(:s, :p, :o)
       end
 
       it "creates using quad array" do
-        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(:s, :p, :o, :graph_name => :c)
+        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(:s, :p, :o, graph_name: :c)
       end
 
       it "creates using hash" do
-        expect(described_class.from(:subject => :s, :predicate => :p, :object => :o, :graph_name => :c)).to eq described_class.new(:s, :p, :o, :graph_name => :c)
+        expect(described_class.from(subject: :s, predicate: :p, object: :o, graph_name: :c)).to eq described_class.new(:s, :p, :o, graph_name: :c)
       end
     end
 
@@ -60,7 +60,7 @@ describe RDF::Query::Pattern do
       expect(subject.variables?).to be_truthy
       expect(subject.variable_count).to eq 1
       expect(subject.variables.keys).to eq [:s]
-      expect(subject.variables).to eq({:s => s})
+      expect(subject.variables).to eq({s: s})
     end
 
     it "should have no unbound variables" do
@@ -69,7 +69,7 @@ describe RDF::Query::Pattern do
 
     it "should have one bound variable" do
       expect(subject.bound_variables.size).to eq 1
-      expect(subject.bound_variables).to eq({:s => s})
+      expect(subject.bound_variables).to eq({s: s})
     end
 
     it "should be fully bound" do
@@ -80,7 +80,7 @@ describe RDF::Query::Pattern do
     it "should have one binding" do
       expect(subject.bindings?).to be_truthy
       expect(subject.binding_count).to eq 1
-      expect(subject.bindings).to eq({:s => true})
+      expect(subject.bindings).to eq({s: true})
     end
   end
 
@@ -98,7 +98,7 @@ describe RDF::Query::Pattern do
       expect(subject.variables?).to be_truthy
       expect(subject.variable_count).to eq 3
       expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
-      expect(subject.variables).to eq({:s => s, :p => p, :o => o})
+      expect(subject.variables).to eq({s: s, p: p, o: o})
     end
 
     it "should have no unbound variables" do
@@ -107,7 +107,7 @@ describe RDF::Query::Pattern do
 
     it "should have three bound variables" do
       expect(subject.bound_variables.size).to eq 3
-      expect(subject.bound_variables).to eq({:s => s, :p => p, :o => o})
+      expect(subject.bound_variables).to eq({s: s, p: p, o: o})
     end
 
     it "should be fully bound" do
@@ -118,7 +118,7 @@ describe RDF::Query::Pattern do
     it "should have three bindings" do
       expect(subject.bindings?).to be_truthy
       expect(subject.binding_count).to eq 3
-      expect(subject.bindings).to eq({:s => true, :p => true, :o => true})
+      expect(subject.bindings).to eq({s: true, p: true, o: true})
     end
   end
 
@@ -127,12 +127,12 @@ describe RDF::Query::Pattern do
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
     it "uses a variable for a symbol" do
-      pattern = described_class.new(s, p, o, :graph_name => :c)
+      pattern = described_class.new(s, p, o, graph_name: :c)
       expect(pattern.graph_name).to eq RDF::Query::Variable.new(:c)
     end
 
     it "uses a constant for :default" do
-      pattern = described_class.new(s, p, o, :graph_name => false)
+      pattern = described_class.new(s, p, o, graph_name: false)
       expect(pattern.graph_name).to eq false
     end
   end
@@ -222,7 +222,7 @@ describe RDF::Query::Pattern do
     describe "#optional" do
       specify {
         expect(described_class.new(:s, :p, :o)).to_not be_optional
-        expect(described_class.new(:s, :p, :o, :optional => true)).to be_optional
+        expect(described_class.new(:s, :p, :o, optional: true)).to be_optional
       }
     end
   end

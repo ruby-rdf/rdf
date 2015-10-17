@@ -31,7 +31,7 @@ describe RDF::Enumerable do
     context "Checking whether a specific value exists" do
       it {is_expected.to have_subject(RDF::URI("http://rubygems.org/gems/rdf"))}
       it {is_expected.to have_predicate(RDF.type)}
-      it {is_expected.to have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))}
+      it {is_expected.to have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", language: :en))}
       it {is_expected.to have_graph(RDF::URI("http://ar.to/#self"))}
     end
 

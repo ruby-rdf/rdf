@@ -56,7 +56,7 @@ describe RDF::Node do
   {
     "" => true,
     "foo" => true,
-    :foo => true,
+    foo: true,
     "1bc" => true,
   }.each do |l, valid|
     context "given '#{l}'" do

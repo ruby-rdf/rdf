@@ -115,8 +115,8 @@ describe RDF::Query do
         query = RDF::Query.new do |q|
           q << [:s, EX.p1, 123.0]
         end
-        expect(query.execute(graph).map(&:to_hash)).to eq [{:s => EX.x1}]
-        expect(graph.query(query).map(&:to_hash)).to eq [{:s => EX.x1}]
+        expect(query.execute(graph).map(&:to_hash)).to eq [{s: EX.x1}]
+        expect(graph.query(query).map(&:to_hash)).to eq [{s: EX.x1}]
       end
     end
 
@@ -904,7 +904,7 @@ describe RDF::Query do
 
     it "Constructing a basic graph pattern query (2)" do
       query = RDF::Query.new({
-        :person => {
+        person: {
           RDF.type  => FOAF.Person,
           FOAF.name => :name,
           FOAF.mbox => :email,
@@ -930,7 +930,7 @@ describe RDF::Query do
 
     it "Constructing and executing a query in one go (2)" do
       solutions = RDF::Query.execute(graph, {
-        :person => {
+        person: {
           RDF.type => FOAF.Person,
         }
       })

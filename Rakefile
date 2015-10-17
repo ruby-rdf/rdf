@@ -16,8 +16,8 @@ namespace :gem do
 end
 
 desc 'Default: run specs.'
-task :default => :spec
-task :specs => :spec
+task default: :spec
+task specs: :spec
 
 require 'rspec/core/rake_task'
 desc 'Run specifications'
@@ -99,7 +99,7 @@ vocab_sources = {
            strict: false},
 }
 
-task :gen_vocabs => vocab_sources.keys.map {|v| "lib/rdf/vocab/#{v}.rb"}
+task gen_vocabs: vocab_sources.keys.map {|v| "lib/rdf/vocab/#{v}.rb"}
 
 vocab_sources.each do |id, v|
   file "lib/rdf/vocab/#{id}.rb" => :do_build do

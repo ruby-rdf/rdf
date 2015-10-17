@@ -17,8 +17,8 @@ describe RDF::Query::HashPatternNormalizer do
     
     it "should be idempotent" do
       hash_pattern = {
-        :foo => {
-          :bar => :baz
+        foo: {
+          bar: :baz
         }
       }
       
@@ -28,19 +28,19 @@ describe RDF::Query::HashPatternNormalizer do
     
     it "should normalize nested hash-patterns" do
       hash_pattern = {
-        :foo => {
-          :bar => {
-            :baz => :qux
+        foo: {
+          bar: {
+            baz: :qux
           }
         }
       }
       
       expected_hash_pattern = {
-        :foo => {
-          :bar => :__1__
+        foo: {
+          bar: :__1__
         }, 
-        :__1__ => {
-          :baz => :qux
+        __1__: {
+          baz: :qux
         }
       }
       
@@ -49,27 +49,27 @@ describe RDF::Query::HashPatternNormalizer do
     
     it "should normalize nested array-patterns" do
       hash_pattern = {
-        :foo => {
-          :bar => [
+        foo: {
+          bar: [
             {
-              :baz => :qux
+              baz: :qux
             },
             {
-              :quux => :corge
+              quux: :corge
             }
           ]
         }
       }
       
       expected_hash_pattern = {
-        :foo => {
-          :bar => [:__1__, :__2__]
+        foo: {
+          bar: [:__1__, :__2__]
         }, 
-        :__1__ => {
-          :baz => :qux
+        __1__: {
+          baz: :qux
         }, 
-        :__2__ => {
-          :quux => :corge
+        __2__: {
+          quux: :corge
         }
       }
       
