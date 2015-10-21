@@ -429,6 +429,10 @@ describe RDF::URI do
         "file:///path/to/file with spaces.txt",
         "file:///path/to/file%20with%20spaces.txt"
       ],
+      "urn" => [
+        "urn:ex:s001",
+        "urn:ex:s001"
+      ]
     }.each do |name, (input, output)|
       it "#canonicalize #{name}" do
         u1 = RDF::URI(input)

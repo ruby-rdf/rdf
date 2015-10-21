@@ -1045,18 +1045,19 @@ module RDF
       when authority
         # ipath-abempty
         segments.map {|s| normalize_segment(s, ISEGMENT)}
-      when segments.first.nil?
+      when segments[0].nil?
         # ipath-absolute
         res = [nil]
         res << normalize_segment(segments[1], ISEGMENT_NZ) if segments.length > 1
         res += segments[2..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 2
         res
-      when segments.first.to_s.index(':')
+      when segments[0].to_s.index(':')
         # ipath-noscheme
         res = []
-        res << normalize_segment(segments[1], ISEGMENT_NZ_NC)
+        res << normalize_segment(segments[0], ISEGMENT_NZ_NC)
         res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
-      when segments.first
+        res
+      when segments[0]
         # ipath-rootless
         # ipath-noscheme
         res = []
