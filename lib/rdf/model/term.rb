@@ -2,7 +2,7 @@ module RDF
   ##
   # An RDF term.
   #
-  # Terms can be used as subjects, predicates, objects, and contexts of
+  # Terms can be used as subjects, predicates, objects, and graph names of
   # statements.
   #
   # @since 0.3.0
@@ -78,6 +78,15 @@ module RDF
     # @return [RDF::Value]
     def to_term
       self
+    end
+
+    ##
+    # Term compatibility according to SPARQL
+    #
+    # @see http://www.w3.org/TR/sparql11-query/#func-arg-compatibility
+    # @since 2.0
+    def compatible?(other)
+      false
     end
 
     protected

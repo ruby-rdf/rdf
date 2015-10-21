@@ -3,10 +3,10 @@ module RDF; class Query
   # An RDF basic graph pattern (BGP) query solution sequence.
   #
   # @example Filtering solutions using a hash
-  #   solutions.filter(:author  => RDF::URI("http://ar.to/#self"))
-  #   solutions.filter(:author  => "Gregg Kellogg")
-  #   solutions.filter(:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"])
-  #   solutions.filter(:updated => RDF::Literal(Date.today))
+  #   solutions.filter(author:  RDF::URI("http://ar.to/#self"))
+  #   solutions.filter(author:  "Gregg Kellogg")
+  #   solutions.filter(author:  [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"])
+  #   solutions.filter(updated: RDF::Literal(Date.today))
   #
   # @example Filtering solutions using a block
   #   solutions.filter { |solution| solution.author.literal? }
@@ -113,10 +113,10 @@ module RDF; class Query
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [Boolean]
     # @return [void] `self`
-    def filter(criteria = {}, &block)
+    def filter(criteria = {})
       if block_given?
         self.reject! do |solution|
-          !block.call(solution.is_a?(Solution) ? solution : Solution.new(solution))
+          !yield(solution.is_a?(Solution) ? solution : Solution.new(solution))
         end
       else
         self.reject! do |solution|
@@ -165,13 +165,13 @@ module RDF; class Query
     # @yieldparam  [RDF::Query::Solution] b
     # @yieldreturn [Integer] -1, 0, or 1 depending on value of comparator
     # @return [void] `self`
-    def order(*variables, &block)
+    def order(*variables)
       if variables.empty? && !block_given?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
       else
         self.sort! do |a, b|
           if block_given?
-            block.call((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
+            yield((a.is_a?(Solution) ? a : Solution.new(a)), (b.is_a?(Solution) ? b : Solution.new(b)))
           else
             # Try each variable until a difference is found.
             variables.inject(nil) do |memo, v|

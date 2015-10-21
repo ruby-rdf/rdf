@@ -18,7 +18,7 @@ class RDF::Query
   #   solution.mbox
   #
   # @example Retrieving all bindings in the solution as a `Hash`
-  #   solution.to_hash       #=> {:mbox => "jrhacker@example.org", ...}
+  #   solution.to_hash       #=> {mbox: "jrhacker@example.org", ...}
   #
   class Solution
     # Undefine all superfluous instance methods:
@@ -100,9 +100,9 @@ class RDF::Query
     # @yield  [variable]
     # @yieldparam [Variable]
     # @return [Enumerator]
-    def each_variable(&block)
+    def each_variable
       @bindings.each do |name, value|
-        block.call(Variable.new(name, value))
+        yield Variable.new(name, value)
       end
     end
 

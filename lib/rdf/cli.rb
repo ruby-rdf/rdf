@@ -62,8 +62,8 @@ module RDF
         writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
         out = opts[:output] || $stdout
         out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
-        opts = opts.merge(:prefixes => {})
-        writer_opts = opts.merge(:standard_prefixes => true)
+        opts = opts.merge(prefixes: {})
+        writer_opts = opts.merge(standard_prefixes: true)
         self.parse(argv, opts) do |reader|
           writer_class.new(out, writer_opts) do |writer|
             writer << reader
@@ -91,14 +91,14 @@ module RDF
     def self.options(&block)
       options = OptionParser.new
       opts = options.options = {
-        :base_uri       => nil,
-        :canonicalize   => false,
-        :debug          => false,
-        :evaluate       => nil,
-        :format         => nil,
-        :output         => $stdout,
-        :output_format  => :ntriples,
-        :validate       => false,
+        base_uri:       nil,
+        canonicalize:   false,
+        debug:          false,
+        evaluate:       nil,
+        format:         nil,
+        output:         $stdout,
+        output_format:  :ntriples,
+        validate:       false,
       }
 
       # Command-specific options

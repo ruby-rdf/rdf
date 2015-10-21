@@ -2,7 +2,6 @@
 # This file generated automatically using vocab-fetch from http://schema.org/docs/schema_org_rdfa.html
 require 'rdf'
 module RDF
-  # @deprecated Please use `RDF::Vocab::SCHEMA` from the rdf-vocab gem instead
   class SCHEMA < RDF::StrictVocabulary("http://schema.org/")
 
     # Class definitions
@@ -2385,7 +2384,7 @@ module RDF
       <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       label: "Periodical".freeze,
-      "owl:equivalentClass" => %(http://purl.org/ontology/bibo/Periodical).freeze,
+      "owl:equivalentClass" => %(bibo:Periodical).freeze,
       subClassOf: "schema:CreativeWorkSeries".freeze,
       type: "rdfs:Class".freeze
     term :Permit,
@@ -2598,7 +2597,7 @@ module RDF
       <br/><br/>See also <a href="http://blog.schema.org/2014/09/schemaorg-support-for-bibliographic_2.html">blog post</a>.).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       label: "PublicationIssue".freeze,
-      "owl:equivalentClass" => %(http://purl.org/ontology/bibo/Issue).freeze,
+      "owl:equivalentClass" => %(bibo:Issue).freeze,
       subClassOf: "schema:CreativeWork".freeze,
       type: "rdfs:Class".freeze
     term :PublicationVolume,
@@ -6441,7 +6440,7 @@ Note 3: Often, the absolute value is useful only when related to driving speed \
       comment: %(The ISBN of the book.).freeze,
       domainIncludes: "schema:Book".freeze,
       label: "isbn".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/isbn).freeze,
+      "owl:equivalentProperty" => %(bibo:isbn).freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :isicV4,
@@ -6462,7 +6461,7 @@ Note 3: Often, the absolute value is useful only when related to driving speed \
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       domainIncludes: "schema:Periodical".freeze,
       label: "issn".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/issn).freeze,
+      "owl:equivalentProperty" => %(bibo:issn).freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :issueNumber,
@@ -6470,7 +6469,7 @@ Note 3: Often, the absolute value is useful only when related to driving speed \
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       domainIncludes: "schema:PublicationIssue".freeze,
       label: "issueNumber".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/issue).freeze,
+      "owl:equivalentProperty" => %(bibo:issue).freeze,
       rangeIncludes: ["schema:Integer".freeze, "schema:Text".freeze],
       subPropertyOf: "schema:position".freeze,
       type: "rdf:Property".freeze
@@ -7329,7 +7328,7 @@ Typical unit code\(s\): C62).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       domainIncludes: ["schema:PublicationVolume".freeze, "schema:PublicationIssue".freeze, "schema:Article".freeze],
       label: "pageEnd".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/pageEnd).freeze,
+      "owl:equivalentProperty" => %(bibo:pageEnd).freeze,
       rangeIncludes: ["schema:Integer".freeze, "schema:Text".freeze],
       type: "rdf:Property".freeze
     property :pageStart,
@@ -7337,7 +7336,7 @@ Typical unit code\(s\): C62).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       domainIncludes: ["schema:PublicationVolume".freeze, "schema:PublicationIssue".freeze, "schema:Article".freeze],
       label: "pageStart".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/pageStart).freeze,
+      "owl:equivalentProperty" => %(bibo:pageStart).freeze,
       rangeIncludes: ["schema:Integer".freeze, "schema:Text".freeze],
       type: "rdf:Property".freeze
     property :pagination,
@@ -7345,7 +7344,7 @@ Typical unit code\(s\): C62).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       domainIncludes: ["schema:PublicationVolume".freeze, "schema:PublicationIssue".freeze, "schema:Article".freeze],
       label: "pagination".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/pages).freeze,
+      "owl:equivalentProperty" => %(bibo:pages).freeze,
       rangeIncludes: "schema:Text".freeze,
       type: "rdf:Property".freeze
     property :parent,
@@ -9549,7 +9548,7 @@ Typical unit code\(s\): C62 for persons ).freeze,
       "dc:source" => %(http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex).freeze,
       domainIncludes: "schema:PublicationVolume".freeze,
       label: "volumeNumber".freeze,
-      "owl:equivalentProperty" => %(http://purl.org/ontology/bibo/volume).freeze,
+      "owl:equivalentProperty" => %(bibo:volume).freeze,
       rangeIncludes: ["schema:Integer".freeze, "schema:Text".freeze],
       subPropertyOf: "schema:position".freeze,
       type: "rdf:Property".freeze

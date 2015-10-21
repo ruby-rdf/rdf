@@ -16,14 +16,14 @@ describe RDF::Queryable do
 
     context "Querying for statements having a given predicate" do
       it "with array" do
-        expect(subject.query([nil, RDF::DOAP.developer, nil]).to_a).not_to be_empty
-        subject.query([nil, RDF::DOAP.developer, nil]) {|s| expect(s).to be_a_statement}
-        expect{|b| subject.query([nil, RDF::DOAP.developer, nil], &b)}.to yield_control.at_least(1).times
+        expect(subject.query([nil, RDF::Vocab::DOAP.developer, nil]).to_a).not_to be_empty
+        subject.query([nil, RDF::Vocab::DOAP.developer, nil]) {|s| expect(s).to be_a_statement}
+        expect{|b| subject.query([nil, RDF::Vocab::DOAP.developer, nil], &b)}.to yield_control.at_least(1).times
       end
       it "with hash" do
-        expect(subject.query(:predicate => RDF::DOAP.developer).to_a).not_to be_empty
-        subject.query(:predicate => RDF::DOAP.developer) {|s| expect(s).to be_a_statement}
-        expect{|b| subject.query(:predicate => RDF::DOAP.developer, &b)}.to yield_control.at_least(1).times
+        expect(subject.query(predicate: RDF::Vocab::DOAP.developer).to_a).not_to be_empty
+        subject.query(predicate: RDF::Vocab::DOAP.developer) {|s| expect(s).to be_a_statement}
+        expect{|b| subject.query(predicate: RDF::Vocab::DOAP.developer, &b)}.to yield_control.at_least(1).times
       end
     end
 

@@ -4,7 +4,7 @@ require 'rdf/ntriples'
 require 'rdf/nquads'
 
 class RDF::Format::FooFormat < RDF::Format
-  content_type     'application/test', :extension => :test
+  content_type     'application/test', extension: :test
   reader { RDF::NTriples::Reader }
   def self.detect(sample)
     sample == "foo"
@@ -12,7 +12,7 @@ class RDF::Format::FooFormat < RDF::Format
 end
 
 class RDF::Format::BarFormat < RDF::Format
-  content_type     'application/test', :extension => :test
+  content_type     'application/test', extension: :test
   reader { RDF::NTriples::Reader }
   def self.detect(sample)
     sample == "bar"
@@ -31,9 +31,9 @@ describe RDF::Format do
   describe ".for" do
     {
       "path with extension" => "filename.test",
-      "file_name"           => {:file_name => "filename.test"},
-      "file_extension"      => {:file_extension => "test"},
-      "content_type"        => {:content_type => "application/test"},
+      "file_name"           => {file_name: "filename.test"},
+      "file_extension"      => {file_extension: "test"},
+      "content_type"        => {content_type: "application/test"},
     }.each do |condition, arg|
       it "yields given conflicting #{condition}" do
         expect {|b| RDF::Format.for(arg, &b)}.to yield_control
@@ -57,8 +57,8 @@ describe RDF::Format do
   describe ".reader_types" do
     it "returns content-types of available readers" do
       %w(
-        application/n-triples text/plain
-        application/n-quads text/x-nquads
+        application/n-triples
+        application/n-quads
         application/test
       ).each do |ct|
         expect(RDF::Format.reader_types).to include(ct)
@@ -80,8 +80,8 @@ describe RDF::Format do
   describe ".writer_types" do
     it "returns content-types of available writers" do
       %w(
-        application/n-triples text/plain
-        application/n-quads text/x-nquads
+        application/n-triples
+        application/n-quads
       ).each do |ct|
         expect(RDF::Format.writer_types).to include(ct)
       end
@@ -115,9 +115,9 @@ describe RDF::Format do
       [
         :ntriples,
         "etc/doap.nt",
-        {:file_name => "etc/doap.nt"},
-        {:file_extension => "nt"},
-        {:content_type => "application/n-triples"}
+        {file_name: "etc/doap.nt"},
+        {file_extension: "nt"},
+        {content_type: "application/n-triples"}
       ].each do |arg|
         expect(subject.for(arg)).to eq RDF::NTriples::Format
       end
@@ -133,7 +133,7 @@ describe RDF::Format do
     it "Defining a new RDF serialization format class" do
       expect {
         class RDF::NTriples::Format < RDF::Format
-          content_type     'application/n-triples', :extension => :nt
+          content_type     'application/n-triples', extension: :nt
           content_encoding 'utf-8'
 
           reader RDF::NTriples::Reader

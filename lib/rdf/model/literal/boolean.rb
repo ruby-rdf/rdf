@@ -5,7 +5,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#boolean
   # @since 0.2.1
   class Boolean < Literal
-    DATATYPE = XSD.boolean
+    DATATYPE = RDF::XSD.boolean
     GRAMMAR  = /^(true|false|1|0)$/i.freeze
     TRUES    = %w(true  1).freeze
     FALSES   = %w(false 0).freeze

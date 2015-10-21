@@ -4,19 +4,19 @@ module RDF
   #
   # @example Creating an RDF statement
   #   s = RDF::URI.new("http://rubygems.org/gems/rdf")
-  #   p = RDF::DC.creator
+  #   p = RDF::Vocab::DC.creator
   #   o = RDF::URI.new("http://ar.to/#self")
   #   RDF::Statement(s, p, o)
   #
-  # @example Creating an RDF statement with a context
+  # @example Creating an RDF statement with a graph_name
   #   uri = RDF::URI("http://example/")
-  #   RDF::Statement(s, p, o, :context => uri)
+  #   RDF::Statement(s, p, o, graph_name: uri)
   #
   # @example Creating an RDF statement from a `Hash`
   #   RDF::Statement({
-  #     :subject   => RDF::URI.new("http://rubygems.org/gems/rdf"),
-  #     :predicate => RDF::DC.creator,
-  #     :object    => RDF::URI.new("http://ar.to/#self"),
+  #     subject:   RDF::URI.new("http://rubygems.org/gems/rdf"),
+  #     predicate: RDF::Vocab::DC.creator,
+  #     object:    RDF::URI.new("http://ar.to/#self"),
   #   })
   #
   # @example Creating an RDF statement with interned nodes
@@ -34,8 +34,8 @@ module RDF
     def self.from(statement, options = {})
       case statement
         when Array, Query::Pattern
-          context = statement[3] == false ? nil : statement[3]
-          self.new(statement[0], statement[1], statement[2], options.merge(:context => context))
+          graph_name = statement[3] == false ? nil : statement[3]
+          self.new(statement[0], statement[1], statement[2], options.merge(graph_name: graph_name))
         when Statement then statement
         when Hash      then self.new(options.merge(statement))
         else raise ArgumentError, "expected RDF::Statement, Hash, or Array, but got #{statement.inspect}"
@@ -46,7 +46,29 @@ module RDF
     attr_accessor :id
 
     # @return [RDF::Resource]
-    attr_accessor :context
+    attr_accessor :graph_name
+
+    ##
+    # Name of this graph, if it is part of an {RDF::Repository}
+    # @!attribute [rw] graph_name
+    # @return [RDF::Resource]
+    # @since 1.1.0
+    # @deprecated Use {#graph_name} instead.
+    def context
+      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+      graph_name
+    end
+
+    ##
+    # Name of this graph, if it is part of an {RDF::Repository}
+    # @!attribute [rw] graph_name
+    # @return [RDF::Resource]
+    # @since 1.1.0
+    # @deprecated Use {#graph_name=} instead.
+    def context=(value)
+      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+      self.graph_name = value
+    end
 
     # @return [RDF::Resource]
     attr_accessor :subject
@@ -66,7 +88,9 @@ module RDF
     #   @option options [RDF::Resource]      :object    (nil)
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @option options [RDF::Term]  :context   (nil)
-    #     Note, in RDF 1.1, a context MUST be an {Resource}.
+    #     Alias for :graph_name, :context is deprecated in RDF.rb.
+    #   @option options [RDF::Term]  :graph_name   (nil)
+    #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, options = {})
@@ -77,41 +101,53 @@ module RDF
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Term]  :context   (nil)
+    #     Alias for :graph_name, :context is deprecated in RDF.rb.
+    #   @option options [RDF::Term]  :graph_name   (nil)
+    #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
-      case subject
-        when Hash
-          @options   = subject.dup
-          @subject   = @options.delete(:subject)
-          @predicate = @options.delete(:predicate)
-          @object    = @options.delete(:object)
-        else
-          @options   = !options.empty? ? options.dup : {}
-          @subject   = subject
-          @predicate = predicate
-          @object    = object
+      if subject.is_a?(Hash)
+        @options   = Hash[subject] # faster subject.dup
+        @subject   = @options.delete(:subject)
+        @predicate = @options.delete(:predicate)
+        @object    = @options.delete(:object)
+      else
+        @options   = !options.empty? ? Hash[options] : {}
+        @subject   = subject
+        @predicate = predicate
+        @object    = object
       end
-      @id      = @options.delete(:id) if @options.has_key?(:id)
-      @context = @options.delete(:context)
+      if @options.has_key?(:context)
+        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
+        @options[:graph_name] ||= @options.delete(:context)
+      end
+      @id          = @options.delete(:id) if @options.has_key?(:id)
+      @graph_name  = @options.delete(:graph_name)
       initialize!
     end
 
     ##
     # @private
     def initialize!
-      @context   = Node.intern(@context)   if @context.is_a?(Symbol)
-      @subject   = case @subject
-        when nil      then nil
-        when Symbol   then Node.intern(@subject)
-        when Value    then @subject.to_term
-        else          raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
+      @graph_name   = Node.intern(@graph_name)   if @graph_name.is_a?(Symbol)
+      @subject   = if @subject.is_a?(Value)
+        @subject.to_term
+      elsif @subject.is_a?(Symbol)
+        Node.intern(@subject)
+      elsif @subject.nil?
+        nil
+      else
+        raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
       end
       @predicate = Node.intern(@predicate) if @predicate.is_a?(Symbol)
-      @object    = case @object
-        when nil    then nil
-        when Symbol then Node.intern(@object)
-        when Value  then @object.to_term
-        else Literal.new(@object)
+      @object    = if @object.is_a?(Value)
+        @object.to_term
+      elsif @object.is_a?(Symbol)
+        Node.intern(@object)
+      elsif @object.nil?
+        nil
+      else
+        Literal.new(@object)
       end
     end
 
@@ -132,7 +168,7 @@ module RDF
       !(has_subject?    && subject.resource? && 
         has_predicate?  && predicate.resource? &&
         has_object?     && (object.resource? || object.literal?) &&
-        (has_context?    ? context.resource? : true ))
+        (has_graph?     ? graph_name.resource? : true ))
     end
 
     ##
@@ -147,7 +183,7 @@ module RDF
       has_subject?    && subject.resource? && subject.valid? && 
       has_predicate?  && predicate.uri? && predicate.valid? &&
       has_object?     && object.term? && object.valid? &&
-      (has_context? ? context.resource? && context.valid? : true )
+      (has_graph?      ? graph_name.resource? && graph_name.valid? : true )
     end
 
     ##
@@ -171,13 +207,16 @@ module RDF
     ##
     # @return [Boolean]
     def has_graph?
-      has_context?
+      !!graph_name
     end
+    alias_method :has_name?, :has_graph?
 
     ##
     # @return [Boolean]
+    # @deprecated Use {#has_graph?} instead.
     def has_context?
-      !!context
+      warn "[DEPRECATION] Statement#has_context? is being replaced with Statement#has_grap in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+     !!context
     end
 
     ##
@@ -202,15 +241,17 @@ module RDF
     # Returns `true` if any resource of this statement is a blank node.
     #
     # @return [Boolean]
-    def has_blank_nodes?
+    # @since 2.0
+    def node?
       to_quad.compact.any?(&:node?)
     end
+    alias_method :has_blank_nodes?, :node?
 
     ##
     # @param  [Statement] other
     # @return [Boolean]
     def eql?(other)
-      other.is_a?(Statement) && self == other && (self.context || false) == (other.context || false)
+      other.is_a?(Statement) && self == other && (self.graph_name || false) == (other.graph_name || false)
     end
 
     ##
@@ -224,7 +265,7 @@ module RDF
     # @param  [Statement] other
     # @return [Boolean]
     def ===(other)
-      return false if has_context?   && !context.eql?(other.context)
+      return false if has_graph?     && !graph_name.eql?(other.graph_name)
       return false if has_subject?   && !subject.eql?(other.subject)
       return false if has_predicate? && !predicate.eql?(other.predicate)
       return false if has_object?    && !object.eql?(other.object)
@@ -239,7 +280,7 @@ module RDF
         when 0 then self.subject
         when 1 then self.predicate
         when 2 then self.object
-        when 3 then self.context
+        when 3 then self.graph_name
         else nil
       end
     end
@@ -253,7 +294,7 @@ module RDF
         when 0 then self.subject   = value
         when 1 then self.predicate = value
         when 2 then self.object    = value
-        when 3 then self.context   = value
+        when 3 then self.graph_name   = value
         else nil
       end
     end
@@ -261,7 +302,7 @@ module RDF
     ##
     # @return [Array(RDF::Term)]
     def to_quad
-      [subject, predicate, object, context]
+      [subject, predicate, object, graph_name]
     end
 
     ##
@@ -283,7 +324,7 @@ module RDF
       self.subject.canonicalize!    if has_subject? && !self.subject.frozen?
       self.predicate.canonicalize!  if has_predicate? && !self.predicate.frozen?
       self.object.canonicalize!     if has_object? && !self.object.frozen?
-      self.context.canonicalize!    if has_context? && !self.context.frozen?
+      self.graph_name.canonicalize! if has_graph? && !self.graph_name.frozen?
       self.validate!
       self
     end
@@ -306,8 +347,8 @@ module RDF
     # @param  [Symbol] predicate_key
     # @param  [Symbol] object_key
     # @return [Hash{Symbol => RDF::Term}]
-    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object, context_key = :context)
-      {subject_key => subject, predicate_key => predicate, object_key => object, context_key => context}
+    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object, graph_key = :graph_name)
+      {subject_key => subject, predicate_key => predicate, object_key => object, graph_key => graph_name}
     end
 
     ##
@@ -315,7 +356,7 @@ module RDF
     #
     # @return [String]
     def to_s
-      (context ? to_quad : to_triple).map do |term|
+      (graph_name ? to_quad : to_triple).map do |term|
         term.respond_to?(:to_base) ? term.to_base : term.inspect
       end.join(" ") + " ."
     end
@@ -327,7 +368,11 @@ module RDF
     # @return [RDF::Graph]
     # @see    http://www.w3.org/TR/rdf-primer/#reification
     def reified(options = {})
-      RDF::Graph.new(options[:context]) do |graph|
+      if options.has_key?(:context)
+        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
+        options[:graph_name] ||= options.delete(:context)
+      end
+      RDF::Graph.new(options[:graph_name]) do |graph|
         subject = options[:subject] || RDF::Node.new(options[:id])
         graph << [subject, RDF.type,      RDF[:Statement]]
         graph << [subject, RDF.subject,   self.subject]

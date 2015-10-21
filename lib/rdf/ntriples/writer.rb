@@ -4,15 +4,15 @@ module RDF::NTriples
   # N-Triples serializer.
   #
   # Output is serialized for UTF-8, to serialize as ASCII
-  # (with) unicode escapes, set :encoding => Encoding::ASCII as
+  # (with) unicode escapes, set encoding: Encoding::ASCII as
   # an option to {RDF::NTriples::Writer#initialize}.
   #
   # @example Obtaining an NTriples writer class
   #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer
   #   RDF::Writer.for("etc/test.nt")
-  #   RDF::Writer.for(:file_name      => "etc/test.nt")
-  #   RDF::Writer.for(:file_extension => "nt")
-  #   RDF::Writer.for(:content_type   => "text/plain")
+  #   RDF::Writer.for(file_name:      "etc/test.nt")
+  #   RDF::Writer.for(file_extension: "nt")
+  #   RDF::Writer.for(content_type:   "application/n-triples")
   #
   # @example Serializing RDF statements into an NTriples file
   #   RDF::NTriples::Writer.open("etc/test.nt") do |writer|
@@ -29,7 +29,7 @@ module RDF::NTriples
   #   end
   #
   # @example Serializing RDF statements into an NTriples string with escaped UTF-8
-  #   RDF::NTriples::Writer.buffer(:encoding => Encoding::ASCII) do |writer|
+  #   RDF::NTriples::Writer.buffer(encoding: Encoding::ASCII) do |writer|
   #     graph.each_statement do |statement|
   #       writer << statement
   #     end
@@ -187,7 +187,7 @@ module RDF::NTriples
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
     def initialize(output = $stdout, options = {}, &block)
-      options = {:validate => true}.merge(options)
+      options = {validate: true}.merge(options)
       super
     end
 

@@ -12,45 +12,17 @@ module RDF
   # The following vocabularies are pre-defined for your convenience:
   #
   # * {RDF}         - Resource Description Framework (RDF)
-  # * {RDF::CC}     - Creative Commons (CC)
-  # * {RDF::CERT}   - W3 Authentication Certificate (CERT)
-  # * {RDF::DC}     - Dublin Core (DC)
-  # * {RDF::DC11}   - Dublin Core 1.1 (DC11) _deprecated_
-  # * {RDF::DOAP}   - Description of a Project (DOAP)
-  # * {RDF::EXIF}   - Exchangeable Image File Format (EXIF)
-  # * {RDF::FOAF}   - Friend of a Friend (FOAF)
-  # * {RDF::GEO}    - WGS84 Geo Positioning (GEO)
-  # * {RDF::GR}     - Good Relations
-  # * {RDF::HT}   - Hypertext Transfer Protocol (HTTP)
-  # * {RDF::ICAL}   - iCal
-  # * {RDF::MA}     - W3C Meda Annotations
-  # * {RDF::OG}     - FaceBook OpenGraph
   # * {RDF::OWL}    - Web Ontology Language (OWL)
-  # * {RDF::PROV}   - W3C Provenance Ontology
   # * {RDF::RDFS}   - RDF Schema (RDFS)
-  # * {RDF::RSA}    - W3 RSA Keys (RSA)
-  # * {RDF::RSS}    - RDF Site Summary (RSS)
-  # * {RDF::SCHEMA} - Schema.org
-  # * {RDF::SIOC}   - Semantically-Interlinked Online Communities (SIOC)
-  # * {RDF::SKOS}   - Simple Knowledge Organization System (SKOS)
-  # * {RDF::SKOSXL} - SKOS Simple Knowledge Organization System eXtension for Labels (SKOS-XL)
-  # * {RDF::V}      - Data Vocabulary
-  # * {RDF::VCARD}  - vCard vocabulary
-  # * {RDF::VOID}   - Vocabulary of Interlinked Datasets (VoID)
-  # * {RDF::WDRS}   - Protocol for Web Description Resources (POWDER)
-  # * {RDF::WOT}    - Web of Trust (WOT)
-  # * {RDF::XHTML}  - Extensible HyperText Markup Language (XHTML)
-  # * {RDF::XHV}    - W3C XHTML Vocabulary
   # * {RDF::XSD}    - XML Schema (XSD)
+  #
+  # Other vocabularies are defined in the [rdf-vocab](http://rubygems.org/gems/rdf-vocab) gem
   #
   # @example Using pre-defined RDF vocabularies
   #   include RDF
   #
-  #   DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
-  #   FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
   #   RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
   #   RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
-  #   RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
   #   OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
   #   XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
   #
@@ -143,7 +115,7 @@ module RDF
           Term.intern("#{self}property", attributes: {label: "property", vocab: self})
         else
           name, options = args
-          options = {:label => name.to_s, vocab: self}.merge(options || {})
+          options = {label: name.to_s, vocab: self}.merge(options || {})
           uri_str = [to_s, name.to_s].join('')
           Term.cache.delete(uri_str)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)
@@ -247,17 +219,17 @@ module RDF
 
       ##
       # @return [String] The label for the named property
-      # @deprecated Use {RDF::Vocabulary::Term#label}
+      # @deprecated Use {RDF::Vocabulary::Term#label} instead.
       def label_for(name)
-        warn "[DEPRECATION] `Vocabulary.label_for is deprecated. Please use Vocabulary::Term#label instead."
+        warn "[DEPRECATION] `Vocabulary.label_for is deprecated. Please use Vocabulary::Term#label instead. Called from #{Gem.location_of_caller.join(':')}"
         self[name].label || ''
       end
 
       ##
       # @return [String] The comment for the named property
-      # @deprecated Use {RDF::Vocabulary::Term#comment}
+      # @deprecated Use {RDF::Vocabulary::Term#comment} instead.
       def comment_for(name)
-        warn "[DEPRECATION] `Vocabulary.comment_for is deprecated. Please use Vocabulary::Term#comment instead."
+        warn "[DEPRECATION] `Vocabulary.comment_for is deprecated. Please use Vocabulary::Term#comment instead. Called from #{Gem.location_of_caller.join(':')}"
         self[name].comment || ''
       end
 
@@ -315,7 +287,7 @@ module RDF
       # @option options [URI, #to_s] :location
       #   Location from which to load the vocabulary, if not from `uri`.
       # @option options [Array<Symbol>, Hash{Symbol => Hash}] :extra
-      #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {#property}.
+      #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
       # @return [RDF::Vocabulary] the loaded vocabulary
       def load(uri, options = {})
         source = options.fetch(:location, uri)
@@ -508,8 +480,39 @@ module RDF
 
     # A Vocabulary Term is a URI that can also act as an {Enumerable} to generate the RDF definition of vocabulary terms as defined within the vocabulary definition.
     class Term < RDF::URI
-      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
-      # @return [Hash{Symbol,Resource => Term, #to_s}]
+      # @!method comment
+      #   `rdfs:comment` accessor
+      #   @return [String]
+      # @!method label
+      #   `rdfs:label` accessor
+      #   @return [String]
+      # @!method type
+      #   `rdf:type` accessor
+      #   @return [RDF::URI]
+      # @!method subClassOf
+      #   `rdfs:subClassOf` accessor
+      #   @return [RDF::URI]
+      # @!method subPropertyOf
+      #   `rdfs:subPropertyOf` accessor
+      #   @return [RDF::URI]
+      # @!method domain
+      #   `rdfs:domain` accessor
+      #   @return [RDF::URI]
+      # @!method range
+      #   `rdfs:range` accessor
+      #   @return [RDF::URI]
+      # @!method inverseOf
+      #   `owl:inverseOf` accessor
+      #   @return [RDF::URI]
+      # @!method domainIncludes
+      #   `schema:domainIncludes` accessor
+      #   @return [RDF::URI]
+      # @!method rangeIncludes
+      #   `schema:rangeIncludes` accoessor
+      #   @return [RDF::URI]
+      # @!attribute [rw] attributes
+      #   Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      #   @return [Hash{Symbol,Resource => Term, #to_s}]
       attr_accessor :attributes
 
       ##
@@ -607,7 +610,7 @@ module RDF
       #
       # @yield statement
       # @yieldparam [RDF::Statement]
-      def each_statement(&block)
+      def each_statement
         attributes.reject {|p| p == :vocab}.each do |prop, values|
           prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
           next unless prop
@@ -646,7 +649,7 @@ module RDF
                 v = RDF::Vocabulary.expand_pname(value)
                 value = v.valid? ? v : RDF::Literal(value)
               end
-              block.call RDF::Statement(self, prop, value)
+              yield RDF::Statement(self, prop, value)
             rescue KeyError
               # Skip things eroneously defined in the vocabulary
             end
@@ -680,38 +683,18 @@ module RDF
         @attributes.has_key?(method) || super
       end
 
-      # Accessor for {#domainIncludes}
+      # Accessor for `domainIncludes`
       # @return [RDF::URI]
       def domain_includes
         Array(@attributes[:domainIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
       end
 
-      # Accessor for {#rangeIncludes}
+      # Accessor for `rangeIncludes`
       # @return [RDF::URI]
       def range_includes
         Array(@attributes[:rangeIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
       end
 
-      # @!method comment
-      #   @return [String]
-      # @!method label
-      #   @return [String]
-      # @!method type
-      #   @return [RDF::URI]
-      # @!method subClassOf
-      #   @return [RDF::URI]
-      # @!method subPropertyOf
-      #   @return [RDF::URI]
-      # @!method domain
-      #   @return [RDF::URI]
-      # @!method range
-      #   @return [RDF::URI]
-      # @!method inverseOf
-      #   @return [RDF::URI]
-      # @!method domainIncludes
-      #   @return [RDF::URI]
-      # @!method rangeIncludes
-      #   @return [RDF::URI]
     protected
       # Implement accessor to symbol attributes
       def method_missing(method, *args, &block)

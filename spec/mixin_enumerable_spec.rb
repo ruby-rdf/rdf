@@ -30,9 +30,9 @@ describe RDF::Enumerable do
 
     context "Checking whether a specific value exists" do
       it {is_expected.to have_subject(RDF::URI("http://rubygems.org/gems/rdf"))}
-      it {is_expected.to have_predicate(RDF::DC.creator)}
-      it {is_expected.to have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", :language => :en))}
-      it {is_expected.to have_context(RDF::URI("http://ar.to/#self"))}
+      it {is_expected.to have_predicate(RDF.type)}
+      it {is_expected.to have_object(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", language: :en))}
+      it {is_expected.to have_graph(RDF::URI("http://ar.to/#self"))}
     end
 
     it "Enumerating all statements" do
@@ -51,14 +51,14 @@ describe RDF::Enumerable do
 
     it "Enumerating all statements in the form of quads" do
       expect {
-        subject.each_quad do |subject, predicate, object, context|
-          $stdout.puts [subject, predicate, object, context].inspect
+        subject.each_quad do |subject, predicate, object, graph_name|
+          $stdout.puts [subject, predicate, object, graph_name].inspect
         end
       }.to write(:something)
     end
 
     context "Enumerating all terms" do
-      %w(each_subject each_predicate each_object each_context).each do |method|
+      %w(each_subject each_predicate each_object each_graph).each do |method|
         it "##{method}" do
           expect {
             subject.send(method.to_sym) {|term| $stdout.puts term.inspect}
@@ -76,7 +76,7 @@ describe RDF::Enumerable do
     end
 
     context "Obtaining all unique values" do
-      %w(subjects predicates objects contexts).each do |method|
+      %w(subjects predicates objects).each do |method|
         it "##{method}" do
           expect(subject.send(method.to_sym).to_a).not_to be_empty
         end

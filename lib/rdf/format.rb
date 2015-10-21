@@ -11,19 +11,19 @@ module RDF
   # @example Getting a serialization format class
   #   RDF::Format.for(:ntriples)     #=> RDF::NTriples::Format
   #   RDF::Format.for("etc/doap.nt")
-  #   RDF::Format.for(:file_name => "etc/doap.nt")
-  #   RDF::Format.for(:file_extension => "nt")
-  #   RDF::Format.for(:content_type => "application/n-triples")
+  #   RDF::Format.for(file_name: "etc/doap.nt")
+  #   RDF::Format.for(file_extension: "nt")
+  #   RDF::Format.for(content_type: "application/n-triples")
   #
   # @example Obtaining serialization format MIME types
   #   RDF::Format.content_types      #=> {"application/n-triples" => [RDF::NTriples::Format]}
   #
   # @example Obtaining serialization format file extension mappings
-  #   RDF::Format.file_extensions    #=> {:nt => [RDF::NTriples::Format]}
+  #   RDF::Format.file_extensions    #=> {nt: [RDF::NTriples::Format]}
   #
   # @example Defining a new RDF serialization format class
   #   class RDF::NTriples::Format < RDF::Format
-  #     content_type     'application/n-triples', :extension => :nt
+  #     content_type     'application/n-triples', extension: :nt
   #     content_encoding 'utf-8'
   #     
   #     reader RDF::NTriples::Reader
@@ -95,7 +95,7 @@ module RDF
       format = case options
         when String
           # Find a format based on the file name
-          self.for(:file_name => options) { yield if block_given? }
+          self.for(file_name: options) { yield if block_given? }
 
         when Hash
           case
@@ -106,13 +106,10 @@ module RDF
               mime_type = mime_type.to_s
               mime_type = mime_type.split(';').first # remove any media type parameters
 
-              # Ignore text/plain, a historical encoding for N-Triples, which is
-              # problematic in format detection, as many web servers will serve
-              # content by default text/plain.
-              content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
+              content_types[mime_type]
             # Find a format based on the file name:
             when file_name = options[:file_name]
-              self.for(:file_extension => File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
+              self.for(file_extension: File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
               file_extensions[file_ext.to_sym]
@@ -201,11 +198,11 @@ module RDF
     # @example
     #
     #     content_types = RDF::Format.reader_types
-    #     format = RDF::Format.for(:content_type => content_types.first)
+    #     format = RDF::Format.for(content_type: content_types.first)
     #
     # @return [Array<String>]
     def self.reader_types
-      reader_symbols.map {|s| RDF::Format.for(s).content_type}.flatten.uniq
+      reader_symbols.flat_map {|s| RDF::Format.for(s).content_type}.uniq
     end
 
     ##
@@ -227,11 +224,11 @@ module RDF
     # @example
     #
     #     content_types = RDF::Format.writer_types
-    #     format = RDF::Format.for(:content_type => content_types.first)
+    #     format = RDF::Format.for(content_type: content_types.first)
     #
     # @return [Array<String>]
     def self.writer_types
-      writer_symbols.map {|s| RDF::Format.for(s).content_type}.flatten.uniq
+      writer_symbols.flat_map {|s| RDF::Format.for(s).content_type}.uniq
     end
 
     ##

@@ -12,9 +12,9 @@ module RDF
   # @example Obtaining an RDF writer class
   #   RDF::Writer.for(:ntriples)     #=> RDF::NTriples::Writer
   #   RDF::Writer.for("spec/data/output.nt")
-  #   RDF::Writer.for(:file_name      => "spec/data/output.nt")
-  #   RDF::Writer.for(:file_extension => "nt")
-  #   RDF::Writer.for(:content_type   => "text/plain")
+  #   RDF::Writer.for(file_name:      "spec/data/output.nt")
+  #   RDF::Writer.for(file_extension: "nt")
+  #   RDF::Writer.for(content_type:   "application/n-triples")
   #
   # @example Instantiating an RDF writer class
   #   RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }
@@ -78,7 +78,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {})
-      options = options.merge(:has_writer => true) if options.is_a?(Hash)
+      options = options.merge(has_writer: true) if options.is_a?(Hash)
       if format = self.format || Format.for(options)
         format.writer
       end
@@ -115,7 +115,7 @@ module RDF
       if io.is_a?(String)
         io = File.open(io, 'w')
       elsif io.respond_to?(:external_encoding) && io.external_encoding
-        options = {:encoding => io.external_encoding}.merge(options)
+        options = {encoding: io.external_encoding}.merge(options)
       end
       io.set_encoding(options[:encoding]) if io.respond_to?(:set_encoding) && options[:encoding]
       method = data.respond_to?(:each_statement) ? :each_statement : :each
@@ -206,7 +206,7 @@ module RDF
     #   the base URI to use when constructing relative URIs (not supported
     #   by all writers)
     # @option options [Boolean]  :unique_bnodes   (false)
-    #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples#format_node}
+    #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples::Writer#format_node}
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
@@ -260,7 +260,7 @@ module RDF
     #
     # @example
     #   writer.prefixes = {
-    #     :dc => RDF::URI('http://purl.org/dc/terms/'),
+    #     dc: RDF::URI('http://purl.org/dc/terms/'),
     #   }
     #
     # @param  [Hash{Symbol => RDF::URI}] prefixes
@@ -361,9 +361,9 @@ module RDF
     ##
     # @param  [RDF::Graph] graph
     # @return [void] `self`
-    # @deprecated Please use {RDF::Writable#insert_graph} instead 
+    # @deprecated Use {RDF::Writable#insert_graph} instead .
     def write_graph(graph)
-      warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead."
+      warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       graph.each_triple { |*triple| write_triple(*triple) }
       self
     end
@@ -371,9 +371,9 @@ module RDF
     ##
     # @param  [Array<RDF::Statement>] statements
     # @return [void] `self`
-    # @deprecated replace by `RDF::Writable#insert`
+    # @deprecated Use {RDF::Writable#insert} instead.
     def write_statements(*statements)
-      warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead."
+      warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       statements.each { |statement| write_statement(statement) }
       self
     end
@@ -427,7 +427,16 @@ module RDF
         else nil
       end
     end
-    alias_method :format_value, :format_term # @deprecated
+
+    ##
+    # @param  [RDF::Term] term
+    # @return [String]
+    # @since  0.3.0
+    # @deprecated Use {#format_term} instead
+    def format_value(term, options = {})
+      warn "[DEPRECATION] Writer#format_value is being replaced with Writer#format_term in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+      format_term(term, options)
+    end
 
     ##
     # @param  [RDF::Node] value
