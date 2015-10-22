@@ -7,7 +7,7 @@ module RDF; class Literal
   class DateTime < Literal
     DATATYPE = RDF::XSD.dateTime
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%Y-%m-%dT%H:%M:%SZ'.freeze
+    FORMAT   = '%Y-%m-%dT%H:%M:%S%:z'.freeze
 
     ##
     # @param  [DateTime] value
@@ -32,9 +32,9 @@ module RDF; class Literal
     def canonicalize!
       if self.valid?
         @string = if has_timezone?
-          @object.new_offset.strftime(FORMAT)
+          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z')
         else
-          @object.strftime(FORMAT[0..-2])
+          @object.strftime(FORMAT[0..-4])
         end
       end
       self

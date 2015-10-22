@@ -12,7 +12,7 @@ module RDF; class Literal
   class Time < Literal
     DATATYPE = RDF::XSD.time
     GRAMMAR  = %r(\A(\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%H:%M:%SZ'.freeze
+    FORMAT   = '%H:%M:%S%:z'.freeze
 
     ##
     # @param  [Time] value
@@ -44,9 +44,9 @@ module RDF; class Literal
     def canonicalize!
       if self.valid?
         @string = if has_timezone?
-          @object.new_offset.strftime(FORMAT)
+          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z')
         else
-          @object.strftime(FORMAT[0..-2])
+          @object.strftime(FORMAT[0..-4])
         end
       end
       self
@@ -92,7 +92,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime('%H:%M:%S%:z').sub("+00:00", 'Z')
+      @string || @object.strftime(FORMAT).sub("+00:00", 'Z')
     end
 
     ##

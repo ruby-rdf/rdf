@@ -299,6 +299,23 @@ describe RDF::Literal do
     it_behaves_like 'RDF::Literal validation', RDF::XSD.boolean,
       %w(true false tRuE FaLsE 1 0),
       %w(foo 10)
+
+    context "object values" do
+      {
+        1 => ["true", "true"],
+        0 => ["false", "false"],
+        true => ["true", "true"],
+        false => ["false", "false"]
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Boolean.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Boolean.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
   end
 
   describe RDF::Literal::Integer do
@@ -314,6 +331,21 @@ describe RDF::Literal do
     it_behaves_like 'RDF::Literal validation', RDF::XSD.integer,
       %w(1 10 100 01 +1 -1),
       %w(foo 10.1 12xyz)
+
+    context "object values" do
+      {
+        1 => ["1", "1"],
+        0 => ["0", "0"]
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Integer.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Integer.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
   end
 
   describe RDF::Literal::Decimal do
@@ -356,6 +388,22 @@ describe RDF::Literal do
         1.2345678901234567890123457890
       ),
       %w(foo 10.1e1 12.xyz)
+
+    context "object values" do
+      {
+        BigDecimal('1.0') => ["1.0", "1.0"],
+        BigDecimal('0') => ["0.0", "0.0"],
+        BigDecimal('10.10') => ["10.1", "10.1"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Decimal.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Decimal.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
   end
 
   describe RDF::Literal::Double do
@@ -396,27 +444,42 @@ describe RDF::Literal do
       ),
       %w(foo 12.xyz 1.0ez)
 
-    before(:each) do
-      @nan = RDF::Literal::Double.new("NaN")
-      @inf = RDF::Literal::Double.new("INF")
+    context "object values" do
+      {
+        1.0       => ["1.0", "1.0E0"],
+        0.0       => ["0.0", "0.0E0"],
+        10.10     => ["10.1", "1.01E1"],
+        123.456e4 => ["1234560.0", "1.23456E6"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Double.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Double.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
     end
 
+    let(:nan) {RDF::Literal::Double.new("NaN")}
+    let(:inf) {RDF::Literal::Double.new("INF")}
+
     it "recognizes INF" do
-      expect(@inf).to be_infinite
-      expect(RDF::Literal.new('INF', datatype: RDF::Literal::Double::DATATYPE)).to eq @inf
-      expect {@inf.canonicalize}.not_to raise_error
+      expect(inf).to be_infinite
+      expect(RDF::Literal.new('INF', datatype: RDF::Literal::Double::DATATYPE)).to eq inf
+      expect {inf.canonicalize}.not_to raise_error
     end
 
     it "recognizes -INF" do
-      expect(-@inf).to be_infinite
-      expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq -@inf
-      expect {-@inf.canonicalize}.not_to raise_error
+      expect(-inf).to be_infinite
+      expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq -inf
+      expect {-inf.canonicalize}.not_to raise_error
     end
 
     it "recognizes NaN" do
-      expect(@nan).to be_nan
+      expect(nan).to be_nan
       expect(RDF::Literal.new('NaN', datatype: RDF::Literal::Double::DATATYPE)).to be_nan
-      expect {@nan.canonicalize}.not_to raise_error
+      expect {nan.canonicalize}.not_to raise_error
     end
 
     [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|
@@ -425,25 +488,25 @@ describe RDF::Literal do
         :"-" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("INF")],
       }.each do |op, (lp, rp, lm, rm)|
         it "returns #{lp} for INF #{op} #{n}" do
-          expect(@inf.send(op, n)).to eq lp
+          expect(inf.send(op, n)).to eq lp
         end
 
         it "returns #{rp} for #{n} #{op} INF" do
-          expect(n.send(op, @inf)).to eq rp
+          expect(n.send(op, inf)).to eq rp
         end
 
         it "returns #{lm} for -INF #{op} #{n}" do
-          expect((-@inf).send(op, n)).to eq lm
+          expect((-inf).send(op, n)).to eq lm
         end
 
         it "returns #{rm} for #{n} #{op} -INF" do
-          expect(n.send(op, -@inf)).to eq rm
+          expect(n.send(op, -inf)).to eq rm
         end
       end
 
       it "#{n} + NaN" do
-        expect(n + -@nan).to be_nan
-        expect(-@nan + n).to be_nan
+        expect(n + -nan).to be_nan
+        expect(-nan + n).to be_nan
       end
     end
 
@@ -455,31 +518,31 @@ describe RDF::Literal do
     }.each do |n, (p, m)|
       it "returns #{p} for #{n} * INF" do
         if p == :nan
-          expect(RDF::Literal::Double.new(n) * @inf).to be_nan
+          expect(RDF::Literal::Double.new(n) * inf).to be_nan
         else
-          expect(RDF::Literal::Double.new(n) * @inf).to eq p
+          expect(RDF::Literal::Double.new(n) * inf).to eq p
         end
       end
 
       it "returns #{p} for INF * #{n}" do
         if p == :nan
-          expect(@inf * RDF::Literal::Double.new(n)).to be_nan
+          expect(inf * RDF::Literal::Double.new(n)).to be_nan
         else
-          expect(@inf * RDF::Literal::Double.new(n)).to eq p
+          expect(inf * RDF::Literal::Double.new(n)).to eq p
         end
       end
     end
 
     it "adds infinities" do
-      expect(@inf + @inf).to eq @inf
-      expect(@inf + -@inf).to be_nan
-      expect(-@inf + -@inf).to eq -@inf
-      expect(-@inf + @inf).to be_nan
+      expect(inf + inf).to eq inf
+      expect(inf + -inf).to be_nan
+      expect(-inf + -inf).to eq -inf
+      expect(-inf + inf).to be_nan
     end
 
     it "adds NaN" do
-      expect(@inf + @nan).to be_nan
-      expect(@nan + @nan).to be_nan
+      expect(inf + nan).to be_nan
+      expect(nan + nan).to be_nan
     end
   end
 
@@ -490,7 +553,7 @@ describe RDF::Literal do
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.dateTime, [
       ["2010-01-01T00:00:00Z",      "2010-01-01T00:00:00Z", "12:00:00 AM UTC on Friday, 01 January 2010"],
       ["2010-01-01T00:00:00.0000Z", "2010-01-01T00:00:00Z", "12:00:00 AM UTC on Friday, 01 January 2010"],
-      ["2010-01-01T00:00:00",       "2010-01-01T00:00:00",  "12:00:00 AM on Friday, 01 January 2010"],
+      ["2010-01-01T00:00:00",       "2010-01-01T00:00:00", "12:00:00 AM on Friday, 01 January 2010"],
       ["2010-01-01T00:00:00+00:00", "2010-01-01T00:00:00Z", "12:00:00 AM UTC on Friday, 01 January 2010"],
       ["2010-01-01T01:00:00+01:00", "2010-01-01T00:00:00Z", "01:00:00 AM +01:00 on Friday, 01 January 2010"],
       ["2009-12-31T23:00:00-01:00", "2010-01-01T00:00:00Z", "11:00:00 PM -01:00 on Thursday, 31 December 2009"],
@@ -520,6 +583,24 @@ describe RDF::Literal do
         2010-07
         2010
       )
+
+    context "object values" do
+      {
+        DateTime.parse("2010-01-01T00:00:00Z")      => ["2010-01-01T00:00:00Z", "2010-01-01T00:00:00Z"],
+        DateTime.parse("2010-02-01T00:00:00")       => ["2010-02-01T00:00:00Z", "2010-02-01T00:00:00Z"],
+        DateTime.parse("2010-03-01T04:00:00+01:00") => ["2010-03-01T04:00:00+01:00", "2010-03-01T03:00:00Z"],
+        DateTime.parse("2009-12-31T04:00:00-01:00") => ["2009-12-31T04:00:00-01:00", "2009-12-31T05:00:00Z"],
+        DateTime.parse("-2010-01-01T00:00:00Z")     => ["-2010-01-01T00:00:00Z","-2010-01-01T00:00:00Z"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::DateTime.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::DateTime.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
 
     describe "#tz" do
       {
@@ -582,6 +663,21 @@ describe RDF::Literal do
         2011
       )
 
+    context "object values" do
+      {
+        Date.parse("2010-02-01")      => ["2010-02-01", "2010-02-01"],
+        Date.parse("-2010-01-01")     => ["-2010-01-01","-2010-01-01"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Date.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Date.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+
     describe "#tz" do
       {
         "2010-06-21Z"      => "Z",
@@ -628,9 +724,27 @@ describe RDF::Literal do
         2011
       )
 
-    subject {
-      double("time", to_s: "05:50:00")
-    }
+    context "object values" do
+      {
+        DateTime.parse("00:00:00Z")      => ["00:00:00Z", "00:00:00Z"],
+        DateTime.parse("01:00:00.0000Z") => ["01:00:00Z","01:00:00Z"],
+        DateTime.parse("02:00:00")       => ["02:00:00Z", "02:00:00Z"],
+        DateTime.parse("03:00:00+00:00") => ["03:00:00Z", "03:00:00Z"],
+        DateTime.parse("05:00:00+01:00") => ["05:00:00+01:00", "04:00:00Z"],
+        DateTime.parse("07:00:00-01:00") => ["07:00:00-01:00", "08:00:00Z"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Time.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Time.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+
+    subject {double("time", to_s: "05:50:00")}
+
     it "parses as string if #to_datetime raises an error" do
       expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)
       expect {RDF::Literal::Time.new(subject)}.not_to raise_error
