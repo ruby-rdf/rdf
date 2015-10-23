@@ -298,6 +298,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
+    # @raise  [RDF::ReaderError] on invalid data
     # @see    RDF::Enumerable#each_statement
     def each_statement(&block)
       if block_given?
@@ -374,6 +375,22 @@ module RDF
     # @return [Integer]
     def lineno
       @input.lineno
+    end
+
+    ##
+    # @return [Boolean]
+    #
+    # @note this parses the full input. 
+    #   Use `Reader.new(input, validate: true)` if you intend to capture the 
+    #   result.
+    #
+    # @see RDF::Value#validate! for Literal & URI validation relevant to 
+    #   error handling.
+    # @see Enumerable#valid?
+    def valid?
+      super 
+    rescue ArgumentError, RDF::ReaderError
+      false
     end
 
   protected
