@@ -57,8 +57,8 @@ describe RDF::Format do
   describe ".reader_types" do
     it "returns content-types of available readers" do
       %w(
-        application/n-triples
-        application/n-quads
+        application/n-triples text/plain
+        application/n-quads text/x-nquads
         application/test
       ).each do |ct|
         expect(RDF::Format.reader_types).to include(ct)
@@ -80,8 +80,8 @@ describe RDF::Format do
   describe ".writer_types" do
     it "returns content-types of available writers" do
       %w(
-        application/n-triples
-        application/n-quads
+        application/n-triples text/plain
+        application/n-quads text/x-nquads
       ).each do |ct|
         expect(RDF::Format.writer_types).to include(ct)
       end

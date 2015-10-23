@@ -106,7 +106,10 @@ module RDF
               mime_type = mime_type.to_s
               mime_type = mime_type.split(';').first # remove any media type parameters
 
-              content_types[mime_type]
+              # Ignore text/plain, a historical encoding for N-Triples, which is
+              # problematic in format detection, as many web servers will serve
+              # content by default text/plain.
+              content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
             # Find a format based on the file name:
             when file_name = options[:file_name]
               self.for(file_extension: File.extname(file_name.to_s)[1..-1]) { yield if block_given? }

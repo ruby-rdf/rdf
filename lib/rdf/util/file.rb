@@ -39,10 +39,10 @@ module RDF; module Util
       ##
       # @return [String] the value for an Accept header
       def self.default_accept_header
-        # Receive text/html  at a lower priority than other formats
+        # Receive text/html and text/plain at a lower priority than other formats
         reader_types = RDF::Format.reader_types.map do |t|
           case t.to_s
-          when /text\/html/
+          when /text\/(?:plain|html)/
             "#{t};q=0.5"
           when /application\/xhtml\+xml/
             "#{t};q=0.7"
@@ -322,7 +322,7 @@ module RDF; module Util
       else
         # Fake content type based on found format
         format = RDF::Format.for(filename_or_url.to_s)
-        content_type = format ? format.content_type.first : 'application/n-triples'
+        content_type = format ? format.content_type.first : 'text/plain'
         # Open as a file, passing any options
         begin
           Kernel.open(filename_or_url, "r:utf-8", options) do |file|

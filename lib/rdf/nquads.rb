@@ -20,7 +20,7 @@ module RDF
     # @see http://www.w3.org/TR/n-quads/
     # @since  0.4.0
     class Format < RDF::Format
-      content_type     'application/n-quads', extension: :nq
+      content_type     'application/n-quads', extension: :nq, alias: ['text/x-nquads']
       content_encoding 'utf-8'
 
       reader { RDF::NQuads::Reader }
