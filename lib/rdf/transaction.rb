@@ -95,8 +95,8 @@ module RDF
         @options[:graph_name] ||= @options.delete(:context)
       end
       @graph_name = @options.delete(:graph) || @options.delete(:graph_name)
-      @inserts = @options.delete(:insert)   || RDF::Graph.new
-      @deletes = @options.delete(:delete)   || RDF::Graph.new
+      @inserts = @options.delete(:insert)   || []
+      @deletes = @options.delete(:delete)   || []
       @inserts.extend(RDF::Enumerable) unless @inserts.kind_of?(RDF::Enumerable)
       @deletes.extend(RDF::Enumerable) unless @deletes.kind_of?(RDF::Enumerable)
 
