@@ -100,7 +100,6 @@ module RDF; module Util
             # If a Location is returned, it defines the base resource for this file, not it's actual ending location
             document_options = {
               base_uri:     RDF::URI(response.headers.fetch(:location, base_uri)),
-              charset:      Encoding::UTF_8,
               code:         response.code.to_i,
               headers:      response.headers
             }
@@ -159,7 +158,6 @@ module RDF; module Util
                 # If a Location is returned, it defines the base resource for this file, not it's actual ending location
                 document_options = {
                   base_uri:     RDF::URI(response["Location"] ? response["Location"] : base_uri),
-                  charset:      Encoding::UTF_8,
                   code:         response.code.to_i,
                   content_type: response.content_type,
                   headers:      response_headers
@@ -226,7 +224,6 @@ module RDF; module Util
           # If a Location is returned, it defines the base resource for this file, not it's actual ending location
           document_options = {
             base_uri:     RDF::URI(response.headers.fetch(:location, response.env.url)),
-            charset:      Encoding::UTF_8,
             code:         response.status,
             headers:      response.headers
           }
@@ -279,6 +276,8 @@ module RDF; module Util
     # Adds Accept header based on available reader content types to allow
     # for content negotiation based on available readers.
     #
+    # Input received as non-unicode, is transformed to UTF-8. With Ruby >= 2.2, all UTF is normalized to [Unicode Normalization Form C (NFC)](http://unicode.org/reports/tr15/#Norm_Forms).
+    #
     # HTTP resources may be retrieved via proxy using the `proxy` option. If `RestClient` is loaded, they will use the proxy globally by setting something like the following:
     #     `RestClient.proxy = "http://proxy.example.com/"`.
     # When retrieving documents over HTTP(S), use the mechanism described in [Providing and Discovering URI Documentation](http://www.w3.org/2001/tag/awwsw/issue57/latest/) to pass the appropriate `base_uri` to the block or as the return.
@@ -328,11 +327,11 @@ module RDF; module Util
           Kernel.open(filename_or_url, "r:utf-8", options) do |file|
             document_options = {
               base_uri:     filename_or_url.to_s,
-              charset:      file.external_encoding,
+              charset:      file.external_encoding.to_s,
               code:         200,
               content_type: content_type,
               last_modified:file.mtime,
-              headers:      {'Content-Type' => content_type, 'Last-Modified' => file.mtime.xmlschema}
+              headers:      {content_type: content_type, last_modified: file.mtime.xmlschema}
             }
 
             remote_document = RemoteDocument.new(file.read, document_options)
@@ -363,8 +362,8 @@ module RDF; module Util
       # @return [String]
       attr_reader :content_type
 
-      # Encoding of resource (from header), also applied to content
-      # @return [Encoding}]
+      # Encoding of resource (from Content-Type), downcased. Also applied to content if it is UTF
+      # @return [String}]
       attr_reader :charset
 
       # Response code
@@ -381,7 +380,7 @@ module RDF; module Util
       attr_reader :last_modified
 
       # Raw headers from response
-      # @return [Hash{String => Object}]
+      # @return [Hash{Symbol => Object}]
       attr_reader :headers
 
       # Originally requested URL
@@ -390,40 +389,58 @@ module RDF; module Util
 
       ##
       # Set content
-      # @param [String] body entiry content of request.
+      # @param [String] body entity content of request.
       def initialize(body, options = {})
-        super(body)
         options.each do |key, value|
           # de-quote charset
           matchdata = value.match(/^["'](.*)["']$/.freeze) if key == "charset"
           value = matchdata[1] if matchdata
+          value = value.downcase if value.is_a?(String)
           instance_variable_set(:"@#{key}", value)
         end
-        @headers ||= {}
+        @headers = options.fetch(:headers, {})
+        @charset = options[:charset].to_s.downcase if options[:charset]
 
         # Find Content-Type
-        if !@content_type && headers[:content_type]
-          @content_type, *params = headers[:content_type].split(';').map(&:strip)
+        if headers[:content_type]
+          ct, *params = headers[:content_type].split(';').map(&:strip)
+          @content_type ||= ct
 
           # Find charset
           params.each do |param|
             p, v = param.split('=')
             next unless p.downcase == 'charset'
-            @charset = v.sub(/^["']?(.*)["']?$/, '\1')
+            @charset ||= v.sub(/^["']?(.*)["']?$/, '\1').downcase
           end
         end
 
         @etag = headers[:etag]
         @last_modified = DateTime.parse(headers[:last_modified]) if headers[:last_modified]
+        encoding = @charset ||= "utf-8"
 
-        set_encoding Encoding.find(@charset) if @charset
+        unless encoding.start_with?("utf")
+          body.force_encoding(Encoding::UTF_8)
+          encoding = "utf-8"
+        end
+
+        # Make sure Unicode is in NFC
+        
+        begin
+          body.unicode_normalize! unless !body.unicode_normalized?
+        rescue Encoding::CompatibilityError
+          # Oh, well ...
+        end if body.respond_to?(:unicode_normalized?)
+
+        super(body, "r:#{encoding}")
       end
 
       ##
-      # Content encoding, based on {#charset} normalized to lower-case
-      # @return [String]
+      # Returns a list of encodings in Content-Encoding field as an array of strings.
+      #
+      # The encodings are downcased for canonicalization.
+      # @return [Array<String>]
       def content_encoding
-        charset.to_s.downcase
+        headers.fetch(:content_encoding, "").split(',').map(&:strip).map(&:downcase)
       end
 
       ##
