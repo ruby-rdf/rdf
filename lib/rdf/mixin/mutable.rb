@@ -153,7 +153,7 @@ module RDF
     def clear
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      if respond_to?(:clear_statements)
+      if respond_to?(:clear_statements, true)
         clear_statements
       else
         delete_statements(self)
