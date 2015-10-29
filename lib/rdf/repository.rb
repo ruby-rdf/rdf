@@ -368,12 +368,22 @@ module RDF
         cs = @data.has_key?(graph_name) ? {graph_name => @data[graph_name]} : @data.dup
         cs.each do |c, ss|
           next unless graph_name.nil? || graph_name == false && !c || graph_name.eql?(c)
-          ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
+          ss = if ss.has_key?(subject)
+                 { subject => ss[subject] }
+               elsif subject.nil? || subject.is_a?(RDF::Query::Variable)
+                 ss.dup
+               else
+                 []
+               end
           ss.each do |s, ps|
-            next unless subject.nil? || subject.eql?(s)
-            ps = ps.has_key?(predicate) ? {predicate => ps[predicate]} : ps.dup
+            ps = if ps.has_key?(predicate)
+                   { predicate => ps[predicate] }
+                 elsif predicate.nil? || predicate.is_a?(RDF::Query::Variable)
+                   ps.dup
+                 else
+                   []
+                 end
             ps.each do |p, os|
-              next unless predicate.nil? || predicate.eql?(p)
               os = os.dup # TODO: is this really needed?
               os.each do |o|
                 next unless object.nil? || object.eql?(o)
