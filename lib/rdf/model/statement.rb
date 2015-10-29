@@ -265,10 +265,10 @@ module RDF
     # @param  [Statement] other
     # @return [Boolean]
     def ===(other)
-      return false if has_graph?     && !graph_name.eql?(other.graph_name)
-      return false if has_subject?   && !subject.eql?(other.subject)
-      return false if has_predicate? && !predicate.eql?(other.predicate)
       return false if has_object?    && !object.eql?(other.object)
+      return false if has_predicate? && !predicate.eql?(other.predicate)
+      return false if has_subject?   && !subject.eql?(other.subject)
+      return false if has_graph?     && !graph_name.eql?(other.graph_name)
       return true
     end
 
