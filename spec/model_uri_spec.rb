@@ -379,9 +379,9 @@ describe RDF::URI do
       ],
       "path-segment normalization(1)" => [
         "http://example.com/./foo",
-        "http://example.com/foo/"
+        "http://example.com/foo"
       ],
-      "path-segment normalization(1)" => [
+      "path-segment normalization(2)" => [
         "http://example.com/foo/bar/..",
         "http://example.com/foo/"
       ],
