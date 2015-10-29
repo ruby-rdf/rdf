@@ -298,8 +298,7 @@ describe RDF::NQuads::Writer do
 
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
-        let(:graph) {RDF::Repository.new << statement}
-        subject {RDF::NTriples::Writer.buffer(validate: true) {|w| w << graph}}
+        subject {RDF::NTriples::Writer.buffer(validate: true) {|w| w << statement}}
         if valid
           specify {expect {subject}.not_to raise_error}
         else
@@ -330,8 +329,7 @@ describe RDF::NQuads::Writer do
   context "c14n" do
     shared_examples "c14n" do |statement, result|
       context "given #{statement}" do
-        let(:graph) {RDF::Graph.new << statement}
-        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true) {|w| w << graph}}
+        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true) {|w| w << statement}}
         if result
           specify {expect(subject).to eq "#{result}\n"}
         else

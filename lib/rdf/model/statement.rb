@@ -205,6 +205,24 @@ module RDF
     end
 
     ##
+    # Determines if the statement is incomplete, vs. invalid. An incomplete statement is one in which any of `subject`, `predicate`, or `object`, are nil.
+    #
+    # @return [Boolean]
+    # @since 3.0
+    def incomplete?
+      to_triple.any?(&:nil?)
+    end
+
+    ##
+    # Determines if the statement is complete, vs. invalid. A complete statement is one in which none of `subject`, `predicate`, or `object`, are nil.
+    #
+    # @return [Boolean]
+    # @since 3.0
+    def complete?
+      !incomplete?
+    end
+
+    ##
     # @return [Boolean]
     def has_graph?
       !!graph_name

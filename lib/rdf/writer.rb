@@ -384,6 +384,7 @@ module RDF
     # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
       statement = statement.canonicalize! if canonicalize?
+      raise RDF::WriterError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
       raise RDF::WriterError, "Statement #{statement.inspect} is invalid" if validate? && statement.invalid?
       write_triple(*statement.to_triple)
       self
