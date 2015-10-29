@@ -388,7 +388,8 @@ module RDF
       # @private
       # @see RDF::Mutable#insert
       def insert_statement(statement)
-        unless has_statement?(statement) || statement.incomplete?
+        raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
+        unless has_statement?(statement)
           s, p, o, c = statement.to_quad
           c = DEFAULT_GRAPH unless supports?(:graph_name)
           c ||= DEFAULT_GRAPH
