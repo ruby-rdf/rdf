@@ -834,7 +834,7 @@ module RDF
     #
     # @return [Fixnum]
     def hash
-      @hash ||= (to_s.hash * -1)
+      @hash ||= (value.hash * -1)
     end
 
     ##
