@@ -130,18 +130,21 @@ module RDF
     def execute(repository, options = {})
       before_execute(repository, options) if respond_to?(:before_execute)
 
-      deletes.each_statement do |statement|
-        statement = statement.dup
+      dels = deletes.map do |s|
+        statement = s.dup
         statement.graph_name ||= graph_name
-        repository.delete(statement)
+        statement
       end
 
-      inserts.each_statement do |statement|
-        statement = statement.dup
+      ins = inserts.map do |s|
+        statement = s.dup
         statement.graph_name ||= graph_name
-        repository.insert(statement)
+        statement
       end
-
+      
+      repository.delete(*dels) unless dels.empty?
+      repository.insert(*ins) unless ins.empty?
+      
       after_execute(repository, options) if respond_to?(:after_execute)
       self
     end
