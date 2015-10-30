@@ -834,7 +834,7 @@ module RDF
     #
     # @return [Fixnum]
     def hash
-      return @hash ||= (to_s.hash * -1)
+      @hash ||= (to_s.hash * -1)
     end
 
     ##
@@ -842,9 +842,7 @@ module RDF
     #
     # @return [Hash{Symbol => String}]
     def object
-      @object ||= begin
-        parse @value
-      end
+      @object ||= parse(@value)
     end
     alias_method :to_hash, :object
 
