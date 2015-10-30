@@ -717,7 +717,7 @@ module RDF
     # @param  [RDF::URI] other
     # @return [Boolean] `true` or `false`
     def eql?(other)
-      other.is_a?(URI) && self.hash == other.hash && self == other
+      other.is_a?(URI) && self == other
     end
 
     ##
