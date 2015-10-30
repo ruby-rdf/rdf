@@ -5,9 +5,9 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#dateTime#boolean
   # @since 0.2.1
   class DateTime < Literal
-    DATATYPE = XSD.dateTime
+    DATATYPE = RDF::XSD.dateTime
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%Y-%m-%dT%H:%M:%SZ'.freeze
+    FORMAT   = '%Y-%m-%dT%H:%M:%S%:z'.freeze
 
     ##
     # @param  [DateTime] value
@@ -32,9 +32,9 @@ module RDF; class Literal
     def canonicalize!
       if self.valid?
         @string = if has_timezone?
-          @object.new_offset.strftime(FORMAT)
+          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z')
         else
-          @object.strftime(FORMAT[0..-2])
+          @object.strftime(FORMAT[0..-4])
         end
       end
       self
@@ -58,7 +58,7 @@ module RDF; class Literal
     # @return [RDF::Literal]
     def timezone
       if tz == 'Z'
-        RDF::Literal("PT0S", :datatype => RDF::XSD.dayTimeDuration)
+        RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration)
       elsif md = tz.to_s.match(/^([+-])?(\d+):(\d+)?$/)
         plus_minus, hour, min = md[1,3]
         plus_minus = nil unless plus_minus == "-"

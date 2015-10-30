@@ -3,27 +3,27 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe RDF::Query::Solutions do
   let(:uri) {
     RDF::Query::Solution.new(
-      :author => RDF::URI("http://ar.to/#self"),
-      :age => RDF::Literal(0),
-      :name => RDF::Literal("Arto Bendiken", :language => :es),
-      :description => RDF::Literal("Description"),
-      :updated => RDF::Literal(Date.today),
-      :created => RDF::Literal(Date.parse("1970-01-01")),
-      :title => RDF::Literal("RDF 1.1"),
-      :price => RDF::Literal(30)
+      author: RDF::URI("http://ar.to/#self"),
+      age: RDF::Literal(0),
+      name: RDF::Literal("Arto Bendiken", language: :es),
+      description: RDF::Literal("Description"),
+      updated: RDF::Literal(Date.today),
+      created: RDF::Literal(Date.parse("1970-01-01")),
+      title: RDF::Literal("RDF 1.1"),
+      price: RDF::Literal(30)
     )
   }
   let(:lit) {
     RDF::Query::Solution.new(
-      :author => RDF::Literal("Gregg Kellogg"),
-      :age => RDF::Literal(0),
-      :name => RDF::Literal("Gregg Kellogg", :language => :en),
-      :description => RDF::Literal("Description"),
-      :updated => RDF::Literal(Date.today - 1),
-      :created => RDF::Literal(Date.parse("1970-01-01")),
-      :title => RDF::Literal("SPARQL 1.1 Query"),
-      :price => RDF::Literal(40),
-      :date => RDF::Literal(Date.parse("1957-02-27"))
+      author: RDF::Literal("Gregg Kellogg"),
+      age: RDF::Literal(0),
+      name: RDF::Literal("Gregg Kellogg", language: :en),
+      description: RDF::Literal("Description"),
+      updated: RDF::Literal(Date.today - 1),
+      created: RDF::Literal(Date.parse("1970-01-01")),
+      title: RDF::Literal("SPARQL 1.1 Query"),
+      price: RDF::Literal(40),
+      date: RDF::Literal(Date.parse("1957-02-27"))
     )
   }
 
@@ -44,10 +44,10 @@ describe RDF::Query::Solutions do
   describe "#filter" do
     it "using a hash" do
       {
-        {:author  => RDF::URI("http://ar.to/#self")} => [uri],
-        {:author  => "Gregg Kellogg"} => [lit],
-        {:author  => [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"]} => [uri, lit],
-        {:updated => RDF::Literal(Date.today)} => [uri],
+        {author:  RDF::URI("http://ar.to/#self")} => [uri],
+        {author:  "Gregg Kellogg"} => [lit],
+        {author:  [RDF::URI("http://ar.to/#self"), "Gregg Kellogg"]} => [uri, lit],
+        {updated: RDF::Literal(Date.today)} => [uri],
       }.each do |arg, result|
         expect(solutions.dup.filter(arg)).to eq result
       end
@@ -71,54 +71,54 @@ describe RDF::Query::Solutions do
     {
       "subsetByExcl01" => [
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
-          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
-          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
         ]),
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   :type => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
-          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   :type => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
         ]),
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:animal => RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
         ])
       ],
       "exists-02" => [
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a0"), :b => RDF::URI("http://example/b0"), :c => RDF::URI("http://example/c0")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a1"), :b => RDF::URI("http://example/b1"), :c => RDF::URI("http://example/c1")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2"), :c => RDF::URI("http://example/c2")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a0"), b: RDF::URI("http://example/b0"), c: RDF::URI("http://example/c0")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a1"), b: RDF::URI("http://example/b1"), c: RDF::URI("http://example/c1")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a2"), b: RDF::URI("http://example/b2"), c: RDF::URI("http://example/c2")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a3"), b: RDF::URI("http://example/b3"), c: RDF::URI("http://example/c3")),
         ]),
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d0")),
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d1"), :b => RDF::URI("http://example/b1"), :c => RDF::URI("http://example/c1")),
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d2"), :b => RDF::URI("http://example/b2")),
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/cx")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d0")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d1"), b: RDF::URI("http://example/b1"), c: RDF::URI("http://example/c1")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d2"), b: RDF::URI("http://example/b2")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d3"), b: RDF::URI("http://example/b3"), c: RDF::URI("http://example/cx")),
         ]),
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a0"), :b => RDF::URI("http://example/b0"), :c => RDF::URI("http://example/c0")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a0"), b: RDF::URI("http://example/b0"), c: RDF::URI("http://example/c0")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a3"), b: RDF::URI("http://example/b3"), c: RDF::URI("http://example/c3")),
         ])
       ],
       "full-minuend" => [
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a1"), :b => RDF::URI("http://example/b1")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a3"), :b => RDF::URI("http://example/b3")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a4")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a1"), b: RDF::URI("http://example/b1")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a2"), b: RDF::URI("http://example/b2")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a3"), b: RDF::URI("http://example/b3")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a4")),
         ]),
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d1"), :b => RDF::URI("http://example/b1")),
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d3"), :b => RDF::URI("http://example/b3"), :c => RDF::URI("http://example/c3")),
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d4"), :b => RDF::URI("http://example/b4"), :c => RDF::URI("http://example/c4")),
-          RDF::Query::Solution.new(:d => RDF::URI("http://example/d5")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d1"), b: RDF::URI("http://example/b1")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d3"), b: RDF::URI("http://example/b3"), c: RDF::URI("http://example/c3")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d4"), b: RDF::URI("http://example/b4"), c: RDF::URI("http://example/c4")),
+          RDF::Query::Solution.new(d: RDF::URI("http://example/d5")),
         ]),
         RDF::Query::Solutions.new.concat([
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a2"), :b => RDF::URI("http://example/b2")),
-          RDF::Query::Solution.new(:a => RDF::URI("http://example/a4")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a2"), b: RDF::URI("http://example/b2")),
+          RDF::Query::Solution.new(a: RDF::URI("http://example/a4")),
         ])
       ],
     }.each do |name, (left, right, result)|
@@ -144,8 +144,8 @@ describe RDF::Query::Solutions do
       it {is_expected.to be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
-          RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
-          RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
+          RDF::Query::Solution.new(title: RDF::Literal("RDF 1.1")),
+          RDF::Query::Solution.new(title: RDF::Literal("SPARQL 1.1 Query"))
         )
       end
     end
@@ -155,8 +155,8 @@ describe RDF::Query::Solutions do
       it {is_expected.to be_a(RDF::Query::Solutions)}
       it "contains particular variables only" do
         expect(subject).to include(
-          RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1"), :description => RDF::Literal("Description")),
-          RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"), :description => RDF::Literal("Description"))
+          RDF::Query::Solution.new(title: RDF::Literal("RDF 1.1"), description: RDF::Literal("Description")),
+          RDF::Query::Solution.new(title: RDF::Literal("SPARQL 1.1 Query"), description: RDF::Literal("Description"))
         )
       end
     end
@@ -167,8 +167,8 @@ describe RDF::Query::Solutions do
     it {is_expected.to be_a(RDF::Query::Solutions)}
     it "contains particular variables only" do
       expect(subject).to include(
-        RDF::Query::Solution.new(:title => RDF::Literal("RDF 1.1")),
-        RDF::Query::Solution.new(:title => RDF::Literal("SPARQL 1.1 Query"))
+        RDF::Query::Solution.new(title: RDF::Literal("RDF 1.1")),
+        RDF::Query::Solution.new(title: RDF::Literal("SPARQL 1.1 Query"))
       )
     end
   end

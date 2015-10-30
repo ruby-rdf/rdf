@@ -57,7 +57,7 @@ describe RDF::Query::Variable do
     it "is unbound" do
       expect(subject).to be_unbound
       expect(subject).not_to be_bound
-      expect(subject.variables).to eq({:x => subject})
+      expect(subject.variables).to eq({x: subject})
       expect(subject.bindings).to eq({})
     end
 
@@ -114,8 +114,8 @@ describe RDF::Query::Variable do
     it "is bound" do
       expect(subject).not_to be_unbound
       expect(subject).to be_bound
-      expect(subject.variables).to eq({:x => subject})
-      expect(subject.bindings).to eq({:x => RDF::Literal(123)})
+      expect(subject.variables).to eq({x: subject})
+      expect(subject.bindings).to eq({x: RDF::Literal(123)})
     end
 
     it "matches only its value" do

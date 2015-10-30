@@ -6,9 +6,9 @@ module RDF::NTriples
   # @example Obtaining an NTriples reader class
   #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
   #   RDF::Reader.for("etc/doap.nt")
-  #   RDF::Reader.for(:file_name      => "etc/doap.nt")
-  #   RDF::Reader.for(:file_extension => "nt")
-  #   RDF::Reader.for(:content_type   => "text/plain")
+  #   RDF::Reader.for(file_name:      "etc/doap.nt")
+  #   RDF::Reader.for(file_extension: "nt")
+  #   RDF::Reader.for(content_type:   "application/n-triples")
   #
   # @example Parsing RDF statements from an NTriples file
   #   RDF::NTriples::Reader.open("etc/doap.nt") do |reader|
@@ -110,7 +110,7 @@ module RDF::NTriples
     # @param  [String] input
     # @return [RDF::URI]
     def self.parse_predicate(input)
-      parse_uri(input, :intern => true)
+      parse_uri(input, intern: true)
     end
 
     ##
@@ -144,9 +144,9 @@ module RDF::NTriples
     def self.parse_literal(input)
       case input
         when LITERAL_WITH_LANGUAGE
-          RDF::Literal.new(unescape($1), :language => $2)
+          RDF::Literal.new(unescape($1), language: $4)
         when LITERAL_WITH_DATATYPE
-          RDF::Literal.new(unescape($1), :datatype => $2)
+          RDF::Literal.new(unescape($1), datatype: $4)
         when LITERAL_PLAIN
           RDF::Literal.new(unescape($1))
       end
@@ -169,7 +169,7 @@ module RDF::NTriples
       while
         (string.sub!(ESCAPE_SURROGATE) do
           if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
-            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in a future release."
+            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
             s = [$1, $2].pack('H*H*')
             s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8)
           else
@@ -207,7 +207,7 @@ module RDF::NTriples
         begin
           unless blank? || read_comment
             subject   = read_uriref || read_node || fail_subject
-            predicate = read_uriref(:intern => true) || fail_predicate
+            predicate = read_uriref(intern: true) || fail_predicate
             object    = read_uriref || read_node || read_literal || fail_object
 
             if validate? && !read_eos
@@ -263,9 +263,9 @@ module RDF::NTriples
         literal_str = self.class.unescape(literal_str)
         literal = case
           when language = match(LANGTAG)
-            RDF::Literal.new(literal_str, :language => language)
+            RDF::Literal.new(literal_str, language: language)
           when datatype = match(/^(\^\^)/) # FIXME
-            RDF::Literal.new(literal_str, :datatype => read_uriref || fail_object)
+            RDF::Literal.new(literal_str, datatype: read_uriref || fail_object)
           else
             RDF::Literal.new(literal_str) # plain string literal
         end

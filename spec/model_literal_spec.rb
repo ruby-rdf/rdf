@@ -1,5 +1,6 @@
 # coding: utf-8
 require File.join(File.dirname(__FILE__), 'spec_helper')
+require 'rdf/spec/literal'
 
 describe RDF::Literal do
   XSD = RDF::XSD
@@ -64,244 +65,10 @@ describe RDF::Literal do
         expect(RDF::Literal.new('Hi', language: :"en-us", canonicalize: true).language).to eq :"en-us"
       end
 
-      {
-        "true"  => "true",
-        "false" => "false",
-        "tRuE"  => "true",
-        "FaLsE" => "false",
-        "1"     => "true",
-        "0"     => "false",
-      }.each_pair do |value, str|
-        it "does not normalize boolean '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.boolean, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes boolean '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.boolean, canonicalize: true).to_s).to eq str
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::Boolean" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.boolean, canonicalize: true)).to be_a(RDF::Literal::Boolean)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.boolean, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.boolean, canonicalize: false)
-        end
-      end
-
-      {
-        "01" => "1",
-        "1"  => "1",
-        "-1" => "-1",
-        "+1" => "1",
-      }.each_pair do |value, str|
-        it "does not normalize integer '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.integer, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes integer '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.integer, canonicalize: true).to_s).to eq str
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::Integer" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.integer, canonicalize: true)).to be_a(RDF::Literal::Integer)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.integer, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.integer, canonicalize: false)
-        end
-      end
-
-      {
-        "1"                              => "1.0",
-        "-1"                             => "-1.0",
-        "1."                             => "1.0",
-        "1.0"                            => "1.0",
-        "1.00"                           => "1.0",
-        "+001.00"                        => "1.0",
-        "123.456"                        => "123.456",
-        "2.345"                          => "2.345",
-        "1.000000000"                    => "1.0",
-        "2.3"                            => "2.3",
-        "2.234000005"                    => "2.234000005",
-        "2.2340000000000005"             => "2.2340000000000005",
-        "2.23400000000000005"            => "2.234",
-        "2.23400000000000000000005"      => "2.234",
-        "1.2345678901234567890123457890" => "1.2345678901234567",
-      }.each_pair do |value, str|
-        it "does not normalize decimal '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes decimal '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: true).to_s).to eq str
-        end
-
-        it "humanizes decimal '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: false).humanize).to eq value
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::Decimal" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: true)).to be_a(RDF::Literal::Decimal)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.decimal, canonicalize: false)
-        end
-      end
-
-      {
-        "1"         => "1.0E0",
-        "-1"        => "-1.0E0",
-        "+01.000"   => "1.0E0",
-        #"1."        => "1.0E0",
-        "1.0"       => "1.0E0",
-        "123.456"   => "1.23456E2",
-        "1.0e+1"    => "1.0E1",
-        "1.0e-10"   => "1.0E-10",
-        "123.456e4" => "1.23456E6",
-        "3E1"       => "3.0E1",
-        "1.1e-01"   => "1.1E-1",
-      }.each_pair do |value, str|
-        it "does not normalize double '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes double '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: true).to_s).to eq str
-        end
-
-        it "humanizes double '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: false).humanize).to eq value
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::Double" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: true)).to be_a(RDF::Literal::Double)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.double, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.double, canonicalize: false)
-        end
-      end
-
       # Native representations
       [Date.today, Time.now, DateTime.now].each do |v|
         it "creates a valid literal from #{v.inspect}" do
           expect(RDF::Literal(v, canonicalize: true)).to be_valid
-        end
-      end
-
-      # DateTime
-      {
-        "2010-01-01T00:00:00Z"      => "2010-01-01T00:00:00Z",
-        "2010-01-01T00:00:00.0000Z" => "2010-01-01T00:00:00Z",
-        "2010-01-01T00:00:00"       => "2010-01-01T00:00:00",
-        "2010-01-01T00:00:00+00:00" => "2010-01-01T00:00:00Z",
-        "2010-01-01T01:00:00+01:00" => "2010-01-01T00:00:00Z",
-        "2009-12-31T23:00:00-01:00" => "2010-01-01T00:00:00Z",
-        "-2010-01-01T00:00:00Z"     => "-2010-01-01T00:00:00Z",
-        "2014-09-01T12:13:14"       => "2014-09-01T12:13:14",
-        "2014-09-01T12:13:14Z"      => "2014-09-01T12:13:14Z",
-        "2014-09-01T12:13:14-08:00" => "2014-09-01T20:13:14Z",
-      }.each_pair do |value, str|
-        it "does not normalize dateTime '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes dateTime '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: true).to_s).to eq str
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::DateTime" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: true)).to be_a(RDF::Literal::DateTime)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.dateTime, canonicalize: false)
-        end
-      end
-
-      {
-        "2014-09-01T12:13:14.567"       => "12:13:14 PM on Monday, 01 September 2014",
-        "2014-09-01T12:13:14.567Z"      => "12:13:14 PM UTC on Monday, 01 September 2014",
-        "2014-09-01T12:13:14.567-08:00" => "12:13:14 PM -08:00 on Monday, 01 September 2014",
-      }.each_pair do |value, str|
-        it "humanizes dateTime '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime, canonicalize: false).humanize).to eq str
-        end
-      end
-
-      # Date
-      {
-        "2010-01-01Z"      => "2010-01-01Z",
-        "2010-01-01"       => "2010-01-01",
-        "2010-01-01+00:00" => "2010-01-01Z",
-        "2010-01-01+01:00" => "2010-01-01+01:00",
-        "2009-12-31-01:00" => "2009-12-31-01:00",
-        "-2010-01-01Z"     => "-2010-01-01Z",
-        "2014-09-03-08:00" => "2014-09-03-08:00"
-      }.each_pair do |value, str|
-        it "does not normalize date '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes date '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: true).to_s).to eq str
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::Date" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: true)).to be_a(RDF::Literal::Date)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.date, canonicalize: false)
-        end
-      end
-
-      {
-        "2014-09-01"       => "Monday, 01 September 2014",
-        "2014-09-01Z"      => "Monday, 01 September 2014 UTC",
-        "2014-09-01-08:00" => "Monday, 01 September 2014 -08:00",
-      }.each_pair do |value, str|
-        it "humanizes date '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.date, canonicalize: false).humanize).to eq str
-        end
-      end
-
-      # Time
-      {
-        "00:00:00Z"      => "00:00:00Z",
-        "00:00:00"       => "00:00:00",
-        "00:00:00.0000Z" => "00:00:00Z",
-        "00:00:00+00:00" => "00:00:00Z",
-        "01:00:00+01:00" => "00:00:00Z",
-        "23:00:00-01:00" => "00:00:00Z",
-        "12:13:14-08:00" => "20:13:14Z"
-      }.each_pair do |value, str|
-        it "does not normalize dateTime '#{value}' by default" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: false).to_s).to eq value
-        end
-
-        it "normalizes time '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: true).to_s).to eq str
-        end
-
-        it "instantiates '#{value}' as RDF::Literal::Time" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: true)).to be_a(RDF::Literal::Time)
-        end
-
-        it "causes normalized '#{value}' to be == '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: true)).to eq RDF::Literal.new(str, datatype: RDF::XSD.time, canonicalize: false)
-        end
-      end
-
-      {
-        "12:13:14.567"       => "12:13:14 PM",
-        "12:13:14.567Z"      => "12:13:14 PM UTC",
-        "12:13:14.567-08:00" => "12:13:14 PM -08:00",
-      }.each_pair do |value, str|
-        it "humanizes time '#{value}' to '#{str}'" do
-          expect(RDF::Literal.new(value, datatype: RDF::XSD.time, canonicalize: false).humanize).to eq str
         end
       end
     end
@@ -479,164 +246,521 @@ describe RDF::Literal do
     end
   end
 
-  describe "#valid?" do
-    # Boolean
-    {
-      "true"  => "true",
-      "false" => "false",
-      "tRuE"  => "true",
-      "FaLsE" => "false",
-      "1"     => "true",
-      "0"     => "false",
-    }.each_pair do |value, str|
-      it "validates boolean '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.boolean)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.boolean)).not_to be_invalid
-      end
-    end
 
-    # Integer
+  describe "#compatible?" do
     {
-      "01" => "1",
-      "1"  => "1",
-      "-1" => "-1",
-      "+1" => "1",
-    }.each_pair do |value, str|
-      it "validates integer '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.integer)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.integer)).not_to be_invalid
-      end
-    end
-
-    # Decimal
-    {
-      "1"                              => "1.0",
-      "-1"                             => "-1.0",
-      "1."                             => "1.0",
-      "1.0"                            => "1.0",
-      "1.00"                           => "1.0",
-      "+001.00"                        => "1.0",
-      "123.456"                        => "123.456",
-      "2.345"                          => "2.345",
-      "1.000000000"                    => "1.0",
-      "2.3"                            => "2.3",
-      "2.234000005"                    => "2.234000005",
-      "2.2340000000000005"             => "2.2340000000000005",
-      "2.23400000000000005"            => "2.234",
-      "2.23400000000000000000005"      => "2.234",
-      "1.2345678901234567890123457890" => "1.2345678901234567",
-    }.each_pair do |value, str|
-      it "validates decimal '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.decimal)).not_to be_invalid
-      end
-    end
-
-    # Double
-    {
-      "1"         => "1.0E0",
-      "-1"        => "-1.0E0",
-      "+01.000"   => "1.0E0",
-      #"1."        => "1.0E0",
-      "1.0"       => "1.0E0",
-      "123.456"   => "1.23456E2",
-      "1.0e+1"    => "1.0E1",
-      "1.0e-10"   => "1.0E-10",
-      "123.456e4" => "1.23456E6",
-      "+INF"      => "INF",
-      "INF"       => "INF",
-      "-INF"      => "-INF",
-      "NaN"       => "NaN",
-      "3E1"       => "3.0E1"
-    }.each_pair do |value, str|
-      it "validates double '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.double)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.double)).not_to be_invalid
-      end
-    end
-
-    # DateTime
-    {
-      "2010-01-01T00:00:00Z"      => "2010-01-01T00:00:00Z",
-      "2010-01-01T00:00:00.0000Z" => "2010-01-01T00:00:00Z",
-      "2010-01-01T00:00:00"       => "2010-01-01T00:00:00Z",
-      "2010-01-01T00:00:00+00:00" => "2010-01-01T00:00:00Z",
-      "2010-01-01T01:00:00+01:00" => "2010-01-01T01:00:00+01:00",
-      "2009-12-31T23:00:00-01:00" => "2009-12-31T23:00:00-01:00",
-      "-2010-01-01T00:00:00Z"     => "-2010-01-01T00:00:00Z",
-    }.each_pair do |value, str|
-      it "validates dateTime '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.dateTime)).not_to be_invalid
-      end
-    end
-
-    # Date
-    {
-      "2010-01-01Z"      => "2010-01-01Z",
-      "2010-01-01"       => "2010-01-01Z",
-      "2010-01-01+00:00" => "2010-01-01Z",
-      "2010-01-01+01:00" => "2010-01-01Z",
-      "2009-12-31-01:00" => "2009-12-31Z",
-      "-2010-01-01Z"     => "-2010-01-01Z",
-    }.each_pair do |value, str|
-      it "validates date '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.date)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.date)).not_to be_invalid
-      end
-    end
-
-    # Time
-    {
-      "00:00:00Z"      => "00:00:00Z",
-      "00:00:00.0000Z" => "00:00:00Z",
-      "00:00:00"       => "00:00:00Z",
-      "00:00:00+00:00" => "00:00:00Z",
-      "01:00:00+01:00" => "00:00:00Z",
-      "23:00:00-01:00" => "00:00:00Z",
-    }.each_pair do |value, str|
-      it "validates time '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.time)).to be_valid
-        expect(RDF::Literal.new(value, datatype: RDF::XSD.time)).not_to be_invalid
+      %("abc") => {
+        %("b") => true,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => true,
+        %("b"@ja) => false,
+        %("b"@en) => false,
+        %(<a>) => false,
+        %(_:a) => false,
+      },
+      %("abc^^<http://www.w3.org/2001/XMLSchema#string>") => {
+        %("b") => true,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => true,
+        %("b"@en) => false
+      },
+      %("abc"@en) => {
+        %("b") => true,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => true,
+        %("b"@en) => true,
+        %("b"@ja) => false
+      },
+      %("abc"@fr) => {
+        %("b"@ja) => false
+      },
+    }.each do |l1, props|
+      props.each do |l2, res|
+        it "#{l1} should #{'not ' unless res}be compatible with #{l2}" do
+          if res
+            expect(RDF::NTriples::Reader.parse_object l1).to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          else
+            expect(RDF::NTriples::Reader.parse_object l1).not_to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          end
+        end
       end
     end
   end
 
-  describe "#invalid?" do
+  describe RDF::Literal::Boolean do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "true", RDF::XSD.boolean
+    it_behaves_like 'RDF::Literal equality', "true", true
+    it_behaves_like 'RDF::Literal lexical values', "true"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.boolean, [
+      %w(true true),
+      %w(false false),
+      %w(tRuE true),
+      %w(FaLsE false),
+      %w(1 true),
+      %w(0 false)
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.boolean,
+      %w(true false tRuE FaLsE 1 0),
+      %w(foo 10)
+
+    context "object values" do
+      {
+        1 => ["true", "true"],
+        0 => ["false", "false"],
+        true => ["true", "true"],
+        false => ["false", "false"]
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Boolean.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Boolean.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+  end
+
+  describe RDF::Literal::Integer do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "1", RDF::XSD.integer
+    it_behaves_like 'RDF::Literal equality', "1", 1
+    it_behaves_like 'RDF::Literal lexical values', "1"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.integer, [
+      %w(01 1),
+      %w(1  1),
+      %w(-1 -1),
+      %w(+1 1)
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.integer,
+      %w(1 10 100 01 +1 -1),
+      %w(foo 10.1 12xyz)
+
+    context "object values" do
+      {
+        1 => ["1", "1"],
+        0 => ["0", "0"]
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Integer.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Integer.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+  end
+
+  describe RDF::Literal::Decimal do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "1.1", RDF::XSD.decimal
+    it_behaves_like 'RDF::Literal equality', "1.1", 1.1
+    it_behaves_like 'RDF::Literal lexical values', "1.1"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.decimal, [
+      %w(1                              1.0),
+      %w(-1                             -1.0),
+      %w(1.                             1.0),
+      %w(1.0                            1.0),
+      %w(1.00                           1.0),
+      %w(+001.00                        1.0),
+      %w(123.456                        123.456),
+      %w(1.000000000                    1.0),
+      %w(2.345                          2.345),
+      %w(2.3                            2.3),
+      %w(2.234000005                    2.234000005),
+      %w(2.2340000000000005             2.2340000000000005),
+      %w(2.23400000000000005            2.234),
+      %w(2.23400000000000000000005      2.234),
+      %w(1.2345678901234567890123457890 1.2345678901234567),
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.decimal,
+      %w(
+        1
+        -1
+        1.
+        1.0
+        1.00
+        +001.00
+        123.456
+        1.000000000
+        2.345
+        2.3
+        2.234000005
+        2.2340000000000005
+        2.23400000000000005
+        2.23400000000000000000005
+        1.2345678901234567890123457890
+      ),
+      %w(foo 10.1e1 12.xyz)
+
+    context "object values" do
+      {
+        BigDecimal('1.0') => ["1.0", "1.0"],
+        BigDecimal('0') => ["0.0", "0.0"],
+        BigDecimal('10.10') => ["10.1", "10.1"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Decimal.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Decimal.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+  end
+
+  describe RDF::Literal::Double do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "1.0E0", RDF::XSD.double
+    it_behaves_like 'RDF::Literal equality', "1.0E0", 1.0E0
+    it_behaves_like 'RDF::Literal lexical values', "1.0E0"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.double, [
+      %w(1         1.0E0),
+      %w(-1        -1.0E0),
+      %w(+01.000   1.0E0),
+      #%w(1.        1.0E0),
+      %w(1.0       1.0E0),
+      %w(123.456   1.23456E2),
+      %w(1.0e+1    1.0E1),
+      %w(1.0e-10   1.0E-10),
+      %w(123.456e4 1.23456E6),
+      %w(+INF      INF),
+      %w(INF       INF),
+      %w(-INF      -INF),
+      #%w(NaN       NaN),
+      %w(3E1       3.0E1)
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.double,
+      %w(
+        1
+        -1
+        +01.000
+        1.0
+        123.456
+        1.0e+1
+        1.0e-10
+        123.456e4
+        +INF
+        INF
+        -INF
+        NaN
+        3E1
+      ),
+      %w(foo 12.xyz 1.0ez)
+
+    context "object values" do
+      {
+        1.0       => ["1.0", "1.0E0"],
+        0.0       => ["0.0", "0.0E0"],
+        10.10     => ["10.1", "1.01E1"],
+        123.456e4 => ["1234560.0", "1.23456E6"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Double.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Double.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+
+    let(:nan) {RDF::Literal::Double.new("NaN")}
+    let(:inf) {RDF::Literal::Double.new("INF")}
+
+    it "recognizes INF" do
+      expect(inf).to be_infinite
+      expect(RDF::Literal.new('INF', datatype: RDF::Literal::Double::DATATYPE)).to eq inf
+      expect {inf.canonicalize}.not_to raise_error
+    end
+
+    it "recognizes -INF" do
+      expect(-inf).to be_infinite
+      expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq -inf
+      expect {-inf.canonicalize}.not_to raise_error
+    end
+
+    it "recognizes NaN" do
+      expect(nan).to be_nan
+      expect(RDF::Literal.new('NaN', datatype: RDF::Literal::Double::DATATYPE)).to be_nan
+      expect {nan.canonicalize}.not_to raise_error
+    end
+
+    [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|
+      {
+        :"+" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
+        :"-" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("INF")],
+      }.each do |op, (lp, rp, lm, rm)|
+        it "returns #{lp} for INF #{op} #{n}" do
+          expect(inf.send(op, n)).to eq lp
+        end
+
+        it "returns #{rp} for #{n} #{op} INF" do
+          expect(n.send(op, inf)).to eq rp
+        end
+
+        it "returns #{lm} for -INF #{op} #{n}" do
+          expect((-inf).send(op, n)).to eq lm
+        end
+
+        it "returns #{rm} for #{n} #{op} -INF" do
+          expect(n.send(op, -inf)).to eq rm
+        end
+      end
+
+      it "#{n} + NaN" do
+        expect(n + -nan).to be_nan
+        expect(-nan + n).to be_nan
+      end
+    end
+
+    # Multiplication
     {
-      "foo"                    => RDF::XSD.boolean,
-      "bar"                    => RDF::XSD.integer,
-      "baz"                    => RDF::XSD.decimal,
-      "fub"                    => RDF::XSD.double,
-      "xyz"                    => RDF::XSD.integer,
-      "12xyz"                  => RDF::XSD.integer,
-      "12.xyz"                 => RDF::XSD.decimal,
-      "xy.z"                   => RDF::XSD.double,
-      "+1.0z"                  => RDF::XSD.double,
+      -1 => [RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
+      0  => [:nan, :nan],
+      1  => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
+    }.each do |n, (p, m)|
+      it "returns #{p} for #{n} * INF" do
+        if p == :nan
+          expect(RDF::Literal::Double.new(n) * inf).to be_nan
+        else
+          expect(RDF::Literal::Double.new(n) * inf).to eq p
+        end
+      end
 
-      "+2010-01-01T00:00:00Z"  => RDF::XSD.dateTime,
-      "2010-01-01T00:00:00FOO" => RDF::XSD.dateTime,
-      "02010-01-01T00:00:00"   => RDF::XSD.dateTime,
-      "2010-01-01"             => RDF::XSD.dateTime,
-      "2010-1-1T00:00:00"      => RDF::XSD.dateTime,
-      "0000-01-01T00:00:00"    => RDF::XSD.dateTime,
-      "2010-07"                => RDF::XSD.dateTime,
-      "2010"                   => RDF::XSD.dateTime,
+      it "returns #{p} for INF * #{n}" do
+        if p == :nan
+          expect(inf * RDF::Literal::Double.new(n)).to be_nan
+        else
+          expect(inf * RDF::Literal::Double.new(n)).to eq p
+        end
+      end
+    end
 
-      "+2010-01-01Z"           => RDF::XSD.date,
-      "2010-01-01TFOO"         => RDF::XSD.date,
-      "02010-01-01"            => RDF::XSD.date,
-      "2010-1-1"               => RDF::XSD.date,
-      "0000-01-01"             => RDF::XSD.date,
-      "2011-07"                => RDF::XSD.date,
-      "2011"                   => RDF::XSD.date,
+    it "adds infinities" do
+      expect(inf + inf).to eq inf
+      expect(inf + -inf).to be_nan
+      expect(-inf + -inf).to eq -inf
+      expect(-inf + inf).to be_nan
+    end
 
-      "+00:00:00Z"             => RDF::XSD.time,
-      "-00:00:00Z"             => RDF::XSD.time,
-    }.each_pair do |value, datatype|
-      it "does not validate for '#{value}'" do
-        expect(RDF::Literal.new(value, datatype: datatype)).to be_invalid
-        expect(RDF::Literal.new(value, datatype: datatype)).not_to be_valid
+    it "adds NaN" do
+      expect(inf + nan).to be_nan
+      expect(nan + nan).to be_nan
+    end
+  end
+
+  describe RDF::Literal::DateTime do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "2010-01-01T00:00:00Z", RDF::XSD.dateTime
+    it_behaves_like 'RDF::Literal equality', "2010-01-01T00:00:00Z", DateTime.parse("2010-01-01T00:00:00Z")
+    it_behaves_like 'RDF::Literal lexical values', "2010-01-01T00:00:00Z"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.dateTime, [
+      ["2010-01-01T00:00:00Z",      "2010-01-01T00:00:00Z", "12:00:00 AM UTC on Friday, 01 January 2010"],
+      ["2010-01-01T00:00:00.0000Z", "2010-01-01T00:00:00Z", "12:00:00 AM UTC on Friday, 01 January 2010"],
+      ["2010-01-01T00:00:00",       "2010-01-01T00:00:00", "12:00:00 AM on Friday, 01 January 2010"],
+      ["2010-01-01T00:00:00+00:00", "2010-01-01T00:00:00Z", "12:00:00 AM UTC on Friday, 01 January 2010"],
+      ["2010-01-01T01:00:00+01:00", "2010-01-01T00:00:00Z", "01:00:00 AM +01:00 on Friday, 01 January 2010"],
+      ["2009-12-31T23:00:00-01:00", "2010-01-01T00:00:00Z", "11:00:00 PM -01:00 on Thursday, 31 December 2009"],
+      ["-2010-01-01T00:00:00Z",     "-2010-01-01T00:00:00Z","12:00:00 AM UTC on Friday, 01 January -2010"],
+      #["2014-09-01T12:13:14.567",   "2014-09-01T12:13:14",  "12:13:14 PM on Monday, 01 September 2014"],
+      #["2014-09-01T12:13:14.567Z",   "2014-09-01T12:13:14Z", "12:13:14 PM UTC on Monday, 01 September 2014"],
+      #["2014-09-01T12:13:14.567-08:00","2014-09-01T20:13:14Z","12:13:14 PM -08:00 on Monday, 01 September 2014"],
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.dateTime,
+      %w(
+        2010-01-01T00:00:00Z
+        2010-01-01T00:00:00.0000Z
+        2010-01-01T00:00:00
+        2010-01-01T00:00:00+00:00
+        2010-01-01T01:00:00+01:00
+        2009-12-31T23:00:00-01:00
+        -2010-01-01T00:00:00Z
+      ),
+      %w(
+        foo
+        +2010-01-01T00:00:00Z
+        2010-01-01T00:00:00FOO
+        02010-01-01T00:00:00
+        2010-01-01
+        2010-1-1T00:00:00
+        0000-01-01T00:00:00
+        2010-07
+        2010
+      )
+
+    context "object values" do
+      {
+        DateTime.parse("2010-01-01T00:00:00Z")      => ["2010-01-01T00:00:00Z", "2010-01-01T00:00:00Z"],
+        DateTime.parse("2010-02-01T00:00:00")       => ["2010-02-01T00:00:00Z", "2010-02-01T00:00:00Z"],
+        DateTime.parse("2010-03-01T04:00:00+01:00") => ["2010-03-01T04:00:00+01:00", "2010-03-01T03:00:00Z"],
+        DateTime.parse("2009-12-31T04:00:00-01:00") => ["2009-12-31T04:00:00-01:00", "2009-12-31T05:00:00Z"],
+        DateTime.parse("-2010-01-01T00:00:00Z")     => ["-2010-01-01T00:00:00Z","-2010-01-01T00:00:00Z"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::DateTime.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::DateTime.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+
+    describe "#tz" do
+      {
+        "2010-06-21T11:28:01Z"      => "Z",
+        "2010-12-21T15:38:02-08:00" => "-08:00",
+        "2008-06-20T23:59:00Z"      => "Z",
+        "2011-02-01T01:02:03"       => "",
+      }.each do |l, r|
+        it "#{l} => #{r}" do
+          expect(RDF::Literal::DateTime.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
+    end
+
+    describe "#timezone" do
+      {
+        "2010-06-21T11:28:01Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
+        "2010-12-21T15:38:02-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
+        "2008-06-20T23:59:00Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
+        "2011-02-01T01:02:03"       => nil,
+      }.each do |l, r|
+        it "#{l} => #{r.inspect}" do
+          expect(RDF::Literal::DateTime.new(l).timezone).to eq r
+        end
+      end
+    end
+  end
+
+
+  describe RDF::Literal::Date do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "2010-01-01T00:00:00Z", RDF::XSD.date
+    it_behaves_like 'RDF::Literal equality', "2010-01-01T00:00:00Z", DateTime.parse("2010-01-01T00:00:00Z")
+    it_behaves_like 'RDF::Literal lexical values', "2010-01-01T00:00:00Z"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.date, [
+      ["2010-01-01Z",     "2010-01-01Z",      "Friday, 01 January 2010 UTC"],
+      ["2010-01-01",      "2010-01-01",       "Friday, 01 January 2010"],
+      ["2010-01-01+00:00","2010-01-01Z",      "Friday, 01 January 2010 UTC"],
+      ["2010-01-01+01:00","2010-01-01+01:00", "Friday, 01 January 2010 +01:00"],
+      ["2009-12-31-01:00","2009-12-31-01:00", "Thursday, 31 December 2009 -01:00"],
+      ["-2010-01-01Z",    "-2010-01-01Z",     "Friday, 01 January -2010 UTC"],
+      ["2014-09-01-08:00","2014-09-01-08:00", "Monday, 01 September 2014 -08:00"],
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.date,
+      %w(
+        2010-01-01Z
+        2010-01-01
+        2010-01-01+00:00
+        2010-01-01+01:00
+        2009-12-31-01:00
+        -2010-01-01Z
+      ),
+      %w(
+        foo
+        +2010-01-01Z
+        2010-01-01TFOO
+        02010-01-01
+        2010-1-1
+        0000-01-01
+        2011-07
+        2011
+      )
+
+    context "object values" do
+      {
+        Date.parse("2010-02-01")      => ["2010-02-01", "2010-02-01"],
+        Date.parse("-2010-01-01")     => ["-2010-01-01","-2010-01-01"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Date.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Date.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+
+    describe "#tz" do
+      {
+        "2010-06-21Z"      => "Z",
+        "2010-12-21-08:00" => "-08:00",
+        "2008-06-20Z"      => "Z",
+        "2011-02-01"       => "",
+      }.each do |l, r|
+        it "#{l} => #{r}" do
+          expect(RDF::Literal::Date.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
+    end
+  end
+
+  describe RDF::Literal::Time do
+    it_behaves_like 'RDF::Literal with datatype and grammar', "00:00:00Z", RDF::XSD.time
+    it_behaves_like 'RDF::Literal equality', "00:00:00Z", DateTime.parse("00:00:00Z")
+    it_behaves_like 'RDF::Literal lexical values', "00:00:00Z"
+    it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.time, [
+      ["00:00:00Z",      "00:00:00Z", "12:00:00 AM UTC"],
+      ["00:00:00.0000Z", "00:00:00Z", "12:00:00 AM UTC"],
+      ["00:00:00",       "00:00:00",  "12:00:00 AM"],
+      ["00:00:00+00:00", "00:00:00Z", "12:00:00 AM UTC"],
+      ["01:00:00+01:00", "00:00:00Z", "01:00:00 AM +01:00"],
+      ["23:00:00-01:00", "00:00:00Z", "11:00:00 PM -01:00"],
+    ]
+    it_behaves_like 'RDF::Literal validation', RDF::XSD.time,
+      %w(
+        00:00:00Z
+        00:00:00.0000Z
+        00:00:00    
+        00:00:00+00:00
+        01:00:00+01:00
+        23:00:00-01:00
+      ),
+      %w(
+        foo
+        +2010-01-01Z
+        2010-01-01TFOO
+        02010-01-01
+        2010-1-1
+        0000-01-01
+        2011-07
+        2011
+      )
+
+    context "object values" do
+      {
+        DateTime.parse("00:00:00Z")      => ["00:00:00Z", "00:00:00Z"],
+        DateTime.parse("01:00:00.0000Z") => ["01:00:00Z","01:00:00Z"],
+        DateTime.parse("02:00:00")       => ["02:00:00Z", "02:00:00Z"],
+        DateTime.parse("03:00:00+00:00") => ["03:00:00Z", "03:00:00Z"],
+        DateTime.parse("05:00:00+01:00") => ["05:00:00+01:00", "04:00:00Z"],
+        DateTime.parse("07:00:00-01:00") => ["07:00:00-01:00", "08:00:00Z"],
+      }.each do |obj, (str, canon)|
+        it "to_str #{obj} to #{str.inspect}" do
+          expect(RDF::Literal::Time.new(obj).to_s).to eql str
+        end
+
+        it "canonicalizes #{obj} to #{canon.inspect}" do
+          expect(RDF::Literal::Time.new(obj, canonicalize: true).to_s).to eql canon
+        end
+      end
+    end
+
+    subject {double("time", to_s: "05:50:00")}
+
+    it "parses as string if #to_datetime raises an error" do
+      expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)
+      expect {RDF::Literal::Time.new(subject)}.not_to raise_error
+      expect(RDF::Literal::Time.new(subject).object).to eq ::DateTime.parse(subject.to_s)
+    end
+
+    describe "#tz" do
+      {
+        "11:28:01Z"      => "Z",
+        "15:38:02-08:00" => "-08:00",
+        "23:59:00Z"      => "Z",
+        "01:02:03"       => "",
+      }.each do |l, r|
+        it "#{l} => #{r}" do
+          expect(RDF::Literal::Time.new(l).tz).to eq RDF::Literal(r)
+        end
       end
     end
   end
@@ -724,161 +848,6 @@ describe RDF::Literal do
           it "#{value} => #{result}" do
             expect(RDF::Literal(value).floor).to eq RDF::Literal(result)
           end
-        end
-      end
-    end
-  end
-
-  describe RDF::Literal::Double do
-    before(:each) do
-      @nan = RDF::Literal::Double.new("NaN")
-      @inf = RDF::Literal::Double.new("INF")
-    end
-
-    it "recognizes INF" do
-      expect(@inf).to be_infinite
-      expect(RDF::Literal.new('INF', datatype: RDF::Literal::Double::DATATYPE)).to eq @inf
-      expect {@inf.canonicalize}.not_to raise_error
-    end
-
-    it "recognizes -INF" do
-      expect(-@inf).to be_infinite
-      expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq -@inf
-      expect {-@inf.canonicalize}.not_to raise_error
-    end
-
-    it "recognizes NaN" do
-      expect(@nan).to be_nan
-      expect(RDF::Literal.new('NaN', datatype: RDF::Literal::Double::DATATYPE)).to be_nan
-      expect {@nan.canonicalize}.not_to raise_error
-    end
-
-    [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|
-      {
-        :"+" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
-        :"-" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("INF")],
-      }.each do |op, (lp, rp, lm, rm)|
-        it "returns #{lp} for INF #{op} #{n}" do
-          expect(@inf.send(op, n)).to eq lp
-        end
-
-        it "returns #{rp} for #{n} #{op} INF" do
-          expect(n.send(op, @inf)).to eq rp
-        end
-
-        it "returns #{lm} for -INF #{op} #{n}" do
-          expect((-@inf).send(op, n)).to eq lm
-        end
-
-        it "returns #{rm} for #{n} #{op} -INF" do
-          expect(n.send(op, -@inf)).to eq rm
-        end
-      end
-
-      it "#{n} + NaN" do
-        expect(n + -@nan).to be_nan
-        expect(-@nan + n).to be_nan
-      end
-    end
-
-    # Multiplication
-    {
-      -1 => [RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
-      0  => [:nan, :nan],
-      1  => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
-    }.each do |n, (p, m)|
-      it "returns #{p} for #{n} * INF" do
-        if p == :nan
-          expect(RDF::Literal::Double.new(n) * @inf).to be_nan
-        else
-          expect(RDF::Literal::Double.new(n) * @inf).to eq p
-        end
-      end
-
-      it "returns #{p} for INF * #{n}" do
-        if p == :nan
-          expect(@inf * RDF::Literal::Double.new(n)).to be_nan
-        else
-          expect(@inf * RDF::Literal::Double.new(n)).to eq p
-        end
-      end
-    end
-
-    it "adds infinities" do
-      expect(@inf + @inf).to eq @inf
-      expect(@inf + -@inf).to be_nan
-      expect(-@inf + -@inf).to eq -@inf
-      expect(-@inf + @inf).to be_nan
-    end
-
-    it "adds NaN" do
-      expect(@inf + @nan).to be_nan
-      expect(@nan + @nan).to be_nan
-    end
-  end
-
-  describe RDF::Literal::DateTime do
-    describe "#tz" do
-      {
-        "2010-06-21T11:28:01Z"      => "Z",
-        "2010-12-21T15:38:02-08:00" => "-08:00",
-        "2008-06-20T23:59:00Z"      => "Z",
-        "2011-02-01T01:02:03"       => "",
-      }.each do |l, r|
-        it "#{l} => #{r}" do
-          expect(RDF::Literal::DateTime.new(l).tz).to eq RDF::Literal(r)
-        end
-      end
-    end
-
-    describe "#timezone" do
-      {
-        "2010-06-21T11:28:01Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
-        "2010-12-21T15:38:02-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
-        "2008-06-20T23:59:00Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
-        "2011-02-01T01:02:03"       => nil,
-      }.each do |l, r|
-        it "#{l} => #{r.inspect}" do
-          expect(RDF::Literal::DateTime.new(l).timezone).to eq r
-        end
-      end
-    end
-  end
-
-  describe RDF::Literal::Date do
-    describe "#tz" do
-      {
-        "2010-06-21Z"      => "Z",
-        "2010-12-21-08:00" => "-08:00",
-        "2008-06-20Z"      => "Z",
-        "2011-02-01"       => "",
-      }.each do |l, r|
-        it "#{l} => #{r}" do
-          expect(RDF::Literal::Date.new(l).tz).to eq RDF::Literal(r)
-        end
-      end
-    end
-  end
-
-  describe RDF::Literal::Time do
-    subject {
-      double("time", :to_s => "05:50:00")
-    }
-    it "parses as string if #to_datetime raises an error" do
-      expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)
-      expect {RDF::Literal::Time.new(subject)}.not_to raise_error
-      expect(RDF::Literal::Time.new(subject).object).to eq ::DateTime.parse(subject.to_s)
-    end
-
-    describe "#tz" do
-      {
-        "11:28:01Z"      => "Z",
-        "15:38:02-08:00" => "-08:00",
-        "23:59:00Z"      => "Z",
-        "01:02:03"       => "",
-      }.each do |l, r|
-        it "#{l} => #{r}" do
-          expect(RDF::Literal::Time.new(l).tz).to eq RDF::Literal(r)
         end
       end
     end
@@ -1027,13 +996,9 @@ describe RDF::Literal do
         "open-eq-06 'b'^^<unknown>='a'^^<unknown>" => [RDF::Literal.new("b", datatype: RDF::URI("unknown")), RDF::Literal.new("a", datatype: RDF::URI("unknown"))],
         "open-eq-06 1='a'^^<unknown>" => [RDF::Literal(1), RDF::Literal.new("a", datatype: RDF::URI("unknown"))],
         "open-eq-08 'xyz'='xyz'^^<unknown>" => [RDF::Literal("xyz"), RDF::Literal("xyz", datatype: RDF::URI("unknown"))],
-        "open-eq-08 'xyz'='xyz'^^<unknown>" => [RDF::Literal("xyz"), RDF::Literal.new("xyz", datatype: RDF::URI("unknown"))],
         "open-eq-08 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("xyz", datatype: XSD.integer)],
-        "open-eq-08 'xyz'='xyz'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal::Integer.new("xyz")],
         "open-eq-08 'xyz'^^<unknown>='xyz'" => [RDF::Literal("xyz", datatype: RDF::URI("unknown")), RDF::Literal("xyz")],
-        "open-eq-08 'xyz'^^<unknown>='xyz'" => [RDF::Literal("xyz", datatype: RDF::URI("unknown")), RDF::Literal.new("xyz")],
         "open-eq-08 'xyz'^^xsd:integer='xyz'" => [RDF::Literal("xyz", datatype: XSD.integer), RDF::Literal("xyz")],
-        "open-eq-08 'xyz'^^xsd:integer='xyz'" => [RDF::Literal::Integer.new("xyz"), RDF::Literal.new("xyz")],
         "open-eq-10 'xyz'='abc'^^xsd:integer" => [RDF::Literal("xyz"), RDF::Literal("abc", datatype: XSD.integer)],
         "open-eq-10 'xyz'^^<unknown>='abc'^^<unknown>" => [RDF::Literal("xyz", datatype: RDF::URI("unknown")), RDF::Literal("abc", datatype: RDF::URI("unknown"))],
         "open-eq-10 'xyz'^^xsd:integer='abc'" => [RDF::Literal("xyz", datatype: XSD.integer), RDF::Literal("abc")],
@@ -1108,13 +1073,13 @@ describe RDF::Literal do
     it "Creating a plain literal" do
       value = RDF::Literal.new("Hello, world!")
       expect(value).to be_plain
-    end      
+    end
 
     it "Creating a language-tagged literal (1)" do
       value = RDF::Literal.new("Hello, world!", language: :en)
       expect(value).to have_language
       expect(value.language).to eq :en
-    end      
+    end
 
     it "Creating a language-tagged literal (2)" do
       expect {
@@ -1122,19 +1087,19 @@ describe RDF::Literal do
         RDF::Literal.new("Hej!",   language: :sv)
         RDF::Literal.new("¡Hola!", language: :es)
       }.not_to raise_error
-    end      
+    end
 
     it "Creating an explicitly datatyped literal" do
       value = RDF::Literal.new("2009-12-31", datatype: RDF::XSD.date)
       expect(value).to have_datatype
       expect(value.datatype).to eq XSD.date
-    end      
+    end
 
     it "Creating an implicitly datatyped literal" do
       value = RDF::Literal.new(Date.today)
       expect(value).to have_datatype
       expect(value.datatype).to eq XSD.date
-    end      
+    end
 
     it "Creating an implicitly datatyped literals" do
       {

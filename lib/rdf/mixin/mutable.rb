@@ -35,16 +35,22 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     #   Options from {RDF::Reader.open}
     # @option options [RDF::Resource] :context
-    #   Set set context of each loaded statement
+    #   Set set context of each loaded statement. This option is deprecated in RDF.rb 2.0.
+    # @option options [RDF::Resource] :graph_name
+    #   Set set graph name of each loaded statement
     # @return [void]
     def load(filename, options = {})
+      if options.has_key?(:context)
+        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
+        options[:graph_name] ||= options.delete(:context)
+      end
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      Reader.open(filename, {:base_uri => filename}.merge(options)) do |reader|
-        if options[:context]
+      Reader.open(filename, {base_uri: filename}.merge(options)) do |reader|
+        if options[:graph_name]
           statements = []
           reader.each_statement do |statement|
-            statement.context = options[:context]
+            statement.graph_name = options[:graph_name]
             statements << statement
           end
           insert_statements(statements)
@@ -147,7 +153,7 @@ module RDF
     def clear
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      if respond_to?(:clear_statements)
+      if respond_to?(:clear_statements, true)
         clear_statements
       else
         delete_statements(self)

@@ -11,9 +11,9 @@ module RDF
   # @example Obtaining an RDF reader class
   #   RDF::Reader.for(:ntriples)     #=> RDF::NTriples::Reader
   #   RDF::Reader.for("etc/doap.nt")
-  #   RDF::Reader.for(:file_name      => "etc/doap.nt")
-  #   RDF::Reader.for(:file_extension => "nt")
-  #   RDF::Reader.for(:content_type   => "text/plain")
+  #   RDF::Reader.for(file_name:      "etc/doap.nt")
+  #   RDF::Reader.for(file_extension: "nt")
+  #   RDF::Reader.for(content_type:   "application/n-triples")
   #
   # @example Instantiating an RDF reader class
   #   RDF::Reader.for(:ntriples).new($stdin) { |reader| ... }
@@ -87,7 +87,7 @@ module RDF
     #
     # @return [Class]
     def self.for(options = {}, &block)
-      options = options.merge(:has_reader => true) if options.is_a?(Hash)
+      options = options.merge(has_reader: true) if options.is_a?(Hash)
       if format = self.format || Format.for(options, &block)
         format.reader
       end
@@ -246,7 +246,7 @@ module RDF
     #
     # @example
     #   reader.prefixes = {
-    #     :dc => RDF::URI('http://purl.org/dc/terms/'),
+    #     dc: RDF::URI('http://purl.org/dc/terms/'),
     #   }
     #
     # @param  [Hash{Symbol => RDF::URI}] prefixes
@@ -298,6 +298,7 @@ module RDF
     #   @return [Enumerator]
     #
     # @return [void]
+    # @raise  [RDF::ReaderError] on invalid data
     # @see    RDF::Enumerable#each_statement
     def each_statement(&block)
       if block_given?
@@ -374,6 +375,22 @@ module RDF
     # @return [Integer]
     def lineno
       @input.lineno
+    end
+
+    ##
+    # @return [Boolean]
+    #
+    # @note this parses the full input. 
+    #   Use `Reader.new(input, validate: true)` if you intend to capture the 
+    #   result.
+    #
+    # @see RDF::Value#validate! for Literal & URI validation relevant to 
+    #   error handling.
+    # @see Enumerable#valid?
+    def valid?
+      super 
+    rescue ArgumentError, RDF::ReaderError
+      false
     end
 
   protected

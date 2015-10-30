@@ -96,13 +96,19 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     # @option options [URI, #to_s]    :uri (nil)
     # @option options [String, #to_s] :title (nil)
-    # @option options [Boolean] :with_context (true)
+    # @option options [Boolean] :with_graph_name (true)
     #   Indicates that the repository supports named graphs, otherwise,
     #   only the default graph is supported.
+    # @option options [Boolean] :with_context (true)
+    #   Alias for :with_graph_name. :with_context is deprecated in RDF.rb 2.0.
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(options = {}, &block)
-      @options = {:with_context => true}.merge(options)
+      if options[:with_context]
+        warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
+        options[:graph_name] ||= options.delete(:with_context)
+      end
+      @options = {with_graph_name: true}.merge(options)
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
 
@@ -140,20 +146,20 @@ module RDF
     #
     # @example
     #   repository.transaction do |tx|
-    #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::DC.title, "RDF.rb"]
+    #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
     #   end
     #
-    # @param  [RDF::Resource] context
+    # @param  [RDF::Resource] graph_name
     #   Context on which to run the transaction, use `false` for the default
-    #   context and `nil` the entire Repository
+    #   graph_name and `nil` the entire Repository
     # @yield  [tx]
     # @yieldparam  [RDF::Transaction] tx
     # @yieldreturn [void] ignored
-    # @return [void] `self`
+    # @return [self]
     # @see    RDF::Transaction
     # @since  0.3.0
-    def transaction(context = nil, &block)
-      tx = begin_transaction(context)
+    def transaction(graph_name = nil, &block)
+      tx = begin_transaction(graph_name)
       begin
         case block.arity
           when 1 then block.call(tx)
@@ -177,11 +183,11 @@ module RDF
     # to override this method in order to begin a transaction against the
     # underlying storage.
     #
-    # @param  [RDF::Resource] context
+    # @param  [RDF::Resource] graph_name
     # @return [RDF::Transaction]
     # @since  0.3.0
-    def begin_transaction(context)
-      RDF::Transaction.new(:graph => context)
+    def begin_transaction(graph_name)
+      RDF::Transaction.new(graph: graph_name)
     end
 
     ##
@@ -215,7 +221,7 @@ module RDF
     ##
     # @see RDF::Repository
     module Implementation
-      DEFAULT_CONTEXT = false
+      DEFAULT_GRAPH = false
 
       ##
       # @private
@@ -229,8 +235,11 @@ module RDF
       # @see RDF::Enumerable#supports?
       def supports?(feature)
         case feature.to_sym
-          # statement contexts / named graphs
-          when :context   then @options[:with_context]
+          #statement named graphs
+          when :context
+            warn "[DEPRECATION] the :context feature is deprecated in RDF.rb 2.0; use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
+            @options[:with_context] || @options[:with_graph_name]
+          when :graph_name   then @options[:with_graph_name]
           when :inference then false  # forward-chaining inference
           when :validity  then @options.fetch(:with_validity, true)
           else false
@@ -249,7 +258,7 @@ module RDF
       # @see RDF::Countable#count
       def count
         count = 0
-        @data.each do |c, ss|
+        @data.each do |g, ss|
           ss.each do |s, ps|
             ps.each do |p, os|
               count += os.size
@@ -263,12 +272,12 @@ module RDF
       # @private
       # @see RDF::Enumerable#has_statement?
       def has_statement?(statement)
-        s, p, o, c = statement.to_quad
-        c ||= DEFAULT_CONTEXT
-        @data.has_key?(c) &&
-          @data[c].has_key?(s) &&
-          @data[c][s].has_key?(p) &&
-          @data[c][s][p].include?(o)
+        s, p, o, g = statement.to_quad
+        g ||= DEFAULT_GRAPH
+        @data.has_key?(g) &&
+          @data[g].has_key?(s) &&
+          @data[g][s].has_key?(p) &&
+          @data[g][s][p].include?(o)
       end
 
       ##
@@ -280,12 +289,12 @@ module RDF
           # possible concurrent mutations to `@data`, we use `#dup` to make
           # shallow copies of the nested hashes before beginning the
           # iteration over their keys and values.
-          @data.dup.each do |c, ss|
+          @data.dup.each do |g, ss|
             ss.dup.each do |s, ps|
               ps.dup.each do |p, os|
                 os.dup.each do |o|
                   # FIXME: yield has better performance, but broken in MRI 2.2: See https://bugs.ruby-lang.org/issues/11451.
-                  block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
+                  block.call(RDF::Statement.new(s, p, o, graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g))
                 end
               end
             end
@@ -298,48 +307,87 @@ module RDF
       ##
       # @private
       # @see RDF::Enumerable#has_context?
+      # @deprecated Use {#has_graph?} instead.
       def has_context?(value)
+       warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}"
+       has_graph?(value)
+      end
+
+      ##
+      # @private
+      # @see RDF::Enumerable#has_graph?
+      def has_graph?(value)
         @data.keys.include?(value)
+      end
+      ##
+      # @private
+      # @see RDF::Enumerable#each_graph
+      def graph_names(options = nil, &block)
+        @data.keys.reject {|g| g == DEFAULT_GRAPH}
       end
 
       ##
       # @private
       # @see RDF::Enumerable#each_context
+      # @deprecated Use {#each_graph} instead.
       def each_context(&block)
+        warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}"
         if block_given?
           contexts = @data.keys
-          contexts.delete(DEFAULT_CONTEXT)
+          contexts.delete(DEFAULT_GRAPH)
           contexts.each(&block)
         end
         enum_context
+      end
+
+      ##
+      # @private
+      # @see RDF::Enumerable#each_graph
+      def each_graph(&block)
+        if block_given?
+          @data.each_key do |gn|
+            yield RDF::Graph.new(gn == DEFAULT_GRAPH ? nil : gn, data: self)
+          end
+        end
+        enum_graph
       end
 
     protected
 
       ##
       # Match elements with eql?, not ==
-      # Context of `false` matches default context. Unbound variable matches non-false context
+      # Context of `false` matches default graph. Unbound variable matches non-false graph name
       # @private
       # @see RDF::Queryable#query
       def query_pattern(pattern, &block)
-        context   = pattern.context
+        graph_name  = pattern.graph_name
         subject   = pattern.subject
         predicate = pattern.predicate
         object    = pattern.object
 
-        cs = @data.has_key?(context) ? {context => @data[context]} : @data.dup
+        cs = @data.has_key?(graph_name) ? {graph_name => @data[graph_name]} : @data.dup
         cs.each do |c, ss|
-          next unless context.nil? || context == false && !c || context.eql?(c)
-          ss = ss.has_key?(subject) ? {subject => ss[subject]} : ss.dup
+          next unless graph_name.nil? || graph_name == false && !c || graph_name.eql?(c)
+          ss = if ss.has_key?(subject)
+                 { subject => ss[subject] }
+               elsif subject.nil? || subject.is_a?(RDF::Query::Variable)
+                 ss.dup
+               else
+                 []
+               end
           ss.each do |s, ps|
-            next unless subject.nil? || subject.eql?(s)
-            ps = ps.has_key?(predicate) ? {predicate => ps[predicate]} : ps.dup
+            ps = if ps.has_key?(predicate)
+                   { predicate => ps[predicate] }
+                 elsif predicate.nil? || predicate.is_a?(RDF::Query::Variable)
+                   ps.dup
+                 else
+                   []
+                 end
             ps.each do |p, os|
-              next unless predicate.nil? || predicate.eql?(p)
               os = os.dup # TODO: is this really needed?
               os.each do |o|
                 next unless object.nil? || object.eql?(o)
-                block.call(RDF::Statement.new(s, p, o, :context => c.equal?(DEFAULT_CONTEXT) ? nil : c))
+                block.call(RDF::Statement.new(s, p, o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c))
               end
             end
           end
@@ -350,10 +398,11 @@ module RDF
       # @private
       # @see RDF::Mutable#insert
       def insert_statement(statement)
+        raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
         unless has_statement?(statement)
           s, p, o, c = statement.to_quad
-          c = DEFAULT_CONTEXT unless supports?(:context)
-          c ||= DEFAULT_CONTEXT
+          c = DEFAULT_GRAPH unless supports?(:graph_name)
+          c ||= DEFAULT_GRAPH
           @data[c] ||= {}
           @data[c][s] ||= {}
           @data[c][s][p] ||= []
@@ -367,8 +416,8 @@ module RDF
       def delete_statement(statement)
         if has_statement?(statement)
           s, p, o, c = statement.to_quad
-          c = DEFAULT_CONTEXT unless supports?(:context)
-          c ||= DEFAULT_CONTEXT
+          c = DEFAULT_GRAPH unless supports?(:graph_name)
+          c ||= DEFAULT_GRAPH
           @data[c][s][p].delete(o)
           @data[c][s].delete(p) if @data[c][s][p].empty?
           @data[c].delete(s) if @data[c][s].empty?

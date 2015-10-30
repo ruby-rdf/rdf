@@ -9,15 +9,14 @@ module RDF::NTriples
   # @example Obtaining an NTriples format class
   #   RDF::Format.for(:ntriples)     #=> RDF::NTriples::Format
   #   RDF::Format.for("etc/doap.nt")
-  #   RDF::Format.for(:file_name      => "etc/doap.nt")
-  #   RDF::Format.for(:file_extension => "nt")
-  #   RDF::Format.for(:content_type   => "application/n-triples")
-  #   RDF::Format.for(:content_type   => "text/plain")
+  #   RDF::Format.for(file_name:      "etc/doap.nt")
+  #   RDF::Format.for(file_extension: "nt")
+  #   RDF::Format.for(content_type:   "application/n-triples")
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
   class Format < RDF::Format
-    content_type     'application/n-triples', :extension => :nt, :alias => ['text/plain']
+    content_type     'application/n-triples', extension: :nt, alias: ['text/plain']
     content_encoding 'utf-8'
 
     reader { RDF::NTriples::Reader }

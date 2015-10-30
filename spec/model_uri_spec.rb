@@ -49,40 +49,40 @@ describe RDF::URI do
 
     it "should canonicalize input with :canonicalize" do
       allow_any_instance_of(RDF::URI).to receive(:canonicalize!).and_raise(ArgumentError)
-      expect { RDF::URI("foo", :canonicalize => true) }.to raise_error(ArgumentError)
+      expect { RDF::URI("foo", canonicalize: true) }.to raise_error(ArgumentError)
     end
 
     it "should validate input with :validate" do
       allow_any_instance_of(RDF::URI).to receive(:valid?).and_return(false)
-      expect { RDF::URI("foo", :validate => true) }.to raise_error(ArgumentError)
+      expect { RDF::URI("foo", validate: true) }.to raise_error(ArgumentError)
     end
 
     context "with hash" do
       context "simple" do
         subject {
           RDF::URI.new({
-            :scheme => "http",
-            :user => "user",
-            :password => "password",
-            :host => "example.com",
-            :port => 8080,
-            :path => "/path",
-            :query => "query=value",
-            :fragment => "fragment"
+            scheme: "http",
+            user: "user",
+            password: "password",
+            host: "example.com",
+            port: 8080,
+            path: "/path",
+            query: "query=value",
+            fragment: "fragment"
           })
         }
 
         {
-          :scheme => "http",
-          :user => "user",
-          :password => "password",
-          :userinfo => "user:password",
-          :host => "example.com",
-          :port => 8080,
-          :authority => "user:password@example.com:8080",
-          :path => "/path",
-          :query => "query=value",
-          :fragment => "fragment"
+          scheme: "http",
+          user: "user",
+          password: "password",
+          userinfo: "user:password",
+          host: "example.com",
+          port: 8080,
+          authority: "user:password@example.com:8080",
+          path: "/path",
+          query: "query=value",
+          fragment: "fragment"
         }.each do |method, value|
           its(method) {is_expected.to eq value}
           its("normalized_#{method}".to_sym) {is_expected.to eq value}
@@ -92,10 +92,10 @@ describe RDF::URI do
       end
 
       {
-        "//user@example.com" => {:authority => "user@example.com"},
-        "http://example.com/path" => {:scheme => "http", :host => "example.com", :path => "path"},
-        "http:path" => {:scheme => "http", :path => "path"},
-        "http://resource1" => {:scheme => "http", :host => "resource1", :path => ""}
+        "//user@example.com" => {authority: "user@example.com"},
+        "http://example.com/path" => {scheme: "http", host: "example.com", path: "path"},
+        "http:path" => {scheme: "http", path: "path"},
+        "http://resource1" => {scheme: "http", host: "resource1", path: ""}
       }.each do |value, object|
         it "creates #{value}" do
           expect(RDF::URI(object).to_s).to eq value
@@ -107,31 +107,31 @@ describe RDF::URI do
   describe "#freeze" do
     subject {RDF::URI("HTTP://example.com.:%38%30/%70a%74%68?a=%31#1%323").freeze}
     {
-      :scheme => "HTTP",
-      :user => nil,
-      :password => nil,
-      :userinfo => nil,
-      :host => "example.com.",
-      :port => 80,
-      :authority => "example.com.:%38%30",
-      :path => "/%70a%74%68",
-      :query => "a=%31",
-      :fragment => "1%323"
+      scheme: "HTTP",
+      user: nil,
+      password: nil,
+      userinfo: nil,
+      host: "example.com.",
+      port: 80,
+      authority: "example.com.:%38%30",
+      path: "/%70a%74%68",
+      query: "a=%31",
+      fragment: "1%323"
     }.each do |method, value|
       its(method) {is_expected.to eq value}
     end
 
     {
-      :scheme => "http",
-      :user => nil,
-      :password => nil,
-      :userinfo => nil,
-      :host => "example.com",
-      :port => nil,
-      :authority => "example.com",
-      :path => "/path",
-      :query => "a=1",
-      :fragment => "123"
+      scheme: "http",
+      user: nil,
+      password: nil,
+      userinfo: nil,
+      host: "example.com",
+      port: nil,
+      authority: "example.com",
+      path: "/path",
+      query: "a=1",
+      fragment: "123"
     }.each do |method, value|
       its("normalized_#{method}".to_sym) {is_expected.to eq value}
     end
@@ -145,42 +145,42 @@ describe RDF::URI do
   describe "#parse" do
     {
       "http://user:password@example.com:8080/path?query=value#fragment" => {
-        :scheme => "http",
-        :user => "user",
-        :password => "password",
-        :userinfo => "user:password",
-        :host => "example.com",
-        :port => 8080,
-        :authority => "user:password@example.com:8080",
-        :path => "/path",
-        :query => "query=value",
-        :fragment => "fragment"
+        scheme: "http",
+        user: "user",
+        password: "password",
+        userinfo: "user:password",
+        host: "example.com",
+        port: 8080,
+        authority: "user:password@example.com:8080",
+        path: "/path",
+        query: "query=value",
+        fragment: "fragment"
       },
       #"ldap://[2001:db8::7]/c=GB?objectClass?one" => {
-      #  :scheme => "ldap",
-      #  :host => "[2001:db8::7]",
-      #  :path => "/c=GB",
-      #  :query => "objectClass?one",
+      #  scheme: "ldap",
+      #  host: "[2001:db8::7]",
+      #  path: "/c=GB",
+      #  query: "objectClass?one",
       #},
       "mailto:John.Doe@example.com" => {
-        :scheme => "mailto",
-        :host => nil,
-        :authority => nil,
-        :path => "John.Doe@example.com"
+        scheme: "mailto",
+        host: nil,
+        authority: nil,
+        path: "John.Doe@example.com"
       },
       "news:comp.infosystems.www.servers.unix" => {
-        :scheme => "news",
-        :host => nil,
-        :authority => nil,
-        :path => "comp.infosystems.www.servers.unix"
+        scheme: "news",
+        host: nil,
+        authority: nil,
+        path: "comp.infosystems.www.servers.unix"
       },
       "tel:+1-816-555-1212" => {
-        :scheme => "tel",
-        :path => "+1-816-555-1212"
+        scheme: "tel",
+        path: "+1-816-555-1212"
       },
       "urn:oasis:names:specification:docbook:dtd:xml:4.1.2" => {
-        :scheme => "urn",
-        :path => "oasis:names:specification:docbook:dtd:xml:4.1.2",
+        scheme: "urn",
+        path: "oasis:names:specification:docbook:dtd:xml:4.1.2",
       }
     }.each do |uri, object|
       context uri do
@@ -226,6 +226,28 @@ describe RDF::URI do
   describe "#anonymous?" do
     it "should not be #anonymous?" do
       expect(described_class.new('http://example.org')).not_to be_anonymous
+    end
+  end
+
+  describe "#compatible?" do
+    {
+      %(<abc>) => {
+        %("b") => false,
+        %("b^^<http://www.w3.org/2001/XMLSchema#string>") => false,
+        %("b"@ja) => false,
+        %(<a>) => false,
+        %(_:a) => false,
+      },
+    }.each do |l1, props|
+      props.each do |l2, res|
+        it "#{l1} should #{'not ' unless res}be compatible with #{l2}" do
+          if res
+            expect(RDF::NTriples::Reader.parse_object l1).to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          else
+            expect(RDF::NTriples::Reader.parse_object l1).not_to be_compatible(RDF::NTriples::Reader.parse_object l2)
+          end
+        end
+      end
     end
   end
 
@@ -357,9 +379,9 @@ describe RDF::URI do
       ],
       "path-segment normalization(1)" => [
         "http://example.com/./foo",
-        "http://example.com/foo/"
+        "http://example.com/foo"
       ],
-      "path-segment normalization(1)" => [
+      "path-segment normalization(2)" => [
         "http://example.com/foo/bar/..",
         "http://example.com/foo/"
       ],
@@ -407,6 +429,10 @@ describe RDF::URI do
         "file:///path/to/file with spaces.txt",
         "file:///path/to/file%20with%20spaces.txt"
       ],
+      "urn" => [
+        "urn:ex:s001",
+        "urn:ex:s001"
+      ]
     }.each do |name, (input, output)|
       it "#canonicalize #{name}" do
         u1 = RDF::URI(input)
@@ -415,7 +441,7 @@ describe RDF::URI do
         expect(u1).to eq u1
       end
     end
-    it "#canonicalize! alters resource", :ruby => "1.9" do
+    it "#canonicalize! alters resource", ruby: "1.9" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")
       expect(u1.canonicalize!.to_s).to eq u2.to_s
@@ -667,9 +693,9 @@ describe RDF::URI do
   describe "#query_values=" do
     {
       "" => {},
-      "a=a" => {:a => "a"},
-      "a" => {:a => nil},
-      "a=a&b=c&b=d&b=e" => {:a => "a", :b => ["c", "d", "e"]},
+      "a=a" => {a: "a"},
+      "a" => {a: nil},
+      "a=a&b=c&b=d&b=e" => {a: "a", b: ["c", "d", "e"]},
       nil => nil,
     }.each do |result, values|
       it values do

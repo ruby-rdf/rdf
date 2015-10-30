@@ -16,7 +16,7 @@ module RDF
     # Defines the maximum number of interned Node references that can be held
     # cached in memory at any one time.
     #
-    # Note that caching interned nodes means that two different invocations using the same symbol will result in the same node, which may not be appropriate depending on the context from which it is used. RDF requires that bnodes with the same label are, in fact, different bnodes, unless they are used within the same document.
+    # @note caching interned nodes means that two different invocations using the same symbol will result in the same node, which may not be appropriate depending on the graph from which it is used. RDF requires that bnodes with the same label are, in fact, different bnodes, unless they are used within the same document.
     CACHE_SIZE = -1 # unlimited by default
 
     ##

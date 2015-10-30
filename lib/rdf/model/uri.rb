@@ -10,7 +10,7 @@ module RDF
   #   uri = RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating a URI reference (2)
-  #   uri = RDF::URI.new(:scheme => 'http', host: 'rubygems.org', path: '/rdf')
+  #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/rdf')
   #     #=> RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating an interned URI reference
@@ -377,11 +377,11 @@ module RDF
     # @since  0.3.0
     def canonicalize!
       @object = {
-        :scheme => normalized_scheme,
-        :authority => normalized_authority,
-        :path => normalized_path.sub(/\/+/, '/'),
-        :query => normalized_query,
-        :fragment => normalized_fragment
+        scheme: normalized_scheme,
+        authority: normalized_authority,
+        path: normalized_path.sub(/\/+/, '/'),
+        query: normalized_query,
+        fragment: normalized_fragment
       }
       @value = nil
       self
@@ -421,7 +421,7 @@ module RDF
 
         case
         when uri.scheme
-          joined_parts = uri.object.merge(:path => self.class.normalize_path(uri.path))
+          joined_parts = uri.object.merge(path: self.class.normalize_path(uri.path))
         when uri.authority
           joined_parts[:authority] = uri.authority
           joined_parts[:path] = self.class.normalize_path(uri.path)
@@ -572,7 +572,7 @@ module RDF
         self
       else
         RDF::URI.new(
-          object.merge(:path => '/').
+          object.merge(path: '/').
           keep_if {|k, v| [:scheme, :authority, :path].include?(k)})
       end
     end
@@ -616,9 +616,9 @@ module RDF
     # Returns a qualified name (QName) for this URI based on available vocabularies, if possible.
     #
     # @example
-    #   RDF::URI('http://purl.org/dc/terms/').qname             #=> [:dc, nil]
-    #   RDF::URI('http://purl.org/dc/terms/title').qname        #=> [:dc, :title]
-    #   RDF::DC.title.qname                                     #=> [:dc, :title]
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname       #=> [:rdfs, nil]
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname  #=> [:rdfs, :label]
+    #   RDF::RDFS.label.qname                                         #=> [:rdfs, :label]
     #
     # @return [Array(Symbol, Symbol)] or `nil` if no QName found
     def qname
@@ -710,9 +710,9 @@ module RDF
     # Checks whether this URI the same term as `other`.
     #
     # @example
-    #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/')) #=> true
-    #   RDF::URI('http://t.co/').eql?('http://t.co/')           #=> false
-    #   RDF::URI('http://purl.org/dc/terms/').eql?(RDF::DC)     #=> false
+    #   RDF::URI('http://t.co/').eql?(RDF::URI('http://t.co/'))    #=> true
+    #   RDF::URI('http://t.co/').eql?('http://t.co/')              #=> false
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#').eql?(RDF::RDFS) #=> false
     #
     # @param  [RDF::URI] other
     # @return [Boolean] `true` or `false`
@@ -728,7 +728,7 @@ module RDF
     # @example
     #   RDF::URI('http://t.co/') == RDF::URI('http://t.co/')    #=> true
     #   RDF::URI('http://t.co/') == 'http://t.co/'              #=> true
-    #   RDF::URI('http://purl.org/dc/terms/') == RDF::DC        #=> true
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#') == RDF::RDFS        #=> true
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
@@ -752,7 +752,7 @@ module RDF
     #   RDF::URI('http://example.org/') === /foobar/            #=> false
     #   RDF::URI('http://t.co/') === RDF::URI('http://t.co/')   #=> true
     #   RDF::URI('http://t.co/') === 'http://t.co/'             #=> true
-    #   RDF::URI('http://purl.org/dc/terms/') === RDF::DC       #=> true
+    #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#') === RDF::RDFS       #=> true
     #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
@@ -834,7 +834,7 @@ module RDF
     #
     # @return [Fixnum]
     def hash
-      return @hash ||= (to_s.hash * -1)
+      @hash ||= (value.hash * -1)
     end
 
     ##
@@ -842,9 +842,7 @@ module RDF
     #
     # @return [Hash{Symbol => String}]
     def object
-      @object ||= begin
-        parse @value
-      end
+      @object ||= parse(@value)
     end
     alias_method :to_hash, :object
 
@@ -1045,18 +1043,19 @@ module RDF
       when authority
         # ipath-abempty
         segments.map {|s| normalize_segment(s, ISEGMENT)}
-      when segments.first.nil?
+      when segments[0].nil?
         # ipath-absolute
         res = [nil]
         res << normalize_segment(segments[1], ISEGMENT_NZ) if segments.length > 1
         res += segments[2..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 2
         res
-      when segments.first.to_s.index(':')
+      when segments[0].to_s.index(':')
         # ipath-noscheme
         res = []
-        res << normalize_segment(segments[1], ISEGMENT_NZ_NC)
+        res << normalize_segment(segments[0], ISEGMENT_NZ_NC)
         res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
-      when segments.first
+        res
+      when segments[0]
         # ipath-rootless
         # ipath-noscheme
         res = []
@@ -1218,7 +1217,7 @@ module RDF
     # An empty Hash or Array will result in an empty query string.
     #
     # @example
-    #   uri.query_values = {:a => "a", :b => ["c", "d", "e"]}
+    #   uri.query_values = {a: "a", b: ["c", "d", "e"]}
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
     #   uri.query_values = [['a', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e']]
