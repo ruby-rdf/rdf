@@ -421,15 +421,14 @@ module RDF; module Util
         unless encoding.start_with?("utf")
           body.force_encoding(Encoding::UTF_8)
           encoding = "utf-8"
-        end
 
-        # Make sure Unicode is in NFC
-        
-        begin
-          body.unicode_normalize! unless !body.unicode_normalized?
-        rescue Encoding::CompatibilityError
-          # Oh, well ...
-        end if body.respond_to?(:unicode_normalized?)
+          # Make sure Unicode is in NFC
+          begin
+            body.unicode_normalize! unless !body.unicode_normalized?
+          rescue Encoding::CompatibilityError
+            # Oh, well ...
+          end if body.respond_to?(:unicode_normalized?)
+        end
 
         super(body, "r:#{encoding}")
       end
