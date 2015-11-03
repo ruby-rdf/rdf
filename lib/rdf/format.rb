@@ -120,12 +120,15 @@ module RDF
           # Try to find a match based on the full class name
           # We want this to work even if autoloading fails
           fmt, options = options, {}
-          case fmt
-          when :ntriples then [RDF::NTriples::Format]
-          when :nquads   then [RDF::NQuads::Format]
-          else                []
-          end +
-          @@subclasses.select { |klass| klass.symbols.include?(fmt) }
+          classes = @@subclasses.select { |klass| klass.symbols.include?(fmt) }
+          if classes.empty?
+            classes = case fmt
+            when :ntriples then [RDF::NTriples::Format]
+            when :nquads   then [RDF::NQuads::Format]
+            else                []
+            end
+          end
+          classes
       end
 
       if format.is_a?(Array)
