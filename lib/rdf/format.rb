@@ -125,7 +125,7 @@ module RDF
           when :nquads   then [RDF::NQuads::Format]
           else                []
           end +
-          @@subclasses.select { |klass| klass.to_sym == fmt }
+          @@subclasses.select { |klass| klass.symbols.include?(fmt) }
       end
 
       if format.is_a?(Array)
@@ -188,7 +188,7 @@ module RDF
     #
     # @return [Array<Symbol>]
     def self.reader_symbols
-      @@readers.keys.compact.map(&:to_sym).uniq
+      @@readers.keys.map(&:symbols).flatten.uniq
     end
 
     ##
@@ -214,7 +214,7 @@ module RDF
     #
     # @return [Array<Symbol>]
     def self.writer_symbols
-      @@writers.keys.compact.map(&:to_sym).uniq
+      @@writers.keys.map(&:symbols).flatten.uniq
     end
 
     ##
@@ -231,13 +231,26 @@ module RDF
     end
 
     ##
-    # Returns a symbol appropriate to use with RDF::Format.for()
+    # Returns a symbol appropriate to use with `RDF::Format.for()`
+    #
+    # @note Defaults to the last element of the class name before `Format` downcased and made a symbol. Individual formats can override this.
     # @return [Symbol]
     def self.to_sym
       elements = self.to_s.split("::")
       sym = elements.pop
       sym = elements.pop if sym == 'Format'
       sym.downcase.to_s.to_sym if sym.is_a?(String)
+    end
+
+    ##
+    # Returns the set of symbols for a writer appropriate for use with with `RDF::Format.for()`
+    #
+    # @note Individual formats can override this to provide an array of symbols; otherwise, it uses `self.to_sym`
+    # @return [Array<Symbol>]
+    # @see to_sym
+    # @since 2.0
+    def self.symbols
+      [self.to_sym]
     end
 
     ##
