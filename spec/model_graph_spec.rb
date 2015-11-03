@@ -86,6 +86,17 @@ describe RDF::Graph do
       expect(graph).to receive(:load).with("http://example/doc.nt", base_uri: "http://example/doc.nt")
       graph.load!
     end
+
+    it "should insert multiple statements as enumerable" do
+      graph = described_class.new(RDF::URI("http://example/doc.nt"), data: repo)
+      expect(repo).to receive(:insert_statements).with(responding_to(:each))
+
+      statements = [RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o')),
+                    RDF::Statement(RDF::URI('x'), RDF::URI('y'), RDF::URI('z'))]
+      statements.extend(RDF::Enumerable)
+
+      graph << statements
+    end
   end
 
   it "should maintain arbitrary options" do
