@@ -301,6 +301,21 @@ module RDF
 
     ##
     # @private
+    # @see RDF::Mutable#insert_statements
+    def insert_statements(statements)
+      enum = Enumerable::Enumerator.new do |yielder|
+        
+        statements.send(method = statements.respond_to?(:each_statement) ? :each_statement : :each) do |s|
+          s = s.dup
+          s.graph_name = graph_name
+          yielder << s
+        end
+      end
+      @data.insert(enum)
+    end
+
+    ##
+    # @private
     # @see RDF::Mutable#delete
     def delete_statement(statement)
       statement = statement.dup
