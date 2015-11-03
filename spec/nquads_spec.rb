@@ -31,10 +31,10 @@ describe RDF::NQuads::Format do
     {
       nquads: "<a> <b> <c> <d> . ",
       literal: '<a> <b> "literal" <d> .',
-      multi_line: %(<a>\n  <b>\n  "literal"\n <d>\n .),
+      bnode: %(<a> <b> "literal" _:d .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        expect(subject.for {str}).to eq subject
+        expect(subject.detect(str)).to be_truthy
       end
     end
 

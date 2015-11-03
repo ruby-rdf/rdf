@@ -9,6 +9,7 @@ class RDF::Format::FooFormat < RDF::Format
   def self.detect(sample)
     sample == "foo"
   end
+  def self.to_sym; :foo_bar; end
 end
 
 class RDF::Format::BarFormat < RDF::Format
@@ -17,6 +18,7 @@ class RDF::Format::BarFormat < RDF::Format
   def self.detect(sample)
     sample == "bar"
   end
+  def self.to_sym; :foo_bar; end
 end
 
 describe RDF::Format do
@@ -30,25 +32,32 @@ describe RDF::Format do
   # Format.for should yield to return a sample used for detection
   describe ".for" do
     {
+      "symbol"              => :foo_bar,
       "path with extension" => "filename.test",
       "file_name"           => {file_name: "filename.test"},
       "file_extension"      => {file_extension: "test"},
       "content_type"        => {content_type: "application/test"},
     }.each do |condition, arg|
-      it "yields given conflicting #{condition}" do
-        expect {|b| RDF::Format.for(arg, &b)}.to yield_control
-      end
+      context condition do
+        it "yields given duplicates" do
+          expect {|b| RDF::Format.for(arg, &b)}.to yield_control
+        end
 
-      it "returns detected format given conflicting #{condition}" do
-        expect(RDF::Format.for(arg) { "foo" }).to eq RDF::Format::FooFormat
-        expect(RDF::Format.for(arg) { "bar" }).to eq RDF::Format::BarFormat
+        it "returns last defined format for duplicates" do
+          expect(RDF::Format.for(arg)).to eq RDF::Format::BarFormat
+        end
+
+        it "returns detected format for duplicates" do
+          expect(RDF::Format.for(arg) { "foo" }).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(arg) { "bar" }).to eq RDF::Format::BarFormat
+        end
       end
     end
   end
 
   describe ".reader_symbols" do
     it "returns symbols of available readers" do
-      [:ntriples, :nquads, :fooformat, :barformat].each do |sym|
+      [:ntriples, :nquads, :foo_bar].each do |sym|
         expect(RDF::Format.reader_symbols).to include(sym)
       end
     end

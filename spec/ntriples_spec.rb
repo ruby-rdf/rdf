@@ -7,6 +7,18 @@ require 'rdf/spec/writer'
 
 describe RDF::NTriples::Format do
 
+  # Restrict detected formats
+  before(:all) do
+    @formats = RDF::Format.class_variable_get(:@@subclasses)
+    RDF::Format.class_variable_set(:@@subclasses, [])
+  end
+  before(:all) {RDF::Format.class_variable_set(:@@subclasses, @formats)}
+
+  # @see lib/rdf/spec/format.rb in rdf-spec
+  it_behaves_like 'an RDF::Format' do
+    let(:format_class) { described_class }
+  end
+
   # @see lib/rdf/spec/format.rb in rdf-spec
   it_behaves_like 'an RDF::Format' do
     let(:format_class) { described_class }
@@ -31,10 +43,10 @@ describe RDF::NTriples::Format do
     {
       ntriples: "<a> <b> <c> .",
       literal: '<a> <b> "literal" .',
-      multi_line: %(<a>\n  <b>\n  "literal"\n .),
+      bnode: %(<a> <b> _:c .),
     }.each do |sym, str|
       it "detects #{sym}" do
-        expect(subject.for {str}).to eq subject
+        expect(subject.detect(str)).to be_truthy
       end
     end
   end

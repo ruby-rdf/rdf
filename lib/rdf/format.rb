@@ -56,7 +56,7 @@ module RDF
     end
 
     ##
-    # Finds an RDF serialization format class based on the given criteria.
+    # Finds an RDF serialization format class based on the given criteria. If multiple formats are identified, the last one found is returned; this allows descrimination of equivalent formats based on load order.
     #
     # @overload for(format)
     #   Finds an RDF serialization format class based on a symbolic name.
@@ -83,10 +83,7 @@ module RDF
     #   @option options [Boolean]   :has_writer   (false)
     #     Only return a format having a writer.
     #   @option options [String]          :sample (nil)
-    #     A sample of input used for performing format detection.
-    #     If we find no formats, or we find more than one, and we have a sample, we can
-    #     perform format detection to find a specific format to use, in which case
-    #     we pick the first one we find
+    #     A sample of input used for performing format detection. If we find no formats, or we find more than one, and we have a sample, we can perform format detection to find a specific format to use, in which case we pick the last one we find
     #   @return [Class]
     #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
@@ -95,7 +92,8 @@ module RDF
       format = case options
         when String
           # Find a format based on the file name
-          self.for(file_name: options) { yield if block_given? }
+          fn, options = options, {}
+          self.for(file_name: fn) { yield if block_given? }
 
         when Hash
           case
@@ -121,21 +119,20 @@ module RDF
         when Symbol
           # Try to find a match based on the full class name
           # We want this to work even if autoloading fails
-          format = options
-          @@subclasses.detect { |klass| klass.to_sym == format } ||
-          case format
-          when :ntriples
-            RDF::NTriples::Format
-          when :nquads
-            RDF::NQuads::Format
-          end
+          fmt, options = options, {}
+          case fmt
+          when :ntriples then [RDF::NTriples::Format]
+          when :nquads   then [RDF::NQuads::Format]
+          else                []
+          end +
+          @@subclasses.select { |klass| klass.to_sym == fmt }
       end
 
       if format.is_a?(Array)
         format = format.select {|f| f.reader} if options[:has_reader]
         format = format.select {|f| f.writer} if options[:has_writer]
         
-        return format.first if format.uniq.length == 1
+        return format.last if format.uniq.length == 1
       elsif !format.nil?
         return format
       end
@@ -144,15 +141,14 @@ module RDF
       if sample = (options[:sample] if options.is_a?(Hash)) || (yield if block_given?)
         sample = sample.dup.to_s
         sample.force_encoding(Encoding::ASCII_8BIT) if sample.respond_to?(:force_encoding)
-        # Given a sample, perform format detection across the appropriate formats, choosing
-        # the first that matches
+        # Given a sample, perform format detection across the appropriate formats, choosing the last that matches
         format ||= @@subclasses
 
-        # Return first format that has a positive detection
-        format.detect {|f| f.detect(sample)} || format.first
+        # Return last format that has a positive detection
+        format.reverse.detect {|f| f.detect(sample)} || format.last
       elsif format.is_a?(Array)
-        # Otherwise, just return the first matching format
-        format.first
+        # Otherwise, just return the last matching format
+        format.last
       else
         nil
       end
