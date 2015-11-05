@@ -117,6 +117,18 @@ describe RDF::Util::File do
       opened.opened
     end
 
+    it "returns a local file with fragment identifier" do
+      f = RDF::Util::File.open_file(fixture_path("test.nt#fragment"))
+      expect(f).to respond_to(:read)
+      opened.opened
+    end
+
+    it "returns a local file with query" do
+      f = RDF::Util::File.open_file(fixture_path("test.nt?query"))
+      expect(f).to respond_to(:read)
+      opened.opened
+    end
+
     it "returns a file URL" do
       f = RDF::Util::File.open_file("file:" + fixture_path("test.nt"))
       expect(f).to respond_to(:read)
