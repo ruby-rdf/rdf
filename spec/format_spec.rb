@@ -37,6 +37,9 @@ describe RDF::Format do
       "file_name"           => {file_name: "filename.test"},
       "file_extension"      => {file_extension: "test"},
       "content_type"        => {content_type: "application/test"},
+      "URI"                 => RDF::URI("filename.test"),
+      "fragment"            => "filename.test#fragment",
+      "query"               => "filename.test?query",
     }.each do |condition, arg|
       context condition do
         it "yields given duplicates" do
