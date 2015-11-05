@@ -329,7 +329,7 @@ module RDF
     ##
     # Flushes the underlying output buffer.
     #
-    # @return [void] `self`
+    # @return [self]
     def flush
       @output.flush if @output.respond_to?(:flush)
       self
@@ -337,14 +337,14 @@ module RDF
     alias_method :flush!, :flush
 
     ##
-    # @return [void] `self`
+    # @return [self]
     # @abstract
     def write_prologue
       self
     end
 
     ##
-    # @return [void] `self`
+    # @return [self]
     # @abstract
     def write_epilogue
       self
@@ -352,7 +352,7 @@ module RDF
 
     ##
     # @param  [String] text
-    # @return [void] `self`
+    # @return [self]
     # @abstract
     def write_comment(text)
       self
@@ -363,6 +363,7 @@ module RDF
     # @return [void] `self`
     # @deprecated Use {RDF::Writable#insert_graph} instead .
     def write_graph(graph)
+      raise NoMethodError, "Writer#graph_write is deprecated in RDF.rb 2.0, use Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       graph.each_triple { |*triple| write_triple(*triple) }
       self
@@ -373,6 +374,7 @@ module RDF
     # @return [void] `self`
     # @deprecated Use {RDF::Writable#insert} instead.
     def write_statements(*statements)
+      raise NoMethodError, "Writer#write_statements is deprecated in RDF.rb 2.0, use Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       statements.each { |statement| write_statement(statement) }
       self
@@ -380,7 +382,7 @@ module RDF
 
     ##
     # @param  [RDF::Statement] statement
-    # @return [void] `self`
+    # @return [self]
     # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
       statement = statement.canonicalize! if canonicalize?
@@ -395,7 +397,7 @@ module RDF
 
     ##
     # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>] triples
-    # @return [void] `self`
+    # @return [self]
     # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
@@ -406,7 +408,7 @@ module RDF
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Term]     object
-    # @return [void] `self`
+    # @return [self]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
     # @abstract
@@ -435,6 +437,7 @@ module RDF
     # @since  0.3.0
     # @deprecated Use {#format_term} instead
     def format_value(term, options = {})
+      raise NoMethodError, "Writer#format_value is deprecated in RDF.rb 2.0, use Writable#format_term instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Writer#format_value is being replaced with Writer#format_term in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       format_term(term, options)
     end

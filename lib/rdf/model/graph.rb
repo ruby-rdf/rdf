@@ -51,6 +51,7 @@ module RDF
     attr_accessor :graph_name
 
     alias_method :name, :graph_name
+    alias_method :name=, :graph_name=
 
     ##
     # Name of this graph, if it is part of an {RDF::Repository}
@@ -59,6 +60,7 @@ module RDF
     # @since 1.1.0
     # @deprecated Use {#graph_name} instead.
     def context
+      raise NoMethodError, "Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	    graph_name
     end
@@ -192,8 +194,9 @@ module RDF
     # @return [Enumerator<RDF::Resource>]
     # @deprecated Use {#graph_names} instead.
     def contexts(options = {})
+      raise NoMethodError, "Graph#contexts is being replaced with Graph@graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Graph#contexts is being replaced with Graph#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      (named? ? [context] : []).to_enum.extend(RDF::Countable)
+      (named? ? [graph_name] : []).to_enum.extend(RDF::Countable)
     end
 
     ##
@@ -264,6 +267,17 @@ module RDF
         @data.each(&block)
       else
         @data.to_a.each(&block)
+      end
+    end
+
+    ##
+    # @private
+    # @see RDF::Enumerable#project_graph
+    def project_graph(graph_name, &block)
+      if block_given?
+        self.each(&block) if graph_name == self.graph_name
+      else
+        graph_name == self.graph_name ? self : RDF::Graph.new
       end
     end
 
@@ -340,7 +354,7 @@ module RDF
     # @see    RDF::Enumerable#graphs
     # @since  0.2.0
     def graphs
-      enum_graph
+      Array(enum_graph)
     end
 
     ##

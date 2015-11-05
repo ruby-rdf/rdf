@@ -7,6 +7,7 @@ module RDF; class Query
     # @since 0.2.2
     def self.from(pattern, options = {})
       if options.has_key?(:context)
+        raise ArgumentError, "The :contexts option to Pattern.from is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Pattern.from is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
@@ -25,9 +26,6 @@ module RDF; class Query
     #   @option options [Variable, Resource, Symbol, nil] :subject   (nil)
     #   @option options [Variable, URI, Symbol, nil]      :predicate (nil)
     #   @option options [Variable, Term, Symbol, nil]     :object    (nil)
-    #   @option options [Variable, Resource, Symbol, nil, false] :context   (nil)
-    #     A context of nil matches any context, a context of false, matches only the default context.
-    #     The :context option is deprecated in RDF.rb 2.0. Use :graph_name instead.
     #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
     #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
     #   @option options [Boolean]            :optional  (false)
@@ -37,9 +35,6 @@ module RDF; class Query
     #   @param  [Variable, URI, Symbol, nil]              predicate
     #   @param  [Variable, Termm, Symbol, nil]            object
     #   @param  [Hash{Symbol => Object}]          options
-    #   @option options [Variable, Resource, Symbol, nil, false] :context   (nil)
-    #     A context of nil matches any context, a context of false, matches only the default context.
-    #     The :context option is deprecated in RDF.rb 2.0. Use :graph_name instead.
     #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
     #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
     #   @option options [Boolean]                 :optional  (false)
@@ -47,6 +42,7 @@ module RDF; class Query
     # @note {Statement} treats symbols as interned {Node} instances, in a {Pattern}, they are treated as {Variable}.
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       if options.has_key?(:context)
+        raise ArgumentError, "The :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
@@ -170,12 +166,13 @@ module RDF; class Query
           terms = variable_terms(name)
           break terms if terms.size > 1
         end
-        queryable.query(query) do |statement|
+        queryable.query(query).select do |statement|
           # Only yield those matching statements where the variable
           # constraint is also satisfied:
           # FIXME: `Array#uniq` uses `#eql?` and `#hash`, not `#==`
-          if matches = terms.map { |term| statement.send(term) }.uniq.size.equal?(1)
-            block.call(statement)
+          if terms.map { |term| statement.send(term) }.uniq.size.equal?(1)
+            yield statement if block_given?
+            true
           end
         end
       end

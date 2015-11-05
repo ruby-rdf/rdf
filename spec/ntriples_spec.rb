@@ -154,22 +154,6 @@ describe RDF::NTriples::Reader do
       expect(g.count).to eq doap_count
     end
   end
-
-  # Tests for deprecated surrogate pairs support
-  context "Surrogate Pairs" do
-    {
-      "\\uD800\\uDC00" => "𐀀",
-      "\\uDBFF\\uDC00" => "􏰀",
-      "\\uD800\\uDF00" => "𐌀",
-      "\\uDBFF\\uDF00" => "􏼀",
-    }.each do |sp, l|
-      it "unescapes #{sp} to #{l.inspect}" do
-        expect do
-          expect(described_class.unescape(sp)).to eq l
-        end.to write('[DEPRECATION]').to(:error)
-      end
-    end
-  end
 end
 
 describe RDF::NTriples::Writer do
@@ -218,14 +202,6 @@ describe RDF::NTriples::Writer do
         writer_class.new($stdout, validate: false).insert(graph)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
-
-    it "#write_graph (DEPRECATED)" do
-      expect do
-        expect do
-          writer_class.new($stdout, validate: false).write_graph(graph)
-        end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
-      end.to write('[DEPRECATION]').to(:error)
-    end
   end
 
   context "Writing a Statements" do
@@ -237,14 +213,6 @@ describe RDF::NTriples::Writer do
       expect do
         writer_class.new($stdout, validate: false).insert(*statements)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
-    end
-
-    it "#write_statements (DEPRECATED)" do
-      expect do
-        expect do
-          writer_class.new($stdout, validate: false).write_statements(*statements)
-        end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
-      end.to write('[DEPRECATION]').to(:error)
     end
   end
 

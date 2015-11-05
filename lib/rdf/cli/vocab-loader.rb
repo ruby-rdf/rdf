@@ -134,6 +134,10 @@ module RDF
         # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module #{module_name}
+          # @!parse
+          #   # Vocabulary for <#{uri}>
+          #   class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary
+          #   end
           class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 

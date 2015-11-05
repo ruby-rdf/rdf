@@ -250,14 +250,6 @@ describe RDF::NQuads::Writer do
         described_class.new.insert(graph)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
     end
-
-    it "#write_graph (DEPRECATED)" do
-      expect do
-        expect do
-          described_class.new.write_graph(graph)
-        end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
-      end.to write('[DEPRECATION]').to(:error)
-    end
   end
 
   context "Writing a Statements" do
@@ -269,14 +261,6 @@ describe RDF::NQuads::Writer do
       expect do
         described_class.new.insert(*statements)
       end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
-    end
-
-    it "#write_statements (DEPRECATED)" do
-      expect do
-        expect do
-          described_class.new.write_statements(*statements)
-        end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
-      end.to write('[DEPRECATION]').to(:error)
     end
   end
 

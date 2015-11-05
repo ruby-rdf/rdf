@@ -90,7 +90,7 @@ module RDF
     class Writer < NTriples::Writer
       ##
       # @param  [RDF::Statement] statement
-      # @return [void] `self`
+      # @return [self]
       def write_statement(statement)
         write_quad(*statement.to_quad)
         self

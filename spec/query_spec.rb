@@ -67,8 +67,14 @@ describe RDF::Query do
           it "returns a single empty solution (query execute)" do
             expect(subject.execute(graph).map(&:to_hash)).to eq [{}]
           end
+          it "yields a single empty solution (query execute)" do
+            expect {|b| subject.execute(graph, &b)}.to yield_successive_args(RDF::Query::Solution.new)
+          end
           it "returns a single empty solution (graph execute)" do
             expect(graph.query(subject).map(&:to_hash)).to eq [{}]
+          end
+          it "yields a single empty solution (graph execute)" do
+            expect {|b| graph.query(subject, &b)}.to yield_successive_args(RDF::Query::Solution.new)
           end
         end
       end
@@ -886,7 +892,7 @@ describe RDF::Query do
   end
 
   context "Examples" do
-    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    let!(:graph) {RDF::Graph.new.insert(RDF::Spec.triples.extend(RDF::Enumerable))}
     subject {
       query = RDF::Query.new do
         pattern [:person, RDF.type,  FOAF.Person]

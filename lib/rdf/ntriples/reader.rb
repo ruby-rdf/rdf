@@ -164,20 +164,6 @@ module RDF::NTriples
       # Decode \t|\n|\r|\"|\\ character escapes:
       ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
 
-      # Decode \uXXXX\uXXXX surrogate pairs:
-      # XXX: This block should be removed in RDF.rb 2.0
-      while
-        (string.sub!(ESCAPE_SURROGATE) do
-          if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
-            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-            s = [$1, $2].pack('H*H*')
-            s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8)
-          else
-            [$1.hex].pack('U*') << '\u' << $2
-          end
-        end)
-      end
-
       # Decode \uXXXX and \UXXXXXXXX code points:
       string.gsub!(ESCAPE_CHAR) do
         [($1 || $2).hex].pack('U*')

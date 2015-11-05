@@ -42,14 +42,16 @@ module RDF
 
     # @deprecated Use {#graph_name} instead.
     def context
-      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-	  graph_name
+      raise NoMethodError, "Transaction#context is deprecated in RDF.rb 2.0, use Transaction@graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
+      warn "[DEPRECATION] Transaction#context is being replaced with Transaction@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+      graph_name
     end
 
     # @deprecated Use {#graph_name=} instead.
     def context=(value)
-      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-	  self.graph_name = value
+      raise NoMethodError, "Transaction#context= is deprecated in RDF.rb 2.0, use Transaction@graph_name= instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
+      warn "[DEPRECATION] Transaction#context= is being replaced with Transaction@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+      self.graph_name = value
     end
 
     alias_method :graph, :graph_name
@@ -77,8 +79,8 @@ module RDF
     # Initializes this transaction.
     #
     # @param  [Hash{Symbol => Object}]  options
-    # @option options [RDF::Resource]   :context  (nil)
-    #   Alias for `:graph_name`. Deprected in RDF.rb 2.0.
+    # @option options [Boolean]         :mutable (false)
+    #    Whether this is a read-only or read/write transaction.
     # @option options [RDF::Resource]   :graph_name (nil)
     #   Name of named graph to be affected if `inserts` or `deletes`
     #   do not have a `graph_name`.
@@ -91,9 +93,11 @@ module RDF
     def initialize(options = {}, &block)
       @options = options.dup
       if @options.has_key?(:context)
+        raise ArgumentError, "The :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         @options[:graph_name] ||= @options.delete(:context)
       end
+      @mutable = @options.delete(:mutable) || false
       @graph_name = @options.delete(:graph) || @options.delete(:graph_name)
       @inserts = @options.delete(:insert)   || []
       @deletes = @options.delete(:delete)   || []
@@ -109,6 +113,15 @@ module RDF
     end
 
     ##
+    # Returns `true` if this is a read/write transaction, `false` otherwise.
+    #
+    # @return [Boolean]
+    # @see     RDF::Writable#writable?
+    def writable?
+      @mutable
+    end
+
+    ##
     # Returns `false` to indicate that this transaction is append-only.
     #
     # Transactions do not support the `RDF::Enumerable` protocol directly.
@@ -118,7 +131,7 @@ module RDF
     # @return [Boolean]
     # @see    RDF::Readable#readable?
     def readable?
-      false
+      false # TODO: support RDF::Enumerable and RDF::Queryable.
     end
 
     ##
@@ -168,6 +181,7 @@ module RDF
     end
 
     protected
+
     ##
     # Appends an RDF statement to the sequence to insert when executed.
     #

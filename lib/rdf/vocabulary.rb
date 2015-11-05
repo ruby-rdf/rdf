@@ -221,6 +221,7 @@ module RDF
       # @return [String] The label for the named property
       # @deprecated Use {RDF::Vocabulary::Term#label} instead.
       def label_for(name)
+        raise NoMethodError, "Vocabulary.label_for is deprecated in RDF.rb 2.0, use Vocabulary::Term#label instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] `Vocabulary.label_for is deprecated. Please use Vocabulary::Term#label instead. Called from #{Gem.location_of_caller.join(':')}"
         self[name].label || ''
       end
@@ -229,6 +230,7 @@ module RDF
       # @return [String] The comment for the named property
       # @deprecated Use {RDF::Vocabulary::Term#comment} instead.
       def comment_for(name)
+        raise NoMethodError, "Vocabulary.comment_for is deprecated in RDF.rb 2.0, use Vocabulary::Term#comment instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] `Vocabulary.comment_for is deprecated. Please use Vocabulary::Term#comment instead. Called from #{Gem.location_of_caller.join(':')}"
         self[name].comment || ''
       end
@@ -305,17 +307,17 @@ module RDF
           name = statement.subject.to_s[uri.to_s.length..-1] 
           term = (term_defs[name.to_sym] ||= {})
           key = case statement.predicate
-          when RDF.type                   then :type
-          when RDF::RDFS.subClassOf       then :subClassOf
-          when RDF::RDFS.subPropertyOf    then :subPropertyOf
-          when RDF::RDFS.range            then :range
-          when RDF::RDFS.domain           then :domain
-          when RDF::RDFS.comment          then :comment
-          when RDF::RDFS.label            then :label
-          when RDF::SCHEMA.inverseOf      then :inverseOf
-          when RDF::SCHEMA.domainIncludes then :domainIncludes
-          when RDF::SCHEMA.rangeIncludes  then :rangeIncludes
-          else                            statement.predicate.pname
+          when RDF.type                                     then :type
+          when RDF::RDFS.subClassOf                         then :subClassOf
+          when RDF::RDFS.subPropertyOf                      then :subPropertyOf
+          when RDF::RDFS.range                              then :range
+          when RDF::RDFS.domain                             then :domain
+          when RDF::RDFS.comment                            then :comment
+          when RDF::RDFS.label                              then :label
+          when RDF::URI("http://schema.org/inverseOf")      then :inverseOf
+          when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
+          when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
+          else                                              statement.predicate.pname
           end
 
           value = if statement.object.uri?
@@ -633,13 +635,13 @@ module RDF
                 prop = RDFS.range
                 value = RDF::Vocabulary.expand_pname(value)
               when :inverseOf
-                prop = RDF::SCHEMA.inverseOf
+                prop = RDF::URI("http://schema.org/inverseOf")
                 value = RDF::Vocabulary.expand_pname(value)
               when :domainIncludes
-                prop = RDF::SCHEMA.domainIncludes
+                prop = RDF::URI("http://schema.org/domainIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
               when :rangeIncludes
-                prop = RDF::SCHEMA.rangeIncludes
+                prop = RDF::URI("http://schema.org/rangeIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
               when :label
                 prop = RDFS.label
@@ -683,13 +685,13 @@ module RDF
         @attributes.has_key?(method) || super
       end
 
-      # Accessor for `domainIncludes`
+      # Accessor for `schema:domainIncludes`
       # @return [RDF::URI]
       def domain_includes
         Array(@attributes[:domainIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
       end
 
-      # Accessor for `rangeIncludes`
+      # Accessor for `schema:rangeIncludes`
       # @return [RDF::URI]
       def range_includes
         Array(@attributes[:rangeIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}

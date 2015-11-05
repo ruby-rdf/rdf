@@ -350,7 +350,7 @@ module RDF
     #
     # @return [void]
     # @since  0.2.3
-    # @see    http://ruby-doc.org/core-1.9/classes/IO.html#M001692
+    # @see    http://ruby-doc.org/core-2.2.2/IO.html#method-i-rewind
     def rewind
       @input.rewind
     end
@@ -364,7 +364,7 @@ module RDF
     #
     # @return [void]
     # @since  0.2.2
-    # @see    http://ruby-doc.org/core-1.9/classes/IO.html#M001699
+    # @see    http://ruby-doc.org/core-2.2.2/IO.html#method-i-close
     def close
       @input.close unless @input.closed?
     end

@@ -41,6 +41,7 @@ module RDF
   #   enumerable.each_subject   { |term| puts term.inspect }
   #   enumerable.each_predicate { |term| puts term.inspect }
   #   enumerable.each_object    { |term| puts term.inspect }
+  #   enumerable.each_term      { |term| puts term.inspect }
   #
   # @example Obtaining all statements
   #   enumerable.statements  #=> [RDF::Statement(subject1, predicate1, object1), ...]
@@ -66,7 +67,6 @@ module RDF
     #
     # Supported features include:
     #   * `:graph_name` supports statements with a graph_name, allowing multiple named graphs
-    #   * `:context` supports statements with a context, allowing multiple contexts (DEPRECATED, use graph_name. `context` will be removed in RDF.rb 2.0)
     #   * `:inference` supports RDFS inferrence of queryable contents.
     #   * `:validity` allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.
     #   * `:skolemize` supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an `Enumerable`. Implementations supporting this feature must implement a `#skolemize` method, taking a base URI used for minting URIs for BNodes as stable identifiers and a `#deskolemize` method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.
@@ -117,11 +117,11 @@ module RDF
     # Returns all RDF statements.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<RDF::Statement>]
+    # @return [Array<RDF::Statement>]
     # @see    #each_statement
     # @see    #enum_statement
     def statements(options = {})
-      enum_statement
+      Array(enum_statement)
     end
 
     ##
@@ -149,9 +149,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_statement
-    #   @return [Enumerator]
+    #   @return [Enumerator<RDF::Statement>]
     #
-    # @return [void]
     # @see    #enum_statement
     def each_statement(&block)
       if block_given?
@@ -166,7 +165,7 @@ module RDF
     # FIXME: enum_for doesn't seem to be working properly
     # in JRuby 1.7, so specs are marked pending
     #
-    # @return [Enumerator]
+    # @return [Enumerator<RDF::Statement>]
     # @see    #each_statement
     def enum_statement
       # Ensure that statements are queryable, countable and enumerable
@@ -181,11 +180,11 @@ module RDF
     # Returns all RDF triples.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
+    # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     # @see    #enum_triple
     def triples(options = {})
-      enum_statement.map(&:to_triple).to_enum # TODO: optimize
+      enum_statement.map(&:to_triple) # TODO: optimize
     end
 
     ##
@@ -214,9 +213,8 @@ module RDF
     #   @return [void]
     #
     # @overload each_triple
-    #   @return [Enumerator]
+    #   @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     #
-    # @return [void]
     # @see    #enum_triple
     def each_triple
       if block_given?
@@ -230,7 +228,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_triple}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     def enum_triple
       Countable::Enumerator.new do |yielder|
@@ -243,11 +241,11 @@ module RDF
     # Returns all RDF quads.
     #
     # @param  [Hash{Symbol => Boolean}] options
-    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
+    # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
     def quads(options = {})
-      enum_statement.map(&:to_quad).to_enum # TODO: optimize
+      enum_statement.map(&:to_quad) # TODO: optimize
     end
 
     ##
@@ -292,7 +290,7 @@ module RDF
     ##
     # Returns an enumerator for {RDF::Enumerable#each_quad}.
     #
-    # @return [Enumerator]
+    # @return [Enumerator<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     def enum_quad
       Countable::Enumerator.new do |yielder|
@@ -306,14 +304,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::Resource>]
+    # @return [Array<RDF::Resource>]
     # @see    #each_subject
     # @see    #enum_subject
     def subjects(options = {})
       if options[:unique] == false
-        enum_statement.map(&:subject).to_enum # TODO: optimize
+        enum_statement.map(&:subject) # TODO: optimize
       else
-        enum_subject
+        Array(enum_subject)
       end
     end
 
@@ -377,9 +375,9 @@ module RDF
     # @see    #enum_predicate
     def predicates(options = {})
       if options[:unique] == false
-        enum_statement.map(&:predicate).to_enum # TODO: optimize
+        enum_statement.map(&:predicate) # TODO: optimize
       else
-        enum_predicate
+        Array(enum_predicate)
       end
     end
 
@@ -438,14 +436,14 @@ module RDF
     #
     # @param  [Hash{Symbol => Boolean}] options
     # @option options [Boolean] :unique (true)
-    # @return [Enumerator<RDF::Term>]
+    # @return [Array<RDF::Term>]
     # @see    #each_object
     # @see    #enum_object
     def objects(options = {})
       if options[:unique] == false
-        enum_statement.map(&:object).to_enum # TODO: optimize
+        enum_statement.map(&:object) # TODO: optimize
       else
-        enum_object
+        Array(enum_object)
       end
     end
 
@@ -501,6 +499,83 @@ module RDF
     alias_method :enum_objects, :enum_object
 
     ##
+    # Returns all unique RDF terms (subjects, predicates, objects, and graph_names).
+    #
+    # @example finding all Blank Nodes used within an enumerable
+    #   enumberable.terms.select(&:node?)
+    #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
+    # @return [Array<RDF::Resource>]
+    # @since 2.0
+    # @see    #each_resource
+    # @see    #enum_resource
+    def terms(options = {})
+      if options[:unique] == false
+        enum_statement.
+          map(&:to_quad).
+          flatten.
+          compact
+      else
+        Array(enum_term)
+      end
+    end
+
+    ##
+    # Returns `true` if `self` contains the given RDF subject term.
+    #
+    # @param  [RDF::Resource] value
+    # @return [Boolean]
+    # @since 2.0
+    def has_term?(value)
+      enum_term.include?(value)
+    end
+
+    ##
+    # Iterates the given block for each unique RDF term (subject, predicate, object, or graph_name).
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # The order in which values are yielded is undefined.
+    #
+    # @overload each_term
+    #   @yield  [term]
+    #     each term
+    #   @yieldparam  [RDF::Term] term
+    #   @yieldreturn [void] ignored
+    #   @return [void]
+    #
+    # @overload each_term
+    #   @return [Enumerator<RDF::Term>]
+    # @since 2.0
+    # @see    #enum_term
+    def each_term
+      if block_given?
+        values = {}
+        each_statement do |statement|
+          statement.to_quad.each do |value|
+            unless value.nil? || values.include?(value.hash)
+              values[value.hash] = true
+              yield value
+            end
+          end
+        end
+      end
+      enum_term
+    end
+
+    ##
+    # Returns an enumerator for {RDF::Enumerable#each_term}.
+    #
+    # @return [Enumerator<RDF::Term>]
+    # @see    #each_term
+    # @since 2.0
+    def enum_term
+      enum_for(:each_term)
+    end
+    alias_method :enum_terms, :enum_term
+
+    ##
     # Returns all unique RDF contexts, other than the default context.
     #
     # @param  [Hash{Symbol => Boolean}] options
@@ -510,28 +585,12 @@ module RDF
     # @see    #enum_context
     # @deprecated use {#graph_names} instead.
     def contexts(options = {})
+      raise NoMethodError, "Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if options[:unique] == false
         enum_statement.map(&:context).compact.to_enum # TODO: optimize
       else
         enum_context
-      end
-    end
-
-    ##
-    # Returns all unique RDF graph names, other than the default graph.
-    #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
-    # @return [Array<RDF::Resource>]
-    # @see    #each_graph
-    # @see    #enum_graph
-    # @since 2.0
-    def graph_names(options = {})
-      if options[:unique] == false
-        enum_statement.map(&:graph_name).compact # TODO: optimize
-      else
-        enum_graph.map(&:graph_name).compact
       end
     end
 
@@ -543,6 +602,7 @@ module RDF
     # @return [Boolean]
     # @deprecated Use {#has_graph?} instead.
     def has_context?(value)
+      raise NoMethodError, "Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       has_graph?(value)
     end
@@ -567,6 +627,7 @@ module RDF
     # @see    #enum_context
     # @deprecated Use {#each_graph} instead.
     def each_context
+      raise NoMethodError, "Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if block_given?
         values = {}
@@ -588,10 +649,28 @@ module RDF
     # @see    #each_context
     # @deprecated Use {#enum_graph} instead.
     def enum_context
+      raise NoMethodError, "Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       enum_for(:each_context)
     end
     alias_method :enum_contexts, :enum_context
+
+    ##
+    # Returns all unique RDF graph names, other than the default graph.
+    #
+    # @param  [Hash{Symbol => Boolean}] options
+    # @option options [Boolean] :unique (true)
+    # @return [Array<RDF::Resource>]
+    # @see    #each_graph
+    # @see    #enum_graph
+    # @since 2.0
+    def graph_names(options = {})
+      if options[:unique] == false
+        enum_statement.map(&:graph_name).compact # TODO: optimize
+      else
+        enum_graph.map(&:graph_name).compact
+      end
+    end
 
     ##
     # Returns `true` if `self` contains the given RDF graph_name.
@@ -601,6 +680,45 @@ module RDF
     # @return [Boolean]
     def has_graph?(graph_name)
       enum_statement.any? {|s| s.graph_name == graph_name}
+    end
+
+    ##
+    # Limits statements to be from a specific graph.
+    #
+    # If no block was given, returns an enumerator.
+    #
+    # The order in which statements are yielded is undefined.
+    #
+    # @overload project_graph(graph_name)
+    #   @param [RDF::Resource, nil] graph_name
+    #     The name of the graph from which statements are taken.
+    #     Use `nil` for the default graph.
+    #   @yield  [statement]
+    #     each statement
+    #   @yieldparam  [RDF::Statement] statement
+    #   @yieldreturn [void] ignored
+    #   @return [void]
+    #
+    # @overload project_graph(graph_name)
+    #   @param [RDF::Resource, false] graph_name
+    #     The name of the graph from which statements are taken.
+    #     Use `false` for the default graph.
+    #   @return [Enumerable]
+    #
+    # @see    #each_statement
+    # @since 3.0
+    def project_graph(graph_name)
+      if block_given?
+        self.each do |statement|
+          yield statement if statement.graph_name == graph_name
+        end
+      else
+        # Ensure that statements are queryable, countable and enumerable
+        this = self
+        Queryable::Enumerator.new do |yielder|
+          this.send(:project_graph, graph_name) {|y| yielder << y}
+        end
+      end
     end
 
     ##

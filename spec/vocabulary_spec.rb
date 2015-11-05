@@ -191,18 +191,6 @@ describe RDF::Vocabulary do
       expect(test_vocab.Class).to be_a(RDF::URI)
     end
 
-    it "should respond to label_for from base RDFS (DEPRECATED)" do
-      expect {
-        expect(test_vocab.label_for("prop2")).to eql "Test property label"
-      }.to write('[DEPRECATION]').to(:error)
-    end
-
-    it "should respond to comment_for from base RDFS (DEPRECATED)" do
-      expect {
-        expect(test_vocab.comment_for(:prop2)).to eql " Test property comment"
-      }.to write('[DEPRECATION]').to(:error)
-    end
-
     it "should not enumerate from RDF::Vocabulary.each" do
       expect(RDF::Vocabulary.each.to_a).not_to include(test_vocab)
     end
@@ -270,7 +258,6 @@ describe RDF::Vocabulary do
 
   describe ".imported_from" do
     {
-      RDF::Vocab::FOAF => [RDF::Vocab::DOAP, RDF::Vocab::MO],
       RDF::RDFS => [RDF::Vocab::WOT],
       RDF::OWL => [RDF::Vocab::WOT]
     }.each do |v, r|
@@ -280,7 +267,7 @@ describe RDF::Vocabulary do
       end
     end
 
-    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
+    specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
   end
 
   describe ".load" do

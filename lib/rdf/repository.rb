@@ -43,9 +43,9 @@ module RDF
   class Repository
     include RDF::Countable
     include RDF::Enumerable
-    include RDF::Queryable
     include RDF::Mutable
     include RDF::Durable
+    include RDF::Queryable
 
     ##
     # Returns the options passed to this repository when it was constructed.
@@ -99,12 +99,11 @@ module RDF
     # @option options [Boolean] :with_graph_name (true)
     #   Indicates that the repository supports named graphs, otherwise,
     #   only the default graph is supported.
-    # @option options [Boolean] :with_context (true)
-    #   Alias for :with_graph_name. :with_context is deprecated in RDF.rb 2.0.
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(options = {}, &block)
       if options[:with_context]
+        raise ArgumentError, "The :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:with_context)
       end
@@ -121,6 +120,14 @@ module RDF
           else instance_eval(&block)
         end
       end
+    end
+
+    ##
+    # @private
+    # @see RDF::Enumerable#project_graph
+    def project_graph(graph_name, &block)
+      RDF::Graph.new(graph_name ? graph_name : nil, data: self).
+        project_graph(graph_name, &block)
     end
 
     ##
@@ -237,6 +244,7 @@ module RDF
         case feature.to_sym
           #statement named graphs
           when :context
+            raise ArgumentError, "The :contexts feature is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
             warn "[DEPRECATION] the :context feature is deprecated in RDF.rb 2.0; use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
             @options[:with_context] || @options[:with_graph_name]
           when :graph_name   then @options[:with_graph_name]
@@ -309,6 +317,7 @@ module RDF
       # @see RDF::Enumerable#has_context?
       # @deprecated Use {#has_graph?} instead.
       def has_context?(value)
+        raise NoMethodError, "Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
        warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}"
        has_graph?(value)
       end
@@ -319,6 +328,7 @@ module RDF
       def has_graph?(value)
         @data.keys.include?(value)
       end
+
       ##
       # @private
       # @see RDF::Enumerable#each_graph
@@ -331,6 +341,7 @@ module RDF
       # @see RDF::Enumerable#each_context
       # @deprecated Use {#each_graph} instead.
       def each_context(&block)
+        raise NoMethodError, "Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
         warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}"
         if block_given?
           contexts = @data.keys
@@ -359,38 +370,45 @@ module RDF
       # Context of `false` matches default graph. Unbound variable matches non-false graph name
       # @private
       # @see RDF::Queryable#query
-      def query_pattern(pattern, &block)
-        graph_name  = pattern.graph_name
-        subject   = pattern.subject
-        predicate = pattern.predicate
-        object    = pattern.object
+      def query_pattern(pattern, options = {}, &block)
+        if block_given?
+          graph_name  = pattern.graph_name
+          subject     = pattern.subject
+          predicate   = pattern.predicate
+          object      = pattern.object
 
-        cs = @data.has_key?(graph_name) ? {graph_name => @data[graph_name]} : @data.dup
-        cs.each do |c, ss|
-          next unless graph_name.nil? || graph_name == false && !c || graph_name.eql?(c)
-          ss = if ss.has_key?(subject)
-                 { subject => ss[subject] }
-               elsif subject.nil? || subject.is_a?(RDF::Query::Variable)
-                 ss.dup
-               else
-                 []
-               end
-          ss.each do |s, ps|
-            ps = if ps.has_key?(predicate)
-                   { predicate => ps[predicate] }
-                 elsif predicate.nil? || predicate.is_a?(RDF::Query::Variable)
-                   ps.dup
+          cs = @data.has_key?(graph_name) ? {graph_name => @data[graph_name]} : @data.dup
+          cs.each do |c, ss|
+            next unless graph_name.nil? || graph_name == false && !c || graph_name.eql?(c)
+            ss = if ss.has_key?(subject)
+                   { subject => ss[subject] }
+                 elsif subject.nil? || subject.is_a?(RDF::Query::Variable)
+                   ss.dup
                  else
                    []
                  end
-            ps.each do |p, os|
-              os = os.dup # TODO: is this really needed?
-              os.each do |o|
-                next unless object.nil? || object.eql?(o)
-                block.call(RDF::Statement.new(s, p, o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c))
+            ss.each do |s, ps|
+              next unless subject.nil? || subject.eql?(s)
+              ps = if ps.has_key?(predicate)
+                     { predicate => ps[predicate] }
+                   elsif predicate.nil? || predicate.is_a?(RDF::Query::Variable)
+                     ps.dup
+                   else
+                     []
+                   end
+              ps.each do |p, os|
+                next unless predicate.nil? || predicate.eql?(p)
+                os = os.dup # TODO: is this really needed?
+                os.each do |o|
+                  next unless object.nil? || object.eql?(o)
+                  # FIXME: yield has better performance, but broken in MRI 2.2: See https://bugs.ruby-lang.org/issues/11451.
+                  block.call(RDF::Statement.new(s, p, o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c))
+                end
               end
             end
           end
+        else
+          enum_for(:query_pattern, pattern, options)
         end
       end
 

@@ -2,6 +2,10 @@
 # This file generated automatically using vocab-fetch from http://www.w3.org/2002/07/owl#
 require 'rdf'
 module RDF
+  # @!parse
+  #   # Vocabulary for <http://www.w3.org/2002/07/owl#>
+  #   class OWL < RDF::StrictVocabulary
+  #   end
   class OWL < RDF::StrictVocabulary("http://www.w3.org/2002/07/owl#")
 
     # Class definitions

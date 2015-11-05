@@ -44,7 +44,8 @@ module RDF
   autoload :NQuads,      'rdf/nquads'
 
   # RDF storage
-  autoload :Dataset,     'rdf/model/repository'
+  autoload :Changeset,   'rdf/changeset'
+  autoload :Dataset,     'rdf/model/dataset'
   autoload :Repository,  'rdf/repository'
   autoload :Transaction, 'rdf/transaction'
 
@@ -164,8 +165,6 @@ module RDF
   #   @option options [RDF::Resource]  :subject   (nil)
   #   @option options [RDF::URI]       :predicate (nil)
   #   @option options [RDF::Term]      :object    (nil)
-  #   @option options [RDF::Resource]  :context   (nil)
-  #     Alias for :graph_name, :context is deprecated in RDF.rb.
   #   @option options [RDF::Resource]  :graph_name   (nil)
   #     Note, a graph_name MUST be an IRI or BNode.
   #   @return [RDF::Statement]

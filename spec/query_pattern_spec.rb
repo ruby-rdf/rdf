@@ -196,7 +196,7 @@ describe RDF::Query::Pattern do
   end
 
   context "Examples" do
-    let!(:repo) {RDF::Repository.new {|r| r.insert(*RDF::Spec.triples)}}
+    let!(:repo) {RDF::Repository.new {|r| r.insert(RDF::Spec.triples.extend(RDF::Enumerable))}}
     let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}
     let(:pattern) {described_class.new(:s, :p, :o)}
     subject {pattern}
