@@ -3,8 +3,8 @@ source "https://rubygems.org"
 gemspec
 
 group :develop do
-  gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "feature/release-2_0"
-  gem "rdf-vocab",      git: "git://github.com/ruby-rdf/rdf-vocab.git", branch: "feature/release-2_0"
+  gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
+  gem "rdf-vocab",      git: "git://github.com/ruby-rdf/rdf-vocab.git", branch: "develop"
   gem 'linkeddata',     git: "git://github.com/ruby-rdf/linkeddata.git", branch: "develop"
   gem 'rdf-aggregate-repo', git: "git://github.com/ruby-rdf/rdf-aggregate-repo.git", branch: "develop"
   gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
