@@ -67,7 +67,7 @@ module RDF
     # @overload for(filename)
     #   Finds an RDF serialization format class based on a file name.
     #
-    #   @param  [String] filename
+    #   @param  [String, RDF::URI] filename
     #   @return [Class]
     #
     # @overload for(options = {})
@@ -90,7 +90,7 @@ module RDF
     # @return [Class]
     def self.for(options = {})
       format = case options
-        when String
+        when String, RDF::URI
           # Find a format based on the file name
           fn, options = options, {}
           self.for(file_name: fn) { yield if block_given? }
@@ -110,7 +110,7 @@ module RDF
               content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
             # Find a format based on the file name:
             when file_name = options[:file_name]
-              self.for(file_extension: File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
+              self.for(file_extension: File.extname(RDF::URI(file_name).path)[1..-1]) { yield if block_given? }
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
               file_extensions[file_ext.to_sym]
