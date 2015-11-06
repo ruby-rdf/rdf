@@ -155,8 +155,7 @@ module RDF
         statement
       end
       
-      repository.delete(*dels) unless dels.empty?
-      repository.insert(*ins) unless ins.empty?
+      repository.delete_insert(dels, ins)
       
       after_execute(repository, options) if respond_to?(:after_execute)
       self
