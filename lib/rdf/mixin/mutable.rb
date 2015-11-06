@@ -177,6 +177,30 @@ module RDF
     alias_method :delete!, :delete
 
     ##
+    # Performs a set of deletes and inserts as a combined operation.
+    #
+    # @note in the base implementation, this is equivalent to calling `#delete` 
+    #   and `#insert` sequentially. This method is preferred to take advantage 
+    #   of (e.g.) `RDF::Repositories` that can execute the operation in a single
+    #   request.
+    #
+    # @param  [Enumerable<RDF::Statement>, Array<RDF::Statement>] deletes
+    # @param  [Enumerable<RDF::Statement>, Array<RDF::Statement>] inserts
+    # @raise  [TypeError] if `self` is immutable
+    # @return [Mutable] self
+    #
+    # @see #delete
+    # @see #insert
+    def delete_insert(deletes, inserts)
+      deletes.respond_to?(:each_statement) ? delete(deletes) : delete(*deletes)
+      inserts.respond_to?(:each_statement) ? insert(inserts) : insert(*inserts)
+
+      self
+    end
+
+    alias_method :delete_insert!, :delete_insert
+
+    ##
     # Deletes all RDF statements from `self`.
     #
     # @raise  [TypeError] if `self` is immutable
