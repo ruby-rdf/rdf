@@ -244,12 +244,14 @@ module RDF
     ##
     # Returns `true` if this graph contains the given RDF statement.
     #
+    # A statement is in a graph if the statement has no graph name, or the graph name is the same as the graph.
+    #
     # @param  [Statement] statement
     # @return [Boolean]
     # @see    RDF::Enumerable#has_statement?
     def has_statement?(statement)
       statement = statement.dup
-      statement.graph_name ||= graph_name
+      statement.graph_name = graph_name if statement.graph_name.nil?
       @data.has_statement?(statement)
     end
 
