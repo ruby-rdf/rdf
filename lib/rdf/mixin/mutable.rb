@@ -126,8 +126,11 @@ module RDF
 
       statements.each do |statement|
         if (statement = Statement.from(statement))
-          delete([statement.subject, statement.predicate, nil])
-          insert(statement) if statement.has_object?
+          if statement.has_object?
+            delete_insert([[statement.subject, statement.predicate, nil]], [statement])
+          else
+            delete([statement.subject, statement.predicate, nil])
+          end
         end
       end
     end
