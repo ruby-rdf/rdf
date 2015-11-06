@@ -585,7 +585,7 @@ module RDF
     # @see    #enum_context
     # @deprecated use {#graph_names} instead.
     def contexts(options = {})
-      raise NoMethodError, "Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
+      raise NoMethodError, "Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if options[:unique] == false
         enum_statement.map(&:context).compact.to_enum # TODO: optimize
@@ -602,7 +602,7 @@ module RDF
     # @return [Boolean]
     # @deprecated Use {#has_graph?} instead.
     def has_context?(value)
-      raise NoMethodError, "Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
+      raise NoMethodError, "Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       has_graph?(value)
     end
@@ -627,7 +627,7 @@ module RDF
     # @see    #enum_context
     # @deprecated Use {#each_graph} instead.
     def each_context
-      raise NoMethodError, "Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
+      raise NoMethodError, "Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       if block_given?
         values = {}
@@ -649,7 +649,7 @@ module RDF
     # @see    #each_context
     # @deprecated Use {#enum_graph} instead.
     def enum_context
-      raise NoMethodError, "Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::Version.to_s >= '2.0'
+      raise NoMethodError, "Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       enum_for(:each_context)
     end
