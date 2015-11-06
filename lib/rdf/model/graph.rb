@@ -249,7 +249,7 @@ module RDF
     # @see    RDF::Enumerable#has_statement?
     def has_statement?(statement)
       statement = statement.dup
-      statement.graph_name = graph_name
+      statement.graph_name ||= graph_name
       @data.has_statement?(statement)
     end
 

@@ -44,6 +44,24 @@ describe RDF::Graph do
       expect { described_class.new("http://rubygems.org/gems/rdf") }.to raise_error(ArgumentError)
     end
 
+    it "has statement in default graph" do
+      st = RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o'))
+      subject << st
+      expect(subject).to have_statement(st)
+    end
+
+    it "has statement with the same graph name" do
+      st = RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o'), graph_name: RDF::URI(subject.graph_name))
+      subject << st
+      expect(subject).to have_statement(st)
+    end
+
+    it "does not have statement with a different graph name" do
+      st = RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o'), graph_name: RDF::URI(RDF::URI('g')))
+      subject << st
+      expect(subject).not_to have_statement(st)
+    end
+
     its(:named?) {is_expected.to be_truthy}
     its(:unnamed?) {is_expected.to be_falsey}
     its(:name) {is_expected.not_to be_nil}
