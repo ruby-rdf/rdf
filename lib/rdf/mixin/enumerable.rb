@@ -744,8 +744,10 @@ module RDF
       if block_given?
         yield RDF::Graph.new(nil, data: self)
         # FIXME: brute force, repositories should override behavior
-        enum_statement.map(&:graph_name).uniq.compact do |graph_name|
-          yield RDF::Graph.new(graph_name, data: self)
+        if supports?(:graph_name)
+          enum_statement.map(&:graph_name).uniq.compact.each do |graph_name|
+            yield RDF::Graph.new(graph_name, data: self)
+          end
         end
       end
       enum_graph
