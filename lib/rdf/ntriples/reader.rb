@@ -28,6 +28,7 @@ module RDF::NTriples
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
   class Reader < RDF::Reader
+    include RDF::Util::Logger
     format RDF::NTriples::Format
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
@@ -95,7 +96,7 @@ module RDF::NTriples
     def self.unserialize(input)
       case input
         when nil then nil
-        else self.new(input).read_value
+        else self.new(input, logger: []).read_value
       end
     end
 
@@ -178,7 +179,9 @@ module RDF::NTriples
       begin
         read_statement
       rescue RDF::ReaderError
-        read_uriref || read_node || read_literal
+        value = read_uriref || read_node || read_literal
+        log_recover
+        value
       end
     end
 
@@ -197,8 +200,7 @@ module RDF::NTriples
             object    = read_uriref || read_node || read_literal || fail_object
 
             if validate? && !read_eos
-              raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})",
-                                         lineno: lineno)
+              log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
             end
             return [subject, predicate, object]
           end
@@ -228,7 +230,7 @@ module RDF::NTriples
         uri
       end
     rescue ArgumentError => e
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Invalid URI (found: \"<#{uri_str}>\")", lineno: lineno, token: "<#{uri_str}>")
+      log_error("Invalid URI (found: \"<#{uri_str}>\")", lineno: lineno, token: "<#{uri_str}>", exception: RDF::ReaderError)
     end
 
     ##

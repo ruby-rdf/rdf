@@ -38,6 +38,7 @@ module RDF::NTriples
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
   class Writer < RDF::Writer
+    include RDF::Util::Logger
     format RDF::NTriples::Format
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
@@ -95,6 +96,7 @@ module RDF::NTriples
     # @param  [Integer, #ord] u
     # @param  [Encoding] encoding
     # @return [String]
+    # @raise  [ArgumentError] if `u` is not a valid Unicode codepoint
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     def self.escape_unicode(u, encoding)
       case (u = u.ord)
@@ -105,7 +107,7 @@ module RDF::NTriples
         when (0x10000..0x10FFFF) # Unicode
           escape_utf32(u)
         else
-          raise ArgumentError.new("expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x#{u.to_s(16)}")
+          log_error("expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x#{u.to_s(16)}", exception: ArgumentError)
       end
     end
 
@@ -116,6 +118,7 @@ module RDF::NTriples
     #
     # @param  [Integer, #ord] u
     # @return [String]
+    # @raise  [ArgumentError] if `u` is not a valid Unicode codepoint
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     # @see    http://www.w3.org/TR/n-triples/
     def self.escape_ascii(u, encoding)
@@ -133,7 +136,7 @@ module RDF::NTriples
         when (0x7F)       then escape_utf16(u)
         when (0x00..0x7F) then u.chr
         else
-          raise ArgumentError.new("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}")
+          log_error("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}", exception: ArgumentError)
       end
     end
 
@@ -170,7 +173,7 @@ module RDF::NTriples
         when RDF::Term
           writer.format_term(value)
         else
-          raise ArgumentError, "expected an RDF::Statement or RDF::Term, but got #{value.inspect}"
+          log_error("expected an RDF::Statement or RDF::Term, but got #{value.inspect}", exception: ArgumentError)
       end
     end
 

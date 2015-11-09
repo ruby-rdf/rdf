@@ -74,7 +74,7 @@ module RDF
               object    = read_uriref || read_node || read_literal || fail_object
               graph_name    = read_uriref || read_node
               if validate? && !read_eos
-                raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})")
+                log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
               end
               return [subject, predicate, object, {graph_name: graph_name}]
             end
