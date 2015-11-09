@@ -30,6 +30,11 @@ describe RDF::Util::Logger do
         logger = LogTester.new
         expect {logger.log_fatal("foo") rescue nil}.to write(:something).to(:error)
       end
+
+      it "increments log_statistics" do
+        subject.log_fatal("foo") rescue nil
+        expect(subject.log_statistics[:fatal]).to eql 1
+      end
     end
 
     describe "#log_error" do
@@ -51,9 +56,19 @@ describe RDF::Util::Logger do
         expect(subject.logger.to_s).to eql "a\nc\n"
       end
 
+      it "Indicates recovering" do
+        subject.log_error("a")
+        expect(subject).to be_log_recovering
+      end
+
       it "logs to $stderr if logger not configured" do
         logger = LogTester.new
         expect {logger.log_error("foo") rescue nil}.to write(:something).to(:error)
+      end
+
+      it "increments log_statistics" do
+        subject.log_error("foo") rescue nil
+        expect(subject.log_statistics[:error]).to eql 1
       end
     end
 
@@ -93,6 +108,11 @@ describe RDF::Util::Logger do
         logger.log_info("a", logger: l)
         expect(logger.logger.to_s).to be_empty
         expect(l.to_s).to eql "a\n"
+      end
+
+      it "increments log_statistics" do
+        subject.log_info("foo") rescue nil
+        expect(subject.log_statistics[:info]).to eql 1
       end
     end
 

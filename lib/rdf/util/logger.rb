@@ -6,6 +6,11 @@ module RDF; module Util
   # @since 2.0.0
   module Logger
     ##
+    # Number of times logger has been called at each level
+    # @return [Hash{Symbol => Integer}]
+    attr_reader :log_statistics
+
+    ##
     # Used for fatal errors where processing cannot continue. If `logger` is not configured, it logs to `$stderr`.
     #
     # @overload log_fatal(*args, options = {}, &block)
@@ -53,6 +58,12 @@ module RDF; module Util
       options = args.last.is_a?(Hash) ? args.pop : {}
       logger_common(*args, options.merge(level: :error), &block)
       raise options[:exception], args.first if options[:exception]
+    end
+
+    # In recovery mode? When `log_error` is called, we enter recovery mode. This is cleared when `log_recover` is called.
+    # @return [Boolean]
+    def log_recovering?
+      !!@logger_in_error
     end
 
     ##
@@ -151,6 +162,8 @@ module RDF; module Util
       options = args.last.is_a?(Hash) ? args.pop : {}
       logger = options[:logger] || @logger || (@options || {})[:logger]
       level = options[:level]
+      (@log_statistics ||= {})[level] ||= 0
+      @log_statistics[level] += 1
       logger ||= $stderr if [:fatal, :error].include?(level)
       return unless logger
 
