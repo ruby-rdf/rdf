@@ -6,7 +6,7 @@ module RDF; module Util
   # @since 2.0.0
   module Logger
     ##
-    # Used for fatal errors where processing cannot continue
+    # Used for fatal errors where processing cannot continue. If `logger` is not configured, it logs to `$stderr`.
     #
     # @overload log_fatal(*args, options = {}, &block)
     #   @param [Array<String>] args
@@ -29,7 +29,7 @@ module RDF; module Util
     end
 
     ##
-    # Used for non-fatal errors where processing can continue.
+    # Used for non-fatal errors where processing can continue. If `logger` is not configured, it logs to `$stderr`.
     #
     # As a side-effect of setting `@logger_in_error`, which will suppress further error messages until cleared using {#recover}.
     #
@@ -150,20 +150,23 @@ module RDF; module Util
     def logger_common(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
       logger = options[:logger] || @logger || (@options || {})[:logger]
+      level = options[:level]
+      logger ||= $stderr if [:fatal, :error].include?(level)
       return unless logger
 
-      level = options.fetch(:level, :<<)
       depth = options[:log_depth] || (@options || {})[:log_depth] || 0
       args << yield if block_given?
       message = args.join(": ")
       d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
       str = "#{d_str}#{message}"
-      str = "[#{options[:lineno]}] #{str}" if options[:lineno]
+      str = "[line #{options[:lineno]}] #{str}" if options[:lineno]
 
-      if logger.respond_to?(level)
+      if level && logger.respond_to?(level)
         logger.__send__(level, str)
+      elsif logger.respond_to?(:write)
+        logger.write "#{level.to_s.upcase} #{str}\n"
       else
-        logger << str
+        logger << "#{level.to_s.upcase} #{str}"
       end
     end
   end # Logger

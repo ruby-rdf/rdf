@@ -25,6 +25,11 @@ describe RDF::Util::Logger do
         expect {subject.log_fatal("foo")}.to raise_error(StandardError)
         expect(subject.logger.to_s).to match /Called from #{File.expand_path("", __FILE__)}:#{__LINE__-1}/
       end
+
+      it "logs to $stderr if logger not configured" do
+        logger = LogTester.new
+        expect {logger.log_fatal("foo") rescue nil}.to write(:something).to(:error)
+      end
     end
 
     describe "#log_error" do
@@ -45,6 +50,11 @@ describe RDF::Util::Logger do
         subject.log_error("c")
         expect(subject.logger.to_s).to eql "a\nc\n"
       end
+
+      it "logs to $stderr if logger not configured" do
+        logger = LogTester.new
+        expect {logger.log_error("foo") rescue nil}.to write(:something).to(:error)
+      end
     end
 
     describe "#log_info" do
@@ -55,7 +65,7 @@ describe RDF::Util::Logger do
 
       it "adds lineno" do
         subject.log_info("a", lineno: 10)
-        expect(subject.logger.to_s).to eql "[10] a\n"
+        expect(subject.logger.to_s).to eql "[line 10] a\n"
       end
 
       it "adds depth with option" do
@@ -116,7 +126,7 @@ describe RDF::Util::Logger do
     it "appends to StringIO" do
       subject.log_info("a")
       subject.logger.rewind
-      expect(subject.logger.read).to eql "a"
+      expect(subject.logger.read).to eql "INFO a\n"
     end
   end
 
@@ -125,7 +135,7 @@ describe RDF::Util::Logger do
 
     it "appends to Array" do
       subject.log_info("a")
-      expect(subject.logger).to eql ["a"]
+      expect(subject.logger).to eql ["INFO a"]
     end
   end
 end
