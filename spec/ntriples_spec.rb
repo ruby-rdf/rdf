@@ -230,12 +230,19 @@ describe RDF::NTriples::Writer do
   context "validataion" do
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
-        subject {RDF::NTriples::Writer.buffer(validate: true) {|w| w << statement}}
+        logger = RDF::Spec.logger
+        subject {RDF::NTriples::Writer.buffer(validate: true, logger: logger) {|w| w << statement}}
 
         if valid
-          specify {expect {subject}.not_to raise_error}
+          specify {
+            expect {subject}.not_to raise_error
+            #expect(logger.to_s).to be_empty
+          }
         else
-          specify {expect {subject}.to raise_error(RDF::WriterError)}
+          specify {
+            expect {subject}.to raise_error(RDF::WriterError)
+            #expect(logger.to_s).not_to be_empty
+          }
         end
       end
     end
@@ -646,47 +653,49 @@ describe RDF::NTriples do
       {
         "nt-syntax-bad-struct-01" => [
           %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
-          %r(ERROR \[line 1\] Expected end of statement \(found: ", .* \."\))
+          %r(Expected end of statement \(found: ", .* \."\))
         ],
         "nt-syntax-bad-struct-02" => [
           %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
-          %r(ERROR \[line 1\] Expected end of statement \(found: "; .* \."\))
+          %r(Expected end of statement \(found: "; .* \."\))
         ],
         "nt-syntax-bad-lang-01" => [
           %q(<http://example/s> <http://example/p> "string"@1 .),
-          %r(ERROR \[line 1\] Expected end of statement \(found: "@1 \."\))
+          %r(Expected end of statement \(found: "@1 \."\))
         ],
         "nt-syntax-bad-string-05" => [
           %q(<http://example/s> <http://example/p> """abc""" .),
-          %r(ERROR \[line 1\] Expected end of statement \(found: .* \."\))
+          %r(Expected end of statement \(found: .* \."\))
         ],
         "nt-syntax-bad-num-01" => [
           %q(<http://example/s> <http://example/p> 1 .),
-          %r(ERROR \[line 1\] Expected object \(found: "1 \."\))
+          %r(Expected object \(found: "1 \."\))
         ],
         "nt-syntax-bad-num-02" => [
           %q(<http://example/s> <http://example/p> 1.0 .),
-          %r(ERROR \[line 1\] Expected object \(found: "1\.0 \."\))
+          %r(Expected object \(found: "1\.0 \."\))
         ],
         "nt-syntax-bad-num-03" => [
           %q(<http://example/s> <http://example/p> 1.0e0 .),
-          %r(ERROR \[line 1\] Expected object \(found: "1\.0e0 \."\))
+          %r(Expected object \(found: "1\.0e0 \."\))
         ],
         "nt-syntax-bad-uri-02" => [
           %(# Bad IRI : space.\n<http://example/ space> <http://example/p> <http://example/o> .),
-          %r(ERROR \[line 2\] Expected subject)
+          %r(Expected subject)
         ],
         "nt-syntax-bad-uri-07" => [
           %(# No relative IRIs in N-Triples\n<http://example/s> <p> <http://example/o> .),
-          %r(ERROR \[line 2\] Invalid URI)
+          %r(Invalid URI)
         ],
         "bnode predicate" => [
           %q(<http://example/s> _:p <http://example/o> .),
-          %r(ERROR \[line 1\] Expected predicate)
+          %r(Expected predicate)
         ]
       }.each do |name, (nt, error)|
         it name do
-          expect {reader.new(nt.freeze, validate: true).to_a}.to raise_error(error || RDF::ReaderError)
+          logger = RDF::Spec.logger
+          expect {reader.new(nt.freeze, validate: true, logger: logger).to_a}.to raise_error(error || RDF::ReaderError)
+          expect(logger.to_s).to match error
         end
       end
     end
@@ -815,7 +824,9 @@ describe RDF::NTriples do
         %(http://example.com/\u003E),
       ].each do |uri|
         it "rejects #{('<' + uri + '>').inspect}" do
-          expect {parse(%(<s> <p> <#{uri}>), validate: true)}.to raise_error RDF::ReaderError
+          logger = RDF::Spec.logger
+          expect {parse(%(<s> <p> <#{uri}>), validate: true, logger: logger)}.to raise_error RDF::ReaderError
+          expect(logger.to_s).not_to be_empty
         end
       end
     end

@@ -421,8 +421,12 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_subject
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected subject (found: #{current_line.inspect})",
-                                 lineno: lineno)
+      if respond_to?(:log_error)
+        log_error("Expected subject (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
+      else
+        raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected subject (found: #{current_line.inspect})",
+                                   lineno: lineno)
+      end
     end
 
     ##
@@ -431,8 +435,12 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_predicate
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected predicate (found: #{current_line.inspect})",
-                                 lineno: lineno)
+      if respond_to?(:log_error)
+        log_error("Expected predicate (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
+      else
+        raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected predicate (found: #{current_line.inspect})",
+                                   lineno: lineno)
+      end
     end
 
     ##
@@ -441,8 +449,12 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_object
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected object (found: #{current_line.inspect})",
-                                 lineno: lineno)
+      if respond_to?(:log_error)
+        log_error("Expected object (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
+      else
+        raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected object (found: #{current_line.inspect})",
+                                   lineno: lineno)
+      end
     end
 
   public
