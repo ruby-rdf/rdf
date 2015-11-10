@@ -8,7 +8,9 @@ module RDF; module Util
     ##
     # Number of times logger has been called at each level
     # @return [Hash{Symbol => Integer}]
-    attr_reader :log_statistics
+    def log_statistics
+      (@log_statistics ||= {})
+    end
 
     ##
     # Used for fatal errors where processing cannot continue. If `logger` is not configured, it logs to `$stderr`.
@@ -138,9 +140,9 @@ module RDF; module Util
       options ||= @options || {}
       options[:log_depth] ||= 0
       options[:log_depth] += 1
-      ret = yield
+      yield
+    ensure
       options[:log_depth] -= 1
-      ret
     end
 
   private
@@ -164,7 +166,7 @@ module RDF; module Util
       level = options[:level]
       (@log_statistics ||= {})[level] ||= 0
       @log_statistics[level] += 1
-      logger ||= $stderr if [:fatal, :error].include?(level)
+      logger = $stderr if [:fatal, :error].include?(level) && logger.nil?
       return unless logger
 
       depth = options[:log_depth] || (@options || {})[:log_depth] || 0
