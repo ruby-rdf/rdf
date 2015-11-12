@@ -107,7 +107,7 @@ module RDF::NTriples
         when (0x10000..0x10FFFF) # Unicode
           escape_utf32(u)
         else
-          log_error("expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x#{u.to_s(16)}", exception: ArgumentError)
+          raise ArgumentError.new("expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x#{u.to_s(16)}")
       end
     end
 
@@ -136,7 +136,7 @@ module RDF::NTriples
         when (0x7F)       then escape_utf16(u)
         when (0x00..0x7F) then u.chr
         else
-          log_error("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}", exception: ArgumentError)
+          raise ArgumentError.new("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}")
       end
     end
 
@@ -173,7 +173,7 @@ module RDF::NTriples
         when RDF::Term
           writer.format_term(value)
         else
-          log_error("expected an RDF::Statement or RDF::Term, but got #{value.inspect}", exception: ArgumentError)
+          raise ArgumentError, "expected an RDF::Statement or RDF::Term, but got #{value.inspect}"
       end
     end
 
