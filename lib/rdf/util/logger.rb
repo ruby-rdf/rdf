@@ -1,3 +1,4 @@
+# coding: utf-8
 module RDF; module Util
   ##
   # Helpers for logging errors, warnings and debug information.
