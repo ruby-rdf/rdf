@@ -22,7 +22,7 @@ module RDF; module Util
     #   @param [Hash{Symbol => Object}] options
     #   @option options [Integer] :depth (@options[:depth] || @depth)
     #     Recursion depth for indenting output
-    #   @option options [:fatal, :error, :warning, :info, :debug] level (:<<)
+    #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
     #   @option options [Class] :exception, (StandardError)
@@ -47,7 +47,7 @@ module RDF; module Util
     #   @param [Hash{Symbol => Object}] options
     #   @option options [Integer] :depth (@options[:depth] || @depth)
     #     Recursion depth for indenting output
-    #   @option options [:fatal, :error, :warning, :info, :debug] level (:<<)
+    #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
     #   @option options [Class] :exception, (StandardError)
@@ -70,6 +70,25 @@ module RDF; module Util
     end
 
     ##
+    # Warning message.
+    #
+    # @overload log_warn(*args, options = {}, &block)
+    #   @param [Array<String>] args
+    #   @param [Array<String>] args Messages
+    #   @param [Hash{Symbol => Object}] options
+    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #     Recursion depth for indenting output
+    #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
+    #   @option options [Integer] :lineno associated with message
+    #   @option options [Logger, #<<] :logger
+    #   @yieldreturn [String] added to message
+    #   @return [void]
+    def log_warn(*args, &block)
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      logger_common(*args, options.merge(level: :warn), &block)
+    end
+
+    ##
     # Recovers from an error condition. If `args` are passed, sent as an informational message
     #
     # As a side-effect of clearing `@logger_in_error`.
@@ -80,7 +99,6 @@ module RDF; module Util
     #   @param [Hash{Symbol => Object}] options
     #   @option options [Integer] :depth (@options[:depth] || @depth)
     #     Recursion depth for indenting output
-    #   @option options [:fatal, :error, :warning, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
     #   @yieldreturn [String] added to message
@@ -95,13 +113,12 @@ module RDF; module Util
     ##
     # Informational message.
     #
-    # @overload recover(*args, options = {}, &block)
+    # @overload log_info(*args, options = {}, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
     #   @option options [Integer] :depth (@options[:depth] || @depth)
     #     Recursion depth for indenting output
-    #   @option options [:fatal, :error, :warning, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
     #   @yieldreturn [String] added to message
@@ -114,13 +131,12 @@ module RDF; module Util
     ##
     # Debug message.
     #
-    # @overload recover(*args, options = {}, &block)
+    # @overload log_debug(*args, options = {}, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
     #   @option options [Integer] :depth (@options[:depth] || @depth)
     #     Recursion depth for indenting output
-    #   @option options [:fatal, :error, :warning, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
     #   @yieldreturn [String] added to message
@@ -156,7 +172,7 @@ module RDF; module Util
     # @param [Hash{Symbol => Object}] options
     # @option options [Integer] :depth (@options[:depth] || @depth)
     #   Recursion depth for indenting output
-    # @option options [:fatal, :error, :warning, :info, :debug] level (:<<)
+    # @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     # @option options [Integer] :lineno associated with message
     # @option options [Logger, #<<] :logger
     # @yieldreturn [String] added to message
