@@ -143,7 +143,7 @@ module RDF; module Util
     #   @return [void]
     def log_debug(*args, &block)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      logger_common(*args, options.merge(level: :info), &block)
+      logger_common(*args, options.merge(level: :debug), &block)
     end
 
     # Increase depth around a method invocation
