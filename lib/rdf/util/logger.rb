@@ -7,10 +7,24 @@ module RDF; module Util
   # @since 2.0.0
   module Logger
     ##
+    # Logger instance, found using `options[:logger]`, `@logger`, or `@options[:logger]`
+    # @param [Hash{Symbol => Object}] options
+    # @option options [Logger, #<<] :logger
+    # @return [Logger, #write, #<<]
+    def logger(options = {})
+      logger = options.fetch(:logger, @logger || (@options || {})[:logger])
+      logger ||= options[:logger] = $stderr
+      logger.extend(LoggerBehavior) unless logger.is_a?(LoggerBehavior)
+      logger
+    end
+
+    ##
     # Number of times logger has been called at each level
+    # @param [Hash{Symbol => Object}] options
+    # @option options [Logger, #<<] :logger
     # @return [Hash{Symbol => Integer}]
-    def log_statistics
-      (@log_statistics ||= {})
+    def log_statistics(options = {})
+      logger(options).log_statistics
     end
 
     ##
@@ -20,7 +34,7 @@ module RDF; module Util
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
-    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #   @option options [Integer] :depth
     #     Recursion depth for indenting output
     #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
@@ -45,7 +59,7 @@ module RDF; module Util
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
-    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #   @option options [Integer] :depth
     #     Recursion depth for indenting output
     #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
@@ -56,17 +70,20 @@ module RDF; module Util
     #   @return [void]
     #   @raise Raises the provided exception class using the first element from args as the message component, if `:exception` option is provided.
     def log_error(*args, &block)
-      return if @logger_in_error
-      @logger_in_error = true
       options = args.last.is_a?(Hash) ? args.pop : {}
+      logger = self.logger(options)
+      return if logger.recovering
+      logger.recovering = true
       logger_common(*args, options.merge(level: :error), &block)
       raise options[:exception], args.first if options[:exception]
     end
 
     # In recovery mode? When `log_error` is called, we enter recovery mode. This is cleared when `log_recover` is called.
+    # @param [Hash{Symbol => Object}] options
+    # @option options [Logger, #<<] :logger
     # @return [Boolean]
-    def log_recovering?
-      !!@logger_in_error
+    def log_recovering?(options = {})
+      self.logger(options).recovering
     end
 
     ##
@@ -76,7 +93,7 @@ module RDF; module Util
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
-    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #   @option options [Integer] :depth
     #     Recursion depth for indenting output
     #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     #   @option options [Integer] :lineno associated with message
@@ -97,16 +114,17 @@ module RDF; module Util
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
-    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #   @option options [Integer] :depth
     #     Recursion depth for indenting output
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
     #   @yieldreturn [String] added to message
     #   @return [void]
     def log_recover(*args, &block)
-      @logger_in_error = nil
-      return if args.empty? && !block_given?
       options = args.last.is_a?(Hash) ? args.pop : {}
+      logger = self.logger(options)
+      logger.recovering = false
+      return if args.empty? && !block_given?
       logger_common(*args, options.merge(level: :info), &block)
     end
 
@@ -117,7 +135,7 @@ module RDF; module Util
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
-    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #   @option options [Integer] :depth
     #     Recursion depth for indenting output
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
@@ -135,7 +153,7 @@ module RDF; module Util
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
-    #   @option options [Integer] :depth (@options[:depth] || @depth)
+    #   @option options [Integer] :depth
     #     Recursion depth for indenting output
     #   @option options [Integer] :lineno associated with message
     #   @option options [Logger, #<<] :logger
@@ -146,20 +164,22 @@ module RDF; module Util
       logger_common(*args, options.merge(level: :debug), &block)
     end
 
-    # Increase depth around a method invocation
-    # @param [Hash{Symbol}] options (@options || {})
-    # @option options [Integer] :log_depth
-    # @yield
-    #   Yields with no arguments
-    # @yieldreturn [Object] returns the result of yielding
-    # @return [Object]
-    def log_depth(options = nil)
-      options ||= @options || {}
-      options[:log_depth] ||= 0
-      options[:log_depth] += 1
-      yield
-    ensure
-      options[:log_depth] -= 1
+    ##
+    # @overload log_depth(options, &block)
+    #   Increase depth around a method invocation
+    #   @param [Hash{Symbol}] options (@options || {})
+    #   @option options [Integer] :depth Additional recursion depth
+    #   @option options [Logger, #<<] :logger
+    #   @yield
+    #     Yields with no arguments
+    #   @yieldreturn [Object] returns the result of yielding
+    #   @return [Object]
+    #
+    # @overload log_depth
+    #   # Return the current log depth
+    #   @return [Integer]
+    def log_depth(options = {}, &block)
+      self.logger(options).log_depth(&block)
     end
 
   private
@@ -170,7 +190,7 @@ module RDF; module Util
     #
     # @param [Array<String>] args Messages
     # @param [Hash{Symbol => Object}] options
-    # @option options [Integer] :depth (@options[:depth] || @depth)
+    # @option options [Integer] :depth
     #   Recursion depth for indenting output
     # @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
     # @option options [Integer] :lineno associated with message
@@ -179,26 +199,66 @@ module RDF; module Util
     # @return [void]
     def logger_common(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      logger = options[:logger] || @logger || (@options || {})[:logger]
       level = options[:level]
-      (@log_statistics ||= {})[level] ||= 0
-      @log_statistics[level] += 1
-      logger = $stderr if [:fatal, :error].include?(level) && logger.nil?
-      return unless logger
+      logger = self.logger(options)
+      logger.log_statistics[level] = logger.log_statistics[level].to_i + 1
+      return if logger.level > {fatal: 4, error: 3, warn: 2, info: 1, debug: 0}[level]
 
-      depth = options[:log_depth] || (@options || {})[:log_depth] || 0
+      depth = options.fetch(:depth, logger.log_depth)
       args << yield if block_given?
-      message = args.join(": ")
-      d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
-      str = "#{d_str}#{message}"
+      str = (depth > 100 ? ' ' * 100 + '+' : ' ' * depth) + args.join(": ")
       str = "[line #{options[:lineno]}] #{str}" if options[:lineno]
+      logger.__send__(level, str)
+    end
 
-      if level && logger.respond_to?(level)
-        logger.__send__(level, str)
-      elsif logger.respond_to?(:write)
-        logger.write "#{level.to_s.upcase} #{str}\n"
-      else
-        logger << "#{level.to_s.upcase} #{str}"
+    ##
+    # Module which is mixed-in to found logger to provide statistics and depth behavior
+    module LoggerBehavior
+      attr_accessor :recovering
+
+      def log_statistics
+        @logger_statistics ||= {}
+      end
+
+      ##
+      # @overload log_depth(options, &block)
+      #   Increase depth around a method invocation
+      #   @param [Hash{Symbol}] options (@options || {})
+      #   @option options [Integer] :depth (1) recursion depth
+      #   @option options [Logger, #<<] :logger
+      #   @yield
+      #     Yields with no arguments
+      #   @yieldreturn [Object] returns the result of yielding
+      #   @return [Object]
+      #
+      # @overload log_depth
+      #   # Return the current log depth
+      #   @return [Integer]
+      def log_depth(options = {})
+        @log_depth ||= 0
+        if block_given?
+          @log_depth += options.fetch(:depth, 1)
+          yield
+        else
+          @log_depth
+        end
+      ensure
+        @log_depth -= options.fetch(:depth, 1) if block_given?
+      end
+
+      # Give Logger like behavior to non-logger objects
+      def method_missing(method, *args)
+        case method.to_sym
+        when :fatal, :error, :warn, :info, :debug
+          if self.respond_to?(:write)
+            self.write "#{method.to_s.upcase} #{(args.join(": "))}\n"
+          else
+            self << "#{method.to_s.upcase} #{args.join(": ")}"
+          end
+        when :level, :sev_threshold then 2
+        else
+          super
+        end
       end
     end
   end # Logger
