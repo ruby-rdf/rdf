@@ -173,4 +173,13 @@ describe RDF::Util::Logger do
       expect(subject.logger).to eql ["ERROR a"]
     end
   end
+
+  context "with false" do
+    subject {LogTester.new(false)}
+
+    it "Creates an Object logger" do
+      subject.log_error("a")
+      expect(subject.options).to have_key(:logger)
+    end
+  end
 end

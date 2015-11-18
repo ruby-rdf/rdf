@@ -12,8 +12,10 @@ module RDF; module Util
     # @option options [Logger, #<<] :logger
     # @return [Logger, #write, #<<]
     def logger(options = {})
-      logger = options.fetch(:logger, @logger || (@options || {})[:logger])
-      logger ||= options[:logger] = $stderr
+      logger = options.fetch(:logger, @logger)
+      logger = @options[:logger] if logger.nil? && @options
+      logger = (@options || options)[:logger] = $stderr if logger.nil?
+      logger = (@options || options)[:logger] = Object.new  unless logger # Incase false was used, which is frozen
       logger.extend(LoggerBehavior) unless logger.is_a?(LoggerBehavior)
       logger
     end
@@ -252,8 +254,10 @@ module RDF; module Util
         when :fatal, :error, :warn, :info, :debug
           if self.respond_to?(:write)
             self.write "#{method.to_s.upcase} #{(args.join(": "))}\n"
-          else
+          elsif self.respond_to?(:<<)
             self << "#{method.to_s.upcase} #{args.join(": ")}"
+          else
+            # Silently eat the message
           end
         when :level, :sev_threshold then 2
         else
