@@ -2,9 +2,8 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Util::Logger do
   class LogTester
+    attr_reader :options
     include RDF::Util::Logger
-    attr_accessor :logger, :options
-
     def initialize(logger = nil)
       @logger = logger
       @options = {}
@@ -13,6 +12,32 @@ describe RDF::Util::Logger do
 
   context "with Spec Logger" do
     subject {LogTester.new(RDF::Spec.logger)}
+
+    describe "#logger" do
+      it "retrieves logger from @logger" do
+        expect(subject.logger).to eql subject.instance_variable_get(:@logger)
+      end
+
+      it "prefers logger from options" do
+        l = RDF::Spec.logger
+        expect(subject.logger(logger: l)).to eql l
+      end
+
+      it "prefers @logger to @options[:logger]" do
+        subject.options[:logger] = RDF::Spec.logger
+        expect(subject.logger).to eql subject.instance_variable_get(:@logger)
+      end
+
+      it "will use @options[:logger]" do
+        subject.instance_variable_set(:@logger, nil)
+        subject.options[:logger] = RDF::Spec.logger
+        expect(subject.logger).to eql subject.options[:logger]
+      end
+
+      it "applies LoggerBehavior to logger" do
+        expect(subject.logger).to be_a(RDF::Util::Logger::LoggerBehavior)
+      end
+    end
 
     describe "#log_fatal" do
       specify {expect {subject.log_fatal("foo", "bar")}.to raise_error(StandardError, "foo")}
@@ -84,13 +109,12 @@ describe RDF::Util::Logger do
       end
 
       it "adds depth with option" do
-        subject.log_info("a", log_depth: 2)
+        subject.log_info("a", depth: 2)
         expect(subject.logger.to_s).to eql "  a\n"
       end
 
-      it "adds depth with @option" do
-        subject.options[:log_depth] = 2
-        subject.log_info("a")
+      it "adds depth with option" do
+        subject.log_info("a", depth: 2)
         expect(subject.logger.to_s).to eql "  a\n"
       end
 
@@ -98,7 +122,7 @@ describe RDF::Util::Logger do
         logger = LogTester.new
         logger.options[:logger] = RDF::Spec.logger
         logger.log_info("a")
-        expect(logger.logger.to_s).to be_empty
+        expect(logger.instance_variable_get(:@logger).to_s).to be_empty
         expect(logger.options[:logger].to_s).to eql "a\n"
       end
 
@@ -106,7 +130,7 @@ describe RDF::Util::Logger do
         logger = LogTester.new
         l = RDF::Spec.logger
         logger.log_info("a", logger: l)
-        expect(logger.logger.to_s).to be_empty
+        expect(logger.instance_variable_get(:@logger).to_s).to be_empty
         expect(l.to_s).to eql "a\n"
       end
 
@@ -117,24 +141,15 @@ describe RDF::Util::Logger do
     end
 
     describe "#log_depth" do
-      it "sets @options[:log_depth]" do
-        expect{subject.log_depth {}}.to change{subject.options[:log_depth]}.from(nil).to(0)
-      end
-
-      it "sets options[:log_depth]" do
-        options = {}
-        expect{subject.log_depth(options) {}}.to change{options[:log_depth]}.from(nil).to(0)
-      end
-
       specify {expect {|b| subject.log_depth(&b)}.to yield_with_no_args}
 
       it "returns result of block" do
         expect(subject.log_depth {"foo"}).to eql "foo"
       end
 
-      it "increments @options[:log_depth] in block" do
+      it "increments log_depth in block" do
         subject.log_depth do
-          expect(subject.options[:log_depth]).to eql 1
+          expect(subject.log_depth).to eql 1
         end
       end
     end
@@ -144,9 +159,9 @@ describe RDF::Util::Logger do
     subject {LogTester.new(StringIO.new)}
 
     it "appends to StringIO" do
-      subject.log_info("a")
+      subject.log_error("a")
       subject.logger.rewind
-      expect(subject.logger.read).to eql "INFO a\n"
+      expect(subject.logger.read).to eql "ERROR a\n"
     end
   end
 
@@ -154,8 +169,8 @@ describe RDF::Util::Logger do
     subject {LogTester.new([])}
 
     it "appends to Array" do
-      subject.log_info("a")
-      expect(subject.logger).to eql ["INFO a"]
+      subject.log_error("a")
+      expect(subject.logger).to eql ["ERROR a"]
     end
   end
 end
