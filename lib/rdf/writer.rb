@@ -39,6 +39,7 @@ module RDF
   class Writer
     extend  ::Enumerable
     extend  RDF::Util::Aliasing::LateBound
+    include RDF::Util::Logger
     include RDF::Writable
 
     ##
@@ -347,6 +348,9 @@ module RDF
     # @return [self]
     # @abstract
     def write_epilogue
+      if log_statistics[:error]
+        raise RDF::WriterError, "Errors found during processing"
+      end
       self
     end
 
@@ -386,12 +390,17 @@ module RDF
     # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
       statement = statement.canonicalize! if canonicalize?
-      raise RDF::WriterError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
-      raise RDF::WriterError, "Statement #{statement.inspect} is invalid" if validate? && statement.invalid?
-      write_triple(*statement.to_triple)
+
+      if statement.incomplete?
+        log_error "Statement #{statement.inspect} is incomplete"
+      elsif validate? && statement.invalid?
+        log_error "Statement #{statement.inspect} is invalid" if validate? && statement.invalid?
+      else
+        write_triple(*statement.to_triple)
+      end
       self
     rescue ArgumentError => e
-      raise WriterError, e.message
+      log_error e.message
     end
     alias_method :insert_statement, :write_statement # support the RDF::Writable interface
 

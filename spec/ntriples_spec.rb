@@ -87,6 +87,7 @@ describe RDF::NTriples::Format do
 end
 
 describe RDF::NTriples::Reader do
+  let(:logger) {RDF::Spec.logger}
   let!(:doap) {File.expand_path("../../etc/doap.nt", __FILE__)}
   let!(:doap_count) {File.open(doap).each_line.to_a.length}
   subject { RDF::NTriples::Reader.new }
@@ -157,6 +158,7 @@ describe RDF::NTriples::Reader do
 end
 
 describe RDF::NTriples::Writer do
+  let(:logger) {RDF::Spec.logger}
   let(:writer_class) { RDF::NTriples::Writer }
   let(:writer) { RDF::NTriples::Writer.new }
 
@@ -230,7 +232,6 @@ describe RDF::NTriples::Writer do
   context "validataion" do
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
-        logger = RDF::Spec.logger
         subject {RDF::NTriples::Writer.buffer(validate: true, logger: logger) {|w| w << statement}}
 
         if valid
@@ -246,6 +247,7 @@ describe RDF::NTriples::Writer do
         end
       end
     end
+
     {
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
       RDF::Statement.new(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
@@ -267,7 +269,7 @@ describe RDF::NTriples::Writer do
   context "c14n" do
     shared_examples "c14n" do |statement, result|
       context "given #{statement}" do
-        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true) {|w| w << statement}}
+        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true, logger: logger) {|w| w << statement}}
         if result
           specify {expect(subject).to eq "#{result}\n"}
         else
@@ -275,6 +277,7 @@ describe RDF::NTriples::Writer do
         end
       end
     end
+
     {
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
         RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
@@ -294,6 +297,7 @@ describe RDF::NTriples::Writer do
 end
 
 describe RDF::NTriples do
+  let(:logger) {RDF::Spec.logger}
   let(:testfile) {fixture_path('test.nt')}
 
   let(:reader) {RDF::NTriples::Reader}
@@ -693,8 +697,7 @@ describe RDF::NTriples do
         ]
       }.each do |name, (nt, error)|
         it name do
-          logger = RDF::Spec.logger
-          expect {reader.new(nt.freeze, validate: true, logger: logger).to_a}.to raise_error(error || RDF::ReaderError)
+          expect {reader.new(nt.freeze, validate: true, logger: logger).to_a}.to raise_error(RDF::ReaderError)
           expect(logger.to_s).to match error
         end
       end

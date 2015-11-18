@@ -6,7 +6,6 @@ require 'rdf/spec/reader'
 require 'rdf/spec/writer'
 
 describe RDF::NQuads::Format do
-
   # @see lib/rdf/spec/format.rb in rdf-spec
   it_behaves_like 'an RDF::Format' do
     let(:format_class) { described_class }
@@ -87,6 +86,8 @@ describe RDF::NQuads::Format do
 end
 
 describe RDF::NQuads::Reader do
+  let(:logger) {RDF::Spec.logger}
+
   let(:testfile) {fixture_path('test.nq')}
   let!(:test_count) {File.open(testfile).each_line.to_a.reject {|l| l.sub(/#.*$/, '').strip.empty?}.length}
 
@@ -187,6 +188,7 @@ describe RDF::NQuads::Reader do
 end
 
 describe RDF::NQuads::Writer do
+  let(:logger) {RDF::Spec.logger}
   subject { RDF::NQuads::Writer.new }
 
   describe ".for" do
@@ -282,7 +284,7 @@ describe RDF::NQuads::Writer do
 
     shared_examples "validation" do |statement, valid|
       context "given #{statement}" do
-        subject {RDF::NTriples::Writer.buffer(validate: true) {|w| w << statement}}
+        subject {RDF::NTriples::Writer.buffer(validate: true, logger: logger) {|w| w << statement}}
         if valid
           specify {expect {subject}.not_to raise_error}
         else
@@ -290,6 +292,7 @@ describe RDF::NQuads::Writer do
         end
       end
     end
+
     {
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Node("node")) => true,
@@ -313,7 +316,7 @@ describe RDF::NQuads::Writer do
   context "c14n" do
     shared_examples "c14n" do |statement, result|
       context "given #{statement}" do
-        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true) {|w| w << statement}}
+        subject {RDF::NTriples::Writer.buffer(validate: true, canonicalize: true, logger: logger) {|w| w << statement}}
         if result
           specify {expect(subject).to eq "#{result}\n"}
         else
@@ -321,6 +324,7 @@ describe RDF::NQuads::Writer do
         end
       end
     end
+
     {
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
         RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
