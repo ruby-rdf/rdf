@@ -39,6 +39,7 @@ module RDF
   class Reader
     extend  ::Enumerable
     extend  RDF::Util::Aliasing::LateBound
+    include RDF::Util::Logger
     include RDF::Readable
     include RDF::Enumerable # @since 0.3.0
 
@@ -380,15 +381,20 @@ module RDF
     ##
     # @return [Boolean]
     #
-    # @note this parses the full input. 
+    # @note this parses the full input and is valid only in the reader block.
     #   Use `Reader.new(input, validate: true)` if you intend to capture the 
     #   result.
+    #
+    # @example Parsing RDF statements from a file
+    #   RDF::NTriples::Reader.new("!!invalid input??") do |reader|
+    #     reader.valid? # => false
+    #   end
     #
     # @see RDF::Value#validate! for Literal & URI validation relevant to 
     #   error handling.
     # @see Enumerable#valid?
     def valid?
-      super 
+      super && !log_statistics[:error]
     rescue ArgumentError, RDF::ReaderError
       false
     end
@@ -421,12 +427,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_subject
-      if respond_to?(:log_error)
-        log_error("Expected subject (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
-      else
-        raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected subject (found: #{current_line.inspect})",
-                                   lineno: lineno)
-      end
+      log_error("Expected subject (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
     ##
@@ -435,12 +436,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_predicate
-      if respond_to?(:log_error)
-        log_error("Expected predicate (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
-      else
-        raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected predicate (found: #{current_line.inspect})",
-                                   lineno: lineno)
-      end
+      log_error("Expected predicate (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
     ##
@@ -449,12 +445,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_object
-      if respond_to?(:log_error)
-        log_error("Expected object (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
-      else
-        raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected object (found: #{current_line.inspect})",
-                                   lineno: lineno)
-      end
+      log_error("Expected object (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
   public

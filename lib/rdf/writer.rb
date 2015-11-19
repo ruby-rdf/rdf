@@ -33,6 +33,17 @@ module RDF
   #     end
   #   end
   #
+  # @example Detecting invalid output
+  #   logger = Logger.new([])
+  #   RDF::Writer.for(:ntriples).buffer(logger: logger) do |writer|
+  #     statement = RDF::Statement.new(
+  #       RDF::URI("http://rubygems.org/gems/rdf"),
+  #       RDF::URI("http://purl.org/dc/terms/creator"),
+  #       nil)
+  #     writer << statement
+  #   end # => RDF::WriterError
+  #   logger.empty? => false
+  #
   # @abstract
   # @see RDF::Format
   # @see RDF::Reader
@@ -346,6 +357,7 @@ module RDF
 
     ##
     # @return [self]
+    # @raise [RDF::WriterError] if errors logged during processing.
     # @abstract
     def write_epilogue
       if log_statistics[:error]
@@ -387,7 +399,7 @@ module RDF
     ##
     # @param  [RDF::Statement] statement
     # @return [self]
-    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
+    # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
       statement = statement.canonicalize! if canonicalize?
 
@@ -407,7 +419,7 @@ module RDF
     ##
     # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>] triples
     # @return [self]
-    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
+    # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
       self
@@ -419,7 +431,7 @@ module RDF
     # @param  [RDF::Term]     object
     # @return [self]
     # @raise  [NotImplementedError] unless implemented in subclass
-    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
+    # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     # @abstract
     def write_triple(subject, predicate, object)
       raise NotImplementedError.new("#{self.class}#write_triple") # override in subclasses
