@@ -15,7 +15,7 @@ module RDF; module Util
       logger = options.fetch(:logger, @logger)
       logger = @options[:logger] if logger.nil? && @options
       logger = (@options || options)[:logger] = $stderr if logger.nil?
-      logger = (@options || options)[:logger] = Object.new  unless logger # Incase false was used, which is frozen
+      logger = (@options || options)[:logger] = ::Logger.new(::File.open(::File::NULL, "w"))  unless logger # Incase false was used, which is frozen
       logger.extend(LoggerBehavior) unless logger.is_a?(LoggerBehavior)
       logger
     end
@@ -210,7 +210,7 @@ module RDF; module Util
       args << yield if block_given?
       str = (depth > 100 ? ' ' * 100 + '+' : ' ' * depth) + args.join(": ")
       str = "[line #{options[:lineno]}] #{str}" if options[:lineno]
-      logger.__send__(level, str)
+      logger.send(level, str)
     end
 
     ##
