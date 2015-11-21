@@ -395,7 +395,8 @@ module RDF
     # @see Enumerable#valid?
     def valid?
       super && !log_statistics[:error]
-    rescue ArgumentError, RDF::ReaderError
+    rescue ArgumentError, RDF::ReaderError => e
+      log_error(e.message)
       false
     end
 
