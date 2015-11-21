@@ -93,7 +93,6 @@ module RDF
       # @return [self]
       def write_statement(statement)
         if statement.incomplete?
-          require 'byebug'; byebug
           log_error "Statement #{statement.inspect} is incomplete"
         elsif validate? && statement.invalid?
           log_error "Statement #{statement.inspect} is invalid"
