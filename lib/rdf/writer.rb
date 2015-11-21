@@ -406,7 +406,7 @@ module RDF
       if statement.incomplete?
         log_error "Statement #{statement.inspect} is incomplete"
       elsif validate? && statement.invalid?
-        log_error "Statement #{statement.inspect} is invalid" if validate? && statement.invalid?
+        log_error "Statement #{statement.inspect} is invalid"
       else
         write_triple(*statement.to_triple)
       end

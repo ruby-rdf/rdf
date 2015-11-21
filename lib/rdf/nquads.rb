@@ -92,7 +92,14 @@ module RDF
       # @param  [RDF::Statement] statement
       # @return [self]
       def write_statement(statement)
-        write_quad(*statement.to_quad)
+        if statement.incomplete?
+          require 'byebug'; byebug
+          log_error "Statement #{statement.inspect} is incomplete"
+        elsif validate? && statement.invalid?
+          log_error "Statement #{statement.inspect} is invalid"
+        else
+          write_quad(*statement.to_quad)
+        end
         self
       end
       alias_method :insert_statement, :write_statement # support the RDF::Writable interface

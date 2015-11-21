@@ -215,10 +215,10 @@ describe RDF::NQuads::Writer do
     describe "writing statements" do
       context "with simple triples" do
         [
-          ['<a> <b> <c> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
-          ['<a> <b> _:c .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
-          ['<a> <b> "c" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
-          ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
+          ['<http://example/a> <http://example/b> <http://example/c> .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"))],
+          ['<http://example/a> <http://example/b> _:c .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::Node.new("c"))],
+          ['<http://example/a> <http://example/b> "c" .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::Literal("c"))],
+          ['_:a <http://example/b> <http://example/c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
             expect(described_class.buffer {|w| w << statement}).to eq "#{str}\n"
@@ -228,9 +228,8 @@ describe RDF::NQuads::Writer do
 
       context "with simple quads" do
         [
-          ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::URI("d"))],
-          ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Node.new("d"))],
-          ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Literal("d"))],
+          ['<http://example/a> <http://example/b> <http://example/c> <http://example/d> .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"), graph_name: RDF::URI("http://example/d"))],
+          ['<http://example/a> <http://example/b> <http://example/c> _:d .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"), graph_name: RDF::Node.new("d"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
             expect(described_class.buffer {|w| w << statement}).to eq "#{str}\n"
@@ -243,26 +242,26 @@ describe RDF::NQuads::Writer do
   context "Writing a Graph" do
     let(:graph) {
       g = RDF::Graph.new
-      g << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')]
-      g << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'), RDF::URI('c')]
+      g << [RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o1')]
+      g << [RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o2'), RDF::URI('http://example/c')]
       g
     }
     it "#insert" do
       expect do
         described_class.new.insert(graph)
-      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+      end.to write("<http://example/s> <http://example/p> <http://example/o1> .\n<http://example/s> <http://example/p> <http://example/o2> .\n")
     end
   end
 
   context "Writing a Statements" do
     let(:statements) {[
-      RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')),
-      RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'))
+      RDF::Statement(RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o1')),
+      RDF::Statement(RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o2'))
     ]}
     it "#insert" do
       expect do
         described_class.new.insert(*statements)
-      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+      end.to write("<http://example/s> <http://example/p> <http://example/o1> .\n<http://example/s> <http://example/p> <http://example/o2> .\n")
     end
   end
 

@@ -131,13 +131,13 @@ describe 'README' do
 
         RDF::Writer.open("hello.nq") do |writer|
           writer << RDF::Repository.new do |repo|
-            repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("context"))
+            repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("http://example/context"))
           end
         end
       },
       example2: lambda {
         require 'rdf/nquads'
-        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("context"))
+        repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("http://example/context"))
         File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
       },
     }.each do |example, code|
@@ -154,7 +154,7 @@ describe 'README' do
 
         it "should produce the expected data" do
           subject
-          expect(File.read('hello.nq')).to eq %Q(_:hello <http://www.w3.org/2000/01/rdf-schema#label> "Hello, world!" <context> .\n)
+          expect(File.read('hello.nq')).to eq %Q(_:hello <http://www.w3.org/2000/01/rdf-schema#label> "Hello, world!" <http://example/context> .\n)
         end
       end
     end
