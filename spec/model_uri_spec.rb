@@ -256,8 +256,10 @@ describe RDF::URI do
 
     describe "#valid?" do
       let(:refs) {
-        %W(a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 foo %20) +
-        %W(\U00000053 Dürst)
+        %W(a d z A D Z 0 5 99 - . _ ~ ` ^ \\ \u0053 \u00D6 foo %20) +
+        %W(\u0000 \u0001 \u0002 \u0003 \u0004 \u0005 \u0006
+           \u0010 \u0020 \u003c \u003e \u0022 \u007b \u007d) +
+        %W(Dürst)
       }
       {
         ""  => "%s",
@@ -321,10 +323,10 @@ describe RDF::URI do
           end
         end
       end
-      
-      [" ", "<", ">", "'" '"'].each do |c|
-        it "does not validate <http://example/#{c}>" do
-          expect(RDF::URI("http://example/#{c}")).not_to be_valid
+
+      [" ", "<", ">", "'", '"'].each do |c|
+        it "validates <http://example/#{c}>" do
+          expect(RDF::URI("http://example/#{c}")).to be_valid
         end
       end
     end

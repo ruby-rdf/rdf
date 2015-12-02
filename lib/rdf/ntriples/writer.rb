@@ -43,7 +43,7 @@ module RDF::NTriples
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     ESCAPE_PLAIN = /\A[\x20-\x21\x23-#{Regexp.escape '['}#{Regexp.escape ']'}-\x7E]*\z/m.freeze
-    ESCAPE_ASCII = /\A[\x00-\x7F]*\z/m.freeze
+    ESCAPE_PLAIN_U = /\A(?:#{Reader::IRI_RANGE}|#{Reader::ESCAPE_CHAR})*\z/.freeze
 
     ##
     # Escape Literal and URI content. If encoding is ASCII, all unicode
@@ -64,7 +64,7 @@ module RDF::NTriples
             string.each_byte { |u| buffer << escape_ascii(u, encoding) }
             buffer.string
           end
-        when string.respond_to?(:each_char) && encoding && encoding != Encoding::ASCII
+        when encoding && encoding != Encoding::ASCII
           # Not encoding UTF-8 characters
           StringIO.open do |buffer|
             buffer.set_encoding(encoding)
@@ -245,17 +245,51 @@ module RDF::NTriples
     #   Serialize node using unique identifier, rather than any used to create the node.
     # @return [String]
     def format_node(node, options = {})
-      options[:unique_bnodes] ? node.to_unique_base : node.to_base
+      options[:unique_bnodes] ? node.to_unique_base : node.to_s
     end
 
     ##
-    # Returns the N-Triples representation of a URI reference.
+    # Returns the N-Triples representation of a URI reference using write encoding.
     #
     # @param  [RDF::URI] uri
     # @param  [Hash{Symbol => Object}] options = ({})
     # @return [String]
     def format_uri(uri, options = {})
-      uri.to_base
+      string = uri.to_s
+      iriref = case
+        when string =~ ESCAPE_PLAIN_U # a shortcut for the simple case
+          string
+        when string.ascii_only? || (encoding && encoding != Encoding::ASCII)
+          StringIO.open do |buffer|
+            buffer.set_encoding(encoding)
+            string.each_char do |u|
+              buffer << case u.ord
+                when (0x00..0x20) then self.class.escape_utf16(u)
+                when 0x3c, 0x3e, 0x22, 0x7b, 0x7d # <>"{}
+                  self.class.escape_utf16(u)
+                else u
+              end
+            end
+            buffer.string
+          end
+        else
+          # Encode ASCII && UTF-8/16 characters
+          StringIO.open do |buffer|
+            buffer.set_encoding(Encoding::ASCII)
+            string.each_byte do |u|
+              buffer << case u
+                when (0x00..0x20) then self.class.escape_utf16(u)
+                when 0x3c, 0x3e, 0x22, 0x7b, 0x7d # <>"{}
+                  self.class.escape_utf16(u)
+                when (0x80..0xFFFF)                then self.class.escape_utf16(u)
+                when (0x10000..0x10FFFF)           then self.class.escape_utf32(u)
+                else u
+              end
+            end
+            buffer.string
+          end
+      end
+      encoding ? "<#{iriref}>".encode(encoding) : "<#{iriref}>"
     end
 
     ##

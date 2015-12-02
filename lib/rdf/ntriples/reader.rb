@@ -36,9 +36,6 @@ module RDF::NTriples
     ESCAPE_CHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
     ESCAPE_CHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
     ESCAPE_CHAR           = Regexp.union(ESCAPE_CHAR4, ESCAPE_CHAR8).freeze
-    ESCAPE_SURROGATE      = /\\u([0-9A-Fa-f]{4,4})\\u([0-9A-Fa-f]{4,4})/.freeze
-    ESCAPE_SURROGATE1     = (0xD800..0xDBFF).freeze
-    ESCAPE_SURROGATE2     = (0xDC00..0xDFFF).freeze
 
 
     # Terminals from rdf-turtle.

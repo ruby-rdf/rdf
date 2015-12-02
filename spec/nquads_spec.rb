@@ -298,7 +298,7 @@ describe RDF::NQuads::Writer do
       RDF::Statement.new(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node"), graph_name: RDF.to_uri) => true,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal"), graph_name: RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
       RDF::Statement.new(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil, graph_name: RDF.to_uri) => false,
@@ -306,6 +306,10 @@ describe RDF::NQuads::Writer do
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Literal("literal")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/\\u0000'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI('scheme://auth/^'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI('scheme://auth/`'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
+      RDF::Statement.new(RDF::URI('scheme://auth/\\'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
     }.each do |st, valid|
       include_examples "validation", st, valid
     end

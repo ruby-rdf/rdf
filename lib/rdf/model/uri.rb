@@ -341,11 +341,23 @@ module RDF
     ##
     # Determine if the URI is a valid according to RFC3987
     #
+    # Note that RDF URIs syntactically can contain Unicode escapes, which are unencoded in the internal representation. To validate, %-encode specifically excluded characters from IRIREF
+    #
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      # Validate relative to RFC3987
-      to_s.match(RDF::URI::IRI) || false
+      iriref = StringIO.open do |buffer|
+        to_s.each_char do |u|
+          buffer << case u.ord
+            when (0x00..0x20) then "%%%.2x" % u.ord
+            when 0x3c, 0x3e, 0x22, 0x7b, 0x7d, 0x60, 0x5e, 0x5c # <>"{}`^\\
+              "%%%.2x" % u.ord
+            else u
+          end
+        end
+        buffer.string
+      end
+      iriref.match(RDF::URI::IRI)
     end
 
     ##
@@ -355,7 +367,7 @@ module RDF
     # @raise  [ArgumentError] if the URI is invalid
     # @since  0.3.0
     def validate!
-      raise ArgumentError, "#{to_s.inspect} is not a valid IRI" if invalid?
+      raise ArgumentError, "#{to_base.inspect} is not a valid IRI" if invalid?
       self
     end
 
@@ -788,14 +800,6 @@ module RDF
     # @return [RDF::URI] `self`
     def to_uri
       self
-    end
-
-    ##
-    # Returns the base representation of this URI.
-    #
-    # @return [Sring]
-    def to_base
-      "<#{escape(to_s)}>"
     end
 
     ##

@@ -417,14 +417,23 @@ module RDF
     end
 
     ##
-    # Returns the base representation of this URI.
+    # Escape a literal using ECHAR escapes.
     #
-    # @return [Sring]
-    def to_base
-      text = %("#{escape(value)}")
-      text << "@#{language}" if has_language?
-      text << "^^#{datatype.to_base}" if has_datatype?
-      text
+    #    ECHAR ::= '\' [tbnrf"'\]
+    #
+    # @note N-Triples only requires '\"\n\r' to be escaped.
+    #
+    # @param  [String] string
+    # @return [String]
+    # @see {RDF::Term#escape}
+    def escape(string)
+      string.gsub('\\', '\\\\').
+             gsub("\t", '\\t').
+             gsub("\b", '\\b').
+             gsub("\n", '\\n').
+             gsub("\r", '\\r').
+             gsub("\f", '\\f').
+             gsub('"', '\\"')
     end
 
     ##
