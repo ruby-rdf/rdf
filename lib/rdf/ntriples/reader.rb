@@ -51,7 +51,7 @@ module RDF::NTriples
                          [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
                        EOS
     U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]").freeze
-    IRI_RANGE        = Regexp.compile("[[^<>\"{}|^`\\\\]&&[^\\x00-\\x20]]").freeze
+    IRI_RANGE        = Regexp.compile("[[^<>\"{}][`\\\\^]&&[^\\x00-\\x20]]").freeze
 
     # 163s
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/.freeze

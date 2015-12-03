@@ -633,6 +633,9 @@ describe RDF::NTriples do
         %(<http://a/b#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8".) => %(<http://a/b#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
         %(<scheme://auth/\\u0020> <http://example.org/p> <http://example.org/o>.) => %(<scheme://auth/\\u0020> <http://example.org/p> <http://example.org/o> .),
+        %(<scheme://auth/`> <http://example.org/p> <http://example.org/o>.) => %(<scheme://auth/\\u0060> <http://example.org/p> <http://example.org/o> .),
+        %(<scheme://auth/^> <http://example.org/p> <http://example.org/o>.) => %(<scheme://auth/\\u005e> <http://example.org/p> <http://example.org/o> .),
+        %(<scheme://auth/\\> <http://example.org/p> <http://example.org/o>.) => %(<scheme://auth/\\u005c> <http://example.org/p> <http://example.org/o> .),
       }.each_pair do |src, res|
         specify src do
           stmt1 = reader.unserialize(src)
