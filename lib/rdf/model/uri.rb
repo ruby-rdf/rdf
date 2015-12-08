@@ -39,7 +39,7 @@ module RDF
       [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
       [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
       [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
-      [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
+      [\\u{D0000}-\\u{DFFFD}]|[\\u{E1000}-\\u{EFFFD}]
     EOS
     IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]").freeze
     SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*").freeze
@@ -346,18 +346,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      iriref = StringIO.open do |buffer|
-        to_s.each_char do |u|
-          buffer << case u.ord
-            when (0x00..0x20) then "%%%.2x" % u.ord
-            when 0x3c, 0x3e, 0x22, 0x7b, 0x7d, 0x60, 0x5e, 0x5c # <>"{}`^\\
-              "%%%.2x" % u.ord
-            else u
-          end
-        end
-        buffer.string
-      end
-      iriref.match(RDF::URI::IRI)
+      to_s.match(RDF::URI::IRI) || false
     end
 
     ##
