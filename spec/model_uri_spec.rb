@@ -321,7 +321,9 @@ describe RDF::URI do
           end
         end
       end
-      
+
+      %W(` ^ \\ \u0000 \u0001 \u0002 \u0003 \u0004 \u0005 \u0006
+         \u0010 \u0020 \u003c \u003e \u0022 \u007b \u007d) +
       [" ", "<", ">", "'" '"'].each do |c|
         it "does not validate <http://example/#{c}>" do
           expect(RDF::URI("http://example/#{c}")).not_to be_valid

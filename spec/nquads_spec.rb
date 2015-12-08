@@ -306,6 +306,10 @@ describe RDF::NQuads::Writer do
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
       RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Literal("literal")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/\\u0000'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/^'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/`'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/\\'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
     }.each do |st, valid|
       include_examples "validation", st, valid
     end

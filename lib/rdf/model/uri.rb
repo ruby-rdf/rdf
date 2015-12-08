@@ -39,7 +39,7 @@ module RDF
       [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
       [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
       [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
-      [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
+      [\\u{D0000}-\\u{DFFFD}]|[\\u{E1000}-\\u{EFFFD}]
     EOS
     IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]").freeze
     SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*").freeze
@@ -341,10 +341,11 @@ module RDF
     ##
     # Determine if the URI is a valid according to RFC3987
     #
+    # Note that RDF URIs syntactically can contain Unicode escapes, which are unencoded in the internal representation. To validate, %-encode specifically excluded characters from IRIREF
+    #
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      # Validate relative to RFC3987
       to_s.match(RDF::URI::IRI) || false
     end
 
@@ -355,7 +356,7 @@ module RDF
     # @raise  [ArgumentError] if the URI is invalid
     # @since  0.3.0
     def validate!
-      raise ArgumentError, "#{to_s.inspect} is not a valid IRI" if invalid?
+      raise ArgumentError, "#{to_base.inspect} is not a valid IRI" if invalid?
       self
     end
 
@@ -788,14 +789,6 @@ module RDF
     # @return [RDF::URI] `self`
     def to_uri
       self
-    end
-
-    ##
-    # Returns the base representation of this URI.
-    #
-    # @return [Sring]
-    def to_base
-      "<#{escape(to_s)}>"
     end
 
     ##

@@ -57,7 +57,7 @@ module RDF; module Util
     ##
     # Used for non-fatal errors where processing can continue. If `logger` is not configured, it logs to `$stderr`.
     #
-    # As a side-effect of setting `@logger_in_error`, which will suppress further error messages until cleared using {#recover}.
+    # As a side-effect of setting `@logger_in_error`, which will suppress further error messages until cleared using {#log_recover}.
     #
     # @overload log_error(*args, options = {}, &block)
     #   @param [Array<String>] args
@@ -192,15 +192,16 @@ module RDF; module Util
     #
     # The call is ignored, unless `@logger` or `@options[:logger]` is set, in which case it records tracing information as indicated.
     #
-    # @param [Array<String>] args Messages
-    # @param [Hash{Symbol => Object}] options
-    # @option options [Integer] :depth
-    #   Recursion depth for indenting output
-    # @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
-    # @option options [Integer] :lineno associated with message
-    # @option options [Logger, #<<] :logger
-    # @yieldreturn [String] added to message
-    # @return [void]
+    # @overload logger_common(args, options)
+    #   @param [Array<String>] args Messages
+    #   @param [Hash{Symbol => Object}] options
+    #   @option options [Integer] :depth
+    #     Recursion depth for indenting output
+    #   @option options [:fatal, :error, :warn, :info, :debug] level (:<<)
+    #   @option options [Integer] :lineno associated with message
+    #   @option options [Logger, #<<] :logger
+    #   @yieldreturn [String] added to message
+    #   @return [void]
     def logger_common(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
       level = options[:level]
