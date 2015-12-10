@@ -59,12 +59,17 @@ module RDF
   # Use const_missing instead of autoload to load most vocabularies so we can provide deprecation messages
   def self.const_missing(constant)
     if VOCABS.include?(constant.to_s.downcase.to_sym)
+      @vocab_fault ||= {}
+      raise "Class not found: RDF::#{constant}" if @vocab_fault[constant.to_s]
+      @vocab_fault[constant.to_s] = true
       warn %([DEPRECATION] the #{constant} vocabulary will be moved to the rdf-vocab gem
         for the RDF.rb 2.0 release. Use as RDF::Vocab::#{constant}, or include RDF::Vocab in the RDF module.
         Called from #{Gem.location_of_caller.join(':')}
       ).gsub(/^\s+/, '') unless [:OWL, :RDFS, :RDFV, :XSD].include?(constant)
       require "rdf/vocab/#{constant.to_s.downcase}"
-      const_get(constant)
+      klass = const_get(constant)
+      return klass if klass
+      raise "Class not found: RDF::#{constant}"
     else
       super
     end
