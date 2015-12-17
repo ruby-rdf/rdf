@@ -56,6 +56,9 @@ module RDF
   autoload :StrictVocabulary,  'rdf/vocabulary'
   VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
 
+  # Ruby versions < 2.0 are deprecated in RDF.rb 2.0
+  warn %([DEPRECATION] Ruby versions before 2.0 are no longer supported starting with RDF.rb 2.0.) if RUBY_VERSION < "2.0"
+
   # Use const_missing instead of autoload to load most vocabularies so we can provide deprecation messages
   def self.const_missing(constant)
     if VOCABS.include?(constant.to_s.downcase.to_sym)
