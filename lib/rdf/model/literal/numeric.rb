@@ -211,6 +211,8 @@ module RDF; class Literal
     # @return [BigDecimal]
     def to_d
       @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
+    rescue FloatDomainError
+      ::Float::NAN
     end
 
     ##
