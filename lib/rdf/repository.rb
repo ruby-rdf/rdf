@@ -369,7 +369,7 @@ module RDF
       # Match elements with eql?, not ==
       # Context of `false` matches default graph. Unbound variable matches non-false graph name
       # @private
-      # @see RDF::Queryable#query
+      # @see RDF::Queryable#query_pattern
       def query_pattern(pattern, options = {}, &block)
         if block_given?
           graph_name  = pattern.graph_name
