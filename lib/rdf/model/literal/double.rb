@@ -66,6 +66,21 @@ module RDF; class Literal
     end
 
     ##
+    # Returns `true` if this literal is equal to `other`.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def ==(other)
+      if valid? && infinite? && other.respond_to?(:infinite?) && other.infinite?
+        infinite? == other.infinite?
+        # JRuby INF comparisons differ from MRI
+      else
+        super
+      end
+    end
+
+    ##
     # Compares this literal to `other` for sorting purposes.
     #
     # @param  [Object] other
