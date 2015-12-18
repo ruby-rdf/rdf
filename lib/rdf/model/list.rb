@@ -27,7 +27,7 @@ module RDF
     # @param  [Array<RDF::Term>] values
     # @return [RDF::List]
     def self.[](*values)
-      self.new(nil, nil, values)
+      self.new(subject: nil, graph: nil, values: values)
     end
 
     ##
@@ -49,21 +49,32 @@ module RDF
     #     g.count # => l.count
     #
     # @overload initialize(subject = nil, graph = nil, values = nil, &block)
-    #   @param  [RDF::URI]          subject
+    #   @param  [RDF::Resource]          subject
+    #     Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
     #   @param  [RDF::Graph]        graph
     #   @param  [Array<RDF::Term>]  values
     #     Any values which are not terms are coerced to `RDF::Literal`.
     #   @yield  [list]
     #   @yieldparam [RDF::List] list
+    #   @deprecated This form is deprecated in version 2.0
+    #
+    # @overload initialize(subjec: nil, graph: nil, values: nil, &block)
+    #   @param  [RDF::Resource]         subject (RDF.nil)
     #     Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
-    # @overload initialize(subject = nil, graph = nil, values = nil, &block)
-    #   @param  [RDF::Node]         subject (RDF.nil)
     #   @param  [RDF::Graph]        graph (RDF::Graph.new)
     #   @param  [Array<RDF::Term>]  values
     #     Any values which are not terms are coerced to `RDF::Literal`.
     #   @yield  [list]
     #   @yieldparam [RDF::List] list
-    def initialize(subject = nil, graph = nil, values = nil, &block)
+    #   @deprecated This form is deprecated in version 2.0
+    #
+    def initialize(*args, subject: nil, graph: nil, values: nil, &block)
+      unless args.empty?
+        warn "[DEPRECATION] List#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
+        subject ||= args[0]
+        graph ||= args[1]
+        values ||= args[2]
+      end
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
       is_empty = @graph.query(subject: subject, predicate: RDF.first).empty?
@@ -95,7 +106,7 @@ module RDF
     UNSET = Object.new.freeze # @private
 
     # The canonical empty list.
-    NIL = RDF::List.new(RDF.nil).freeze
+    NIL = RDF::List.new(subject: RDF.nil).freeze
 
     ##
     # Validate the list ensuring that
@@ -327,7 +338,7 @@ module RDF
       # Clear the list and create a new list using the existing subject
       subject = @subject unless ary.empty? || @subject == RDF.nil
       self.clear
-      new_list = RDF::List.new(subject, @graph, ary)
+      new_list = RDF::List.new(subject: subject, graph: @graph, values: ary)
       @subject = new_list.subject
       ret # Returns inserted values
     end
@@ -347,7 +358,7 @@ module RDF
       value = case value
         when nil         then RDF.nil
         when RDF::Term   then value
-        when Array       then RDF::List.new(nil, graph, value)
+        when Array       then RDF::List.new(subject: nil, graph: graph, values: value)
         else value
       end
 
@@ -410,7 +421,7 @@ module RDF
       value = case value
         when nil         then RDF.nil
         when RDF::Value  then value
-        when Array       then RDF::List.new(nil, graph, value)
+        when Array       then RDF::List.new(subject: nil, graph: graph, values: value)
         else value
       end
 
@@ -709,7 +720,7 @@ module RDF
     #
     # @return [RDF::List]
     def rest
-      (subject = rest_subject).eql?(RDF.nil) ? nil : self.class.new(subject, graph)
+      (subject = rest_subject).eql?(RDF.nil) ? nil : self.class.new(subject: subject, graph: graph)
     end
 
     ##
@@ -720,7 +731,7 @@ module RDF
     #
     # @return [RDF::List]
     def tail
-      (subject = last_subject).eql?(RDF.nil) ? nil : self.class.new(subject, graph)
+      (subject = last_subject).eql?(RDF.nil) ? nil : self.class.new(subject: subject, graph: graph)
     end
 
     ##
