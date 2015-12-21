@@ -69,16 +69,16 @@ module RDF
     ##
     # Loads one or more RDF files into a new transient in-memory repository.
     #
-    # @param  [String, Array<String>] filenames
+    # @param  [String, Array<String>] urls
     # @param  [Hash{Symbol => Object}] options
     #   Options from {RDF::Repository#initialize} and {RDF::Mutable#load}
     # @yield  [repository]
     # @yieldparam [Repository]
     # @return [void]
-    def self.load(filenames, options = {}, &block)
+    def self.load(urls, options = {}, &block)
       self.new(options) do |repository|
-        Array(filenames).each do |filename|
-          repository.load(filename, options)
+        Array(urls).each do |url|
+          repository.load(url, options)
         end
 
         if block_given?
@@ -93,21 +93,23 @@ module RDF
     ##
     # Initializes this repository instance.
     #
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [URI, #to_s]    :uri (nil)
-    # @option options [String, #to_s] :title (nil)
-    # @option options [Boolean] :with_graph_name (true)
+    # @param [URI, #to_s]    uri (nil)
+    # @param [String, #to_s] title (nil)
+    # @param [Hash{Symbol => Object}] options
+    # @option options [Boolean]       :with_graph_name (true)
     #   Indicates that the repository supports named graphs, otherwise,
     #   only the default graph is supported.
+    # @option options [Boolean]       :with_validity (true)
+    #   Indicates that the repository supports named validation.
     # @yield  [repository]
     # @yieldparam [Repository] repository
-    def initialize(options = {}, &block)
+    def initialize(url: nil, title: nil, **options, &block)
       if options[:with_context]
         raise ArgumentError, "The :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:with_context)
       end
-      @options = {with_graph_name: true}.merge(options)
+      @options = {with_graph_name: true, with_validity: true}.merge(options)
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
 
@@ -126,7 +128,7 @@ module RDF
     # @private
     # @see RDF::Enumerable#project_graph
     def project_graph(graph_name, &block)
-      RDF::Graph.new(graph_name ? graph_name : nil, data: self).
+      RDF::Graph.new(graph_name: graph_name, data: self).
         project_graph(graph_name, &block)
     end
 
@@ -357,7 +359,7 @@ module RDF
       def each_graph(&block)
         if block_given?
           @data.each_key do |gn|
-            yield RDF::Graph.new(gn == DEFAULT_GRAPH ? nil : gn, data: self)
+            yield RDF::Graph.new(graph_name: (gn == DEFAULT_GRAPH ? nil : gn), data: self)
           end
         end
         enum_graph

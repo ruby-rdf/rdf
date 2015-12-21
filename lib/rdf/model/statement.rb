@@ -391,7 +391,7 @@ module RDF
         warn "[DEPRECATION] the :contexts option to Statement#reified is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
-      RDF::Graph.new(options[:graph_name]) do |graph|
+      RDF::Graph.new(graph_name: options[:graph_name]) do |graph|
         subject = options[:subject] || RDF::Node.new(options[:id])
         graph << [subject, RDF.type,      RDF[:Statement]]
         graph << [subject, RDF.subject,   self.subject]

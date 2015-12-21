@@ -27,7 +27,7 @@ module RDF
   #   require 'rdf/trig'  # for TriG support
   #
   #   repository = graph = RDF::Repository.load("https://raw.githubusercontent.com/ruby-rdf/rdf-trig/develop/etc/doap.trig", format: :trig))
-  #   graph = RDF::Graph.new(RDF::URI("http://greggkellogg.net/foaf#me"), data: repository)
+  #   graph = RDF::Graph.new(graph_name: RDF::URI("http://greggkellogg.net/foaf#me"), data: repository)
   class Graph
     include RDF::Value
     include RDF::Countable
@@ -75,36 +75,18 @@ module RDF
     # Creates a new `Graph` instance populated by the RDF data returned by
     # dereferencing the given graph_name Resource.
     #
-    # @overload self.load(url, options = {})
-    #   @param  [String, #to_s]          url
-    #   @param  [Hash{Symbol => Object}] options
-    #     Options from {RDF::Reader.open}
-    #   @option options [RDF::Resource] :graph_name
-    #     Set set graph name of each loaded statement
-    #   @deprecated This form is deprecated in version 2.0
-    #
-    # @overload self.load(url:, **options)
-    #   @param  [String, #to_s] url
-    #   @param  [RDF::Resource] graph_name
-    #     Set set graph name of each loaded statement
-    #   @param  [Hash{Symbol => Object}] options
-    #     Options from {RDF::Reader.open}
-    #
+    # @param  [String, #to_s] url
+    # @param  [RDF::Resource] graph_name
+    #   Set set graph name of each loaded statement
+    # @param  [Hash{Symbol => Object}] options
+    #   Options from {RDF::Reader.open}
     # @yield  [graph]
     # @yieldparam [Graph] graph
     # @return [Graph]
     # @since  0.1.7
-    def self.load(*args, url: nil, graph_name: nil, **options, &block)
-      if args.empty?
-        # This won't be necessary when *args is removed, when url is mandatory
-        raise ArgumentError, "missing keyword: url" unless url
-      else
-        warn "[DEPRECATION] Graph.load now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-        url ||= args.first
-      end
-
+    def self.load(url, graph_name: nil, **options, &block)
       self.new(graph_name: graph_name, **options) do |graph|
-        graph.load(url: url, graph_name: graph_name, **options)
+        graph.load(url, graph_name: graph_name, **options)
 
         if block_given?
           case block.arity
@@ -184,7 +166,7 @@ module RDF
       case
         when args.empty?
           raise ArgumentError, "Can't reload graph without a graph_name" unless graph_name.is_a?(RDF::URI)
-          load(url: graph_name.to_s, base_uri: graph_name)
+          load(graph_name.to_s, base_uri: graph_name)
         else super
       end
     end

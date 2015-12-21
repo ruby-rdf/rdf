@@ -736,7 +736,7 @@ module RDF
     # @since  0.1.9
     def each_graph
       if block_given?
-        yield RDF::Graph.new(nil, data: self)
+        yield RDF::Graph.new(graph_name: nil, data: self)
         # FIXME: brute force, repositories should override behavior
         if supports?(:graph_name)
           enum_statement.map(&:graph_name).uniq.compact.each do |graph_name|

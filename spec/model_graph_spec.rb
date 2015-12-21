@@ -5,19 +5,12 @@ describe RDF::Graph do
   describe ".load" do
     it "creates an unnamed graph" do
       expect(described_class).to receive(:new).with(graph_name: nil, base_uri: "http://example/")
-      described_class.load(url: "http://example/", base_uri: "http://example/")
+      described_class.load("http://example/", base_uri: "http://example/")
     end
 
     it "loads into an unnamed graph" do
-      expect_any_instance_of(described_class).to receive(:load).with(url: "http://example/", graph_name: nil, base_uri: "http://example/")
-      described_class.load(url: "http://example/", base_uri: "http://example/")
-    end
-
-    it "creates an unnamed graph with positional arg (DEPRECATED)" do
-      expect {
-        expect(described_class).to receive(:new).with(graph_name: nil, base_uri: "http://example/")
-        described_class.load("http://example/", base_uri: "http://example/")
-      }.to write('[DEPRECATION]').to(:error)
+      expect_any_instance_of(described_class).to receive(:load).with("http://example/", graph_name: nil, base_uri: "http://example/")
+      described_class.load("http://example/", base_uri: "http://example/")
     end
   end
 
@@ -114,7 +107,7 @@ describe RDF::Graph do
 
     it "should reload named graph" do
       graph = described_class.new(graph_name: RDF::URI("http://example/doc.nt"), data: repo)
-      expect(graph).to receive(:load).with(url: "http://example/doc.nt", base_uri: "http://example/doc.nt")
+      expect(graph).to receive(:load).with("http://example/doc.nt", base_uri: "http://example/doc.nt")
       graph.load!
     end
 
@@ -169,7 +162,7 @@ describe RDF::Graph do
       expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
-      graph = described_class.load(url: "http://www.bbc.co.uk/programmes/b0081dq5.rdf")
+      graph = described_class.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
       expect(graph).not_to be_empty
     end
   end

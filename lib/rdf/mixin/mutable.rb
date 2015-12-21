@@ -31,31 +31,13 @@ module RDF
     ##
     # Loads RDF statements from the given file or URL into `self`.
     #
-    # @overload load(url, options = {})
-    #   @param  [String, #to_s]          url
-    #   @param  [Hash{Symbol => Object}] options
-    #     Options from {RDF::Reader.open}
-    #   @option options [RDF::Resource] :graph_name
-    #     Set set graph name of each loaded statement
-    #   @return [void]
-    #   @deprecated This form is deprecated in version 2.0
-    #
-    # @overload load(url:, **options)
-    #   @param  [String, #to_s] url
-    #   @param  [RDF::Resource] graph_name
-    #     Set set graph name of each loaded statement
-    #   @param  [Hash{Symbol => Object}] options
-    #     Options from {RDF::Reader.open}
-    #   @return [void]
-    def load(*args, url: nil, graph_name: nil, **options)
-      if args.empty?
-        # This won't be necessary when *args is removed, when url is mandatory
-        raise ArgumentError, "missing keyword: url" unless url
-      else
-        warn "[DEPRECATION] Mutable#load now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-        url ||= args.first
-      end
-
+    # @param  [String, #to_s]          url
+    # @param  [Hash{Symbol => Object}] options
+    #   Options from {RDF::Reader.open}
+    # @option options [RDF::Resource] :graph_name
+    #   Set set graph name of each loaded statement
+    # @return [void]
+     def load(url, graph_name: nil, **options)
       if options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
