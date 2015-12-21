@@ -42,15 +42,14 @@ module RDF
     ##
     # Initializes this changeset.
     #
-    # @param  [Hash{Symbol => Object}]  options
-    # @option options [RDF::Enumerable] :insert (RDF::Graph.new)
-    # @option options [RDF::Enumerable] :delete (RDF::Graph.new)
+    # @param [RDF::Enumerable] insert (RDF::Graph.new)
+    # @param [RDF::Enumerable] delete (RDF::Graph.new)
     # @yield  [changes]
     # @yieldparam [RDF::Changeset] changes
-    def initialize(options = {}, &block)
+    def initialize(insert: RDF::Graph.new, delete: RDF::Graph.new, &block)
       @options = options.dup
-      @inserts = @options.delete(:insert) || RDF::Graph.new
-      @deletes = @options.delete(:delete) || RDF::Graph.new
+      @inserts = insert
+      @deletes = delete
 
       @inserts.extend(RDF::Enumerable) unless @inserts.kind_of?(RDF::Enumerable)
       @deletes.extend(RDF::Enumerable) unless @deletes.kind_of?(RDF::Enumerable)

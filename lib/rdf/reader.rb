@@ -126,20 +126,20 @@ module RDF
     #   end
     #
     # @param  [String, #to_s] filename
+    # @param [Symbol] format
     # @param  [Hash{Symbol => Object}] options
     #   any additional options (see {RDF::Util::File.open_file}, {RDF::Reader#initialize} and {RDF::Format.for})
-    # @option options [Symbol] :format (:ntriples)
     # @yield  [reader]
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
     # @raise  [RDF::FormatError] if no reader found for the specified format
-    def self.open(filename, options = {}, &block)
+    def self.open(filename, format: nil, **options, &block)
       Util::File.open_file(filename, options) do |file|
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
         options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
-        reader = self.for(format_options[:format] || format_options) do
+        reader = self.for(format || format_options) do
           # Return a sample from the input file
           sample = file.read(1000)
           file.rewind
