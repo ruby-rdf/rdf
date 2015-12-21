@@ -180,8 +180,10 @@ module RDF
   def self.Statement(*args)
     if args.empty?
       RDF[:Statement]
+    elsif args.length == 1 && args.first.is_a?(Hash)
+      Statement.from(args.first)
     else
-      Statement.new(*args)
+      Statement.from(args)
     end
   end
 

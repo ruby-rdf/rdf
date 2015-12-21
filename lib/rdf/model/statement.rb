@@ -34,8 +34,14 @@ module RDF
     def self.from(statement, options = {})
       case statement
         when Array, Query::Pattern
-          graph_name = statement[3] == false ? nil : statement[3]
-          self.new(statement[0], statement[1], statement[2], options.merge(graph_name: graph_name))
+          graph_name = case statement[3]
+          when false then nil
+          when Hash  then statement[3][:graph_name]
+          else            statement[3]
+          end
+          options = options.merge(subject: statement[0], predicate: statement[1], object: statement[2])
+          options[:graph_name] = graph_name unless graph_name.nil?
+          self.new(options)
         when Statement then statement
         when Hash      then self.new(options.merge(statement))
         else raise ArgumentError, "expected RDF::Statement, Hash, or Array, but got #{statement.inspect}"
@@ -43,6 +49,7 @@ module RDF
     end
 
     # @return [Object]
+    # @deprecated
     attr_accessor :id
 
     # @return [RDF::Resource]
@@ -82,46 +89,35 @@ module RDF
     attr_accessor :object
 
     ##
-    # @overload initialize(options = {})
-    #   @param  [Hash{Symbol => Object}] options
-    #   @option options [RDF::Term]  :subject   (nil)
+    # @overload initialize(subject, predicate, object, graph_name, **options)
+    #   @param  [RDF::Term]      subject
     #     A symbol is converted to an interned {Node}.
-    #   @option options [RDF::URI]       :predicate (nil)
-    #   @option options [RDF::Resource]      :object    (nil)
-    #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
-    #   @option options [RDF::Term]  :graph_name   (nil)
-    #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
-    #   @return [RDF::Statement]
-    #
-    # @overload initialize(subject, predicate, object, options = {})
-    #   @param  [RDF::Term]          subject
-    #     A symbol is converted to an interned {Node}.
-    #   @param  [RDF::URI]               predicate
-    #   @param  [RDF::Resource]              object
+    #   @param  [RDF::URI]       predicate
+    #   @param  [RDF::Resource]  object
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @return [RDF::Statement]
-    def initialize(subject = nil, predicate = nil, object = nil, options = {})
-      if subject.is_a?(Hash)
-        @options   = Hash[subject] # faster subject.dup
-        @subject   = @options.delete(:subject)
-        @predicate = @options.delete(:predicate)
-        @object    = @options.delete(:object)
+    def initialize(*args, subject: nil, predicate: nil, object: nil, graph_name: nil, **options)
+      unless args.empty?
+        warn "[DEPRECATION] Statement#initialize now takes keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
+        @subject, @predicate, @object = *args
+        @object ||= RDF::URI(options) if options.has_key?(:scheme) # sometimes this gets eaten
+        @graph_name = graph_name
       else
-        @options   = !options.empty? ? Hash[options] : {}
-        @subject   = subject
-        @predicate = predicate
-        @object    = object
+        @subject, @predicate, @object, @graph_name = subject, predicate, object, graph_name
       end
-      if @options.has_key?(:context)
+      if options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Statement#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Statement#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        @options[:graph_name] ||= @options.delete(:context)
+        @graph_name ||= options.delete(:context)
       end
-      @id          = @options.delete(:id) if @options.has_key?(:id)
-      @graph_name  = @options.delete(:graph_name)
+      if options.has_key?(:id)
+        raise ArgumentError, "The :id option to Statement#initialize is deprecated in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
+        warn "[DEPRECATION] the :id option to Statement#initialize is deprecated in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
+        @id          = options.delete(:id) if options.has_key?(:id)
+      end
       initialize!
     end
 

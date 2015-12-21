@@ -304,7 +304,7 @@ module RDF
               ps.dup.each do |p, os|
                 os.dup.each do |o|
                   # FIXME: yield has better performance, but broken in MRI 2.2: See https://bugs.ruby-lang.org/issues/11451.
-                  block.call(RDF::Statement.new(s, p, o, graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g))
+                  block.call(RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g))
                 end
               end
             end
@@ -404,7 +404,7 @@ module RDF
                 os.each do |o|
                   next unless object.nil? || object.eql?(o)
                   # FIXME: yield has better performance, but broken in MRI 2.2: See https://bugs.ruby-lang.org/issues/11451.
-                  block.call(RDF::Statement.new(s, p, o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c))
+                  block.call(RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c))
                 end
               end
             end

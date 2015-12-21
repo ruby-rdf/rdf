@@ -145,7 +145,7 @@ appropriate writer to use.
 
     RDF::Writer.open("hello.nq", format: :nquads) do |writer|
       writer << RDF::Repository.new do |repo|
-        repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", context: RDF::URI("http://example/context"))
+        repo << RDF::Statement.new(subject: :hello, predicate: RDF::RDFS.label, object: "Hello, world!", graph_name: RDF::URI("http://example/context"))
       end
     end
 
@@ -153,7 +153,7 @@ A specific sub-type of Writer can also be invoked directly:
 
     require 'rdf/nquads'
 
-    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", context: RDF::URI("http://example/context"))
+    repo = RDF::Repository.new << RDF::Statement.new(bject: :hello, predicate: RDF::RDFS.label, object: "Hello, world!", graph_name: RDF::URI("http://example/context"))
     File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods

@@ -147,10 +147,10 @@ describe RDF::NQuads::Reader do
 
   context "with simple triples" do
     [
-      ['<a> <b> <c> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
-      ['<a> <b> _:c .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
-      ['<a> <b> "c" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
-      ['_:a <b> <c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
+      ['<a> <b> <c> .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
+      ['<a> <b> _:c .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
+      ['<a> <b> "c" .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
+      ['_:a <b> <c> .', RDF::Statement(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
         graph = RDF::Graph.new << described_class.new(str)
@@ -162,9 +162,9 @@ describe RDF::NQuads::Reader do
 
   context "with simple quads" do
     [
-      ['<a> <b> <c> <d> .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::URI("d"))],
-      ['<a> <b> <c> _:d .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Node.new("d"))],
-      ['<a> <b> <c> "d" .', RDF::Statement.new(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Literal("d"))],
+      ['<a> <b> <c> <d> .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::URI("d"))],
+      ['<a> <b> <c> _:d .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Node.new("d"))],
+      ['<a> <b> <c> "d" .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Literal("d"))],
     ].each do |(str, statement)|
       it "parses #{str.inspect}" do
         graph = RDF::Graph.new << described_class.new(str)
@@ -215,10 +215,10 @@ describe RDF::NQuads::Writer do
     describe "writing statements" do
       context "with simple triples" do
         [
-          ['<http://example/a> <http://example/b> <http://example/c> .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"))],
-          ['<http://example/a> <http://example/b> _:c .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::Node.new("c"))],
-          ['<http://example/a> <http://example/b> "c" .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::Literal("c"))],
-          ['_:a <http://example/b> <http://example/c> .', RDF::Statement.new(RDF::Node.new("a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"))],
+          ['<http://example/a> <http://example/b> <http://example/c> .', RDF::Statement(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"))],
+          ['<http://example/a> <http://example/b> _:c .', RDF::Statement(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::Node.new("c"))],
+          ['<http://example/a> <http://example/b> "c" .', RDF::Statement(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::Literal("c"))],
+          ['_:a <http://example/b> <http://example/c> .', RDF::Statement(RDF::Node("a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
             expect(described_class.buffer {|w| w << statement}).to eq "#{str}\n"
@@ -228,8 +228,8 @@ describe RDF::NQuads::Writer do
 
       context "with simple quads" do
         [
-          ['<http://example/a> <http://example/b> <http://example/c> <http://example/d> .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"), graph_name: RDF::URI("http://example/d"))],
-          ['<http://example/a> <http://example/b> <http://example/c> _:d .', RDF::Statement.new(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"), graph_name: RDF::Node.new("d"))],
+          ['<http://example/a> <http://example/b> <http://example/c> <http://example/d> .', RDF::Statement(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"), graph_name: RDF::URI("http://example/d"))],
+          ['<http://example/a> <http://example/b> <http://example/c> _:d .', RDF::Statement(RDF::URI("http://example/a"), RDF::URI("http://example/b"), RDF::URI("http://example/c"), graph_name: RDF::Node.new("d"))],
         ].each do |(str, statement)|
           it "writes #{str.inspect}" do
             expect(described_class.buffer {|w| w << statement}).to eq "#{str}\n"
@@ -293,23 +293,23 @@ describe RDF::NQuads::Writer do
     end
 
     {
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Node("node")) => true,
-      RDF::Statement.new(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node"), graph_name: RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal"), graph_name: RDF.to_uri) => true,
-      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil, graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Literal("literal")) => false,
-      RDF::Statement.new(RDF::URI('scheme://auth/\\u0000'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(RDF::URI('scheme://auth/^'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI('scheme://auth/`'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
-      RDF::Statement.new(RDF::URI('scheme://auth/\\'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Node("node")) => true,
+      RDF::Statement(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => true,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node"), graph_name: RDF.to_uri) => true,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal"), graph_name: RDF.to_uri) => true,
+      RDF::Statement(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil, graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF::Literal("literal")) => false,
+      RDF::Statement(RDF::URI('scheme://auth/\\u0000'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement(RDF::URI('scheme://auth/^'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI('scheme://auth/`'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
+      RDF::Statement(RDF::URI('scheme://auth/\\'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self"), graph_name: RDF.to_uri) => false,
     }.each do |st, valid|
       include_examples "validation", st, valid
     end
@@ -329,17 +329,17 @@ describe RDF::NQuads::Writer do
     end
 
     {
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")) =>
-        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")),
-      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
-      RDF::Statement.new(nil, RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, nil) => nil,
-      RDF::Statement.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")) =>
+        RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")),
+      RDF::Statement(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
+      RDF::Statement(nil, RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, nil) => nil,
+      RDF::Statement(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
     }.each do |st, result|
       include_examples "c14n", st, result
     end

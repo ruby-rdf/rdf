@@ -6,19 +6,19 @@ describe RDF::Query::Pattern do
 
     describe ".from" do
       it "creates using triple array" do
-        expect(described_class.from([:s, :p, :o])).to eq described_class.new(:s, :p, :o)
+        expect(described_class.from([:s, :p, :o])).to eq described_class.new(subject: :s, predicate: :p, object: :o)
       end
 
       it "creates using hash" do
-        expect(described_class.from(subject: :s, predicate: :p, object: :o)).to eq described_class.new(:s, :p, :o)
+        expect(described_class.from(subject: :s, predicate: :p, object: :o)).to eq described_class.new(subject: :s, predicate: :p, object: :o)
       end
 
       it "creates using quad array" do
-        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(:s, :p, :o, graph_name: :c)
+        expect(described_class.from([:s, :p, :o, :c])).to eq described_class.new(subject: :s, predicate: :p, object: :o, graph_name: :c)
       end
 
       it "creates using hash" do
-        expect(described_class.from(subject: :s, predicate: :p, object: :o, graph_name: :c)).to eq described_class.new(:s, :p, :o, graph_name: :c)
+        expect(described_class.from(subject: :s, predicate: :p, object: :o, graph_name: :c)).to eq described_class.new(subject: :s, predicate: :p, object: :o, graph_name: :c)
       end
     end
 
@@ -50,7 +50,7 @@ describe RDF::Query::Pattern do
 
   context "with one bound variable" do
     let(:s) {RDF::Query::Variable.new(:s, true)}
-    subject {described_class.new(s)}
+    subject {described_class.new(subject: s)}
 
     specify {expect(subject).not_to be_constant}
     specify {expect(subject).to be_variable}
@@ -88,7 +88,7 @@ describe RDF::Query::Pattern do
     let(:s) {RDF::Query::Variable.new(:s, true)}
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
-    subject {described_class.new(s, p, o)}
+    subject {described_class.new(subject: s, predicate: p, object: o)}
 
     specify {expect(subject).not_to be_constant}
     specify {expect(subject).to be_variable}
@@ -127,12 +127,12 @@ describe RDF::Query::Pattern do
     let(:p) {RDF::Query::Variable.new(:p, true)}
     let(:o) {RDF::Query::Variable.new(:o, true)}
     it "uses a variable for a symbol" do
-      pattern = described_class.new(s, p, o, graph_name: :c)
+      pattern = described_class.new(subject: s, predicate: p, object: o, graph_name: :c)
       expect(pattern.graph_name).to eq RDF::Query::Variable.new(:c)
     end
 
     it "uses a constant for :default" do
-      pattern = described_class.new(s, p, o, graph_name: false)
+      pattern = described_class.new(subject: s, predicate: p, object: o, graph_name: false)
       expect(pattern.graph_name).to eq false
     end
   end
@@ -141,7 +141,7 @@ describe RDF::Query::Pattern do
     let(:s) {RDF::Query::Variable.new(:s)}
     let(:p) {RDF::Query::Variable.new(:p)}
     let(:o) {RDF::Query::Variable.new(:o)}
-    subject {described_class.new(s, p, o)}
+    subject {described_class.new(subject: s, predicate: p, object: o)}
 
     specify {expect(subject).not_to be_constant}
     specify {expect(subject).to be_variable}
@@ -162,16 +162,16 @@ describe RDF::Query::Pattern do
 
   context "validataion" do
     {
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => true,
-      described_class.new(:var, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), :var, RDF::URI("http://ar.to/#self")) => true,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var) => true,
-      described_class.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
-      described_class.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(subject: nil, predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: nil, object: RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: nil) => true,
+      described_class.new(subject: :var, predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: :var, object: RDF::URI("http://ar.to/#self")) => true,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: :var) => true,
+      described_class.new(subject: RDF::Literal("literal"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Node("node"), object: RDF::URI("http://ar.to/#self")) => false,
+      described_class.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Literal("literal"), object: RDF::URI("http://ar.to/#self")) => false,
     }.each do |st, valid|
       context "given #{st}" do
         if valid
@@ -198,7 +198,7 @@ describe RDF::Query::Pattern do
   context "Examples" do
     let!(:repo) {RDF::Repository.new {|r| r.insert(RDF::Spec.triples.extend(RDF::Enumerable))}}
     let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}
-    let(:pattern) {described_class.new(:s, :p, :o)}
+    let(:pattern) {described_class.new(subject: :s, predicate: :p, object: :o)}
     subject {pattern}
     describe "#execute" do
       it "executes query against repo" do
@@ -215,15 +215,34 @@ describe RDF::Query::Pattern do
 
     describe "#variable_terms" do
       it "has term" do
-        expect(described_class.new(RDF::Node.new, :p, 123).variable_terms).to eq([:predicate])
+        expect(described_class.new(subject: RDF::Node.new, predicate: :p, object: 123).variable_terms).to eq([:predicate])
       end
     end
 
     describe "#optional" do
       specify {
-        expect(described_class.new(:s, :p, :o)).to_not be_optional
-        expect(described_class.new(:s, :p, :o, optional: true)).to be_optional
+        expect(described_class.new(subject: :s, predicate: :p, object: :o)).to_not be_optional
+        expect(described_class.new(subject: :s, predicate: :p, object: :o, optional: true)).to be_optional
       }
+    end
+  end
+
+  describe "1.99 deprecation" do
+    let(:s) {RDF::Query::Variable.new(:s, true)}
+    let(:p) {RDF::Query::Variable.new(:p, true)}
+    let(:o) {RDF::Query::Variable.new(:o, true)}
+    let(:c) {RDF::Query::Variable.new(:c, true)}
+
+    it "#initialize expects DEPRECATION when used with positional arguments" do
+      expect do
+        expect(RDF::Query::Pattern.new(s, p, o)).to eql RDF::Query::Pattern.new(subject: s, predicate: p, object: o)
+      end.to write("DEPRECATION").to(:error)
+    end
+
+    it "#initialize expects DEPRECATION when used with positional arguments with graph_name" do
+      expect do
+        expect(RDF::Query::Pattern.new(s, p, o, graph_name: c)).to eql RDF::Query::Pattern.new(subject: s, predicate: p, object: o, graph_name: c)
+      end.to write("DEPRECATION").to(:error)
     end
   end
 end
