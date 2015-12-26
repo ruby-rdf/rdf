@@ -740,7 +740,7 @@ module RDF
         # FIXME: brute force, repositories should override behavior
         if supports?(:graph_name)
           enum_statement.map(&:graph_name).uniq.compact.each do |graph_name|
-            yield RDF::Graph.new(graph_name, data: self)
+            yield RDF::Graph.new(graph_name: graph_name, data: self)
           end
         end
       end
