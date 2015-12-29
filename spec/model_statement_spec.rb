@@ -4,7 +4,7 @@ describe RDF::Statement do
   let(:s) {RDF::URI.new("http://rubygems.org/gems/rdf")}
   let(:p) {RDF::URI("http://purl.org/dc/terms/creator")}
   let(:o) {RDF::URI.new("http://ar.to/#self")}
-  let(:stmt) {RDF::Statement.new(subject: s, predicate: p, object: o)}
+  let(:stmt) {RDF::Statement.new(s, p, o)}
   subject {stmt}
 
   context "when initializing" do
@@ -22,10 +22,19 @@ describe RDF::Statement do
       expect(original_hash).to eq hash
     end
 
+    it "should not alter its options argument" do
+      options = { graph_name: RDF::URI("URI:http://usefulinc.com/ns/doap#name") }
+      original_options = options.dup
+      RDF::Statement.new(s, p, o, options)
+      expect(options).to eq original_options
+    end
+
     context "allows arguments to be term or implement #to_term" do
       [
         {subject: RDF::List("foo"), predicate: RDF::URI("p"), object: RDF::URI("o")},
         {subject: RDF::URI("s"), predicate: RDF::URI("p"), object: RDF::List("foo")},
+        [RDF::List("foo"), RDF::URI("p"), RDF::URI("o")],
+        [RDF::URI("s"), RDF::URI("p"), RDF::List("foo")],
       ].each do |arg|
         if arg.is_a?(Array)
           specify {expect{RDF::Statement.new(*arg)}.not_to raise_error}
@@ -39,8 +48,14 @@ describe RDF::Statement do
       [
         {subject: RDF::Graph.new, predicate: RDF::URI("p"), object: RDF::URI("o")},
         {subject: RDF::URI("s"), predicate: RDF::URI("p"), object: RDF::Graph.new},
+        [RDF::Graph.new, RDF::URI("p"), RDF::URI("o")],
+        [RDF::URI("s"), RDF::URI("p"), RDF::Graph.new],
       ].each do |arg|
-        specify {expect{RDF::Statement.new(arg)}.to raise_error(NotImplementedError)}
+        if arg.is_a?(Array)
+          specify {expect{RDF::Statement.new(*arg)}.to raise_error(NotImplementedError)}
+        else
+          specify {expect{RDF::Statement.new(arg)}.to raise_error(NotImplementedError)}
+        end
       end
     end
   end
@@ -62,23 +77,23 @@ describe RDF::Statement do
   end
 
   context "when created with a blank node subject" do
-    subject {RDF::Statement.new(subject: RDF::Node.new, predicate: p, object: o)}
+    subject {RDF::Statement.new(RDF::Node.new, p, o)}
     it {is_expected.to be_node}
   end
 
   context "when created with a blank node object" do
-    subject {RDF::Statement.new(subject: s, predicate: p, object: RDF::Node.new)}
+    subject {RDF::Statement.new(s, p, RDF::Node.new)}
     it {is_expected.to be_node}
   end
 
   context "when created without a graph_name" do
-    subject {RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: nil)}
+    subject {RDF::Statement.new(s, p, o, graph_name: nil)}
     its(:graph_name) {is_expected.to be_nil}
     it {is_expected.not_to have_graph}
   end
 
   context "when created with a graph_name" do
-    subject {RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: s)}
+    subject {RDF::Statement.new(s, p, o, graph_name: s)}
     it {is_expected.to have_graph}
     its(:graph_name) {is_expected.not_to be_nil}
     it {is_expected.to eq stmt}
@@ -86,8 +101,8 @@ describe RDF::Statement do
   end
 
   context "when created with a default graph" do
-    subject {RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: false)}
-    let(:stmtc) {RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: s)}
+    subject {RDF::Statement.new(s, p, o, graph_name: false)}
+    let(:stmtc) {RDF::Statement.new(s, p, o, graph_name: s)}
     it {is_expected.not_to have_graph}
     its(:graph_name) {is_expected.to eq false}
     it {is_expected.to eq stmt}
@@ -96,16 +111,16 @@ describe RDF::Statement do
   end
 
   context "when used with symbols" do
-    specify {expect(RDF::Statement(subject: :s, predicate: p, object: o)).to eq  (RDF::Statement(subject: :s, predicate: p, object: o))}
-    specify {expect(RDF::Statement(subject: :s, predicate: p, object: o)).to eql (RDF::Statement(subject: :s, predicate: p, object: o))}
-    specify {expect(RDF::Statement(subject: s, predicate: p, object: :o)).to eq  (RDF::Statement(subject: s, predicate: p, object: :o))}
-    specify {expect(RDF::Statement(subject: s, predicate: p, object: :o)).to eql (RDF::Statement(subject: s, predicate: p, object: :o))}
+    specify {expect(RDF::Statement(:s, p, o)).to eq (RDF::Statement(:s, p, o))}
+    specify {expect(RDF::Statement(:s, p, o)).to eql (RDF::Statement(:s, p, o))}
+    specify {expect(RDF::Statement(s, p, :o)).to eq (RDF::Statement(s, p, :o))}
+    specify {expect(RDF::Statement(s, p, :o)).to eql (RDF::Statement(s, p, :o))}
   end
 
   context "when used with strings" do
-    specify {expect(RDF::Statement(subject: s, predicate: p, object: "o")).to eq  (RDF::Statement(subject: s, predicate: p, object: "o"))}
-    specify {expect(RDF::Statement(subject: s, predicate: p, object: "o")).to eql (RDF::Statement(subject: s, predicate: p, object: RDF::Literal("o")))}
-    specify {expect(RDF::Statement(subject: s, predicate: p, object: RDF::Literal("o"))).to eql (RDF::Statement(subject: s, predicate: p, object: "o"))}
+    specify {expect(RDF::Statement(s, p, "o")).to eq (RDF::Statement(s, p, "o"))}
+    specify {expect(RDF::Statement(s, p, "o")).to eql (RDF::Statement(s, p, RDF::Literal("o")))}
+    specify {expect(RDF::Statement(s, p, RDF::Literal("o"))).to eql (RDF::Statement(s, p, "o"))}
   end
 
   context "when used like an Array" do
@@ -170,7 +185,7 @@ describe RDF::Statement do
 
   context "when comparing equality" do
     let(:gn) {RDF::URI.parse("http://example.org/graph_name")}
-    let(:other_stmt) {RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: gn)}
+    let(:other_stmt) {RDF::Statement.new(s, p, o, graph_name: gn)}
 
     it "should == regardless of graph_name" do
       expect(subject).to eq other_stmt
@@ -189,54 +204,52 @@ describe RDF::Statement do
     end
 
     it "should only equals? with object equality" do
-      expect(subject).not_to equal RDF::Statement.new subject: s, predicate: p, object: o
+      expect(subject).not_to equal RDF::Statement.new s, p, o
       expect(subject).to equal subject
     end
   end
 
   context "completness" do
     {
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: RDF::Node("node"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::Node("node")) => true,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::Literal("literal")) => true,
-      RDF::Statement.new(subject: RDF::URI('file:///path/to/file with spaces.txt'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: nil, predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: nil, object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: nil) => false,
-      RDF::Statement.new(subject: RDF::Literal("literal"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Node("node"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Literal("literal"), object: RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal")) => true,
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => false,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => true,
     }.each do |st, complete|
-      describe st.to_ntriples do
-        if complete
-          specify {expect(st).to be_complete}
-          specify {expect(st).not_to be_incomplete}
-        else
-          specify {expect(st).not_to be_complete}
-          specify {expect(st).to be_incomplete}
-        end
+      if complete
+        specify {expect(st).to be_complete}
+        specify {expect(st).not_to be_incomplete}
+      else
+        specify {expect(st).not_to be_complete}
+        specify {expect(st).to be_incomplete}
       end
     end
   end
 
   context "validatation" do
     {
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: RDF::Node("node"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::Node("node")) => true,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::Literal("literal")) => true,
-      RDF::Statement.new(subject: RDF::URI('file:///path/to/file with spaces.txt'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: nil, predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: nil, object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: nil) => false,
-      RDF::Statement.new(subject: RDF::Literal("literal"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Node("node"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Literal("literal"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI('scheme://auth/\\u0000'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI('scheme://auth/^'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI('scheme://auth/`'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement.new(subject: RDF::URI('scheme://auth/\\'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node")) => true,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal")) => true,
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => false,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/\\u0000'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/^'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/`'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement.new(RDF::URI('scheme://auth/\\'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
     }.each do |st, valid|
       context "given #{st}" do
         if valid
@@ -258,17 +271,17 @@ describe RDF::Statement do
 
   context "c14n" do
     {
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")),
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::Literal("literal")) =>
-        RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::Literal("literal")),
-      RDF::Statement.new(subject: RDF::URI('file:///path/to/file with spaces.txt'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement.new(subject: RDF::URI('file:///path/to/file%20with%20spaces.txt'), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")),
-      RDF::Statement.new(subject: nil, predicate: RDF::URI("http://purl.org/dc/terms/creator").dup, object: RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: nil, object: RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: nil) => nil,
-      RDF::Statement.new(subject: RDF::Literal("literal"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::Literal("literal"), object: RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")),
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal")) =>
+        RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal")),
+      RDF::Statement.new(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement.new(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")),
+      RDF::Statement.new(nil, RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => nil,
+      RDF::Statement.new(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
     }.each do |st, result|
       context "given #{st}" do
         if result
@@ -288,7 +301,7 @@ describe RDF::Statement do
     let(:uri) {RDF::URI("http://example/")}
 
     it "Creating an RDF statement" do
-      expect(RDF::Statement.new(subject: s, predicate: p, object: o)).to be_a_statement
+      expect(RDF::Statement.new(s, p, o)).to be_a_statement
     end
 
     it "Creating an RDF statement from a Hash" do
@@ -300,7 +313,7 @@ describe RDF::Statement do
     end
 
     it "Creating an RDF statement with a graph_name" do
-      expect(RDF::Statement.new(subject: s, predicate: p, object: o, graph_name: uri).graph_name).to eq uri
+      expect(RDF::Statement.new(s, p, o, graph_name: uri).graph_name).to eq uri
     end
 
     it "Creating an RDF statement from a Hash" do
@@ -314,20 +327,12 @@ describe RDF::Statement do
     it "Creating an RDF statement with interned nodes" do
       s = RDF::Node.intern("s")
       o = RDF::Node.intern("o")
-      expect(RDF::Statement.new(subject: :s, predicate: p, object: :o)).to eql RDF::Statement.new(subject: s, predicate: p, object: o)
+      expect(RDF::Statement.new(:s, p, :o)).to eql RDF::Statement.new(s, p, o)
     end
 
     it "Creating an RDF statement with interned nodes" do
       o = RDF::Literal("o")
-      expect(RDF::Statement.new(subject: s, predicate: p, object: "o")).to eql RDF::Statement.new(subject: s, predicate: p, object: o)
-    end
-  end
-
-  describe "1.99 deprecation" do
-    it "#initialize expects DEPRECATION when used with positional arguments" do
-      expect do
-        expect(RDF::Statement.new(s, p, o)).to eql stmt
-      end.to write("DEPRECATION").to(:error)
+      expect(RDF::Statement.new(s, p, "o")).to eql RDF::Statement.new(s, p, o)
     end
   end
 end

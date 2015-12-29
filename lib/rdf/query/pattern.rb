@@ -14,43 +14,39 @@ module RDF; class Query
       case pattern
         when Pattern then pattern
         when Array, Statement
-          self.new(options.merge(subject: pattern[0], predicate: pattern[1], object: pattern[2], graph_name: pattern[3]))
+          self.new(pattern[0], pattern[1], pattern[2], options.merge(graph_name: pattern[3]))
         when Hash    then self.new(options.merge(pattern))
         else raise ArgumentError, "expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}"
       end
     end
 
     ##
-    # @overload initialize(subject, predicate, object, graph_name: nil, optional: false)
-    #   @param  [Variable, Resource, Symbol, nil]     subject
-    #   @param  [Variable, URI, Symbol, nil]          predicate
-    #   @param  [Variable, Term, Symbol, nil]         object
-    #   @param  [Variable, Term, Symbol, nil, false]  graph_name (nil)
+    # @overload initialize(options = {})
+    #   @param  [Hash{Symbol => Object}]     options
+    #   @option options [Variable, Resource, Symbol, nil] :subject   (nil)
+    #   @option options [Variable, URI, Symbol, nil]      :predicate (nil)
+    #   @option options [Variable, Term, Symbol, nil]     :object    (nil)
+    #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
     #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
-    #   @param [Boolean]                              optional  (false)
+    #   @option options [Boolean]            :optional  (false)
     #
-    # @overload initialize(subject:, predicate:, object:, graph_name: nil, optional: false)
-    #   @param  [Variable, Resource, Symbol, nil]     subject
-    #   @param  [Variable, URI, Symbol, nil]          predicate
-    #   @param  [Variable, Term, Symbol, nil]         object
-    #   @param  [Variable, Term, Symbol, nil, false]  graph_name (nil)
+    # @overload initialize(subject, predicate, object, options = {})
+    #   @param  [Variable, Resource, Symbol, nil]         subject
+    #   @param  [Variable, URI, Symbol, nil]              predicate
+    #   @param  [Variable, Termm, Symbol, nil]            object
+    #   @param  [Hash{Symbol => Object}]          options
+    #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
     #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
-    #   @param [Boolean]                              optional  (false)
+    #   @option options [Boolean]                 :optional  (false)
     #
     # @note {Statement} treats symbols as interned {Node} instances, in a {Pattern}, they are treated as {Variable}.
-    def initialize(*args, subject: nil, predicate: nil, object: nil, graph_name: nil, optional: false, **options)
-      unless args.empty?
-        warn "[DEPRECATION] Pattern#initialize now takes keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-        # Deal with splat wierdness when last argument is a hash
-        options[:object] ||= args[2]
-        options[:object] ||= options.values.first if options.values.first.is_a?(RDF::Query::Variable)
-        options[:object] ||= RDF::URI(options) if options.keys.include?(:scheme)
-        options[:graph_name] = graph_name
-        super(options.merge(subject: args[0], predicate: args[1]))
-      else
-        super
+    def initialize(subject = nil, predicate = nil, object = nil, options = {})
+      if options.has_key?(:context)
+        raise ArgumentError, "The :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
+        warn "[DEPRECATION] the :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
+        options[:graph_name] ||= options.delete(:context)
       end
-      @optional = optional
+      super
     end
 
     ##
@@ -62,6 +58,12 @@ module RDF; class Query
       @object     = Variable.new(@object)     if @object.is_a?(Symbol)
       super
     end
+
+    ##
+    # Any additional options for this pattern.
+    #
+    # @return [Hash]
+    attr_reader :options
 
     ##
     # The estimated cost of this pattern (for query optimization).
@@ -101,7 +103,7 @@ module RDF; class Query
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def optional?
-      !!@optional
+      !!options[:optional]
     end
 
     ##

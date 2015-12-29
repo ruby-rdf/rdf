@@ -409,7 +409,7 @@ module RDF
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
     def read_statement
-      Statement.from(read_triple)
+      Statement.new(*read_triple)
     end
 
     ##

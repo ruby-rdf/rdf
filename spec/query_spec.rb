@@ -13,7 +13,7 @@ describe RDF::Query do
   FOAF = RDF::Vocab::FOAF
 
   context "when created" do
-    let(:pattern) {RDF::Query::Pattern.new(subject: RDF::URI("a"), predicate: RDF::URI("b"), object: "c")}
+    let(:pattern) {RDF::Query::Pattern.new(RDF::URI("a"), RDF::URI("b"), "c")}
 
     it "should be instantiable" do
       expect { RDF::Query.new }.not_to raise_error
@@ -854,21 +854,21 @@ describe RDF::Query do
       ],
       "query with optional pattern" => [
         described_class.new {
-          pattern RDF::Query::Pattern.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var, optional: true)
         },
         true
       ],
       "query with required and optional patterns" => [
         described_class.new {
-          pattern RDF::Query::Pattern.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: :var)
-          pattern RDF::Query::Pattern.new(subject: RDF::URI("http://rubygems.org/gems/rdf-spec"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::URI("http://purl.org/dc/terms/creator"), :var, optional: true)
         },
         true
       ],
       "query with optional and required patterns" => [
         described_class.new {
-          pattern RDF::Query::Pattern.new(subject: RDF::URI("http://rubygems.org/gems/rdf-spec"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: :var, optional: true)
-          pattern RDF::Query::Pattern.new(subject: RDF::URI("http://rubygems.org/gems/rdf"), predicate: RDF::URI("http://purl.org/dc/terms/creator"), object: :var)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf-spec"), RDF::URI("http://purl.org/dc/terms/creator"), :var, optional: true)
+          pattern RDF::Query::Pattern.new(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), :var)
         },
         false
       ],
@@ -903,9 +903,9 @@ describe RDF::Query do
     it "Constructing a basic graph pattern query (1)" do
       expect(subject).to be_a(RDF::Query)
       expect(subject.patterns.size).to eq 3
-      expect(subject.patterns[0]).to eq RDF::Query::Pattern.new(subject: :person, predicate: RDF.type,  object: FOAF.Person)
-      expect(subject.patterns[1]).to eq RDF::Query::Pattern.new(subject: :person, predicate: FOAF.name, object: :name)
-      expect(subject.patterns[2]).to eq RDF::Query::Pattern.new(subject: :person, predicate: FOAF.mbox, object: :email)
+      expect(subject.patterns[0]).to eq RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
+      expect(subject.patterns[1]).to eq RDF::Query::Pattern.new(:person, FOAF.name, :name)
+      expect(subject.patterns[2]).to eq RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
     end
 
     it "Constructing a basic graph pattern query (2)" do
@@ -918,9 +918,9 @@ describe RDF::Query do
       })
       expect(query).to be_a(RDF::Query)
       expect(query.patterns.size).to eq 3
-      expect(query.patterns[0]).to eq RDF::Query::Pattern.new(subject: :person, predicate: RDF.type,  object: FOAF.Person)
-      expect(query.patterns[1]).to eq RDF::Query::Pattern.new(subject: :person, predicate: FOAF.name, object: :name)
-      expect(query.patterns[2]).to eq RDF::Query::Pattern.new(subject: :person, predicate: FOAF.mbox, object: :email)
+      expect(query.patterns[0]).to eq RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)
+      expect(query.patterns[1]).to eq RDF::Query::Pattern.new(:person, FOAF.name, :name)
+      expect(query.patterns[2]).to eq RDF::Query::Pattern.new(:person, FOAF.mbox, :email)
     end
 
     it "Executing a basic graph pattern query" do

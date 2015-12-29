@@ -49,12 +49,12 @@ the 1.1 release of RDF.rb:
 * Introduces {RDF::IRI}, as a synonym for {RDF::URI} either {RDF::IRI} or {RDF::URI} can be used interchangeably. Versions of RDF.rb prior to the 1.1 release were already compatible with IRIs. Internationalized Resource Identifiers (see [RFC3987][]) are a super-set of URIs (see [RFC3986][]) which allow for characters other than standard US-ASCII.
 * {RDF::URI} no longer uses the `Addressable` gem. As URIs typically don't need to be parsed, this provides a substantial performance improvement when enumerating or querying graphs and repositories.
 * {RDF::List} no longer emits a `rdf:List` type. However, it will now recognize any subjects that are {RDF::Node} instances as being list elements, as long as they have both `rdf:first` and `rdf:rest` predicates.
-* {RDF::Graph} adding a `context` to a graph may only be done when the underlying storage model supports contexts (the default {RDF::Repository} does). The notion of `context` in RDF.rb is treated equivalently to [Named Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF Dataset, and graphs on their own are not named.
+* {RDF::Graph} adding a `graph_name` to a graph may only be done when the underlying storage model supports graph_names (the default {RDF::Repository} does). The notion of `graph_name` in RDF.rb is treated equivalently to [Named Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF Dataset, and graphs on their own are not named.
 * {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}. Made it clear that using {RDF::Graph} does not mean that it may be used within an {RDF::Statement}, for this see {RDF::Term}.
 * {RDF::Statement} now is stricter about checking that all elements are valid when validating.
 * {RDF::NTriples::Writer} and {RDF::NQuads::Writer} now default to validate output, only allowing valid statements to be emitted. This may disabled by setting the `:validate` option to `false`.
 * {RDF::Dataset} is introduced as a class alias of {RDF::Repository}. This allows closer alignment to the RDF concept of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
-* The `context` (or `name`) of a named graph within a Dataset or Repository may be either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict this to being only {RDF::IRI}.
+* The `graph_name` of a graph within a Dataset or Repository may be either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict this to being only {RDF::IRI}.
 * There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][], all literals are typed, including plain literals and language tagged literals. Internally, plain literals are given the `xsd:string` datatype and language tagged literals are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language tagged literals. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
 * {RDF::Query#execute} now accepts a block and returns {RDF::Query::Solutions}. This allows `enumerable.query(query)` to behave like `query.execute(enumerable)` and either return an enumerable or yield each solution.
 * {RDF::Queryable#query} now returns {RDF::Query::Solutions} instead of an Enumerator if it's argument is an {RDF::Query}.
@@ -145,7 +145,7 @@ appropriate writer to use.
 
     RDF::Writer.open("hello.nq", format: :nquads) do |writer|
       writer << RDF::Repository.new do |repo|
-        repo << RDF::Statement.new(subject: :hello, predicate: RDF::RDFS.label, object: "Hello, world!", graph_name: RDF::URI("http://example/context"))
+        repo << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("http://example/graph_name"))
       end
     end
 
@@ -153,7 +153,7 @@ A specific sub-type of Writer can also be invoked directly:
 
     require 'rdf/nquads'
 
-    repo = RDF::Repository.new << RDF::Statement.new(bject: :hello, predicate: RDF::RDFS.label, object: "Hello, world!", graph_name: RDF::URI("http://example/context"))
+    repo = RDF::Repository.new << RDF::Statement.new(:hello, RDF::RDFS.label, "Hello, world!", graph_name: RDF::URI("http://example/graph_name"))
     File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods
