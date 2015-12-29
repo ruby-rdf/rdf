@@ -122,7 +122,7 @@ module RDF
     #   @return [self]
     def update(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
-      statements = statements[0] if statements.length == 1 && statements[0].is_a?(Enummerable)
+      statements = statements[0] if statements.length == 1 && statements[0].is_a?(Enumerable)
 
       statements.each do |statement|
         if (statement = Statement.from(statement))
