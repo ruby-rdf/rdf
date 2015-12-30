@@ -56,10 +56,10 @@ describe RDF::Graph do
       expect(subject).to have_statement(st)
     end
 
-    it "does not have statement with a different graph name" do
+    it "ignores graph name when finding statements" do
       st = RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o'), graph_name: RDF::URI(RDF::URI('g')))
       subject << st
-      expect(subject).not_to have_statement(st)
+      expect(subject).to have_statement(st)
     end
 
     its(:named?) {is_expected.to be_truthy}
