@@ -14,6 +14,8 @@ module RDF; class Literal
       case other
         when ::Numeric
           to_d <=> other
+        when Double
+          to_f <=> other.to_f
         when Numeric
           to_d <=> other.to_d
         else super
