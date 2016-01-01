@@ -533,6 +533,21 @@ describe RDF::Literal do
       end
     end
 
+    # Comparison
+    {
+      "inf < inf" => [:<, "INF", "INF", false],
+      "inf > inf" => [:<, "INF", "INF", false],
+      "-inf < -inf" => [:<, "-INF", "-INF", false],
+      "0 < inf" => [:<, "0", "INF", true],
+      "0 < -inf" => [:<, "0", "-INF", false],
+      "0 > inf" => [:>, "0", "INF", false],
+      "0 > -inf" => [:>, "0", "-INF", true],
+    }.each do |n, (op, l, r, result)|
+      it "returns #{result} for #{l} #{op} #{r}" do
+        expect(RDF::Literal::Double.new(l).send(op, RDF::Literal::Double.new(r))).to eql result
+      end
+    end
+
     it "adds infinities" do
       expect(inf + inf).to eq inf
       expect(inf + -inf).to be_nan

@@ -89,9 +89,11 @@ module RDF; class Literal
     def <=>(other)
       case other
         when ::Numeric
-          to_d <=> other
-        when RDF::Literal::Decimal, RDF::Literal::Double
-          to_d <=> other.to_d
+          to_f <=> other
+        when RDF::Literal::Decimal
+          to_f <=> other.to_d
+        when RDF::Literal::Double
+          to_f <=> other.to_f
         else super
       end
     end
