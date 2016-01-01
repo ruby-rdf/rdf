@@ -14,6 +14,22 @@ describe RDF::Graph do
     end
   end
 
+  context "as method" do
+    it "with keyword arg" do
+      expect(described_class).to receive(:new).with(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
+      expect {
+        RDF::Graph(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
+      }.not_to write('[DEPRECATION]').to(:error)
+    end
+
+    it "with positional arg (DEPRECATED)" do
+      expect(described_class).to receive(:new).with(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
+      expect {
+        RDF::Graph("http://ruby-rdf.github.com/rdf/etc/doap.nt")
+      }.to write('[DEPRECATION]').to(:error)
+    end
+  end
+
   context "unnamed graphs" do
     subject {described_class.new}
 
