@@ -24,6 +24,34 @@ describe RDF::URI do
     end
   end
 
+  context "as method" do
+    it "with URI args" do
+      expect(described_class).to receive(:new).with("http://example/")
+      RDF::URI("http://example/")
+    end
+
+    it "with hash arg" do
+      expect(described_class).to receive(:new).with(scheme: "http",
+        user: "user",
+        password: "password",
+        host: "example.com",
+        port: 8080,
+        path: "/path",
+        query: "query=value",
+        fragment: "fragment")
+      RDF::URI.new({
+        scheme: "http",
+        user: "user",
+        password: "password",
+        host: "example.com",
+        port: 8080,
+        path: "/path",
+        query: "query=value",
+        fragment: "fragment"
+      })
+    end
+  end
+
   describe "#initialize" do
     it "should recognize URNs" do
       urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)

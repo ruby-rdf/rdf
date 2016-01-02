@@ -30,18 +30,17 @@ module RDF
     ##
     # Returns a blank node with a random UUID-based identifier.
     #
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [Regexp] :grammar (nil)
+    # @param [Regexp] grammar (nil)
     #   a grammar specification that the generated UUID must match
     # @return [RDF::Node]
-    def self.uuid(options = {})
+    def self.uuid(grammar: nil)
       case
-        when options[:grammar]
+        when grammar
           # The UUID is generated such that its initial part is guaranteed
           # to match the given `grammar`, e.g. `/^[A-Za-z][A-Za-z0-9]*/`.
           # Some RDF storage systems (e.g. AllegroGraph) require this.
           # @see http://github.com/bendiken/rdf/pull/43
-          uuid = RDF::Util::UUID.generate(options) until uuid =~ options[:grammar]
+          uuid = RDF::Util::UUID.generate(options) until uuid =~ grammar
         else
           uuid = RDF::Util::UUID.generate(options)
       end

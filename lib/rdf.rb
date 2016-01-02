@@ -124,8 +124,12 @@ module RDF
   #
   # @param (see RDF::Graph#initialize)
   # @return [RDF::Graph]
-  def self.Graph(*args, &block)
-    Graph.new(*args, &block)
+  def self.Graph(*args, **options, &block)
+    unless args.empty?
+      warn "[DEPRECATION] Graph#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
+      options[:graph_name] ||= args.first
+    end
+    Graph.new(options, &block)
   end
 
   ##

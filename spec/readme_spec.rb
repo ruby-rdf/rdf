@@ -109,7 +109,7 @@ describe 'README' do
         subject {
           if example == :example0
             expect(RDF::Util::File).to receive(:open_file).
-              with("http://ruby-rdf.github.com/rdf/etc/doap.nq", {:base_uri=>"http://ruby-rdf.github.com/rdf/etc/doap.nq", :format=>:nquads}).
+              with("http://ruby-rdf.github.com/rdf/etc/doap.nq", {:base_uri=>"http://ruby-rdf.github.com/rdf/etc/doap.nq"}).
               at_least(1).
               and_yield(Kernel.open(File.expand_path("../../etc/doap.nq", __FILE__)))
           end

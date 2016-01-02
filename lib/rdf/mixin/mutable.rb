@@ -31,25 +31,25 @@ module RDF
     ##
     # Loads RDF statements from the given file or URL into `self`.
     #
-    # @param  [String, #to_s]          filename
+    # @param  [String, #to_s]          url
     # @param  [Hash{Symbol => Object}] options
     #   Options from {RDF::Reader.open}
     # @option options [RDF::Resource] :graph_name
     #   Set set graph name of each loaded statement
     # @return [void]
-    def load(filename, options = {})
+     def load(url, graph_name: nil, **options)
       if options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        options[:graph_name] ||= options.delete(:context)
+        graph_name ||= options.delete(:context)
       end
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      Reader.open(filename, {base_uri: filename}.merge(options)) do |reader|
-        if options[:graph_name]
+      Reader.open(url, {base_uri: url}.merge(options)) do |reader|
+        if graph_name
           statements = []
           reader.each_statement do |statement|
-            statement.graph_name = options[:graph_name]
+            statement.graph_name = graph_name
             statements << statement
           end
           insert_statements(statements)

@@ -19,6 +19,18 @@ describe RDF::Node do
     end
   end
 
+  context "as method" do
+    it "with no args" do
+      expect(described_class).to receive(:new).with(no_args)
+      RDF::Node()
+    end
+
+    it "with positional arg" do
+      expect(described_class).to receive(:new).with("a")
+      RDF::Node("a")
+    end
+  end
+
   describe "#==" do
     specify {expect(new.call("a")).to eq new.call("a")}
     specify {expect(new.call(:a)).to eq new.call("a")}

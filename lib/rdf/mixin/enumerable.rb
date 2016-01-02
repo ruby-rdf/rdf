@@ -302,13 +302,12 @@ module RDF
     ##
     # Returns all unique RDF subject terms.
     #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
+    # @param  unique (true)
     # @return [Array<RDF::Resource>]
     # @see    #each_subject
     # @see    #enum_subject
-    def subjects(options = {})
-      if options[:unique] == false
+    def subjects(unique: true)
+      unless unique
         enum_statement.map(&:subject) # TODO: optimize
       else
         Array(enum_subject)
@@ -368,13 +367,12 @@ module RDF
     ##
     # Returns all unique RDF predicate terms.
     #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
+    # @param  unique (true)
     # @return [Array<RDF::URI>]
     # @see    #each_predicate
     # @see    #enum_predicate
-    def predicates(options = {})
-      if options[:unique] == false
+    def predicates(unique: true)
+      unless unique
         enum_statement.map(&:predicate) # TODO: optimize
       else
         Array(enum_predicate)
@@ -434,13 +432,12 @@ module RDF
     ##
     # Returns all unique RDF object terms.
     #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
+    # @param  unique (true)
     # @return [Array<RDF::Term>]
     # @see    #each_object
     # @see    #enum_object
-    def objects(options = {})
-      if options[:unique] == false
+    def objects(unique: true)
+      unless unique
         enum_statement.map(&:object) # TODO: optimize
       else
         Array(enum_object)
@@ -504,14 +501,13 @@ module RDF
     # @example finding all Blank Nodes used within an enumerable
     #   enumberable.terms.select(&:node?)
     #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
+    # @param  unique (true)
     # @return [Array<RDF::Resource>]
     # @since 2.0
     # @see    #each_resource
     # @see    #enum_resource
-    def terms(options = {})
-      if options[:unique] == false
+    def terms(unique: true)
+      unless unique
         enum_statement.
           map(&:to_quad).
           flatten.
@@ -578,16 +574,15 @@ module RDF
     ##
     # Returns all unique RDF contexts, other than the default context.
     #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
+    # @param  unique (true)
     # @return [Enumerator<RDF::Resource>]
     # @see    #each_context
     # @see    #enum_context
     # @deprecated use {#graph_names} instead.
-    def contexts(options = {})
+    def contexts(unique: true)
       raise NoMethodError, "Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      if options[:unique] == false
+      unless unique
         enum_statement.map(&:context).compact.to_enum # TODO: optimize
       else
         enum_context
@@ -658,14 +653,13 @@ module RDF
     ##
     # Returns all unique RDF graph names, other than the default graph.
     #
-    # @param  [Hash{Symbol => Boolean}] options
-    # @option options [Boolean] :unique (true)
+    # @param  unique (true)
     # @return [Array<RDF::Resource>]
     # @see    #each_graph
     # @see    #enum_graph
     # @since 2.0
-    def graph_names(options = {})
-      if options[:unique] == false
+    def graph_names(unique: true)
+      unless unique
         enum_statement.map(&:graph_name).compact # TODO: optimize
       else
         enum_graph.map(&:graph_name).compact
@@ -742,11 +736,11 @@ module RDF
     # @since  0.1.9
     def each_graph
       if block_given?
-        yield RDF::Graph.new(nil, data: self)
+        yield RDF::Graph.new(graph_name: nil, data: self)
         # FIXME: brute force, repositories should override behavior
         if supports?(:graph_name)
           enum_statement.map(&:graph_name).uniq.compact.each do |graph_name|
-            yield RDF::Graph.new(graph_name, data: self)
+            yield RDF::Graph.new(graph_name: graph_name, data: self)
           end
         end
       end

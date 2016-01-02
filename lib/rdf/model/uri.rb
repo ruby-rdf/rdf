@@ -202,14 +202,9 @@ module RDF
     ##
     # @overload URI(uri, options = {})
     #   @param  [URI, String, #to_s]    uri
-    #   @param  [Hash{Symbol => Object}] options
-    #   @option options [Boolean] :validate (false)
-    #   @option options [Boolean] :canonicalize (false)
     #
     # @overload URI(options = {})
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [Boolean] :validate (false)
-    #   @option options [Boolean] :canonicalize (false)
     #   @option [String, #to_s] :scheme The scheme component.
     #   @option [String, #to_s] :user The user component.
     #   @option [String, #to_s] :password The password component.
@@ -224,33 +219,34 @@ module RDF
     #   @option [String, #to_s] :path The path component.
     #   @option [String, #to_s] :query The query component.
     #   @option [String, #to_s] :fragment The fragment component.
-    def initialize(*args)
-      options = args.last.is_a?(Hash) ? args.last : {}
+    #
+    #   @param [Boolean] validate (false)
+    #   @param [Boolean] canonicalize (false)
+    def initialize(*args, validate: false, canonicalize: false, **options)
       uri = args.first
-      case uri
-      when Hash
+      if uri
+        @value = uri.to_s
+        if @value.encoding != Encoding::UTF_8
+          @value = @value.dup if @value.frozen?
+          @value.force_encoding(Encoding::UTF_8)
+        end
+      else
         %w(
           scheme
           user password userinfo
           host port authority
           path query fragment
         ).map(&:to_sym).each do |meth|
-          if uri.has_key?(meth)
-            self.send("#{meth}=".to_sym, uri[meth])
+          if options.has_key?(meth)
+            self.send("#{meth}=".to_sym, options[meth])
           else
             self.send(meth)
           end
         end
-      else
-        @value = uri.to_s
-        if @value.encoding != Encoding::UTF_8
-          @value = @value.dup if @value.frozen?
-          @value.force_encoding(Encoding::UTF_8)
-        end
       end
 
-      validate!     if options[:validate]
-      canonicalize! if options[:canonicalize]
+      validate!     if validate
+      canonicalize! if canonicalize
     end
 
     ##

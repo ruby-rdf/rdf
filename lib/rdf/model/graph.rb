@@ -27,7 +27,7 @@ module RDF
   #   require 'rdf/trig'  # for TriG support
   #
   #   repository = graph = RDF::Repository.load("https://raw.githubusercontent.com/ruby-rdf/rdf-trig/develop/etc/doap.trig", format: :trig))
-  #   graph = RDF::Graph.new(RDF::URI("http://greggkellogg.net/foaf#me"), data: repository)
+  #   graph = RDF::Graph.new(graph_name: RDF::URI("http://greggkellogg.net/foaf#me"), data: repository)
   class Graph
     include RDF::Value
     include RDF::Countable
@@ -75,16 +75,18 @@ module RDF
     # Creates a new `Graph` instance populated by the RDF data returned by
     # dereferencing the given graph_name Resource.
     #
-    # @param  [String, #to_s]          url
+    # @param  [String, #to_s] url
+    # @param  [RDF::Resource] graph_name
+    #   Set set graph name of each loaded statement
     # @param  [Hash{Symbol => Object}] options
-    #   Options from {RDF::Graph#initialize} and {RDF::Mutable#load}
+    #   Options from {RDF::Reader.open}
     # @yield  [graph]
     # @yieldparam [Graph] graph
     # @return [Graph]
     # @since  0.1.7
-    def self.load(url, options = {}, &block)
-      self.new(options) do |graph|
-        graph.load(url, options)
+    def self.load(url, graph_name: nil, **options, &block)
+      self.new(graph_name: graph_name, **options) do |graph|
+        graph.load(url, graph_name: graph_name, **options)
 
         if block_given?
           case block.arity
@@ -105,21 +107,37 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Queryable] :data (RDF::Repository.new)
     #     Storage behind this graph.
-    #   @raise [ArgumentError] if a `data` does not support named graphs.
-    #   @note
-    #     Contexts are only useful when used as a projection
-    #     on a `:data` which supports named graphs. Otherwise, there is no
-    #     such thing as a named graph in RDF 1.1, a repository may have
-    #     graphs which are named, but the name is not a property of the graph.
+    #   @deprecated This form is deprecated in version 2.0.
+    #
     # @overload initialize(options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Queryable] :data (RDF::Repository.new)
     #     Storage behind this graph.
+    #   @deprecated This form is deprecated in version 2.0.
+    #
+    # @overload initialize(graph_name: nil, data: nil)
+    #   @param  [RDF::Resource]          graph_name
+    #     The graph_name from the associated {RDF::Queryable} associated
+    #     with this graph as provided with the `:data` option
+    #     (only for {RDF::Queryable} instances supporting
+    #     named graphs).
+    #   @param [RDF::Queryable] :data (RDF::Repository.new)
+    #     Storage behind this graph.
+    #
+    # @raise [ArgumentError] if a `data` does not support named graphs.
+    # @note
+    #   Contexts are only useful when used as a projection
+    #   on a `:data` which supports named graphs. Otherwise, there is no
+    #   such thing as a named graph in RDF 1.1, a repository may have
+    #   graphs which are named, but the name is not a property of the graph.
     # @yield  [graph]
     # @yieldparam [Graph]
-    def initialize(*args, &block)
-      graph_name = args.shift unless args.first.is_a?(Hash)
-      options = args.first || {}
+    def initialize(*args, graph_name: nil, data: nil, **options, &block)
+      unless args.empty?
+        warn "[DEPRECATION] Graph#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
+        graph_name ||= args.first
+      end
+
       @graph_name = case graph_name
         when nil then nil
         when RDF::Resource then graph_name
@@ -127,7 +145,7 @@ module RDF
       end
 
       @options = options.dup
-      @data    = @options.delete(:data) || RDF::Repository.new(with_graph_name: false)
+      @data = data || RDF::Repository.new(with_graph_name: false)
 
       raise ArgumentError, "Can't apply graph_name unless initialized with `data` supporting graph_names" if
         @graph_name && !@data.supports?(:graph_name)
@@ -148,7 +166,7 @@ module RDF
       case
         when args.empty?
           raise ArgumentError, "Can't reload graph without a graph_name" unless graph_name.is_a?(RDF::URI)
-          load(graph_name.to_s, {base_uri: graph_name}.merge(@options))
+          load(graph_name.to_s, base_uri: graph_name)
         else super
       end
     end
@@ -193,7 +211,7 @@ module RDF
     #
     # @return [Enumerator<RDF::Resource>]
     # @deprecated Use {#graph_names} instead.
-    def contexts(options = {})
+    def contexts(unique: true)
       raise NoMethodError, "Graph#contexts is being replaced with Graph@graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Graph#contexts is being replaced with Graph#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       (named? ? [graph_name] : []).to_enum.extend(RDF::Countable)
@@ -203,7 +221,7 @@ module RDF
     # Returns all unique RDF names for this graph.
     #
     # @return [Enumerator<RDF::Resource>]
-    def graph_names(options = {})
+    def graph_names(unique: true)
       (named? ? [graph_name] : []).extend(RDF::Countable)
     end
 

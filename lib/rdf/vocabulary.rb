@@ -282,29 +282,28 @@ module RDF
       ##
       # Load a vocabulary, optionally from a separate location.
       #
-      # @param [URI, #to_s] uri
+      # @param [URI, #to_s] url
       # @param [Hash{Symbol => Object}] options
-      # @option options [String] class_name
+      # @param [String] class_name
       #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
-      # @option options [URI, #to_s] :location
+      # @param [URI, #to_s] location
       #   Location from which to load the vocabulary, if not from `uri`.
-      # @option options [Array<Symbol>, Hash{Symbol => Hash}] :extra
+      # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
       #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
       # @return [RDF::Vocabulary] the loaded vocabulary
-      def load(uri, options = {})
-        source = options.fetch(:location, uri)
-        class_name = options[:class_name]
+      def load(url, class_name: nil, location: nil, extra: nil)
+        source = location || url
         vocab = if class_name
-          Object.const_set(class_name, Class.new(self.create(uri)))
+          Object.const_set(class_name, Class.new(self.create(url)))
         else
-          Class.new(self.create(uri))
+          Class.new(self.create(url))
         end
 
         graph = RDF::Graph.load(source)
         term_defs = {}
         graph.each do |statement|
-          next unless statement.subject.uri? && statement.subject.start_with?(uri)
-          name = statement.subject.to_s[uri.to_s.length..-1] 
+          next unless statement.subject.uri? && statement.subject.start_with?(url)
+          name = statement.subject.to_s[url.to_s.length..-1] 
           term = (term_defs[name.to_sym] ||= {})
           key = case statement.predicate
           when RDF.type                                     then :type
@@ -330,11 +329,11 @@ module RDF
         end
 
         # Create extra terms
-        term_defs = case options[:extra]
+        term_defs = case extra
         when Array
-          options[:extra].inject({}) {|memo, s| memo[s.to_sym] = {label: s.to_s}; memo}.merge(term_defs)
+          extra.inject({}) {|memo, s| memo[s.to_sym] = {label: s.to_s}; memo}.merge(term_defs)
         when Hash
-          options[:extra].merge(term_defs)
+          extra.merge(term_defs)
         else
           term_defs
         end
@@ -547,8 +546,7 @@ module RDF
       #   @option options [String, #to_s] :fragment The fragment component.
       #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
-      def initialize(*args)
-        options = args.last.is_a?(Hash) ? args.last : {}
+      def initialize(*args, **options)
         @attributes = options.fetch(:attributes)
         super
       end
