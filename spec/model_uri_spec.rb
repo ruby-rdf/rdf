@@ -285,7 +285,7 @@ describe RDF::URI do
     describe "#valid?" do
       let(:refs) {
         %W(a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 foo %20) +
-        %W(\U00000053 Dürst)
+        %W(\U00000053 Dürst AZazÀÖØöø˿Ͱͽ΄῾‌‍⁰↉Ⰰ⿕、ퟻ﨎ﷇﷰ￯𐀀𪘀)
       }
       {
         ""  => "%s",
