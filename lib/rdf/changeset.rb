@@ -1,9 +1,33 @@
 module RDF
   ##
-  # An RDF changeset.
+  # An RDF changeset that can be applied to an {RDF::Mutable}.
   #
   # Changesets consist of a sequence of RDF statements to delete from and a
-  # sequence of RDF statements to insert into a target dataset.
+  # sequence of RDF statements to insert into a target dataset. 
+  # 
+  # @example Applying a Changeset with block syntax
+  #   graph = RDF::Graph.new
+  #   graph << [RDF::URI('s_del'), RDF::URI('p_del'), RDF::URI('o_del')]
+  #
+  #   RDF::Changeset.apply(graph) do |c|
+  #     c.insert [RDF::URI('s1'), RDF::URI('p1'), RDF::URI('o1')]
+  #     c.insert [RDF::URI('s2'), RDF::URI('p2'), RDF::URI('o2')]
+  #     c.delete [RDF::URI('s_del'), RDF::URI('p_del'), RDF::URI('o_del')]
+  #   end
+  #
+  # @example Defining a changeset for later application to a Mutable
+  #   changes = RDF::Changeset.new do |c|
+  #     c.insert [RDF::URI('s1'), RDF::URI('p1'), RDF::URI('o1')]
+  #     c.insert [RDF::URI('s2'), RDF::URI('p2'), RDF::URI('o2')]
+  #     c.delete [RDF::URI('s_del'), RDF::URI('p_del'), RDF::URI('o_del')]
+  #   end
+  #
+  #   graph = RDF::Graph.new
+  #   graph << [RDF::URI('s_del'), RDF::URI('p_del'), RDF::URI('o_del')]
+  # 
+  #   changes.apply(graph) # or graph.apply_changeset(changes)
+  #
+  # @note When applying a Changeset, deletes are resolved before inserts.
   #
   # @since 2.0.0
   class Changeset

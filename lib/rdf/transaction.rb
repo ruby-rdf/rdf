@@ -4,10 +4,10 @@ module RDF
   #
   # Transactions provide an ACID scope for queries and mutations.
   #
-  # Repository implementations may choose to sub-class this class to provide
-  # transactional support for repository updates, when accessed through
-  # {RDF::Repository#begin_transaction}.
-  #
+  # Repository implementations may provide support for transactional updates
+  # by providing an atomic implementation of {Mutable#apply_changeset} and 
+  # responding to `#supports?(:transactions)` with `true`.
+  # 
   # We carefully distinguish between read-only and read/write transactions,
   # in order to enable repository implementations to take out the
   # appropriate locks for concurrency control. Transactions are read-only
@@ -16,10 +16,11 @@ module RDF
   #
   # In case repository implementations should be unable to provide full ACID
   # guarantees for transactions, that must be clearly indicated in their
-  # documentation.
+  # documentation and `#supports?(:transactions)` must respond `false`.
   #
   # @example Executing a read-only transaction against a repository
-  #   repository = ...
+  #   repository = RDF::Repository.new
+  #
   #   RDF::Transaction.begin(repository) do |tx|
   #     tx.query(predicate: RDF::Vocab::DOAP.developer) do |statement|
   #       puts statement.inspect
@@ -27,7 +28,8 @@ module RDF
   #   end
   #
   # @example Executing a read/write transaction against a repository
-  #   repository = ...
+  #   repository = RDF::Repository.new
+  #
   #   RDF::Transaction.begin(repository, mutable: true) do |tx|
   #     subject = RDF::URI("http://example.org/article")
   #     tx.delete [subject, RDF::RDFS.label, "Old title"]
@@ -35,6 +37,7 @@ module RDF
   #   end
   #
   # @see RDF::Changeset
+  # @see RDF::Mutable#apply_changeset
   # @since 0.3.0
   class Transaction
     include RDF::Mutable
@@ -107,7 +110,9 @@ module RDF
       @repository = repository
       @options = options.dup
       @mutable = !!(@options.delete(:mutable) || false)
-
+      
+      @changes = RDF::Changeset.new
+      
       if block_given?
         case block.arity
           when 1 then block.call(self)
@@ -124,7 +129,7 @@ module RDF
     # @see    #changes
     # @since  2.0.0
     def buffered?
-      !(self.changes.nil?)
+      !(self.changes.empty?)
     end
 
     ##
@@ -133,6 +138,15 @@ module RDF
     # @return [Boolean]
     # @see     RDF::Writable#writable?
     def writable?
+      @mutable
+    end
+
+    ##
+    # Returns `true` if this is a read/write transaction, `false` otherwise.
+    #
+    # @return [Boolean]
+    # @see     RDF::Writable#mutable?
+    def mutable?
       @mutable
     end
 
@@ -163,6 +177,14 @@ module RDF
       $stderr.puts(inspect)
     end
 
+    ##
+    # Executes the transaction
+    #
+    # @return [Boolean] `true` if the changes are successfully applied.
+    def execute
+      @changes.apply(@repository)
+    end
+
     protected
 
     ##
@@ -172,7 +194,7 @@ module RDF
     # @return [void]
     # @see    RDF::Writable#insert_statement
     def insert_statement(statement)
-      @changes.inserts << statement
+      @changes.insert(statement)
     end
 
     ##
@@ -182,7 +204,7 @@ module RDF
     # @return [void]
     # @see    RDF::Mutable#delete_statement
     def delete_statement(statement)
-      @changes.deletes << statement
+      @changes.delete(statement)
     end
 
     undef_method :load, :update, :clear
