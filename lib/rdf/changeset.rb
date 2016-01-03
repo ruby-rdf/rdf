@@ -87,6 +87,12 @@ module RDF
     end
 
     ##
+    # @return [Boolean] `true` iff inserts and deletes are both empty
+    def empty?
+      deletes.empty? && inserts.empty?
+    end
+
+    ##
     # Returns a developer-friendly representation of this changeset.
     #
     # @return [String]

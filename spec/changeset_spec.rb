@@ -76,6 +76,24 @@ describe RDF::Changeset do
     end
   end
 
+  describe '#empty?' do
+    let(:s) {RDF::Statement.new(RDF::URI("s"), RDF::URI("p"), RDF::URI("o"))}
+
+    it 'is empty when no deletes/inserts are present' do
+      expect(subject).to be_empty
+    end
+
+    it 'is not empty when deletes are present' do
+      subject.delete(s)
+      expect(subject).not_to be_empty
+    end
+
+    it 'is not empty when inserts are present' do
+      subject.insert(s)
+      expect(subject).not_to be_empty
+    end
+  end
+
   describe '#delete' do
     let(:s) {RDF::Statement.new(RDF::URI("s"), RDF::URI("p"), RDF::URI("o"))}
 
