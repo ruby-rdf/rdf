@@ -10,15 +10,15 @@ module RDF
     include RDF::Mutable
 
     ##
-    # Applies a changeset to the given RDF repository.
+    # Applies a changeset to the given mutable RDF::Enumerable .
     #
-    # @param  [RDF::Repository]        repository
+    # @param  [RDF::Mutable] mutable
     # @param  [Hash{Symbol => Object}] options
     # @yield  [changes]
     # @yieldparam [RDF::Changeset] changes
     # @return [void]
-    def self.apply(repository, options = {}, &block)
-      self.new(&block).apply(repository, options)
+    def self.apply(mutable, options = {}, &block)
+      self.new(&block).apply(mutable, options)
     end
 
     ##
@@ -46,8 +46,7 @@ module RDF
     # @param [RDF::Enumerable] delete (RDF::Graph.new)
     # @yield  [changes]
     # @yieldparam [RDF::Changeset] changes
-    def initialize(insert: RDF::Graph.new, delete: RDF::Graph.new, &block)
-      @options = options.dup
+    def initialize(insert: [], delete: [], &block)
       @inserts = insert
       @deletes = delete
 
@@ -76,28 +75,15 @@ module RDF
     end
 
     ##
-    # Applies this changeset to the given RDF repository.
+    # Applies this changeset to the given mutable RDF::Enumerable.
     #
     # This operation executes as a single write transaction.
     #
-    # @param  [RDF::Repository]        repository
+    # @param  [RDF::Mutable] mutable
     # @param  [Hash{Symbol => Object}] options
     # @return [void]
-    def apply(repository, options = {})
-      repository.transaction(mutable: true) do |transaction|
-        self.before_apply(transaction, options) if self.respond_to?(:before_apply)
-
-        self.deletes.each_statement do |statement|
-          transaction.delete(statement)
-        end
-
-        self.inserts.each_statement do |statement|
-          transaction.insert(statement)
-        end
-
-        self.after_apply(transaction, options) if self.respond_to?(:after_apply)
-      end
-      self
+    def apply(mutable, options = {})
+      mutable.apply_changeset(self)
     end
 
     ##

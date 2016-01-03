@@ -153,17 +153,16 @@ module RDF
     #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
     #   end
     #
-    # @param  [RDF::Resource] graph_name
-    #   Graph name on which to run the transaction, use `false` for the default
-    #   graph_name and `nil` the entire Repository
+    # @param mutable [Boolean] 
+    #   Context on which to run the transaction, use `false` for the default
     # @yield  [tx]
     # @yieldparam  [RDF::Transaction] tx
     # @yieldreturn [void] ignored
     # @return [self]
     # @see    RDF::Transaction
     # @since  0.3.0
-    def transaction(graph_name = nil, &block)
-      tx = begin_transaction(graph_name)
+    def transaction(mutable: false, &block)
+      tx = begin_transaction(mutable: mutable)
       begin
         case block.arity
           when 1 then block.call(tx)
@@ -190,8 +189,8 @@ module RDF
     # @param  [RDF::Resource] graph_name
     # @return [RDF::Transaction]
     # @since  0.3.0
-    def begin_transaction(graph_name)
-      RDF::Transaction.new(graph: graph_name)
+    def begin_transaction(mutable: false)
+      RDF::Transaction.new(self, mutable: mutable)
     end
 
     ##

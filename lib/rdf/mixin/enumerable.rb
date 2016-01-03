@@ -70,6 +70,7 @@ module RDF
     #   * `:inference` supports RDFS inferrence of queryable contents.
     #   * `:validity` allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.
     #   * `:skolemize` supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an `Enumerable`. Implementations supporting this feature must implement a `#skolemize` method, taking a base URI used for minting URIs for BNodes as stable identifiers and a `#deskolemize` method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.
+    #   * `:transactions` supports atomic application of a [Changeset] 
     #
     # @param  [Symbol, #to_sym] feature
     # @return [Boolean]
