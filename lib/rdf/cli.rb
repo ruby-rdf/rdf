@@ -49,11 +49,12 @@ module RDF
       # @param [Symbol] symbol
       # @param [Array<String>] on
       # @param [String] description
+      # @param [Class] datatype datatype of value
       # @yield value which may be used within `OptionParser#on`
       # @yieldparam [Object] value The option value as parsed using `on` argument
       # @yieldreturn [Object] a possibly modified input value
-      def initialize(symbol:, on:, description: nil, &block)
-        @symbol, @on, @description, @callback = symbol.to_sym, Array(on), description, block
+      def initialize(symbol:, on:, description: nil, datatype: String, &block)
+        @symbol, @on, @description, @datatype, @callback = symbol.to_sym, Array(on), description, datatype, block
       end
 
       def call(arg)

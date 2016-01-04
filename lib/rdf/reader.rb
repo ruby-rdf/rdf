@@ -116,18 +116,22 @@ module RDF
       [
         RDF::CLI::Option.new(
           symbol: :canonicalize,
+          datatype: TrueClass,
           on: ["--canonicalize"],
           description: "Canonicalize input/output.") {true},
         RDF::CLI::Option.new(
           symbol: :encoding,
+          datatype: Encoding,
           on: ["--encoding ENCODING"],
           description: "The encoding of the input stream.") {|arg| Encoding.find arg},
         RDF::CLI::Option.new(
           symbol: :intern,
+          datatype: TrueClass,
           on: ["--intern"],
           description: "Intern all parsed URIs.") {true},
         RDF::CLI::Option.new(
           symbol: :prefixes,
+          datatype: Hash,
           on: ["--prefixes PREFIX,PREFIX"],
           description: "A space-separated list of prefix:uri pairs.") do |arg|
             arg.split(' ').inject({}) do |memo, pfxuri|
@@ -137,10 +141,12 @@ module RDF
         end,
         RDF::CLI::Option.new(
           symbol: :base_uri,
+          datatype: RDF::URI,
           on: ["--uri URI"],
-          description: "Base URI of input file, defaults to the filename."),
+          description: "Base URI of input file, defaults to the filename.") {|arg| RDF::URI(arg)},
         RDF::CLI::Option.new(
           symbol: :validate,
+          datatype: TrueClass,
           on: ["--validate"],
           description: "Validate input file.") {true},
       ]

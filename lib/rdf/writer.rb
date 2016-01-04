@@ -118,14 +118,17 @@ module RDF
       [
         RDF::CLI::Option.new(
           symbol: :canonicalize,
+          datatype: TrueClass,
           on: ["--canonicalize"],
           description: "Canonicalize input/output.") {true},
         RDF::CLI::Option.new(
           symbol: :encoding,
+          datatype: Encoding,
           on: ["--encoding", :REQUIRED],
           description: "The encoding of the input stream.") {|arg| Encoding.find arg},
         RDF::CLI::Option.new(
           symbol: :prefixes,
+          datatype: Hash,
           on: ["--prefixes", :REQUIRED],
           description: "A space-separated list of prefix:uri pairs.") do |arg|
             arg.split(' ').inject({}) do |memo, pfxuri|
@@ -135,6 +138,7 @@ module RDF
         end,
         RDF::CLI::Option.new(
           symbol: :unique_bnodes,
+          datatype: TrueClass,
           on: ["--unique-bnodes"],
           description: "Use unique Node identifiers.") {true},
       ]
