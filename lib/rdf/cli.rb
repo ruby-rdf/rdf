@@ -53,7 +53,9 @@ module RDF
       # @yield value which may be used within `OptionParser#on`
       # @yieldparam [Object] value The option value as parsed using `on` argument
       # @yieldreturn [Object] a possibly modified input value
-      def initialize(symbol:, on:, description: nil, datatype: String, &block)
+      def initialize(symbol: nil, on: nil, description: nil, datatype: String, &block)
+        raise ArgumentError, "symbol is a required argument" unless symbol
+        raise ArgumentError, "on is a required argument" unless on
         @symbol, @on, @description, @datatype, @callback = symbol.to_sym, Array(on), description, datatype, block
       end
 
