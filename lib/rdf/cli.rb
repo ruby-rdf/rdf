@@ -48,7 +48,6 @@ module RDF
       #
       # @param [Symbol] symbol
       # @param [Array<String>] on
-      # @param [String] name
       # @param [String] description
       # @yield value which may be used within `OptionParser#on`
       # @yieldparam [Object] value The option value as parsed using `on` argument
@@ -212,7 +211,7 @@ module RDF
       end
 
       options.on("--output-format FORMAT", "Format of output file, defaults to NTriples") do |arg|
-        unless RDF::Writer.for(arg.downcase.to_sym)
+        unless writer = RDF::Writer.for(arg.downcase.to_sym)
           $stderr.puts "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.formats(writer: true).join("\n  ")}"
           exit(1)
         end
