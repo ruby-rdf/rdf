@@ -145,7 +145,13 @@ module RDF
         opts[:evaluate] = arg
       end
 
-      options.on("--input-format FORMAT", "Format of input file, uses heuristic if not specified") do |arg|
+      options.on("--input-format FORMAT", "--format FORMAT", "Format of input file, uses heuristic if not specified") do |arg|
+        unless RDF::Reader.for(arg.downcase.to_sym)
+          $stderr.puts "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{self.readers.join("\n  ")}"
+          exit(1)
+        end
+
+        # Add format-specific reader options
         opts[:format] = arg.downcase.to_sym
       end
 
@@ -154,6 +160,12 @@ module RDF
       end
 
       options.on("--output-format FORMAT", "Format of output file, defaults to NTriples") do |arg|
+        unless RDF::Writer.for(arg.downcase.to_sym)
+          $stderr.puts "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.writers.join("\n  ")}"
+          exit(1)
+        end
+
+        # Add format-specific writer options
         opts[:output_format] = arg.downcase.to_sym
       end
 
@@ -168,6 +180,8 @@ module RDF
       options.on_tail("-h", "--help", "Show this message") do
         $stdout.puts options
         $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
+        $stdout.puts "Available readers:\n\t#{self.readers.join("\n\t")}"
+        $stdout.puts "Available writers:\n\t#{self.writers.join("\n\t")}"
         exit
       end
 
@@ -196,6 +210,26 @@ module RDF
     # @return [Array<String>] list of executable commands
     def self.commands
       COMMANDS.keys
+    end
+
+    ##
+    # @return [Array<String>] list of available readers
+    def self.readers
+      f = RDF::Format.each.select(&:reader).inject({}) do |memo, reader|
+        memo.merge(reader.to_sym => reader.name)
+      end
+      sym_len = f.keys.map {|k| k.to_s.length}.max
+      f.map {|s, t| "%*s %s" % [sym_len, s, t]}
+    end
+
+    ##
+    # @return [Array<String>] list of available writers
+    def self.writers
+      f = RDF::Format.each.select(&:writer).inject({}) do |memo, writer|
+        memo.merge(writer.to_sym => writer.name)
+      end
+      sym_len = f.keys.map {|k| k.to_s.length}.max
+      f.map {|s, t| "%*s %s" % [sym_len, s, t]}
     end
 
     ##
