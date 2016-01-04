@@ -1,6 +1,7 @@
 require 'rdf'
 require 'rdf/ntriples'
 require 'rdf/nquads'
+require 'logger'
 require 'optparse'
 begin
   gem 'linkeddata'
@@ -12,6 +13,11 @@ rescue LoadError
       require "rdf/#{ser}"
     rescue LoadError
     end
+  end
+
+  begin
+    require 'json/ld'
+  rescue LoadError
   end
 end
 
@@ -77,6 +83,19 @@ module RDF
             $stdout.puts statement.subject.to_ntriples
           end
         end
+      end,
+      "validate"   => lambda do |argv, opts|
+        start = Time.new
+        count = 0
+        valid = true
+        self.parse(argv, opts) do |reader|
+          reader.each_statement do |statement|
+            count += 1
+            valid = false if statement.invalid?
+          end
+        end
+        secs = Time.new - start
+        $stdout.puts "Validated #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
       end
     }
 
@@ -90,6 +109,9 @@ module RDF
     # @return [OptionParser]
     def self.options(&block)
       options = OptionParser.new
+      logger = Logger.new($stderr)
+      logger.level = Logger::ERROR
+      logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity} #{msg}\n"}
       opts = options.options = {
         base_uri:       nil,
         canonicalize:   false,
@@ -99,6 +121,7 @@ module RDF
         output:         $stdout,
         output_format:  :ntriples,
         validate:       false,
+        logger:         logger
       }
 
       # Command-specific options
@@ -115,7 +138,7 @@ module RDF
       end
 
       options.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
-        opts[:debug] = $DEBUG = true
+        opts[:logger].level = Logger::DEBUG
       end
 
       options.on("-e", "--evaluate STRING", "Evaluate argument as RDF input, if no files are specified") do |arg|
