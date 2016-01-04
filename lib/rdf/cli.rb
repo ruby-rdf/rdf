@@ -218,6 +218,14 @@ module RDF
         end
 
         # Add format-specific writer options
+        writer.options.each do |cli_opt|
+          next if opts.has_key?(cli_opt.symbol)
+          on_args = cli_opt.on || []
+          on_args << cli_opt.description if cli_opt.description
+          options.on(*on_args) do |arg|
+            opts[cli_opt.symbol] = cli_opt.call(arg)
+          end
+        end
         opts[:output_format] = arg.downcase.to_sym
       end
 
