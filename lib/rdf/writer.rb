@@ -111,6 +111,35 @@ module RDF
       end
     end
 
+    ##
+    # Options suitable for automatic Reader provisioning.
+    # @return [Array<RDF::CLI::Option>]
+    def self.options
+      [
+        RDF::CLI::Option.new(
+          symbol: :canonicalize,
+          on: ["--canonicalize"],
+          description: "Canonicalize input/output.") {true},
+        RDF::CLI::Option.new(
+          symbol: :encoding,
+          on: ["--encoding", :REQUIRED],
+          description: "The encoding of the input stream.") {|arg| Encoding.find arg},
+        RDF::CLI::Option.new(
+          symbol: :prefixes,
+          on: ["--prefixes", :REQUIRED],
+          description: "A space-separated list of prefix:uri pairs.") do |arg|
+            arg.split(' ').inject({}) do |memo, pfxuri|
+              pfx,uri = pfxuri.split(':', 2)
+              memo.merge(pfx.to_sym => RDF::URI(uri))
+            end
+        end,
+        RDF::CLI::Option.new(
+          symbol: :unique_bnodes,
+          on: ["--unique-bnodes"],
+          description: "Use unique Node identifiers.") {true},
+      ]
+    end
+
     class << self
       alias_method :format_class, :format
     end

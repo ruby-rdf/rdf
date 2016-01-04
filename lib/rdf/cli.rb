@@ -29,6 +29,39 @@ end
 module RDF
   class CLI
 
+    # Option description for use within Readers/Writers
+    class Option
+      # Symbol used for this option when calling `Reader.new`
+      # @return [Symbol]
+      attr_reader :symbol
+
+      # Arguments passed to OptionParser#on
+      # @return [Array<String>]
+      attr_reader :on
+
+      # Description of this option (optional)
+      # @return [String]
+      attr_reader :description
+
+      ##
+      # Create a new option with optional callback.
+      #
+      # @param [Symbol] symbol
+      # @param [Array<String>] on
+      # @param [String] name
+      # @param [String] description
+      # @yield value which may be used within `OptionParser#on`
+      # @yieldparam [Object] value The option value as parsed using `on` argument
+      # @yieldreturn [Object] a possibly modified input value
+      def initialize(symbol:, on:, description: nil, &block)
+        @symbol, @on, @description, @callback = symbol.to_sym, Array(on), description, block
+      end
+
+      def call(arg)
+        @callback ? @callback.call(arg) : arg
+      end
+    end
+
     COMMANDS = {
       "count"       => lambda do |argv, opts|
         start = Time.new
@@ -113,16 +146,31 @@ module RDF
       logger.level = Logger::ERROR
       logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity} #{msg}\n"}
       opts = options.options = {
-        base_uri:       nil,
-        canonicalize:   false,
         debug:          false,
         evaluate:       nil,
         format:         nil,
         output:         $stdout,
         output_format:  :ntriples,
-        validate:       false,
         logger:         logger
       }
+
+      # Add default Reader and Writer options
+      RDF::Reader.options.each do |cli_opt|
+        next if opts.has_key?(cli_opt.symbol)
+        on_args = cli_opt.on || []
+        on_args << cli_opt.description if cli_opt.description
+        options.on(*on_args) do |arg|
+          opts[cli_opt.symbol] = cli_opt.call(arg)
+        end
+      end
+      RDF::Writer.options.each do |cli_opt|
+        next if opts.has_key?(cli_opt.symbol)
+        on_args = cli_opt.on || []
+        on_args << cli_opt.description if cli_opt.description
+        options.on(*on_args) do |arg|
+          opts[cli_opt.symbol] = cli_opt.call(arg)
+        end
+      end
 
       # Command-specific options
       if block_given?
@@ -133,10 +181,6 @@ module RDF
       end
       options.banner ||= "Usage: #{self.basename} [options] command [args...]"
 
-      options.on('--canonicalize', 'Canonicalize input.') do
-        opts[:canonicalize] = true
-      end
-
       options.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
         opts[:logger].level = Logger::DEBUG
       end
@@ -146,12 +190,20 @@ module RDF
       end
 
       options.on("--input-format FORMAT", "--format FORMAT", "Format of input file, uses heuristic if not specified") do |arg|
-        unless RDF::Reader.for(arg.downcase.to_sym)
-          $stderr.puts "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{self.readers.join("\n  ")}"
+        unless reader = RDF::Reader.for(arg.downcase.to_sym)
+          $stderr.puts "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{self.formats(reader: true).join("\n  ")}"
           exit(1)
         end
 
         # Add format-specific reader options
+        reader.options.each do |cli_opt|
+          next if opts.has_key?(cli_opt.symbol)
+          on_args = cli_opt.on || []
+          on_args << cli_opt.description if cli_opt.description
+          options.on(*on_args) do |arg|
+            opts[cli_opt.symbol] = cli_opt.call(arg)
+          end
+        end
         opts[:format] = arg.downcase.to_sym
       end
 
@@ -161,7 +213,7 @@ module RDF
 
       options.on("--output-format FORMAT", "Format of output file, defaults to NTriples") do |arg|
         unless RDF::Writer.for(arg.downcase.to_sym)
-          $stderr.puts "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.writers.join("\n  ")}"
+          $stderr.puts "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.formats(writer: true).join("\n  ")}"
           exit(1)
         end
 
@@ -169,19 +221,10 @@ module RDF
         opts[:output_format] = arg.downcase.to_sym
       end
 
-      options.on('--uri URI', 'Base URI of input file, defaults to the filename.') do |arg|
-        opts[:base_uri] = arg
-      end
-
-      options.on('--validate', 'Validate input file.') do
-        opts[:validate] = true
-      end
-
       options.on_tail("-h", "--help", "Show this message") do
         $stdout.puts options
         $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
-        $stdout.puts "Available readers:\n\t#{self.readers.join("\n\t")}"
-        $stdout.puts "Available writers:\n\t#{self.writers.join("\n\t")}"
+        $stdout.puts "Available formats:\n\t#{(self.formats).join("\n\t")}"
         exit
       end
 
@@ -213,23 +256,15 @@ module RDF
     end
 
     ##
-    # @return [Array<String>] list of available readers
-    def self.readers
-      f = RDF::Format.each.select(&:reader).inject({}) do |memo, reader|
-        memo.merge(reader.to_sym => reader.name)
+    # @return [Array<String>] list of available formats
+    def self.formats(reader: false, writer: false)
+      f = RDF::Format.each.
+        select {|f| (reader ? f.reader : (writer ? f.writer : true))}.
+        inject({}) do |memo, reader|
+          memo.merge(reader.to_sym => reader.name)
       end
       sym_len = f.keys.map {|k| k.to_s.length}.max
-      f.map {|s, t| "%*s %s" % [sym_len, s, t]}
-    end
-
-    ##
-    # @return [Array<String>] list of available writers
-    def self.writers
-      f = RDF::Format.each.select(&:writer).inject({}) do |memo, writer|
-        memo.merge(writer.to_sym => writer.name)
-      end
-      sym_len = f.keys.map {|k| k.to_s.length}.max
-      f.map {|s, t| "%*s %s" % [sym_len, s, t]}
+      f.map {|s, t| "%*s: %s" % [sym_len, s, t]}
     end
 
     ##

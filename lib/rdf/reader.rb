@@ -109,6 +109,45 @@ module RDF
       end
     end
 
+    ##
+    # Options suitable for automatic Reader provisioning.
+    # @return [Array<RDF::CLI::Option>]
+    def self.options
+      [
+        RDF::CLI::Option.new(
+          symbol: :canonicalize,
+          on: ["--canonicalize"],
+          description: "Canonicalize input/output.") {true},
+        RDF::CLI::Option.new(
+          symbol: :encoding,
+          on: ["--encoding ENCODING"],
+          description: "The encoding of the input stream.") {|arg| Encoding.find arg},
+        RDF::CLI::Option.new(
+          symbol: :intern,
+          on: ["--intern"],
+          description: "Intern all parsed URIs.") {true},
+        RDF::CLI::Option.new(
+          symbol: :prefixes,
+          on: ["--prefixes PREFIX,PREFIX"],
+          description: "A space-separated list of prefix:uri pairs.") do |arg|
+            arg.split(' ').inject({}) do |memo, pfxuri|
+              pfx,uri = pfxuri.split(':', 2)
+              memo.merge(pfx.to_sym => RDF::URI(uri))
+            end
+        end,
+        RDF::CLI::Option.new(
+          symbol: :base_uri,
+          on: ["--uri URI"],
+          description: "Base URI of input file, defaults to the filename."),
+        RDF::CLI::Option.new(
+          symbol: :validate,
+          on: ["--validate"],
+          description: "Validate input file.") {true},
+      ]
+    end
+
+    # Returns a hash of options appropriate for use with this reader
+    
     class << self
       alias_method :format_class, :format
     end
