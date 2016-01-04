@@ -139,6 +139,7 @@ module RDF
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
         options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
+        options[:filename] ||= filename
         reader = self.for(format || format_options) do
           # Return a sample from the input file
           sample = file.read(1000)
