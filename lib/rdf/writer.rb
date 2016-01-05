@@ -112,7 +112,7 @@ module RDF
     end
 
     ##
-    # Options suitable for automatic Reader provisioning.
+    # Options suitable for automatic Writer provisioning.
     # @return [Array<RDF::CLI::Option>]
     def self.options
       [
@@ -124,14 +124,15 @@ module RDF
         RDF::CLI::Option.new(
           symbol: :encoding,
           datatype: Encoding,
-          on: ["--encoding", :REQUIRED],
+          on: ["--encoding ENCODING"],
           description: "The encoding of the input stream.") {|arg| Encoding.find arg},
         RDF::CLI::Option.new(
           symbol: :prefixes,
           datatype: Hash,
-          on: ["--prefixes", :REQUIRED],
-          description: "A space-separated list of prefix:uri pairs.") do |arg|
-            arg.split(' ').inject({}) do |memo, pfxuri|
+          multiple: true,
+          on: ["--prefixes PREFIX,PREFIX"],
+          description: "A comma-separated list of prefix:uri pairs.") do |arg|
+            arg.split(',').inject({}) do |memo, pfxuri|
               pfx,uri = pfxuri.split(':', 2)
               memo.merge(pfx.to_sym => RDF::URI(uri))
             end

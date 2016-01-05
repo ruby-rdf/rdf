@@ -132,9 +132,10 @@ module RDF
         RDF::CLI::Option.new(
           symbol: :prefixes,
           datatype: Hash,
+          multiple: true,
           on: ["--prefixes PREFIX,PREFIX"],
-          description: "A space-separated list of prefix:uri pairs.") do |arg|
-            arg.split(' ').inject({}) do |memo, pfxuri|
+          description: "A comma-separated list of prefix:uri pairs.") do |arg|
+            arg.split(',').inject({}) do |memo, pfxuri|
               pfx,uri = pfxuri.split(':', 2)
               memo.merge(pfx.to_sym => RDF::URI(uri))
             end

@@ -43,20 +43,29 @@ module RDF
       # @return [String]
       attr_reader :description
 
+      # Argument datatype, which may be enumerated string values
+      # @return [Class, Array<String>]
+      attr_reader :datatype
+
+      # Allows multiple comma-spearated values.
+      # @return [Boolean]
+      attr_reader :multiple
+
       ##
       # Create a new option with optional callback.
       #
       # @param [Symbol] symbol
       # @param [Array<String>] on
       # @param [String] description
-      # @param [Class] datatype datatype of value
+      # @param [Class, Array<String>] datatype of value
+      # @param [Boolean] multiple can have multiple comma-separated values
       # @yield value which may be used within `OptionParser#on`
       # @yieldparam [Object] value The option value as parsed using `on` argument
       # @yieldreturn [Object] a possibly modified input value
-      def initialize(symbol: nil, on: nil, description: nil, datatype: String, &block)
+      def initialize(symbol: nil, on: nil, description: nil, datatype: String, multiple: false, &block)
         raise ArgumentError, "symbol is a required argument" unless symbol
         raise ArgumentError, "on is a required argument" unless on
-        @symbol, @on, @description, @datatype, @callback = symbol.to_sym, Array(on), description, datatype, block
+        @symbol, @on, @description, @datatype, @multiple, @callback = symbol.to_sym, Array(on), description, datatype, multiple, block
       end
 
       def call(arg)
