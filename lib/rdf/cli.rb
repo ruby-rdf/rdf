@@ -27,9 +27,41 @@ class OptionParser
 end
 
 module RDF
+  # Individual formats can modify options by updating {Reader.options} or {Writer.options}. Format-specific commands are taken from {Format.cli_commands} for each loaded format, which returns an array of lambdas taking arguments and options.
+  #
+  # @example Creating Reader-specific options:
+  #   class Reader
+  #     def self.options
+  #       [
+  #         RDF::CLI::Option.new(
+  #           symbol: :canonicalize,
+  #           datatype: TrueClass,
+  #           on: ["--canonicalize"],
+  #           description: "Canonicalize input/output.") {true},
+  #         ...
+  #       ]
+  #     end
+  #
+  # @example Creating Format-specific commands:
+  #   class Format
+  #     def self.cli_commands
+  #       {
+  #         count: ->(argv, opts) do
+  #           count = 0
+  #           RDF::CLI.parse(argv, opts) do |reader|
+  #             reader.each_statement do |statement|
+  #               count += 1
+  #             end
+  #           end
+  #           $stdout.puts "Parsed #{count} statements"
+  #         end,
+  #       }
+  #     end
+  #
+  # Format-specific commands should verify that the reader and/or output format are appropriate for the command.
   class CLI
 
-    # Option description for use within Readers/Writers
+    # Option description for use within Readers/Writers. See {RDF::Reader.options} and {RDF::Writer.options} for example usage.
     class Option
       # Symbol used for this option when calling `Reader.new`
       # @return [Symbol]
@@ -73,8 +105,9 @@ module RDF
       end
     end
 
+    # @private
     COMMANDS = {
-      "count"       => lambda do |argv, opts|
+      count: ->(argv, opts) do
         start = Time.new
         count = 0
         self.parse(argv, opts) do |reader|
@@ -85,14 +118,17 @@ module RDF
         secs = Time.new - start
         $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
       end,
-      "lenghts"     => lambda do |argv, opts|
+      help: ->(argv, opts) do
+        self.usage(self.options)
+      end,
+      lenghts: ->(argv, opts) do
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
             $stdout.puts statement.to_s.size
           end
         end
       end,
-      "objects"     => lambda do |argv, opts|
+      objects: ->(argv, opts) do
         $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
@@ -100,7 +136,7 @@ module RDF
           end
         end
       end,
-      "predicates"   => lambda do |argv, opts|
+      predicates: ->(argv, opts) do
         $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
@@ -108,7 +144,7 @@ module RDF
           end
         end
       end,
-      "serialize" => lambda do |argv, opts|
+      serialize: ->(argv, opts) do
         writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
         out = opts[:output] || $stdout
         out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
@@ -120,7 +156,7 @@ module RDF
           end
         end
       end,
-      "subjects"   => lambda do |argv, opts|
+      subjects: ->(argv, opts) do
         $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
         self.parse(argv, opts) do |reader|
           reader.each_statement do |statement|
@@ -128,7 +164,7 @@ module RDF
           end
         end
       end,
-      "validate"   => lambda do |argv, opts|
+      validate: ->(argv, opts) do
         start = Time.new
         count = 0
         valid = true
@@ -241,10 +277,7 @@ module RDF
       end
 
       options.on_tail("-h", "--help", "Show this message") do
-        $stdout.puts options
-        $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
-        $stdout.puts "Available formats:\n\t#{(self.formats).join("\n\t")}"
-        exit
+        self.usage(options)
       end
 
       begin
@@ -257,21 +290,41 @@ module RDF
     end
 
     ##
-    # @param  [String] command
+    # Output usage message
+    def self.usage(options)
+      $stdout.puts options
+      $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
+      $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
+      $stdout.puts "Available formats:\n\t#{(self.formats).join("\n\t")}"
+    end
+
+    ##
+    # @param  [#to_sym] command
     # @param  [Array<String>] args
     # @return [Boolean]
     def self.exec_command(command, args, options = {})
-      unless COMMANDS.has_key?(command)
-        abort "#{File.basename($0)}: unknown command `#{command}'"
+      unless commands.include?(command.to_s)
+        abort "unknown command `#{command}'"
       end
 
-      COMMANDS[command].call(args, options)
+      COMMANDS[command.to_sym].call(args, options)
+    rescue ArgumentError => e
+      abort e.message
     end
 
     ##
     # @return [Array<String>] list of executable commands
     def self.commands
-      COMMANDS.keys
+      # First, load commands from other formats
+      unless @commands_loaded
+        RDF::Format.each do |format|
+          format.cli_commands.each do |command, lambda|
+            COMMANDS[command] ||= lambda
+          end
+        end
+        @commands_loaded = true
+      end
+      COMMANDS.keys.map(&:to_s).sort
     end
 
     ##
