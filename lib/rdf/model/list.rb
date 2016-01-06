@@ -109,6 +109,14 @@ module RDF
     NIL = RDF::List.new(subject: RDF.nil).freeze
 
     ##
+    # Is this a {RDF::List}?
+    #
+    # @return [Boolean]
+    def list?
+      true
+    end
+
+    ##
     # Validate the list ensuring that
     # * rdf:rest values are all BNodes are nil
     # * each subject has exactly one value for `rdf:first` and
