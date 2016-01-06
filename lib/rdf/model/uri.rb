@@ -10,7 +10,7 @@ module RDF
   #   uri = RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating a URI reference (2)
-  #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/rdf')
+  #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/gems/rdf')
   #     #=> RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating an interned URI reference
@@ -472,7 +472,7 @@ module RDF
     # @example Building a HTTP URL
     #     RDF::URI.new('http://example.org') / 'jhacker' / 'foaf.ttl'
     #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
-    # @example Building a HTTP URL
+    # @example Building a HTTP URL (absolute path components)
     #     RDF::URI.new('http://example.org/') / '/jhacker/' / '/foaf.ttl'
     #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
     # @example Using an anchored base URI
@@ -1205,16 +1205,22 @@ module RDF
     # Sets the query component for this URI from a Hash object.
     # An empty Hash or Array will result in an empty query string.
     #
-    # @example
+    # @example Hash with single and array values
     #   uri.query_values = {a: "a", b: ["c", "d", "e"]}
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
+    #
+    # @example Array with Array values including repeated variables
     #   uri.query_values = [['a', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e']]
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
+    #
+    # @example Array with Array values including multiple elements
     #   uri.query_values = [['a', 'a'], ['b', ['c', 'd', 'e']]]
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
+    #
+    # @example Array with Array values having only one entry
     #   uri.query_values = [['flag'], ['key', 'value']]
     #   uri.query
     #   # => "flag&key=value"
@@ -1234,7 +1240,13 @@ module RDF
           if v.nil?
             k
           else
-            "#{k}=#{normalize_segment(v.to_s, UNRESERVED)}"
+            Array(v).map do |vv|
+              if vv === TrueClass
+                k
+              else
+                "#{k}=#{normalize_segment(vv.to_s, UNRESERVED)}"
+              end
+            end.join("&")
           end
         end
       when Hash
