@@ -109,6 +109,52 @@ module RDF
       end
     end
 
+    ##
+    # Options suitable for automatic Reader provisioning.
+    # @return [Array<RDF::CLI::Option>]
+    def self.options
+      [
+        RDF::CLI::Option.new(
+          symbol: :canonicalize,
+          datatype: TrueClass,
+          on: ["--canonicalize"],
+          description: "Canonicalize input/output.") {true},
+        RDF::CLI::Option.new(
+          symbol: :encoding,
+          datatype: Encoding,
+          on: ["--encoding ENCODING"],
+          description: "The encoding of the input stream.") {|arg| Encoding.find arg},
+        RDF::CLI::Option.new(
+          symbol: :intern,
+          datatype: TrueClass,
+          on: ["--intern"],
+          description: "Intern all parsed URIs.") {true},
+        RDF::CLI::Option.new(
+          symbol: :prefixes,
+          datatype: Hash,
+          multiple: true,
+          on: ["--prefixes PREFIX,PREFIX"],
+          description: "A comma-separated list of prefix:uri pairs.") do |arg|
+            arg.split(',').inject({}) do |memo, pfxuri|
+              pfx,uri = pfxuri.split(':', 2)
+              memo.merge(pfx.to_sym => RDF::URI(uri))
+            end
+        end,
+        RDF::CLI::Option.new(
+          symbol: :base_uri,
+          datatype: RDF::URI,
+          on: ["--uri URI"],
+          description: "Base URI of input file, defaults to the filename.") {|arg| RDF::URI(arg)},
+        RDF::CLI::Option.new(
+          symbol: :validate,
+          datatype: TrueClass,
+          on: ["--validate"],
+          description: "Validate input file.") {true},
+      ]
+    end
+
+    # Returns a hash of options appropriate for use with this reader
+    
     class << self
       alias_method :format_class, :format
     end
@@ -139,6 +185,7 @@ module RDF
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
         options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
+        options[:filename] ||= filename
         reader = self.for(format || format_options) do
           # Return a sample from the input file
           sample = file.read(1000)

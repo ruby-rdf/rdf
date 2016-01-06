@@ -59,4 +59,13 @@ describe RDF::CLI do
       end
     end
   end
+
+  describe "#validate" do
+    TEST_FILES.each do |fmt, file|
+      it "validates #{fmt}" do
+        g = RDF::Repository.load(file)
+        expect {RDF::CLI.exec_command("validate", [file])}.to write(/Validated #{g.count} statements/)
+      end
+    end
+  end
 end

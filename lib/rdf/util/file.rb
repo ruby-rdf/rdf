@@ -327,7 +327,8 @@ module RDF; module Util
           url_no_frag_or_query = RDF::URI(filename_or_url)
           url_no_frag_or_query.query = nil
           url_no_frag_or_query.fragment = nil
-          Kernel.open(url_no_frag_or_query, "r:utf-8", options) do |file|
+          options[:encoding] ||= Encoding::UTF_8
+          Kernel.open(url_no_frag_or_query, "r", options) do |file|
             document_options = {
               base_uri:     filename_or_url.to_s,
               charset:      file.external_encoding.to_s,

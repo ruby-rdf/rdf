@@ -111,6 +111,40 @@ module RDF
       end
     end
 
+    ##
+    # Options suitable for automatic Writer provisioning.
+    # @return [Array<RDF::CLI::Option>]
+    def self.options
+      [
+        RDF::CLI::Option.new(
+          symbol: :canonicalize,
+          datatype: TrueClass,
+          on: ["--canonicalize"],
+          description: "Canonicalize input/output.") {true},
+        RDF::CLI::Option.new(
+          symbol: :encoding,
+          datatype: Encoding,
+          on: ["--encoding ENCODING"],
+          description: "The encoding of the input stream.") {|arg| Encoding.find arg},
+        RDF::CLI::Option.new(
+          symbol: :prefixes,
+          datatype: Hash,
+          multiple: true,
+          on: ["--prefixes PREFIX,PREFIX"],
+          description: "A comma-separated list of prefix:uri pairs.") do |arg|
+            arg.split(',').inject({}) do |memo, pfxuri|
+              pfx,uri = pfxuri.split(':', 2)
+              memo.merge(pfx.to_sym => RDF::URI(uri))
+            end
+        end,
+        RDF::CLI::Option.new(
+          symbol: :unique_bnodes,
+          datatype: TrueClass,
+          on: ["--unique-bnodes"],
+          description: "Use unique Node identifiers.") {true},
+      ]
+    end
+
     class << self
       alias_method :format_class, :format
     end

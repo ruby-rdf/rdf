@@ -359,6 +359,12 @@ module RDF
       end
     end
 
+    ##
+    # Hash of CLI commands appropriate for this format
+    # @return [Hash{Symbol => Lambda(Array, Hash)}]
+    def self.cli_commands
+      {}
+    end
 
     ##
     # Use a text sample to detect the format of an input file. Sub-classes implement
