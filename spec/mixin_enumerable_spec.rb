@@ -25,7 +25,11 @@ describe RDF::Enumerable do
       let(:statement) {subject.detect {|s| s.to_a.none?(&:node?)}}
       it {is_expected.to have_statement(statement)}
       it {is_expected.to have_triple(statement.to_a)}
-      xit {is_expected.to have_quad(statement.to_a)}
+      it do
+        quad = statement.to_a
+        quad[3] ||= nil
+        is_expected.to have_quad(quad)
+      end
     end
 
     context "Checking whether a specific value exists" do
