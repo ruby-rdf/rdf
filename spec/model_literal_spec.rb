@@ -231,7 +231,8 @@ describe RDF::Literal do
       literal(:double)   => 3.1415,
       literal(:date)     => ::Date.new(2010),
       literal(:datetime) => ::DateTime.new(2011),
-      literal(:time)     => ::DateTime.parse('01:02:03Z')
+      # This is problematic when date changes between local testing location and UTC
+      #literal(:time)     => ::DateTime.parse('01:02:03Z')
     }.each_pair do |args, value|
       it "returns object for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
