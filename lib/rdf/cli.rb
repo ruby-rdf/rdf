@@ -238,8 +238,7 @@ module RDF
 
       options.on("--input-format FORMAT", "--format FORMAT", "Format of input file, uses heuristic if not specified") do |arg|
         unless reader = RDF::Reader.for(arg.downcase.to_sym)
-          $stderr.puts "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{self.formats(reader: true).join("\n  ")}"
-          exit(1)
+          self.abort "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{self.formats(reader: true).join("\n  ")}"
         end
 
         # Add format-specific reader options
@@ -260,8 +259,7 @@ module RDF
 
       options.on("--output-format FORMAT", "Format of output file, defaults to NTriples") do |arg|
         unless writer = RDF::Writer.for(arg.downcase.to_sym)
-          $stderr.puts "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.formats(writer: true).join("\n  ")}"
-          exit(1)
+          self.abort "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.formats(writer: true).join("\n  ")}"
         end
 
         # Add format-specific writer options
@@ -340,7 +338,7 @@ module RDF
     end
 
     ##
-    # Parse each file, STDIN or specified string in `options[:evaluate]`
+    # Parse each file, $stdin or specified string in `options[:evaluate]`
     # yielding a reader
     #
     # @param  [Array<String>] files
@@ -350,7 +348,7 @@ module RDF
     def self.parse(files, options = {}, &block)
       if files.empty?
         # If files are empty, either use options[:execute]
-        input = options[:evaluate] ? StringIO.new(options[:evaluate]) : STDIN
+        input = options[:evaluate] ? StringIO.new(options[:evaluate]) : $stdin
         input.set_encoding(options.fetch(:encoding, Encoding::UTF_8))
         RDF::Reader.for(options[:format] || :ntriples).new(input, options) do |reader|
           yield(reader)
