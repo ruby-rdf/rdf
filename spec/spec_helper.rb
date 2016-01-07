@@ -1,4 +1,19 @@
 require "bundler/setup"
+begin
+  require 'simplecov'
+  require 'coveralls'
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter
+  ])
+  SimpleCov.start do
+    add_group "Mixins", 'lib/rdf/mixin'
+    add_group "Models", 'lib/rdf/model'
+    add_group "Query", 'lib/rdf/query'
+    add_filter "/spec/"
+  end
+rescue LoadError
+end
 require 'rdf'
 require 'rdf/vocab'
 require 'rdf/spec'

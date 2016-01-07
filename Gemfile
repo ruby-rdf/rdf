@@ -34,6 +34,8 @@ group :test do
   gem "rake"
   gem "equivalent-xml"
   gem 'fasterer'
+  gem 'simplecov',  require: false, platform: :mri
+  gem 'coveralls',  require: false, platform: :mri
 end
 
 platforms :rbx do
