@@ -985,6 +985,105 @@ describe RDF::Literal do
     end
   end
 
+  describe RDF::Literal::Integer do
+    describe "#pred" do
+      {
+        1                  => 0,
+        -1                 => -2,
+        0                  => -1,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).pred).to eq RDF::Literal(result)
+        end
+      end
+    end
+
+    describe "#succ" do
+      {
+        1                  => 2,
+        -1                 => 0,
+        0                  => 1,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).succ).to eq RDF::Literal(result)
+        end
+      end
+    end
+
+    describe "#even?" do
+      {
+        -2                 => true,
+        -1                 => false,
+        0                  => true,
+        1                  => false,
+        2                  => true,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).even?).to eq result
+        end
+      end
+    end
+
+    describe "#odd?" do
+      {
+        -2                 => false,
+        -1                 => true,
+        0                  => false,
+        1                  => true,
+        2                  => false,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).odd?).to eq result
+        end
+      end
+    end
+
+    describe "#zero?" do
+      {
+        -2                 => false,
+        -1                 => false,
+        0                  => true,
+        1                  => false,
+        2                  => false,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).zero?).to eq result
+        end
+      end
+    end
+
+    describe "#nonzero?" do
+      {
+        -2                 => -2,
+        -1                 => -1,
+        0                  => false,
+        1                  => 1,
+        2                  => 2,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          if result
+            expect(RDF::Literal(value).nonzero?).to eql RDF::Literal(result)
+          else
+            expect(RDF::Literal(value).nonzero?).to be_falsy
+          end
+        end
+      end
+    end
+
+    describe "#to_bn" do
+      require 'openssl' unless defined?(OpenSSL::BN)
+      {
+        0                  => OpenSSL::BN.new("0"),
+        1                  => OpenSSL::BN.new("1"),
+        2                  => OpenSSL::BN.new("2"),
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).to_bn).to eql result
+        end
+      end
+    end
+  end
+
   describe "SPARQL tests" do
     context "#==" do
       {
