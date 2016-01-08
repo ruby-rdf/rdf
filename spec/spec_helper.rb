@@ -12,6 +12,7 @@ begin
     add_group "Query", 'lib/rdf/query'
     add_filter "/spec/"
   end
+  Coveralls.wear!
 rescue LoadError
 end
 require 'rdf'
