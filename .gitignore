@@ -11,3 +11,4 @@ Gemfile.lock
 *.sw?
 benchmark/
 /.byebug_history
+/coverage/

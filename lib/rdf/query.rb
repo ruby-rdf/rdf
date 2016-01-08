@@ -182,11 +182,13 @@ module RDF
     #   @yieldreturn [void] ignored
     def initialize(*patterns, &block)
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
+      # :nocov:
       if @options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Query#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Query#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         @options[:graph_name] ||= options.delete(:context)
       end
+      # :nocov:
       patterns << @options if patterns.empty?
       @variables = {}
       @solutions = Query::Solutions(@options.delete(:solutions))
@@ -301,11 +303,13 @@ module RDF
     def execute(queryable, options = {}, &block)
       validate!
       options = options.dup
+      # :nocov:
       if options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Query#execute is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Query#execute is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
+      # :nocov:
 
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}
@@ -437,20 +441,24 @@ module RDF
     # @param [RDF::IRI, RDF::Query::Variable] value
     # @return [RDF::IRI, RDF::Query::Variable]
     # @deprecated Use {#graph_name=} instead.
+    # :nocov:
     def context=(value)
       raise NoMethodError, "Query#context= is deprecated in RDF.rb 2.0, use Query#graph_name= instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Query#context= is deprecated in RDF.rb 2.0, use Query#graph_name= instead. Called from #{Gem.location_of_caller.join(':')}"
       self.graph_name = value
     end
+    # :nocov:
 
     # Scope of this query, if any
     # @return [RDF::IRI, RDF::Query::Variable]
     # @deprecated Use {#graph_name} instead.
+    # :nocov:
     def context
       raise NoMethodError, "Query#context is deprecated in RDF.rb 2.0, use Query#graph_name= instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Query#context is deprecated in RDF.rb 2.0, use Query#graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
       graph_name
     end
+    # :nocov:
 
     # Scope the query to named graphs matching value
     # @param [RDF::IRI, RDF::Query::Variable] value

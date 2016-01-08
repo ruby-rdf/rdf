@@ -1,15 +1,100 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/cli'
+require 'rdf/ntriples'
+require 'rdf/nquads'
 
 describe RDF::CLI do
+  before(:all) {ARGV.replace %w(help)}
+
   TEST_FILES = {
     nt: fixture_path('test.nt'),
     nq: fixture_path('test.nq'),
   }
 
+  describe ".options" do
+    it "calls a block" do
+      expect {|b| RDF::CLI.options(&b)}.to yield_control
+    end
+
+    it "sets debug logging with --debug" do
+      ARGV.replace %w(help --debug)
+      options = RDF::CLI.options
+      expect(options.options[:logger].level).to eql Logger::DEBUG
+    end
+
+    it "sets :evaluate with --evaluate" do
+      ARGV.replace %w(help --evaluate foo)
+      options = RDF::CLI.options
+      expect(options.options[:evaluate]).to eql "foo"
+    end
+
+    describe "--input-format" do
+      it "sets :format given a legitimate format" do
+        ARGV.replace %w(help --format ntriples)
+        options = RDF::CLI.options
+        expect(options.options[:format]).to eql :ntriples
+      end
+
+      it "Calls options on selected reader" do
+        ARGV.replace %w(help --format ntriples)
+        expect(RDF::NTriples::Reader).to receive(:options).and_return({})
+        options = RDF::CLI.options
+      end
+
+      #it "sets aborts given an illegitimate format" do
+      #  ARGV.replace %w(help --format foo)
+      #  options = RDF::CLI.options
+      #  expect(RDF::CLI).to receive(:abort).and_return(nil)
+      #  expect(options.options[:format]).not_to eql :foo
+      #end
+    end
+
+    it "sets :output with --output" do
+      ARGV.replace %w(help --output foo)
+      mock = double("open")
+      expect(File).to receive(:open).with("foo", "w").and_return(mock)
+      options = RDF::CLI.options
+      expect(options.options[:output]).to eql mock
+    end
+
+    describe "--output-format" do
+      it "sets :output_format given a legitimate format" do
+        ARGV.replace %w(help --output-format ntriples)
+        options = RDF::CLI.options
+        expect(options.options[:output_format]).to eql :ntriples
+      end
+
+      it "Calls options on selected writer" do
+        ARGV.replace %w(help --output-format ntriples)
+        expect(RDF::NTriples::Writer).to receive(:options).and_return({})
+        options = RDF::CLI.options
+      end
+
+      #it "sets aborts given an illegitimate format" do
+      #  ARGV.replace %w(help --output-format foo)
+      #  options = RDF::CLI.options
+      #  expect(RDF::CLI).to receive(:abort).and_return(nil)
+      #  expect(options.options[::output_format]).not_to eql :foo
+      #end
+    end
+  end
+
   describe "#serialize" do
+    after(:each) do
+      $stdin = STDIN
+    end
+
     it "serializes to NTriples" do
       expect {RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]])}.to write.to(:output)
+    end
+
+    it "serializes to NTriples from $stdin" do
+      $stdin = File.open(TEST_FILES[:nt])
+      expect {RDF::CLI.exec_command("serialize", [])}.to write.to(:output)
+    end
+
+    it "serializes to NTriples from evaluate" do
+      expect {RDF::CLI.exec_command("serialize", [], evaluate: File.read(TEST_FILES[:nt]))}.to write.to(:output)
     end
 
     it "serializes to NQuads" do
@@ -17,6 +102,10 @@ describe RDF::CLI do
         RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]], output_format: :nquads)
       }.to write.to(:output)
     end
+  end
+
+  it "#help" do
+    expect {RDF::CLI.exec_command("help", [TEST_FILES[:nt]])}.to write(:anything)
   end
 
   describe "#count" do

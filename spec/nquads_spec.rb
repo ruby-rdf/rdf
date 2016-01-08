@@ -346,6 +346,16 @@ describe RDF::NQuads::Writer do
   end
 
   context "Examples" do
-    it "needs specs for documentation examples"
+    it "Obtaining an NQuads format class" do
+      [
+        :nquads,
+        "etc/doap.nq",
+        {file_name: "etc/doap.nq"},
+        {file_extension: "nq"},
+        {content_type: "application/n-quads"}
+      ].each do |arg|
+        expect(RDF::Format.for(arg)).to eql RDF::NQuads::Format
+      end
+    end
   end
 end

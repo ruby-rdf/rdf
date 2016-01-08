@@ -870,7 +870,93 @@ describe RDF::NTriples do
   end
 
   context "Examples" do
-    it "needs specs for documentation examples"
+    let(:graph) {RDF::Graph.new {|g| g << RDF::Statement(RDF::URI("http:/a"), RDF::URI("http:/b"), "c")}}
+
+    it "Obtaining an NTriples format class" do
+      [
+        :ntriples,
+        "etc/doap.nt",
+        {file_name: "etc/doap.nt"},
+        {file_extension: "nt"},
+        {content_type: "application/n-triples"}
+      ].each do |arg|
+        expect(RDF::Format.for(arg)).to eql RDF::NTriples::Format
+      end
+    end
+
+    it "Obtaining an NTriples reader class" do
+      [
+        :ntriples,
+        "etc/doap.nt",
+        {file_name: "etc/doap.nt"},
+        {file_extension: "nt"},
+        {content_type: "application/n-triples"}
+      ].each do |arg|
+        expect(RDF::Reader.for(arg)).to eql RDF::NTriples::Reader
+      end
+    end
+
+    it "Parsing RDF statements from an NTriples file" do
+      expect do
+        RDF::NTriples::Reader.open("etc/doap.nt") do |reader|
+          reader.each_statement do |statement|
+            puts statement.inspect
+          end
+        end
+      end.to write(:something).to(:output)
+    end
+
+    it "Parsing RDF statements from an NTriples string" do
+      expect do
+        data = StringIO.new(File.read("etc/doap.nt"))
+        RDF::NTriples::Reader.new(data) do |reader|
+          reader.each_statement do |statement|
+            puts statement.inspect
+          end
+        end
+      end.to write(:something).to(:output)
+    end
+
+    it "Obtaining an NTriples writer class" do
+      [
+        :ntriples,
+        "etc/doap.nt",
+        {file_name: "etc/doap.nt"},
+        {file_extension: "nt"},
+        {content_type: "application/n-triples"}
+      ].each do |arg|
+        expect(RDF::Writer.for(arg)).to eql RDF::NTriples::Writer
+      end
+    end
+
+    it "Serializing RDF statements into an NTriples file" do
+      mock = StringIO.new
+      allow(File).to receive(:open).and_yield(mock)
+      RDF::NTriples::Writer.open("etc/test.nt") do |writer|
+        graph.each_statement do |statement|
+          writer << statement
+        end
+      end
+      expect(mock.length).not_to eql 0
+    end
+
+    it "Serializing RDF statements into an NTriples string" do
+      output = RDF::NTriples::Writer.buffer do |writer|
+        graph.each_statement do |statement|
+          writer << statement
+        end
+      end
+      expect(output).not_to be_empty
+    end
+
+    it "Serializing RDF statements into an NTriples string with escaped UTF-8" do
+      output = RDF::NTriples::Writer.buffer(encoding: Encoding::ASCII) do |writer|
+        graph.each_statement do |statement|
+          writer << statement
+        end
+      end
+      expect(output.encoding).to eql Encoding::ASCII
+    end
   end
 
   def parse(input, options = {})

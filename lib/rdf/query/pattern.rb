@@ -6,11 +6,13 @@ module RDF; class Query
     # @private
     # @since 0.2.2
     def self.from(pattern, options = {})
+      # :nocov:
       if options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Pattern.from is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Pattern.from is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
+      # :nocov:
       case pattern
         when Pattern then pattern
         when Array, Statement
@@ -41,11 +43,13 @@ module RDF; class Query
     #
     # @note {Statement} treats symbols as interned {Node} instances, in a {Pattern}, they are treated as {Variable}.
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
+      # :nocov:
       if options.has_key?(:context)
         raise ArgumentError, "The :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Pattern#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:context)
       end
+      # :nocov:
       super
     end
 

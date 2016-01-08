@@ -104,11 +104,13 @@ module RDF
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(url: nil, title: nil, **options, &block)
+      # :nocov:
       if options[:with_context]
         raise ArgumentError, "The :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
         options[:graph_name] ||= options.delete(:with_context)
       end
+      # :nocov:
       @options = {with_graph_name: true, with_validity: true}.merge(options)
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
@@ -246,9 +248,11 @@ module RDF
         case feature.to_sym
           #statement named graphs
           when :context
+            # :nocov:
             raise ArgumentError, "The :contexts feature is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
             warn "[DEPRECATION] the :context feature is deprecated in RDF.rb 2.0; use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
             @options[:with_context] || @options[:with_graph_name]
+            # :nocov:
           when :graph_name   then @options[:with_graph_name]
           when :inference then false  # forward-chaining inference
           when :validity  then @options.fetch(:with_validity, true)
@@ -318,11 +322,13 @@ module RDF
       # @private
       # @see RDF::Enumerable#has_context?
       # @deprecated Use {#has_graph?} instead.
+      # :nocov:
       def has_context?(value)
         raise NoMethodError, "Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
        warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}"
        has_graph?(value)
       end
+      # :nocov:
 
       ##
       # @private
@@ -342,6 +348,7 @@ module RDF
       # @private
       # @see RDF::Enumerable#each_context
       # @deprecated Use {#each_graph} instead.
+      # :nocov:
       def each_context(&block)
         raise NoMethodError, "Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}"
@@ -352,6 +359,7 @@ module RDF
         end
         enum_context
       end
+      # :nocov:
 
       ##
       # @private

@@ -231,7 +231,8 @@ describe RDF::Literal do
       literal(:double)   => 3.1415,
       literal(:date)     => ::Date.new(2010),
       literal(:datetime) => ::DateTime.new(2011),
-      literal(:time)     => ::DateTime.parse('01:02:03Z')
+      # This is problematic when date changes between local testing location and UTC
+      #literal(:time)     => ::DateTime.parse('01:02:03Z')
     }.each_pair do |args, value|
       it "returns object for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
@@ -799,6 +800,10 @@ describe RDF::Literal do
           expect(RDF::Literal(value).abs).to eq RDF::Literal(result)
         end
       end
+
+      it "Numeric does not implement #abs" do
+        expect {RDF::Literal::Numeric.new(-1).abs}.to raise_error(NotImplementedError)
+      end
     end
 
     describe "#round" do
@@ -820,6 +825,10 @@ describe RDF::Literal do
         it "#{value} => #{result}" do
           expect(RDF::Literal(value).round).to eq RDF::Literal(result)
         end
+      end
+
+      it "Numeric does not implement #round" do
+        expect {RDF::Literal::Numeric.new(-1).round}.to raise_error(NotImplementedError)
       end
     end
 
@@ -844,25 +853,232 @@ describe RDF::Literal do
         end
       end
 
-      describe "#floor" do
+      it "Numeric returns self" do
+        expect(RDF::Literal::Numeric.new(-1).ceil).to eql RDF::Literal::Numeric.new(-1)
+      end
+    end
+
+    describe "#floor" do
+      {
+        1                  => 1,
+        -1                 => -1,
+        0                  => 0,
+        BigDecimal("1.1")  => BigDecimal("1"),
+        BigDecimal("-1.1") => BigDecimal("-2"),
+        BigDecimal("1.5")  => BigDecimal("1"),
+        BigDecimal("-1.5") => BigDecimal("-2"),
+        +0.0               => 0,
+        -0.0               => 0,
+        1.5                => 1,
+        -1.5               => -2,
+        1.2e0              => 1.0e0,
+        -1.2e0             => -2.0e0
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).floor).to eq RDF::Literal(result)
+        end
+      end
+
+      it "Numeric returns self" do
+        expect(RDF::Literal::Numeric.new(-1).floor).to eql RDF::Literal::Numeric.new(-1)
+      end
+    end
+
+    describe "#+" do
+      {
+        "Double + Double"     => [RDF::Literal::Double.new(1), RDF::Literal::Double.new(1), RDF::Literal::Double.new(2)],
+        "Double + Float"      => [RDF::Literal::Double.new(1), 1.0, RDF::Literal::Double.new(2)],
+        "Double + Decimal"    => [RDF::Literal::Double.new(1), RDF::Literal::Decimal.new(1), RDF::Literal::Double.new(2)],
+        "Double + Integer"    => [RDF::Literal::Double.new(1), RDF::Literal::Integer.new(1), RDF::Literal::Double.new(2)],
+        "Double + ::Integer"  => [RDF::Literal::Double.new(1), 1, RDF::Literal::Double.new(2)],
+        "Decimal + Double"    => [RDF::Literal::Decimal.new(1), RDF::Literal::Double.new(1), RDF::Literal::Double.new(2)],
+        "Decimal + Float"     => [RDF::Literal::Decimal.new(1), 1.0, RDF::Literal::Double.new(2)],
+        "Decimal + Decimal"   => [RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(2)],
+        "Decimal + Integer"   => [RDF::Literal::Decimal.new(1), RDF::Literal::Integer.new(1), RDF::Literal::Decimal.new(2)],
+        "Decimal + ::Integer" => [RDF::Literal::Decimal.new(1), 1, RDF::Literal::Decimal.new(2)],
+        "Integer + Double"    => [RDF::Literal::Integer.new(1), RDF::Literal::Double.new(1), RDF::Literal::Double.new(2)],
+        "Integer + Float"     => [RDF::Literal::Integer.new(1), 1.0, RDF::Literal::Double.new(2)],
+        "Integer + Decimal"   => [RDF::Literal::Integer.new(1), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(2)],
+        "Integer + Integer"   => [RDF::Literal::Integer.new(1), RDF::Literal::Integer.new(1), RDF::Literal::Integer.new(2)],
+        "Integer + ::Integer" => [RDF::Literal::Integer.new(1), 1, RDF::Literal::Integer.new(2)],
+      }.each do |test, (l,r,v)|
+        it test do
+          expect(l + r).to eql v
+        end
+      end
+
+      it "returns self for unary +" do
+        expect(+RDF::Literal::Numeric.new(1)).to eql RDF::Literal::Numeric.new(1)
+      end
+    end
+
+    describe "#-" do
+      {
+        "Double - Double"     => [RDF::Literal::Double.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(9)],
+        "Double - Float"      => [RDF::Literal::Double.new(10), 1.0, RDF::Literal::Double.new(9)],
+        "Double - Decimal"    => [RDF::Literal::Double.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Double.new(9)],
+        "Double - Integer"    => [RDF::Literal::Double.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Double.new(9)],
+        "Double - ::Integer"  => [RDF::Literal::Double.new(10), 1, RDF::Literal::Double.new(9)],
+        "Decimal - Double"    => [RDF::Literal::Decimal.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(9)],
+        "Decimal - Float"     => [RDF::Literal::Decimal.new(10), 1.0, RDF::Literal::Double.new(9)],
+        "Decimal - Decimal"   => [RDF::Literal::Decimal.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(9)],
+        "Decimal - Integer"   => [RDF::Literal::Decimal.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Decimal.new(9)],
+        "Decimal - ::Integer" => [RDF::Literal::Decimal.new(10), 1, RDF::Literal::Decimal.new(9)],
+        "Integer - Double"    => [RDF::Literal::Integer.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(9)],
+        "Integer - Float"     => [RDF::Literal::Integer.new(10), 1.0, RDF::Literal::Double.new(9)],
+        "Integer - Decimal"   => [RDF::Literal::Integer.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(9)],
+        "Integer - Integer"   => [RDF::Literal::Integer.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Integer.new(9)],
+        "Integer - ::Integer" => [RDF::Literal::Integer.new(10), 1, RDF::Literal::Integer.new(9)],
+      }.each do |test, (l,r,v)|
+        it test do
+          expect(l - r).to eql v
+        end
+      end
+    end
+
+    describe "#*" do
+      {
+        "Double * Double"     => [RDF::Literal::Double.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(10)],
+        "Double * Float"      => [RDF::Literal::Double.new(10), 1.0, RDF::Literal::Double.new(10)],
+        "Double * Decimal"    => [RDF::Literal::Double.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Double.new(10)],
+        "Double * Integer"    => [RDF::Literal::Double.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Double.new(10)],
+        "Double * ::Integer"  => [RDF::Literal::Double.new(10), 1, RDF::Literal::Double.new(10)],
+        "Decimal * Double"    => [RDF::Literal::Decimal.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(10)],
+        "Decimal * Float"     => [RDF::Literal::Decimal.new(10), 1.0, RDF::Literal::Double.new(10)],
+        "Decimal * Decimal"   => [RDF::Literal::Decimal.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(10)],
+        "Decimal * Integer"   => [RDF::Literal::Decimal.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Decimal.new(10)],
+        "Decimal * ::Integer" => [RDF::Literal::Decimal.new(10), 1, RDF::Literal::Decimal.new(10)],
+        "Integer * Double"    => [RDF::Literal::Integer.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(10)],
+        "Integer * Float"     => [RDF::Literal::Integer.new(10), 1.0, RDF::Literal::Double.new(10)],
+        "Integer * Decimal"   => [RDF::Literal::Integer.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(10)],
+        "Integer * Integer"   => [RDF::Literal::Integer.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Integer.new(10)],
+        "Integer * ::Integer" => [RDF::Literal::Integer.new(10), 1, RDF::Literal::Integer.new(10)],
+      }.each do |test, (l,r,v)|
+        it test do
+          expect(l * r).to eql v
+        end
+      end
+
+      describe "#/" do
         {
-          1                  => 1,
-          -1                 => -1,
-          0                  => 0,
-          BigDecimal("1.1")  => BigDecimal("1"),
-          BigDecimal("-1.1") => BigDecimal("-2"),
-          BigDecimal("1.5")  => BigDecimal("1"),
-          BigDecimal("-1.5") => BigDecimal("-2"),
-          +0.0               => 0,
-          -0.0               => 0,
-          1.5                => 1,
-          -1.5               => -2,
-          1.2e0              => 1.0e0,
-          -1.2e0             => -2.0e0
-        }.each do |value, result|
-          it "#{value} => #{result}" do
-            expect(RDF::Literal(value).floor).to eq RDF::Literal(result)
+          "Double * Double"     => [RDF::Literal::Double.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(10)],
+          "Double * Float"      => [RDF::Literal::Double.new(10), 1.0, RDF::Literal::Double.new(10)],
+          "Double * Decimal"    => [RDF::Literal::Double.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Double.new(10)],
+          "Double * Integer"    => [RDF::Literal::Double.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Double.new(10)],
+          "Double * ::Integer"  => [RDF::Literal::Double.new(10), 1, RDF::Literal::Double.new(10)],
+          "Decimal * Double"    => [RDF::Literal::Decimal.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(10)],
+          "Decimal * Float"     => [RDF::Literal::Decimal.new(10), 1.0, RDF::Literal::Double.new(10)],
+          "Decimal * Decimal"   => [RDF::Literal::Decimal.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(10)],
+          "Decimal * Integer"   => [RDF::Literal::Decimal.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Decimal.new(10)],
+          "Decimal * ::Integer" => [RDF::Literal::Decimal.new(10), 1, RDF::Literal::Decimal.new(10)],
+          "Integer * Double"    => [RDF::Literal::Integer.new(10), RDF::Literal::Double.new(1), RDF::Literal::Double.new(10)],
+          "Integer * Float"     => [RDF::Literal::Integer.new(10), 1.0, RDF::Literal::Double.new(10)],
+          "Integer * Decimal"   => [RDF::Literal::Integer.new(10), RDF::Literal::Decimal.new(1), RDF::Literal::Decimal.new(10)],
+          "Integer * Integer"   => [RDF::Literal::Integer.new(10), RDF::Literal::Integer.new(1), RDF::Literal::Decimal.new(10)],
+          "Integer * ::Integer" => [RDF::Literal::Integer.new(10), 1, RDF::Literal::Decimal.new(10)],
+        }.each do |test, (l,r,v)|
+          it test do
+            expect(l / r).to eql v
           end
+        end
+      end
+    end
+  end
+
+  describe RDF::Literal::Integer do
+    describe "#pred" do
+      {
+        1                  => 0,
+        -1                 => -2,
+        0                  => -1,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).pred).to eq RDF::Literal(result)
+        end
+      end
+    end
+
+    describe "#succ" do
+      {
+        1                  => 2,
+        -1                 => 0,
+        0                  => 1,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).succ).to eq RDF::Literal(result)
+        end
+      end
+    end
+
+    describe "#even?" do
+      {
+        -2                 => true,
+        -1                 => false,
+        0                  => true,
+        1                  => false,
+        2                  => true,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).even?).to eq result
+        end
+      end
+    end
+
+    describe "#odd?" do
+      {
+        -2                 => false,
+        -1                 => true,
+        0                  => false,
+        1                  => true,
+        2                  => false,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).odd?).to eq result
+        end
+      end
+    end
+
+    describe "#zero?" do
+      {
+        -2                 => false,
+        -1                 => false,
+        0                  => true,
+        1                  => false,
+        2                  => false,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).zero?).to eq result
+        end
+      end
+    end
+
+    describe "#nonzero?" do
+      {
+        -2                 => -2,
+        -1                 => -1,
+        0                  => false,
+        1                  => 1,
+        2                  => 2,
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          if result
+            expect(RDF::Literal(value).nonzero?).to eql RDF::Literal(result)
+          else
+            expect(RDF::Literal(value).nonzero?).to be_falsy
+          end
+        end
+      end
+    end
+
+    describe "#to_bn" do
+      require 'openssl' unless defined?(OpenSSL::BN)
+      {
+        0                  => OpenSSL::BN.new("0"),
+        1                  => OpenSSL::BN.new("1"),
+        2                  => OpenSSL::BN.new("2"),
+      }.each do |value, result|
+        it "#{value} => #{result}" do
+          expect(RDF::Literal(value).to_bn).to eql result
         end
       end
     end
