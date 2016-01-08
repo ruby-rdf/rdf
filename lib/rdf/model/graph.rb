@@ -59,11 +59,13 @@ module RDF
     # @return [RDF::Resource]
     # @since 1.1.0
     # @deprecated Use {#graph_name} instead.
+    # :nocov:
     def context
       raise NoMethodError, "Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
 	    graph_name
     end
+    # :nocov:
 
     ##
     # {RDF::Queryable} backing this graph.
@@ -211,11 +213,13 @@ module RDF
     #
     # @return [Enumerator<RDF::Resource>]
     # @deprecated Use {#graph_names} instead.
+    # :nocov:
     def contexts(unique: true)
       raise NoMethodError, "Graph#contexts is being replaced with Graph@graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Graph#contexts is being replaced with Graph#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       (named? ? [graph_name] : []).to_enum.extend(RDF::Countable)
     end
+    # :nocov:
 
     ##
     # Returns all unique RDF names for this graph.

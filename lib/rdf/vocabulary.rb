@@ -220,20 +220,24 @@ module RDF
       ##
       # @return [String] The label for the named property
       # @deprecated Use {RDF::Vocabulary::Term#label} instead.
+      # :nocov:
       def label_for(name)
         raise NoMethodError, "Vocabulary.label_for is deprecated in RDF.rb 2.0, use Vocabulary::Term#label instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] `Vocabulary.label_for is deprecated. Please use Vocabulary::Term#label instead. Called from #{Gem.location_of_caller.join(':')}"
         self[name].label || ''
       end
+      # :nocov:
 
       ##
       # @return [String] The comment for the named property
       # @deprecated Use {RDF::Vocabulary::Term#comment} instead.
+      # :nocov:
       def comment_for(name)
         raise NoMethodError, "Vocabulary.comment_for is deprecated in RDF.rb 2.0, use Vocabulary::Term#comment instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
         warn "[DEPRECATION] `Vocabulary.comment_for is deprecated. Please use Vocabulary::Term#comment instead. Called from #{Gem.location_of_caller.join(':')}"
         self[name].comment || ''
       end
+      # :nocov:
 
       ##
       # Returns the base URI for this vocabulary class.

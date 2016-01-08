@@ -579,6 +579,7 @@ module RDF
     # @see    #each_context
     # @see    #enum_context
     # @deprecated use {#graph_names} instead.
+    # :nocov:
     def contexts(unique: true)
       raise NoMethodError, "Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#contexts is being replaced with Enumerable#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
@@ -588,6 +589,7 @@ module RDF
         enum_context
       end
     end
+    # :nocov:
 
     ##
     # Returns `true` if `self` contains the given RDF context.
@@ -596,11 +598,13 @@ module RDF
     #   Use value `false` to query for the default context
     # @return [Boolean]
     # @deprecated Use {#has_graph?} instead.
+    # :nocov:
     def has_context?(value)
       raise NoMethodError, "Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#has_context? is being replaced with Enumerable#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       has_graph?(value)
     end
+    # :nocov:
 
     ##
     # Iterates the given block for each unique RDF context, other than the default context.
@@ -621,6 +625,7 @@ module RDF
     #
     # @see    #enum_context
     # @deprecated Use {#each_graph} instead.
+    # :nocov:
     def each_context
       raise NoMethodError, "Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#each_context is being replaced with Enumerable#each_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
@@ -636,6 +641,7 @@ module RDF
       end
       enum_context
     end
+    # :nocov:
 
     ##
     # Returns an enumerator for {RDF::Enumerable#each_context}.
@@ -643,12 +649,14 @@ module RDF
     # @return [Enumerator]
     # @see    #each_context
     # @deprecated Use {#enum_graph} instead.
+    # :nocov:
     def enum_context
       raise NoMethodError, "Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Enumerable#enum_context is being replaced with Enumerable#enum_graph in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       enum_for(:each_context)
     end
     alias_method :enum_contexts, :enum_context
+    # :nocov:
 
     ##
     # Returns all unique RDF graph names, other than the default graph.

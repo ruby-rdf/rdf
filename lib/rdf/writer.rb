@@ -411,24 +411,28 @@ module RDF
     ##
     # @param  [RDF::Graph] graph
     # @return [void] `self`
-    # @deprecated Use {RDF::Writable#insert_graph} instead .
+    # @deprecated Use {RDF::Writable#insert_graph} instead.
+    # :nocov:
     def write_graph(graph)
       raise NoMethodError, "Writer#graph_write is deprecated in RDF.rb 2.0, use Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       graph.each_triple { |*triple| write_triple(*triple) }
       self
     end
+    # :nocov:
 
     ##
     # @param  [Array<RDF::Statement>] statements
     # @return [void] `self`
     # @deprecated Use {RDF::Writable#insert} instead.
+    # :nocov:
     def write_statements(*statements)
       raise NoMethodError, "Writer#write_statements is deprecated in RDF.rb 2.0, use Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
       statements.each { |statement| write_statement(statement) }
       self
     end
+    # :nocov:
 
     ##
     # @param  [RDF::Statement] statement
@@ -491,11 +495,13 @@ module RDF
     # @return [String]
     # @since  0.3.0
     # @deprecated Use {#format_term} instead
+    # :nocov:
     def format_value(term, options = {})
       raise NoMethodError, "Writer#format_value is deprecated in RDF.rb 2.0, use Writable#format_term instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
       warn "[DEPRECATION] Writer#format_value is being replaced with Writer#format_term in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
       format_term(term, options)
     end
+    # :nocov:
 
     ##
     # @param  [RDF::Node] value
