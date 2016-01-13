@@ -108,6 +108,8 @@ module RDF
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
 
+      @tx_class = @options.delete(:transaction_class) { RDF::Transaction }
+
       # Provide a default in-memory implementation:
       send(:extend, Implementation) if self.class.equal?(RDF::Repository)
 
@@ -190,21 +192,17 @@ module RDF
     # @return [RDF::Transaction]
     # @since  0.3.0
     def begin_transaction(mutable: false)
-      RDF::Transaction.new(self, mutable: mutable)
+      @tx_class.new(self, mutable: mutable)
     end
 
     ##
     # Rolls back the given transaction.
     #
-    # Subclasses implementing transaction-capable storage adapters may wish
-    # to override this method in order to roll back the given transaction in
-    # the underlying storage.
-    #
     # @param  [RDF::Transaction] tx
     # @return [void] ignored
     # @since  0.3.0
     def rollback_transaction(tx)
-      # nothing to do
+      tx.rollback
     end
 
     ##

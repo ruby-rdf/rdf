@@ -37,6 +37,16 @@ module RDF
   #     tx.delete [subject, RDF::RDFS.label, "Old title"]
   #     tx.insert [subject, RDF::RDFS.label, "New title"]
   #   end
+  # 
+  # The base class provides a full, buffered implementation depending on 
+  # `RDF::Changeset` and using `Changeset#apply`. Custom `Repositories`
+  # can implement a minimial write-atomic transactions by overriding
+  # `#apply_changeset`. Minimal snapshot isolation for queries can be 
+  # implemented by passing a `:snapshot` to `options` on initialization.
+  #
+  # For datastores that support Transactions natively, it is recommended 
+  # to implement a custom `Transaction` subclass, setting `@tx_class` to
+  # default to that class for the `Repository`.
   #
   # @see RDF::Changeset
   # @see RDF::Mutable#apply_changeset
@@ -47,7 +57,7 @@ module RDF
 
     extend Forwardable
 
-    def_delegators :@repository, :size, :<<, :map
+    def_delegators :@snapshot, :query_pattern, :query_execute
 
     ##
     # Executes a transaction against the given RDF repository.
@@ -109,12 +119,16 @@ module RDF
     # @param  [Hash{Symbol => Object}]  options
     # @option options [Boolean]         :mutable (false)
     #    Whether this is a read-only or read/write transaction.
+    # @option options [Queryable]       :snapshot
+    #    A queryable snapshot of the repository for isolated reads. Defaults to
+    #    `#repository` as an unisolated query target.
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
     def initialize(repository, options = {}, &block)
       @repository = repository
-      @options = options.dup
-      @mutable = !!(@options.delete(:mutable) || false)
+      @options  = options.dup
+      @snapshot = @options.delete(:snapshot) { @repository }
+      @mutable  = !!(@options.delete(:mutable) || false)
       
       @changes = RDF::Changeset.new
       
@@ -197,6 +211,21 @@ module RDF
     # @return [Boolean] `true` if the changes are successfully applied.
     def execute
       @changes.apply(@repository)
+    end
+
+    ##
+    # Rolls back the transaction
+    #
+    # @note: the base class simply replaces its current `Changeset` with a 
+    #   fresh one. Other implementations may need to explictly rollback 
+    #   at the supporting datastore.
+    #
+    # @note: clients should not rely on using same transaction instance after
+    #   rollback.
+    #
+    # @return [Boolean] `true` if the changes are successfully applied.
+    def rollback
+      @changes = RDF::Changeset.new
     end
 
     protected

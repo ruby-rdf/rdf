@@ -7,7 +7,7 @@ describe RDF::Transaction do
   # @see lib/rdf/spec/transaction.rb in rdf-spec
   it_behaves_like "an RDF::Transaction", RDF::Transaction
 
-  describe 'default implementation' do
+  describe 'base implementation' do
     subject { described_class.new(repository, mutable: true) }
 
     describe '#buffered' do
@@ -62,6 +62,13 @@ describe RDF::Transaction do
 
         expect { subject.delete(sts) }
           .to change { subject.changes.deletes }.to contain_exactly(*sts)
+      end
+    end
+
+    describe '#execute' do
+      it 'calls `changes#apply` with repository' do
+        expect(subject.changes).to receive(:apply).with(subject.repository)
+        subject.execute
       end
     end
   end
