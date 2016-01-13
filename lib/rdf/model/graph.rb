@@ -54,20 +54,6 @@ module RDF
     alias_method :name=, :graph_name=
 
     ##
-    # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] graph_name
-    # @return [RDF::Resource]
-    # @since 1.1.0
-    # @deprecated Use {#graph_name} instead.
-    # :nocov:
-    def context
-      raise NoMethodError, "Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Graph#context is being replaced with Graph@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-	    graph_name
-    end
-    # :nocov:
-
-    ##
     # {RDF::Queryable} backing this graph.
     # @!attribute [rw] data
     # @return [RDF::Queryable]
@@ -128,7 +114,7 @@ module RDF
     #
     # @raise [ArgumentError] if a `data` does not support named graphs.
     # @note
-    #   Contexts are only useful when used as a projection
+    #   Graph names are only useful when used as a projection
     #   on a `:data` which supports named graphs. Otherwise, there is no
     #   such thing as a named graph in RDF 1.1, a repository may have
     #   graphs which are named, but the name is not a property of the graph.
@@ -207,19 +193,6 @@ module RDF
     def durable?
       @data.durable?
     end
-
-    ##
-    # Returns all unique RDF contexts for this graph.
-    #
-    # @return [Enumerator<RDF::Resource>]
-    # @deprecated Use {#graph_names} instead.
-    # :nocov:
-    def contexts(unique: true)
-      raise NoMethodError, "Graph#contexts is being replaced with Graph@graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Graph#contexts is being replaced with Graph#graph_names in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      (named? ? [graph_name] : []).to_enum.extend(RDF::Countable)
-    end
-    # :nocov:
 
     ##
     # Returns all unique RDF names for this graph.

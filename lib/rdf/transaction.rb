@@ -40,20 +40,6 @@ module RDF
     # @since 1.1.0
     attr_accessor :graph_name
 
-    # @deprecated Use {#graph_name} instead.
-    def context
-      raise NoMethodError, "Transaction#context is deprecated in RDF.rb 2.0, use Transaction@graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Transaction#context is being replaced with Transaction@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      graph_name
-    end
-
-    # @deprecated Use {#graph_name=} instead.
-    def context=(value)
-      raise NoMethodError, "Transaction#context= is deprecated in RDF.rb 2.0, use Transaction@graph_name= instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Transaction#context= is being replaced with Transaction@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      self.graph_name = value
-    end
-
     alias_method :graph, :graph_name
     alias_method :graph=, :graph_name=
 
@@ -92,11 +78,6 @@ module RDF
     # @yieldparam [RDF::Transaction] tx
     def initialize(options = {}, &block)
       @options = options.dup
-      if @options.has_key?(:context)
-        raise ArgumentError, "The :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        @options[:graph_name] ||= @options.delete(:context)
-      end
       @mutable = @options.delete(:mutable) || false
       @graph_name = @options.delete(:graph) || @options.delete(:graph_name)
       @inserts = @options.delete(:insert)   || []

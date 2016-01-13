@@ -38,13 +38,6 @@ module RDF
     #   Set set graph name of each loaded statement
     # @return [void]
      def load(url, graph_name: nil, **options)
-       # :nocov:
-      if options.has_key?(:context)
-        raise ArgumentError, "The :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        graph_name ||= options.delete(:context)
-      end
-      # :nocov:
       raise TypeError.new("#{self} is immutable") if immutable?
 
       Reader.open(url, {base_uri: url}.merge(options)) do |reader|

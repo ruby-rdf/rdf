@@ -43,7 +43,7 @@ module RDF
           \s*
           (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
           \s*
-          (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Context
+          (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Graph Name
           \s*\.
         )x) && !(
           sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
