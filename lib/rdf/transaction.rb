@@ -14,11 +14,13 @@ module RDF
   # by default; mutability must be explicitly requested on construction in
   # order to obtain a read/write transaction.
   #
-  # In case repository implementations should be unable to provide full ACID
-  # guarantees for transactions, that must be clearly indicated in their
-  # documentation and `#supports?(:transactions)` must respond `false`.
+  # Individual repositories may make their own sets of guarantees within the 
+  # transaction's scope. In case repository implementations should be unable
+  # to provide full ACID guarantees for transactions, that must be clearly 
+  # indicated in their documentation. If update atomicity is not provided, 
+  # `#supports?(:transactions)` must respond `false`.
   #
-  # @example Executing a read-only transaction against a repository
+  # @example Executing a read-only transaction
   #   repository = RDF::Repository.new
   #
   #   RDF::Transaction.begin(repository) do |tx|
@@ -27,7 +29,7 @@ module RDF
   #     end
   #   end
   #
-  # @example Executing a read/write transaction against a repository
+  # @example Executing a read/write transaction
   #   repository = RDF::Repository.new
   #
   #   RDF::Transaction.begin(repository, mutable: true) do |tx|
@@ -41,8 +43,11 @@ module RDF
   # @since 0.3.0
   class Transaction
     include RDF::Mutable
-    include RDF::Enumerable
     include RDF::Queryable
+
+    extend Forwardable
+
+    def_delegators :@repository, :size, :<<, :map
 
     ##
     # Executes a transaction against the given RDF repository.
@@ -124,6 +129,15 @@ module RDF
     ##
     # Determines whether the transaction's changeset is available for
     # introspection.
+    #
+    # If `#buffered` is `true`, `#changes` contains the current up-to-date 
+    # Changeset as it would be applied on execution. This is not necessarily 
+    # the case for all Transaction subclasses, which are permitted to use the
+    # underlying datastore, obviating the need to track a `Changeset`. 
+    #
+    # Such implementations must return `false` when `#changes` is out of date.
+    # They should return `true` when `#changes` has been synced to the relevant
+    # transaction scope in the datastore.
     #
     # @return [Boolean]
     # @see    #changes
