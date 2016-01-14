@@ -209,7 +209,10 @@ module RDF
     # Executes the transaction
     #
     # @return [Boolean] `true` if the changes are successfully applied.
+    # @raise [TransactionError] if the transaction can't be applied
     def execute
+      raise TransactionError, 'Cannot execute a rolled back transaction. ' \
+                              'Open a new one instead.' if @rolledback
       @changes.apply(@repository)
     end
 
@@ -226,6 +229,7 @@ module RDF
     # @return [Boolean] `true` if the changes are successfully applied.
     def rollback
       @changes = RDF::Changeset.new
+      @rolledback = true
     end
 
     protected
@@ -251,5 +255,11 @@ module RDF
     end
 
     undef_method :load, :update, :clear
+
+    public
+    
+    ##
+    # An error class for transaction failures.
+    class TransactionError < RuntimeError; end
   end # Transaction
 end # RDF
