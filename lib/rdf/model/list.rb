@@ -58,7 +58,7 @@ module RDF
     #   @yieldparam [RDF::List] list
     #   @deprecated This form is deprecated in version 2.0
     #
-    # @overload initialize(subjec: nil, graph: nil, values: nil, &block)
+    # @overload initialize(subject: nil, graph: nil, values: nil, &block)
     #   @param  [RDF::Resource]         subject (RDF.nil)
     #     Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
     #   @param  [RDF::Graph]        graph (RDF::Graph.new)
@@ -66,14 +66,10 @@ module RDF
     #     Any values which are not terms are coerced to `RDF::Literal`.
     #   @yield  [list]
     #   @yieldparam [RDF::List] list
-    #   @deprecated This form is deprecated in version 2.0
     #
     def initialize(*args, subject: nil, graph: nil, values: nil, &block)
       unless args.empty?
-        warn "[DEPRECATION] List#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-        subject ||= args[0]
-        graph ||= args[1]
-        values ||= args[2]
+        raise ArgumentError, "[FATAL DEPRECATION] List#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
       end
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new

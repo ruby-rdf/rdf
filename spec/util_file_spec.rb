@@ -3,6 +3,9 @@ require 'webmock/rspec'
 require 'rdf/ntriples'
 
 describe RDF::Util::File do
+  before(:all) {WebMock.disable_net_connect!}
+  after(:all) {WebMock.allow_net_connect!}
+
   describe ".http_adapter" do
     after do
       RDF::Util::File.http_adapter = nil

@@ -104,13 +104,6 @@ module RDF
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(url: nil, title: nil, **options, &block)
-      # :nocov:
-      if options[:with_context]
-        raise ArgumentError, "The :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-        warn "[DEPRECATION] the :contexts option to Repository#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        options[:graph_name] ||= options.delete(:with_context)
-      end
-      # :nocov:
       @options = {with_graph_name: true, with_validity: true}.merge(options)
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
@@ -161,7 +154,7 @@ module RDF
     #   end
     #
     # @param  [RDF::Resource] graph_name
-    #   Context on which to run the transaction, use `false` for the default
+    #   Graph name on which to run the transaction, use `false` for the default
     #   graph_name and `nil` the entire Repository
     # @yield  [tx]
     # @yieldparam  [RDF::Transaction] tx
@@ -246,13 +239,6 @@ module RDF
       # @see RDF::Enumerable#supports?
       def supports?(feature)
         case feature.to_sym
-          #statement named graphs
-          when :context
-            # :nocov:
-            raise ArgumentError, "The :contexts feature is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-            warn "[DEPRECATION] the :context feature is deprecated in RDF.rb 2.0; use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-            @options[:with_context] || @options[:with_graph_name]
-            # :nocov:
           when :graph_name   then @options[:with_graph_name]
           when :inference then false  # forward-chaining inference
           when :validity  then @options.fetch(:with_validity, true)
@@ -320,18 +306,6 @@ module RDF
 
       ##
       # @private
-      # @see RDF::Enumerable#has_context?
-      # @deprecated Use {#has_graph?} instead.
-      # :nocov:
-      def has_context?(value)
-        raise NoMethodError, "Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-       warn "[DEPRECATION] Repository#has_context? is deprecated in RDF.rb 2.0, use Repository#has_graph? instead. Called from #{Gem.location_of_caller.join(':')}"
-       has_graph?(value)
-      end
-      # :nocov:
-
-      ##
-      # @private
       # @see RDF::Enumerable#has_graph?
       def has_graph?(value)
         @data.keys.include?(value)
@@ -343,23 +317,6 @@ module RDF
       def graph_names(options = nil, &block)
         @data.keys.reject {|g| g == DEFAULT_GRAPH}
       end
-
-      ##
-      # @private
-      # @see RDF::Enumerable#each_context
-      # @deprecated Use {#each_graph} instead.
-      # :nocov:
-      def each_context(&block)
-        raise NoMethodError, "Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-        warn "[DEPRECATION] Repository#each_context is deprecated in RDF.rb 2.0, use Repository#each_graph instead. Called from #{Gem.location_of_caller.join(':')}"
-        if block_given?
-          contexts = @data.keys
-          contexts.delete(DEFAULT_GRAPH)
-          contexts.each(&block)
-        end
-        enum_context
-      end
-      # :nocov:
 
       ##
       # @private
@@ -377,7 +334,7 @@ module RDF
 
       ##
       # Match elements with eql?, not ==
-      # Context of `false` matches default graph. Unbound variable matches non-false graph name
+      # graph_name of `false` matches default graph. Unbound variable matches non-false graph name
       # @private
       # @see RDF::Queryable#query_pattern
       def query_pattern(pattern, options = {}, &block)

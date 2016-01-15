@@ -48,34 +48,6 @@ module RDF
     # @return [RDF::Resource]
     attr_accessor :graph_name
 
-    ##
-    # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] graph_name
-    # @return [RDF::Resource]
-    # @since 1.1.0
-    # @deprecated Use {#graph_name} instead.
-    # :nocov:
-    def context
-      raise NoMethodError, "Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      graph_name
-    end
-    # :nocov:
-
-    ##
-    # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] graph_name
-    # @return [RDF::Resource]
-    # @since 1.1.0
-    # @deprecated Use {#graph_name=} instead.
-    # :nocov:
-    def context=(value)
-      raise NoMethodError, "Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      self.graph_name = value
-    end
-    # :nocov:
-
     # @return [RDF::Resource]
     attr_accessor :subject
 
@@ -119,13 +91,6 @@ module RDF
         @predicate = predicate
         @object    = object
       end
-      # :nocov:
-      if @options.has_key?(:context)
-        raise ArgumentError, "The :contexts option to Statement#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-        warn "[DEPRECATION] the :contexts option to Statement#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        @options[:graph_name] ||= @options.delete(:context)
-      end
-      # :nocov:
       @id          = @options.delete(:id) if @options.has_key?(:id)
       @graph_name  = @options.delete(:graph_name)
       initialize!
@@ -233,17 +198,6 @@ module RDF
       !!graph_name
     end
     alias_method :has_name?, :has_graph?
-
-    ##
-    # @return [Boolean]
-    # @deprecated Use {#has_graph?} instead.
-    # :nocov:
-    def has_context?
-      raise NoMethodError, "Statement#has_context? is being replaced with Statement#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-      warn "[DEPRECATION] Statement#has_context? is being replaced with Statement#has_graph? in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-     !!context
-    end
-    # :nocov:
 
     ##
     # @return [Boolean]
@@ -394,13 +348,6 @@ module RDF
     # @return [RDF::Graph]
     # @see    http://www.w3.org/TR/rdf-primer/#reification
     def reified(options = {})
-      # :nocov:
-      if options.has_key?(:context)
-        raise ArgumentError, "The :contexts option to Statement#reified is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}" if RDF::VERSION.to_s >= '2.0'
-        warn "[DEPRECATION] the :contexts option to Statement#reified is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        options[:graph_name] ||= options.delete(:context)
-      end
-      # :nocov:
       RDF::Graph.new(graph_name: options[:graph_name]) do |graph|
         subject = options[:subject] || RDF::Node.new(options[:id])
         graph << [subject, RDF.type,      RDF[:Statement]]
