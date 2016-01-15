@@ -12,8 +12,8 @@ begin
     add_group "Query", 'lib/rdf/query'
     add_filter "/spec/"
   end
-  Coveralls.wear!
-rescue LoadError
+rescue LoadError => e
+  STDERR.puts "Coverage Skipped: #{e.message}"
 end
 require 'rdf'
 require 'rdf/vocab'

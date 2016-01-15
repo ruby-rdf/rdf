@@ -97,12 +97,6 @@ module RDF
     #     Storage behind this graph.
     #   @deprecated This form is deprecated in version 2.0.
     #
-    # @overload initialize(options)
-    #   @param  [Hash{Symbol => Object}] options
-    #   @option options [RDF::Queryable] :data (RDF::Repository.new)
-    #     Storage behind this graph.
-    #   @deprecated This form is deprecated in version 2.0.
-    #
     # @overload initialize(graph_name: nil, data: nil)
     #   @param  [RDF::Resource]          graph_name
     #     The graph_name from the associated {RDF::Queryable} associated
