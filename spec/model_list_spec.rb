@@ -145,7 +145,7 @@ describe RDF::List do
       it "should be instantiable with positional args (DEPRECATED)" do
         expect {
           described_class.new(RDF::Node.new, graph)
-        }.to write('[DEPRECATION]').to(:error)
+        }.to raise_error ArgumentError
       end
     end
   end
