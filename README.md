@@ -298,7 +298,6 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Countable}
   * {RDF::Enumerable}
   * {RDF::Indexable}
-  * {RDF::Inferable}
   * {RDF::Queryable}
   * {RDF::Mutable}
   * {RDF::Durable}
