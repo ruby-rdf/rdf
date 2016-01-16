@@ -261,6 +261,20 @@ module RDF
         end
         count
       end
+      
+      ##
+      # @private
+      # @see RDF::Enumerable#has_graph?      
+      def has_graph?(graph)
+        @data.keys.include?(graph)
+      end
+
+      ##
+      # @private
+      # @see RDF::Enumerable#each_graph
+      def graph_names(options = nil, &block)
+        @data.keys.reject { |g| g == DEFAULT_GRAPH }.to_a
+      end
 
       ##
       # @private
