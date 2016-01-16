@@ -838,7 +838,7 @@ describe RDF::List do
     it "adds statements to separate graph" do
       g = RDF::Graph.new << ten
       expect(g.count).to eql ten.count * 2
-      expect(RDF::List.new(subject: g.subjects.first, graph: g)).to eq ten
+      expect(RDF::List.new(subject: ten.subject, graph: g)).to eq ten
     end
   end
 
