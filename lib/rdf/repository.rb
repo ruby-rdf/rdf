@@ -231,7 +231,7 @@ module RDF
       ##
       # @private
       def self.extend_object(obj)
-        obj.instance_variable_set(:@data, obj.options.delete(:data) || Hamster::Hash.new)
+        obj.instance_variable_set(:@data, Hamster::Hash.new)
         super
       end
 
@@ -279,12 +279,9 @@ module RDF
       # @private
       # @see RDF::Enumerable#each_statement
       def each_statement(&block)
+        snapshot = @data
         if block_given?
-          # Note that to iterate in a more consistent fashion despite
-          # possible concurrent mutations to `@data`, we use `#dup` to make
-          # shallow copies of the nested hashes before beginning the
-          # iteration over their keys and values.
-          @data.each do |g, ss|
+          snapshot.each do |g, ss|
             ss.each do |s, ps|
               ps.each do |p, os|
                 os.each do |o|
@@ -310,13 +307,14 @@ module RDF
       # @private
       # @see RDF::Queryable#query_pattern
       def query_pattern(pattern, options = {}, &block)
+        snapshot = @data
         if block_given?
           graph_name  = pattern.graph_name
           subject     = pattern.subject
           predicate   = pattern.predicate
           object      = pattern.object
 
-          cs = @data.has_key?(graph_name) ? { graph_name => @data[graph_name] } : @data
+          cs = snapshot.has_key?(graph_name) ? { graph_name => snapshot[graph_name] } : snapshot
 
           cs.each do |c, ss|
             next unless graph_name.nil? ||
