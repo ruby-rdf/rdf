@@ -296,7 +296,7 @@ module RDF
         @data.has_key?(g) &&
           @data[g].has_key?(s) &&
           @data[g][s].has_key?(p) &&
-          @data[g][s][p].include?(o)
+          @data[g][s][p].any? {|e| e.eql?(o)}
       end
 
       ##
