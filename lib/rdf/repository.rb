@@ -266,7 +266,7 @@ module RDF
       # @private
       # @see RDF::Enumerable#has_graph?      
       def has_graph?(graph)
-        @data.keys.include?(graph)
+        @data.has_key?(graph)
       end
 
       ##
@@ -274,6 +274,18 @@ module RDF
       # @see RDF::Enumerable#each_graph
       def graph_names(options = nil, &block)
         @data.keys.reject { |g| g == DEFAULT_GRAPH }.to_a
+      end
+
+      ##
+      # @private
+      # @see RDF::Enumerable#each_graph
+      def each_graph(&block)
+        if block_given?
+          @data.each_key do |gn|
+            yield RDF::Graph.new(graph_name: (gn == DEFAULT_GRAPH ? nil : gn), data: self)
+          end
+        end
+        enum_graph
       end
 
       ##
@@ -334,24 +346,22 @@ module RDF
                         graph_name == false && !c ||
                         graph_name.eql?(c)
 
-            ss = if ss.has_key?(subject)
-                   { subject => ss[subject] }
-                 elsif subject.nil? || subject.is_a?(RDF::Query::Variable)
+            ss = if subject.nil? || subject.is_a?(RDF::Query::Variable)
                    ss
+                 elsif ss.has_key?(subject)
+                   { subject => ss[subject] }
                  else
                    []
                  end
             ss.each do |s, ps|
-              next unless subject.nil? || subject.eql?(s)
-              ps = if ps.has_key?(predicate)
-                     { predicate => ps[predicate] }
-                   elsif predicate.nil? || predicate.is_a?(RDF::Query::Variable)
+              ps = if predicate.nil? || predicate.is_a?(RDF::Query::Variable)
                      ps
+                   elsif ps.has_key?(predicate)
+                     { predicate => ps[predicate] }
                    else
                      []
                    end
               ps.each do |p, os|
-                next unless predicate.nil? || predicate.eql?(p)
                 os.each do |o|
                   next unless object.nil? || object.eql?(o)
                   yield RDF::Statement.new(s, p, o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c)
