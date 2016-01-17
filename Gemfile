@@ -20,6 +20,8 @@ group :develop do
   gem 'sparql-client',  git: "git://github.com/ruby-rdf/sparql-client.git", branch: "develop"
   gem 'sxp',            git: "git://github.com/gkellogg/sxp-ruby.git"
   gem 'rest-client-components'
+
+  gem 'benchmark-ips'
 end
 
 group :debug do

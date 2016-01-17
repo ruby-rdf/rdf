@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'benchmark'
+require 'benchmark/ips'
 require 'rdf'
 require 'rdf/vocab'
 require 'rdf/ntriples'
@@ -8,10 +8,7 @@ graph = RDF::Graph.load("etc/doap.nt")
 
 puts graph.query(predicate: RDF::Vocab::FOAF.name).is_a?(RDF::Queryable)
 
-Benchmark.bmbm do |bench|
-  bench.report("query_pattern") do
-    100_000.times do
-      graph.query(predicate: RDF::Vocab::FOAF.name) {}
-    end
-  end
+Benchmark.ips do |x|
+  x.config(:time => 10, :warmup => 5)
+  x.report('query_pattern') { graph.query(predicate: RDF::Vocab::FOAF.name) {} }
 end
