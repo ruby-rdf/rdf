@@ -252,11 +252,9 @@ module RDF
       # @see RDF::Countable#count
       def count
         count = 0
-        @data.each do |g, ss|
-          ss.each do |s, ps|
-            ps.each do |p, os|
-              count += os.size
-            end
+        @data.each do |_, ss|
+          ss.each do |_, ps|
+            ps.each { |_, os| count += os.size }
           end
         end
         count
@@ -272,7 +270,7 @@ module RDF
       ##
       # @private
       # @see RDF::Enumerable#each_graph
-      def graph_names(options = nil, &block)
+      def graph_names(options = nil, &block)        
         @data.keys.reject { |g| g == DEFAULT_GRAPH }.to_a
       end
 
