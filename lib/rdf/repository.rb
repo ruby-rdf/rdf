@@ -308,8 +308,7 @@ module RDF
             ss.each do |s, ps|
               ps.each do |p, os|
                 os.each do |o|
-                  # FIXME: yield has better performance, but broken in MRI 2.2: See https://bugs.ruby-lang.org/issues/11451.
-                  block.call(RDF::Statement.new(s, p, o, graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g))
+                  yield RDF::Statement.new(s, p, o, graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g)
                 end
               end
             end
