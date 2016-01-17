@@ -137,14 +137,14 @@ describe RDF::Query do
 
        context "with no graph_name" do
          it "returns statements differing in context (direct execute)" do
-           expect(subject.execute(repo).map(&:to_hash)).to eq [
-             {s: EX.s1, p: EX.p1, o: EX.o1},
-             {s: EX.s2, p: EX.p2, o: EX.o2}]
+           expect(subject.execute(repo).map(&:to_hash))
+             .to contain_exactly({s: EX.s1, p: EX.p1, o: EX.o1},
+                                 {s: EX.s2, p: EX.p2, o: EX.o2})
          end
          it "returns statements differing in context (graph execute)" do
-           expect(repo.query(subject).map(&:to_hash)).to eq [
-             {s: EX.s1, p: EX.p1, o: EX.o1},
-             {s: EX.s2, p: EX.p2, o: EX.o2}]
+           expect(repo.query(subject).map(&:to_hash))
+             .to contain_exactly({s: EX.s1, p: EX.p1, o: EX.o1},
+                                 {s: EX.s2, p: EX.p2, o: EX.o2})
          end
        end
 

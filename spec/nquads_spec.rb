@@ -247,9 +247,9 @@ describe RDF::NQuads::Writer do
       g
     }
     it "#insert" do
-      expect do
-        described_class.new.insert(graph)
-      end.to write("<http://example/s> <http://example/p> <http://example/o1> .\n<http://example/s> <http://example/p> <http://example/o2> .\n")
+      expect { described_class.new.insert(graph) }
+        .to write_each("<http://example/s> <http://example/p> <http://example/o1> .\n",
+                       "<http://example/s> <http://example/p> <http://example/o2> .\n")
     end
   end
 
@@ -259,9 +259,9 @@ describe RDF::NQuads::Writer do
       RDF::Statement(RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o2'))
     ]}
     it "#insert" do
-      expect do
-        described_class.new.insert(*statements)
-      end.to write("<http://example/s> <http://example/p> <http://example/o1> .\n<http://example/s> <http://example/p> <http://example/o2> .\n")
+      expect { described_class.new.insert(*statements) }
+        .to write_each("<http://example/s> <http://example/p> <http://example/o1> .\n",
+                       "<http://example/s> <http://example/p> <http://example/o2> .\n")
     end
   end
 

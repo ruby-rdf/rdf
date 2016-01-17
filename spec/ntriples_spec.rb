@@ -202,7 +202,7 @@ describe RDF::NTriples::Writer do
     it "#insert" do
       expect do
         writer_class.new($stdout, validate: false).insert(graph)
-      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+      end.to write_each("<s> <p> <o1> .\n", "<s> <p> <o2> .\n")
     end
   end
 
@@ -214,7 +214,7 @@ describe RDF::NTriples::Writer do
     it "#insert" do
       expect do
         writer_class.new($stdout, validate: false).insert(*statements)
-      end.to write("<s> <p> <o1> .\n<s> <p> <o2> .\n")
+      end.to write_each("<s> <p> <o1> .\n", "<s> <p> <o2> .\n")
     end
   end
 
