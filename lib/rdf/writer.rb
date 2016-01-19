@@ -258,7 +258,7 @@ module RDF
     # @yieldreturn [void]
     def initialize(output = $stdout, options = {}, &block)
       @output, @options = output, options.dup
-      @nodes, @node_id  = {}, 0
+      @nodes, @node_id, @node_id_map  = {}, 0, {}
 
       if block_given?
         write_prologue
@@ -409,16 +409,43 @@ module RDF
     end
 
     ##
+    # Add a statement to the writer. This will check to ensure that the statement is complete (no nil terms) and is valid, if the `:validation` option is set.
+    #
+    # Additionally, it will de-duplicate BNode terms sharing a common identifier.
+    #
     # @param  [RDF::Statement] statement
     # @return [self]
     # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
       statement = statement.canonicalize! if canonicalize?
 
+      # Make sure BNodes in statement use unique identifiers
+      if statement.node?
+        terms = statement.to_quad.map do |term|
+          if term.is_a?(RDF::Node)
+            term = term.original while term.original
+            @nodes[term] ||= begin
+              # Account for duplicated nodes
+              @node_id_map[term.to_s] ||= term
+              if !@node_id_map[term.to_s].equal?(term)
+                # Rename node
+                term.make_unique!
+                @node_id_map[term.to_s] = term
+              end
+            end
+          else
+            term
+          end
+        end
+        statement = RDF::Statement.from(statement.to_quad)
+      end
+
       if statement.incomplete?
         log_error "Statement #{statement.inspect} is incomplete"
       elsif validate? && statement.invalid?
         log_error "Statement #{statement.inspect} is invalid"
+      elsif respond_to?(:write_quad)
+        write_quad(*statement.to_quad)
       else
         write_triple(*statement.to_triple)
       end
@@ -515,16 +542,16 @@ module RDF
     end
 
     ##
-    # @param  [RDF::Resource] uriref
+    # @param  [RDF::Resource] term
     # @return [String]
-    def uri_for(uriref)
+    def uri_for(term)
       case
-        when uriref.is_a?(RDF::Node)
-          @nodes[uriref]
-        when uriref.respond_to?(:to_uri)
-          uriref.to_uri.to_s
+        when term.is_a?(RDF::Node)
+          @nodes[term] ||= term.to_base
+        when term.respond_to?(:to_uri)
+          term.to_uri.to_s
         else
-          uriref.to_s
+          term.to_s
       end
     end
 

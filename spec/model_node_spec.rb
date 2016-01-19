@@ -65,6 +65,13 @@ describe RDF::Node do
   its(:to_base) {is_expected.to eq "_:foo"}
   its(:to_unique_base) {is_expected.to match /^_:g/}
 
+  describe "#to_unique_base" do
+    it "uses the to_unique_base of original if duped" do
+      dup = subject.dup
+      expect(dup.to_unique_base).to eql subject.to_unique_base
+    end
+  end
+
   {
     "" => true,
     "foo" => true,
@@ -91,6 +98,20 @@ describe RDF::Node do
           expect(n.canonicalize!).to eq(n)
         }
       end
+    end
+  end
+
+  describe "#make_unique!" do
+    it "changes the id if assigned" do
+      ub = subject.to_unique_base
+      subject.make_unique!
+      expect(subject.id).to eql ub[2..-1]
+    end
+
+    it "changes the id of a duplicated node based on the original node" do
+      subject.freeze
+      dup = subject.dup.make_unique!
+      expect(dup.id).to eql subject.to_unique_base[2..-1]
     end
   end
 

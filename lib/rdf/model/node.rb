@@ -120,7 +120,7 @@ module RDF
     end
 
     ##
-    # Determins if `self` is the same term as `other`.
+    # Determines if `self` is the same term as `other`.
     #
     # In this case, nodes must be the same object
     #
@@ -147,7 +147,7 @@ module RDF
       else
         other.respond_to?(:node?) && other.node? &&
           self.hash == other.to_term.hash &&
-          other.respond_to?(:id) && @id == other.id
+          other.respond_to?(:id) && @id == other.to_term.id
       end
     end
     alias_method :===, :==
@@ -157,7 +157,15 @@ module RDF
     #
     # @return [String]
     def to_unique_base
-      "_:g#{__id__.to_i.abs}"
+      original ? original.to_unique_base :  "_:g#{__id__.to_i.abs}"
+    end
+
+    ##
+    # Make this term identifier unique, if it is found to be shared with another node having the same identifier
+    # @return [self]
+    def make_unique!
+      @id = to_unique_base[2..-1]
+      self
     end
 
     ##

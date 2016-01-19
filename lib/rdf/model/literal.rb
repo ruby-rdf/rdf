@@ -197,14 +197,6 @@ module RDF
     end
 
     ##
-    # Returns `false`.
-    #
-    # @return [Boolean] `true` or `false`
-    def anonymous?
-      false
-    end
-
-    ##
     # Term compatibility according to SPARQL
     #
     # Compatibility of two arguments is defined as:
