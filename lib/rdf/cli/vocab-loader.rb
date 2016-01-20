@@ -131,6 +131,7 @@ module RDF
     # then call #run
     def run
       @output.print %(# -*- encoding: utf-8 -*-
+        # frozen_string_literal: true
         # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module #{module_name}
