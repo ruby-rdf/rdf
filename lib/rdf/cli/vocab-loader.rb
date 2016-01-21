@@ -105,7 +105,7 @@ module RDF
       attributes.keys.sort_by(&:to_s).each do |key|
         next if key == :vocab
         value = Array(attributes[key])
-        component = key.is_a?(Symbol) ? "#{key}: " : "#{key.inspect} => "
+        component = key.is_a?(Symbol) ? "#{key}: " : ":#{key.inspect} => "
         value = value.first if value.length == 1
         component << if value.is_a?(Array)
           '[' + value.map {|v| serialize_value(v, key)}.join(", ") + "]"

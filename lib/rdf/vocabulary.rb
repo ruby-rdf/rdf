@@ -595,8 +595,6 @@ module RDF
       # @yieldparam [RDF::Statement]
       def each_statement
         attributes.reject {|p| p == :vocab}.each do |prop, values|
-          prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
-          next unless prop
           Array(values).each do |value|
             begin
               case prop
@@ -629,8 +627,10 @@ module RDF
               when :comment
                 prop = RDFS.comment
               else
-                v = RDF::Vocabulary.expand_pname(value)
-                value = v.valid? ? v : RDF::Literal(value)
+                prop = RDF::Vocabulary.expand_pname(prop.to_s)
+                next unless prop
+                v = RDF::Vocabulary.expand_pname(value.to_s)
+                value = v.valid? ? v : RDF::Literal(value.to_s)
               end
               yield RDF::Statement(self, prop, value)
             rescue KeyError
