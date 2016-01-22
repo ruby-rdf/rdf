@@ -240,7 +240,7 @@ describe RDF::Vocabulary do
         expect(RDF::Vocabulary.find_term(term.to_s)).to equal term
       end
     end
-  end
+  end unless ENV["CI"]
 
   describe ".imports" do
     {
@@ -254,7 +254,7 @@ describe RDF::Vocabulary do
     end
 
     specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
-  end
+  end unless ENV["CI"]
 
   describe ".imported_from" do
     {
@@ -268,7 +268,7 @@ describe RDF::Vocabulary do
     end
 
     specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
-  end
+  end unless ENV["CI"]
 
   describe ".load" do
     let!(:nt) {%{

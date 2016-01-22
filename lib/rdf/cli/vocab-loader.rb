@@ -42,6 +42,11 @@ module RDF
       @extra = extra
     end
 
+    # patch to run over loaded vocabulary
+    def patch=(patch)
+      @patch = patch
+    end
+
     # Use StrictVocabulary or Vocabulary
     def strict=(strict)
       @strict = strict
@@ -143,7 +148,7 @@ module RDF
         ).gsub(/^        /, '') if @output_class_file
 
       # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values
-      vocab = RDF::Vocabulary.load(uri, location: source, extra: @extra)
+      vocab = RDF::Vocabulary.load(uri, location: source, extra: @extra, patch: @patch)
 
       # Split nodes into Class/Property/Datatype/Other
       term_nodes = {
