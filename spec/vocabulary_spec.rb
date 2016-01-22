@@ -287,6 +287,26 @@ describe RDF::Vocabulary do
       expect(subject).to be_a_vocabulary("http://example/")
       expect(subject).to have_properties("http://example/", %w(Class prop))
     end
+
+    describe ":extra" do
+      subject {RDF::Vocabulary.load("http://example/", extra: {id: {label: "Identifier"}})}
+
+      it "adds extra properties to vocabulary" do
+        expect(subject).to have_properties("http://example/", %w(id))
+      end
+    end
+
+    describe ":patch" do
+      let(:patch) {%{
+        DeleteExisting {<http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .} .
+        AddNew {<http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Klass" .} .
+      }}
+      subject {RDF::Vocabulary.load("http://example/", patch: patch)}
+
+      it "replaces properties from vocabulary" do
+        expect(subject[:Class].attributes["rdfs:Datatype"]).to contain_exactly "Klass"
+      end
+    end
   end
 
   describe RDF::Vocabulary::Term do

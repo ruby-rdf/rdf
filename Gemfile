@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gemspec
 
 group :develop do
+  gem "ld-patch",       git: "git://github.com/ruby-rdf/ld-patch.git", branch: "develop"
   gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
   gem "rdf-vocab",      git: "git://github.com/ruby-rdf/rdf-vocab.git", branch: "develop"
   gem 'linkeddata',     git: "git://github.com/ruby-rdf/linkeddata.git", branch: "develop"

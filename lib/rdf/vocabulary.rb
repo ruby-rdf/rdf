@@ -273,8 +273,10 @@ module RDF
       #   Location from which to load the vocabulary, if not from `uri`.
       # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
       #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
+      # @param [String] patch
+      #   A patch to run on the graph after loading. Requires the `ld-patch` gem to be available.
       # @return [RDF::Vocabulary] the loaded vocabulary
-      def load(url, class_name: nil, location: nil, extra: nil)
+      def load(url, class_name: nil, location: nil, extra: nil, patch: nil)
         source = location || url
         vocab = if class_name
           Object.const_set(class_name, Class.new(self.create(url)))
@@ -283,6 +285,16 @@ module RDF
         end
 
         graph = RDF::Graph.load(source)
+
+        if patch
+          begin
+            require 'ld/patch'
+            operator = LD::Patch.parse(patch)
+            graph.query(operator)
+          rescue LoadError
+            raise ArgumentError, "patching vocabulary requires the ld-patch gem"
+          end
+        end
         term_defs = {}
         graph.each do |statement|
           next unless statement.subject.uri? && statement.subject.start_with?(url)
@@ -718,7 +730,7 @@ module RDF
       # @raise [KeyError] if property not defined in vocabulary
       def [](name)
         props.fetch(name.to_sym)
-      rescue KeyError => e
+      rescue KeyError
         raise KeyError, "#{name} not found in vocabulary #{self.__name__}"
       end
     end
