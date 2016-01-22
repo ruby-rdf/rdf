@@ -113,7 +113,7 @@ module RDF
         component = key.is_a?(Symbol) ? "#{key}: " : ":#{key.inspect} => "
         value = value.first if value.length == 1
         component << if value.is_a?(Array)
-          '[' + value.map {|v| serialize_value(v, key)}.join(", ") + "]"
+          '[' + value.map {|v| serialize_value(v, key)}.sort.join(", ") + "]"
         else
           serialize_value(value, key)
         end

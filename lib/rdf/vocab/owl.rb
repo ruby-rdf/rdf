@@ -208,7 +208,7 @@ module RDF
       label: "backwardCompatibleWith".freeze,
       range: "owl:Ontology".freeze,
       :"rdfs:isDefinedBy" => %(owl:).freeze,
-      type: ["owl:OntologyProperty".freeze, "owl:AnnotationProperty".freeze]
+      type: ["owl:AnnotationProperty".freeze, "owl:OntologyProperty".freeze]
     property :bottomDataProperty,
       comment: %(The data property that does not relate any individual to any data value.).freeze,
       domain: "owl:Thing".freeze,
@@ -327,7 +327,7 @@ module RDF
       label: "incompatibleWith".freeze,
       range: "owl:Ontology".freeze,
       :"rdfs:isDefinedBy" => %(owl:).freeze,
-      type: ["owl:OntologyProperty".freeze, "owl:AnnotationProperty".freeze]
+      type: ["owl:AnnotationProperty".freeze, "owl:OntologyProperty".freeze]
     property :intersectionOf,
       comment: %(The property that determines the collection of classes or data ranges that build an intersection.).freeze,
       domain: "rdfs:Class".freeze,
@@ -425,7 +425,7 @@ module RDF
       label: "priorVersion".freeze,
       range: "owl:Ontology".freeze,
       :"rdfs:isDefinedBy" => %(owl:).freeze,
-      type: ["owl:OntologyProperty".freeze, "owl:AnnotationProperty".freeze]
+      type: ["owl:AnnotationProperty".freeze, "owl:OntologyProperty".freeze]
     property :propertyChainAxiom,
       comment: %(The property that determines the n-tuple of properties that build a sub property chain of a given property.).freeze,
       domain: "owl:ObjectProperty".freeze,
