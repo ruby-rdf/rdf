@@ -201,7 +201,7 @@ module RDF
       # @return [Array<RDF::Vocabulary>]
       def imports
         @imports ||= begin
-          Array(self[""].attributes["owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
+          Array(self[""].attributes[:"owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
         rescue KeyError
           []
         end
