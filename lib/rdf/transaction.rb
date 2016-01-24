@@ -41,8 +41,7 @@ module RDF
   # The base class provides a full, buffered implementation depending on 
   # `RDF::Changeset` and using `Changeset#apply`. Custom `Repositories`
   # can implement a minimial write-atomic transactions by overriding
-  # `#apply_changeset`. Minimal snapshot isolation for queries can be 
-  # implemented by passing a `:snapshot` to `options` on initialization.
+  # `#apply_changeset`.
   #
   # For datastores that support Transactions natively, it is recommended 
   # to implement a custom `Transaction` subclass, setting `@tx_class` to
@@ -119,15 +118,13 @@ module RDF
     # @param  [Hash{Symbol => Object}]  options
     # @option options [Boolean]         :mutable (false)
     #    Whether this is a read-only or read/write transaction.
-    # @option options [Queryable]       :snapshot
-    #    A queryable snapshot of the repository for isolated reads. Defaults to
-    #    `#repository` as an unisolated query target.
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
     def initialize(repository, options = {}, &block)
       @repository = repository
+      @snapsot = 
+        repository.supports?(:snapshots) ? repository.snapshot : repository
       @options  = options.dup
-      @snapshot = @options.delete(:snapshot) { @repository }
       @mutable  = !!(@options.delete(:mutable) || false)
       
       @changes = RDF::Changeset.new

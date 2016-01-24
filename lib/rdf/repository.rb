@@ -240,6 +240,7 @@ module RDF
         when :graph_name   then @options[:with_graph_name]
         when :inference then false  # forward-chaining inference
         when :validity  then @options.fetch(:with_validity, true)
+        when :snapshots then true
         else false
         end
       end
@@ -314,6 +315,15 @@ module RDF
         enum_statement
       end
       alias_method :each, :each_statement
+      
+      ##
+      # A queryable snapshot of the repository for isolated reads. Used by
+      # `RDF::Transaction` for
+      # 
+      # @return [Queryable] a queryable repository snapshot.
+      def snapshot
+        self.class.new(data: @data).freeze
+      end
 
       protected
 
