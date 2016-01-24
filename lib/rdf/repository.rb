@@ -288,13 +288,7 @@ module RDF
       # @private
       # @see RDF::Enumerable#has_statement?
       def has_statement?(statement)
-        s, p, o, g = statement.to_quad
-        g ||= DEFAULT_GRAPH
-
-        @data.has_key?(g) &&
-          @data[g].has_key?(s) &&
-          @data[g][s].has_key?(p) &&
-          @data[g][s][p].include?(o)
+        has_statement_in?(@data, statement)
       end
 
       ##
@@ -316,6 +310,16 @@ module RDF
       end
       alias_method :each, :each_statement
       
+
+      ##
+      # @see Mutable#apply_changeset
+      def apply_changeset(changeset)
+        data = @data
+        changeset.deletes.each { |del| data = delete_from(data, del) }
+        changeset.inserts.each { |ins| data = insert_to(data, ins) }
+        @data = data
+      end
+
       ##
       # A queryable snapshot of the repository for isolated reads. Used by
       # `RDF::Transaction` for
@@ -382,36 +386,14 @@ module RDF
       # @private
       # @see RDF::Mutable#insert
       def insert_statement(statement)
-        raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
-
-        unless has_statement?(statement)
-          s, p, o, c = statement.to_quad
-          c ||= DEFAULT_GRAPH
-
-          @data = @data.put(c) do |subs|
-            subs = (subs || Hamster::Hash.new).put(s) do |preds|
-              preds = (preds || Hamster::Hash.new).put(p) do |objs|
-                (objs || Hamster::Set.new).add(o)
-              end
-            end
-          end
-        end
+        @data = insert_to(@data, statement)
       end
 
       ##
       # @private
       # @see RDF::Mutable#delete
       def delete_statement(statement)
-        if has_statement?(statement)
-          s, p, o, g = statement.to_quad
-          g = DEFAULT_GRAPH unless supports?(:graph_name)
-          g ||= DEFAULT_GRAPH
-
-          os    = @data[g][s][p].delete(o)
-          ps    = os.empty? ? @data[g][s].delete(p) : @data[g][s].put(p, os)
-          ss    = ps.empty? ? @data[g].delete(s)    : @data[g].put(s, ps)
-          @data = ss.empty? ? @data.delete(g)       : @data.put(g, ss)
-        end
+        @data = delete_from(@data, statement)
       end
 
       ##
@@ -419,6 +401,59 @@ module RDF
       # @see RDF::Mutable#clear
       def clear_statements
         @data = @data.clear
+      end
+
+      private
+
+      ##
+      # @private
+      # @see #has_statement
+      def has_statement_in?(data, statement)
+        s, p, o, g = statement.to_quad
+        g ||= DEFAULT_GRAPH
+
+        data.has_key?(g) &&
+          data[g].has_key?(s) &&
+          data[g][s].has_key?(p) &&
+          data[g][s][p].include?(o)
+      end
+
+      ##
+      # @private
+      # @return [Hamster::Hash] a new, updated hamster hash 
+      def insert_to(data, statement)
+        raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
+
+        unless has_statement_in?(data, statement)
+          s, p, o, c = statement.to_quad
+          c ||= DEFAULT_GRAPH
+          
+          return data.put(c) do |subs|
+            subs = (subs || Hamster::Hash.new).put(s) do |preds|
+              preds = (preds || Hamster::Hash.new).put(p) do |objs|
+                (objs || Hamster::Set.new).add(o)
+              end
+            end
+          end
+        end
+        data
+      end
+      
+      ##
+      # @private
+      # @return [Hamster::Hash] a new, updated hamster hash 
+      def delete_from(data, statement)
+        if has_statement_in?(data, statement)
+          s, p, o, g = statement.to_quad
+          g = DEFAULT_GRAPH unless supports?(:graph_name)
+          g ||= DEFAULT_GRAPH
+
+          os   = data[g][s][p].delete(o)
+          ps   = os.empty? ? data[g][s].delete(p) : data[g][s].put(p, os)
+          ss   = ps.empty? ? data[g].delete(s)    : data[g].put(s, ps)
+          return ss.empty? ? data.delete(g) : data.put(g, ss)
+        end
+        data
       end
     end # Implementation
   end # Repository

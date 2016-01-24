@@ -20,4 +20,21 @@ describe RDF::Repository do
       let(:repository) { RDF::Repository.new(with_validity: false) }
     end
   end
+
+  describe '#apply_changeset' do
+    let(:changeset) { double('changeset', deletes: dels, inserts: ins) }
+
+    let(:dels) { [] }
+    let(:ins)  { [] }
+    
+    it '' do
+      subject << existing_statement = RDF::Statement(:s, RDF.type, :o)
+      dels << existing_statement
+      ins << RDF::Statement(nil, nil, nil)
+
+      expect do
+        begin; subject.apply_changeset(changeset) rescue ArgumentError; end;
+      end.not_to change { subject.statements }
+    end
+  end
 end
