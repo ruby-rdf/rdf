@@ -52,11 +52,14 @@ module RDF
   # @since 0.3.0
   class Transaction
     include RDF::Mutable
+    include RDF::Enumerable
     include RDF::Queryable
 
-    extend Forwardable
-
-    def_delegators :@snapshot, :query_pattern, :query_execute
+    ##
+    # @see RDF::Enumerable#each
+    def each(*args, &block)
+      @snapshot.each(*args, &block)
+    end
 
     ##
     # Executes a transaction against the given RDF repository.
@@ -122,7 +125,7 @@ module RDF
     # @yieldparam [RDF::Transaction] tx
     def initialize(repository, options = {}, &block)
       @repository = repository
-      @snapsot = 
+      @snapshot = 
         repository.supports?(:snapshots) ? repository.snapshot : repository
       @options  = options.dup
       @mutable  = !!(@options.delete(:mutable) || false)
@@ -251,6 +254,14 @@ module RDF
       @changes.delete(statement)
     end
 
+    def query_pattern(*args, &block)
+      @snapshot.send(:query_pattern, *args, &block)
+    end
+
+    def query_execute(*args, &block)
+      @snapshot.send(:query_execute, *args, &block)
+    end
+  
     undef_method :load, :update, :clear
 
     public
