@@ -202,8 +202,8 @@ module RDF
     # Applies the given changeset
     #
     # If `#supports?(:transactions)` is `true`, this must apply the changeset
-    # atomically. Otherwise, it should offer an efficient implementation for the
-    # `Enumerable` subclass.
+    # atomically. Otherwise, it should offer an efficient implementation of a 
+    # combined delete/insert of the changeset.
     #
     # @param changeset [RDF::Changeset] the changeset to apply
     # @return [Boolean] true if the changeset has been applied
