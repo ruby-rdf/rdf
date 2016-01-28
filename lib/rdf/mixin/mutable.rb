@@ -199,6 +199,19 @@ module RDF
     alias_method :delete_insert!, :delete_insert
 
     ##
+    # Applies the given changeset
+    #
+    # If `#supports?(:transactions)` is `true`, this must apply the changeset
+    # atomically. Otherwise, it should offer an efficient implementation of a 
+    # combined delete/insert of the changeset.
+    #
+    # @param changeset [RDF::Changeset] the changeset to apply
+    # @return [Boolean] true if the changeset has been applied
+    def apply_changeset(changeset)
+      delete_insert(changeset.deletes, changeset.inserts)
+    end
+
+    ##
     # Deletes all RDF statements from `self`.
     #
     # @raise  [TypeError] if `self` is immutable

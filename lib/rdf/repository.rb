@@ -108,6 +108,8 @@ module RDF
       @uri     = @options.delete(:uri)
       @title   = @options.delete(:title)
 
+      @tx_class = @options.delete(:transaction_class) { RDF::Transaction }
+
       # Provide a default in-memory implementation:
       send(:extend, Implementation) if self.class.equal?(RDF::Repository)
 
@@ -153,17 +155,16 @@ module RDF
     #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
     #   end
     #
-    # @param  [RDF::Resource] graph_name
-    #   Graph name on which to run the transaction, use `false` for the default
-    #   graph_name and `nil` the entire Repository
+    # @param mutable [Boolean] 
+    #   Context on which to run the transaction, use `false` for the default
     # @yield  [tx]
     # @yieldparam  [RDF::Transaction] tx
     # @yieldreturn [void] ignored
     # @return [self]
     # @see    RDF::Transaction
     # @since  0.3.0
-    def transaction(graph_name = nil, &block)
-      tx = begin_transaction(graph_name)
+    def transaction(mutable: false, &block)
+      tx = begin_transaction(mutable: mutable)
       begin
         case block.arity
           when 1 then block.call(tx)
@@ -190,22 +191,18 @@ module RDF
     # @param  [RDF::Resource] graph_name
     # @return [RDF::Transaction]
     # @since  0.3.0
-    def begin_transaction(graph_name)
-      RDF::Transaction.new(graph: graph_name)
+    def begin_transaction(mutable: false)
+      @tx_class.new(self, mutable: mutable)
     end
 
     ##
     # Rolls back the given transaction.
     #
-    # Subclasses implementing transaction-capable storage adapters may wish
-    # to override this method in order to roll back the given transaction in
-    # the underlying storage.
-    #
     # @param  [RDF::Transaction] tx
     # @return [void] ignored
     # @since  0.3.0
     def rollback_transaction(tx)
-      # nothing to do
+      tx.rollback
     end
 
     ##
@@ -243,6 +240,7 @@ module RDF
         when :graph_name   then @options[:with_graph_name]
         when :inference then false  # forward-chaining inference
         when :validity  then @options.fetch(:with_validity, true)
+        when :snapshots then true
         else false
         end
       end
@@ -290,13 +288,7 @@ module RDF
       # @private
       # @see RDF::Enumerable#has_statement?
       def has_statement?(statement)
-        s, p, o, g = statement.to_quad
-        g ||= DEFAULT_GRAPH
-
-        @data.has_key?(g) &&
-          @data[g].has_key?(s) &&
-          @data[g][s].has_key?(p) &&
-          @data[g][s][p].include?(o)
+        has_statement_in?(@data, statement)
       end
 
       ##
@@ -317,6 +309,25 @@ module RDF
         enum_statement
       end
       alias_method :each, :each_statement
+      
+
+      ##
+      # @see Mutable#apply_changeset
+      def apply_changeset(changeset)
+        data = @data
+        changeset.deletes.each { |del| data = delete_from(data, del) }
+        changeset.inserts.each { |ins| data = insert_to(data, ins) }
+        @data = data
+      end
+
+      ##
+      # A queryable snapshot of the repository for isolated reads. Used by
+      # `RDF::Transaction` for
+      # 
+      # @return [Queryable] a queryable repository snapshot.
+      def snapshot
+        self.class.new(data: @data).freeze
+      end
 
       protected
 
@@ -375,36 +386,14 @@ module RDF
       # @private
       # @see RDF::Mutable#insert
       def insert_statement(statement)
-        raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
-
-        unless has_statement?(statement)
-          s, p, o, c = statement.to_quad
-          c ||= DEFAULT_GRAPH
-
-          @data = @data.put(c) do |subs|
-            subs = (subs || Hamster::Hash.new).put(s) do |preds|
-              preds = (preds || Hamster::Hash.new).put(p) do |objs|
-                (objs || Hamster::Set.new).add(o)
-              end
-            end
-          end
-        end
+        @data = insert_to(@data, statement)
       end
 
       ##
       # @private
       # @see RDF::Mutable#delete
       def delete_statement(statement)
-        if has_statement?(statement)
-          s, p, o, g = statement.to_quad
-          g = DEFAULT_GRAPH unless supports?(:graph_name)
-          g ||= DEFAULT_GRAPH
-
-          os    = @data[g][s][p].delete(o)
-          ps    = os.empty? ? @data[g][s].delete(p) : @data[g][s].put(p, os)
-          ss    = ps.empty? ? @data[g].delete(s)    : @data[g].put(s, ps)
-          @data = ss.empty? ? @data.delete(g)       : @data.put(g, ss)
-        end
+        @data = delete_from(@data, statement)
       end
 
       ##
@@ -412,6 +401,59 @@ module RDF
       # @see RDF::Mutable#clear
       def clear_statements
         @data = @data.clear
+      end
+
+      private
+
+      ##
+      # @private
+      # @see #has_statement
+      def has_statement_in?(data, statement)
+        s, p, o, g = statement.to_quad
+        g ||= DEFAULT_GRAPH
+
+        data.has_key?(g) &&
+          data[g].has_key?(s) &&
+          data[g][s].has_key?(p) &&
+          data[g][s][p].include?(o)
+      end
+
+      ##
+      # @private
+      # @return [Hamster::Hash] a new, updated hamster hash 
+      def insert_to(data, statement)
+        raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
+
+        unless has_statement_in?(data, statement)
+          s, p, o, c = statement.to_quad
+          c ||= DEFAULT_GRAPH
+          
+          return data.put(c) do |subs|
+            subs = (subs || Hamster::Hash.new).put(s) do |preds|
+              preds = (preds || Hamster::Hash.new).put(p) do |objs|
+                (objs || Hamster::Set.new).add(o)
+              end
+            end
+          end
+        end
+        data
+      end
+      
+      ##
+      # @private
+      # @return [Hamster::Hash] a new, updated hamster hash 
+      def delete_from(data, statement)
+        if has_statement_in?(data, statement)
+          s, p, o, g = statement.to_quad
+          g = DEFAULT_GRAPH unless supports?(:graph_name)
+          g ||= DEFAULT_GRAPH
+
+          os   = data[g][s][p].delete(o)
+          ps   = os.empty? ? data[g][s].delete(p) : data[g][s].put(p, os)
+          ss   = ps.empty? ? data[g].delete(s)    : data[g].put(s, ps)
+          return ss.empty? ? data.delete(g) : data.put(g, ss)
+        end
+        data
       end
     end # Implementation
   end # Repository
