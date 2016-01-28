@@ -39,6 +39,7 @@ group :test do
   gem 'fasterer'
   gem 'simplecov',  require: false, platform: :mri
   gem 'coveralls',  require: false, platform: :mri
+  gem "codeclimate-test-reporter", require: false
 end
 
 platforms :rbx do

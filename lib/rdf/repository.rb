@@ -103,10 +103,10 @@ module RDF
     #   Indicates that the repository supports named validation.
     # @yield  [repository]
     # @yieldparam [Repository] repository
-    def initialize(url: nil, title: nil, **options, &block)
+    def initialize(uri: nil, title: nil, **options, &block)
       @options = {with_graph_name: true, with_validity: true}.merge(options)
-      @uri     = @options.delete(:uri)
-      @title   = @options.delete(:title)
+      @uri     = uri
+      @title   = title
 
       @tx_class = @options.delete(:transaction_class) { RDF::Transaction }
 
@@ -156,7 +156,7 @@ module RDF
     #   end
     #
     # @param mutable [Boolean] 
-    #   Context on which to run the transaction, use `false` for the default
+    #   allows changes to the transaction, otherwise it is a read-only snapshot of the underlying repository.
     # @yield  [tx]
     # @yieldparam  [RDF::Transaction] tx
     # @yieldreturn [void] ignored
@@ -188,7 +188,7 @@ module RDF
     # to override this method in order to begin a transaction against the
     # underlying storage.
     #
-    # @param  [RDF::Resource] graph_name
+    # @param mutable [Boolean] Create a mutable or immutable transaction.
     # @return [RDF::Transaction]
     # @since  0.3.0
     def begin_transaction(mutable: false)

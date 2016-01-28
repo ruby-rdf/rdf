@@ -266,7 +266,6 @@ module RDF
       # Load a vocabulary, optionally from a separate location.
       #
       # @param [URI, #to_s] url
-      # @param [Hash{Symbol => Object}] options
       # @param [String] class_name
       #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
       # @param [URI, #to_s] location

@@ -1,7 +1,9 @@
 require "bundler/setup"
 begin
+  require "codeclimate-test-reporter"
   require 'simplecov'
   require 'coveralls'
+  CodeClimate::TestReporter.start
   SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
     SimpleCov::Formatter::HTMLFormatter,
     Coveralls::SimpleCov::Formatter
