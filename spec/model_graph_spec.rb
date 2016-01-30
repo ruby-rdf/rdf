@@ -144,12 +144,31 @@ describe RDF::Graph do
     expect(graph.options).to include(foo: :bar)
   end
 
-  context "as repository" do
-    require 'rdf/spec/repository'
+  let(:countable)  { RDF::Graph.new }
+  let(:enumerable) { RDF::Graph.new }
+  let(:queryable)  { RDF::Graph.new }
+  let(:mutable)    { RDF::Graph.new }
 
-    it_behaves_like 'an RDF::Repository' do
-      let(:repository) { RDF::Graph.new }
-    end
+  context "when updating" do
+    require 'rdf/spec/mutable'
+
+    before { mutable.clear }
+    it_behaves_like 'an RDF::Mutable'
+  end
+
+  context "when counting statements" do
+    require 'rdf/spec/countable'
+    it_behaves_like 'an RDF::Countable'
+  end
+
+  context "when enumerating statements" do
+    require 'rdf/spec/enumerable'
+    it_behaves_like 'an RDF::Enumerable'
+  end
+
+  context "when querying statements" do
+    require 'rdf/spec/queryable'
+    it_behaves_like 'an RDF::Queryable'
   end
 
   context "Examples" do

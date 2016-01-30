@@ -8,7 +8,7 @@ describe RDF::Repository do
     let(:repository) { RDF::Repository.new }
   end
 
-  it "should maintain arbitrary options" do
+  it "maintains arbitrary options" do
     repository = RDF::Repository.new(foo: :bar)
     expect(repository.options).to have_key(:foo)
     expect(repository.options[:foo]).to eq :bar
@@ -27,7 +27,7 @@ describe RDF::Repository do
     let(:dels) { [] }
     let(:ins)  { [] }
     
-    it '' do
+    it 'applies atomically' do
       subject << existing_statement = RDF::Statement(:s, RDF.type, :o)
       dels << existing_statement
       ins << RDF::Statement(nil, nil, nil)

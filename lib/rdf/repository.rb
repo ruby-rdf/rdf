@@ -40,12 +40,11 @@ module RDF
   # @example Deleting all statements from a repository
   #   repository.clear!
   #
-  class Repository
-    include RDF::Countable
-    include RDF::Enumerable
-    include RDF::Mutable
+  class Repository < Dataset
     include RDF::Durable
-    include RDF::Queryable
+    include RDF::Mutable
+
+    DEFAULT_TX_CLASS = RDF::Transaction
 
     ##
     # Returns the options passed to this repository when it was constructed.
@@ -96,11 +95,13 @@ module RDF
     # @param [URI, #to_s]    uri (nil)
     # @param [String, #to_s] title (nil)
     # @param [Hash{Symbol => Object}] options
-    # @option options [Boolean]       :with_graph_name (true)
+    # @option options [Boolean]   :with_graph_name (true)
     #   Indicates that the repository supports named graphs, otherwise,
     #   only the default graph is supported.
-    # @option options [Boolean]       :with_validity (true)
+    # @option options [Boolean]   :with_validity (true)
     #   Indicates that the repository supports named validation.
+    # @option options [Boolean]   :transaction_class (DEFAULT_TX_CLASS)
+    #   Specifies the RDF::Transaction implementation to use in this Repository.
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(uri: nil, title: nil, **options, &block)
@@ -108,16 +109,29 @@ module RDF
       @uri     = uri
       @title   = title
 
-      @tx_class = @options.delete(:transaction_class) { RDF::Transaction }
-
       # Provide a default in-memory implementation:
       send(:extend, Implementation) if self.class.equal?(RDF::Repository)
+
+      @tx_class ||= @options.delete(:transaction_class) { DEFAULT_TX_CLASS }
 
       if block_given?
         case block.arity
           when 1 then block.call(self)
           else instance_eval(&block)
         end
+      end
+    end
+    
+    ##
+    # Performs a set of deletes and inserts as a combined operation within a 
+    # transaction. The Repository's transaction semantics apply to updates made
+    # through this method.
+    #
+    # @see RDF::Mutable#delete_insert
+    def delete_insert(deletes, inserts)
+      transaction(mutable: true) do
+        deletes.respond_to?(:each_statement) ? delete(deletes) : delete(*deletes)
+        inserts.respond_to?(:each_statement) ? insert(inserts) : insert(*inserts)
       end
     end
 
@@ -127,24 +141,6 @@ module RDF
     def project_graph(graph_name, &block)
       RDF::Graph.new(graph_name: graph_name, data: self).
         project_graph(graph_name, &block)
-    end
-
-    ##
-    # Returns a developer-friendly representation of this object.
-    #
-    # @return [String]
-    def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, uri.to_s)
-    end
-
-    ##
-    # Outputs a developer-friendly representation of this object to
-    # `stderr`.
-    #
-    # @return [void]
-    def inspect!
-      each_statement { |statement| statement.inspect! }
-      nil
     end
 
     ##
@@ -216,7 +212,7 @@ module RDF
     # @return [void] ignored
     # @since  0.3.0
     def commit_transaction(tx)
-      tx.execute(self)
+      tx.execute
     end
 
     ##
@@ -228,7 +224,11 @@ module RDF
       ##
       # @private
       def self.extend_object(obj)
-        obj.instance_variable_set(:@data, obj.options.delete(:data) || Hamster::Hash.new)
+        obj.instance_variable_set(:@data, obj.options.delete(:data) || 
+                                          Hamster::Hash.new)
+        obj.instance_variable_set(:@tx_class, 
+                                  obj.options.delete(:transaction_class) || 
+                                  SerializedTransaction)
         super
       end
 
@@ -238,9 +238,10 @@ module RDF
       def supports?(feature)
         case feature.to_sym
         when :graph_name   then @options[:with_graph_name]
-        when :inference then false  # forward-chaining inference
-        when :validity  then @options.fetch(:with_validity, true)
-        when :snapshots then true
+        when :inference    then false  # forward-chaining inference
+        when :validity     then @options.fetch(:with_validity, true)
+        when :transactions then true
+        when :snapshots    then true
         else false
         end
       end
@@ -310,7 +311,6 @@ module RDF
       end
       alias_method :each, :each_statement
       
-
       ##
       # @see Mutable#apply_changeset
       def apply_changeset(changeset)
@@ -321,10 +321,16 @@ module RDF
       end
 
       ##
-      # A queryable snapshot of the repository for isolated reads. Used by
-      # `RDF::Transaction` for
+      # @see RDF::Dataset#isolation_level
+      def isolation_level
+        :serializable
+      end
+
+      ##
+      # A queryable snapshot of the repository for isolated reads.
       # 
-      # @return [Queryable] a queryable repository snapshot.
+      # @return [Dataset] an immutable Dataset containing a current snapshot of
+      #   the Repository contents.
       def snapshot
         self.class.new(data: @data).freeze
       end
@@ -403,6 +409,20 @@ module RDF
         @data = @data.clear
       end
 
+      ##
+      # @private
+      # @return [Hamster::Hash]
+      def data
+        @data
+      end
+
+      ##
+      # @private
+      # @return [Hamster::Hash]
+      def data=(hash)
+        @data = hash
+      end
+
       private
 
       ##
@@ -455,9 +475,42 @@ module RDF
         end
         data
       end
+
+      ##
+      # A transaction for the Hamster-based `RDF::Repository::Implementation` 
+      # with full serializability.
+      #
+      # @todo refactor me!
+      # @see RDF::Transaction
+      class SerializedTransaction < Transaction
+        def initialize(*)
+          super
+          @base_snapshot = @snapshot
+        end
+        
+        def insert_statement(statement)
+          @snapshot = @snapshot.class
+            .new(data: @snapshot.send(:insert_to, @snapshot.send(:data), statement))
+        end
+
+        def delete_statement(statement)
+          @snapshot = @snapshot.class
+            .new(data: @snapshot.send(:delete_from, @snapshot.send(:data), statement))
+        end
+        
+        def execute
+          raise TransactionError, 'Cannot execute a rolled back transaction. ' \
+                                  'Open a new one instead.' if @rolledback
+
+          # `Hamster::Hash#==` will use a cheap `#equal?` check first, but fall 
+          # back on a full Ruby Hash comparison if required.
+          raise TransactionError, 'Error merging transaction. Repository' \
+                                  'has changed during transaction time.' unless 
+            repository.send(:data) == @base_snapshot.send(:data)
+
+          repository.send(:data=, @snapshot.send(:data))
+        end
+      end
     end # Implementation
   end # Repository
-
-  # RDF::Dataset is a synonym for RDF::Repository
-  Dataset = Repository
 end # RDF

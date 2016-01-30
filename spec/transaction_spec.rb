@@ -10,13 +10,6 @@ describe RDF::Transaction do
   describe 'base implementation' do
     subject { described_class.new(repository, mutable: true) }
 
-    describe '#buffered' do
-      it 'is true if changeset has changes' do
-        subject.insert([:s, :p, :o])
-        expect(subject).to(be_buffered)
-      end
-    end
-
     describe "#insert" do
       let(:st) { RDF::Statement(:s, RDF::URI('p'), 'o') }
       
