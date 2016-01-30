@@ -117,6 +117,19 @@ module RDF
         end
       end
     end
+    
+    ##
+    # Performs a set of deletes and inserts as a combined operation within a 
+    # transaction. The Repository's transaction semantics apply to updates made
+    # through this method.
+    #
+    # @see RDF::Mutable#delete_insert
+    def delete_insert(deletes, inserts)
+      transaction(mutable: true) do
+        deletes.respond_to?(:each_statement) ? delete(deletes) : delete(*deletes)
+        inserts.respond_to?(:each_statement) ? insert(inserts) : insert(*inserts)
+      end
+    end
 
     ##
     # @private
@@ -195,7 +208,7 @@ module RDF
     # @return [void] ignored
     # @since  0.3.0
     def commit_transaction(tx)
-      tx.execute(self)
+      tx.execute
     end
 
     ##
