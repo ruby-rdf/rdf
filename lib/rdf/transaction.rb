@@ -38,7 +38,7 @@ module RDF
   #     tx.insert [subject, RDF::RDFS.label, "New title"]
   #   end
   # 
-  # The base class provides a full, buffered implementation depending on 
+  # The base class provides an atomic write implementation depending on
   # `RDF::Changeset` and using `Changeset#apply`. Custom `Repositories`
   # can implement a minimial write-atomic transactions by overriding
   # `#apply_changeset`.
@@ -139,25 +139,11 @@ module RDF
         end
       end
     end
-
+    
     ##
-    # Determines whether the transaction's changeset is available for
-    # introspection.
-    #
-    # If `#buffered` is `true`, `#changes` contains the current up-to-date 
-    # Changeset as it would be applied on execution. This is not necessarily 
-    # the case for all Transaction subclasses, which are permitted to use the
-    # underlying datastore, obviating the need to track a `Changeset`. 
-    #
-    # Such implementations must return `false` when `#changes` is out of date.
-    # They should return `true` when `#changes` has been synced to the relevant
-    # transaction scope in the datastore.
-    #
-    # @return [Boolean]
-    # @see    #changes
-    # @since  2.0.0
-    def buffered?
-      !(self.changes.empty?)
+    # @see RDF::Dataset#isolation_level
+    def isolation_level
+      snapshot.isolation_level
     end
 
     ##
