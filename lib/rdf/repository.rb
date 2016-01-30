@@ -230,9 +230,10 @@ module RDF
       def supports?(feature)
         case feature.to_sym
         when :graph_name   then @options[:with_graph_name]
-        when :inference then false  # forward-chaining inference
-        when :validity  then @options.fetch(:with_validity, true)
-        when :snapshots then true
+        when :inference    then false  # forward-chaining inference
+        when :validity     then @options.fetch(:with_validity, true)
+        when :transactions then true
+        when :snapshots    then true
         else false
         end
       end
