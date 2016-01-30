@@ -44,6 +44,8 @@ module RDF
     include RDF::Durable
     include RDF::Mutable
 
+    DEFAULT_TX_CLASS = RDF::Transaction
+
     ##
     # Returns the options passed to this repository when it was constructed.
     #
@@ -93,11 +95,13 @@ module RDF
     # @param [URI, #to_s]    uri (nil)
     # @param [String, #to_s] title (nil)
     # @param [Hash{Symbol => Object}] options
-    # @option options [Boolean]       :with_graph_name (true)
+    # @option options [Boolean]   :with_graph_name (true)
     #   Indicates that the repository supports named graphs, otherwise,
     #   only the default graph is supported.
-    # @option options [Boolean]       :with_validity (true)
+    # @option options [Boolean]   :with_validity (true)
     #   Indicates that the repository supports named validation.
+    # @option options [Boolean]   :transaction_class (DEFAULT_TX_CLASS)
+    #   Specifies the RDF::Transaction implementation to use in this Repository.
     # @yield  [repository]
     # @yieldparam [Repository] repository
     def initialize(uri: nil, title: nil, **options, &block)
@@ -105,10 +109,10 @@ module RDF
       @uri     = uri
       @title   = title
 
-      @tx_class = @options.delete(:transaction_class) { RDF::Transaction }
-
       # Provide a default in-memory implementation:
       send(:extend, Implementation) if self.class.equal?(RDF::Repository)
+
+      @tx_class ||= @options.delete(:transaction_class) { DEFAULT_TX_CLASS }
 
       if block_given?
         case block.arity
@@ -220,7 +224,11 @@ module RDF
       ##
       # @private
       def self.extend_object(obj)
-        obj.instance_variable_set(:@data, obj.options.delete(:data) || Hamster::Hash.new)
+        obj.instance_variable_set(:@data, obj.options.delete(:data) || 
+                                          Hamster::Hash.new)
+        obj.instance_variable_set(:@tx_class, 
+                                  obj.options.delete(:transaction_class) || 
+                                  SerializedTransaction)
         super
       end
 
@@ -313,6 +321,12 @@ module RDF
       end
 
       ##
+      # @see RDF::Dataset#isolation_level
+      def isolation_level
+        :serializable
+      end
+
+      ##
       # A queryable snapshot of the repository for isolated reads.
       # 
       # @return [Dataset] an immutable Dataset containing a current snapshot of
@@ -395,6 +409,20 @@ module RDF
         @data = @data.clear
       end
 
+      ##
+      # @private
+      # @return [Hamster::Hash]
+      def data
+        @data
+      end
+
+      ##
+      # @private
+      # @return [Hamster::Hash]
+      def data=(hash)
+        @data = hash
+      end
+
       private
 
       ##
@@ -446,6 +474,42 @@ module RDF
           return ss.empty? ? data.delete(g) : data.put(g, ss)
         end
         data
+      end
+
+      ##
+      # A transaction for the Hamster-based `RDF::Repository::Implementation` 
+      # with full serializability.
+      #
+      # @todo refactor me!
+      # @see RDF::Transaction
+      class SerializedTransaction < Transaction
+        def initialize(*)
+          super
+          @base_snapshot = @snapshot
+        end
+        
+        def insert_statement(statement)
+          @snapshot = @snapshot.class
+            .new(data: @snapshot.send(:insert_to, @snapshot.send(:data), statement))
+        end
+
+        def delete_statement(statement)
+          @snapshot = @snapshot.class
+            .new(data: @snapshot.send(:delete_from, @snapshot.send(:data), statement))
+        end
+        
+        def execute
+          raise TransactionError, 'Cannot execute a rolled back transaction. ' \
+                                  'Open a new one instead.' if @rolledback
+
+          # `Hamster::Hash#==` will use a cheap `#equal?` check first, but fall 
+          # back on a full Ruby Hash comparison if required.
+          raise TransactionError, 'Error merging transaction. Repository' \
+                                  'has changed during transaction time.' unless 
+            repository.send(:data) == @base_snapshot.send(:data)
+
+          repository.send(:data=, @snapshot.send(:data))
+        end
       end
     end # Implementation
   end # Repository
