@@ -254,6 +254,9 @@ module RDF
     
     ##
     # An error class for transaction failures.
+    # 
+    # This error indicates that the transaction semantics have been violated in 
+    # some way.
     class TransactionError < RuntimeError; end
   end # Transaction
 end # RDF
