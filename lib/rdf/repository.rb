@@ -40,12 +40,9 @@ module RDF
   # @example Deleting all statements from a repository
   #   repository.clear!
   #
-  class Repository
-    include RDF::Countable
-    include RDF::Enumerable
-    include RDF::Mutable
+  class Repository < Dataset
     include RDF::Durable
-    include RDF::Queryable
+    include RDF::Mutable
 
     ##
     # Returns the options passed to this repository when it was constructed.
@@ -127,24 +124,6 @@ module RDF
     def project_graph(graph_name, &block)
       RDF::Graph.new(graph_name: graph_name, data: self).
         project_graph(graph_name, &block)
-    end
-
-    ##
-    # Returns a developer-friendly representation of this object.
-    #
-    # @return [String]
-    def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, uri.to_s)
-    end
-
-    ##
-    # Outputs a developer-friendly representation of this object to
-    # `stderr`.
-    #
-    # @return [void]
-    def inspect!
-      each_statement { |statement| statement.inspect! }
-      nil
     end
 
     ##
@@ -310,7 +289,6 @@ module RDF
       end
       alias_method :each, :each_statement
       
-
       ##
       # @see Mutable#apply_changeset
       def apply_changeset(changeset)
@@ -321,10 +299,10 @@ module RDF
       end
 
       ##
-      # A queryable snapshot of the repository for isolated reads. Used by
-      # `RDF::Transaction` for
+      # A queryable snapshot of the repository for isolated reads.
       # 
-      # @return [Queryable] a queryable repository snapshot.
+      # @return [Dataset] an immutable Dataset containing a current snapshot of
+      #   the Repository contents.
       def snapshot
         self.class.new(data: @data).freeze
       end
@@ -457,7 +435,4 @@ module RDF
       end
     end # Implementation
   end # Repository
-
-  # RDF::Dataset is a synonym for RDF::Repository
-  Dataset = Repository
 end # RDF
