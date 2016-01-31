@@ -65,14 +65,14 @@ module RDF
     # Executes a transaction against the given RDF repository.
     #
     # @param  [RDF::Repository]         repository
-    # @param  [Hash{Symbol => Object}]  options
-    # @option options [Boolean]         :mutable (false)
+    # @param  [Boolean]                 mutable (false)
     #    Whether this is a read-only or read/write transaction.
+    # @param  [Hash{Symbol => Object}]  options
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
     # @return [void]
-    def self.begin(repository, options = {}, &block)
-      self.new(repository, options, &block)
+    def self.begin(repository, mutable: false, **options, &block)
+      self.new(repository, options.merge(mutable: mutable), &block)
     end
 
     ##
@@ -119,16 +119,16 @@ module RDF
     # Initializes this transaction.
     #
     # @param  [Hash{Symbol => Object}]  options
-    # @option options [Boolean]         :mutable (false)
+    # @param  [Boolean]                 mutable (false)
     #    Whether this is a read-only or read/write transaction.
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
-    def initialize(repository, options = {}, &block)
+    def initialize(repository, mutable: false, **options, &block)
       @repository = repository
       @snapshot = 
         repository.supports?(:snapshots) ? repository.snapshot : repository
       @options  = options.dup
-      @mutable  = !!(@options.delete(:mutable) || false)
+      @mutable  = mutable
       
       @changes = RDF::Changeset.new
       
