@@ -261,6 +261,13 @@ module RDF
       
       ##
       # @private
+      # @see RDF::Durable#durable?
+      def durable?
+        false
+      end
+      
+      ##
+      # @private
       # @see RDF::Enumerable#has_graph?      
       def has_graph?(graph)
         @data.has_key?(graph)
