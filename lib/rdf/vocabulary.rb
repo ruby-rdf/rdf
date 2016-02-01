@@ -283,7 +283,7 @@ module RDF
           Class.new(self.create(url))
         end
 
-        graph = RDF::Graph.load(source)
+        graph = RDF::Repository.load(source)
 
         if patch
           begin

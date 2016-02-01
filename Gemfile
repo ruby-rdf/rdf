@@ -5,7 +5,6 @@ gemspec
 group :develop do
   gem "ebnf",           git: "git://github.com/gkellogg/ebnf.git", branch: "develop"
   gem "ld-patch",       git: "git://github.com/ruby-rdf/ld-patch.git", branch: "develop"
-#  gem "linkeddata",     git: "git://github.com/ruby-rdf/linkeddata.git", branch: "develop"
   gem "rdf-json",       git: "git://github.com/ruby-rdf/rdf-json.git", branch: "develop"
   gem "rdf-rdfxml",     git: "git://github.com/ruby-rdf/rdf-rdfxml.git", branch: "develop"
   gem "rdf-reasoner",   git: "git://github.com/ruby-rdf/rdf-reasoner.git", branch: "develop"

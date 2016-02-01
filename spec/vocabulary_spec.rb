@@ -278,7 +278,7 @@ describe RDF::Vocabulary do
       <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
     }}
     before(:each) do
-      allow(RDF::Graph).to receive(:load).and_return(RDF::Graph.new << RDF::NTriples::Reader.new(nt))
+      allow(RDF::Repository).to receive(:load).and_return(RDF::Repository.new << RDF::NTriples::Reader.new(nt))
     end
 
     subject {RDF::Vocabulary.load("http://example/")}
