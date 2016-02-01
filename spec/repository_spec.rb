@@ -8,6 +8,8 @@ describe RDF::Repository do
     let(:repository) { RDF::Repository.new }
   end
 
+  it { is_expected.not_to be_durable }
+
   it "maintains arbitrary options" do
     repository = RDF::Repository.new(foo: :bar)
     expect(repository.options).to have_key(:foo)

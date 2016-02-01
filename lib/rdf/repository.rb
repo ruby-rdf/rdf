@@ -41,7 +41,6 @@ module RDF
   #   repository.clear!
   #
   class Repository < Dataset
-    include RDF::Durable
     include RDF::Mutable
 
     DEFAULT_TX_CLASS = RDF::Transaction
@@ -257,6 +256,13 @@ module RDF
           end
         end
         count
+      end
+      
+      ##
+      # @private
+      # @see RDF::Durable#durable?
+      def durable?
+        false
       end
       
       ##
