@@ -41,7 +41,6 @@ module RDF
   #   repository.clear!
   #
   class Repository < Dataset
-    include RDF::Durable
     include RDF::Mutable
 
     DEFAULT_TX_CLASS = RDF::Transaction

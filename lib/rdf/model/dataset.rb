@@ -10,6 +10,7 @@ module RDF
   class Dataset
     include RDF::Countable
     include RDF::Enumerable
+    include RDF::Durable
     include RDF::Queryable
 
     ISOLATION_LEVELS = [ :read_uncommitted, 
