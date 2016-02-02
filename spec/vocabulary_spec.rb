@@ -303,7 +303,8 @@ describe RDF::Vocabulary do
       }}
       subject {RDF::Vocabulary.load("http://example/", patch: patch)}
 
-      it "replaces properties from vocabulary" do
+      it {expect {subject}.to raise_error "patching vocabulary requires the ld-patch gem"}
+      it "replaces properties from vocabulary", skip: "requires ld-patch" do
         expect(subject[:Class].attributes["rdfs:Datatype"]).to contain_exactly "Klass"
       end
     end

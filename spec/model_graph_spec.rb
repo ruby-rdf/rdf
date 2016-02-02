@@ -172,8 +172,6 @@ describe RDF::Graph do
   end
 
   context "Examples" do
-    require 'rdf/rdfxml'
-
     let(:graph) {described_class.new}
 
     it "Creating an empty unnamed graph" do
@@ -184,7 +182,8 @@ describe RDF::Graph do
       expect {described_class.new(graph_name: "http://rubygems.org/", data: RDF::Repository.new)}.not_to raise_error
     end
 
-    it "Loading graph data from a URL (1)" do
+    it "Loading graph data from a URL (1)", skip: "requires RDF/XML" do
+      require 'rdf/rdfxml'
       expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
@@ -193,7 +192,8 @@ describe RDF::Graph do
       expect(graph).not_to be_empty
     end
 
-    it "Loading graph data from a URL (2)" do
+    it "Loading graph data from a URL (2)", skip: "requires RDF/XML" do
+      require 'rdf/rdfxml'
       expect(RDF::Util::File).to receive(:open_file).
         with("http://www.bbc.co.uk/programmes/b0081dq5.rdf", an_instance_of(Hash)).
         and_yield(File.open(File.expand_path("../data/programmes.rdf", __FILE__)))
