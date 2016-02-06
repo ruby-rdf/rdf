@@ -212,6 +212,19 @@ module RDF
     end
 
     ##
+    # A readable & queryable snapshot of the repository for isolated reads. 
+    # 
+    # This method must be implemented when `#supports(:snapshots)` is `true`.
+    # 
+    # @return [Dataset] an immutable Dataset containing a current snapshot of
+    #   the Repository contents.
+    # @raise [NotImplementederror] when snapshots aren't implemented for the
+    #   class
+    def snapshot
+      raise NotImplementedError, " #{self.class} does not implement snapshots"
+    end
+
+    ##
     # Deletes all RDF statements from `self`.
     #
     # @raise  [TypeError] if `self` is immutable

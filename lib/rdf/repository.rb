@@ -143,6 +143,12 @@ module RDF
     end
 
     ##
+    # @see RDF::Dataset#isolation_level
+    def isolation_level
+      supports?(:snapshot) ? :repeatable_read : super
+    end
+
+    ##
     # Executes the given block in a transaction.
     #
     # @example
@@ -333,10 +339,12 @@ module RDF
       end
 
       ##
-      # A queryable snapshot of the repository for isolated reads.
+      # A readable & queryable snapshot of the repository for isolated reads. 
       # 
       # @return [Dataset] an immutable Dataset containing a current snapshot of
       #   the Repository contents.
+      #
+      # @see Mutable#snapshot
       def snapshot
         self.class.new(data: @data).freeze
       end
