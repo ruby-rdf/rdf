@@ -43,9 +43,25 @@ module RDF
   # can implement a minimial write-atomic transactions by overriding
   # `#apply_changeset`.
   #
-  # For datastores that support Transactions natively, it is recommended 
-  # to implement a custom `Transaction` subclass, setting `@tx_class` to
-  # default to that class for the `Repository`.
+  # Reads within a transaction run against the live repository by default
+  # (`#isolation_level' is `:read_committed`). Repositories may provide support
+  # for snapshots by implementing `Repository#snapshot` and responding `true` to
+  # `#supports?(:snapshots)`. In this case, the transaction will use the 
+  # `RDF::Dataset` returned by `#snapshot` for reads (`:repeatable_read`).
+  #
+  # For datastores that support transactions natively, implementation of a 
+  # custom `Transaction` subclass is recommended. The `Repository` is 
+  # responsible for specifying snapshot support and isolation level as 
+  # appropriate. Note that repositories may provide the snapshot isolation level
+  # without implementing `#snapshot`.
+  #
+  # @example A repository with a custom transaction class
+  #  class MyRepository < RDF::Repository
+  #    DEFAULT_TX_CLASS = MyTransaction
+  #    # ...
+  #    # custom repository logic
+  #    # ...
+  #  end
   #
   # @see RDF::Changeset
   # @see RDF::Mutable#apply_changeset
