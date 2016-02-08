@@ -62,7 +62,7 @@ module RDF
     # @see    RDF::NTriples::Writer.serialize
     # @since  0.1.5
     def self.serialize(value)
-      Writer.serialize(value)
+      Writer.for(:ntriples).serialize(value)
     end
 
     ##
