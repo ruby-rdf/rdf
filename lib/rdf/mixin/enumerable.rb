@@ -63,15 +63,13 @@ module RDF
     include RDF::Countable # NOTE: must come after ::Enumerable
 
     ##
-    # Returns `true` if this repository supports the given `feature`.
+    # Returns `true` if this enumerable supports the given `feature`.
     #
     # Supported features include:
     #   * `:graph_name` supports statements with a graph_name, allowing multiple named graphs
     #   * `:inference` supports RDFS inferrence of queryable contents.
     #   * `:validity` allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.
     #   * `:skolemize` supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an `Enumerable`. Implementations supporting this feature must implement a `#skolemize` method, taking a base URI used for minting URIs for BNodes as stable identifiers and a `#deskolemize` method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.
-    #   * `:transactions` supports atomic transactions
-    #   * `:snapshots` supports creation of immutable snapshots of current contents via #snapshot.
     #
     # @param  [Symbol, #to_sym] feature
     # @return [Boolean]

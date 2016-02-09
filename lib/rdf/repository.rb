@@ -120,7 +120,25 @@ module RDF
         end
       end
     end
-    
+
+    ##
+    # Returns `true` if this respository supports the given `feature`.
+    #
+    # Supported features include those from {RDF::Enumerable#supports?} along with the following:
+    #   * `:transactions` supports atomic transactions
+    #   * `:snapshots` supports creation of immutable snapshots of current contents via #snapshot.
+    # @see RDF::Enumerable#supports?
+    def supports?(feature)
+      case feature.to_sym
+      when :graph_name   then @options[:with_graph_name]
+      when :inference    then false  # forward-chaining inference
+      when :validity     then @options.fetch(:with_validity, true)
+      when :transactions then false
+      when :snapshots    then false
+      else false
+      end
+    end
+
     ##
     # Performs a set of deletes and inserts as a combined operation within a 
     # transaction. The Repository's transaction semantics apply to updates made
@@ -146,6 +164,15 @@ module RDF
     # @see RDF::Dataset#isolation_level
     def isolation_level
       supports?(:snapshot) ? :repeatable_read : super
+    end
+
+    ##
+    # A queryable snapshot of the repository for isolated reads.
+    # 
+    # @return [Dataset] an immutable Dataset containing a current snapshot of
+    #   the Repository contents.
+    def snapshot
+      raise NotImplementedError.new("#{self.class}#snapshot")
     end
 
     ##
