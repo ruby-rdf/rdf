@@ -171,10 +171,6 @@ describe RDF::Graph do
     it_behaves_like 'an RDF::Queryable'
   end
 
-  context 'transactions' do
-    it { require 'pry'; binding.pry }
-  end
-
   context "Examples" do
     let(:graph) {described_class.new}
 
