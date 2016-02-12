@@ -192,6 +192,7 @@ module RDF
     # @see    RDF::Transaction
     # @since  0.3.0
     def transaction(mutable: false, &block)
+      raise NotImplementedError.new("#{self.class}#transaction") unless supports?(:transactions)
       tx = begin_transaction(mutable: mutable)
       begin
         case block.arity

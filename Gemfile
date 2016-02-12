@@ -3,13 +3,13 @@ source "https://rubygems.org"
 gemspec
 
 group :develop do
-  gem "rdf-reasoner",   git: "git://github.com/ruby-rdf/rdf-reasoner.git", branch: "develop"
-  gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
-  gem "rdf-vocab",      git: "git://github.com/ruby-rdf/rdf-vocab.git", branch: "develop"
-  gem "rdf-xsd",        git: "git://github.com/ruby-rdf/rdf-xsd.git", branch: "develop"
-  gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
-  gem 'rest-client-components'
+  gem 'rdf-isomorphic', github: "ruby-rdf/rdf-isomorphic",  branch: "develop"
+  gem "rdf-reasoner",   github: "ruby-rdf/rdf-reasoner",    branch: "develop"
+  gem "rdf-spec",       github: "ruby-rdf/rdf-spec",        branch: "develop"
+  gem "rdf-vocab",      github: "ruby-rdf/rdf-vocab",       branch: "develop"
+  gem "rdf-xsd",        github: "ruby-rdf/rdf-xsd",         branch: "develop"
 
+  gem 'rest-client-components'
   gem 'benchmark-ips'
 end
 
