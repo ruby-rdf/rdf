@@ -6,7 +6,7 @@ module RDF
   #
   # Repository implementations may provide support for transactional updates
   # by providing an atomic implementation of {Mutable#apply_changeset} and 
-  # responding to `#supports?(:transactions)` with `true`.
+  # responding to `#supports?(:atomic_write)` with `true`.
   # 
   # We carefully distinguish between read-only and read/write transactions,
   # in order to enable repository implementations to take out the
@@ -18,7 +18,7 @@ module RDF
   # transaction's scope. In case repository implementations should be unable
   # to provide full ACID guarantees for transactions, that must be clearly 
   # indicated in their documentation. If update atomicity is not provided, 
-  # `#supports?(:transactions)` must respond `false`.
+  # `#supports?(:atomic_write)` must respond `false`.
   #
   # @example Executing a read-only transaction
   #   repository = RDF::Repository.new
@@ -145,7 +145,11 @@ module RDF
         repository.supports?(:snapshots) ? repository.snapshot : repository
       @options  = options.dup
       @mutable  = mutable
-      
+
+      raise TransactionError, 
+            'Tried to open a mutable transaction on an immutable repository' if
+        @mutable && !@repository.mutable?
+
       @changes = RDF::Changeset.new
       
       if block_given?

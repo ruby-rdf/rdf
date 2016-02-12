@@ -124,16 +124,18 @@ module RDF
     ##
     # Returns `true` if this respository supports the given `feature`.
     #
-    # Supported features include those from {RDF::Enumerable#supports?} along with the following:
-    #   * `:transactions` supports atomic transactions
-    #   * `:snapshots` supports creation of immutable snapshots of current contents via #snapshot.
+    # Supported features include those from {RDF::Enumerable#supports?} along 
+    #  with the following:
+    #   * `:atomic_write` supports atomic write in transaction scopes
+    #   * `:snapshots` supports creation of immutable snapshots of current 
+    #        contents via #snapshot.
     # @see RDF::Enumerable#supports?
     def supports?(feature)
       case feature.to_sym
       when :graph_name   then @options[:with_graph_name]
       when :inference    then false  # forward-chaining inference
       when :validity     then @options.fetch(:with_validity, true)
-      when :transactions then false
+      when :atomic_write then false
       when :snapshots    then false
       else false
       end
@@ -272,7 +274,7 @@ module RDF
         when :graph_name   then @options[:with_graph_name]
         when :inference    then false  # forward-chaining inference
         when :validity     then @options.fetch(:with_validity, true)
-        when :transactions then true
+        when :atomic_write then true
         when :snapshots    then true
         else false
         end
