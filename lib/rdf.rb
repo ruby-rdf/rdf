@@ -7,52 +7,53 @@ require 'rdf/version'
 
 module RDF
   # RDF mixins
-  autoload :Countable,   'rdf/mixin/countable'
-  autoload :Durable,     'rdf/mixin/durable'
-  autoload :Enumerable,  'rdf/mixin/enumerable'
-  autoload :Indexable,   'rdf/mixin/indexable'
-  autoload :Mutable,     'rdf/mixin/mutable'
-  autoload :Queryable,   'rdf/mixin/queryable'
-  autoload :Readable,    'rdf/mixin/readable'
-  autoload :TypeCheck,   'rdf/mixin/type_check'
-  autoload :Writable,    'rdf/mixin/writable'
+  autoload :Countable,         'rdf/mixin/countable'
+  autoload :Durable,           'rdf/mixin/durable'
+  autoload :Enumerable,        'rdf/mixin/enumerable'
+  autoload :Indexable,         'rdf/mixin/indexable'
+  autoload :Mutable,           'rdf/mixin/mutable'
+  autoload :Queryable,         'rdf/mixin/queryable'
+  autoload :Readable,          'rdf/mixin/readable'
+  autoload :TypeCheck,         'rdf/mixin/type_check'
+  autoload :Transactable,      'rdf/mixin/transactable'
+  autoload :Writable,          'rdf/mixin/writable'
 
   # RDF objects
-  autoload :Graph,       'rdf/model/graph'
-  autoload :IRI,         'rdf/model/uri'
-  autoload :Literal,     'rdf/model/literal'
-  autoload :Node,        'rdf/model/node'
-  autoload :Resource,    'rdf/model/resource'
-  autoload :Statement,   'rdf/model/statement'
-  autoload :URI,         'rdf/model/uri'
-  autoload :Value,       'rdf/model/value'
-  autoload :Term,        'rdf/model/term'
+  autoload :Graph,             'rdf/model/graph'
+  autoload :IRI,               'rdf/model/uri'
+  autoload :Literal,           'rdf/model/literal'
+  autoload :Node,              'rdf/model/node'
+  autoload :Resource,          'rdf/model/resource'
+  autoload :Statement,         'rdf/model/statement'
+  autoload :URI,               'rdf/model/uri'
+  autoload :Value,             'rdf/model/value'
+  autoload :Term,              'rdf/model/term'
 
   # RDF collections
-  autoload :List,        'rdf/model/list'
+  autoload :List,              'rdf/model/list'
 
   # RDF serialization
-  autoload :Format,      'rdf/format'
-  autoload :Reader,      'rdf/reader'
-  autoload :ReaderError, 'rdf/reader'
-  autoload :Writer,      'rdf/writer'
-  autoload :WriterError, 'rdf/writer'
+  autoload :Format,            'rdf/format'
+  autoload :Reader,            'rdf/reader'
+  autoload :ReaderError,       'rdf/reader'
+  autoload :Writer,            'rdf/writer'
+  autoload :WriterError,       'rdf/writer'
 
   # RDF serialization formats
-  autoload :NTriples,    'rdf/ntriples'
-  autoload :NQuads,      'rdf/nquads'
+  autoload :NTriples,          'rdf/ntriples'
+  autoload :NQuads,            'rdf/nquads'
 
   # RDF storage
-  autoload :Changeset,   'rdf/changeset'
-  autoload :Dataset,     'rdf/model/dataset'
-  autoload :Repository,  'rdf/repository'
-  autoload :Transaction, 'rdf/transaction'
+  autoload :Changeset,         'rdf/changeset'
+  autoload :Dataset,           'rdf/model/dataset'
+  autoload :Repository,        'rdf/repository'
+  autoload :Transaction,       'rdf/transaction'
 
   # RDF querying
-  autoload :Query,       'rdf/query'
+  autoload :Query,             'rdf/query'
 
   # RDF vocabularies
-  autoload :Vocabulary,  'rdf/vocabulary'
+  autoload :Vocabulary,        'rdf/vocabulary'
   autoload :StrictVocabulary,  'rdf/vocabulary'
   VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
 
