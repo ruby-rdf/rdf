@@ -166,6 +166,37 @@ describe RDF::Graph do
     it_behaves_like 'an RDF::Enumerable'
   end
 
+  context "as a transactable" do
+    require 'rdf/spec/transactable'
+
+    let(:transactable) { RDF::Graph.new }
+    it_behaves_like 'an RDF::Transactable'
+
+    context 'with graph_name' do
+      let(:transactable) do 
+        RDF::Graph.new graph_name: name, data: RDF::Repository.new
+      end
+
+      let(:name) { RDF::URI('g') }
+      
+      it_behaves_like 'an RDF::Transactable'
+
+      it 'inserts to graph' do
+        st = [RDF::URI('s'), RDF::URI('p'), 'o']
+        expect { transactable.transaction(mutable: true) { insert(st) } }
+          .to change { transactable.statements }.to contain_exactly(st)
+      end
+      
+      it 'deletes from graph' do
+        st = [RDF::URI('s'), RDF::URI('p'), 'o']
+        transactable.insert(st)
+
+        expect { transactable.transaction(mutable: true) { delete(st) } }
+          .to change { transactable.statements }.to be_empty
+      end
+    end
+  end
+
   context "when querying statements" do
     require 'rdf/spec/queryable'
     it_behaves_like 'an RDF::Queryable'

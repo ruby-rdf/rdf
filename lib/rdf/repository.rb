@@ -186,7 +186,7 @@ module RDF
       # @see RDF::Transactable#begin_transaction
       # @since  0.3.0
       def begin_transaction(mutable: false, graph_name: nil)
-        @tx_class.new(self, mutable: mutable)
+        @tx_class.new(self, mutable: mutable, graph_name: graph_name)
       end
 
     ##
@@ -472,15 +472,19 @@ module RDF
         end
         
         def insert_statement(statement)
+          statement = statement.dup
+          statement.graph_name ||= graph_name if graph_name
           @snapshot = @snapshot.class
             .new(data: @snapshot.send(:insert_to, @snapshot.send(:data), statement))
         end
 
         def delete_statement(statement)
+          statement = statement.dup
+          statement.graph_name ||= graph_name if graph_name
           @snapshot = @snapshot.class
             .new(data: @snapshot.send(:delete_from, @snapshot.send(:data), statement))
         end
-        
+
         def execute
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback

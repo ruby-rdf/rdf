@@ -66,3 +66,11 @@ describe RDF::Transaction do
     end
   end
 end
+
+describe RDF::Repository::Implementation::SerializedTransaction do
+  let(:repository) { RDF::Repository.new }
+
+  # @see lib/rdf/spec/transaction.rb in rdf-spec
+  it_behaves_like "an RDF::Transaction", 
+                  RDF::Repository::Implementation::SerializedTransaction
+end

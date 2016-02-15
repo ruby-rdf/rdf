@@ -13,16 +13,6 @@ module RDF
   #     # ...
   #   end
   #
-  # @example using a returned transaction object
-  #   repository = RDF::Repository.new # or other transactable
-  #   tx = repository.transaction(mutable: true)
-  #
-  #   tx.delete [:node, RDF.type, RDF::OWL.Thing]
-  #   # ...
-  #
-  #   tx.execute 
-  #   # or tx.rollback
-  #   
   # @see RDF::Transaction
   # @since 2.0.0
   module Transactable
