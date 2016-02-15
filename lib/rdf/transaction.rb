@@ -172,7 +172,8 @@ module RDF
     ##
     # @see RDF::Dataset#isolation_level
     def isolation_level
-      snapshot.isolation_level
+      return :repeatable_read if repository.supports?(:snapshots)
+      :read_committed
     end
 
     ##

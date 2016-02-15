@@ -485,6 +485,12 @@ module RDF
             .new(data: @snapshot.send(:delete_from, @snapshot.send(:data), statement))
         end
 
+        ##
+        # @see RDF::Dataset#isolation_level
+        def isolation_level
+          :serializable
+        end
+
         def execute
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback

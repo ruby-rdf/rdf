@@ -221,7 +221,7 @@ module RDF
     # @raise [NotImplementederror] when snapshots aren't implemented for the
     #   class
     def snapshot
-      raise NotImplementedError, " #{self.class} does not implement snapshots"
+      raise NotImplementedError, "#{self.class} does not implement snapshots"
     end
 
     ##
