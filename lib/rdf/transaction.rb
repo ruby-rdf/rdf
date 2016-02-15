@@ -99,6 +99,14 @@ module RDF
     attr_reader :repository
 
     ##
+    # The default graph name to apply to statements inserted or deleted by the
+    # transaction.
+    #
+    # @return [RDF::Resource, nil]
+    # @since  2.0.0
+    attr_reader :graph_name
+
+    ##
     # RDF statement mutations to apply when executed.
     #
     # @return [RDF::Changeset]
@@ -139,12 +147,13 @@ module RDF
     #    Whether this is a read-only or read/write transaction.
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
-    def initialize(repository, mutable: false, **options, &block)
+    def initialize(repository, graph_name: nil, mutable: false, **options, &block)
       @repository = repository
       @snapshot = 
         repository.supports?(:snapshots) ? repository.snapshot : repository
-      @options  = options.dup
-      @mutable  = mutable
+      @options    = options.dup
+      @mutable    = mutable
+      @graph_name = graph_name
 
       raise TransactionError, 
             'Tried to open a mutable transaction on an immutable repository' if
@@ -163,7 +172,8 @@ module RDF
     ##
     # @see RDF::Dataset#isolation_level
     def isolation_level
-      snapshot.isolation_level
+      return :repeatable_read if repository.supports?(:snapshots)
+      :read_committed
     end
 
     ##
@@ -247,7 +257,7 @@ module RDF
     # @return [void]
     # @see    RDF::Writable#insert_statement
     def insert_statement(statement)
-      @changes.insert(statement)
+      @changes.insert(process_statement(statement))
     end
 
     ##
@@ -257,7 +267,7 @@ module RDF
     # @return [void]
     # @see    RDF::Mutable#delete_statement
     def delete_statement(statement)
-      @changes.delete(statement)
+      @changes.delete(process_statement(statement))
     end
 
     def query_pattern(*args, &block)
@@ -269,6 +279,22 @@ module RDF
     end
   
     undef_method :load, :update, :clear
+
+    private
+    
+    ##
+    # @private Adds the default graph_name to the statement, when one it does 
+    #   not already have one.
+    #
+    # @param statement [RDF::Statement]
+    # @return [RDF::Statement]
+    def process_statement(statement)
+      if graph_name && statement.graph_name.nil?
+        statement = statement.dup
+        statement.graph_name = graph_name
+      end
+      statement
+    end
 
     public
     

@@ -35,6 +35,7 @@ module RDF
     include RDF::Enumerable
     include RDF::Queryable
     include RDF::Mutable
+    include RDF::Transactable
 
     ##
     # Returns the options passed to this graph when it was constructed.
@@ -335,10 +336,19 @@ module RDF
       @data.delete(graph_name: graph_name || false)
     end
 
+    ##
+    # @private
+    # Opens a transaction over the graph
+    # @see RDF::Transactable#begin_transaction
+    def begin_transaction(mutable: false, graph_name: @graph_name)
+      @data.send(:begin_transaction, mutable: mutable, graph_name: graph_name)
+    end
+
     protected :query_pattern
     protected :insert_statement
     protected :delete_statement
     protected :clear_statements
+    protected :begin_transaction
 
     ##
     # @private

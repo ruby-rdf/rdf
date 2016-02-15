@@ -43,6 +43,8 @@ module RDF
   class Repository < Dataset
     include RDF::Mutable
 
+    include RDF::Transactable
+
     DEFAULT_TX_CLASS = RDF::Transaction
 
     ##
@@ -176,78 +178,16 @@ module RDF
     def snapshot
       raise NotImplementedError.new("#{self.class}#snapshot")
     end
+    
+    protected
 
-    ##
-    # Executes the given block in a transaction.
-    #
-    # @example
-    #   repository.transaction do |tx|
-    #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
-    #   end
-    #
-    # @param mutable [Boolean] 
-    #   allows changes to the transaction, otherwise it is a read-only snapshot of the underlying repository.
-    # @yield  [tx]
-    # @yieldparam  [RDF::Transaction] tx
-    # @yieldreturn [void] ignored
-    # @return [self]
-    # @see    RDF::Transaction
-    # @since  0.3.0
-    def transaction(mutable: false, &block)
-      tx = begin_transaction(mutable: mutable)
-      begin
-        case block.arity
-          when 1 then block.call(tx)
-          else tx.instance_eval(&block)
-        end
-      rescue => error
-        rollback_transaction(tx)
-        raise error
+      ##
+      # @private
+      # @see RDF::Transactable#begin_transaction
+      # @since  0.3.0
+      def begin_transaction(mutable: false, graph_name: nil)
+        @tx_class.new(self, mutable: mutable, graph_name: graph_name)
       end
-      commit_transaction(tx)
-      self
-    end
-    alias_method :transact, :transaction
-
-  protected
-
-    ##
-    # Begins a new transaction.
-    #
-    # Subclasses implementing transaction-capable storage adapters may wish
-    # to override this method in order to begin a transaction against the
-    # underlying storage.
-    #
-    # @param mutable [Boolean] Create a mutable or immutable transaction.
-    # @return [RDF::Transaction]
-    # @since  0.3.0
-    def begin_transaction(mutable: false)
-      @tx_class.new(self, mutable: mutable)
-    end
-
-    ##
-    # Rolls back the given transaction.
-    #
-    # @param  [RDF::Transaction] tx
-    # @return [void] ignored
-    # @since  0.3.0
-    def rollback_transaction(tx)
-      tx.rollback
-    end
-
-    ##
-    # Commits the given transaction.
-    #
-    # Subclasses implementing transaction-capable storage adapters may wish
-    # to override this method in order to commit the given transaction to
-    # the underlying storage.
-    #
-    # @param  [RDF::Transaction] tx
-    # @return [void] ignored
-    # @since  0.3.0
-    def commit_transaction(tx)
-      tx.execute
-    end
 
     ##
     # @see RDF::Repository
@@ -533,14 +473,24 @@ module RDF
         
         def insert_statement(statement)
           @snapshot = @snapshot.class
-            .new(data: @snapshot.send(:insert_to, @snapshot.send(:data), statement))
+            .new(data: @snapshot.send(:insert_to, 
+                                      @snapshot.send(:data), 
+                                      process_statement(statement)))
         end
 
         def delete_statement(statement)
           @snapshot = @snapshot.class
-            .new(data: @snapshot.send(:delete_from, @snapshot.send(:data), statement))
+            .new(data: @snapshot.send(:delete_from, 
+                                      @snapshot.send(:data), 
+                                      process_statement(statement)))
         end
-        
+
+        ##
+        # @see RDF::Dataset#isolation_level
+        def isolation_level
+          :serializable
+        end
+
         def execute
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback
