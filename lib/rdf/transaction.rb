@@ -99,6 +99,14 @@ module RDF
     attr_reader :repository
 
     ##
+    # The default graph name to apply to statements inserted or deleted by the
+    # transaction.
+    #
+    # @return [RDF::Resource, nil]
+    # @since  2.0.0
+    attr_reader :graph_name
+
+    ##
     # RDF statement mutations to apply when executed.
     #
     # @return [RDF::Changeset]
@@ -139,12 +147,13 @@ module RDF
     #    Whether this is a read-only or read/write transaction.
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
-    def initialize(repository, mutable: false, **options, &block)
+    def initialize(repository, graph_name: nil, mutable: false, **options, &block)
       @repository = repository
       @snapshot = 
         repository.supports?(:snapshots) ? repository.snapshot : repository
-      @options  = options.dup
-      @mutable  = mutable
+      @options    = options.dup
+      @mutable    = mutable
+      @graph_name = graph_name
 
       raise TransactionError, 
             'Tried to open a mutable transaction on an immutable repository' if
@@ -247,6 +256,8 @@ module RDF
     # @return [void]
     # @see    RDF::Writable#insert_statement
     def insert_statement(statement)
+      statement = statement.dup
+      statement.graph_name ||= graph_name if graph_name
       @changes.insert(statement)
     end
 
@@ -257,6 +268,8 @@ module RDF
     # @return [void]
     # @see    RDF::Mutable#delete_statement
     def delete_statement(statement)
+      statement = statement.dup
+      statement.graph_name ||= graph_name if graph_name
       @changes.delete(statement)
     end
 
