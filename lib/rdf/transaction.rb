@@ -257,9 +257,7 @@ module RDF
     # @return [void]
     # @see    RDF::Writable#insert_statement
     def insert_statement(statement)
-      statement = statement.dup
-      statement.graph_name ||= graph_name if graph_name
-      @changes.insert(statement)
+      @changes.insert(process_statement(statement))
     end
 
     ##
@@ -269,9 +267,7 @@ module RDF
     # @return [void]
     # @see    RDF::Mutable#delete_statement
     def delete_statement(statement)
-      statement = statement.dup
-      statement.graph_name ||= graph_name if graph_name
-      @changes.delete(statement)
+      @changes.delete(process_statement(statement))
     end
 
     def query_pattern(*args, &block)
@@ -283,6 +279,22 @@ module RDF
     end
   
     undef_method :load, :update, :clear
+
+    private
+    
+    ##
+    # @private Adds the default graph_name to the statement, when one it does 
+    #   not already have one.
+    #
+    # @param statement [RDF::Statement]
+    # @return [RDF::Statement]
+    def process_statement(statement)
+      if graph_name && statement.graph_name.nil?
+        statement = statement.dup
+        statement.graph_name = graph_name
+      end
+      statement
+    end
 
     public
     

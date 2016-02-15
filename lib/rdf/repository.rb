@@ -472,17 +472,17 @@ module RDF
         end
         
         def insert_statement(statement)
-          statement = statement.dup
-          statement.graph_name ||= graph_name if graph_name
           @snapshot = @snapshot.class
-            .new(data: @snapshot.send(:insert_to, @snapshot.send(:data), statement))
+            .new(data: @snapshot.send(:insert_to, 
+                                      @snapshot.send(:data), 
+                                      process_statement(statement)))
         end
 
         def delete_statement(statement)
-          statement = statement.dup
-          statement.graph_name ||= graph_name if graph_name
           @snapshot = @snapshot.class
-            .new(data: @snapshot.send(:delete_from, @snapshot.send(:data), statement))
+            .new(data: @snapshot.send(:delete_from, 
+                                      @snapshot.send(:data), 
+                                      process_statement(statement)))
         end
 
         ##
