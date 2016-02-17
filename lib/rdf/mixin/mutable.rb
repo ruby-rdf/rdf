@@ -201,7 +201,7 @@ module RDF
     ##
     # Applies the given changeset
     #
-    # If `#supports?(:transactions)` is `true`, this must apply the changeset
+    # If `#supports?(:atomic_write)` is `true`, this must apply the changeset
     # atomically. Otherwise, it should offer an efficient implementation of a 
     # combined delete/insert of the changeset.
     #

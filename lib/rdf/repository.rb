@@ -150,6 +150,8 @@ module RDF
     #
     # @see RDF::Mutable#delete_insert
     def delete_insert(deletes, inserts)
+      return super unless supports?(:atomic_write)
+
       transaction(mutable: true) do
         deletes.respond_to?(:each_statement) ? delete(deletes) : delete(*deletes)
         inserts.respond_to?(:each_statement) ? insert(inserts) : insert(*inserts)
@@ -291,7 +293,7 @@ module RDF
         enum_statement
       end
       alias_method :each, :each_statement
-      
+
       ##
       # @see Mutable#apply_changeset
       def apply_changeset(changeset)
