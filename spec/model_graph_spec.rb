@@ -200,6 +200,15 @@ describe RDF::Graph do
   context "when querying statements" do
     require 'rdf/spec/queryable'
     it_behaves_like 'an RDF::Queryable'
+
+    context 'with graph_name' do
+      require 'rdf/spec/queryable'
+      it_behaves_like 'an RDF::Queryable' do
+        let(:queryable) do
+          RDF::Graph.new(graph_name: RDF::URI('g'), data: RDF::Repository.new)
+        end
+      end
+    end
   end
 
   context "Examples" do

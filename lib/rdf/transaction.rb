@@ -74,7 +74,7 @@ module RDF
     ##
     # @see RDF::Enumerable#each
     def each(*args, &block)
-      @snapshot.each(*args, &block)
+      read_target.each(*args, &block)
     end
 
     ##
@@ -204,6 +204,12 @@ module RDF
     end
 
     ##
+    # @see RDF::Enumerable#has_statement?
+    def has_statement?(statement)
+      read_target.has_statement?(statement)
+    end
+
+    ##
     # Returns a developer-friendly representation of this transaction.
     #
     # @return [String]
@@ -271,11 +277,11 @@ module RDF
     end
 
     def query_pattern(*args, &block)
-      @snapshot.send(:query_pattern, *args, &block)
+      read_target.send(:query_pattern, *args, &block)
     end
 
     def query_execute(*args, &block)
-      @snapshot.send(:query_execute, *args, &block)
+      read_target.send(:query_execute, *args, &block)
     end
   
     undef_method :load, :update, :clear
@@ -289,11 +295,17 @@ module RDF
     # @param statement [RDF::Statement]
     # @return [RDF::Statement]
     def process_statement(statement)
-      if graph_name && statement.graph_name.nil?
+      if graph_name
         statement = statement.dup
         statement.graph_name = graph_name
       end
       statement
+    end
+    
+    def read_target
+      return @snapshot if graph_name.nil?
+      return @snapshot.project_graph(nil) if graph_name == false
+      @snapshot.project_graph(graph_name)
     end
 
     public
