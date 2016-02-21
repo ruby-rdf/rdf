@@ -68,6 +68,7 @@ module RDF
     # Supported features include:
     #   * `:graph_name` supports statements with a graph_name, allowing multiple named graphs
     #   * `:inference` supports RDFS inferrence of queryable contents.
+    #   * `:literal_equality' preserves [term-equality](https://www.w3.org/TR/rdf11-concepts/#dfn-literal-term-equality) for literals. Literals are equal only if their lexical values and datatypes are equal, character by character. Literals may be "inlined" to value-space for efficiency only if `:literal_equality` is `false`.
     #   * `:validity` allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.
     #   * `:skolemize` supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an `Enumerable`. Implementations supporting this feature must implement a `#skolemize` method, taking a base URI used for minting URIs for BNodes as stable identifiers and a `#deskolemize` method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.
     #
@@ -75,7 +76,7 @@ module RDF
     # @return [Boolean]
     # @since  0.3.5
     def supports?(feature)
-      feature == :validity
+      feature == :validity || feature == :literal_equality
     end
 
     ##
