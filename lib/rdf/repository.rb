@@ -40,6 +40,48 @@ module RDF
   # @example Deleting all statements from a repository
   #   repository.clear!
   #
+  # Repositories support transactions with a variety of ACID semantics:
+  # 
+  # Atomicity is indicated by `#supports?(:atomic_write)`. When atomicity is
+  # supported, writes through `#transaction`, `#apply_changeset` and 
+  # `#delete_insert` are applied atomically.
+  #
+  # Consistency should be guaranteed, in general. Repositories that don't 
+  # support consistency, or that have specialized definitions of consistency 
+  # above those declared by the RDF data model, should advertise this fact in
+  # their documentation.
+  #
+  # Isolation may be supported at various levels, indicated by `#supports?`:
+  #   - `:read_uncommitted`: inserts & deletes in an uncommitted transaction 
+  #      scope may be visible to other transactions (or via `#each`, etc...)
+  #   - `:read_committed`: inserts & deletes may be visible to other 
+  #      transactions once committed
+  #   - `:repeatable_read`: Phantom reads may be possible
+  #   - `:snapshot`: A transaction reads a consistent snapshot of the data. 
+  #      Write skew anomalies may occur (for various definitions of consistency)
+  #   - `:serializable`: A transaction reads a consistent snapshot of the data.
+  #      When two or more transactions attempt conflicting writes, only one of
+  #      them may succeed.
+  #
+  # Durability is noted via `RDF::Durable` support and `#durable?`
+  # /`#nondurable?`.
+  #
+  # @example Transational read from a repository
+  #   repository.transaction do |tx|
+  #     tx.has_statement?(statement)
+  #     tx.query([:s, :p, :o])
+  #   end
+  #
+  # @example Transational read/write of a repository
+  #   repository.transaction(mutable: true) do |tx|
+  #     tx.insert(*statements)
+  #     tx.insert(statement)
+  #     tx.insert([subject, predicate, object])
+  #     tx.delete(*statements)
+  #     tx.delete(statement)
+  #     tx.delete([subject, predicate, object])
+  #   end
+  # 
   class Repository < Dataset
     include RDF::Mutable
 
@@ -192,6 +234,9 @@ module RDF
       end
 
     ##
+    # A default Repository implementation supporting atomic writes and 
+    # serializable transactions.
+    #
     # @see RDF::Repository
     module Implementation
       require 'hamster'
