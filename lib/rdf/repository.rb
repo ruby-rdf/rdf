@@ -51,10 +51,11 @@ module RDF
   # above those declared by the RDF data model, should advertise this fact in
   # their documentation.
   #
-  # Isolation may be supported at various levels, indicated by `#supports?`:
-  #   - `:read_uncommitted`: inserts & deletes in an uncommitted transaction 
+  # Isolation may be supported at various levels, indicated by 
+  # `#isolation_level`:
+  #   - `:read_uncommitted`: Inserts & deletes in an uncommitted transaction 
   #      scope may be visible to other transactions (or via `#each`, etc...)
-  #   - `:read_committed`: inserts & deletes may be visible to other 
+  #   - `:read_committed`: Inserts & deletes may be visible to other 
   #      transactions once committed
   #   - `:repeatable_read`: Phantom reads may be possible
   #   - `:snapshot`: A transaction reads a consistent snapshot of the data. 
@@ -509,15 +510,21 @@ module RDF
       ##
       # A transaction for the Hamster-based `RDF::Repository::Implementation` 
       # with full serializability.
-      #
+      # 
       # @todo refactor me!
       # @see RDF::Transaction
       class SerializedTransaction < Transaction
+        ##
+        # @see Transaction#initialize
         def initialize(*)
           super
           @base_snapshot = @snapshot
         end
         
+        ##
+        # Inserts the statement to the transaction's working snapshot.
+        #
+        # @see Transaction#insert_statement
         def insert_statement(statement)
           @snapshot = @snapshot.class
             .new(data: @snapshot.send(:insert_to, 
@@ -525,6 +532,10 @@ module RDF
                                       process_statement(statement)))
         end
 
+        ##
+        # Deletes the statement from the transaction's working snapshot.
+        #
+        # @see Transaction#insert_statement
         def delete_statement(statement)
           @snapshot = @snapshot.class
             .new(data: @snapshot.send(:delete_from, 
@@ -537,7 +548,20 @@ module RDF
         def isolation_level
           :serializable
         end
-
+        
+        ##
+        # Replaces repository data with the transaction's snapshot in a safely 
+        # serializable fashion.
+        # 
+        # @note this transaction uses a pessimistic merge strategy which 
+        #   fails the transaction if any data has changed in the repository
+        #   since transaction start time. However, the specific guarantee is 
+        #   softer: multiple concurrent conflicting transactions will not 
+        #   succeed. We may choose to implement a less pessimistic merge 
+        #   strategy as a non-breaking change.
+        # 
+        # @raise [TransactionError] when the transaction can't be merged.
+        # @see Transaction#execute
         def execute
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback
