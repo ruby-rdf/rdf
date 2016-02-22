@@ -24,6 +24,34 @@ describe RDF::URI do
     end
   end
 
+  context "as method" do
+    it "with URI args" do
+      expect(described_class).to receive(:new).with("http://example/")
+      RDF::URI("http://example/")
+    end
+
+    it "with hash arg" do
+      expect(described_class).to receive(:new).with(scheme: "http",
+        user: "user",
+        password: "password",
+        host: "example.com",
+        port: 8080,
+        path: "/path",
+        query: "query=value",
+        fragment: "fragment")
+      RDF::URI.new({
+        scheme: "http",
+        user: "user",
+        password: "password",
+        host: "example.com",
+        port: 8080,
+        path: "/path",
+        query: "query=value",
+        fragment: "fragment"
+      })
+    end
+  end
+
   describe "#initialize" do
     it "should recognize URNs" do
       urns = %w(urn:isbn:0451450523 urn:isan:0000-0000-9E59-0000-O-0000-0000-2 urn:issn:0167-6423 urn:ietf:rfc:2648 urn:mpeg:mpeg7:schema:2001 urn:oid:2.16.840 urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66 urn:uci:I001+SBSi-B10000083052)
@@ -257,7 +285,7 @@ describe RDF::URI do
     describe "#valid?" do
       let(:refs) {
         %W(a d z A D Z 0 5 99 - . _ ~ \u0053 \u00D6 foo %20) +
-        %W(\U00000053 Dürst)
+        %W(\U00000053 Dürst AZazÀÖØöø˿Ͱͽ΄῾‌‍⁰↉Ⰰ⿕、ퟻ﨎ﷇﷰ￯𐀀𪘀)
       }
       {
         ""  => "%s",
@@ -321,7 +349,9 @@ describe RDF::URI do
           end
         end
       end
-      
+
+      %W(` ^ \\ \u0000 \u0001 \u0002 \u0003 \u0004 \u0005 \u0006
+         \u0010 \u0020 \u003c \u003e \u0022 \u007b \u007d) +
       [" ", "<", ">", "'" '"'].each do |c|
         it "does not validate <http://example/#{c}>" do
           expect(RDF::URI("http://example/#{c}")).not_to be_valid
@@ -441,7 +471,7 @@ describe RDF::URI do
         expect(u1).to eq u1
       end
     end
-    it "#canonicalize! alters resource", ruby: "1.9" do
+    it "#canonicalize! alters resource" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")
       expect(u1.canonicalize!.to_s).to eq u2.to_s
@@ -762,6 +792,185 @@ describe RDF::URI do
   end
 
   context "Examples" do
-    it "needs specs for documentation examples"
+    it "Creating a URI reference (1)" do
+      expect(RDF::URI.new("http://rubygems.org/gems/rdf")).to be_a_uri
+    end
+
+    it "Creating a URI reference (2)" do
+      uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/gems/rdf')
+      expect(uri).to eql RDF::URI.new("http://rubygems.org/gems/rdf")
+    end
+
+    it "Creating an interned URI reference" do
+      uri = RDF::URI.intern("http://rubygems.org/gems/rdf")
+      expect(uri).to be_frozen
+    end
+
+    it "Getting the string representation of a URI" do
+      uri = RDF::URI.new("http://rubygems.org/gems/rdf")
+      expect(uri.to_s).to be_a(String)
+      expect(uri.to_s).to eql "http://rubygems.org/gems/rdf"
+    end
+
+    it "#urn?" do
+      expect(RDF::URI('http://example.org/')).not_to be_urn
+    end
+
+    it "#hier?" do
+      expect(RDF::URI('http://example.org/')).to be_hier
+      expect(RDF::URI('urn:isbn:125235111')).not_to be_hier
+    end
+
+    it "#url?" do
+      expect(RDF::URI('http://example.org/')).to be_url
+    end
+
+    it "#length" do
+      expect(RDF::URI('http://example.org/').length).to eql 19
+    end
+
+    describe "#join" do
+      it "Joining two URIs" do
+        expect(
+          RDF::URI.new('http://example.org/foo/bar').join('/foo')
+        ).to eql RDF::URI('http://example.org/foo')
+      end
+    end
+
+    describe "#/" do
+      it "Building a HTTP URL" do
+        expect(
+          RDF::URI.new('http://example.org') / 'jhacker' / 'foaf.ttl'
+        ).to eql RDF::URI('http://example.org/jhacker/foaf.ttl')
+      end
+
+      it "Building a HTTP URL (absolute path components)" do
+        expect(
+          RDF::URI.new('http://example.org/') / '/jhacker/' / '/foaf.ttl'
+        ).to eql RDF::URI('http://example.org/jhacker/foaf.ttl')
+      end
+
+      it "Using an anchored base URI" do
+        expect(
+          RDF::URI.new('http://example.org/users#') / 'jhacker'
+        ).to eql RDF::URI('http://example.org/users#jhacker')
+      end
+
+      it "Building a URN" do
+        expect(
+          RDF::URI.new('urn:isbn') / 125235111
+        ).to eql RDF::URI('urn:isbn:125235111')
+      end
+    end
+
+    describe "#+" do
+      it "Concatenating a string to a URI" do
+        expect(
+          RDF::URI.new('http://example.org/test') + 'test'
+        ).to eql RDF::URI('http://example.org/testtest')
+      end
+
+      it "Concatenating two URIs" do
+        expect(
+          RDF::URI.new('http://example.org/test') + RDF::URI.new('test')
+        ).to eql RDF::URI('http://example.org/testtest')
+      end
+    end
+
+    it "#root?" do
+      expect(RDF::URI('http://example.org/')).to be_root
+      expect((RDF::URI('http://example.org/path/'))).not_to be_root
+      expect(RDF::URI('urn:isbn')).to be_root
+    end
+
+    it "#root" do
+      expect(RDF::URI('http://example.org/').root).to eql RDF::URI('http://example.org/')
+      expect(RDF::URI('http://example.org/path/').root).to eql RDF::URI('http://example.org/')
+    end
+
+    it "#has_parent?" do
+      expect(RDF::URI('http://example.org/')).not_to have_parent
+      expect(RDF::URI('http://example.org/path/')).to have_parent
+    end
+
+    it "#parent" do
+      expect(RDF::URI('http://example.org/').parent).to be_nil
+      expect(RDF::URI('http://example.org/path/').parent).to eql RDF::URI('http://example.org/')
+    end
+
+    it "#qname" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname).to eql [:rdfs, nil]
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname).to eql [:rdfs, :label]
+      expect(RDF::RDFS.label.qname).to eql [:rdfs, :label]
+    end
+
+    it "#start_with?" do
+      expect(RDF::URI('http://example.org/')).to be_start_with('http')
+      expect(RDF::URI('http://example.org/')).not_to be_start_with('ftp')
+    end
+
+    it "#end_with?" do
+      expect(RDF::URI('http://example.org/')).to be_end_with('/')
+      expect(RDF::URI('http://example.org/')).not_to be_end_with('#')
+    end
+
+    it "#eql?" do
+      expect(RDF::URI('http://t.co/')).to eql(RDF::URI('http://t.co/'))
+      expect(RDF::URI('http://t.co/')).not_to eql('http://t.co/')
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#')).not_to eql(RDF::RDFS)
+    end
+
+    it "#==" do
+      expect(RDF::URI('http://t.co/')).to eq RDF::URI('http://t.co/')
+      expect(RDF::URI('http://t.co/')).to eq 'http://t.co/'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#')).to eq RDF::RDFS
+    end
+
+    it "#===" do
+      expect(RDF::URI('http://example.org/') === /example/).to be_truthy
+      expect(RDF::URI('http://example.org/') === /foobar/).not_to be_truthy
+      expect(RDF::URI('http://t.co/') === RDF::URI('http://t.co/')).to be_truthy
+      expect(RDF::URI('http://t.co/') === 'http://t.co/').to be_truthy
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#') === RDF::RDFS).to be_truthy
+    end
+
+    it "#=~" do
+      expect(RDF::URI('http://example.org/')).to match /example/
+      expect(RDF::URI('http://example.org/')).not_to match /foobar/
+    end
+
+    it "#to_str" do
+      expect(RDF::URI('http://example.org/').to_str).to eql 'http://example.org/'
+    end
+
+    it "#query_values" do
+      expect(RDF::URI.new("?one=1&two=2&three=3").query_values).to eql({"one" => "1", "two" => "2", "three" => "3"})
+      expect(RDF::URI.new("?one=two&one=three").query_values(Array)).to eql [["one", "two"], ["one", "three"]]
+      expect(RDF::URI.new("?one=two&one=three").query_values(Hash)).to eql({"one" => ["two", "three"]})
+    end
+
+    describe "#query_values=" do
+      subject {RDF::URI("http://example/")}
+
+      it "Hash with single and array values" do
+        subject.query_values = {a: "a", b: ["c", "d", "e"]}
+        expect(subject.query).to eql "a=a&b=c&b=d&b=e"
+      end
+
+      it "Array with Array values including repeated variables" do
+        subject.query_values = [['a', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e']]
+        expect(subject.query).to eql "a=a&b=c&b=d&b=e"
+      end
+
+      it "Array with Array values including multiple elements" do
+        subject.query_values = [['a', 'a'], ['b', ['c', 'd', 'e']]]
+        expect(subject.query).to eql "a=a&b=c&b=d&b=e"
+      end
+
+      it "Array with Array values having only one entry" do
+        subject.query_values = [['flag'], ['key', 'value']]
+        expect(subject.query).to eql "flag&key=value"
+      end
+    end
   end
 end

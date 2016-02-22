@@ -21,7 +21,7 @@ module RDF
     # Inserts RDF data into `self`.
     #
     # @param  [RDF::Enumerable, RDF::Statement, #to_rdf] data
-    # @return [RDF::Writable] `self`
+    # @return [self]
     def <<(data)
       case data
         when RDF::Reader
@@ -46,8 +46,17 @@ module RDF
     ##
     # Inserts RDF statements into `self`.
     #
-    # @param  [Array<RDF::Statement>] statements
-    # @return [RDF::Writable] `self`
+    # @note using splat argument syntax with excessive arguments provided
+    # significantly affects performance. Use Enumerator form for large
+    # numbers of statements.
+    #
+    # @overload insert(*statements)
+    #   @param  [Array<RDF::Statement>] statements
+    #   @return [self]
+    #
+    # @overload insert(statements)
+    #   @param  [Enumerable<RDF::Statement>] statements
+    #   @return [self]
     def insert(*statements)
       statements.map! do |value|
         case

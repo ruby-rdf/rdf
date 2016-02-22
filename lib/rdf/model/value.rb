@@ -154,7 +154,7 @@ module RDF
     # @raise  [ArgumentError] if the value is invalid
     # @since  0.3.9
     def validate!
-      raise ArgumentError if invalid?
+      raise ArgumentError, "#{self.inspect} is not valid" if invalid?
       self
     end
     alias_method :validate, :validate!

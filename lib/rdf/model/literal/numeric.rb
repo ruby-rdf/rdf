@@ -14,6 +14,8 @@ module RDF; class Literal
       case other
         when ::Numeric
           to_d <=> other
+        when Double
+          to_f <=> other.to_f
         when Numeric
           to_d <=> other.to_d
         else super
@@ -72,9 +74,9 @@ module RDF; class Literal
     # @since  0.2.3
     # @see http://www.w3.org/TR/xpath-functions/#func-numeric-add
     def +(other)
-      if self.class == Double || other.class == Double
+      if self.class == Double || [Double, ::Float].include?(other.class)
         RDF::Literal::Double.new(to_f + other.to_f)
-      elsif self.class == Float || other.class == Float
+      elsif ((self.class == RDF::Literal::Float || other.class == RDF::Literal::Float) rescue false)
         RDF::Literal::Float.new(to_f + other.to_f)
       elsif self.class == Decimal || other.class == Decimal
         RDF::Literal::Decimal.new(to_d + (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
@@ -91,9 +93,9 @@ module RDF; class Literal
     # @since  0.2.3
     # @see http://www.w3.org/TR/xpath-functions/#func-numeric-subtract
     def -(other)
-      if self.class == Double || other.class == Double
+      if self.class == Double || [Double, ::Float].include?(other.class)
         RDF::Literal::Double.new(to_f - other.to_f)
-      elsif self.class == Float || other.class == Float
+      elsif ((self.class == RDF::Literal::Float || other.class == RDF::Literal::Float) rescue false)
         RDF::Literal::Float.new(to_f - other.to_f)
       elsif self.class == Decimal || other.class == Decimal
         RDF::Literal::Decimal.new(to_d - (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
@@ -110,9 +112,9 @@ module RDF; class Literal
     # @since  0.2.3
     # @see http://www.w3.org/TR/xpath-functions/#func-numeric-multiply
     def *(other)
-      if self.class == Double || other.class == Double
+      if self.class == Double || [Double, ::Float].include?(other.class)
         RDF::Literal::Double.new(to_f * other.to_f)
-      elsif self.class == Float || other.class == Float
+      elsif ((self.class == RDF::Literal::Float || other.class == RDF::Literal::Float) rescue false)
         RDF::Literal::Float.new(to_f * other.to_f)
       elsif self.class == Decimal || other.class == Decimal
         RDF::Literal::Decimal.new(to_d * (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
@@ -124,8 +126,8 @@ module RDF; class Literal
     ##
     # Returns the quotient of `self` divided by `other`.
     #
-    # As a special case, if the types of both $arg1 and $arg2 are xs:integer,
-    # then the return type is xs:decimal.
+    # As a special case, if the types of both $arg1 and $arg2 are xsd:integer,
+    # then the return type is xsd:decimal.
     #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
@@ -133,14 +135,12 @@ module RDF; class Literal
     # @since  0.2.3
     # @see http://www.w3.org/TR/xpath-functions/#func-numeric-divide
     def /(other)
-      if self.class == Double || other.class == Double
+      if self.class == Double || [Double, ::Float].include?(other.class)
         RDF::Literal::Double.new(to_f / other.to_f)
-      elsif self.class == Float || other.class == Float
+      elsif ((self.class == RDF::Literal::Float || other.class == RDF::Literal::Float) rescue false)
         RDF::Literal::Float.new(to_f / other.to_f)
-      elsif self.class == Decimal || other.class == Decimal
-        RDF::Literal::Decimal.new(to_d / (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
       else
-        RDF::Literal::Integer.new(to_i / other.to_i)
+        RDF::Literal::Decimal.new(to_d / (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
       end
     end
 
@@ -211,6 +211,8 @@ module RDF; class Literal
     # @return [BigDecimal]
     def to_d
       @object.respond_to?(:to_d) ? @object.to_d : BigDecimal(@object.to_s)
+    rescue FloatDomainError
+      ::Float::NAN
     end
 
     ##

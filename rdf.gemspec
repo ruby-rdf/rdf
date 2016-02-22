@@ -25,15 +25,13 @@ Gem::Specification.new do |gem|
   gem.test_files         = %w()
   gem.has_rdoc           = false
 
-  gem.required_ruby_version      = '>= 1.9.2'
+  gem.required_ruby_version      = '>= 2.0'
   gem.requirements               = []
   gem.add_runtime_dependency     'link_header', '~> 0.0', '>= 0.0.8'
-  gem.add_development_dependency 'rdf-spec',    '~> 1.1', '>= 1.1.13'
-  gem.add_development_dependency 'rdf-rdfxml',  '~> 1.1'
-  gem.add_development_dependency 'rdf-rdfa',    '~> 1.1'
-  gem.add_development_dependency 'rdf-turtle',  '~> 1.1'
-  gem.add_development_dependency 'rdf-vocab',   '~> 0.8'
-  gem.add_development_dependency 'rdf-xsd',     '~> 1.1'
+  gem.add_runtime_dependency     'hamster',     '~> 2.0'
+  gem.add_development_dependency 'rdf-spec',    '>= 2.0.0.beta', '< 3'
+  gem.add_development_dependency 'rdf-vocab',   '>= 0.8'
+  gem.add_development_dependency 'rdf-xsd',     '>= 1.1'
   gem.add_development_dependency 'rest-client', '~> 1.7'
   gem.add_development_dependency 'rspec',       '~> 3.0'
   gem.add_development_dependency 'rspec-its',   '~> 1.0'

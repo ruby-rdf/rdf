@@ -191,18 +191,6 @@ describe RDF::Vocabulary do
       expect(test_vocab.Class).to be_a(RDF::URI)
     end
 
-    it "should respond to label_for from base RDFS (DEPRECATED)" do
-      expect {
-        expect(test_vocab.label_for("prop2")).to eql "Test property label"
-      }.to write('[DEPRECATION]').to(:error)
-    end
-
-    it "should respond to comment_for from base RDFS (DEPRECATED)" do
-      expect {
-        expect(test_vocab.comment_for(:prop2)).to eql " Test property comment"
-      }.to write('[DEPRECATION]').to(:error)
-    end
-
     it "should not enumerate from RDF::Vocabulary.each" do
       expect(RDF::Vocabulary.each.to_a).not_to include(test_vocab)
     end
@@ -252,7 +240,7 @@ describe RDF::Vocabulary do
         expect(RDF::Vocabulary.find_term(term.to_s)).to equal term
       end
     end
-  end
+  end unless ENV["CI"]
 
   describe ".imports" do
     {
@@ -266,11 +254,10 @@ describe RDF::Vocabulary do
     end
 
     specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
-  end
+  end unless ENV["CI"]
 
   describe ".imported_from" do
     {
-      RDF::Vocab::FOAF => [RDF::Vocab::DOAP, RDF::Vocab::MO],
       RDF::RDFS => [RDF::Vocab::WOT],
       RDF::OWL => [RDF::Vocab::WOT]
     }.each do |v, r|
@@ -280,8 +267,8 @@ describe RDF::Vocabulary do
       end
     end
 
-    specify {expect {RDF::SCHEMA.imports}.not_to raise_error}
-  end
+    specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
+  end unless ENV["CI"]
 
   describe ".load" do
     let!(:nt) {%{
@@ -291,7 +278,7 @@ describe RDF::Vocabulary do
       <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
     }}
     before(:each) do
-      allow(RDF::Graph).to receive(:load).and_return(RDF::Graph.new << RDF::NTriples::Reader.new(nt))
+      allow(RDF::Repository).to receive(:load).and_return(RDF::Repository.new << RDF::NTriples::Reader.new(nt))
     end
 
     subject {RDF::Vocabulary.load("http://example/")}
@@ -299,6 +286,27 @@ describe RDF::Vocabulary do
     it "creates terms" do
       expect(subject).to be_a_vocabulary("http://example/")
       expect(subject).to have_properties("http://example/", %w(Class prop))
+    end
+
+    describe ":extra" do
+      subject {RDF::Vocabulary.load("http://example/", extra: {id: {label: "Identifier"}})}
+
+      it "adds extra properties to vocabulary" do
+        expect(subject).to have_properties("http://example/", %w(id))
+      end
+    end
+
+    describe ":patch" do
+      let(:patch) {%{
+        DeleteExisting {<http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .} .
+        AddNew {<http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Klass" .} .
+      }}
+      subject {RDF::Vocabulary.load("http://example/", patch: patch)}
+
+      it {expect {subject}.to raise_error "patching vocabulary requires the ld-patch gem"}
+      it "replaces properties from vocabulary", skip: "requires ld-patch" do
+        expect(subject[:Class].attributes["rdfs:Datatype"]).to contain_exactly "Klass"
+      end
     end
   end
 

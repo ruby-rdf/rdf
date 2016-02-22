@@ -112,7 +112,7 @@ module RDF; class Query
     # @yield  [solution]
     # @yieldparam  [RDF::Query::Solution] solution
     # @yieldreturn [Boolean]
-    # @return [void] `self`
+    # @return [self]
     def filter(criteria = {})
       if block_given?
         self.reject! do |solution|
@@ -164,7 +164,7 @@ module RDF; class Query
     # @yieldparam  [RDF::Query::Solution] q
     # @yieldparam  [RDF::Query::Solution] b
     # @yieldreturn [Integer] -1, 0, or 1 depending on value of comparator
-    # @return [void] `self`
+    # @return [self]
     def order(*variables)
       if variables.empty? && !block_given?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
@@ -191,7 +191,7 @@ module RDF; class Query
     # Restricts this solution sequence to the given `variables` only.
     #
     # @param  [Array<Symbol, #to_sym>] variables
-    # @return [void] `self`
+    # @return [self]
     def project(*variables)
       if variables.empty?
         raise ArgumentError, "wrong number of arguments (0 for 1)"
@@ -208,7 +208,7 @@ module RDF; class Query
     ##
     # Ensures that the solutions in this solution sequence are unique.
     #
-    # @return [void] `self`
+    # @return [self]
     def distinct
       self.uniq!
       self
@@ -223,7 +223,7 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] start
     #   zero or a positive or negative integer
-    # @return [void] `self`
+    # @return [self]
     def offset(start)
       case start = start.to_i
         when 0 then nil
@@ -239,7 +239,7 @@ module RDF; class Query
     #
     # @param  [Integer, #to_i] length
     #   zero or a positive integer
-    # @return [void] `self`
+    # @return [self]
     # @raise  [ArgumentError] if `length` is negative
     def limit(length)
       length = length.to_i

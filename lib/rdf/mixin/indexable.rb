@@ -18,7 +18,7 @@ module RDF
     # Indexes `self`.
     #
     # @abstract
-    # @return [void]
+    # @return [self]
     def index!
       raise NotImplementedError, "#{self.class}#index!"
     end

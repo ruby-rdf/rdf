@@ -81,6 +81,14 @@ module RDF
     end
 
     ##
+    # Returns the base representation of this term.
+    #
+    # @return [Sring]
+    def to_base
+      RDF::NTriples.serialize(self)
+    end
+
+    ##
     # Term compatibility according to SPARQL
     #
     # @see http://www.w3.org/TR/sparql11-query/#func-arg-compatibility
@@ -91,18 +99,12 @@ module RDF
 
     protected
     ##
-    # Escape a term using standard character escapes
+    # Escape a term using escapes. This should be implemented as appropriate for the given type of term.
     #
     # @param  [String] string
     # @return [String]
     def escape(string)
-      string.gsub('\\', '\\\\').
-             gsub("\b", '\\b').
-             gsub("\f", '\\f').
-             gsub("\t", '\\t').
-             gsub("\n", '\\n').
-             gsub("\r", '\\r').
-             gsub('"', '\\"')
+      raise NotImplementedError, "#{self.class}#escape"
     end
 
   end # Term

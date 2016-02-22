@@ -201,7 +201,7 @@ module RDF
       # @return [Array<RDF::Vocabulary>]
       def imports
         @imports ||= begin
-          Array(self[""].attributes["owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
+          Array(self[""].attributes[:"owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
         rescue KeyError
           []
         end
@@ -215,22 +215,6 @@ module RDF
         @imported_from ||= begin
           RDF::Vocabulary.select {|v| v.__imports__.include?(self)}
         end
-      end
-
-      ##
-      # @return [String] The label for the named property
-      # @deprecated Use {RDF::Vocabulary::Term#label} instead.
-      def label_for(name)
-        warn "[DEPRECATION] `Vocabulary.label_for is deprecated. Please use Vocabulary::Term#label instead. Called from #{Gem.location_of_caller.join(':')}"
-        self[name].label || ''
-      end
-
-      ##
-      # @return [String] The comment for the named property
-      # @deprecated Use {RDF::Vocabulary::Term#comment} instead.
-      def comment_for(name)
-        warn "[DEPRECATION] `Vocabulary.comment_for is deprecated. Please use Vocabulary::Term#comment instead. Called from #{Gem.location_of_caller.join(':')}"
-        self[name].comment || ''
       end
 
       ##
@@ -256,6 +240,7 @@ module RDF
         end
       end
       alias_method :to_enum, :enum_for
+
       ##
       # Enumerate each statement constructed from the defined vocabulary terms
       #
@@ -280,42 +265,52 @@ module RDF
       ##
       # Load a vocabulary, optionally from a separate location.
       #
-      # @param [URI, #to_s] uri
-      # @param [Hash{Symbol => Object}] options
-      # @option options [String] class_name
+      # @param [URI, #to_s] url
+      # @param [String] class_name
       #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
-      # @option options [URI, #to_s] :location
+      # @param [URI, #to_s] location
       #   Location from which to load the vocabulary, if not from `uri`.
-      # @option options [Array<Symbol>, Hash{Symbol => Hash}] :extra
+      # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
       #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
+      # @param [String] patch
+      #   A patch to run on the graph after loading. Requires the `ld-patch` gem to be available.
       # @return [RDF::Vocabulary] the loaded vocabulary
-      def load(uri, options = {})
-        source = options.fetch(:location, uri)
-        class_name = options[:class_name]
+      def load(url, class_name: nil, location: nil, extra: nil, patch: nil)
+        source = location || url
         vocab = if class_name
-          Object.const_set(class_name, Class.new(self.create(uri)))
+          Object.const_set(class_name, Class.new(self.create(url)))
         else
-          Class.new(self.create(uri))
+          Class.new(self.create(url))
         end
 
-        graph = RDF::Graph.load(source)
+        graph = RDF::Repository.load(source)
+
+        if patch
+          begin
+            require 'ld/patch'
+            operator = LD::Patch.parse(patch)
+            graph.query(operator)
+          rescue LoadError
+            raise ArgumentError, "patching vocabulary requires the ld-patch gem"
+          end
+        end
         term_defs = {}
         graph.each do |statement|
-          next unless statement.subject.uri? && statement.subject.start_with?(uri)
-          name = statement.subject.to_s[uri.to_s.length..-1] 
+          next unless statement.subject.uri? && statement.subject.start_with?(url)
+          name = statement.subject.to_s[url.to_s.length..-1] 
           term = (term_defs[name.to_sym] ||= {})
           key = case statement.predicate
-          when RDF.type                   then :type
-          when RDF::RDFS.subClassOf       then :subClassOf
-          when RDF::RDFS.subPropertyOf    then :subPropertyOf
-          when RDF::RDFS.range            then :range
-          when RDF::RDFS.domain           then :domain
-          when RDF::RDFS.comment          then :comment
-          when RDF::RDFS.label            then :label
-          when RDF::SCHEMA.inverseOf      then :inverseOf
-          when RDF::SCHEMA.domainIncludes then :domainIncludes
-          when RDF::SCHEMA.rangeIncludes  then :rangeIncludes
-          else                            statement.predicate.pname
+          when RDF.type                                     then :type
+          when RDF::RDFS.subClassOf                         then :subClassOf
+          when RDF::RDFS.subPropertyOf                      then :subPropertyOf
+          when RDF::RDFS.range                              then :range
+          when RDF::RDFS.domain                             then :domain
+          when RDF::RDFS.comment                            then :comment
+          when RDF::RDFS.label                              then :label
+          when RDF::URI("http://schema.org/inverseOf")      then :inverseOf
+          when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
+          when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
+          else                                              statement.predicate.pname
           end
 
           value = if statement.object.uri?
@@ -328,11 +323,11 @@ module RDF
         end
 
         # Create extra terms
-        term_defs = case options[:extra]
+        term_defs = case extra
         when Array
-          options[:extra].inject({}) {|memo, s| memo[s.to_sym] = {label: s.to_s}; memo}.merge(term_defs)
+          extra.inject({}) {|memo, s| memo[s.to_sym] = {label: s.to_s}; memo}.merge(term_defs)
         when Hash
-          options[:extra].merge(term_defs)
+          extra.merge(term_defs)
         else
           term_defs
         end
@@ -545,8 +540,7 @@ module RDF
       #   @option options [String, #to_s] :fragment The fragment component.
       #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
-      def initialize(*args)
-        options = args.last.is_a?(Hash) ? args.last : {}
+      def initialize(*args, **options)
         @attributes = options.fetch(:attributes)
         super
       end
@@ -612,8 +606,6 @@ module RDF
       # @yieldparam [RDF::Statement]
       def each_statement
         attributes.reject {|p| p == :vocab}.each do |prop, values|
-          prop = RDF::Vocabulary.expand_pname(prop) unless prop.is_a?(Symbol)
-          next unless prop
           Array(values).each do |value|
             begin
               case prop
@@ -633,21 +625,23 @@ module RDF
                 prop = RDFS.range
                 value = RDF::Vocabulary.expand_pname(value)
               when :inverseOf
-                prop = RDF::SCHEMA.inverseOf
+                prop = RDF::URI("http://schema.org/inverseOf")
                 value = RDF::Vocabulary.expand_pname(value)
               when :domainIncludes
-                prop = RDF::SCHEMA.domainIncludes
+                prop = RDF::URI("http://schema.org/domainIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
               when :rangeIncludes
-                prop = RDF::SCHEMA.rangeIncludes
+                prop = RDF::URI("http://schema.org/rangeIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
               when :label
                 prop = RDFS.label
               when :comment
                 prop = RDFS.comment
               else
-                v = RDF::Vocabulary.expand_pname(value)
-                value = v.valid? ? v : RDF::Literal(value)
+                prop = RDF::Vocabulary.expand_pname(prop.to_s)
+                next unless prop
+                v = RDF::Vocabulary.expand_pname(value.to_s)
+                value = v.valid? ? v : RDF::Literal(value.to_s)
               end
               yield RDF::Statement(self, prop, value)
             rescue KeyError
@@ -683,13 +677,13 @@ module RDF
         @attributes.has_key?(method) || super
       end
 
-      # Accessor for `domainIncludes`
+      # Accessor for `schema:domainIncludes`
       # @return [RDF::URI]
       def domain_includes
         Array(@attributes[:domainIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
       end
 
-      # Accessor for `rangeIncludes`
+      # Accessor for `schema:rangeIncludes`
       # @return [RDF::URI]
       def range_includes
         Array(@attributes[:rangeIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
@@ -735,7 +729,7 @@ module RDF
       # @raise [KeyError] if property not defined in vocabulary
       def [](name)
         props.fetch(name.to_sym)
-      rescue KeyError => e
+      rescue KeyError
         raise KeyError, "#{name} not found in vocabulary #{self.__name__}"
       end
     end

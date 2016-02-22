@@ -2,70 +2,136 @@ module RDF
   ##
   # An RDF transaction.
   #
-  # Transactions consist of a sequence of RDF statements to delete from and
-  # a sequence of RDF statements to insert into a given named graph.
+  # Transactions provide an ACID scope for queries and mutations.
   #
-  # Repository implementations may choose to sub-class this class
-  # to provide transactional support for repository updates, when
-  # accessed through {RDF::Repository#begin_transaction}.
+  # Repository implementations may provide support for transactional updates
+  # by providing an atomic implementation of {Mutable#apply_changeset} and 
+  # responding to `#supports?(:atomic_write)` with `true`.
+  # 
+  # We carefully distinguish between read-only and read/write transactions,
+  # in order to enable repository implementations to take out the
+  # appropriate locks for concurrency control. Transactions are read-only
+  # by default; mutability must be explicitly requested on construction in
+  # order to obtain a read/write transaction.
   #
-  # @example Executing a transaction against a repository
-  #   repository = ...
-  #   RDF::Transaction.execute(repository) do |tx|
+  # Individual repositories may make their own sets of guarantees within the 
+  # transaction's scope. In case repository implementations should be unable
+  # to provide full ACID guarantees for transactions, that must be clearly 
+  # indicated in their documentation. If update atomicity is not provided, 
+  # `#supports?(:atomic_write)` must respond `false`.
+  #
+  # @example Executing a read-only transaction
+  #   repository = RDF::Repository.new
+  #
+  #   RDF::Transaction.begin(repository) do |tx|
+  #     tx.query(predicate: RDF::Vocab::DOAP.developer) do |statement|
+  #       puts statement.inspect
+  #     end
+  #   end
+  #
+  # @example Executing a read/write transaction
+  #   repository = RDF::Repository.new
+  #
+  #   RDF::Transaction.begin(repository, mutable: true) do |tx|
   #     subject = RDF::URI("http://example.org/article")
   #     tx.delete [subject, RDF::RDFS.label, "Old title"]
   #     tx.insert [subject, RDF::RDFS.label, "New title"]
   #   end
+  # 
+  # The base class provides an atomic write implementation depending on
+  # `RDF::Changeset` and using `Changeset#apply`. Custom `Repositories`
+  # can implement a minimial write-atomic transactions by overriding
+  # `#apply_changeset`.
   #
+  # Reads within a transaction run against the live repository by default
+  # (`#isolation_level' is `:read_committed`). Repositories may provide support
+  # for snapshots by implementing `Repository#snapshot` and responding `true` to
+  # `#supports?(:snapshots)`. In this case, the transaction will use the 
+  # `RDF::Dataset` returned by `#snapshot` for reads (`:repeatable_read`).
+  #
+  # For datastores that support transactions natively, implementation of a 
+  # custom `Transaction` subclass is recommended. The `Repository` is 
+  # responsible for specifying snapshot support and isolation level as 
+  # appropriate. Note that repositories may provide the snapshot isolation level
+  # without implementing `#snapshot`.
+  #
+  # @example A repository with a custom transaction class
+  #  class MyRepository < RDF::Repository
+  #    DEFAULT_TX_CLASS = MyTransaction
+  #    # ...
+  #    # custom repository logic
+  #    # ...
+  #  end
+  #
+  # @see RDF::Changeset
+  # @see RDF::Mutable#apply_changeset
   # @since 0.3.0
   class Transaction
     include RDF::Mutable
+    include RDF::Enumerable
+    include RDF::Queryable
+
+    ##
+    # @see RDF::Enumerable#each
+    def each(*args, &block)
+      read_target.each(*args, &block)
+    end
 
     ##
     # Executes a transaction against the given RDF repository.
     #
     # @param  [RDF::Repository]         repository
+    # @param  [Boolean]                 mutable (false)
+    #    Whether this is a read-only or read/write transaction.
     # @param  [Hash{Symbol => Object}]  options
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
     # @return [void]
-    def self.execute(repository, options = {}, &block)
-      self.new(&block).execute(repository, options)
+    def self.begin(repository, mutable: false, **options, &block)
+      self.new(repository, options.merge(mutable: mutable), &block)
     end
 
     ##
-    # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] graph_name
-    # @return [RDF::Resource]
-    # @since 1.1.0
-    attr_accessor :graph_name
+    # The repository being operated upon.
+    #
+    # @return [RDF::Repository]
+    # @since  2.0.0
+    attr_reader :repository
 
-    # @deprecated Use {#graph_name} instead.
-    def context
-      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-	  graph_name
-    end
+    ##
+    # The default graph name to apply to statements inserted or deleted by the
+    # transaction.
+    #
+    # @return [RDF::Resource, nil]
+    # @since  2.0.0
+    attr_reader :graph_name
 
-    # @deprecated Use {#graph_name=} instead.
-    def context=(value)
-      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-	  self.graph_name = value
-    end
-
-    alias_method :graph, :graph_name
-    alias_method :graph=, :graph_name=
+    ##
+    # RDF statement mutations to apply when executed.
+    #
+    # @return [RDF::Changeset]
+    # @since  2.0.0
+    attr_reader :changes
 
     ##
     # RDF statements to delete when executed.
     #
+    # @deprecated
     # @return [RDF::Enumerable]
     attr_reader :deletes
+    def deletes
+      self.changes.deletes
+    end
 
     ##
     # RDF statements to insert when executed.
     #
+    # @deprecated
     # @return [RDF::Enumerable]
     attr_reader :inserts
+    def inserts
+      self.changes.inserts
+    end
 
     ##
     # Any additional options for this transaction.
@@ -77,76 +143,70 @@ module RDF
     # Initializes this transaction.
     #
     # @param  [Hash{Symbol => Object}]  options
-    # @option options [RDF::Resource]   :context  (nil)
-    #   Alias for `:graph_name`. Deprected in RDF.rb 2.0.
-    # @option options [RDF::Resource]   :graph_name (nil)
-    #   Name of named graph to be affected if `inserts` or `deletes`
-    #   do not have a `graph_name`.
-    # @option options [RDF::Resource]   :graph  (nil)
-    #   Alias for `:graph_name`.
-    # @option options [RDF::Enumerable] :insert (RDF::Graph.new)
-    # @option options [RDF::Enumerable] :delete (RDF::Graph.new)
+    # @param  [Boolean]                 mutable (false)
+    #    Whether this is a read-only or read/write transaction.
     # @yield  [tx]
     # @yieldparam [RDF::Transaction] tx
-    def initialize(options = {}, &block)
-      @options = options.dup
-      if @options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        @options[:graph_name] ||= @options.delete(:context)
-      end
-      @graph_name = @options.delete(:graph) || @options.delete(:graph_name)
-      @inserts = @options.delete(:insert)   || []
-      @deletes = @options.delete(:delete)   || []
-      @inserts.extend(RDF::Enumerable) unless @inserts.kind_of?(RDF::Enumerable)
-      @deletes.extend(RDF::Enumerable) unless @deletes.kind_of?(RDF::Enumerable)
+    def initialize(repository, graph_name: nil, mutable: false, **options, &block)
+      @repository = repository
+      @snapshot = 
+        repository.supports?(:snapshots) ? repository.snapshot : repository
+      @options    = options.dup
+      @mutable    = mutable
+      @graph_name = graph_name
 
+      raise TransactionError, 
+            'Tried to open a mutable transaction on an immutable repository' if
+        @mutable && !@repository.mutable?
+
+      @changes = RDF::Changeset.new
+      
       if block_given?
         case block.arity
           when 1 then block.call(self)
-          else instance_eval(&block)
+          else self.instance_eval(&block)
         end
       end
     end
+    
+    ##
+    # @see RDF::Dataset#isolation_level
+    def isolation_level
+      return :repeatable_read if repository.supports?(:snapshots)
+      :read_committed
+    end
 
     ##
-    # Returns `false` to indicate that this transaction is append-only.
+    # Returns `true` if this is a read/write transaction, `false` otherwise.
     #
-    # Transactions do not support the `RDF::Enumerable` protocol directly.
-    # To enumerate the RDF statements to be inserted or deleted, use the
-    # {RDF::Transaction#inserts} and {RDF::Transaction#deletes} accessors.
+    # @return [Boolean]
+    # @see     RDF::Writable#writable?
+    def writable?
+      @mutable
+    end
+
+    ##
+    # Returns `true` if this is a read/write transaction, `false` otherwise.
+    #
+    # @return [Boolean]
+    # @see     RDF::Writable#mutable?
+    def mutable?
+      @mutable
+    end
+
+    ##
+    # Returns `true` to indicate that this transaction is readable.
     #
     # @return [Boolean]
     # @see    RDF::Readable#readable?
     def readable?
-      false
+      true
     end
 
     ##
-    # Executes this transaction against the given RDF repository.
-    #
-    # @param  [RDF::Repository]         repository
-    # @param  [Hash{Symbol => Object}]  options
-    # @return [void]
-    def execute(repository, options = {})
-      before_execute(repository, options) if respond_to?(:before_execute)
-
-      dels = deletes.map do |s|
-        statement = s.dup
-        statement.graph_name ||= graph_name
-        statement
-      end
-
-      ins = inserts.map do |s|
-        statement = s.dup
-        statement.graph_name ||= graph_name
-        statement
-      end
-      
-      repository.delete(*dels) unless dels.empty?
-      repository.insert(*ins) unless ins.empty?
-      
-      after_execute(repository, options) if respond_to?(:after_execute)
-      self
+    # @see RDF::Enumerable#has_statement?
+    def has_statement?(statement)
+      read_target.has_statement?(statement)
     end
 
     ##
@@ -154,8 +214,8 @@ module RDF
     #
     # @return [String]
     def inspect
-      sprintf("#<%s:%#0x(graph: %s, deletes: %d, inserts: %d)>", self.class.name, __id__,
-        graph ? graph.to_s : 'nil', deletes.count, inserts.count)
+      sprintf("#<%s:%#0x(changes: -%d/+%d)>", self.class.name,
+        self.__id__, self.changes.deletes.count, self.changes.inserts.count)
     end
 
     ##
@@ -164,10 +224,38 @@ module RDF
     #
     # @return [void]
     def inspect!
-      warn(inspect)
+      $stderr.puts(inspect)
+    end
+
+    ##
+    # Executes the transaction
+    #
+    # @return [Boolean] `true` if the changes are successfully applied.
+    # @raise [TransactionError] if the transaction can't be applied
+    def execute
+      raise TransactionError, 'Cannot execute a rolled back transaction. ' \
+                              'Open a new one instead.' if @rolledback
+      @changes.apply(@repository)
+    end
+
+    ##
+    # Rolls back the transaction
+    #
+    # @note: the base class simply replaces its current `Changeset` with a 
+    #   fresh one. Other implementations may need to explictly rollback 
+    #   at the supporting datastore.
+    #
+    # @note: clients should not rely on using same transaction instance after
+    #   rollback.
+    #
+    # @return [Boolean] `true` if the changes are successfully applied.
+    def rollback
+      @changes = RDF::Changeset.new
+      @rolledback = true
     end
 
     protected
+
     ##
     # Appends an RDF statement to the sequence to insert when executed.
     #
@@ -175,7 +263,7 @@ module RDF
     # @return [void]
     # @see    RDF::Writable#insert_statement
     def insert_statement(statement)
-      inserts << statement
+      @changes.insert(process_statement(statement))
     end
 
     ##
@@ -185,9 +273,48 @@ module RDF
     # @return [void]
     # @see    RDF::Mutable#delete_statement
     def delete_statement(statement)
-      deletes << statement
+      @changes.delete(process_statement(statement))
     end
 
+    def query_pattern(*args, &block)
+      read_target.send(:query_pattern, *args, &block)
+    end
+
+    def query_execute(*args, &block)
+      read_target.send(:query_execute, *args, &block)
+    end
+  
     undef_method :load, :update, :clear
+
+    private
+    
+    ##
+    # @private Adds the default graph_name to the statement, when one it does 
+    #   not already have one.
+    #
+    # @param statement [RDF::Statement]
+    # @return [RDF::Statement]
+    def process_statement(statement)
+      if graph_name
+        statement = statement.dup
+        statement.graph_name = graph_name
+      end
+      statement
+    end
+    
+    def read_target
+      return @snapshot if graph_name.nil?
+      return @snapshot.project_graph(nil) if graph_name == false
+      @snapshot.project_graph(graph_name)
+    end
+
+    public
+    
+    ##
+    # An error class for transaction failures.
+    # 
+    # This error indicates that the transaction semantics have been violated in 
+    # some way.
+    class TransactionError < RuntimeError; end
   end # Transaction
 end # RDF

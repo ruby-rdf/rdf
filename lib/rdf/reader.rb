@@ -39,6 +39,7 @@ module RDF
   class Reader
     extend  ::Enumerable
     extend  RDF::Util::Aliasing::LateBound
+    include RDF::Util::Logger
     include RDF::Readable
     include RDF::Enumerable # @since 0.3.0
 
@@ -108,6 +109,52 @@ module RDF
       end
     end
 
+    ##
+    # Options suitable for automatic Reader provisioning.
+    # @return [Array<RDF::CLI::Option>]
+    def self.options
+      [
+        RDF::CLI::Option.new(
+          symbol: :canonicalize,
+          datatype: TrueClass,
+          on: ["--canonicalize"],
+          description: "Canonicalize input/output.") {true},
+        RDF::CLI::Option.new(
+          symbol: :encoding,
+          datatype: Encoding,
+          on: ["--encoding ENCODING"],
+          description: "The encoding of the input stream.") {|arg| Encoding.find arg},
+        RDF::CLI::Option.new(
+          symbol: :intern,
+          datatype: TrueClass,
+          on: ["--intern"],
+          description: "Intern all parsed URIs.") {true},
+        RDF::CLI::Option.new(
+          symbol: :prefixes,
+          datatype: Hash,
+          multiple: true,
+          on: ["--prefixes PREFIX,PREFIX"],
+          description: "A comma-separated list of prefix:uri pairs.") do |arg|
+            arg.split(',').inject({}) do |memo, pfxuri|
+              pfx,uri = pfxuri.split(':', 2)
+              memo.merge(pfx.to_sym => RDF::URI(uri))
+            end
+        end,
+        RDF::CLI::Option.new(
+          symbol: :base_uri,
+          datatype: RDF::URI,
+          on: ["--uri URI"],
+          description: "Base URI of input file, defaults to the filename.") {|arg| RDF::URI(arg)},
+        RDF::CLI::Option.new(
+          symbol: :validate,
+          datatype: TrueClass,
+          on: ["--validate"],
+          description: "Validate input file.") {true},
+      ]
+    end
+
+    # Returns a hash of options appropriate for use with this reader
+    
     class << self
       alias_method :format_class, :format
     end
@@ -125,20 +172,21 @@ module RDF
     #   end
     #
     # @param  [String, #to_s] filename
+    # @param [Symbol] format
     # @param  [Hash{Symbol => Object}] options
     #   any additional options (see {RDF::Util::File.open_file}, {RDF::Reader#initialize} and {RDF::Format.for})
-    # @option options [Symbol] :format (:ntriples)
     # @yield  [reader]
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
     # @raise  [RDF::FormatError] if no reader found for the specified format
-    def self.open(filename, options = {}, &block)
+    def self.open(filename, format: nil, **options, &block)
       Util::File.open_file(filename, options) do |file|
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
         options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
-        reader = self.for(format_options[:format] || format_options) do
+        options[:filename] ||= filename
+        reader = self.for(format || format_options) do
           # Return a sample from the input file
           sample = file.read(1000)
           file.rewind
@@ -350,7 +398,7 @@ module RDF
     #
     # @return [void]
     # @since  0.2.3
-    # @see    http://ruby-doc.org/core-1.9/classes/IO.html#M001692
+    # @see    http://ruby-doc.org/core-2.2.2/IO.html#method-i-rewind
     def rewind
       @input.rewind
     end
@@ -364,7 +412,7 @@ module RDF
     #
     # @return [void]
     # @since  0.2.2
-    # @see    http://ruby-doc.org/core-1.9/classes/IO.html#M001699
+    # @see    http://ruby-doc.org/core-2.2.2/IO.html#method-i-close
     def close
       @input.close unless @input.closed?
     end
@@ -380,16 +428,22 @@ module RDF
     ##
     # @return [Boolean]
     #
-    # @note this parses the full input. 
+    # @note this parses the full input and is valid only in the reader block.
     #   Use `Reader.new(input, validate: true)` if you intend to capture the 
     #   result.
+    #
+    # @example Parsing RDF statements from a file
+    #   RDF::NTriples::Reader.new("!!invalid input??") do |reader|
+    #     reader.valid? # => false
+    #   end
     #
     # @see RDF::Value#validate! for Literal & URI validation relevant to 
     #   error handling.
     # @see Enumerable#valid?
     def valid?
-      super 
-    rescue ArgumentError, RDF::ReaderError
+      super && !log_statistics[:error]
+    rescue ArgumentError, RDF::ReaderError => e
+      log_error(e.message)
       false
     end
 
@@ -421,8 +475,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_subject
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected subject (found: #{current_line.inspect})",
-                                 lineno: lineno)
+      log_error("Expected subject (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
     ##
@@ -431,8 +484,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_predicate
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected predicate (found: #{current_line.inspect})",
-                                 lineno: lineno)
+      log_error("Expected predicate (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
     ##
@@ -441,8 +493,7 @@ module RDF
     # @return [void]
     # @raise  [RDF::ReaderError]
     def fail_object
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected object (found: #{current_line.inspect})",
-                                 lineno: lineno)
+      log_error("Expected object (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
   public

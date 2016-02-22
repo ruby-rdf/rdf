@@ -33,12 +33,24 @@ module RDF
   #     end
   #   end
   #
+  # @example Detecting invalid output
+  #   logger = Logger.new([])
+  #   RDF::Writer.for(:ntriples).buffer(logger: logger) do |writer|
+  #     statement = RDF::Statement.new(
+  #       RDF::URI("http://rubygems.org/gems/rdf"),
+  #       RDF::URI("http://purl.org/dc/terms/creator"),
+  #       nil)
+  #     writer << statement
+  #   end # => RDF::WriterError
+  #   logger.empty? => false
+  #
   # @abstract
   # @see RDF::Format
   # @see RDF::Reader
   class Writer
     extend  ::Enumerable
     extend  RDF::Util::Aliasing::LateBound
+    include RDF::Util::Logger
     include RDF::Writable
 
     ##
@@ -97,6 +109,40 @@ module RDF
         end
         nil # not found
       end
+    end
+
+    ##
+    # Options suitable for automatic Writer provisioning.
+    # @return [Array<RDF::CLI::Option>]
+    def self.options
+      [
+        RDF::CLI::Option.new(
+          symbol: :canonicalize,
+          datatype: TrueClass,
+          on: ["--canonicalize"],
+          description: "Canonicalize input/output.") {true},
+        RDF::CLI::Option.new(
+          symbol: :encoding,
+          datatype: Encoding,
+          on: ["--encoding ENCODING"],
+          description: "The encoding of the input stream.") {|arg| Encoding.find arg},
+        RDF::CLI::Option.new(
+          symbol: :prefixes,
+          datatype: Hash,
+          multiple: true,
+          on: ["--prefixes PREFIX,PREFIX"],
+          description: "A comma-separated list of prefix:uri pairs.") do |arg|
+            arg.split(',').inject({}) do |memo, pfxuri|
+              pfx,uri = pfxuri.split(':', 2)
+              memo.merge(pfx.to_sym => RDF::URI(uri))
+            end
+        end,
+        RDF::CLI::Option.new(
+          symbol: :unique_bnodes,
+          datatype: TrueClass,
+          on: ["--unique-bnodes"],
+          description: "Use unique Node identifiers.") {true},
+      ]
     end
 
     class << self
@@ -212,7 +258,7 @@ module RDF
     # @yieldreturn [void]
     def initialize(output = $stdout, options = {}, &block)
       @output, @options = output, options.dup
-      @nodes, @node_id  = {}, 0
+      @nodes, @node_id, @node_id_map  = {}, 0, {}
 
       if block_given?
         write_prologue
@@ -329,7 +375,7 @@ module RDF
     ##
     # Flushes the underlying output buffer.
     #
-    # @return [void] `self`
+    # @return [self]
     def flush
       @output.flush if @output.respond_to?(:flush)
       self
@@ -337,66 +383,82 @@ module RDF
     alias_method :flush!, :flush
 
     ##
-    # @return [void] `self`
+    # @return [self]
     # @abstract
     def write_prologue
       self
     end
 
     ##
-    # @return [void] `self`
+    # @return [self]
+    # @raise [RDF::WriterError] if errors logged during processing.
     # @abstract
     def write_epilogue
+      if log_statistics[:error]
+        raise RDF::WriterError, "Errors found during processing"
+      end
       self
     end
 
     ##
     # @param  [String] text
-    # @return [void] `self`
+    # @return [self]
     # @abstract
     def write_comment(text)
       self
     end
 
     ##
-    # @param  [RDF::Graph] graph
-    # @return [void] `self`
-    # @deprecated Use {RDF::Writable#insert_graph} instead .
-    def write_graph(graph)
-      warn "[DEPRECATION] `Writer#graph_write is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
-      graph.each_triple { |*triple| write_triple(*triple) }
-      self
-    end
-
-    ##
-    # @param  [Array<RDF::Statement>] statements
-    # @return [void] `self`
-    # @deprecated Use {RDF::Writable#insert} instead.
-    def write_statements(*statements)
-      warn "[DEPRECATION] `Writer#write_statements is deprecated. Please use RDF::Writable#insert instead. Called from #{Gem.location_of_caller.join(':')}"
-      statements.each { |statement| write_statement(statement) }
-      self
-    end
-
-    ##
+    # Add a statement to the writer. This will check to ensure that the statement is complete (no nil terms) and is valid, if the `:validation` option is set.
+    #
+    # Additionally, it will de-duplicate BNode terms sharing a common identifier.
+    #
     # @param  [RDF::Statement] statement
-    # @return [void] `self`
-    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
+    # @return [self]
+    # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_statement(statement)
       statement = statement.canonicalize! if canonicalize?
-      raise RDF::WriterError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
-      raise RDF::WriterError, "Statement #{statement.inspect} is invalid" if validate? && statement.invalid?
-      write_triple(*statement.to_triple)
+
+      # Make sure BNodes in statement use unique identifiers
+      if statement.node?
+        terms = statement.to_quad.map do |term|
+          if term.is_a?(RDF::Node)
+            term = term.original while term.original
+            @nodes[term] ||= begin
+              # Account for duplicated nodes
+              @node_id_map[term.to_s] ||= term
+              if !@node_id_map[term.to_s].equal?(term)
+                # Rename node
+                term.make_unique!
+                @node_id_map[term.to_s] = term
+              end
+            end
+          else
+            term
+          end
+        end
+        statement = RDF::Statement.from(statement.to_quad)
+      end
+
+      if statement.incomplete?
+        log_error "Statement #{statement.inspect} is incomplete"
+      elsif validate? && statement.invalid?
+        log_error "Statement #{statement.inspect} is invalid"
+      elsif respond_to?(:write_quad)
+        write_quad(*statement.to_quad)
+      else
+        write_triple(*statement.to_triple)
+      end
       self
     rescue ArgumentError => e
-      raise WriterError, e.message
+      log_error e.message
     end
     alias_method :insert_statement, :write_statement # support the RDF::Writable interface
 
     ##
     # @param  [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>] triples
-    # @return [void] `self`
-    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
+    # @return [self]
+    # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     def write_triples(*triples)
       triples.each { |triple| write_triple(*triple) }
       self
@@ -406,9 +468,9 @@ module RDF
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Term]     object
-    # @return [void] `self`
+    # @return [self]
     # @raise  [NotImplementedError] unless implemented in subclass
-    # @raise [RDF::WriterError] if validating and attempting to write an invalid {RDF::Term}.
+    # @note logs error if attempting to write an invalid {RDF::Statement} or if canonicalizing a statement which cannot be canonicalized.
     # @abstract
     def write_triple(subject, predicate, object)
       raise NotImplementedError.new("#{self.class}#write_triple") # override in subclasses
@@ -427,16 +489,6 @@ module RDF
         when RDF::Node    then format_node(term, options)
         else nil
       end
-    end
-
-    ##
-    # @param  [RDF::Term] term
-    # @return [String]
-    # @since  0.3.0
-    # @deprecated Use {#format_term} instead
-    def format_value(term, options = {})
-      warn "[DEPRECATION] Writer#format_value is being replaced with Writer#format_term in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      format_term(term, options)
     end
 
     ##
@@ -490,16 +542,16 @@ module RDF
     end
 
     ##
-    # @param  [RDF::Resource] uriref
+    # @param  [RDF::Resource] term
     # @return [String]
-    def uri_for(uriref)
+    def uri_for(term)
       case
-        when uriref.is_a?(RDF::Node)
-          @nodes[uriref]
-        when uriref.respond_to?(:to_uri)
-          uriref.to_uri.to_s
+        when term.is_a?(RDF::Node)
+          @nodes[term] ||= term.to_base
+        when term.respond_to?(:to_uri)
+          term.to_uri.to_s
         else
-          uriref.to_s
+          term.to_s
       end
     end
 

@@ -30,18 +30,17 @@ module RDF
     ##
     # Returns a blank node with a random UUID-based identifier.
     #
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [Regexp] :grammar (nil)
+    # @param [Regexp] grammar (nil)
     #   a grammar specification that the generated UUID must match
     # @return [RDF::Node]
-    def self.uuid(options = {})
+    def self.uuid(grammar: nil)
       case
-        when options[:grammar]
+        when grammar
           # The UUID is generated such that its initial part is guaranteed
           # to match the given `grammar`, e.g. `/^[A-Za-z][A-Za-z0-9]*/`.
           # Some RDF storage systems (e.g. AllegroGraph) require this.
           # @see http://github.com/bendiken/rdf/pull/43
-          uuid = RDF::Util::UUID.generate(options) until uuid =~ options[:grammar]
+          uuid = RDF::Util::UUID.generate(options) until uuid =~ grammar
         else
           uuid = RDF::Util::UUID.generate(options)
       end
@@ -121,7 +120,7 @@ module RDF
     end
 
     ##
-    # Determins if `self` is the same term as `other`.
+    # Determines if `self` is the same term as `other`.
     #
     # In this case, nodes must be the same object
     #
@@ -148,25 +147,25 @@ module RDF
       else
         other.respond_to?(:node?) && other.node? &&
           self.hash == other.to_term.hash &&
-          other.respond_to?(:id) && @id == other.id
+          other.respond_to?(:id) && @id == other.to_term.id
       end
     end
     alias_method :===, :==
-
-    ##
-    # Returns the base representation of this node.
-    #
-    # @return [Sring]
-    def to_base
-      to_s
-    end
 
     ##
     # Returns a representation of this node independent of any identifier used to initialize it
     #
     # @return [String]
     def to_unique_base
-      "_:g#{__id__.to_i.abs}"
+      original ? original.to_unique_base :  "_:g#{__id__.to_i.abs}"
+    end
+
+    ##
+    # Make this term identifier unique, if it is found to be shared with another node having the same identifier
+    # @return [self]
+    def make_unique!
+      @id = to_unique_base[2..-1]
+      self
     end
 
     ##

@@ -28,16 +28,14 @@ module RDF::NTriples
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
   class Reader < RDF::Reader
+    include RDF::Util::Logger
     format RDF::NTriples::Format
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    ESCAPE_CHARS          = ["\b", "\f", "\t", "\n", "\r", "\"", "\\"].freeze
-    ESCAPE_CHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
-    ESCAPE_CHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
-    ESCAPE_CHAR           = Regexp.union(ESCAPE_CHAR4, ESCAPE_CHAR8).freeze
-    ESCAPE_SURROGATE      = /\\u([0-9A-Fa-f]{4,4})\\u([0-9A-Fa-f]{4,4})/.freeze
-    ESCAPE_SURROGATE1     = (0xD800..0xDBFF).freeze
-    ESCAPE_SURROGATE2     = (0xDC00..0xDFFF).freeze
+    ESCAPE_CHARS    = ["\b", "\f", "\t", "\n", "\r", "\"", "\\"].freeze
+    UCHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
+    UCHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
+    UCHAR           = Regexp.union(UCHAR4, UCHAR8).freeze
 
 
     # Terminals from rdf-turtle.
@@ -53,7 +51,7 @@ module RDF::NTriples
                          [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
                        EOS
     U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]").freeze
-    IRI_RANGE        = Regexp.compile("[[^<>\"{}|^`\\\\]&&[^\\x00-\\x20]]").freeze
+    IRI_RANGE        = Regexp.compile("[[^<>\"{}\|\^`\\\\]&&[^\\x00-\\x20]]").freeze
 
     # 163s
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/.freeze
@@ -64,13 +62,13 @@ module RDF::NTriples
     # 159s
     ECHAR                = /\\[tbnrf\\"]/.freeze
     # 18
-    IRIREF               = /<((?:#{IRI_RANGE}|#{ESCAPE_CHAR})*)>/.freeze
+    IRIREF               = /<((?:#{IRI_RANGE}|#{UCHAR})*)>/.freeze
     # 141s
     BLANK_NODE_LABEL     = /_:((?:[0-9]|#{PN_CHARS_U})(?:(?:#{PN_CHARS}|\.)*#{PN_CHARS})?)/.freeze
     # 144s
     LANGTAG              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*)/.freeze
     # 22
-    STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{ESCAPE_CHAR})*)"/.freeze
+    STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*)"/.freeze
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     COMMENT               = /^#\s*(.*)$/.freeze
@@ -91,57 +89,59 @@ module RDF::NTriples
     # representation.
     #
     # @param  [String] input
+    # @param [{Symbol => Object}] options
+    #   From {RDF::Reader#initialize}
     # @return [RDF::Term]
-    def self.unserialize(input)
+    def self.unserialize(input, options = {})
       case input
         when nil then nil
-        else self.new(input).read_value
+        else self.new(input, {logger: []}.merge(options)).read_value
       end
     end
 
     ##
-    # @param  [String] input
+    # (see unserialize)
     # @return [RDF::Resource]
-    def self.parse_subject(input)
-      parse_uri(input) || parse_node(input)
+    def self.parse_subject(input, options = {})
+      parse_uri(input, options) || parse_node(input, options)
     end
 
     ##
-    # @param  [String] input
+    # (see unserialize)
     # @return [RDF::URI]
-    def self.parse_predicate(input)
+    def self.parse_predicate(input, options = {})
       parse_uri(input, intern: true)
     end
 
     ##
-    # @param  [String] input
-    # @return [RDF::Term]
-    def self.parse_object(input)
-      parse_uri(input) || parse_node(input) || parse_literal(input)
+    # (see unserialize)
+    def self.parse_object(input, options = {})
+      parse_uri(input, options) || parse_node(input, options) || parse_literal(input, options)
     end
 
     ##
-    # @param  [String] input
+    # (see unserialize)
     # @return [RDF::Node]
-    def self.parse_node(input)
+    def self.parse_node(input, options = {})
       if input =~ NODEID
         RDF::Node.new($1)
       end
     end
 
     ##
-    # @param  [String] input
+    # (see unserialize)
     # @return [RDF::URI]
     def self.parse_uri(input, options = {})
       if input =~ URIREF
-        RDF::URI.send(options[:intern] ? :intern : :new, $1)
+        uri_str = unescape($1)
+        RDF::URI.send(options[:intern] ? :intern : :new, unescape($1))
       end
     end
 
     ##
-    # @param  [String] input
+    # (see unserialize)
     # @return [RDF::Literal]
-    def self.parse_literal(input)
+    def self.parse_literal(input, options = {})
       case input
         when LITERAL_WITH_LANGUAGE
           RDF::Literal.new(unescape($1), language: $4)
@@ -164,22 +164,8 @@ module RDF::NTriples
       # Decode \t|\n|\r|\"|\\ character escapes:
       ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
 
-      # Decode \uXXXX\uXXXX surrogate pairs:
-      # XXX: This block should be removed in RDF.rb 2.0
-      while
-        (string.sub!(ESCAPE_SURROGATE) do
-          if ESCAPE_SURROGATE1.include?($1.hex) && ESCAPE_SURROGATE2.include?($2.hex)
-            warn "[DEPRECATION] Surrogate pairs support deprecated. Support will be removed in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-            s = [$1, $2].pack('H*H*')
-            s.force_encoding(Encoding::UTF_16BE).encode!(Encoding::UTF_8)
-          else
-            [$1.hex].pack('U*') << '\u' << $2
-          end
-        end)
-      end
-
       # Decode \uXXXX and \UXXXXXXXX code points:
-      string.gsub!(ESCAPE_CHAR) do
+      string.gsub!(UCHAR) do
         [($1 || $2).hex].pack('U*')
       end
 
@@ -192,7 +178,9 @@ module RDF::NTriples
       begin
         read_statement
       rescue RDF::ReaderError
-        read_uriref || read_node || read_literal
+        value = read_uriref || read_node || read_literal
+        log_recover
+        value
       end
     end
 
@@ -211,8 +199,7 @@ module RDF::NTriples
             object    = read_uriref || read_node || read_literal || fail_object
 
             if validate? && !read_eos
-              raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})",
-                                         lineno: lineno)
+              log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
             end
             return [subject, predicate, object]
           end
@@ -242,7 +229,7 @@ module RDF::NTriples
         uri
       end
     rescue ArgumentError => e
-      raise RDF::ReaderError.new("ERROR [line #{lineno}] Invalid URI (found: \"<#{uri_str}>\")", lineno: lineno, token: "<#{uri_str}>")
+      log_error("Invalid URI (found: \"<#{uri_str}>\")", lineno: lineno, token: "<#{uri_str}>", exception: RDF::ReaderError)
     end
 
     ##

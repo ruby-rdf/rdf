@@ -48,28 +48,6 @@ module RDF
     # @return [RDF::Resource]
     attr_accessor :graph_name
 
-    ##
-    # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] graph_name
-    # @return [RDF::Resource]
-    # @since 1.1.0
-    # @deprecated Use {#graph_name} instead.
-    def context
-      warn "[DEPRECATION] Statement#context is being replaced with Statement@graph_name in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      graph_name
-    end
-
-    ##
-    # Name of this graph, if it is part of an {RDF::Repository}
-    # @!attribute [rw] graph_name
-    # @return [RDF::Resource]
-    # @since 1.1.0
-    # @deprecated Use {#graph_name=} instead.
-    def context=(value)
-      warn "[DEPRECATION] Statement#context= is being replaced with Statement@graph_name= in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-      self.graph_name = value
-    end
-
     # @return [RDF::Resource]
     attr_accessor :subject
 
@@ -87,8 +65,6 @@ module RDF
     #   @option options [RDF::URI]       :predicate (nil)
     #   @option options [RDF::Resource]      :object    (nil)
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
-    #   @option options [RDF::Term]  :context   (nil)
-    #     Alias for :graph_name, :context is deprecated in RDF.rb.
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @return [RDF::Statement]
@@ -100,8 +76,6 @@ module RDF
     #   @param  [RDF::Resource]              object
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [RDF::Term]  :context   (nil)
-    #     Alias for :graph_name, :context is deprecated in RDF.rb.
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @return [RDF::Statement]
@@ -116,10 +90,6 @@ module RDF
         @subject   = subject
         @predicate = predicate
         @object    = object
-      end
-      if @options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        @options[:graph_name] ||= @options.delete(:context)
       end
       @id          = @options.delete(:id) if @options.has_key?(:id)
       @graph_name  = @options.delete(:graph_name)
@@ -228,14 +198,6 @@ module RDF
       !!graph_name
     end
     alias_method :has_name?, :has_graph?
-
-    ##
-    # @return [Boolean]
-    # @deprecated Use {#has_graph?} instead.
-    def has_context?
-      warn "[DEPRECATION] Statement#has_context? is being replaced with Statement#has_grap in RDF.rb 2.0. Called from #{Gem.location_of_caller.join(':')}"
-     !!context
-    end
 
     ##
     # @return [Boolean]
@@ -386,11 +348,7 @@ module RDF
     # @return [RDF::Graph]
     # @see    http://www.w3.org/TR/rdf-primer/#reification
     def reified(options = {})
-      if options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Mutable#load is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        options[:graph_name] ||= options.delete(:context)
-      end
-      RDF::Graph.new(options[:graph_name]) do |graph|
+      RDF::Graph.new(graph_name: options[:graph_name]) do |graph|
         subject = options[:subject] || RDF::Node.new(options[:id])
         graph << [subject, RDF.type,      RDF[:Statement]]
         graph << [subject, RDF.subject,   self.subject]

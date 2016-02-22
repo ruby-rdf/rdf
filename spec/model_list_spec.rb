@@ -40,8 +40,8 @@ describe RDF::List do
         l1 = RDF::List[[1]]
         expect(l1.size).to eq 1
         expect(l1.first).to be_a(RDF::Node)
-        expect { RDF::List.new(l1.first, l1.graph) }.not_to raise_error
-        l2 = RDF::List.new(l1.first, l1.graph)
+        expect { RDF::List.new(subject: l1.first, graph: l1.graph) }.not_to raise_error
+        l2 = RDF::List.new(subject: l1.first, graph: l1.graph)
         expect(l2.first).to eq RDF::Literal(1)
       end
 
@@ -121,14 +121,14 @@ describe RDF::List do
         n = RDF::Node.new
         graph.insert(RDF::Statement(n, RDF.first, "foo"))
         graph.insert(RDF::Statement(n, RDF.rest, RDF.nil))
-        expect(RDF::List.new(n, graph)).to be_valid
+        expect(RDF::List.new(subject: n, graph: graph)).to be_valid
       end
 
       it "Prepends values with new subject if existing list" do
         n = RDF::Node.new
         graph.insert(RDF::Statement(n, RDF.first, "foo"))
         graph.insert(RDF::Statement(n, RDF.rest, RDF.nil))
-        l = RDF::List.new(n, graph, %w(a b c))
+        l = RDF::List.new(subject: n, graph: graph, values: %w(a b c))
         expect(l.subject).not_to eq(n)
         expect(l.first).to eq(RDF::Literal("a"))
         expect(l.last).to eq(RDF::Literal("foo"))
@@ -137,9 +137,15 @@ describe RDF::List do
 
       it "Creates an invalid empty list if subject does not identify a list" do
         n = RDF::Node.new
-        l = RDF::List.new(n, graph)
+        l = RDF::List.new(subject: n, graph: graph)
         expect(l).not_to be_valid
         expect(l.subject).to eq(n)
+      end
+
+      it "should be instantiable with positional args (DEPRECATED)" do
+        expect {
+          described_class.new(RDF::Node.new, graph)
+        }.to raise_error ArgumentError
       end
     end
   end
@@ -148,7 +154,7 @@ describe RDF::List do
     context "valid cases" do
       {
         "empty list" => RDF::List(),
-        "empty list with nil subject" => RDF::List.new(RDF.nil),
+        "empty list with nil subject" => RDF::List.new(subject: RDF.nil),
         "list with literals" => RDF::List(%w(a b c)),
         "list with other properties on head" => [
           RDF::Statement(:node1, RDF.first, "a"),
@@ -168,7 +174,7 @@ describe RDF::List do
         it name do
           if list.is_a?(Array)
             graph = RDF::Graph.new.insert(*list)
-            list = RDF::List.new(list.first.subject, graph)
+            list = RDF::List.new(subject: list.first.subject, graph: graph)
           end
           expect(list).to be_valid
           expect(list).not_to be_invalid
@@ -178,8 +184,8 @@ describe RDF::List do
 
     context "invalid cases" do
       {
-        "empty list with IRI subject" => RDF::List.new(RDF::URI("http://example/a")),
-        "non-empty list with IRI subject" => RDF::List.new(RDF::URI("http://example/a"), RDF::Graph.new, %w(a b c)),
+        "empty list with IRI subject" => RDF::List.new(subject: RDF::URI("http://example/a")),
+        "non-empty list with IRI subject" => RDF::List.new(subject: RDF::URI("http://example/a"), graph: RDF::Graph.new, values: %w(a b c)),
         "list with muliple first" => [
           RDF::Statement(:node1, RDF.first, "a"),
           RDF::Statement(:node1, RDF.first, "a1"),
@@ -204,7 +210,7 @@ describe RDF::List do
         it name do
           if list.is_a?(Array)
             graph = RDF::Graph.new.insert(*list)
-            list = RDF::List.new(list.first.subject, graph)
+            list = RDF::List.new(subject: list.first.subject, graph: graph)
           end
           expect(list).to be_invalid
           expect(list).not_to be_valid
@@ -832,7 +838,7 @@ describe RDF::List do
     it "adds statements to separate graph" do
       g = RDF::Graph.new << ten
       expect(g.count).to eql ten.count * 2
-      expect(RDF::List.new(g.subjects.first, g)).to eq ten
+      expect(RDF::List.new(subject: ten.subject, graph: g)).to eq ten
     end
   end
 
@@ -1017,7 +1023,7 @@ describe RDF::List do
     end
 
     context "Turtle List construction" do
-      subject {RDF::List.new(nil, nil, %w(a))}
+      subject {RDF::List.new(values: %w(a))}
       its(:length) {is_expected.to eq 1}
     end
   end

@@ -43,7 +43,7 @@ module RDF
           \s*
           (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
           \s*
-          (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Context
+          (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Graph Name
           \s*\.
         )x) && !(
           sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
@@ -74,7 +74,7 @@ module RDF
               object    = read_uriref || read_node || read_literal || fail_object
               graph_name    = read_uriref || read_node
               if validate? && !read_eos
-                raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})")
+                log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
               end
               return [subject, predicate, object, {graph_name: graph_name}]
             end
@@ -88,15 +88,6 @@ module RDF
     end # Reader
 
     class Writer < NTriples::Writer
-      ##
-      # @param  [RDF::Statement] statement
-      # @return [void] `self`
-      def write_statement(statement)
-        write_quad(*statement.to_quad)
-        self
-      end
-      alias_method :insert_statement, :write_statement # support the RDF::Writable interface
-
       ##
       # Outputs the N-Quads representation of a statement.
       #

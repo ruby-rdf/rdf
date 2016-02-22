@@ -42,7 +42,7 @@ describe RDF::Query::Pattern do
     end
 
     it "should not have bindings" do
-      expect(subject.bindings?).to be_falsey
+      expect(subject).not_to be_bindings
       expect(subject.binding_count).to eq 0
       expect(subject.bindings).to eq({})
     end
@@ -57,7 +57,7 @@ describe RDF::Query::Pattern do
     specify {expect(subject).to be_bound}
 
     it "should have one variable" do
-      expect(subject.variables?).to be_truthy
+      expect(subject).to be_variables
       expect(subject.variable_count).to eq 1
       expect(subject.variables.keys).to eq [:s]
       expect(subject.variables).to eq({s: s})
@@ -73,12 +73,12 @@ describe RDF::Query::Pattern do
     end
 
     it "should be fully bound" do
-      expect(subject.unbound?).to be_falsey
-      expect(subject.bound?).to be_truthy
+      expect(subject).not_to be_unbound
+      expect(subject).to be_bound
     end
 
     it "should have one binding" do
-      expect(subject.bindings?).to be_truthy
+      expect(subject).to be_bindings
       expect(subject.binding_count).to eq 1
       expect(subject.bindings).to eq({s: true})
     end
@@ -95,7 +95,7 @@ describe RDF::Query::Pattern do
     specify {expect(subject).to be_bound}
 
     it "should have three variables" do
-      expect(subject.variables?).to be_truthy
+      expect(subject).to be_variables
       expect(subject.variable_count).to eq 3
       expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
       expect(subject.variables).to eq({s: s, p: p, o: o})
@@ -111,12 +111,12 @@ describe RDF::Query::Pattern do
     end
 
     it "should be fully bound" do
-      expect(subject.unbound?).to be_falsey
-      expect(subject.bound?).to be_truthy
+      expect(subject).not_to be_unbound
+      expect(subject).to be_bound
     end
 
     it "should have three bindings" do
-      expect(subject.bindings?).to be_truthy
+      expect(subject).to be_bindings
       expect(subject.binding_count).to eq 3
       expect(subject.bindings).to eq({s: true, p: true, o: true})
     end
@@ -192,11 +192,45 @@ describe RDF::Query::Pattern do
   end
 
   context "with one bound and one unbound variable" do
-    it "needs a spec" # TODO
+    let(:s) {RDF::Query::Variable.new(:s, true)}
+    let(:p) {RDF::Query::Variable.new(:p)}
+    subject {described_class.new(s, p)}
+
+    specify {expect(subject).not_to be_constant}
+    specify {expect(subject).to be_variable}
+    specify {expect(subject).not_to be_bound}
+
+    it "should have two variable" do
+      expect(subject).to be_variables
+      expect(subject.variable_count).to eq 2
+      expect(subject.variables.keys).to eq [:s, :p]
+      expect(subject.variables).to eq({s: s, p: p})
+    end
+
+    it "should have one unbound variables" do
+      expect(subject.unbound_variables.size).to eq 1
+      expect(subject.unbound_variables).to eq({p: p})
+    end
+
+    it "should have one bound variable" do
+      expect(subject.bound_variables.size).to eq 1
+      expect(subject.bound_variables).to eq({s: s})
+    end
+
+    it "should not be fully bound" do
+      expect(subject).not_to be_unbound
+      expect(subject).not_to be_bound
+    end
+
+    it "should have one binding" do
+      expect(subject).to be_bindings
+      expect(subject.binding_count).to eq 1
+      expect(subject.bindings).to eq({s: true})
+    end
   end
 
   context "Examples" do
-    let!(:repo) {RDF::Repository.new {|r| r.insert(*RDF::Spec.triples)}}
+    let!(:repo) {RDF::Repository.new {|r| r.insert(RDF::Spec.triples.extend(RDF::Enumerable))}}
     let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}
     let(:pattern) {described_class.new(:s, :p, :o)}
     subject {pattern}

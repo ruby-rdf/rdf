@@ -324,7 +324,11 @@ module RDF; module Util
         content_type = format ? format.content_type.first : 'text/plain'
         # Open as a file, passing any options
         begin
-          Kernel.open(filename_or_url, "r:utf-8", options) do |file|
+          url_no_frag_or_query = RDF::URI(filename_or_url)
+          url_no_frag_or_query.query = nil
+          url_no_frag_or_query.fragment = nil
+          options[:encoding] ||= Encoding::UTF_8
+          Kernel.open(url_no_frag_or_query, "r", options) do |file|
             document_options = {
               base_uri:     filename_or_url.to_s,
               charset:      file.external_encoding.to_s,
@@ -421,15 +425,14 @@ module RDF; module Util
         unless encoding.start_with?("utf")
           body.force_encoding(Encoding::UTF_8)
           encoding = "utf-8"
-        end
 
-        # Make sure Unicode is in NFC
-        
-        begin
-          body.unicode_normalize! unless !body.unicode_normalized?
-        rescue Encoding::CompatibilityError
-          # Oh, well ...
-        end if body.respond_to?(:unicode_normalized?)
+          # Make sure Unicode is in NFC
+          begin
+            body.unicode_normalize! unless !body.unicode_normalized?
+          rescue Encoding::CompatibilityError
+            # Oh, well ...
+          end if body.respond_to?(:unicode_normalized?)
+        end
 
         super(body, "r:#{encoding}")
       end

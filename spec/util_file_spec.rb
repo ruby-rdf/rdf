@@ -3,6 +3,9 @@ require 'webmock/rspec'
 require 'rdf/ntriples'
 
 describe RDF::Util::File do
+  before(:each) {WebMock.disable_net_connect!}
+  after(:each) {WebMock.allow_net_connect!}
+
   describe ".http_adapter" do
     after do
       RDF::Util::File.http_adapter = nil
@@ -100,7 +103,7 @@ describe RDF::Util::File do
         RDF::Reader.new
       end
       expect(r).to be_a(RDF::Reader)
-    end
+    end unless ENV["CI"]
 
     it "yields a file URL" do
       r = RDF::Util::File.open_file("file:" + fixture_path("test.nt")) do |f|
@@ -113,6 +116,18 @@ describe RDF::Util::File do
 
     it "returns a local file" do
       f = RDF::Util::File.open_file(fixture_path("test.nt"))
+      expect(f).to respond_to(:read)
+      opened.opened
+    end
+
+    it "returns a local file with fragment identifier" do
+      f = RDF::Util::File.open_file(fixture_path("test.nt#fragment"))
+      expect(f).to respond_to(:read)
+      opened.opened
+    end
+
+    it "returns a local file with query" do
+      f = RDF::Util::File.open_file(fixture_path("test.nt?query"))
       expect(f).to respond_to(:read)
       opened.opened
     end
@@ -154,5 +169,5 @@ describe RDF::Util::File do
         let(:http_adapter) { RDF::Util::File::FaradayAdapter }
       end
     end
-  end
+  end unless ENV["CI"]
 end

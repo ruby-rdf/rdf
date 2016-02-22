@@ -42,6 +42,11 @@ module RDF
       @extra = extra
     end
 
+    # patch to run over loaded vocabulary
+    def patch=(patch)
+      @patch = patch
+    end
+
     # Use StrictVocabulary or Vocabulary
     def strict=(strict)
       @strict = strict
@@ -105,10 +110,10 @@ module RDF
       attributes.keys.sort_by(&:to_s).each do |key|
         next if key == :vocab
         value = Array(attributes[key])
-        component = key.is_a?(Symbol) ? "#{key}: " : "#{key.inspect} => "
+        component = key.is_a?(Symbol) ? "#{key}: " : ":#{key.inspect} => "
         value = value.first if value.length == 1
         component << if value.is_a?(Array)
-          '[' + value.map {|v| serialize_value(v, key)}.join(", ") + "]"
+          '[' + value.map {|v| serialize_value(v, key)}.sort.join(", ") + "]"
         else
           serialize_value(value, key)
         end
@@ -131,14 +136,19 @@ module RDF
     # then call #run
     def run
       @output.print %(# -*- encoding: utf-8 -*-
+        # frozen_string_literal: true
         # This file generated automatically using vocab-fetch from #{source}
         require 'rdf'
         module #{module_name}
+          # @!parse
+          #   # Vocabulary for <#{uri}>
+          #   class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary
+          #   end
           class #{class_name} < RDF::#{"Strict" if @strict}Vocabulary("#{uri}")
         ).gsub(/^        /, '') if @output_class_file
 
       # Extract statements with subjects that have the vocabulary prefix and organize into a hash of properties and values
-      vocab = RDF::Vocabulary.load(uri, location: source, extra: @extra)
+      vocab = RDF::Vocabulary.load(uri, location: source, extra: @extra, patch: @patch)
 
       # Split nodes into Class/Property/Datatype/Other
       term_nodes = {

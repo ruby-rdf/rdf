@@ -56,7 +56,7 @@ module RDF
     end
 
     ##
-    # Finds an RDF serialization format class based on the given criteria.
+    # Finds an RDF serialization format class based on the given criteria. If multiple formats are identified, the last one found is returned; this allows descrimination of equivalent formats based on load order.
     #
     # @overload for(format)
     #   Finds an RDF serialization format class based on a symbolic name.
@@ -67,7 +67,7 @@ module RDF
     # @overload for(filename)
     #   Finds an RDF serialization format class based on a file name.
     #
-    #   @param  [String] filename
+    #   @param  [String, RDF::URI] filename
     #   @return [Class]
     #
     # @overload for(options = {})
@@ -83,19 +83,17 @@ module RDF
     #   @option options [Boolean]   :has_writer   (false)
     #     Only return a format having a writer.
     #   @option options [String]          :sample (nil)
-    #     A sample of input used for performing format detection.
-    #     If we find no formats, or we find more than one, and we have a sample, we can
-    #     perform format detection to find a specific format to use, in which case
-    #     we pick the first one we find
+    #     A sample of input used for performing format detection. If we find no formats, or we find more than one, and we have a sample, we can perform format detection to find a specific format to use, in which case we pick the last one we find
     #   @return [Class]
     #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
     # @return [Class]
     def self.for(options = {})
       format = case options
-        when String
+        when String, RDF::URI
           # Find a format based on the file name
-          self.for(file_name: options) { yield if block_given? }
+          fn, options = options, {}
+          self.for(file_name: fn) { yield if block_given? }
 
         when Hash
           case
@@ -112,7 +110,7 @@ module RDF
               content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
             # Find a format based on the file name:
             when file_name = options[:file_name]
-              self.for(file_extension: File.extname(file_name.to_s)[1..-1]) { yield if block_given? }
+              self.for(file_extension: File.extname(RDF::URI(file_name).path)[1..-1]) { yield if block_given? }
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
               file_extensions[file_ext.to_sym]
@@ -121,21 +119,23 @@ module RDF
         when Symbol
           # Try to find a match based on the full class name
           # We want this to work even if autoloading fails
-          format = options
-          @@subclasses.detect { |klass| klass.to_sym == format } ||
-          case format
-          when :ntriples
-            RDF::NTriples::Format
-          when :nquads
-            RDF::NQuads::Format
+          fmt, options = options, {}
+          classes = @@subclasses.select { |klass| klass.symbols.include?(fmt) }
+          if classes.empty?
+            classes = case fmt
+            when :ntriples then [RDF::NTriples::Format]
+            when :nquads   then [RDF::NQuads::Format]
+            else                []
+            end
           end
+          classes
       end
 
       if format.is_a?(Array)
         format = format.select {|f| f.reader} if options[:has_reader]
         format = format.select {|f| f.writer} if options[:has_writer]
         
-        return format.first if format.uniq.length == 1
+        return format.last if format.uniq.length == 1
       elsif !format.nil?
         return format
       end
@@ -144,15 +144,14 @@ module RDF
       if sample = (options[:sample] if options.is_a?(Hash)) || (yield if block_given?)
         sample = sample.dup.to_s
         sample.force_encoding(Encoding::ASCII_8BIT) if sample.respond_to?(:force_encoding)
-        # Given a sample, perform format detection across the appropriate formats, choosing
-        # the first that matches
+        # Given a sample, perform format detection across the appropriate formats, choosing the last that matches
         format ||= @@subclasses
 
-        # Return first format that has a positive detection
-        format.detect {|f| f.detect(sample)} || format.first
+        # Return last format that has a positive detection
+        format.reverse.detect {|f| f.detect(sample)} || format.last
       elsif format.is_a?(Array)
-        # Otherwise, just return the first matching format
-        format.first
+        # Otherwise, just return the last matching format
+        format.last
       else
         nil
       end
@@ -192,7 +191,7 @@ module RDF
     #
     # @return [Array<Symbol>]
     def self.reader_symbols
-      @@readers.keys.compact.map(&:to_sym).uniq
+      @@readers.keys.map(&:symbols).flatten.uniq
     end
 
     ##
@@ -218,7 +217,7 @@ module RDF
     #
     # @return [Array<Symbol>]
     def self.writer_symbols
-      @@writers.keys.compact.map(&:to_sym).uniq
+      @@writers.keys.map(&:symbols).flatten.uniq
     end
 
     ##
@@ -235,13 +234,26 @@ module RDF
     end
 
     ##
-    # Returns a symbol appropriate to use with RDF::Format.for()
+    # Returns a symbol appropriate to use with `RDF::Format.for()`
+    #
+    # @note Defaults to the last element of the class name before `Format` downcased and made a symbol. Individual formats can override this.
     # @return [Symbol]
     def self.to_sym
       elements = self.to_s.split("::")
       sym = elements.pop
       sym = elements.pop if sym == 'Format'
       sym.downcase.to_s.to_sym if sym.is_a?(String)
+    end
+
+    ##
+    # Returns the set of symbols for a writer appropriate for use with with `RDF::Format.for()`
+    #
+    # @note Individual formats can override this to provide an array of symbols; otherwise, it uses `self.to_sym`
+    # @return [Array<Symbol>]
+    # @see to_sym
+    # @since 2.0
+    def self.symbols
+      [self.to_sym]
     end
 
     ##
@@ -347,6 +359,12 @@ module RDF
       end
     end
 
+    ##
+    # Hash of CLI commands appropriate for this format
+    # @return [Hash{Symbol => Lambda(Array, Hash)}]
+    def self.cli_commands
+      {}
+    end
 
     ##
     # Use a text sample to detect the format of an input file. Sub-classes implement

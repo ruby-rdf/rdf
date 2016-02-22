@@ -18,7 +18,6 @@ module RDF; class Literal
     # @param  [Float, #to_f] value
     # @option options [String] :lexical (nil)
     def initialize(value, options = {})
-      #require 'byebug'; byebug
       @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   ||= value if value.is_a?(String)
@@ -67,6 +66,21 @@ module RDF; class Literal
     end
 
     ##
+    # Returns `true` if this literal is equal to `other`.
+    #
+    # @param  [Object] other
+    # @return [Boolean] `true` or `false`
+    # @since  0.3.0
+    def ==(other)
+      if valid? && infinite? && other.respond_to?(:infinite?) && other.infinite?
+        infinite? == other.infinite?
+        # JRuby INF comparisons differ from MRI
+      else
+        super
+      end
+    end
+
+    ##
     # Compares this literal to `other` for sorting purposes.
     #
     # @param  [Object] other
@@ -75,9 +89,11 @@ module RDF; class Literal
     def <=>(other)
       case other
         when ::Numeric
-          to_d <=> other
-        when RDF::Literal::Decimal, RDF::Literal::Double
-          to_d <=> other.to_d
+          to_f <=> other
+        when RDF::Literal::Decimal
+          to_f <=> other.to_d
+        when RDF::Literal::Double
+          to_f <=> other.to_f
         else super
       end
     end

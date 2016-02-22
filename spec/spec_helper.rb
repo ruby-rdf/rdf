@@ -1,4 +1,22 @@
 require "bundler/setup"
+begin
+  require "codeclimate-test-reporter"
+  require 'simplecov'
+  require 'coveralls'
+  CodeClimate::TestReporter.start
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter
+  ])
+  SimpleCov.start do
+    add_group "Mixins", 'lib/rdf/mixin'
+    add_group "Models", 'lib/rdf/model'
+    add_group "Query", 'lib/rdf/query'
+    add_filter "/spec/"
+  end
+rescue LoadError => e
+  STDERR.puts "Coverage Skipped: #{e.message}"
+end
 require 'rdf'
 require 'rdf/vocab'
 require 'rdf/spec'

@@ -56,12 +56,12 @@ module RDF; module Util
 
     ##
     # This implementation relies on `ObjectSpace#_id2ref` and performs
-    # optimally on Ruby >= 1.9.x; however, it does not work on JRuby
+    # optimally on Ruby >= 2.x; however, it does not work on JRuby
     # by default since much `ObjectSpace` functionality on that platform is
     # disabled unless the `-X+O` startup option is given.
     #
-    # @see http://www.ruby-doc.org/core-1.9/ObjectSpace.html
-    # @see http://www.ruby-doc.org/stdlib-1.9.3/libdoc/weakref/rdoc/WeakRef.html
+    # @see http://ruby-doc.org/core-2.2.2/ObjectSpace.html
+    # @see http://ruby-doc.org/stdlib-2.2.0/libdoc/weakref/rdoc/WeakRef.html
     class ObjectSpaceCache < Cache
       ##
       # @param  [Object] key
@@ -100,9 +100,9 @@ module RDF; module Util
 
     ##
     # This implementation uses the `WeakRef` class from Ruby's standard
-    # library, and provides adequate performance on JRuby and on Ruby 1.9.x.
+    # library, and provides adequate performance on JRuby and on Ruby 2.x.
     #
-    # @see http://ruby-doc.org/ruby-1.9/classes/WeakRef.html
+    # @see http://ruby-doc.org/stdlib-2.2.0/libdoc/weakref/rdoc/WeakRef.html
     class WeakRefCache < Cache
       ##
       # @param  [Integer] capacity

@@ -13,7 +13,7 @@ module RDF
     def self.to_str() STRING end
 
     ##
-    # @return [Array(Integer, Integer, Integer)]
-    def self.to_a() [MAJOR, MINOR, TINY] end
+    # @return [Array(String, String, String, String)]
+    def self.to_a() [MAJOR, MINOR, TINY, EXTRA].compact end
   end
 end

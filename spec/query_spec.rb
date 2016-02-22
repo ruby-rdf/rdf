@@ -67,8 +67,14 @@ describe RDF::Query do
           it "returns a single empty solution (query execute)" do
             expect(subject.execute(graph).map(&:to_hash)).to eq [{}]
           end
+          it "yields a single empty solution (query execute)" do
+            expect {|b| subject.execute(graph, &b)}.to yield_successive_args(RDF::Query::Solution.new)
+          end
           it "returns a single empty solution (graph execute)" do
             expect(graph.query(subject).map(&:to_hash)).to eq [{}]
+          end
+          it "yields a single empty solution (graph execute)" do
+            expect {|b| graph.query(subject, &b)}.to yield_successive_args(RDF::Query::Solution.new)
           end
         end
       end
@@ -131,14 +137,14 @@ describe RDF::Query do
 
        context "with no graph_name" do
          it "returns statements differing in context (direct execute)" do
-           expect(subject.execute(repo).map(&:to_hash)).to eq [
-             {s: EX.s1, p: EX.p1, o: EX.o1},
-             {s: EX.s2, p: EX.p2, o: EX.o2}]
+           expect(subject.execute(repo).map(&:to_hash))
+             .to contain_exactly({s: EX.s1, p: EX.p1, o: EX.o1},
+                                 {s: EX.s2, p: EX.p2, o: EX.o2})
          end
          it "returns statements differing in context (graph execute)" do
-           expect(repo.query(subject).map(&:to_hash)).to eq [
-             {s: EX.s1, p: EX.p1, o: EX.o1},
-             {s: EX.s2, p: EX.p2, o: EX.o2}]
+           expect(repo.query(subject).map(&:to_hash))
+             .to contain_exactly({s: EX.s1, p: EX.p1, o: EX.o1},
+                                 {s: EX.s2, p: EX.p2, o: EX.o2})
          end
        end
 
@@ -886,7 +892,7 @@ describe RDF::Query do
   end
 
   context "Examples" do
-    let!(:graph) {RDF::Graph.new.insert(*RDF::Spec.triples)}
+    let!(:graph) {RDF::Graph.new.insert(RDF::Spec.triples.extend(RDF::Enumerable))}
     subject {
       query = RDF::Query.new do
         pattern [:person, RDF.type,  FOAF.Person]

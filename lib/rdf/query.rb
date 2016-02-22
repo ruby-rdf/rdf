@@ -109,8 +109,10 @@ module RDF
     #   @param [Array<Solution>] args
     #   @return [Solutions] returns new solutions including the arguments, which must each be a {Solution}
     def self.Solutions(*args)
-      return args.first if args.length == 1 && args.first.is_a?(Solutions)
-      args = args.first if args.first.is_a?(Array) && args.length == 1
+       if args.length == 1
+        return args[0] if args[0].is_a?(Solutions)
+        args = args[0] if args[0].is_a?(Array)
+      end
       return Solutions.new(args)
     end
 
@@ -154,8 +156,6 @@ module RDF
     #     Names that are against unbound variables match either default
     #     or named graphs.
     #     The name of `false` will only match against the default graph.
-    #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
-    #     Alias for `:graph_name`. The :context option is deprecated in RDF.rb 2.0.
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :name (nil)
     #     Alias for `:graph_name`.
     #   @yield  [query]
@@ -175,8 +175,6 @@ module RDF
     #     Names that are against unbound variables match either default
     #     or named graphs.
     #     The name of `false` will only match against the default graph.
-    #   @option options [RDF::Resource, RDF::Query::Variable, false] :context (nil)
-    #     Alias for `:graph_name`. The :context option is deprecated in RDF.rb 2.0.
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :name (nil)
     #     Alias for `:graph_name`.
     #   @yield  [query]
@@ -184,10 +182,6 @@ module RDF
     #   @yieldreturn [void] ignored
     def initialize(*patterns, &block)
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
-      if @options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Query#initialize is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        @options[:graph_name] ||= options.delete(:context)
-      end
       patterns << @options if patterns.empty?
       @variables = {}
       @solutions = Query::Solutions(@options.delete(:solutions))
@@ -276,14 +270,14 @@ module RDF
     # If the query nas no patterns, it returns a single empty solution as
     # per SPARQL 1.1 _Empty Group Pattern_.
     #
+    # @note solutions could be an Iterator, but this algorithm cycles over solutions, which requires them to be an array internally.
+    #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
     # @param  [Hash{Symbol => Object}] options
     #   any additional keyword options
     # @option options [Hash{Symbol => RDF::Term}] bindings
     #   optional variable bindings to use
-    # @option options [RDF::Resource, RDF::Query::Variable, false] context (nil)
-    #   Alias for `:graph_name`. The :context option is deprecated in RDF.rb 2.0.
     # @option options [RDF::Resource, RDF::Query::Variable, false] graph_name (nil)
     #   Specific graph name for matching against queryable;
     #   overrides default graph defined on query.
@@ -302,10 +296,6 @@ module RDF
     def execute(queryable, options = {}, &block)
       validate!
       options = options.dup
-      if options.has_key?(:context)
-        warn "[DEPRECATION] the :contexts option to Query#execute is deprecated in RDF.rb 2.0, use :graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-        options[:graph_name] ||= options.delete(:context)
-      end
 
       # just so we can call #keys below without worrying
       options[:bindings] ||= {}
@@ -436,38 +426,14 @@ module RDF
     # Scope the query to named graphs matching value
     # @param [RDF::IRI, RDF::Query::Variable] value
     # @return [RDF::IRI, RDF::Query::Variable]
-    # @deprecated Use {#graph_name=} instead.
-    def context=(value)
-      warn "[DEPRECATION] Query#context= is deprecated in RDF.rb 2.0, use Query#graph_name= instead. Called from #{Gem.location_of_caller.join(':')}"
-      self.graph_name = value
-    end
-
-    # Scope the query to named graphs matching value
-    # @param [RDF::IRI, RDF::Query::Variable] value
-    # @return [RDF::IRI, RDF::Query::Variable]
     def graph_name=(value)
       options[:graph_name] = value
     end
 
     # Scope of this query, if any
     # @return [RDF::IRI, RDF::Query::Variable]
-    # @deprecated Use {#graph_name} instead.
-    def context
-      warn "[DEPRECATION] Query#context is deprecated in RDF.rb 2.0, use Query#graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-      graph_name
-    end
-
-    # Scope of this query, if any
-    # @return [RDF::IRI, RDF::Query::Variable]
     def graph_name
       options[:graph_name]
-    end
-
-    # Apply the context specified (or configured) to all patterns that have no context
-    # @param [RDF::IRI, RDF::Query::Variable] context (self.context)
-    def apply_context(context = options[:context])
-      warn "[DEPRECATION] Query#apply_context is deprecated in RDF.rb 2.0, use Query#apply_graph_name instead. Called from #{Gem.location_of_caller.join(':')}"
-      apply_graph_name(context)
     end
 
     # Apply the graph name specified (or configured) to all patterns that have no graph name

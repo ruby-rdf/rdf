@@ -1,7 +1,12 @@
 # -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 # This file generated automatically using vocab-fetch from etc/xsd.ttl
 require 'rdf'
 module RDF
+  # @!parse
+  #   # Vocabulary for <http://www.w3.org/2001/XMLSchema#>
+  #   class XSD < RDF::Vocabulary
+  #   end
   class XSD < RDF::Vocabulary("http://www.w3.org/2001/XMLSchema#")
 
     # Datatype definitions

@@ -3,33 +3,21 @@ source "https://rubygems.org"
 gemspec
 
 group :develop do
-  gem "rdf-spec",       git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
-  gem "rdf-vocab",      git: "git://github.com/ruby-rdf/rdf-vocab.git", branch: "develop"
-  gem 'linkeddata',     git: "git://github.com/ruby-rdf/linkeddata.git", branch: "develop"
-  gem 'rdf-aggregate-repo', git: "git://github.com/ruby-rdf/rdf-aggregate-repo.git", branch: "develop"
-  gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
-  gem 'rdf-n3',         git: "git://github.com/ruby-rdf/rdf-n3.git", branch: "develop"
-  gem "rdf-rdfxml",     git: "git://github.com/ruby-rdf/rdf-rdfxml.git", branch: "develop"
-  gem 'rdf-rdfa',       git: "git://github.com/ruby-rdf/rdf-rdfa.git", branch: "develop"
-  gem 'rdf-trig',       git: "git://github.com/ruby-rdf/rdf-trig.git", branch: "develop"
-  gem 'rdf-turtle',     git: "git://github.com/ruby-rdf/rdf-turtle.git", branch: "develop"
-  gem 'rdf-microdata',  git: "git://github.com/ruby-rdf/rdf-microdata.git", branch: "develop"
-  gem "rdf-xsd",        git: "git://github.com/ruby-rdf/rdf-xsd.git", branch: "develop"
-  gem 'json-ld',        git: "git://github.com/ruby-rdf/json-ld.git", branch: "develop"
-  gem 'sparql',         git: "git://github.com/ruby-rdf/sparql.git", branch: "develop"
-  gem 'sparql-client',  git: "git://github.com/ruby-rdf/sparql-client.git", branch: "develop"
-  gem 'sxp',            git: "git://github.com/gkellogg/sxp-ruby.git"
+  gem 'rdf-isomorphic', github: "ruby-rdf/rdf-isomorphic",  branch: "develop"
+  gem "rdf-reasoner",   github: "ruby-rdf/rdf-reasoner",    branch: "develop"
+  gem "rdf-spec",       github: "ruby-rdf/rdf-spec",        branch: "develop"
+  gem "rdf-vocab",      github: "ruby-rdf/rdf-vocab",       branch: "develop"
+  gem "rdf-xsd",        github: "ruby-rdf/rdf-xsd",         branch: "develop"
+
   gem 'rest-client-components'
+  gem 'benchmark-ips'
 end
 
 group :debug do
   gem 'psych', platforms: [:mri, :rbx]
   gem "wirble"
   gem "redcarpet", platforms: :ruby
-  gem "debugger", platforms: :mri_19
   gem "byebug", platforms: :mri
-  gem "ruby-debug", platforms: :jruby
-  gem "pry", platforms: :rbx
   gem 'guard-rspec'
 end
 
@@ -37,6 +25,9 @@ group :test do
   gem "rake"
   gem "equivalent-xml"
   gem 'fasterer'
+  gem 'simplecov',  require: false, platform: :mri
+  gem 'coveralls',  require: false, platform: :mri
+  gem "codeclimate-test-reporter", require: false
 end
 
 platforms :rbx do

@@ -148,6 +148,7 @@ module RDF
     #
     # @param  [Object] value
     # @option options [Symbol]  :language (nil)
+    #   Language is downcased to ensure proper matching
     # @option options [String]  :lexical (nil)
     #   Supplied lexical representation of this literal,
     #   otherwise it comes from transforming `value` to a string form
@@ -166,7 +167,7 @@ module RDF
       @string   = value if !defined?(@string) && value.is_a?(String)
       @string   = @string.encode(Encoding::UTF_8) if @string
       @object   = @string if @string && @object.is_a?(String)
-      @language = options[:language].to_s.to_sym if options[:language]
+      @language = options[:language].to_s.downcase.to_sym if options[:language]
       @datatype = RDF::URI(options[:datatype]) if options[:datatype]
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= @language ? RDF.langString : RDF::XSD.string
@@ -193,14 +194,6 @@ module RDF
     # @return [Boolean] `true` or `false`
     def literal?
       true
-    end
-
-    ##
-    # Returns `false`.
-    #
-    # @return [Boolean] `true` or `false`
-    def anonymous?
-      false
     end
 
     ##
@@ -275,7 +268,7 @@ module RDF
         (self.class.eql?(other.class) &&
          self.value_hash == other.value_hash &&
          self.value.eql?(other.value) &&
-         self.language.to_s.downcase.eql?(other.language.to_s.downcase) &&
+         self.language.to_s.eql?(other.language.to_s) &&
          self.datatype.eql?(other.datatype))
     end
 
@@ -296,7 +289,7 @@ module RDF
         case
         when self.eql?(other)
           true
-        when self.has_language? && self.language.to_s.downcase == other.language.to_s.downcase
+        when self.has_language? && self.language.to_s == other.language.to_s
           # Literals with languages can compare if languages are identical
           self.value_hash == other.value_hash && self.value == other.value
         when self.simple? && other.simple?
@@ -412,19 +405,27 @@ module RDF
     # @return [RDF::Literal] `self`
     # @since  0.3.0
     def canonicalize!
-      @language = @language.to_s.downcase.to_sym if @language
       self
     end
 
     ##
-    # Returns the base representation of this URI.
+    # Escape a literal using ECHAR escapes.
     #
-    # @return [Sring]
-    def to_base
-      text = %("#{escape(value)}")
-      text << "@#{language}" if has_language?
-      text << "^^#{datatype.to_base}" if has_datatype?
-      text
+    #    ECHAR ::= '\' [tbnrf"'\]
+    #
+    # @note N-Triples only requires '\"\n\r' to be escaped.
+    #
+    # @param  [String] string
+    # @return [String]
+    # @see {RDF::Term#escape}
+    def escape(string)
+      string.gsub('\\', '\\\\').
+             gsub("\t", '\\t').
+             gsub("\b", '\\b').
+             gsub("\n", '\\n').
+             gsub("\r", '\\r').
+             gsub("\f", '\\f').
+             gsub('"', '\\"')
     end
 
     ##

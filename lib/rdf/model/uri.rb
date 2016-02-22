@@ -10,7 +10,7 @@ module RDF
   #   uri = RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating a URI reference (2)
-  #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/rdf')
+  #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/gems/rdf')
   #     #=> RDF::URI.new("http://rubygems.org/gems/rdf")
   #
   # @example Creating an interned URI reference
@@ -39,7 +39,7 @@ module RDF
       [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
       [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
       [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
-      [\\u{D0000}-\\u{DFFFD}]|[\\u{E0000}-\\u{EFFFD}]
+      [\\u{D0000}-\\u{DFFFD}]|[\\u{E1000}-\\u{EFFFD}]
     EOS
     IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]").freeze
     SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*").freeze
@@ -202,14 +202,9 @@ module RDF
     ##
     # @overload URI(uri, options = {})
     #   @param  [URI, String, #to_s]    uri
-    #   @param  [Hash{Symbol => Object}] options
-    #   @option options [Boolean] :validate (false)
-    #   @option options [Boolean] :canonicalize (false)
     #
     # @overload URI(options = {})
     #   @param  [Hash{Symbol => Object}] options
-    #   @option options [Boolean] :validate (false)
-    #   @option options [Boolean] :canonicalize (false)
     #   @option [String, #to_s] :scheme The scheme component.
     #   @option [String, #to_s] :user The user component.
     #   @option [String, #to_s] :password The password component.
@@ -224,33 +219,34 @@ module RDF
     #   @option [String, #to_s] :path The path component.
     #   @option [String, #to_s] :query The query component.
     #   @option [String, #to_s] :fragment The fragment component.
-    def initialize(*args)
-      options = args.last.is_a?(Hash) ? args.last : {}
+    #
+    #   @param [Boolean] validate (false)
+    #   @param [Boolean] canonicalize (false)
+    def initialize(*args, validate: false, canonicalize: false, **options)
       uri = args.first
-      case uri
-      when Hash
+      if uri
+        @value = uri.to_s
+        if @value.encoding != Encoding::UTF_8
+          @value = @value.dup if @value.frozen?
+          @value.force_encoding(Encoding::UTF_8)
+        end
+      else
         %w(
           scheme
           user password userinfo
           host port authority
           path query fragment
         ).map(&:to_sym).each do |meth|
-          if uri.has_key?(meth)
-            self.send("#{meth}=".to_sym, uri[meth])
+          if options.has_key?(meth)
+            self.send("#{meth}=".to_sym, options[meth])
           else
             self.send(meth)
           end
         end
-      else
-        @value = uri.to_s
-        if @value.encoding != Encoding::UTF_8
-          @value = @value.dup if @value.frozen?
-          @value.force_encoding(Encoding::UTF_8)
-        end
       end
 
-      validate!     if options[:validate]
-      canonicalize! if options[:canonicalize]
+      validate!     if validate
+      canonicalize! if canonicalize
     end
 
     ##
@@ -341,10 +337,11 @@ module RDF
     ##
     # Determine if the URI is a valid according to RFC3987
     #
+    # Note that RDF URIs syntactically can contain Unicode escapes, which are unencoded in the internal representation. To validate, %-encode specifically excluded characters from IRIREF
+    #
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      # Validate relative to RFC3987
       to_s.match(RDF::URI::IRI) || false
     end
 
@@ -355,7 +352,7 @@ module RDF
     # @raise  [ArgumentError] if the URI is invalid
     # @since  0.3.0
     def validate!
-      raise ArgumentError, "#{to_s.inspect} is not a valid IRI" if invalid?
+      raise ArgumentError, "#{to_base.inspect} is not a valid IRI" if invalid?
       self
     end
 
@@ -475,7 +472,7 @@ module RDF
     # @example Building a HTTP URL
     #     RDF::URI.new('http://example.org') / 'jhacker' / 'foaf.ttl'
     #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
-    # @example Building a HTTP URL
+    # @example Building a HTTP URL (absolute path components)
     #     RDF::URI.new('http://example.org/') / '/jhacker/' / '/foaf.ttl'
     #     #=> RDF::URI('http://example.org/jhacker/foaf.ttl')
     # @example Using an anchored base URI
@@ -788,14 +785,6 @@ module RDF
     # @return [RDF::URI] `self`
     def to_uri
       self
-    end
-
-    ##
-    # Returns the base representation of this URI.
-    #
-    # @return [Sring]
-    def to_base
-      "<#{escape(to_s)}>"
     end
 
     ##
@@ -1216,16 +1205,22 @@ module RDF
     # Sets the query component for this URI from a Hash object.
     # An empty Hash or Array will result in an empty query string.
     #
-    # @example
+    # @example Hash with single and array values
     #   uri.query_values = {a: "a", b: ["c", "d", "e"]}
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
+    #
+    # @example Array with Array values including repeated variables
     #   uri.query_values = [['a', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e']]
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
+    #
+    # @example Array with Array values including multiple elements
     #   uri.query_values = [['a', 'a'], ['b', ['c', 'd', 'e']]]
     #   uri.query
     #   # => "a=a&b=c&b=d&b=e"
+    #
+    # @example Array with Array values having only one entry
     #   uri.query_values = [['flag'], ['key', 'value']]
     #   uri.query
     #   # => "flag&key=value"
@@ -1245,7 +1240,13 @@ module RDF
           if v.nil?
             k
           else
-            "#{k}=#{normalize_segment(v.to_s, UNRESERVED)}"
+            Array(v).map do |vv|
+              if vv === TrueClass
+                k
+              else
+                "#{k}=#{normalize_segment(vv.to_s, UNRESERVED)}"
+              end
+            end.join("&")
           end
         end
       when Hash

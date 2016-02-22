@@ -5,7 +5,7 @@ require 'rdf/cli'
 
 options = RDF::CLI.options do
   self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
-    $VERBOSE = true
+    self.options[:logger].level = Logger::INFO
   end
 
   self.on('-V', '--version', 'Display the RDF.rb version and exit.') do
