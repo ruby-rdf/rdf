@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
 
   gem.name               = 'rdf'
   gem.homepage           = 'http://ruby-rdf.github.com/'
-  gem.license            = 'Public Domain' if gem.respond_to?(:license=)
+  gem.license            = 'Unlicense'
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
   gem.rubyforge_project  = 'rdf'
@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.email              = 'public-rdf-ruby@w3.org'
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS CREDITS README UNLICENSE VERSION bin/rdf etc/doap.nt) + Dir.glob('lib/**/*.rb')
+  gem.files              = %w(AUTHORS CREDITS README.md UNLICENSE VERSION bin/rdf etc/doap.nt) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w(rdf)
   gem.default_executable = gem.executables.first
@@ -30,8 +30,8 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency     'link_header', '~> 0.0', '>= 0.0.8'
   gem.add_runtime_dependency     'hamster',     '~> 2.0'
   gem.add_development_dependency 'rdf-spec',    '>= 2.0.0.beta', '< 3'
-  gem.add_development_dependency 'rdf-vocab',   '>= 0.8'
-  gem.add_development_dependency 'rdf-xsd',     '>= 1.1'
+  gem.add_development_dependency 'rdf-vocab',   '>= 2.0.0.beta', '< 3'
+  gem.add_development_dependency 'rdf-xsd',     '>= 2.0.0.beta', '< 3'
   gem.add_development_dependency 'rest-client', '~> 1.7'
   gem.add_development_dependency 'rspec',       '~> 3.0'
   gem.add_development_dependency 'rspec-its',   '~> 1.0'
