@@ -16,7 +16,13 @@ module RDF; module Util
     def logger(options = {})
       logger = options.fetch(:logger, @logger)
       logger = @options[:logger] if logger.nil? && @options
-      logger = (@options || options)[:logger] = $stderr if logger.nil?
+      if logger.nil?
+        # Unless otherwise specified, use $stderr
+        logger = (@options || options)[:logger] = $stderr
+
+        # Reset log_statistics so that it's not inherited across different instances
+        logger.log_statistics.clear if logger.respond_to?(:log_statistics)
+      end
       logger = (@options || options)[:logger] = ::Logger.new(::File.open(::File::NULL, "w"))  unless logger # Incase false was used, which is frozen
       logger.extend(LoggerBehavior) unless logger.is_a?(LoggerBehavior)
       logger
