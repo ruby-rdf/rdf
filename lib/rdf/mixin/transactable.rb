@@ -20,22 +20,37 @@ module RDF
     # Executes the given block in a transaction.
     #
     # @example running a transaction
-    #   repository.transaction do |tx|
+    #   repository.transaction(mutable: true) do |tx|
     #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
     #   end
     #
     # Raising an error within the transaction block causes automatic rollback.
     #
-    # @param mutable [Boolean] 
-    #   allows changes to the transaction, otherwise it is a read-only snapshot of the underlying repository.
-    # @yield  [tx]
-    # @yieldparam  [RDF::Transaction] tx
-    # @yieldreturn [void] ignored
-    # @return [self]
+    # @example manipulating a live transaction
+    #   tx = repository.transaction(mutable: true)
+    #   tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
+    #   tx.execute
+    #
+    # @overload transaction(mutable: false)
+    #   @param mutable [Boolean]
+    #   @return [RDF::Transaction] an open transaction; the client is 
+    #     responsible for closing the transaction via #execute or #rollback
+    #
+    # @overload transaction(mutable: false, &block)
+    #   @param mutable [Boolean] 
+    #     allows changes to the transaction, otherwise it is a read-only 
+    #     snapshot of the underlying repository.
+    #   @yield  [tx]
+    #   @yieldparam  [RDF::Transaction] tx
+    #   @yieldreturn [void] ignored
+    #   @return [self]
+    #
     # @see    RDF::Transaction
     # @since  0.3.0
     def transaction(mutable: false, &block)
       tx = begin_transaction(mutable: mutable)
+      return tx unless block_given?
+
       begin
         case block.arity
           when 1 then block.call(tx)
