@@ -43,7 +43,6 @@ module RDF; class Literal
     def canonicalize!
       # Can't use simple %f transformation due to special requirements from
       # N3 tests in representation
-      require 'byebug'; byebug if @object.nil?
       @string = case
         when @object.nan?      then 'NaN'
         when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
