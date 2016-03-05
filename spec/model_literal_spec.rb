@@ -422,6 +422,7 @@ describe RDF::Literal do
       %w(1.0e+1    1.0E1),
       %w(1.0e-10   1.0E-10),
       %w(123.456e4 1.23456E6),
+      %w(1.E-8     1.0E-8),
       %w(+INF      INF),
       %w(INF       INF),
       %w(-INF      -INF),
