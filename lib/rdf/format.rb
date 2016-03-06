@@ -361,7 +361,7 @@ module RDF
 
     ##
     # Hash of CLI commands appropriate for this format
-    # @return [Hash{Symbol => Lambda(Array, Hash)}]
+    # @return [Hash{Symbol => {description: String, lambda: Lambda(Array, Hash)}}]
     def self.cli_commands
       {}
     end

@@ -11,7 +11,7 @@ describe RDF::CLI do
     nq: fixture_path('test.nq'),
   }
 
-  describe ".options" do
+  describe "options" do
     it "calls a block" do
       expect {|b| RDF::CLI.options(&b)}.to yield_control
     end
@@ -26,6 +26,22 @@ describe RDF::CLI do
       ARGV.replace %w(help --evaluate foo)
       options = RDF::CLI.options
       expect(options.options[:evaluate]).to eql "foo"
+    end
+
+    describe "add_command" do
+      around(:each) do |example|
+        orig_commands = RDF::CLI::COMMANDS.dup
+        example.run
+        RDF::CLI::COMMANDS.clear
+        RDF::CLI::COMMANDS.merge!(orig_commands)
+      end
+
+      it "adds a command" do
+        RDF::CLI.add_command(:foo) do |argv, opts|
+          $stdout.puts "Hello, World!"
+        end
+        expect {RDF::CLI.exec(["foo"])}.to write("Hello, World!").to(:output)
+      end
     end
 
     describe "--input-format" do
@@ -85,34 +101,34 @@ describe RDF::CLI do
     end
 
     it "serializes to NTriples" do
-      expect {RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]])}.to write.to(:output)
+      expect {RDF::CLI.exec(["serialize", TEST_FILES[:nt]])}.to write.to(:output)
     end
 
     it "serializes to NTriples from $stdin" do
       $stdin = File.open(TEST_FILES[:nt])
-      expect {RDF::CLI.exec_command("serialize", [])}.to write.to(:output)
+      expect {RDF::CLI.exec(["serialize"])}.to write.to(:output)
     end
 
     it "serializes to NTriples from evaluate" do
-      expect {RDF::CLI.exec_command("serialize", [], evaluate: File.read(TEST_FILES[:nt]))}.to write.to(:output)
+      expect {RDF::CLI.exec(["serialize"], evaluate: File.read(TEST_FILES[:nt]))}.to write.to(:output)
     end
 
     it "serializes to NQuads" do
       expect {
-        RDF::CLI.exec_command("serialize", [TEST_FILES[:nt]], output_format: :nquads)
+        RDF::CLI.exec(["serialize", TEST_FILES[:nt]], output_format: :nquads)
       }.to write.to(:output)
     end
   end
 
   it "#help" do
-    expect {RDF::CLI.exec_command("help", [TEST_FILES[:nt]])}.to write(:anything)
+    expect {RDF::CLI.exec(["help", TEST_FILES[:nt]])}.to write(:anything)
   end
 
   describe "#count" do
     TEST_FILES.each do |fmt, file|
       it "counts #{fmt}" do
         g = RDF::Repository.load(file)
-        expect {RDF::CLI.exec_command("count", [file])}.to write(/Parsed #{g.count} statements/)
+        expect {RDF::CLI.exec(["count", file])}.to write(/Parsed #{g.count} statements/)
       end
     end
   end
@@ -120,7 +136,7 @@ describe RDF::CLI do
   describe "#subjects" do
     TEST_FILES.each do |fmt, file|
       it "gets subjects #{fmt}" do
-        expect {RDF::CLI.exec_command("subjects", [file])}.to write(:something)
+        expect {RDF::CLI.exec(["subjects", file])}.to write(:something)
       end
     end
   end
@@ -128,7 +144,7 @@ describe RDF::CLI do
   describe "#objects" do
     TEST_FILES.each do |fmt, file|
       it "gets objects #{fmt}" do
-        expect {RDF::CLI.exec_command("objects", [file])}.to write(:anything)
+        expect {RDF::CLI.exec(["objects", file])}.to write(:anything)
       end
     end
   end
@@ -136,7 +152,7 @@ describe RDF::CLI do
   describe "#predicates" do
     TEST_FILES.each do |fmt, file|
       it "gets predicates #{fmt}" do
-        expect {RDF::CLI.exec_command("predicates", [file])}.to write(:something)
+        expect {RDF::CLI.exec(["predicates", file])}.to write(:something)
       end
     end
   end
@@ -144,7 +160,7 @@ describe RDF::CLI do
   describe "#lenghts" do
     TEST_FILES.each do |fmt, file|
       it "gets lenghts #{fmt}" do
-        expect {RDF::CLI.exec_command("lenghts", [file])}.to write(:something)
+        expect {RDF::CLI.exec(["lenghts", file])}.to write(:something)
       end
     end
   end
@@ -153,7 +169,7 @@ describe RDF::CLI do
     TEST_FILES.each do |fmt, file|
       it "validates #{fmt}" do
         g = RDF::Repository.load(file)
-        expect {RDF::CLI.exec_command("validate", [file])}.to write(/Validated #{g.count} statements/)
+        expect {RDF::CLI.exec(["validate", file])}.to write(/Input is valid/)
       end
     end
   end
