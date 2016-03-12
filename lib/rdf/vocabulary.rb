@@ -263,27 +263,24 @@ module RDF
       end
 
       ##
-      # Load a vocabulary, optionally from a separate location.
+      # Load an RDFS vocabulary, optionally from a separate location.
       #
       # @param [URI, #to_s] url
       # @param [String] class_name
       #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
-      # @param [URI, #to_s] location
-      #   Location from which to load the vocabulary, if not from `uri`.
+      # @param [RDF::Queryable, URI, #to_s] location
+      #   Location from which to load the vocabulary, or Queryable containing already loaded vocabulary triples, if not from `uri`.
       # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
       #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
       # @param [String] patch
       #   A patch to run on the graph after loading. Requires the `ld-patch` gem to be available.
       # @return [RDF::Vocabulary] the loaded vocabulary
+      # @deprecated Use Vocabulary.from_graph
       def load(url, class_name: nil, location: nil, extra: nil, patch: nil)
+        warn "[DEPRECATION] Vocabulary.load is deprecated, use Vocabulary.from_graph instead. Called from #{Gem.location_of_caller.join(':')}"
         source = location || url
-        vocab = if class_name
-          Object.const_set(class_name, Class.new(self.create(url)))
-        else
-          Class.new(self.create(url))
-        end
 
-        graph = RDF::Repository.load(source)
+        graph = source.is_a?(RDF::Queryable) ? source : RDF::Repository.load(source)
 
         if patch
           begin
@@ -294,6 +291,27 @@ module RDF
             raise ArgumentError, "patching vocabulary requires the ld-patch gem"
           end
         end
+
+        from_graph(graph, url: url, class_name: nil, extra: extra)
+      end
+
+      ##
+      # Create a vocabulary from a graph or enumerable
+      #
+      # @param [RDF::Enumerable] graph
+      # @param [URI, #to_s] url
+      # @param [String] class_name
+      #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
+      # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
+      #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
+      # @return [RDF::Vocabulary] the loaded vocabulary
+      def from_graph(graph, url: nil, class_name: nil, extra: nil)
+        vocab = if class_name
+          Object.const_set(class_name, Class.new(self.create(url)))
+        else
+          Class.new(self.create(url))
+        end
+
         term_defs = {}
         graph.each do |statement|
           next unless statement.subject.uri? && statement.subject.start_with?(url)

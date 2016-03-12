@@ -79,12 +79,13 @@ Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symm
 When installed, RDF.rb includes a `rdf` shell script which acts as a wrapper to perform a number of different
 operations on RDF files using available readers and writers.
 
-* `serialize`: Parse an RDF input and re-serializing to [N-Triples][] or another available format using `--output-format` option.
 * `count`: Parse and RDF input and count the number of statements.
-* `subjects`: Returns unique subjects from parsed input.
-* `objects`: Returns unique objects from parsed input.
 * `predicates`: Returns unique objects from parsed input.
+* `objects`: Returns unique objects from parsed input.
+* `serialize`: Parse an RDF input and re-serializing to [N-Triples][] or another available format using `--output-format` option.
+* `subjects`: Returns unique subjects from parsed input.
 
+The `serialize` command can also be used to serialize as a vocabulary
 ## Examples
 
     require 'rdf'

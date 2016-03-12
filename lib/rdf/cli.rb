@@ -332,6 +332,11 @@ module RDF
       out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
       cmds, args = args.partition {|e| commands.include?(e.to_s)}
 
+      if cmds.empty?
+        usage(options)
+        abort "No command given"
+      end
+
       if cmds.first == 'help'
         on_cmd = cmds[1]
         if on_cmd && COMMANDS[on_cmd][:help]
