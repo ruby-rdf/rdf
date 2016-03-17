@@ -273,5 +273,11 @@ class RDF::Query
         super # raises NoMethodError
       end
     end
+
+    ##
+    # @return [Boolean]
+    def respond_to_missing?(name, include_private = false)
+      @bindings.has_key?(name.to_sym) || super
+    end
   end # Solution
 end # RDF::Query
