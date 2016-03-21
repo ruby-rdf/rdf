@@ -54,15 +54,11 @@ module RDF
   #   class Format
   #     def self.cli_commands
   #       {
-  #         count: ->(argv, opts) do
-  #           count = 0
-  #           RDF::CLI.parse(argv, opts) do |reader|
-  #             reader.each_statement do |statement|
-  #               count += 1
-  #             end
-  #           end
-  #           $stdout.puts "Parsed #{count} statements"
-  #         end,
+  #         count: {
+  #           description: "",
+  #           parse: true,
+  #           lambda: ->(argv, opts) {}
+  #         },
   #       }
   #     end
   #
@@ -388,7 +384,8 @@ module RDF
     # @param [#to_sym] command
     # @param [Hash{Symbol => String}] options
     # @option options [String] description
-    # @option options [String] help
+    # @option options [String] help string to display for help
+    # @option options [Boolean] parse parse input files in to Repository, or not.
     # @yield argv, opts
     # @yieldparam [Array<String>] argv
     # @yieldparam [Hash] opts
