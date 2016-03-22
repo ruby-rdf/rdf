@@ -55,7 +55,7 @@ module RDF
     # @return [RDF::Node]
     # @since  0.2.0
     def self.intern(id)
-      (cache[id = id.to_s] ||= self.new(id)).freeze
+      (cache[(id = id.to_s).to_sym] ||= self.new(id)).freeze
     end
 
     ##
@@ -82,7 +82,7 @@ module RDF
     # @param  [#to_s] id
     def initialize(id = nil)
       id = nil if id.to_s.empty?
-      @id = (id || "g#{__id__.to_i.abs}").to_s
+      @id = (id || "g#{__id__.to_i.abs}").to_s.freeze
     end
 
     ##

@@ -10,7 +10,7 @@ describe RDF::URI do
     before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
     it "caches URI instance" do
       RDF::URI.intern("a")
-      expect(RDF::URI.instance_variable_get(:@cache)["a"]).to eq RDF::URI("a")
+      expect(RDF::URI.instance_variable_get(:@cache)[:a]).to eq RDF::URI("a")
     end
 
     it "freezes instance" do
