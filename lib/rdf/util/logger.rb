@@ -273,6 +273,13 @@ module RDF; module Util
           super
         end
       end
+      
+      def respond_to_missing?(name, include_private = false)
+        return true if 
+          [:fatal, :error, :warn, :info, :debug, :level, :sev_threshold]
+          .include?(name.to_sym)
+        super
+      end
     end
   end # Logger
 end; end # RDF::Util
