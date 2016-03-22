@@ -11,7 +11,7 @@ describe RDF::Node do
     before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
     it "caches Node instance" do
       RDF::Node.intern("a")
-      expect(RDF::Node.instance_variable_get(:@cache)["a"]).to eq RDF::Node.intern("a")
+      expect(RDF::Node.instance_variable_get(:@cache)[:a]).to eq RDF::Node.intern("a")
     end
 
     it "freezes instance" do

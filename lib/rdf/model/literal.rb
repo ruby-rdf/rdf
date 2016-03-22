@@ -162,13 +162,13 @@ module RDF
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
     def initialize(value, options = {})
-      @object   = value
+      @object   = value.freeze
       @string   = options[:lexical] if options[:lexical]
       @string   = value if !defined?(@string) && value.is_a?(String)
-      @string   = @string.encode(Encoding::UTF_8) if @string
+      @string   = @string.encode(Encoding::UTF_8).freeze if @string
       @object   = @string if @string && @object.is_a?(String)
       @language = options[:language].to_s.downcase.to_sym if options[:language]
-      @datatype = RDF::URI(options[:datatype]) if options[:datatype]
+      @datatype = RDF::URI(options[:datatype]).freeze if options[:datatype]
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= @language ? RDF.langString : RDF::XSD.string
       raise ArgumentError, "datatype of rdf:langString requires a language" if !@language && @datatype == RDF::langString
@@ -425,7 +425,8 @@ module RDF
              gsub("\n", '\\n').
              gsub("\r", '\\r').
              gsub("\f", '\\f').
-             gsub('"', '\\"')
+             gsub('"', '\\"').
+             freeze
     end
 
     ##
@@ -433,7 +434,7 @@ module RDF
     #
     # @return [String]
     def to_s
-      @object.to_s
+      @object.to_s.freeze
     end
 
     ##
@@ -442,7 +443,7 @@ module RDF
     # @return [String]
     # @since 1.1.6
     def humanize(lang = :en)
-      to_s
+      to_s.freeze
     end
 
     ##
