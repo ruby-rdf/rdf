@@ -157,10 +157,10 @@ describe RDF::CLI do
     end
   end
 
-  describe "#lenghts" do
+  describe "#lengths" do
     TEST_FILES.each do |fmt, file|
-      it "gets lenghts #{fmt}" do
-        expect {RDF::CLI.exec(["lenghts", file])}.to write(:something)
+      it "gets lengths #{fmt}" do
+        expect {RDF::CLI.exec(["lengths", file])}.to write(:something)
       end
     end
   end
@@ -168,8 +168,15 @@ describe RDF::CLI do
   describe "#validate" do
     TEST_FILES.each do |fmt, file|
       it "validates #{fmt}" do
-        g = RDF::Repository.load(file)
         expect {RDF::CLI.exec(["validate", file])}.to write(/Input is valid/)
+      end
+    end
+  end
+
+  context "chaining" do
+    TEST_FILES.each do |fmt, file|
+      it "chains subjects and objects #{fmt}" do
+        expect {RDF::CLI.exec(["subjects", "objects", file])}.to write(:something)
       end
     end
   end

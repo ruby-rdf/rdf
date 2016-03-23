@@ -126,17 +126,31 @@ module RDF
     COMMANDS = {
       count: {
         description: "Count statements in parsed input",
-        parse: true,
-        lambda: ->(argv, opts) {}
+        parse: false,
+        help: "count [options] [args...]\nreturns number of parsed statements",
+        lambda: ->(argv, opts) do
+          unless repository.count > 0
+            start = Time.new
+            count = 0
+            self.parse(argv, opts) do |reader|
+              reader.each_statement do |statement|
+                count += 1
+              end
+            end
+            secs = Time.new - start
+            $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
+          end
+        end
       },
       help: {
         description: "This message",
         parse: false,
         lambda: ->(argv, opts) {self.usage(self.options)}
       },
-      lenghts: {
+      lengths: {
         description: "Lengths of each parsed statement",
         parse: true,
+        help: "lengths [options] [args...]\nreturns statement lengths",
         lambda: ->(argv, opts) do
           repository.each_statement do |statement|
             $stdout.puts statement.to_s.size
@@ -146,6 +160,7 @@ module RDF
       objects: {
         description: "Serialize each parsed object to N-Triples",
         parse: true,
+        help: "objects [options] [args...]\nreturns unique objects",
         lambda: ->(argv, opts) do
           $stdout.puts "Objects"
           repository.each_object do |object|
@@ -156,6 +171,7 @@ module RDF
       predicates: {
         description: "Serialize each parsed predicate to N-Triples",
         parse: true,
+        help: "predicates [options] [args...]\nreturns unique predicates",
         lambda: ->(argv, opts) do
           $stdout.puts "Predicates"
           repository.each_predicate do |predicate|
@@ -166,6 +182,7 @@ module RDF
       serialize: {
         description: "Serialize each parsed statement to N-Triples, or the specified output format",
         parse: true,
+        help: "serialize [options] [args...]\nserialize output using specified format (or n-triples if not specified)",
         lambda: ->(argv, opts) do
           writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
           out = opts[:output] || $stdout
@@ -179,6 +196,7 @@ module RDF
       subjects: {
         description: "Serialize each parsed subject to N-Triples",
         parse: true,
+        help: "subjects [options] [args...]\nreturns unique subjects",
         lambda: ->(argv, opts) do
           $stdout.puts "Subjects"
           repository.each_subject do |subject|
@@ -189,9 +207,11 @@ module RDF
       validate: {
         description: "Validate parsed input",
         parse: true,
+        help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
         lambda: ->(argv, opts) do
           $stdout.puts "Input is " + (repository.valid? ? "" :"in") + "valid"
-      end}
+        end
+      }
     }
 
     class << self
@@ -311,7 +331,8 @@ module RDF
 
     ##
     # Output usage message
-    def self.usage(options)
+    def self.usage(options, banner: nil)
+      options.banner = banner if banner
       $stdout.puts options
       $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
       $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
@@ -335,10 +356,12 @@ module RDF
 
       if cmds.first == 'help'
         on_cmd = cmds[1]
-        if on_cmd && COMMANDS[on_cmd][:help]
-          $stdout.puts COMMANDS[on_cmd][:help]
-          exit(0)
+        if on_cmd && COMMANDS.fetch(on_cmd.to_sym, {})[:help]
+          usage(self.options, banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
+        else
+          usage(self.options)
         end
+        return
       end
 
       @repository = RDF::Repository.new
