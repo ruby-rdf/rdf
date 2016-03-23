@@ -15,4 +15,4 @@ end
 
 abort options.banner if ARGV.empty? && !options.options[:evaluate]
 
-RDF::CLI.exec_command(command = ARGV.shift, ARGV, options.options)
+RDF::CLI.exec(ARGV, options.options)

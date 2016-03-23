@@ -35,8 +35,7 @@ task :doap do
   sh "bin/rdf serialize etc/doap.ttl --output etc/doap.nt"
 end
 
-require 'linkeddata'
-require 'rdf/cli/vocab-loader'
+require 'rdf/vocab/writer'
 
 desc "Generate Vocabularies"
 vocab_sources = {
@@ -72,18 +71,16 @@ task gen_vocabs: vocab_sources.keys.map {|v| "lib/rdf/vocab/#{v}.rb"}
 vocab_sources.each do |id, v|
   file "lib/rdf/vocab/#{id}.rb" => :do_build do
     puts "Generate lib/rdf/vocab/#{id}.rb"
+    cmd = "bin/rdf serialize --uri '#{v[:uri]}' --output-format vocabulary"
+    cmd += " --class-name #{id.to_s.upcase}"
+    cmd += " -o lib/rdf/vocab/#{id}.rb_t"
+    cmd += " --strict" if v.fetch(:strict, true)
+    cmd += " '" + v.fetch(:source, v[:uri]) + "'"
+    puts "  #{cmd}"
     begin
-      out = StringIO.new
-      loader = RDF::VocabularyLoader.new(id.to_s.upcase)
-      loader.uri = v[:uri]
-      loader.source = v[:source] if v[:source]
-      loader.extra = v[:extra] if v[:extra]
-      loader.strict = v.fetch(:strict, true)
-      loader.output = out
-      loader.run
-      out.rewind
-      File.open("lib/rdf/vocab/#{id}.rb", "w") {|f| f.write out.read}
+      %x{#{cmd} && mv lib/rdf/vocab/#{id}.rb_t lib/rdf/vocab/#{id}.rb}
     rescue
+      %x{rm -f lib/rdf/vocab/#{id}.rb_t}
       puts "Failed to load #{id}: #{$!.message}"
     end
   end
