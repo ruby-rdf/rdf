@@ -1,6 +1,6 @@
 # How to contribute
 
-Third-party patches are essential for keeping Ruby RDF great. We want to keep it as easy as possible to contribute changes that get things working in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
+Community contributions are essential for keeping Ruby RDF great. We want to keep it as easy as possible to contribute changes that get things working in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
 
 ## Development
 
