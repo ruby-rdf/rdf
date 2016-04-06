@@ -35,6 +35,12 @@ module RDF
             on: ["--strict"],
             description: "Make strict vocabulary"
           ) {true},
+          RDF::CLI::Option.new(
+            symbol: :extra,
+            datatype: String,
+            on: ["--extra URIEncodedJSON"],
+            description: "URI Encoded JSON representation of extra data"
+          ) {|arg| ::JSON.parse(::URI.decode(arg))},
         ]
       end
 
@@ -142,10 +148,10 @@ module RDF
         op = term_type == :property ? "property" : "term"
 
         components = ["    #{op} #{name.to_sym.inspect}"]
-        attributes.keys.sort_by(&:to_s).each do |key|
+        attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|
           next if key == :vocab
           value = Array(attributes[key])
-          component = key.is_a?(Symbol) ? "#{key}: " : ":#{key.inspect} => "
+          component = key.inspect.start_with?(':"') ? "#{key.inspect} => " : "#{key.to_s}: "
           value = value.first if value.length == 1
           component << if value.is_a?(Array)
             '[' + value.map {|v| serialize_value(v, key)}.sort.join(", ") + "]"
@@ -158,8 +164,8 @@ module RDF
       end
 
       def serialize_value(value, key)
-        case key
-        when :comment, String
+        case key.to_s
+        when "comment", /:/
           "%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze"
         else
           "#{value.inspect}.freeze"
