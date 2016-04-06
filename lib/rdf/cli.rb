@@ -409,6 +409,7 @@ module RDF
     # @option options [String] description
     # @option options [String] help string to display for help
     # @option options [Boolean] parse parse input files in to Repository, or not.
+    # @option options [Array<RDF::CLI::Option>] options specific to this command
     # @yield argv, opts
     # @yieldparam [Array<String>] argv
     # @yieldparam [Hash] opts
@@ -422,7 +423,7 @@ module RDF
     # @return [Array<String>] list of available formats
     def self.formats(reader: false, writer: false)
       f = RDF::Format.sort_by(&:to_sym).each.
-        select {|f| (reader ? f.reader : (writer ? f.writer : true))}.
+        select {|f| (reader ? f.reader : (writer ? f.writer : (f.reader || f.writer)))}.
         inject({}) do |memo, reader|
           memo.merge(reader.to_sym => reader.name)
       end
