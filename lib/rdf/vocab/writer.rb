@@ -92,14 +92,14 @@ module RDF
 
         @output.print %(# -*- encoding: utf-8 -*-
           # frozen_string_literal: true
-          # This file generated automatically using vocab-fetch from #{source}
+          # This file generated automatically using rdf vocabulary format from #{source}
           require 'rdf'
           module #{module_name}
             # @!parse
             #   # Vocabulary for <#{base_uri}>
-            #   class #{vocab.name} < RDF::#{"Strict" if strict}Vocabulary
+            #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary
             #   end
-            class #{vocab.name} < RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")
+            class #{class_name} < RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")
           ).gsub(/^          /, '')
 
         # Split nodes into Class/Property/Datatype/Other
