@@ -155,6 +155,22 @@ describe RDF::Util::Logger do
     end
   end
 
+  context "with $stderr" do
+    subject {LogTester.new}
+
+    it "sets logger to $stderr" do
+      expect(subject.logger).to equal $stderr
+    end
+
+    it "forgets log_statistics between instances" do
+      expect {subject.log_error "An error"}.to write("An error").to(:error)
+
+      new_tester = LogTester.new
+      expect(new_tester.log_statistics).to be_empty
+      expect(subject.log_statistics).not_to be_empty
+    end
+  end
+
   context "with StringIO" do
     subject {LogTester.new(StringIO.new)}
 

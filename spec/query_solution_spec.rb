@@ -197,6 +197,11 @@ describe RDF::Query::Solution do
       expect(solution.mbox).to eq "jrhacker@example.org"
     end
 
+    it "Responding to a bound variable" do
+      expect(solution).to respond_to :mbox
+    end
+
+
     it "Retrieving all bindings in the solution as a Hash" do
       expect(solution.to_hash).to eq({title: "foo", mbox: "jrhacker@example.org"})
     end

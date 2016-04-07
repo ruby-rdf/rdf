@@ -57,14 +57,6 @@ module RDF
     end
 
     ##
-    # Returns a base representation of `self`.
-    #
-    # @return [RDF::Value]
-    def to_base
-      self
-    end
-
-    ##
     # Returns `true` if `self` is a {RDF::Term}.
     #
     # @return [Boolean]
@@ -85,7 +77,7 @@ module RDF
     #
     # @return [Sring]
     def to_base
-      RDF::NTriples.serialize(self)
+      RDF::NTriples.serialize(self).freeze
     end
 
     ##

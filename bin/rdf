@@ -11,8 +11,19 @@ options = RDF::CLI.options do
   self.on('-V', '--version', 'Display the RDF.rb version and exit.') do
     puts RDF::VERSION; exit
   end
+
+  ARGV.select {|a| RDF::CLI.commands.include?(a)}.each do |cmd|
+    # Load command-specific options
+    Array(RDF::CLI::COMMANDS[cmd.to_sym][:options]).each do |cli_opt|
+      on_args = cli_opt.on || []
+      on_args << cli_opt.description if cli_opt.description
+      self.on(*on_args) do |arg|
+        self.options[cli_opt.symbol] = cli_opt.call(arg)
+      end
+    end
+  end
 end
 
 abort options.banner if ARGV.empty? && !options.options[:evaluate]
 
-RDF::CLI.exec_command(command = ARGV.shift, ARGV, options.options)
+RDF::CLI.exec(ARGV, options.options)

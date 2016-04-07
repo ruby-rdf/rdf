@@ -27,7 +27,7 @@ module RDF; class Literal
           when 'INF'  then 1/0.0
           when '-INF' then -1/0.0
           when 'NaN'  then 0/0.0
-          else Float(value) rescue nil
+          else Float(value.sub(/\.[eE]/, '.0E')) rescue nil
         end
         when value.is_a?(::Float)     then value
         when value.respond_to?(:to_f) then value.to_f

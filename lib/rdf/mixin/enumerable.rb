@@ -762,6 +762,15 @@ module RDF
     end
 
     ##
+    # @note this instantiates an writer; it could probably be done more 
+    #   efficiently by refactoring `RDF::Reader` and/or `RDF::Format` to expose
+    #   a list of valid format symbols.
+    def respond_to_missing?(name, include_private = false)
+      return RDF::Writer.for(name.to_s[3..-1].to_sym) if name.to_s[0,3] == 'to_'
+      super
+    end
+
+    ##
     # @private
     # @param  [Symbol, #to_sym] method
     # @return [Enumerator]

@@ -143,7 +143,7 @@ module RDF
     # @return [RDF::URI] an immutable, frozen URI object
     def self.intern(*args)
       str = args.first
-      (cache[str = str.to_s] ||= self.new(*args)).freeze
+      (cache[(str = str.to_s).to_sym] ||= self.new(*args)).freeze
     end
 
     ##
@@ -229,6 +229,7 @@ module RDF
         if @value.encoding != Encoding::UTF_8
           @value = @value.dup if @value.frozen?
           @value.force_encoding(Encoding::UTF_8)
+          @value.freeze
         end
       else
         %w(
@@ -815,7 +816,7 @@ module RDF
         path,
         ("?#{query}" if query),
         ("##{fragment}" if fragment)
-      ].compact.join("")
+      ].compact.join("").freeze
     end
 
     ##

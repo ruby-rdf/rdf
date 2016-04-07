@@ -260,6 +260,16 @@ module RDF
         super
       end
     end
+
+    ##
+    # @note this instantiates an entire reader; it could probably be done more 
+    #   efficiently by refactoring `RDF::Reader` and/or `RDF::Format` to expose
+    #   a list of valid format symbols.
+    def respond_to_missing?(name, include_private = false)
+      return RDF::Reader.for(name.to_s[5..-1].to_sym) if name.to_s[0,5] == 'from_'
+      super 
+    end
+
   protected
 
     ##

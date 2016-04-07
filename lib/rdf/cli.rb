@@ -1,23 +1,18 @@
 require 'rdf'
 require 'rdf/ntriples'
 require 'rdf/nquads'
+require 'rdf/vocab/writer'
 require 'logger'
 require 'optparse'
 begin
-  gem 'linkeddata'
   require 'linkeddata'
 rescue LoadError
   # Silently load without linkeddata, but try some others
-  %w(rdfa rdfxml turtle).each do |ser|
+  %w(reasoner rdfa rdfxml turtle json/ld ld/patch).each do |ser|
     begin
-      require "rdf/#{ser}"
+      require ser.include?('/') ? ser : "rdf/#{ser}"
     rescue LoadError
     end
-  end
-
-  begin
-    require 'json/ld'
-  rescue LoadError
   end
 end
 
@@ -29,6 +24,10 @@ end
 module RDF
   # Individual formats can modify options by updating {Reader.options} or {Writer.options}. Format-specific commands are taken from {Format.cli_commands} for each loaded format, which returns an array of lambdas taking arguments and options.
   #
+  # Other than `help`, all commands parse an input file.
+  #
+  # Multiple commands may be added in sequence to execute a pipeline.
+  #
   # @example Creating Reader-specific options:
   #   class Reader
   #     def self.options
@@ -38,7 +37,11 @@ module RDF
   #           datatype: TrueClass,
   #           on: ["--canonicalize"],
   #           description: "Canonicalize input/output.") {true},
-  #         ...
+  #         RDF::CLI::Option.new(
+  #           symbol: :uri,
+  #           datatype: RDF::URI,
+  #           on: ["--uri STRING"],
+  #           description: "URI.") {|v| RDF::URI(v)},
   #       ]
   #     end
   #
@@ -46,18 +49,27 @@ module RDF
   #   class Format
   #     def self.cli_commands
   #       {
-  #         count: ->(argv, opts) do
-  #           count = 0
-  #           RDF::CLI.parse(argv, opts) do |reader|
-  #             reader.each_statement do |statement|
-  #               count += 1
-  #             end
-  #           end
-  #           $stdout.puts "Parsed #{count} statements"
-  #         end,
+  #         count: {
+  #           description: "",
+  #           parse: true,
+  #           lambda: ->(argv, opts) {}
+  #         },
   #       }
   #     end
   #
+  # @example Adding a command manually
+  #   class MyCommand
+  #     RDF::CLI.add_command(:count, description: "Count statements") do |argv, opts|
+  #       count = 0
+  #       RDF::CLI.parse(argv, opts) do |reader|
+  #         reader.each_statement do |statement|
+  #           count += 1
+  #         end
+  #       end
+  #       $stdout.puts "Parsed #{count} statements"
+  #     end
+  #   end
+  #     
   # Format-specific commands should verify that the reader and/or output format are appropriate for the command.
   class CLI
 
@@ -107,77 +119,101 @@ module RDF
 
     # @private
     COMMANDS = {
-      count: ->(argv, opts) do
-        start = Time.new
-        count = 0
-        self.parse(argv, opts) do |reader|
-          reader.each_statement do |statement|
-            count += 1
+      count: {
+        description: "Count statements in parsed input",
+        parse: false,
+        help: "count [options] [args...]\nreturns number of parsed statements",
+        lambda: ->(argv, opts) do
+          unless repository.count > 0
+            start = Time.new
+            count = 0
+            self.parse(argv, opts) do |reader|
+              reader.each_statement do |statement|
+                count += 1
+              end
+            end
+            secs = Time.new - start
+            $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
           end
         end
-        secs = Time.new - start
-        $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
-      end,
-      help: ->(argv, opts) do
-        self.usage(self.options)
-      end,
-      lenghts: ->(argv, opts) do
-        self.parse(argv, opts) do |reader|
-          reader.each_statement do |statement|
+      },
+      help: {
+        description: "This message",
+        parse: false,
+        lambda: ->(argv, opts) {self.usage(self.options)}
+      },
+      lengths: {
+        description: "Lengths of each parsed statement",
+        parse: true,
+        help: "lengths [options] [args...]\nreturns statement lengths",
+        lambda: ->(argv, opts) do
+          repository.each_statement do |statement|
             $stdout.puts statement.to_s.size
           end
         end
-      end,
-      objects: ->(argv, opts) do
-        $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
-        self.parse(argv, opts) do |reader|
-          reader.each_statement do |statement|
-            $stdout.puts statement.object.to_ntriples
+      },
+      objects: {
+        description: "Serialize each parsed object to N-Triples",
+        parse: true,
+        help: "objects [options] [args...]\nreturns unique objects",
+        lambda: ->(argv, opts) do
+          $stdout.puts "Objects"
+          repository.each_object do |object|
+            $stdout.puts object.to_ntriples
           end
         end
-      end,
-      predicates: ->(argv, opts) do
-        $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
-        self.parse(argv, opts) do |reader|
-          reader.each_statement do |statement|
-            $stdout.puts statement.predicate.to_ntriples
+      },
+      predicates: {
+        description: "Serialize each parsed predicate to N-Triples",
+        parse: true,
+        help: "predicates [options] [args...]\nreturns unique predicates",
+        lambda: ->(argv, opts) do
+          $stdout.puts "Predicates"
+          repository.each_predicate do |predicate|
+            $stdout.puts predicate.to_ntriples
           end
         end
-      end,
-      serialize: ->(argv, opts) do
-        writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
-        out = opts[:output] || $stdout
-        out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
-        opts = opts.merge(prefixes: {})
-        writer_opts = opts.merge(standard_prefixes: true)
-        self.parse(argv, opts) do |reader|
+      },
+      serialize: {
+        description: "Serialize each parsed statement to N-Triples, or the specified output format",
+        parse: true,
+        help: "serialize [options] [args...]\nserialize output using specified format (or n-triples if not specified)",
+        lambda: ->(argv, opts) do
+          writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
+          out = opts[:output] || $stdout
+          opts = opts.merge(prefixes: {})
+          writer_opts = opts.merge(standard_prefixes: true)
           writer_class.new(out, writer_opts) do |writer|
-            writer << reader
+            writer << repository
           end
         end
-      end,
-      subjects: ->(argv, opts) do
-        $stdout.set_encoding(Encoding::UTF_8) if RUBY_PLATFORM == "java"
-        self.parse(argv, opts) do |reader|
-          reader.each_statement do |statement|
-            $stdout.puts statement.subject.to_ntriples
+      },
+      subjects: {
+        description: "Serialize each parsed subject to N-Triples",
+        parse: true,
+        help: "subjects [options] [args...]\nreturns unique subjects",
+        lambda: ->(argv, opts) do
+          $stdout.puts "Subjects"
+          repository.each_subject do |subject|
+            $stdout.puts subject.to_ntriples
           end
         end
-      end,
-      validate: ->(argv, opts) do
-        start = Time.new
-        count = 0
-        valid = true
-        self.parse(argv, opts) do |reader|
-          reader.each_statement do |statement|
-            count += 1
-            valid = false if statement.invalid?
-          end
+      },
+      validate: {
+        description: "Validate parsed input",
+        parse: true,
+        help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
+        lambda: ->(argv, opts) do
+          $stdout.puts "Input is " + (repository.valid? ? "" :"in") + "valid"
         end
-        secs = Time.new - start
-        $stdout.puts "Validated #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
-      end
+      }
     }
+
+    class << self
+      # Repository containing parsed statements
+      # @return [RDF::Repository]
+      attr_accessor :repository
+    end
 
     ##
     # @return [String]
@@ -226,7 +262,7 @@ module RDF
           else options.instance_eval(&block)
         end
       end
-      options.banner ||= "Usage: #{self.basename} [options] command [args...]"
+      options.banner = "Usage: #{self.basename} command+ [options] [args...]"
 
       options.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
         opts[:logger].level = Logger::DEBUG
@@ -276,6 +312,7 @@ module RDF
 
       options.on_tail("-h", "--help", "Show this message") do
         self.usage(options)
+        exit(0)
       end
 
       begin
@@ -289,7 +326,8 @@ module RDF
 
     ##
     # Output usage message
-    def self.usage(options)
+    def self.usage(options, banner: nil)
+      options.banner = banner if banner
       $stdout.puts options
       $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
       $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
@@ -297,15 +335,47 @@ module RDF
     end
 
     ##
-    # @param  [#to_sym] command
+    # Execute one or more commands, parsing input as necessary
+    #
     # @param  [Array<String>] args
     # @return [Boolean]
-    def self.exec_command(command, args, options = {})
-      unless commands.include?(command.to_s)
-        abort "unknown command `#{command}'"
+    def self.exec(args, options = {})
+      out = options[:output] || $stdout
+      out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
+      cmds, args = args.partition {|e| commands.include?(e.to_s)}
+
+      if cmds.empty?
+        usage(options)
+        abort "No command given"
       end
 
-      COMMANDS[command.to_sym].call(args, options)
+      if cmds.first == 'help'
+        on_cmd = cmds[1]
+        if on_cmd && COMMANDS.fetch(on_cmd.to_sym, {})[:help]
+          usage(self.options, banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
+        else
+          usage(self.options)
+        end
+        return
+      end
+
+      @repository = RDF::Repository.new
+
+      # Parse input files if any command requires it
+      if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
+        start = Time.new
+        count = 0
+        self.parse(args, options) do |reader|
+          @repository << reader
+        end
+        secs = Time.new - start
+        $stdout.puts "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
+      end
+
+      # Run each command in sequence
+      cmds.each do |command|
+        COMMANDS[command.to_sym][:lambda].call(args, options)
+      end
     rescue ArgumentError => e
       abort e.message
     end
@@ -316,8 +386,9 @@ module RDF
       # First, load commands from other formats
       unless @commands_loaded
         RDF::Format.each do |format|
-          format.cli_commands.each do |command, lambda|
-            COMMANDS[command] ||= lambda
+          format.cli_commands.each do |command, options|
+            options = {lambda: options} unless options.is_a?(Hash)
+            add_command(command, options)
           end
         end
         @commands_loaded = true
@@ -326,10 +397,28 @@ module RDF
     end
 
     ##
+    # Add a command.
+    #
+    # @param [#to_sym] command
+    # @param [Hash{Symbol => String}] options
+    # @option options [String] description
+    # @option options [String] help string to display for help
+    # @option options [Boolean] parse parse input files in to Repository, or not.
+    # @option options [Array<RDF::CLI::Option>] options specific to this command
+    # @yield argv, opts
+    # @yieldparam [Array<String>] argv
+    # @yieldparam [Hash] opts
+    # @yieldreturn [void]
+    def self.add_command(command, options = {}, &block)
+      options[:lambda] = block if block_given?
+      COMMANDS[command.to_sym] ||= options
+    end
+
+    ##
     # @return [Array<String>] list of available formats
     def self.formats(reader: false, writer: false)
-      f = RDF::Format.each.
-        select {|f| (reader ? f.reader : (writer ? f.writer : true))}.
+      f = RDF::Format.sort_by(&:to_sym).each.
+        select {|f| (reader ? f.reader : (writer ? f.writer : (f.reader || f.writer)))}.
         inject({}) do |memo, reader|
           memo.merge(reader.to_sym => reader.name)
       end
