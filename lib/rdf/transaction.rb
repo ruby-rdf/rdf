@@ -118,8 +118,8 @@ module RDF
     #
     # @deprecated
     # @return [RDF::Enumerable]
-    attr_reader :deletes
     def deletes
+      warn "[DEPRECATION] Transaction#deletes now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
       self.changes.deletes
     end
 
@@ -128,8 +128,8 @@ module RDF
     #
     # @deprecated
     # @return [RDF::Enumerable]
-    attr_reader :inserts
     def inserts
+      warn "[DEPRECATION] Transaction#inserts now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
       self.changes.inserts
     end
 

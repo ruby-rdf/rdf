@@ -48,29 +48,14 @@ module RDF
     #     g = RDF::Graph.new << l
     #     g.count # => l.count
     #
-    # @overload initialize(subject = nil, graph = nil, values = nil, &block)
-    #   @param  [RDF::Resource]          subject
-    #     Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
-    #   @param  [RDF::Graph]        graph
-    #   @param  [Array<RDF::Term>]  values
-    #     Any values which are not terms are coerced to `RDF::Literal`.
-    #   @yield  [list]
-    #   @yieldparam [RDF::List] list
-    #   @deprecated This form is deprecated in version 2.0
-    #
-    # @overload initialize(subject: nil, graph: nil, values: nil, &block)
-    #   @param  [RDF::Resource]         subject (RDF.nil)
-    #     Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
-    #   @param  [RDF::Graph]        graph (RDF::Graph.new)
-    #   @param  [Array<RDF::Term>]  values
-    #     Any values which are not terms are coerced to `RDF::Literal`.
-    #   @yield  [list]
-    #   @yieldparam [RDF::List] list
-    #
-    def initialize(*args, subject: nil, graph: nil, values: nil, &block)
-      unless args.empty?
-        raise ArgumentError, "[FATAL DEPRECATION] List#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-      end
+    # @param  [RDF::Resource]         subject (RDF.nil)
+    #   Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
+    # @param  [RDF::Graph]        graph (RDF::Graph.new)
+    # @param  [Array<RDF::Term>]  values
+    #   Any values which are not terms are coerced to `RDF::Literal`.
+    # @yield  [list]
+    # @yieldparam [RDF::List] list
+    def initialize(subject: nil, graph: nil, values: nil, &block)
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
       is_empty = @graph.query(subject: subject, predicate: RDF.first).empty?

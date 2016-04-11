@@ -142,7 +142,7 @@ describe RDF::List do
         expect(l.subject).to eq(n)
       end
 
-      it "should be instantiable with positional args (DEPRECATED)" do
+      it "should not be instantiable with positional args" do
         expect {
           described_class.new(RDF::Node.new, graph)
         }.to raise_error ArgumentError

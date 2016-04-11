@@ -87,25 +87,13 @@ module RDF
     end
 
     ##
-    # @overload initialize(graph_name, options)
-    #   @param  [RDF::Resource]          graph_name
-    #     The graph_name from the associated {RDF::Queryable} associated
-    #     with this graph as provided with the `:data` option
-    #     (only for {RDF::Queryable} instances supporting
-    #     named graphs).
-    #   @param  [Hash{Symbol => Object}] options
-    #   @option options [RDF::Queryable] :data (RDF::Repository.new)
-    #     Storage behind this graph.
-    #   @deprecated This form is deprecated in version 2.0.
-    #
-    # @overload initialize(graph_name: nil, data: nil)
-    #   @param  [RDF::Resource]          graph_name
-    #     The graph_name from the associated {RDF::Queryable} associated
-    #     with this graph as provided with the `:data` option
-    #     (only for {RDF::Queryable} instances supporting
-    #     named graphs).
-    #   @param [RDF::Queryable] :data (RDF::Repository.new)
-    #     Storage behind this graph.
+    # @param  [RDF::Resource]          graph_name
+    #   The graph_name from the associated {RDF::Queryable} associated
+    #   with this graph as provided with the `:data` option
+    #   (only for {RDF::Queryable} instances supporting
+    #   named graphs).
+    # @param [RDF::Queryable] :data (RDF::Repository.new)
+    #   Storage behind this graph.
     #
     # @raise [ArgumentError] if a `data` does not support named graphs.
     # @note
@@ -115,12 +103,7 @@ module RDF
     #   graphs which are named, but the name is not a property of the graph.
     # @yield  [graph]
     # @yieldparam [Graph]
-    def initialize(*args, graph_name: nil, data: nil, **options, &block)
-      unless args.empty?
-        warn "[DEPRECATION] Graph#initialize now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-        graph_name ||= args.first
-      end
-
+    def initialize(graph_name: nil, data: nil, **options, &block)
       @graph_name = case graph_name
         when nil then nil
         when RDF::Resource then graph_name

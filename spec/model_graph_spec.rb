@@ -17,16 +17,13 @@ describe RDF::Graph do
   context "as method" do
     it "with keyword arg" do
       expect(described_class).to receive(:new).with(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
-      expect {
-        RDF::Graph(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
-      }.not_to write('[DEPRECATION]').to(:error)
+      RDF::Graph(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
     end
 
-    it "with positional arg (DEPRECATED)" do
-      expect(described_class).to receive(:new).with(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
+    it "with positional arg (removed)" do
       expect {
         RDF::Graph("http://ruby-rdf.github.com/rdf/etc/doap.nt")
-      }.to write('[DEPRECATION]').to(:error)
+      }.to raise_error(ArgumentError)
     end
   end
 
@@ -56,10 +53,10 @@ describe RDF::Graph do
       expect { subject }.to_not raise_error
     end
 
-    it "should be instantiable with positional arg (DEPRECATED)" do
+    it "should not be instantiable with positional arg" do
       expect {
         described_class.new("http://ruby-rdf.github.com/rdf/etc/doap.nt", data: RDF::Repository.new)
-      }.to write('[DEPRECATION]').to(:error)
+      }.to raise_error(ArgumentError)
     end
 
     it "should not be instantiable by default" do
