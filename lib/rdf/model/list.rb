@@ -1,3 +1,4 @@
+# coding: utf-8
 module RDF
   ##
   # An RDF list.
@@ -344,12 +345,7 @@ module RDF
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-unshift
     #
     def unshift(value)
-      value = case value
-        when nil         then RDF.nil
-        when RDF::Term   then value
-        when Array       then RDF::List.new(subject: nil, graph: graph, values: value)
-        else value
-      end
+      value = normalize_value(value)
 
       new_subject, old_subject = RDF::Node.new, subject
 
@@ -407,12 +403,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-3C-3C
     def <<(value)
-      value = case value
-        when nil         then RDF.nil
-        when RDF::Value  then value
-        when Array       then RDF::List.new(subject: nil, graph: graph, values: value)
-        else value
-      end
+      value = normalize_value(value)
 
       if empty?
         @subject = new_subject = RDF::Node.new
@@ -547,12 +538,11 @@ module RDF
     #   RDF::List[1, 2, 3].fetch(4, nil)        #=> nil
     #   RDF::List[1, 2, 3].fetch(4) { |n| n*n } #=> 16
     #
-    # @return [RDF::Term]
+    # @return [RDF::Term, nil]
     # @see    http://ruby-doc.org/core-1.9/classes/Array.html#M000420
     def fetch(index, default = UNSET)
-      each.with_index do |v, i|
-        return v if i == index
-      end
+      val = at(index)
+      return val unless val.nil?
 
       case
         when block_given?         then yield index
@@ -568,12 +558,10 @@ module RDF
     #   RDF::List[1, 2, 3].at(0)                #=> 1
     #   RDF::List[1, 2, 3].at(4)                #=> nil
     #
-    # @return [RDF::Term]
+    # @return [RDF::Term, nil]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-at
     def at(index)
-      each.with_index do |v, i|
-        return v if i == index
-      end
+      each.with_index { |v, i| return v if i == index }
       return nil
     end
 
@@ -941,6 +929,22 @@ module RDF
         'RDF::List::NIL'
       else
         sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, join(', '))
+      end
+    end
+
+    private
+
+    ##
+    # Normalizes `Array` to `RDF::List` and `nil` to `RDF.nil`.
+    #
+    # @param value [Object]
+    # @return [RDF::Value, Object] normalized value
+    def normalize_value(value)
+      case value
+        when nil         then RDF.nil
+        when RDF::Value  then value
+        when Array       then RDF::List.new(subject: nil, graph: graph, values: value)
+        else value
       end
     end
   end

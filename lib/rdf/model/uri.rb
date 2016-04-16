@@ -1235,23 +1235,8 @@ module RDF
 
       value = value.to_hash if value.respond_to?(:to_hash)
       self.query = case value
-      when Array
+      when Array, Hash
         value.map do |(k,v)|
-          k = normalize_segment(k.to_s, UNRESERVED)
-          if v.nil?
-            k
-          else
-            Array(v).map do |vv|
-              if vv === TrueClass
-                k
-              else
-                "#{k}=#{normalize_segment(vv.to_s, UNRESERVED)}"
-              end
-            end.join("&")
-          end
-        end
-      when Hash
-        value.map do |k, v|
           k = normalize_segment(k.to_s, UNRESERVED)
           if v.nil?
             k
