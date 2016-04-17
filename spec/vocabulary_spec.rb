@@ -270,26 +270,6 @@ describe RDF::Vocabulary do
     specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
   end unless ENV["CI"]
 
-  describe ".load" do
-    let!(:nt) {%{
-      <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
-      <http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .
-      <http://example/prop> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
-      <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
-    }}
-    before(:each) do
-      allow(RDF::Repository).to receive(:load).and_return(RDF::Repository.new << RDF::NTriples::Reader.new(nt))
-    end
-    subject {RDF::Vocabulary.load("http://example/")}
-
-    it "loads with DEPRECATION message" do
-      expect {
-        expect(subject).to be_a_vocabulary("http://example/")
-        expect(subject).to have_properties("http://example/", %w(Class prop))
-      }.to write("DEPRECATION").to(:error)
-    end
-  end
-
   describe ".from_graph" do
     let!(:nt) {%{
       <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
