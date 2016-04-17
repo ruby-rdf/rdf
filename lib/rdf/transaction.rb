@@ -114,26 +114,6 @@ module RDF
     attr_reader :changes
 
     ##
-    # RDF statements to delete when executed.
-    #
-    # @deprecated
-    # @return [RDF::Enumerable]
-    def deletes
-      warn "[DEPRECATION] Transaction#deletes now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-      self.changes.deletes
-    end
-
-    ##
-    # RDF statements to insert when executed.
-    #
-    # @deprecated
-    # @return [RDF::Enumerable]
-    def inserts
-      warn "[DEPRECATION] Transaction#inserts now uses keyword arguments. Called from #{Gem.location_of_caller.join(':')}"
-      self.changes.inserts
-    end
-
-    ##
     # Any additional options for this transaction.
     #
     # @return [Hash{Symbol => Object}]
