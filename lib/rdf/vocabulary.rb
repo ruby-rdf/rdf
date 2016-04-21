@@ -619,9 +619,9 @@ module RDF
                 prop = RDF::URI("http://schema.org/rangeIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
               when :label
-                prop = RDFS.label
+                prop = RDF::RDFS.label
               when :comment
-                prop = RDFS.comment
+                prop = RDF::RDFS.comment
               else
                 prop = RDF::Vocabulary.expand_pname(prop.to_s)
                 next unless prop
