@@ -625,8 +625,25 @@ module RDF
               else
                 prop = RDF::Vocabulary.expand_pname(prop.to_s)
                 next unless prop
-                v = RDF::Vocabulary.expand_pname(value.to_s)
-                value = v.valid? ? v : RDF::Literal(value.to_s)
+
+                v = value.to_s
+                value = RDF::Vocabulary.expand_pname(v)
+                unless value && value.valid?
+                  require 'byebug'; byebug if prop.to_s.include?('isDefinedBy')
+                  # Use as most appropriate literal
+                  value = [
+                    RDF::Literal::Date,
+                    RDF::Literal::DateTime,
+                    RDF::Literal::Integer,
+                    RDF::Literal::Decimal,
+                    RDF::Literal::Double,
+                    RDF::Literal::Boolean,
+                    RDF::Literal
+                  ].inject(nil) do |memo, klass|
+                    l = klass.new(v)
+                    memo || (l if l.valid?)
+                  end
+                end
               end
               yield RDF::Statement(self, prop, value)
             rescue KeyError
