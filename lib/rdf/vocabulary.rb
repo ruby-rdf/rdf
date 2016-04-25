@@ -629,7 +629,6 @@ module RDF
                 v = value.to_s
                 value = RDF::Vocabulary.expand_pname(v)
                 unless value && value.valid?
-                  require 'byebug'; byebug if prop.to_s.include?('isDefinedBy')
                   # Use as most appropriate literal
                   value = [
                     RDF::Literal::Date,
