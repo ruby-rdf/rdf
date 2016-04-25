@@ -8,7 +8,7 @@ begin
   require 'linkeddata'
 rescue LoadError
   # Silently load without linkeddata, but try some others
-  %w(reasoner rdfa rdfxml turtle json/ld ld/patch).each do |ser|
+  %w(reasoner rdfa rdfxml turtle vocab json/ld ld/patch).each do |ser|
     begin
       require ser.include?('/') ? ser : "rdf/#{ser}"
     rescue LoadError
