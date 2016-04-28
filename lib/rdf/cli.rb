@@ -345,16 +345,16 @@ module RDF
       cmds, args = args.partition {|e| commands.include?(e.to_s)}
 
       if cmds.empty?
-        usage(options)
+        usage(options.fetch(:option_parser, self.options))
         abort "No command given"
       end
 
       if cmds.first == 'help'
         on_cmd = cmds[1]
         if on_cmd && COMMANDS.fetch(on_cmd.to_sym, {})[:help]
-          usage(self.options, banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
+          usage(options.fetch(:option_parser, self.options), banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
         else
-          usage(self.options)
+          usage(options.fetch(:option_parser, self.options))
         end
         return
       end
