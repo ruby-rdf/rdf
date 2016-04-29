@@ -527,7 +527,13 @@ module RDF
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       def initialize(*args, **options)
         @attributes = options.fetch(:attributes)
-        super
+        if RUBY_ENGINE == "rbx"
+          # FIXME: Somehow, this gets messed up in Rubinius
+          args << options
+          super(*args)
+        else
+          super
+        end
       end
 
       ##

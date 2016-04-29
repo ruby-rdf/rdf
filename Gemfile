@@ -18,6 +18,7 @@ group :debug do
   gem "wirble"
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
+  gem 'rubinius-debugger', platform: :rbx
   gem 'guard-rspec'
 end
 
