@@ -26,4 +26,5 @@ end
 
 abort options.banner if ARGV.empty? && !options.options[:evaluate]
 
-RDF::CLI.exec(ARGV, options.options)
+# Add option_parser to parsed options to enable help
+RDF::CLI.exec(ARGV, options.options.merge(option_parser: options))

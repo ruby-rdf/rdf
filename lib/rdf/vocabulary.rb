@@ -263,39 +263,6 @@ module RDF
       end
 
       ##
-      # Load an RDFS vocabulary, optionally from a separate location.
-      #
-      # @param [URI, #to_s] url
-      # @param [String] class_name
-      #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
-      # @param [RDF::Queryable, URI, #to_s] location
-      #   Location from which to load the vocabulary, or Queryable containing already loaded vocabulary triples, if not from `uri`.
-      # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
-      #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
-      # @param [String] patch
-      #   A patch to run on the graph after loading. Requires the `ld-patch` gem to be available.
-      # @return [RDF::Vocabulary] the loaded vocabulary
-      # @deprecated Use Vocabulary.from_graph
-      def load(url, class_name: nil, location: nil, extra: nil, patch: nil)
-        warn "[DEPRECATION] Vocabulary.load is deprecated, use Vocabulary.from_graph instead. Called from #{Gem.location_of_caller.join(':')}"
-        source = location || url
-
-        graph = source.is_a?(RDF::Queryable) ? source : RDF::Repository.load(source)
-
-        if patch
-          begin
-            require 'ld/patch'
-            operator = LD::Patch.parse(patch)
-            graph.query(operator)
-          rescue LoadError
-            raise ArgumentError, "patching vocabulary requires the ld-patch gem"
-          end
-        end
-
-        from_graph(graph, url: url, class_name: nil, extra: extra)
-      end
-
-      ##
       # Create a vocabulary from a graph or enumerable
       #
       # @param [RDF::Enumerable] graph
@@ -560,7 +527,13 @@ module RDF
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       def initialize(*args, **options)
         @attributes = options.fetch(:attributes)
-        super
+        if RUBY_ENGINE == "rbx"
+          # FIXME: Somehow, this gets messed up in Rubinius
+          args << options
+          super(*args)
+        else
+          super
+        end
       end
 
       ##
@@ -652,14 +625,30 @@ module RDF
                 prop = RDF::URI("http://schema.org/rangeIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
               when :label
-                prop = RDFS.label
+                prop = RDF::RDFS.label
               when :comment
-                prop = RDFS.comment
+                prop = RDF::RDFS.comment
               else
                 prop = RDF::Vocabulary.expand_pname(prop.to_s)
                 next unless prop
-                v = RDF::Vocabulary.expand_pname(value.to_s)
-                value = v.valid? ? v : RDF::Literal(value.to_s)
+
+                v = value.to_s
+                value = RDF::Vocabulary.expand_pname(v)
+                unless value && value.valid?
+                  # Use as most appropriate literal
+                  value = [
+                    RDF::Literal::Date,
+                    RDF::Literal::DateTime,
+                    RDF::Literal::Integer,
+                    RDF::Literal::Decimal,
+                    RDF::Literal::Double,
+                    RDF::Literal::Boolean,
+                    RDF::Literal
+                  ].inject(nil) do |memo, klass|
+                    l = klass.new(v)
+                    memo || (l if l.valid?)
+                  end
+                end
               end
               yield RDF::Statement(self, prop, value)
             rescue KeyError

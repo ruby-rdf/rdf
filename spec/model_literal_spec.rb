@@ -300,7 +300,7 @@ describe RDF::Literal do
     ]
     it_behaves_like 'RDF::Literal validation', RDF::XSD.boolean,
       %w(true false tRuE FaLsE 1 0),
-      %w(foo 10)
+      %w(foo 10) + ['true false', 'true foo']
 
     context "object values" do
       {
@@ -332,7 +332,7 @@ describe RDF::Literal do
     ]
     it_behaves_like 'RDF::Literal validation', RDF::XSD.integer,
       %w(1 10 100 01 +1 -1),
-      %w(foo 10.1 12xyz)
+      %w(foo 10.1 12xyz) + ["1 2", "foo 1", "1 foo"]
 
     context "object values" do
       {
@@ -389,7 +389,7 @@ describe RDF::Literal do
         2.23400000000000000000005
         1.2345678901234567890123457890
       ),
-      %w(foo 10.1e1 12.xyz)
+      %w(foo 10.1e1 12.xyz) + ['1.0 foo', 'foo 1.0']
 
     context "object values" do
       {
@@ -445,7 +445,7 @@ describe RDF::Literal do
         NaN
         3E1
       ),
-      %w(foo 12.xyz 1.0ez)
+      %w(foo 12.xyz 1.0ez) + ['1.1e1 foo', 'foo 1.1e1']
 
     context "object values" do
       {
@@ -600,7 +600,7 @@ describe RDF::Literal do
         0000-01-01T00:00:00
         2010-07
         2010
-      )
+      ) + ['2010-01-01T00:00:00Z foo', 'foo 2010-01-01T00:00:00Z']
 
     context "object values" do
       {
@@ -679,7 +679,7 @@ describe RDF::Literal do
         0000-01-01
         2011-07
         2011
-      )
+      ) + ['2010-01-01Z foo', 'foo 2010-01-01Z']
 
     context "object values" do
       {
@@ -740,7 +740,7 @@ describe RDF::Literal do
         0000-01-01
         2011-07
         2011
-      )
+      ) + ['00:00:00Z foo', 'foo 00:00:00Z']
 
     context "object values" do
       {

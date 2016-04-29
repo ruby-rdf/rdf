@@ -122,7 +122,6 @@ describe RDF::Vocabulary do
       expect(RDF).to be_a_vocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
       expect(RDF).to have_properties("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(first object predicate rest subject type value))
       expect(RDF).to have_terms("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
-      expect(RDF).to have_terms("http://www.w3.org/1999/02/22-rdf-syntax-ns#", %w(datatype Description parseType ID nodeID li))
       %w(first object predicate rest subject type value).each do |p|
         expect(RDF.send(p)).to eq RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns##{p}")
       end
@@ -270,26 +269,6 @@ describe RDF::Vocabulary do
     specify {expect {RDF::Vocab::SCHEMA.imports}.not_to raise_error}
   end unless ENV["CI"]
 
-  describe ".load" do
-    let!(:nt) {%{
-      <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
-      <http://example/Class> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .
-      <http://example/prop> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
-      <http://example/prop> <http://www.w3.org/2000/01/rdf-schema#Datatype> "prop" .
-    }}
-    before(:each) do
-      allow(RDF::Repository).to receive(:load).and_return(RDF::Repository.new << RDF::NTriples::Reader.new(nt))
-    end
-    subject {RDF::Vocabulary.load("http://example/")}
-
-    it "loads with DEPRECATION message" do
-      expect {
-        expect(subject).to be_a_vocabulary("http://example/")
-        expect(subject).to have_properties("http://example/", %w(Class prop))
-      }.to write("DEPRECATION").to(:error)
-    end
-  end
-
   describe ".from_graph" do
     let!(:nt) {%{
       <http://example/Class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
@@ -368,6 +347,85 @@ describe RDF::Vocabulary do
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
       its(:attributes) {is_expected.to include("schema:domainIncludes" => RDF::RDFS.Resource)}
       its(:attributes) {is_expected.to include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+    end
+
+    context "#each_statement" do
+      it "emits statements for a vocabulary" do
+        graph = RDF::Graph.new {|g| RDF::RDFS[""].each_statement {|s| g << s}}
+
+        expect(graph.map(&:subject)).to all(eql(RDF::RDFS.to_uri))
+        expect(graph.query(predicate: RDF.type).map(&:object)).to include RDF::OWL.Ontology
+      end
+
+      {
+        "rdfs:comment" => {term: RDF::RDFS.comment, predicate: RDF::RDFS.comment, value: RDF::Literal(%(A description of the subject resource.))},
+        "rdfs:label" => {term: RDF::RDFS.label, predicate: RDF::RDFS.label, value: RDF::Literal("label")},
+        "rdf:type" => {term: RDF.type, predicate: RDF.type, value: RDF.Property},
+        "rdfs:subClassOf" => {term: RDF::RDFS.Class, predicate: RDF::RDFS.subClassOf, value: RDF::RDFS.Resource},
+        "rdfs:subPropertyOf" => {term: RDF::RDFS.isDefinedBy, predicate: RDF::RDFS.subPropertyOf, value: RDF::RDFS.seeAlso},
+        "rdfs:domain" => {term: RDF::RDFS.domain, predicate: RDF::RDFS.domain, value: RDF.Property},
+        "rdfs:range" => {term: RDF::RDFS.range, predicate: RDF::RDFS.range, value: RDF::RDFS.Class},
+        "schema:domainIncludes" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {domainIncludes: RDF::RDFS.Resource}),
+          predicate: RDF::Vocab::SCHEMA.domainIncludes,
+          value: RDF::RDFS.Resource
+        },
+        "schema:inverseOf" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {inverseOf: RDF::RDFS.Resource}),
+          predicate: RDF::Vocab::SCHEMA.inverseOf,
+          value: RDF::RDFS.Resource
+        },
+        "schema:rangeIncludes" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {rangeIncludes: RDF::RDFS.Resource}),
+          predicate: RDF::Vocab::SCHEMA.rangeIncludes,
+          value: RDF::RDFS.Resource
+        },
+        "vocab value" => {term: RDF::RDFS.isDefinedBy, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
+        "term value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdfs:seeAlso" => "rdfs:seeAlso"}),
+          predicate: RDF::RDFS.seeAlso,
+          value: RDF::RDFS.seeAlso
+        },
+        "uri value" => {term: RDF::RDFS[""], predicate: RDF::RDFS.seeAlso, value: RDF::URI("http://www.w3.org/2000/01/rdf-schema-more")},
+        "date value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdf:value" => "2016-04-24"}),
+          predicate: RDF.value,
+          value: RDF::Literal::Date.new("2016-04-24")
+        },
+        "dateTime value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdf:value" => "2016-04-24T15:22:00"}),
+          predicate: RDF.value,
+          value: RDF::Literal::DateTime.new("2016-04-24T15:22:00")
+        },
+        "boolean value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdf:value" => "true"}),
+          predicate: RDF.value,
+          value: RDF::Literal::Boolean.new(true)
+        },
+        "integer value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdf:value" => "1"}),
+          predicate: RDF.value,
+          value: RDF::Literal::Integer.new(1)
+        },
+        "decimal value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdf:value" => "1.1"}),
+          predicate: RDF.value,
+          value: RDF::Literal::Decimal.new(1.1)
+        },
+        "double value" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {:"rdf:value" => "1.1e1"}),
+          predicate: RDF.value,
+          value: RDF::Literal::Double.new(1.1e1)
+        },
+        "literal value" => {term: RDF::RDFS[""], predicate: RDF::Vocab::DC11.title, value: RDF::Literal("The RDF Schema vocabulary \(RDFS\)")},
+      }.each do |pred, props|
+        it "emits #{pred}" do
+          graph = RDF::Graph.new {|g| props[:term].each_statement {|s| g << s}}
+
+          expect(graph.map(&:subject)).to all(eql(props[:term]))
+          expect(graph.query(predicate: props[:predicate]).map(&:object)).to include props[:value]
+        end
+      end
     end
   end
 end
