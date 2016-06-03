@@ -377,7 +377,7 @@ module RDF
       @object = {
         scheme: normalized_scheme,
         authority: normalized_authority,
-        path: normalized_path.sub(/\/+/, '/'),
+        path: normalized_path.squeeze('/'),
         query: normalized_query,
         fragment: normalized_fragment
       }
@@ -887,7 +887,7 @@ module RDF
     # Return normalized version of scheme, if any
     # @return [String]
     def normalized_scheme
-      scheme.strip.downcase if scheme
+      normalize_segment(scheme.strip, SCHEME, true) if scheme
     end
 
     ##
@@ -965,7 +965,7 @@ module RDF
     # @return [String]
     def normalized_host
       # Remove trailing '.' characters
-      normalize_segment(host, IHOST, true).sub(/\.*$/, '') if host
+      normalize_segment(host, IHOST, true).chomp('.') if host
     end
 
     ##
@@ -1059,7 +1059,7 @@ module RDF
 
       res = self.class.normalize_path(norm_segs.join("/"))
       # Special rules for specific protocols having empty paths
-      res.empty? ? (%w(http https ftp tftp).include?(normalized_scheme) ? '/' : "") : res
+      normalize_segment(res.empty? ? (%w(http https ftp tftp).include?(normalized_scheme) ? '/' : "") : res, IHIER_PART)
     end
 
     ##
@@ -1134,9 +1134,9 @@ module RDF
     # @return [String]
     def normalized_authority
       if authority
-        (userinfo ? "#{normalized_userinfo}@" : "") +
+        (userinfo ? normalized_userinfo.to_s + "@" : "") +
         normalized_host.to_s +
-        (normalized_port ? ":#{normalized_port}" : "")
+        (normalized_port ? ":" + normalized_port.to_s : "")
       end
     end
 
