@@ -1,3 +1,5 @@
+require 'thread'
+
 module RDF
   ##
   # An RDF repository.
@@ -248,6 +250,7 @@ module RDF
       def self.extend_object(obj)
         obj.instance_variable_set(:@data, obj.options.delete(:data) || 
                                           Hamster::Hash.new)
+        obj.instance_variable_set(:@mutex, Mutex.new)
         obj.instance_variable_set(:@tx_class, 
                                   obj.options.delete(:transaction_class) || 
                                   SerializedTransaction)
@@ -364,6 +367,12 @@ module RDF
       # @see Mutable#snapshot
       def snapshot
         self.class.new(data: @data).freeze
+      end
+
+      ##
+      # @private
+      def mutex
+        @mutex
       end
 
       protected
@@ -566,13 +575,15 @@ module RDF
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback
 
-          # `Hamster::Hash#==` will use a cheap `#equal?` check first, but fall 
-          # back on a full Ruby Hash comparison if required.
-          raise TransactionError, 'Error merging transaction. Repository' \
-                                  'has changed during transaction time.' unless 
-            repository.send(:data) == @base_snapshot.send(:data)
+          repository.mutex.synchronize do
+            # `Hamster::Hash#==` will use a cheap `#equal?` check first, but fall 
+            # back on a full Ruby Hash comparison if required.
+            raise TransactionError, 'Error merging transaction. Repository' \
+                                    'has changed during transaction time.' unless 
+              repository.send(:data) == @base_snapshot.send(:data)
 
-          repository.send(:data=, @snapshot.send(:data))
+            repository.send(:data=, @snapshot.send(:data))
+          end
         end
       end
     end # Implementation
