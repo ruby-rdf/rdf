@@ -207,6 +207,10 @@ describe RDF::Statement do
       expect(subject).not_to equal RDF::Statement.new s, p, o
       expect(subject).to equal subject
     end
+
+    it "is not == a RDF::List" do
+      expect(subject).not_to eq RDF::List[*subject]
+    end
   end
 
   context "completness" do
