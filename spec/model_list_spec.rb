@@ -585,6 +585,20 @@ describe RDF::List do
     it "returns true when comparing a list to its contents" do
       expect(ten).to eq ten.to_a
     end
+
+    it "returns false when comparing to non-list Values" do
+      expect(ten).not_to eq ten.subject
+      expect(ten).not_to eq ten.statements.first
+      expect(ten).not_to eq RDF::Node.new
+      expect(ten).not_to eq RDF::Graph.new
+    end
+    
+    it "returns false when comparing to similar statements" do
+      statement      = RDF::Statement(:s, :p, :o)
+      quasistatement = RDF::List[:s, :p, :o]
+      
+      expect(quasistatement).not_to eq statement
+    end
   end
 
   describe "#empty?" do
