@@ -452,7 +452,7 @@ module RDF
     # @return [Integer]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-3C-3D-3E
     def <=>(other)
-      to_a <=> other.to_a # TODO: optimize this
+      to_a <=> Array(other)
     end
 
     ##
