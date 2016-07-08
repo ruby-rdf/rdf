@@ -135,7 +135,7 @@ module RDF
     #
     # @return [Boolean]
     def variable?
-      !(has_subject?    && subject.resource? && 
+      !(has_subject?    && subject.resource? &&
         has_predicate?  && predicate.resource? &&
         has_object?     && (object.resource? || object.literal?) &&
         (has_graph?     ? graph_name.resource? : true ))
@@ -150,7 +150,7 @@ module RDF
     ##
     # @return [Boolean]
     def valid?
-      has_subject?    && subject.resource? && subject.valid? && 
+      has_subject?    && subject.resource? && subject.valid? &&
       has_predicate?  && predicate.uri? && predicate.valid? &&
       has_object?     && object.term? && object.valid? &&
       (has_graph?      ? graph_name.resource? && graph_name.valid? : true )
@@ -228,22 +228,61 @@ module RDF
     alias_method :has_blank_nodes?, :node?
 
     ##
+    # Checks statement equality as a quad.
+    #
     # @param  [Statement] other
     # @return [Boolean]
+    #
+    # @see RDF::URI#==
+    # @see RDF::Node#==
+    # @see RDF::Literal#==
+    # @see RDF::Query::Variable#==
     def eql?(other)
       other.is_a?(Statement) && self == other && (self.graph_name || false) == (other.graph_name || false)
     end
 
     ##
+    # Checks statement equality as a triple.
+    #
     # @param  [Object] other
     # @return [Boolean]
+    #
+    # @see RDF::URI#==
+    # @see RDF::Node#==
+    # @see RDF::Literal#==
+    # @see RDF::Query::Variable#==
     def ==(other)
-      to_a == Array(other)
+      to_a == Array(other) &&
+        !(other.is_a?(RDF::Value) && other.list?)
     end
 
     ##
+    # Checks statement equality with patterns.
+    #
+    # Uses `#eql?` to compare each of `#subject`, `#predicate`, `#object`, and
+    # `#graph_name` to those of `other`. Any statement part which is not
+    # present in `self` is ignored.
+    #
+    # @example
+    #   statement = RDF::Statement.new(RDF::URI('s'), RDF::URI('p'), RDF::URI('o'))
+    #   pattern   = RDF::Statement.new(RDF::URI('s'), RDF::URI('p'), RDF::Query::Variable.new)
+    #
+    #   # true
+    #   statement === statement
+    #   pattern   === statement
+    #   RDF::Statement.new(nil, nil, nil) === statement
+    #
+    #   # false
+    #   statement === pattern
+    #   statement === RDF::Statement.new(nil, nil, nil)
+    #
     # @param  [Statement] other
     # @return [Boolean]
+    #
+    # @see RDF::URI#eql?
+    # @see RDF::Node#eql?
+    # @see RDF::Literal#eql?
+    # @see RDF::Query::Variable#eql?
     def ===(other)
       return false if has_object?    && !object.eql?(other.object)
       return false if has_predicate? && !predicate.eql?(other.predicate)

@@ -140,6 +140,13 @@ module RDF
     attr_reader :graph
 
     ##
+    # @see RDF::Value#==
+    def ==(other)
+      return false if other.is_a?(RDF::Value) && !other.list?
+      super
+    end
+
+    ##
     # Returns the set intersection of this list and `other`.
     #
     # The resulting list contains the elements common to both lists, with no
@@ -272,7 +279,7 @@ module RDF
     #     a[3, 0] = "B"               #=> [1, 2, "A", "B"]
     #
     # @overload []=(index, term)
-    #   Replaces the element at `index` with `term`. 
+    #   Replaces the element at `index` with `term`.
     #   @param [Integer] index
     #   @param [RDF::Term] term
     #     A non-RDF::Term is coerced to a Literal.
@@ -445,7 +452,7 @@ module RDF
     # @return [Integer]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-3C-3D-3E
     def <=>(other)
-      to_a <=> other.to_a # TODO: optimize this
+      to_a <=> Array(other)
     end
 
     ##
