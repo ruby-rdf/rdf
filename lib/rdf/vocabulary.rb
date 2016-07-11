@@ -295,7 +295,7 @@ module RDF
           when RDF::URI("http://schema.org/inverseOf")      then :inverseOf
           when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
           when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
-          else                                              statement.predicate.pname
+          else                                              statement.predicate.pname.to_sym
           end
 
           value = if statement.object.uri?
