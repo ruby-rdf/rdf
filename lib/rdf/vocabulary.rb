@@ -117,7 +117,7 @@ module RDF
           name, options = args
           options = {label: name.to_s, vocab: self}.merge(options || {})
           uri_str = [to_s, name.to_s].join('')
-          Term.cache.delete(uri_str)  # Clear any previous entry
+          Term.cache.delete(uri_str.to_sym)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)
           props[name.to_sym] = prop
           # Define an accessor, except for problematic properties
