@@ -15,7 +15,6 @@ end
 
 group :debug do
   gem 'psych', platforms: [:mri, :rbx]
-  gem "wirble"
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
   gem 'rubinius-debugger', platform: :rbx

@@ -204,7 +204,7 @@ module RDF
         parse: true,
         help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
         lambda: ->(argv, opts) do
-          $stdout.puts "Input is " + (repository.valid? ? "" :"in") + "valid"
+          $stdout.puts "Input is " + (repository.valid? ? "" : "in") + "valid"
         end
       }
     }
