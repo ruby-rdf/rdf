@@ -550,6 +550,14 @@ module RDF
         end
         
         ##
+        # @note this is a simple object equality check.
+        # 
+        # @see RDF::Transaction#mutated?
+        def mutated?
+          !@snapshot.send(:data).equal?(repository.send(:data))
+        end
+        
+        ##
         # Replaces repository data with the transaction's snapshot in a safely 
         # serializable fashion.
         # 
