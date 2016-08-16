@@ -207,6 +207,20 @@ module RDF
   end
 
   ##
+  # Return an enumerator over {RDF::Statement} defined for this vocabulary.
+  # @return [RDF::Enumerable::Enumerator]
+  # @see    Object#enum_for
+  def self.enum_for(method = :each_statement, *args)
+    # Ensure that enumerators are, themselves, queryable
+    Enumerable::Enumerator.new do |yielder|
+      RDF::RDFV.send(method, *args) {|*y| yielder << (y.length > 1 ? y : y.first)}
+    end
+  end
+  class << self
+    alias_method :to_enum, :enum_for
+  end
+
+  ##
   # respond to module or RDFV
   def self.respond_to?(method, include_all = false)
     super || RDF::RDFV.respond_to?(method, include_all)

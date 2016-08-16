@@ -47,31 +47,38 @@ describe RDF::Vocabulary do
   end
 
   describe "#to_enum" do
-    subject {RDF::RDFS.to_enum}
-    it {should be_enumerable}
-    its(:count) {is_expected.to be >= 30}
-    it "enumerates statements" do
-      expect {|b| subject.each(&b)}.to yield_control.at_least(30).times
-      subject.each {|s| expect(s).to be_statement}
+    [RDF, RDF::RDFS, RDF::OWL, RDF::XSD].each do |vocab|
+      context vocab do
+        subject {vocab.to_enum}
+        it {should be_enumerable}
+        its(:count) {is_expected.to be >= 30}
+        it "enumerates statements" do
+          expect {|b| subject.each(&b)}.to yield_control.at_least(10).times
+          subject.each {|s| expect(s).to be_statement}
+        end
+      end
     end
 
-    it "yields rdfs:label" do
-      expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
-    end
-    it "yields rdfs:comment" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment.comment))
-    end
-    it "yields rdfs:isDefinedBy" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
-    end
-    it "yields rdf:type" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF.type, RDF.Property))
-    end
-    it "yields rdfs:domain" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.domain, RDF::RDFS.Resource))
-    end
-    it "yields rdfs:range" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.range, RDF::RDFS.Literal))
+    context "RDFS" do
+      subject {RDF::RDFS.to_enum}
+      it "yields rdfs:label" do
+        expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
+      end
+      it "yields rdfs:comment" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment.comment))
+      end
+      it "yields rdfs:isDefinedBy" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
+      end
+      it "yields rdf:type" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF.type, RDF.Property))
+      end
+      it "yields rdfs:domain" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.domain, RDF::RDFS.Resource))
+      end
+      it "yields rdfs:range" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.range, RDF::RDFS.Literal))
+      end
     end
   end
 
