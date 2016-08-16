@@ -58,6 +58,16 @@ describe RDF::Transaction do
       end
     end
 
+    describe 'mutated?' do
+      it 'raises an error for subclasses' do
+        class MyTx < described_class; end
+
+        tx = MyTx.new(repository)
+
+        expect { tx.mutated? }.to raise_error NotImplementedError
+      end
+    end
+
     describe '#execute' do
       it 'calls `changes#apply` with repository' do
         expect(subject.changes).to receive(:apply).with(subject.repository)

@@ -550,6 +550,14 @@ module RDF
         end
         
         ##
+        # @note this is a simple object equality check.
+        # 
+        # @see RDF::Transaction#mutated?
+        def mutated?
+          !@snapshot.send(:data).equal?(repository.send(:data))
+        end
+        
+        ##
         # Replaces repository data with the transaction's snapshot in a safely 
         # serializable fashion.
         # 
@@ -566,11 +574,9 @@ module RDF
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback
 
-          # `Hamster::Hash#==` will use a cheap `#equal?` check first, but fall 
-          # back on a full Ruby Hash comparison if required.
           raise TransactionError, 'Error merging transaction. Repository' \
                                   'has changed during transaction time.' unless 
-            repository.send(:data) == @base_snapshot.send(:data)
+            repository.send(:data).equal? @base_snapshot.send(:data)
 
           repository.send(:data=, @snapshot.send(:data))
         end
