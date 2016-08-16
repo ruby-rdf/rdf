@@ -42,7 +42,7 @@ module RDF
       [\\u{D0000}-\\u{DFFFD}]|[\\u{E1000}-\\u{EFFFD}]
     EOS
     IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]").freeze
-    SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*").freeze
+    SCHEME = Regexp.compile("[A-Za-z](?:[A-Za-z0-9+-\.])*").freeze
     PORT = Regexp.compile("[0-9]*").freeze
     IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]").freeze  # Simplified, no IPvFuture
     PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f][0-9A-Fa-f]").freeze
