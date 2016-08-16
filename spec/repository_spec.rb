@@ -2,7 +2,6 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'rdf/spec/repository'
 
 describe RDF::Repository do
-
   # @see lib/rdf/spec/repository.rb in rdf-spec
   it_behaves_like 'an RDF::Repository' do
     let(:repository) { RDF::Repository.new }
@@ -37,6 +36,23 @@ describe RDF::Repository do
       expect do
         begin; subject.apply_changeset(changeset) rescue ArgumentError; end;
       end.not_to change { subject.statements }
+    end
+  end
+
+  describe '#query_pattern' do
+    before { subject.insert(*RDF::Spec.quads) }
+
+    let(:graph_name) { subject.singleton_class::DEFAULT_GRAPH }
+
+    it "returns statements from unnamed graphs with default graph_name" do
+      pattern = RDF::Query::Pattern.new(nil, nil, nil, graph_name: graph_name)
+      solutions = []
+      subject.send(:query_pattern, pattern) {|s| solutions << s}
+      
+      unnamed_statements = subject.statements
+      unnamed_statements.reject! {|st| st.has_name?}
+
+      expect(solutions.size).to eq unnamed_statements.size
     end
   end
 end

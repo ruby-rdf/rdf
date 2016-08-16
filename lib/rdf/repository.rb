@@ -283,13 +283,6 @@ module RDF
       
       ##
       # @private
-      # @see RDF::Durable#durable?
-      def durable?
-        false
-      end
-      
-      ##
-      # @private
       # @see RDF::Enumerable#has_graph?      
       def has_graph?(graph)
         @data.has_key?(graph)
@@ -388,7 +381,7 @@ module RDF
 
           cs.each do |c, ss|
             next unless graph_name.nil? ||
-                        graph_name == false && !c ||
+                        graph_name == DEFAULT_GRAPH && !c ||
                         graph_name.eql?(c)
 
             ss = if subject.nil? || subject.is_a?(RDF::Query::Variable)
