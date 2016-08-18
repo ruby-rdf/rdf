@@ -40,7 +40,12 @@ module RDF
             datatype: String,
             on: ["--extra URIEncodedJSON"],
             description: "URI Encoded JSON representation of extra data"
-          ) {|arg| ::JSON.parse(::URI.decode(arg))},
+          ) do |arg|
+            ::JSON.parse(::URI.decode(arg)).inject({}) do |m1, (term, defs)|
+              d1 = defs.inject({}) {|m, (k,v)| m.merge(k.to_sym => v)}
+              m1.merge(term.to_sym => d1)
+            end
+          end,
         ]
       end
 
