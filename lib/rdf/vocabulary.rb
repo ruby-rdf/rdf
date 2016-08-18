@@ -120,6 +120,10 @@ module RDF
           Term.cache.delete(uri_str.to_sym)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)
           props[name.to_sym] = prop
+
+          # If name is empty, also treat it as the ontology
+          @ontology ||= prop if name.to_s.empty?
+
           # Define an accessor, except for problematic properties
           (class << self; self; end).send(:define_method, name) { prop } unless %w(property hash).include?(name.to_s)
           prop
@@ -129,6 +133,45 @@ module RDF
       # Alternate use for vocabulary terms, functionally equivalent to {#property}.
       alias_method :term, :property
       alias_method :__property__, :property
+
+      ##
+      # @overload ontology
+      #   Returns the ontology definition of the current vocabulary as a term.
+      #   @return [RDF::Vocabulary::Term]
+      #
+      # @overload ontology(name, options)
+      #   Defines the vocabulary ontology.
+      #
+      #   @param [String, #to_s] uri
+      #     The URI of the ontology.
+      #   @param [Hash{Symbol => Object}] options
+      #     Any other values are expected to be String which expands to a {URI} using built-in vocabulary prefixes. The value is a `String` or `Array<String>` which is interpreted according to the `range` of the associated property.
+      #   @option options [String, Array<String>] :label
+      #     Shortcut for `rdfs:label`, values are String interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :comment
+      #     Shortcut for `rdfs:comment`, values are String interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :type
+      #     Shortcut for `rdf:type`, values are String interpreted as a {URI}.
+      #   @return [RDF::Vocabulary::Term]
+      #
+      # @note If the ontology URI has the vocabulary namespace URI as a prefix, it may also be defined using {#property} or {#term}
+      def ontology(*args)
+        case args.length
+        when 0
+          @ontology
+        else
+          uri, options = args
+          options = {vocab: self}.merge(options || {})
+          Term.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
+          @ontology = Term.intern(uri.to_s, attributes: options)
+
+          # If the URI is the same as the vocabulary namespace, also define it as a term
+          props[:""] ||= @ontology if self.to_s == uri.to_s
+
+          @ontology
+        end
+      end
+      alias_method :__ontology__, :ontology
 
       ##
       #  @return [Array<RDF::URI>] a list of properties in the current vocabulary
@@ -150,7 +193,7 @@ module RDF
         elsif vocab = RDF::Vocabulary.each.detect {|v| v.__name__ && v.__prefix__ == prefix.to_sym}
           suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
         else
-          RDF::Vocabulary.find_term(pname) || RDF::URI(pname)
+          (RDF::Vocabulary.find_term(pname) rescue nil) || RDF::URI(pname)
         end
       end
 
@@ -177,8 +220,13 @@ module RDF
       def find_term(uri)
         uri = RDF::URI(uri)
         return uri if uri.is_a?(Vocabulary::Term)
-        vocab = RDF::Vocabulary.detect {|v| uri.start_with?(v.to_uri)}
-        vocab[uri.to_s[vocab.to_uri.to_s.length..-1]] if vocab
+        if vocab = find(uri)
+          if vocab.ontology == uri
+            vocab.ontology
+          else
+            vocab[uri.to_s[vocab.to_uri.to_s.length..-1].to_s]
+          end
+        end
       end
 
       ##
@@ -200,8 +248,11 @@ module RDF
       # @note the alias {__imports__} guards against `RDF::OWL.imports` returning a term, rather than an array of vocabularies
       # @return [Array<RDF::Vocabulary>]
       def imports
+        return [] unless self.ontology
         @imports ||= begin
-          Array(self[""].attributes[:"owl:imports"]).map {|pn|find(expand_pname(pn)) rescue nil}.compact
+          Array(self.ontology.attributes[:"owl:imports"]).map do |pn|
+            find(expand_pname(pn)) rescue nil
+          end.compact
         rescue KeyError
           []
         end
@@ -252,6 +303,9 @@ module RDF
         props.each do |name, subject|
           subject.each_statement(&block)
         end
+
+        # Also include the ontology, if it's not also a property
+        @ontology.each_statement(&block) if @ontology && @ontology != self
       end
 
       ##
@@ -279,11 +333,15 @@ module RDF
           Class.new(self.create(url))
         end
 
+        ont_url = url.to_s.sub(%r([/#]$), '')
         term_defs = {}
         graph.each do |statement|
-          next unless statement.subject.uri? && statement.subject.start_with?(url)
-          name = statement.subject.to_s[url.to_s.length..-1] 
+          next unless statement.subject.uri?
+          next unless statement.subject.start_with?(url) || statement.subject == ont_url
+          name = statement.subject.to_s[url.to_s.length..-1].to_s
           term = (term_defs[name.to_sym] ||= {})
+          term[:uri] = statement.subject if name.empty?
+
           key = case statement.predicate
           when RDF.type                                     then :type
           when RDF::RDFS.subClassOf                         then :subClassOf
@@ -318,7 +376,12 @@ module RDF
         end
 
         term_defs.each do |term, attributes|
-          vocab.__property__ term, attributes
+          if term == :""
+            uri = attributes.delete(:uri)
+            vocab.__ontology__ uri, attributes
+          else
+            vocab.__property__ term, attributes
+          end
         end
 
         vocab

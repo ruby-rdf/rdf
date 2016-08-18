@@ -104,14 +104,21 @@ module RDF
 
         # Split nodes into Class/Property/Datatype/Other
         term_nodes = {
+          ontology: {},
           class: {},
           property: {},
           datatype: {},
           other: {}
         }
 
+        # Generate Ontology first
+        if vocab.ontology
+          term_nodes[:ontology][vocab.ontology.to_s] = vocab.ontology.attributes
+        end
+
         vocab.each.to_a.sort.each do |term|
           name = term.to_s[base_uri.length..-1].to_sym
+          next if name.to_s.empty?  # Ontology serialized separately
           kind = begin
             case term.type.to_s
             when /Class/    then :class
@@ -127,6 +134,7 @@ module RDF
         end
 
         {
+          ontology: "Ontology definition",
           class: "Class definitions",
           property: "Property definitions",
           datatype: "Datatype definitions",
@@ -145,7 +153,11 @@ module RDF
       ##
       # Turn a node definition into a property/term expression
       def from_node(name, attributes, term_type)
-        op = term_type == :property ? "property" : "term"
+        op = case term_type
+        when :property then "property"
+        when :ontology then "ontology"
+        else                "term"
+        end
 
         components = ["    #{op} #{name.to_sym.inspect}"]
         attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|

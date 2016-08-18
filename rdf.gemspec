@@ -30,6 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency     'link_header', '~> 0.0', '>= 0.0.8'
   gem.add_runtime_dependency     'hamster',     '~> 3.0'
   gem.add_development_dependency 'rdf-spec',    '~> 2.0'
+  gem.add_development_dependency 'rdf-turtle',  '~> 2.0'
   gem.add_development_dependency 'rdf-vocab',   '~> 2.0'
   gem.add_development_dependency 'rdf-xsd',     '~> 2.0'
   gem.add_development_dependency 'rest-client', '~> 1.7'
