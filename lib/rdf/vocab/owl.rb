@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # frozen_string_literal: true
-# This file generated automatically using vocab-fetch from http://www.w3.org/2002/07/owl#
+# This file generated automatically using rdf vocabulary format from http://www.w3.org/2002/07/owl#
 require 'rdf'
 module RDF
   # @!parse
@@ -8,6 +8,35 @@ module RDF
   #   class OWL < RDF::StrictVocabulary
   #   end
   class OWL < RDF::StrictVocabulary("http://www.w3.org/2002/07/owl#")
+
+    # Ontology definition
+    ontology :"http://www.w3.org/2002/07/owl",
+      comment: %(
+  This ontology partially describes the built-in classes and
+  properties that together form the basis of the RDF/XML syntax of OWL 2.
+  The content of this ontology is based on Tables 6.1 and 6.2
+  in Section 6.4 of the OWL 2 RDF-Based Semantics specification,
+  available at http://www.w3.org/TR/owl2-rdf-based-semantics/.
+  Please note that those tables do not include the different annotations
+  \(labels, comments and rdfs:isDefinedBy links\) used in this file.
+  Also note that the descriptions provided in this ontology do not
+  provide a complete and correct formal description of either the syntax
+  or the semantics of the introduced terms \(please see the OWL 2
+  recommendations for the complete and normative specifications\).
+  Furthermore, the information provided by this ontology may be
+  misleading if not used with care. This ontology SHOULD NOT be imported
+  into OWL ontologies. Importing this file into an OWL 2 DL ontology
+  will cause it to become an OWL 2 Full ontology and may have other,
+  unexpected, consequences.
+   ).freeze,
+      :"dc11:title" => %(The OWL 2 Schema vocabulary \(OWL 2\)).freeze,
+      :"http://www.w3.org/2003/g/data-view#namespaceTransformation" => %(http://dev.w3.org/cvsweb/2009/owl-grddl/owx2rdf.xsl).freeze,
+      :"owl:imports" => %(http://www.w3.org/2000/01/rdf-schema).freeze,
+      :"owl:versionIRI" => %(http://www.w3.org/2002/07/owl).freeze,
+      :"owl:versionInfo" => %($Date: 2009/11/15 10:54:12 $).freeze,
+      :"rdfs:isDefinedBy" => [%(http://www.w3.org/TR/owl2-mapping-to-rdf/).freeze, %(http://www.w3.org/TR/owl2-rdf-based-semantics/).freeze, %(http://www.w3.org/TR/owl2-syntax/).freeze],
+      :"rdfs:seeAlso" => [%(http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-classes).freeze, %(http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-properties).freeze],
+      type: "owl:Ontology".freeze
 
     # Class definitions
     term :AllDifferent,

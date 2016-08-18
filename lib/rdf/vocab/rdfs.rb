@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # frozen_string_literal: true
-# This file generated automatically using vocab-fetch from http://www.w3.org/2000/01/rdf-schema#
+# This file generated automatically using rdf vocabulary format from http://www.w3.org/2000/01/rdf-schema#
 require 'rdf'
 module RDF
   # @!parse
@@ -8,6 +8,12 @@ module RDF
   #   class RDFS < RDF::StrictVocabulary
   #   end
   class RDFS < RDF::StrictVocabulary("http://www.w3.org/2000/01/rdf-schema#")
+
+    # Ontology definition
+    ontology :"http://www.w3.org/2000/01/rdf-schema#",
+      :"dc11:title" => %(The RDF Schema vocabulary \(RDFS\)).freeze,
+      :"rdfs:seeAlso" => %(http://www.w3.org/2000/01/rdf-schema-more).freeze,
+      type: "owl:Ontology".freeze
 
     # Class definitions
     term :Class,
@@ -112,12 +118,5 @@ module RDF
       range: "rdf:Property".freeze,
       :"rdfs:isDefinedBy" => %(rdfs:).freeze,
       type: "rdf:Property".freeze
-
-    # Extra definitions
-    term :"",
-      :"dc11:title" => %(The RDF Schema vocabulary \(RDFS\)).freeze,
-      label: "".freeze,
-      :"rdfs:seeAlso" => %(http://www.w3.org/2000/01/rdf-schema-more).freeze,
-      type: "owl:Ontology".freeze
   end
 end

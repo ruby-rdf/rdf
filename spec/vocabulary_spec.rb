@@ -82,6 +82,48 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe "#property" do
+    subject {RDF::XSD}
+    it "returns the 'property' term within the vocabulary" do
+      expect(subject.property).to be_a(RDF::Vocabulary::Term)
+      expect(subject.property).to eq "http://www.w3.org/2001/XMLSchema#property"
+    end
+
+    it "defines the named property" do
+      subject.property :foo, label: "Foo"
+      expect(subject.foo).to eq "http://www.w3.org/2001/XMLSchema#foo"
+      expect(subject.foo.label).to eq "Foo"
+    end
+
+    it "defines an ontology if symbol is empty" do
+      subject.property :"", label: "Ontology"
+      expect(subject[:""]).to eq "http://www.w3.org/2001/XMLSchema#"
+      expect(subject[:""].label).to eq "Ontology"
+      expect(subject.ontology).to eql subject[:""]
+    end
+  end
+
+  describe "#ontology" do
+    subject {RDF::XSD}
+    it "returns the nil if no ontology defined" do
+      subject.ontology "http://www.w3.org/2001/XMLSchema"
+      subject.remove_instance_variable(:@ontology)
+      expect(subject.ontology).to be_nil
+    end
+
+    it "defines an ontology otherwise" do
+      subject.ontology "http://www.w3.org/2001/XMLSchema", label: "XML Schema"
+      expect(subject.ontology).to eq "http://www.w3.org/2001/XMLSchema"
+      expect(subject.ontology.label).to eq "XML Schema"
+    end
+
+    it "defines a property with an empty symbol if same as namespace" do
+      subject.ontology "http://www.w3.org/2001/XMLSchema#", label: "Ontology"
+      expect(subject[:""]).to eq "http://www.w3.org/2001/XMLSchema#"
+      expect(subject[:""].label).to eq "Ontology"
+    end
+  end
+
   context "strict vocabularies" do
     STRICT_VOCABS.map {|s| RDF.const_get(s.upcase.to_sym)}.each do |vocab|
       context vocab do
@@ -264,7 +306,7 @@ describe RDF::Vocabulary do
 
   describe ".imported_from" do
     {
-      RDF::RDFS => [RDF::Vocab::WOT],
+      RDF::RDFS => [RDF::OWL, RDF::Vocab::WOT],
       RDF::OWL => [RDF::Vocab::WOT]
     }.each do |v, r|
       context v.to_uri do
