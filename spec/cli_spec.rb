@@ -5,6 +5,7 @@ require 'rdf/nquads'
 
 describe RDF::CLI do
   before(:all) {ARGV.replace %w(help)}
+  let(:triple) {'<http://example.com/subject> <http://example.com/predicate> "foo" .'}
 
   TEST_FILES = {
     nt: fixture_path('test.nt'),
@@ -20,12 +21,6 @@ describe RDF::CLI do
       ARGV.replace %w(help --debug)
       options = RDF::CLI.options
       expect(options.options[:logger].level).to eql Logger::DEBUG
-    end
-
-    it "sets :evaluate with --evaluate" do
-      ARGV.replace %w(help --evaluate foo)
-      options = RDF::CLI.options
-      expect(options.options[:evaluate]).to eql "foo"
     end
 
     describe "add_command" do
@@ -54,10 +49,10 @@ describe RDF::CLI do
       it "Calls options on selected reader" do
         ARGV.replace %w(help --format ntriples)
         expect(RDF::NTriples::Reader).to receive(:options).and_return({})
-        options = RDF::CLI.options
+        RDF::CLI.options
       end
 
-      #it "sets aborts given an illegitimate format" do
+      #it "aborts given an illegitimate format" do
       #  ARGV.replace %w(help --format foo)
       #  options = RDF::CLI.options
       #  expect(RDF::CLI).to receive(:abort).and_return(nil)
@@ -83,15 +78,23 @@ describe RDF::CLI do
       it "Calls options on selected writer" do
         ARGV.replace %w(help --output-format ntriples)
         expect(RDF::NTriples::Writer).to receive(:options).and_return({})
-        options = RDF::CLI.options
+        RDF::CLI.options
       end
 
-      #it "sets aborts given an illegitimate format" do
+      #it "aborts given an illegitimate format" do
       #  ARGV.replace %w(help --output-format foo)
       #  options = RDF::CLI.options
       #  expect(RDF::CLI).to receive(:abort).and_return(nil)
       #  expect(options.options[::output_format]).not_to eql :foo
       #end
+    end
+
+    describe "--evaluate" do
+      it "sets :evaluate" do
+        ARGV.replace (%w(helpcount --format ntriples --evaluate) << triple)
+        options = RDF::CLI.options
+        expect(options.options[:evaluate]).to eql triple
+      end
     end
   end
 
@@ -130,6 +133,10 @@ describe RDF::CLI do
         g = RDF::Repository.load(file)
         expect {RDF::CLI.exec(["count", file])}.to write(/Parsed #{g.count} statements/)
       end
+    end
+
+    it "evaluates from argument" do
+      expect {RDF::CLI.exec(["count"], format: :ntriples, evaluate: triple)}.to write(/Parsed 1 statements/)
     end
   end
 

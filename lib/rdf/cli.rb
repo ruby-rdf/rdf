@@ -439,7 +439,9 @@ module RDF
         # If files are empty, either use options[:execute]
         input = options[:evaluate] ? StringIO.new(options[:evaluate]) : $stdin
         input.set_encoding(options.fetch(:encoding, Encoding::UTF_8))
-        RDF::Reader.for(options[:format] || :ntriples).new(input, options) do |reader|
+        r = RDF::Reader.for(options[:format] || :ntriples)
+        (@readers ||= []) << r
+        r.new(input, options) do |reader|
           yield(reader)
         end
       else
