@@ -351,6 +351,7 @@ module RDF
       self.object.canonicalize!     if has_object? && !self.object.frozen?
       self.graph_name.canonicalize! if has_graph? && !self.graph_name.frozen?
       self.validate!
+      @hash = nil
       self
     end
 
