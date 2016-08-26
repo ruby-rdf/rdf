@@ -242,6 +242,12 @@ module RDF
     end
 
     ##
+    # Generates a Fixnum hash value as a quad.
+    def hash
+      @hash ||= to_quad.hash
+    end
+
+    ##
     # Checks statement equality as a triple.
     #
     # @param  [Object] other
