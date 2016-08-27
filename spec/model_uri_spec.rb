@@ -467,6 +467,7 @@ describe RDF::URI do
       it "#canonicalize #{name}" do
         u1 = RDF::URI(input)
         u2 = RDF::URI(output)
+        expect(u1.canonicalize.hash).to eq u2.hash
         expect(u1.canonicalize.to_s).to eq u2.to_s
         expect(u1).to eq u1
       end

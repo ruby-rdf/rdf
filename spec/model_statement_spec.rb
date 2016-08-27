@@ -211,6 +211,8 @@ describe RDF::Statement do
     it "is not == a RDF::List" do
       expect(subject).not_to eq RDF::List[*subject]
     end
+
+    specify {expect(RDF::Statement(:s, p, o).hash).to eq (RDF::Statement(:s, p, o).hash)}
   end
 
   context "completness" do

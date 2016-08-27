@@ -382,6 +382,7 @@ module RDF
         fragment: normalized_fragment
       }
       @value = nil
+      @hash = nil
       self
     end
     alias_method :normalize!, :canonicalize!
