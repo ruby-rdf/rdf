@@ -212,7 +212,7 @@ module RDF
     ##
     # @see RDF::Dataset#isolation_level
     def isolation_level
-      supports?(:snapshot) ? :repeatable_read : super
+      supports?(:snapshots) ? :repeatable_read : super
     end
 
     ##
