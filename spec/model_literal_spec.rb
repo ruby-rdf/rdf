@@ -248,7 +248,6 @@ describe RDF::Literal do
     end
   end
 
-
   describe "#compatible?" do
     {
       %("abc") => {
@@ -283,6 +282,32 @@ describe RDF::Literal do
           end
         end
       end
+    end
+  end
+
+  describe "#squish" do
+    let(:result) {"a b c"}
+    subject {RDF::Literal("  a\n b  c\n  ")}
+
+    it "squeezes properly" do
+      expect(subject.squish).to eq result
+    end
+
+    it "returns a new object" do
+      expect(subject.squish).not_to equal subject
+    end
+  end
+
+  describe "#squish!" do
+    let(:result) {"a b c"}
+    subject {RDF::Literal("  a\n b  c\n  ")}
+
+    it "squeezes properly" do
+      expect(subject.squish!).to eq result
+    end
+
+    it "returns itself" do
+      expect(subject.squish!).to equal subject
     end
   end
 
