@@ -328,8 +328,11 @@ describe RDF::Vocabulary do
     let!(:graph) {
       RDF::Graph.new << RDF::NTriples::Reader.new(nt)
     }
+    let!(:vocab) {
+      @vocab ||= RDF::Vocabulary.from_graph(graph, url: "http://example/")
+    }
 
-    subject {RDF::Vocabulary.from_graph(graph, url: "http://example/")}
+    subject {@vocab}
 
     it "creates terms" do
       expect(subject).to be_a_vocabulary("http://example/")
@@ -341,6 +344,28 @@ describe RDF::Vocabulary do
 
       it "adds extra properties to vocabulary" do
         expect(subject).to have_properties("http://example/", %w(id))
+      end
+    end
+
+    context "with existing Vocabulary" do
+      let!(:nt) {%{
+        <http://example/Klass> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+        <http://example/Klass> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .
+        <http://example/pr0p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+        <http://example/pr0p> <http://www.w3.org/2000/01/rdf-schema#Datatype> "pr0p" .
+      }}
+      let!(:graph) {
+        RDF::Graph.new << RDF::NTriples::Reader.new(nt)
+      }
+      subject {RDF::Vocabulary.from_graph(graph, url: "http://example/", class_name: vocab)}
+
+      it "creates terms" do
+        expect(subject).to be_a_vocabulary("http://example/")
+        expect(subject).to have_properties("http://example/", %w(Klass pr0p))
+      end
+
+      it "removes old terms" do
+        expect(subject).not_to have_properties("http://example/", %w(Class prop))
       end
     end
   end

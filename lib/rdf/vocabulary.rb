@@ -321,13 +321,18 @@ module RDF
       #
       # @param [RDF::Enumerable] graph
       # @param [URI, #to_s] url
-      # @param [String] class_name
-      #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`.
+      # @param [RDF::Vocabulary, String] class_name
+      #   The class_name associated with the vocabulary, used for creating the class name of the vocabulary. This will create a new class named with a top-level constant based on `class_name`. If given an existing vocabulary, it replaces the existing definitions for that vocabulary with those from the graph.
       # @param [Array<Symbol>, Hash{Symbol => Hash}] extra
       #   Extra terms to add to the vocabulary. In the first form, it is an array of symbols, for which terms are created. In the second, it is a Hash mapping symbols to property attributes, as described in {RDF::Vocabulary.property}.
       # @return [RDF::Vocabulary] the loaded vocabulary
       def from_graph(graph, url: nil, class_name: nil, extra: nil)
-        vocab = if class_name
+        vocab = case class_name
+        when RDF::Vocabulary
+          class_name.instance_variable_set(:@ontology, nil)
+          class_name.instance_variable_set(:@properties, nil)
+          class_name
+        when String
           Object.const_set(class_name, Class.new(self.create(url)))
         else
           Class.new(self.create(url))
