@@ -74,6 +74,7 @@ describe RDF::Statement do
     it {is_expected.to be_asserted}
     it {is_expected.not_to be_quoted}
     it {is_expected.to be_statement}
+    it {is_expected.not_to be_inferred}
   end
 
   context "when created with a blank node subject" do
@@ -168,6 +169,11 @@ describe RDF::Statement do
       stmt[3] = c = RDF::URI("http://example.org/graph_name")
       expect(stmt.graph_name).to eq c
     end
+  end
+
+  context "when marked as inferred" do
+    subject {RDF::Statement.new(RDF::Node.new, p, o, inferred: true)}
+    it {is_expected.to be_inferred}
   end
 
   it {is_expected.to respond_to(:to_hash)}
