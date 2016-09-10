@@ -208,6 +208,19 @@ module RDF
     end
 
     ##
+    # Returns the set of content types with quality for available RDF::Reader subclasses.
+    #
+    # @example
+    #
+    #     accept_types = RDF::Format.accept_types
+    #     # => %w(text/html;q=0.5 text/turtle ...)
+    #
+    # @return [Array<String>]
+    def self.accept_types
+      reader_symbols.flat_map {|s| RDF::Format.for(s).accept_type}.uniq
+    end
+
+    ##
     # Returns the set of format symbols for available RDF::Writer subclasses.
     #
     # @example
@@ -400,6 +413,11 @@ module RDF
     #   extensions, that should be mapped to the given MIME type and handled
     #   by this class.
     #
+    #   Optionally, both `type`, `alias`, and `aliases`, may be parameterized
+    #   for expressing quality.
+    #
+    #       content_type "text/html;q=0.4"
+    #
     #   @param  [String]                 type
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [String]         :alias   (nil)
@@ -420,9 +438,13 @@ module RDF
         [@@content_type[self], @@content_types.map {
           |ct, cl| (cl.include?(self) && ct != @@content_type[self]) ?  ct : nil }].flatten.compact
       else
+        accept_type, type = type, type.split(';').first
         @@content_type[self] = type
         @@content_types[type] ||= []
         @@content_types[type] << self unless @@content_types[type].include?(self)
+
+        @@accept_types[accept_type] ||= []
+        @@accept_types[accept_type] << self unless @@accept_types[accept_type].include?(self)
 
         if extensions = (options[:extension] || options[:extensions])
           extensions = Array(extensions).map(&:to_sym)
@@ -433,11 +455,24 @@ module RDF
         end
         if aliases = (options[:alias] || options[:aliases])
           aliases = Array(aliases).each do |a|
-            @@content_types[a] ||= []
-            @@content_types[a] << self unless @@content_types[a].include?(self)
+            aa = a.split(';').first
+            @@accept_types[a] ||= []
+            @@accept_types[a] << self unless @@accept_types[a].include?(self)
+
+            @@content_types[aa] ||= []
+            @@content_types[aa] << self unless @@content_types[aa].include?(self)
           end
         end
       end
+    end
+
+    ##
+    # Returns an array of values appropriate for an Accept header.
+    # Same as `self.content_type`, if no parameter is given when defined.
+    #
+    # @return [Array<String>]
+    def self.accept_type
+      @@accept_types.map {|t, formats| t if formats.include?(self)}.compact
     end
 
     ##
@@ -488,6 +523,7 @@ module RDF
     @@content_type     = {} # @private
     @@content_types    = {} # @private
     @@content_encoding = {} # @private
+    @@accept_types     = {} # @private
     @@readers          = {} # @private
     @@writers          = {} # @private
     @@subclasses       = [] # @private

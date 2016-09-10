@@ -4,7 +4,8 @@ require 'rdf/ntriples'
 require 'rdf/nquads'
 
 class RDF::Format::FooFormat < RDF::Format
-  content_type     'application/test', extension: :test
+  content_type     'application/test;q=1',
+                   extension: :test
   reader { RDF::NTriples::Reader }
   def self.detect(sample)
     sample == "foo"
@@ -13,7 +14,9 @@ class RDF::Format::FooFormat < RDF::Format
 end
 
 class RDF::Format::BarFormat < RDF::Format
-  content_type     'application/test', extension: :test
+  content_type     'application/test',
+                   extension: :test,
+                   alias: 'application/x-test;q=0.1'
   reader { RDF::NTriples::Reader }
   def self.detect(sample)
     sample == "bar"
@@ -68,13 +71,21 @@ describe RDF::Format do
 
   describe ".reader_types" do
     it "returns content-types of available readers" do
-      %w(
+      expect(RDF::Format.reader_types).to include(*%w(
         application/n-triples text/plain
         application/n-quads text/x-nquads
-        application/test
-      ).each do |ct|
-        expect(RDF::Format.reader_types).to include(ct)
-      end
+        application/test application/x-test
+      ))
+    end
+  end
+
+  describe ".accept_types" do
+    it "returns accept-types of available readers with quality" do
+      expect(RDF::Format.accept_types).to include(*%w(
+        application/n-triples text/plain;q=0.2
+        application/n-quads text/x-nquads;q=0.2
+        application/test application/x-test;q=0.1
+      ))
     end
   end
 

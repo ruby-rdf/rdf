@@ -39,24 +39,7 @@ module RDF; module Util
       ##
       # @return [String] the value for an Accept header
       def self.default_accept_header
-        # Receive text/html and text/plain at a lower priority than other formats. Also special cases for other formats.
-        # TODO: Associate priority level when setting `content_type` and use in an alternative to `reader_types`, or to simply change `reader_types`.
-        reader_types = RDF::Format.reader_types.map do |t|
-          case t.to_s
-          when /text\/plain/
-            "#{t};q=0.2"
-          when /text\/(?:csv|tab-separated-values)/
-            "#{t};q=0.4"
-          when /text\/html/
-            "#{t};q=0.5"
-          when /application\/xhtml\+xml/
-            "#{t};q=0.7"
-          else
-            t
-          end
-        end
-
-        (reader_types + %w(*/*;q=0.1)).join(", ")
+        (RDF::Format.accept_types + %w(*/*;q=0.1)).join(", ")
       end
       
       ##
