@@ -177,11 +177,12 @@ module RDF
     # @see RDF::Enumerable#supports?
     def supports?(feature)
       case feature.to_sym
-      when :graph_name   then @options[:with_graph_name]
-      when :inference    then false  # forward-chaining inference
-      when :validity     then @options.fetch(:with_validity, true)
-      when :atomic_write then false
-      when :snapshots    then false
+      when :graph_name       then @options[:with_graph_name]
+      when :inference        then false  # forward-chaining inference
+      when :validity         then @options.fetch(:with_validity, true)
+      when :literal_equality then true
+      when :atomic_write     then false
+      when :snapshots        then false
       else false
       end
     end
@@ -259,11 +260,12 @@ module RDF
       # @see RDF::Enumerable#supports?
       def supports?(feature)
         case feature.to_sym
-        when :graph_name   then @options[:with_graph_name]
-        when :inference    then false  # forward-chaining inference
-        when :validity     then @options.fetch(:with_validity, true)
-        when :atomic_write then true
-        when :snapshots    then true
+        when :graph_name       then @options[:with_graph_name]
+        when :inference        then false  # forward-chaining inference
+        when :validity         then @options.fetch(:with_validity, true)
+        when :literal_equality then true
+        when :atomic_write     then true
+        when :snapshots        then true
         else false
         end
       end
