@@ -16,3 +16,4 @@ addons:
 matrix:
   allow_failures:
     - rvm: jruby
+    - rvm: rbx

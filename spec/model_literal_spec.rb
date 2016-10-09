@@ -467,7 +467,9 @@ describe RDF::Literal do
         +INF
         INF
         -INF
+        Inf
         NaN
+        NAN
         3E1
       ),
       %w(foo 12.xyz 1.0ez) + ['1.1e1 foo', 'foo 1.1e1']
