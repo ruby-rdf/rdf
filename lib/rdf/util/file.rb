@@ -97,7 +97,7 @@ module RDF; module Util
             # Document base is redirected location
             # Location may be relative
             base_uri = ::URI.join(base_uri, response.headers[:location].to_s).to_s
-            response.follow_redirection(request, res, &blk)
+            response.follow_redirection(&blk)
           else
             raise IOError, "<#{base_uri}>: #{response.code}"
           end
