@@ -179,13 +179,14 @@ Note that no prefixes are loaded automatically, however they can be provided as 
 ### Querying RDF data using basic graph patterns (BGPs)
 
     require 'rdf/ntriples'
+    require 'rdf/vocab'
     
     graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
     query = RDF::Query.new({
       person: {
         RDF.type  => FOAF.Person,
-        FOAF.name => :name,
-        FOAF.mbox => :email,
+        RDF::Vocab::FOAF.name => :name,
+        RDF::Vocab::FOAF.mbox => :email,
       }
     })
     
@@ -205,13 +206,24 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 
 ### Using pre-defined RDF vocabularies
 
-    DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
-    FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
     RDF.type      #=> RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-    RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
-    RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
+    
+    RDF::OWL      #=> not autoloading, so invoke it
     OWL.sameAs    #=> RDF::URI("http://www.w3.org/2002/07/owl#sameAs")
+
+    RDF::RDFS     #=> not autoloading, so invoke it
+    RDFS.seeAlso  #=> RDF::URI("http://www.w3.org/2000/01/rdf-schema#seeAlso")
+    
+    RDF::XSD      #=> not autoloading, so invoke it
     XSD.dateTime  #=> RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
+
+Most vocabularies are moved to 'rdf/vocab':
+  
+    require 'rdf/vocab'
+    
+    RDF::Vocab::DC.title      #=> RDF::URI("http://purl.org/dc/terms/title")
+    RDF::Vocab::FOAF.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
+    RDF::Vocab::RSS.title     #=> RDF::URI("http://purl.org/rss/1.0/title")
 
 ### Using ad-hoc RDF vocabularies
 
