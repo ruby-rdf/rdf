@@ -23,9 +23,8 @@ module RDF; class Literal
       @string   = options[:lexical] if options.has_key?(:lexical)
       @string   ||= value if value.is_a?(String)
       @object   = case
-        when value.is_a?(::String)    then Integer(value) rescue nil
-        when value.is_a?(::Integer)   then value
         when value.respond_to?(:to_i) then value.to_i
+        when value.is_a?(::Integer)   then value
         else Integer(value.to_s) rescue nil
       end
     end
