@@ -155,6 +155,11 @@ describe RDF::Literal do
     end
   end
 
+  it "#start_with?" do
+    expect(RDF::Literal('foo')).to be_start_with('foo')
+    expect(RDF::Literal('bar')).not_to be_start_with('foo')
+  end
+
   describe "#==" do
     literals(:all_plain).each do |args|
       it "returns true for #{args.inspect}" do

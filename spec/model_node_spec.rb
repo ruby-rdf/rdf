@@ -56,6 +56,11 @@ describe RDF::Node do
     specify {expect(RDF::Node.intern(:a)).to eql RDF::Node.intern("a")}
   end
 
+  it "#start_with?" do
+    expect(RDF::Node('foo')).to be_start_with('_:foo')
+    expect(RDF::Node('bar')).not_to be_start_with('_:foo')
+  end
+
   subject {new.call("foo")}
 
   describe "#dup" do
