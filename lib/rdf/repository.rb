@@ -177,11 +177,12 @@ module RDF
     # @see RDF::Enumerable#supports?
     def supports?(feature)
       case feature.to_sym
-      when :graph_name   then @options[:with_graph_name]
-      when :inference    then false  # forward-chaining inference
-      when :validity     then @options.fetch(:with_validity, true)
-      when :atomic_write then false
-      when :snapshots    then false
+      when :graph_name       then @options[:with_graph_name]
+      when :inference        then false  # forward-chaining inference
+      when :validity         then @options.fetch(:with_validity, true)
+      when :literal_equality then true
+      when :atomic_write     then false
+      when :snapshots        then false
       else false
       end
     end
@@ -212,7 +213,7 @@ module RDF
     ##
     # @see RDF::Dataset#isolation_level
     def isolation_level
-      supports?(:snapshot) ? :repeatable_read : super
+      supports?(:snapshots) ? :repeatable_read : super
     end
 
     ##
@@ -259,11 +260,12 @@ module RDF
       # @see RDF::Enumerable#supports?
       def supports?(feature)
         case feature.to_sym
-        when :graph_name   then @options[:with_graph_name]
-        when :inference    then false  # forward-chaining inference
-        when :validity     then @options.fetch(:with_validity, true)
-        when :atomic_write then true
-        when :snapshots    then true
+        when :graph_name       then @options[:with_graph_name]
+        when :inference        then false  # forward-chaining inference
+        when :validity         then @options.fetch(:with_validity, true)
+        when :literal_equality then true
+        when :atomic_write     then true
+        when :snapshots        then true
         else false
         end
       end
@@ -279,13 +281,6 @@ module RDF
           end
         end
         count
-      end
-      
-      ##
-      # @private
-      # @see RDF::Durable#durable?
-      def durable?
-        false
       end
       
       ##
@@ -388,7 +383,7 @@ module RDF
 
           cs.each do |c, ss|
             next unless graph_name.nil? ||
-                        graph_name == false && !c ||
+                        graph_name == DEFAULT_GRAPH && !c ||
                         graph_name.eql?(c)
 
             ss = if subject.nil? || subject.is_a?(RDF::Query::Variable)
@@ -550,6 +545,14 @@ module RDF
         end
         
         ##
+        # @note this is a simple object equality check.
+        # 
+        # @see RDF::Transaction#mutated?
+        def mutated?
+          !@snapshot.send(:data).equal?(repository.send(:data))
+        end
+        
+        ##
         # Replaces repository data with the transaction's snapshot in a safely 
         # serializable fashion.
         # 
@@ -566,11 +569,9 @@ module RDF
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
                                   'Open a new one instead.' if @rolledback
 
-          # `Hamster::Hash#==` will use a cheap `#equal?` check first, but fall 
-          # back on a full Ruby Hash comparison if required.
           raise TransactionError, 'Error merging transaction. Repository' \
                                   'has changed during transaction time.' unless 
-            repository.send(:data) == @base_snapshot.send(:data)
+            repository.send(:data).equal? @base_snapshot.send(:data)
 
           repository.send(:data=, @snapshot.send(:data))
         end

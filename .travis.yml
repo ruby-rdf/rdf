@@ -4,15 +4,13 @@ script: "bundle exec rspec spec"
 env:
   - CI=true
 rvm:
-  - 2.2.5
-  - 2.3.1
+  - 2.2.6
+  - 2.3.3
   - jruby
   - rbx
 cache: bundler
 sudo: false
-addons:
-  code_climate:
-    repo_token: 5806cc8a21c03f4e2f9d3b9d98d5d9fe084b66243b1dbb27b467dbc795acdcac
 matrix:
   allow_failures:
     - rvm: jruby
+    - rvm: rbx

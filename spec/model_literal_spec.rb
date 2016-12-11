@@ -30,9 +30,9 @@ describe RDF::Literal do
   def self.literals(*selector)
     selector.inject([]) do |ary, sel|
       ary += case sel
-      when :all_simple        then [:empty, :plain, :string].map {|sel| literal(sel)}
-      when :all_plain_lang    then [:empty_lang, :plain_lang].map {|sel| literal(sel)}
-      when :all_native        then [:false, :true, :int, :long, :double, :time, :date, :datetime].map {|sel| literal(sel)}
+      when :all_simple        then [:empty, :plain, :string].map {|s| literal(s)}
+      when :all_plain_lang    then [:empty_lang, :plain_lang].map {|s| literal(s)}
+      when :all_native        then [:false, :true, :int, :long, :double, :time, :date, :datetime].map {|s| literal(s)}
       when :all_plain         then literals(:all_simple, :all_plain_lang)
       else                         literals(:all_plain, :all_native)
       end
@@ -155,6 +155,11 @@ describe RDF::Literal do
     end
   end
 
+  it "#start_with?" do
+    expect(RDF::Literal('foo')).to be_start_with('foo')
+    expect(RDF::Literal('bar')).not_to be_start_with('foo')
+  end
+
   describe "#==" do
     literals(:all_plain).each do |args|
       it "returns true for #{args.inspect}" do
@@ -180,7 +185,7 @@ describe RDF::Literal do
       end
 
       it "returns true for value of #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        #literal = RDF::Literal.new(*args)
         #expect(literal).to eq literal.value # FIXME: fails on xsd:date, xsd:time, and xsd:dateTime
       end
     end
@@ -248,7 +253,6 @@ describe RDF::Literal do
     end
   end
 
-
   describe "#compatible?" do
     {
       %("abc") => {
@@ -283,6 +287,32 @@ describe RDF::Literal do
           end
         end
       end
+    end
+  end
+
+  describe "#squish" do
+    let(:result) {"a b c"}
+    subject {RDF::Literal("  a\n b  c\n  ")}
+
+    it "squeezes properly" do
+      expect(subject.squish).to eq result
+    end
+
+    it "returns a new object" do
+      expect(subject.squish).not_to equal subject
+    end
+  end
+
+  describe "#squish!" do
+    let(:result) {"a b c"}
+    subject {RDF::Literal("  a\n b  c\n  ")}
+
+    it "squeezes properly" do
+      expect(subject.squish!).to eq result
+    end
+
+    it "returns itself" do
+      expect(subject.squish!).to equal subject
     end
   end
 
@@ -326,6 +356,7 @@ describe RDF::Literal do
     it_behaves_like 'RDF::Literal lexical values', "1"
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.integer, [
       %w(01 1),
+      %w(0123 123),
       %w(1  1),
       %w(-1 -1),
       %w(+1 1)
@@ -356,12 +387,15 @@ describe RDF::Literal do
     it_behaves_like 'RDF::Literal lexical values', "1.1"
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.decimal, [
       %w(1                              1.0),
+      %w(01                             1.0),
+      %w(0123                           123.0),
       %w(-1                             -1.0),
       %w(1.                             1.0),
       %w(1.0                            1.0),
       %w(1.00                           1.0),
       %w(+001.00                        1.0),
       %w(123.456                        123.456),
+      %w(0123.456                       123.456),
       %w(1.000000000                    1.0),
       %w(2.345                          2.345),
       %w(2.3                            2.3),
@@ -414,6 +448,8 @@ describe RDF::Literal do
     it_behaves_like 'RDF::Literal lexical values', "1.0E0"
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.double, [
       %w(1         1.0E0),
+      %w(01        1.0E0),
+      %w(0123      1.23E2),
       %w(-1        -1.0E0),
       %w(+01.000   1.0E0),
       #%w(1.        1.0E0),
@@ -442,7 +478,9 @@ describe RDF::Literal do
         +INF
         INF
         -INF
+        Inf
         NaN
+        NAN
         3E1
       ),
       %w(foo 12.xyz 1.0ez) + ['1.1e1 foo', 'foo 1.1e1']
@@ -475,7 +513,7 @@ describe RDF::Literal do
 
     it "recognizes -INF" do
       expect(-inf).to be_infinite
-      expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq -inf
+      expect(RDF::Literal.new('-INF', datatype: RDF::Literal::Double::DATATYPE)).to eq(-inf)
       expect {-inf.canonicalize}.not_to raise_error
     end
 
@@ -515,10 +553,10 @@ describe RDF::Literal do
 
     # Multiplication
     {
-      -1 => [RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
-      0  => [:nan, :nan],
-      1  => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF")],
-    }.each do |n, (p, m)|
+      -1 => RDF::Literal::Double.new("-INF"),
+      0  => :nan,
+      1  => RDF::Literal::Double.new("INF"),
+    }.each do |n, p|
       it "returns #{p} for #{n} * INF" do
         if p == :nan
           expect(RDF::Literal::Double.new(n) * inf).to be_nan
@@ -554,7 +592,7 @@ describe RDF::Literal do
     it "adds infinities" do
       expect(inf + inf).to eq inf
       expect(inf + -inf).to be_nan
-      expect(-inf + -inf).to eq -inf
+      expect(-inf + -inf).to eq(-inf)
       expect(-inf + inf).to be_nan
     end
 

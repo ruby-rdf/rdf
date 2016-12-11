@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 # frozen_string_literal: true
-# This file generated automatically using vocab-fetch from etc/xsd.ttl
+# This file generated automatically using rdf vocabulary format from http://www.w3.org/2001/XMLSchema#
 require 'rdf'
 module RDF
   # @!parse

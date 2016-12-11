@@ -1,13 +1,24 @@
 # -*- encoding: utf-8 -*-
-# This file generated automatically using vocab-fetch from http://www.w3.org/1999/02/22-rdf-syntax-ns#
+# frozen_string_literal: true
+# This file generated automatically using rdf vocabulary format from http://www.w3.org/1999/02/22-rdf-syntax-ns#
 require 'rdf'
 module RDF
-  class RDFV < StrictVocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+  # @!parse
+  #   # Vocabulary for <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  #   class RDFV < RDF::StrictVocabulary
+  #   end
+  class RDFV < RDF::StrictVocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
     class << self
       def name; "RDF"; end
       alias_method :__name__, :name
     end
+
+    # Ontology definition
+    ontology :"http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      :"dc11:description" => %(This is the RDF Schema for the RDF vocabulary terms in the RDF Namespace, defined in RDF 1.1 Concepts.).freeze,
+      :"dc11:title" => %(The RDF Concepts Vocabulary \(RDF\)).freeze,
+      type: "owl:Ontology".freeze
 
     # Class definitions
     term :Alt,
@@ -128,11 +139,7 @@ module RDF
       type: "rdfs:Datatype".freeze
 
     # Extra definitions
-    term :"",
-      :"dc11:description" => %(This is the RDF Schema for the RDF vocabulary terms in the RDF Namespace, defined in RDF 1.1 Concepts.).freeze,
-      :"dc11:title" => %(The RDF Concepts Vocabulary \(RDF\)).freeze,
-      type: "owl:Ontology".freeze
-    term :Description,
+   term :Description,
       comment: %(RDF/XML node element).freeze,
       label: "Description".freeze
     term :ID,

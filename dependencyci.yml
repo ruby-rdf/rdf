@@ -1,0 +1,5 @@
+platform:
+  Rubygems:
+    rdf-isomorphic:
+      tests:
+        unmaintained: skip

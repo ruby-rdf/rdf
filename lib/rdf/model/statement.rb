@@ -67,6 +67,7 @@ module RDF
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
+    #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
     #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, options = {})
@@ -78,6 +79,7 @@ module RDF
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
+    #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
     #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       if subject.is_a?(Hash)
@@ -138,7 +140,7 @@ module RDF
       !(has_subject?    && subject.resource? &&
         has_predicate?  && predicate.resource? &&
         has_object?     && (object.resource? || object.literal?) &&
-        (has_graph?     ? graph_name.resource? : true ))
+        (has_graph?     ? graph_name.resource? : true))
     end
 
     ##
@@ -153,7 +155,7 @@ module RDF
       has_subject?    && subject.resource? && subject.valid? &&
       has_predicate?  && predicate.uri? && predicate.valid? &&
       has_object?     && object.term? && object.valid? &&
-      (has_graph?      ? graph_name.resource? && graph_name.valid? : true )
+      (has_graph?      ? (graph_name.resource? && graph_name.valid?) : true)
     end
 
     ##
@@ -171,7 +173,7 @@ module RDF
     ##
     # @return [Boolean]
     def inferred?
-      false
+      !!@options[:inferred]
     end
 
     ##
@@ -239,6 +241,12 @@ module RDF
     # @see RDF::Query::Variable#==
     def eql?(other)
       other.is_a?(Statement) && self == other && (self.graph_name || false) == (other.graph_name || false)
+    end
+
+    ##
+    # Generates a Fixnum hash value as a quad.
+    def hash
+      @hash ||= to_quad.hash
     end
 
     ##
@@ -345,6 +353,7 @@ module RDF
       self.object.canonicalize!     if has_object? && !self.object.frozen?
       self.graph_name.canonicalize! if has_graph? && !self.graph_name.frozen?
       self.validate!
+      @hash = nil
       self
     end
 

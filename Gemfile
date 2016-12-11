@@ -6,6 +6,7 @@ group :develop do
   gem 'rdf-isomorphic', github: "ruby-rdf/rdf-isomorphic",  branch: "develop"
   gem "rdf-reasoner",   github: "ruby-rdf/rdf-reasoner",    branch: "develop"
   gem "rdf-spec",       github: "ruby-rdf/rdf-spec",        branch: "develop"
+  gem "rdf-turtle",     github: "ruby-rdf/rdf-turtle",      branch: "develop"
   gem "rdf-vocab",      github: "ruby-rdf/rdf-vocab",       branch: "develop"
   gem "rdf-xsd",        github: "ruby-rdf/rdf-xsd",         branch: "develop"
 
@@ -27,7 +28,6 @@ group :test do
   gem 'fasterer'
   gem 'simplecov',  require: false, platform: :mri
   gem 'coveralls',  require: false, platform: :mri
-  gem "codeclimate-test-reporter", require: false
 end
 
 platforms :rbx do

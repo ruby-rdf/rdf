@@ -157,6 +157,29 @@ module RDF
     end
 
     ##
+    # Indicates whether the transaction includes changes relative to the target 
+    # repository's state at transaction start time.
+    #
+    # The response is guaranteed to be `true` if executing the transaction 
+    # against the original repository state would cause a change. It may also
+    # return `true` in cases where the repository would not change (e.g. 
+    # because the transaction would insert statements already present). 
+    #
+    # @note `Transaction` implementers may choose to `NotImplementedError`
+    #   if the transaction implementation cannot be implemented efficiently.
+    #
+    # @return [Boolean] true if the transaction has mutated (insert/delete) 
+    #   since transaction start time
+    #
+    # @raise [NotImplementedError] if a mutation check is not implemented
+    def mutated?
+      return !changes.empty? if self.class == Transaction
+
+      raise NotImplementedError, 
+            '#mutated? is not implemented for #{self.class}'
+    end
+
+    ##
     # Returns `true` if this is a read/write transaction, `false` otherwise.
     #
     # @return [Boolean]

@@ -74,6 +74,7 @@ describe RDF::Statement do
     it {is_expected.to be_asserted}
     it {is_expected.not_to be_quoted}
     it {is_expected.to be_statement}
+    it {is_expected.not_to be_inferred}
   end
 
   context "when created with a blank node subject" do
@@ -170,6 +171,11 @@ describe RDF::Statement do
     end
   end
 
+  context "when marked as inferred" do
+    subject {RDF::Statement.new(RDF::Node.new, p, o, inferred: true)}
+    it {is_expected.to be_inferred}
+  end
+
   it {is_expected.to respond_to(:to_hash)}
   its(:to_hash) do
     is_expected.to eql({
@@ -211,6 +217,8 @@ describe RDF::Statement do
     it "is not == a RDF::List" do
       expect(subject).not_to eq RDF::List[*subject]
     end
+
+    specify {expect(RDF::Statement(:s, p, o).hash).to eq (RDF::Statement(:s, p, o).hash)}
   end
 
   context "completness" do

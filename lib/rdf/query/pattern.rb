@@ -104,7 +104,7 @@ module RDF; class Query
       (has_subject?   ? (subject.resource? || subject.variable?) && subject.valid? : true) && 
       (has_predicate? ? (predicate.uri? || predicate.variable?) && predicate.valid? : true) &&
       (has_object?    ? (object.term? || object.variable?) && object.valid? : true) &&
-      (has_graph?     ? (graph_name.resource? || graph_name.variable?) && graph_name.valid? : true )
+      (has_graph?     ? (graph_name.resource? || graph_name.variable?) && graph_name.valid? : true)
     rescue NoMethodError
       false
     end

@@ -47,31 +47,80 @@ describe RDF::Vocabulary do
   end
 
   describe "#to_enum" do
-    subject {RDF::RDFS.to_enum}
-    it {should be_enumerable}
-    its(:count) {is_expected.to be >= 30}
-    it "enumerates statements" do
-      expect {|b| subject.each(&b)}.to yield_control.at_least(30).times
-      subject.each {|s| expect(s).to be_statement}
+    [RDF, RDF::RDFS, RDF::OWL, RDF::XSD].each do |vocab|
+      context vocab do
+        subject {vocab.to_enum}
+        it {should be_enumerable}
+        its(:count) {is_expected.to be >= 30}
+        it "enumerates statements" do
+          expect {|b| subject.each(&b)}.to yield_control.at_least(10).times
+          subject.each {|s| expect(s).to be_statement}
+        end
+      end
     end
 
-    it "yields rdfs:label" do
-      expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
+    context "RDFS" do
+      subject {RDF::RDFS.to_enum}
+      it "yields rdfs:label" do
+        expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
+      end
+      it "yields rdfs:comment" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment.comment))
+      end
+      it "yields rdfs:isDefinedBy" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
+      end
+      it "yields rdf:type" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF.type, RDF.Property))
+      end
+      it "yields rdfs:domain" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.domain, RDF::RDFS.Resource))
+      end
+      it "yields rdfs:range" do
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.range, RDF::RDFS.Literal))
+      end
     end
-    it "yields rdfs:comment" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment.comment))
+  end
+
+  describe "#property" do
+    subject {RDF::XSD}
+    it "returns the 'property' term within the vocabulary" do
+      expect(subject.property).to be_a(RDF::Vocabulary::Term)
+      expect(subject.property).to eq "http://www.w3.org/2001/XMLSchema#property"
     end
-    it "yields rdfs:isDefinedBy" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.isDefinedBy, RDF::RDFS.to_uri))
+
+    it "defines the named property" do
+      subject.property :foo, label: "Foo"
+      expect(subject.foo).to eq "http://www.w3.org/2001/XMLSchema#foo"
+      expect(subject.foo.label).to eq "Foo"
     end
-    it "yields rdf:type" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF.type, RDF.Property))
+
+    it "defines an ontology if symbol is empty" do
+      subject.property :"", label: "Ontology"
+      expect(subject[:""]).to eq "http://www.w3.org/2001/XMLSchema#"
+      expect(subject[:""].label).to eq "Ontology"
+      expect(subject.ontology).to eql subject[:""]
     end
-    it "yields rdfs:domain" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.domain, RDF::RDFS.Resource))
+  end
+
+  describe "#ontology" do
+    subject {RDF::XSD}
+    it "returns the nil if no ontology defined" do
+      subject.ontology "http://www.w3.org/2001/XMLSchema"
+      subject.remove_instance_variable(:@ontology)
+      expect(subject.ontology).to be_nil
     end
-    it "yields rdfs:range" do
-      expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.range, RDF::RDFS.Literal))
+
+    it "defines an ontology otherwise" do
+      subject.ontology "http://www.w3.org/2001/XMLSchema", label: "XML Schema"
+      expect(subject.ontology).to eq "http://www.w3.org/2001/XMLSchema"
+      expect(subject.ontology.label).to eq "XML Schema"
+    end
+
+    it "defines a property with an empty symbol if same as namespace" do
+      subject.ontology "http://www.w3.org/2001/XMLSchema#", label: "Ontology"
+      expect(subject[:""]).to eq "http://www.w3.org/2001/XMLSchema#"
+      expect(subject[:""].label).to eq "Ontology"
     end
   end
 
@@ -257,7 +306,7 @@ describe RDF::Vocabulary do
 
   describe ".imported_from" do
     {
-      RDF::RDFS => [RDF::Vocab::WOT],
+      RDF::RDFS => [RDF::OWL, RDF::Vocab::WOT],
       RDF::OWL => [RDF::Vocab::WOT]
     }.each do |v, r|
       context v.to_uri do
@@ -279,8 +328,11 @@ describe RDF::Vocabulary do
     let!(:graph) {
       RDF::Graph.new << RDF::NTriples::Reader.new(nt)
     }
+    let!(:vocab) {
+      @vocab ||= RDF::Vocabulary.from_graph(graph, url: "http://example/")
+    }
 
-    subject {RDF::Vocabulary.from_graph(graph, url: "http://example/")}
+    subject {@vocab}
 
     it "creates terms" do
       expect(subject).to be_a_vocabulary("http://example/")
@@ -292,6 +344,28 @@ describe RDF::Vocabulary do
 
       it "adds extra properties to vocabulary" do
         expect(subject).to have_properties("http://example/", %w(id))
+      end
+    end
+
+    context "with existing Vocabulary" do
+      let!(:nt) {%{
+        <http://example/Klass> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+        <http://example/Klass> <http://www.w3.org/2000/01/rdf-schema#Datatype> "Class" .
+        <http://example/pr0p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+        <http://example/pr0p> <http://www.w3.org/2000/01/rdf-schema#Datatype> "pr0p" .
+      }}
+      let!(:graph) {
+        RDF::Graph.new << RDF::NTriples::Reader.new(nt)
+      }
+      subject {RDF::Vocabulary.from_graph(graph, url: "http://example/", class_name: vocab)}
+
+      it "creates terms" do
+        expect(subject).to be_a_vocabulary("http://example/")
+        expect(subject).to have_properties("http://example/", %w(Klass pr0p))
+      end
+
+      it "removes old terms" do
+        expect(subject).not_to have_properties("http://example/", %w(Class prop))
       end
     end
   end

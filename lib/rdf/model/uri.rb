@@ -42,7 +42,7 @@ module RDF
       [\\u{D0000}-\\u{DFFFD}]|[\\u{E1000}-\\u{EFFFD}]
     EOS
     IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]").freeze
-    SCHEME = Regexp.compile("[A-za-z](?:[A-Za-z0-9+-\.])*").freeze
+    SCHEME = Regexp.compile("[A-Za-z](?:[A-Za-z0-9+-\.])*").freeze
     PORT = Regexp.compile("[0-9]*").freeze
     IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]").freeze  # Simplified, no IPvFuture
     PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f][0-9A-Fa-f]").freeze
@@ -382,6 +382,7 @@ module RDF
         fragment: normalized_fragment
       }
       @value = nil
+      @hash = nil
       self
     end
     alias_method :normalize!, :canonicalize!
@@ -671,22 +672,6 @@ module RDF
       end
       self
     end
-
-    ##
-    # Returns `true` if this URI starts with the given `string`.
-    #
-    # @example
-    #   RDF::URI('http://example.org/').start_with?('http')     #=> true
-    #   RDF::URI('http://example.org/').start_with?('ftp')      #=> false
-    #
-    # @param  [String, #to_s] string
-    # @return [Boolean] `true` or `false`
-    # @see    String#start_with?
-    # @since  0.3.0
-    def start_with?(string)
-      to_s.start_with?(string.to_s)
-    end
-    alias_method :starts_with?, :start_with?
 
     ##
     # Returns `true` if this URI ends with the given `string`.

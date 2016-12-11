@@ -39,19 +39,7 @@ module RDF; module Util
       ##
       # @return [String] the value for an Accept header
       def self.default_accept_header
-        # Receive text/html and text/plain at a lower priority than other formats
-        reader_types = RDF::Format.reader_types.map do |t|
-          case t.to_s
-          when /text\/(?:plain|html)/
-            "#{t};q=0.5"
-          when /application\/xhtml\+xml/
-            "#{t};q=0.7"
-          else
-            t
-          end
-        end
-
-        (reader_types + %w(*/*;q=0.1)).join(", ")
+        (RDF::Format.accept_types + %w(*/*;q=0.1)).join(", ")
       end
       
       ##
@@ -109,7 +97,7 @@ module RDF; module Util
             # Document base is redirected location
             # Location may be relative
             base_uri = ::URI.join(base_uri, response.headers[:location].to_s).to_s
-            response.follow_redirection(request, res, &blk)
+            response.follow_redirection(&blk)
           else
             raise IOError, "<#{base_uri}>: #{response.code}"
           end

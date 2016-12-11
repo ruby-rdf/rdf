@@ -409,6 +409,30 @@ module RDF
     end
 
     ##
+    # Returns the literal, first removing all whitespace on both ends of the value, and then changing remaining consecutive whitespace groups into one space each.
+    #
+    # Note that it handles both ASCII and Unicode whitespace.
+    #
+    # @see [String#squish](http://apidock.com/rails/String/squish)
+    # @return [RDF::Literal] a new literal based on `self`.
+    def squish(*other_string)
+      self.dup.squish!
+    end
+
+    ##
+    # Performs a destructive {#squish}.
+    #
+    # @see [String#squish!](http://apidock.com/rails/String/squish%21)
+    # @return self
+    def squish!
+      @string = value.
+        gsub(/\A[[:space:]]+/, '').
+        gsub(/[[:space:]]+\z/, '').
+        gsub(/[[:space:]]+/, ' ')
+      self
+    end
+
+    ##
     # Escape a literal using ECHAR escapes.
     #
     #    ECHAR ::= '\' [tbnrf"'\]
