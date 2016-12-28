@@ -164,7 +164,7 @@ class RDF::Query
     ##
     # Returns a hash code for this variable.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     # @since  0.3.0
     def hash
       @name.hash

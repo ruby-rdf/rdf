@@ -114,7 +114,7 @@ module RDF
     ##
     # Returns a hash code for this blank node.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def hash
       @id.hash
     end

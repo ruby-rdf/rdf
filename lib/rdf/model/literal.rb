@@ -233,7 +233,7 @@ module RDF
     ##
     # Returns a hash code for this literal.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def hash
       @hash ||= [to_s, datatype, language].hash
     end
@@ -242,7 +242,7 @@ module RDF
     ##
     # Returns a hash code for the value.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def value_hash
       @value_hash ||= value.hash
     end

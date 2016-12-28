@@ -244,7 +244,7 @@ module RDF
     end
 
     ##
-    # Generates a Fixnum hash value as a quad.
+    # Generates a Integer hash value as a quad.
     def hash
       @hash ||= to_quad.hash
     end

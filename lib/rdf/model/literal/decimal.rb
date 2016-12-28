@@ -23,7 +23,11 @@ module RDF; class Literal
       @string   ||= value if value.is_a?(String)
       @object   = case
         when value.is_a?(BigDecimal) then value
-        else BigDecimal(value.to_s)
+        when value.is_a?(Numeric) then BigDecimal(value)
+        else
+          value = value.to_s
+          value += "0" if value.end_with?(".")  # Normalization required in Ruby 2.4
+          BigDecimal(value) rescue nil
       end
     end
 
