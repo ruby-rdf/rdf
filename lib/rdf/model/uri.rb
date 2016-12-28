@@ -807,7 +807,7 @@ module RDF
     ##
     # Returns a hash code for this URI.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def hash
       @hash ||= (value.hash * -1)
     end
