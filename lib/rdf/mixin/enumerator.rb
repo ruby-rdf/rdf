@@ -7,11 +7,29 @@ module RDF
       include Queryable
       include Enumerable
 
-      # Make sure returned arrays are also queryable
+      ##
+      # @return [Array]
+      # @note Make sure returned arrays are also queryable
       def to_a
         return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
       end
-      alias_method :to_ary, :to_a
+
+      protected
+
+      ##
+      # @overload #to_ary
+      #   @see #to_a
+      #   @deprecated use {#to_a} instead
+      def method_missing(name, *args)
+        if name == :to_ary
+          warn "[DEPRECATION] #{self.class}#to_ary is deprecated, use " \
+               "#{self.class}#to_a instead. Called from " \
+               "#{Gem.location_of_caller.join(':')}"
+          to_a
+        else
+          super
+        end
+      end
     end
   end
 
@@ -28,11 +46,29 @@ module RDF
       include Queryable
       include Enumerable
 
-      # Make sure returned arrays are also queryable
+      ##
+      # @return [Array]
+      # @note Make sure returned arrays are also queryable
       def to_a
         return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
       end
-      alias_method :to_ary, :to_a
+
+      protected
+
+      ##
+      # @overload #to_ary
+      #   @see #to_a
+      #   @deprecated use {#to_a} instead
+      def method_missing(name, *args)
+        if name == :to_ary
+          warn "[DEPRECATION] #{self.class}#to_ary is deprecated, use " \
+               "#{self.class}#to_a instead. Called from " \
+               "#{Gem.location_of_caller.join(':')}"
+          self.to_a
+        else
+          super
+        end
+      end
     end
   end
 end
