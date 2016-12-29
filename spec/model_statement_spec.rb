@@ -176,14 +176,26 @@ describe RDF::Statement do
     it {is_expected.to be_inferred}
   end
 
-  it {is_expected.to respond_to(:to_hash)}
-  its(:to_hash) do
+  it {is_expected.to respond_to(:to_h)}
+  its(:to_h) do
     is_expected.to eql({
       subject:    stmt.subject,
       predicate:  stmt.predicate,
       object:     stmt.object,
       graph_name: stmt.graph_name,
     })
+  end
+
+  it {is_expected.not_to respond_to(:to_hash)}
+  its(:to_hash) do
+    expect {
+      is_expected.to eql({
+        subject:    stmt.subject,
+        predicate:  stmt.predicate,
+        object:     stmt.object,
+        graph_name: stmt.graph_name,
+      })
+    }.to write("DEPRECATION").to(:error)
   end
 
   it {is_expected.to respond_to(:to_s)}

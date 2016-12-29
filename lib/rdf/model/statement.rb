@@ -375,7 +375,7 @@ module RDF
     # @param  [Symbol] predicate_key
     # @param  [Symbol] object_key
     # @return [Hash{Symbol => RDF::Term}]
-    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object, graph_key = :graph_name)
+    def to_h(subject_key = :subject, predicate_key = :predicate, object_key = :object, graph_key = :graph_name)
       {subject_key => subject, predicate_key => predicate, object_key => object, graph_key => graph_name}
     end
 
@@ -402,6 +402,24 @@ module RDF
         graph << [subject, RDF.subject,   self.subject]
         graph << [subject, RDF.predicate, self.predicate]
         graph << [subject, RDF.object,    self.object]
+      end
+    end
+
+  protected
+    ##
+    # @overload #to_hash
+    # Returns the terms of this statement as a `Hash`.
+    #
+    # @param  (see #to_h)
+    # @return (see #to_h)
+    #   @deprecated Use {#to_h} instead.
+    def method_missing(meth, *args)
+      case meth
+      when :to_hash
+        warn "[DEPRECATION] Statement#to_hash is deprecated, use Statement#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        self.to_h
+      else
+        super
       end
     end
   end
