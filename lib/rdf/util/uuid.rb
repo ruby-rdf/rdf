@@ -19,7 +19,7 @@ module RDF; module Util
     # @raise  [LoadError] if no UUID library is available
     # @see    http://rubygems.org/gems/uuid
     # @see    http://rubygems.org/gems/uuidtools
-    def self.generate(options = {})
+    def self.generate(**options)
       begin
         require 'uuid'
         ::UUID.generate(options[:format] || :default)

@@ -41,7 +41,7 @@ module RDF
     # @yield  [changes]
     # @yieldparam [RDF::Changeset] changes
     # @return [void]
-    def self.apply(mutable, options = {}, &block)
+    def self.apply(mutable, **options, &block)
       self.new(&block).apply(mutable, options)
     end
 
@@ -106,7 +106,7 @@ module RDF
     # @param  [RDF::Mutable] mutable
     # @param  [Hash{Symbol => Object}] options
     # @return [void]
-    def apply(mutable, options = {})
+    def apply(mutable, **options)
       mutable.apply_changeset(self)
     end
 

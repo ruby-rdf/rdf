@@ -121,7 +121,7 @@ module RDF
     # @return [Array<RDF::Statement>]
     # @see    #each_statement
     # @see    #enum_statement
-    def statements(options = {})
+    def statements(**options)
       Array(enum_statement)
     end
 
@@ -184,7 +184,7 @@ module RDF
     # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     # @see    #enum_triple
-    def triples(options = {})
+    def triples(**options)
       enum_statement.map(&:to_triple) # TODO: optimize
     end
 
@@ -245,7 +245,7 @@ module RDF
     # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
-    def quads(options = {})
+    def quads(**options)
       enum_statement.map(&:to_quad) # TODO: optimize
     end
 

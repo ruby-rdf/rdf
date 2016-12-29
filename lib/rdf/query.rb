@@ -143,7 +143,7 @@ module RDF
     ##
     # Initializes a new basic graph pattern query.
     #
-    # @overload initialize(patterns = [], options = {})
+    # @overload initialize(patterns = [], **options)
     #   @param  [Array<RDF::Query::Pattern>] patterns
     #     ...
     #   @param  [Hash{Symbol => Object}] options
@@ -162,7 +162,7 @@ module RDF
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
     #
-    # @overload initialize(patterns, options = {})
+    # @overload initialize(patterns, **options)
     #   @param  [Hash{Object => Object}] patterns
     #     ...
     #   @param  [Hash{Symbol => Object}] options
@@ -226,7 +226,7 @@ module RDF
     # @option options [Boolean] :optional (false)
     #   whether this is an optional pattern
     # @return [void] self
-    def pattern(pattern, options = {})
+    def pattern(pattern, **options)
       @patterns << Pattern.from(pattern, options)
       self
     end
@@ -238,7 +238,7 @@ module RDF
     #   any additional options for optimization
     # @return [RDF::Query] a copy of `self`
     # @since  0.3.0
-    def optimize(options = {})
+    def optimize(**options)
       self.dup.optimize!(options)
     end
 
@@ -251,7 +251,7 @@ module RDF
     # @return [self]
     # @see    RDF::Query::Pattern#cost
     # @since  0.3.0
-    def optimize!(options = {})
+    def optimize!(**options)
       @patterns.sort! do |a, b|
         (a.cost || 0) <=> (b.cost || 0)
       end

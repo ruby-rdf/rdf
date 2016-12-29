@@ -118,7 +118,7 @@ module RDF
     # @yield  [repository]
     # @yieldparam [Repository]
     # @return [void]
-    def self.load(urls, options = {}, &block)
+    def self.load(urls, **options, &block)
       self.new(options) do |repository|
         Array(urls).each do |url|
           repository.load(url, options)
@@ -371,7 +371,7 @@ module RDF
       #
       # @private
       # @see RDF::Queryable#query_pattern
-      def query_pattern(pattern, options = {}, &block)
+      def query_pattern(pattern, **options, &block)
         snapshot = @data
         if block_given?
           graph_name  = pattern.graph_name

@@ -70,7 +70,7 @@ module RDF
     #   @param  [String, RDF::URI] filename
     #   @return [Class]
     #
-    # @overload for(options = {})
+    # @overload for(**options)
     #   Finds an RDF serialization format class based on various options.
     #
     #   @param  [Hash{Symbol => Object}] options

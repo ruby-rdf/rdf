@@ -156,7 +156,7 @@ module RDF
   # @overload Statement()
   #   @return [RDF::URI] returns the IRI for `rdf:Statement`
   #
-  # @overload Statement(options = {})
+  # @overload Statement(**options)
   #   @param  [Hash{Symbol => Object}] options
   #   @option options [RDF::Resource]  :subject   (nil)
   #   @option options [RDF::URI]       :predicate (nil)
@@ -165,7 +165,7 @@ module RDF
   #     Note, a graph_name MUST be an IRI or BNode.
   #   @return [RDF::Statement]
   #
-  # @overload Statement(subject, predicate, object, options = {})
+  # @overload Statement(subject, predicate, object, **options)
   #   @param  [RDF::Resource]          subject
   #   @param  [RDF::URI]               predicate
   #   @param  [RDF::Term]              object

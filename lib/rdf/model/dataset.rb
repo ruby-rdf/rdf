@@ -119,7 +119,7 @@ module RDF
     ##
     # Implements basic query pattern matching over the Dataset, with handling 
     # for a default graph.
-    def query_pattern(pattern, options = {}, &block)
+    def query_pattern(pattern, **options, &block)
       return super unless pattern.graph_name == DEFAULT_GRAPH
 
       if block_given?

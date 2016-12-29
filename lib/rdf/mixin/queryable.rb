@@ -41,7 +41,7 @@ module RDF
     #   Returns an enumerable of statements (may be an enumerator) or query solutions, if passed an {RDF::Query}
     # @see    RDF::Queryable#query_pattern
     # @note   Since 2.0, this may return an Enumerable or an Enumerator in addition to Solutions
-    def query(pattern, options = {}, &block)
+    def query(pattern, **options, &block)
       raise TypeError, "#{self} is not readable" if respond_to?(:readable?) && !readable?
 
       case pattern
@@ -111,7 +111,7 @@ module RDF
     # @see    RDF::Queryable#query
     # @see    RDF::Query#execute
     # @since  0.3.0
-    def query_execute(query, options = {}, &block)
+    def query_execute(query, **options, &block)
       # By default, we let RDF.rb's built-in `RDF::Query#execute` handle BGP
       # query execution by breaking down the query into its constituent
       # triple patterns and invoking `RDF::Query::Pattern#execute` on each
@@ -139,7 +139,7 @@ module RDF
     # @see    RDF::Queryable#query
     # @see    RDF::Query::Pattern#execute
     # @since  0.2.0
-    def query_pattern(pattern, options = {}, &block)
+    def query_pattern(pattern, **options, &block)
       # By default, we let Ruby's built-in `Enumerable#grep` handle the
       # matching of statements by iterating over all statements and calling
       # `RDF::Query::Pattern#===` on each statement.

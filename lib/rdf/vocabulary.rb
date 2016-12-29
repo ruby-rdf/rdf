@@ -564,7 +564,7 @@ module RDF
       attr_accessor :attributes
 
       ##
-      # @overload URI(uri, options = {})
+      # @overload URI(uri, **options)
       #   @param  [URI, String, #to_s]    uri
       #   @param  [Hash{Symbol => Object}] options
       #   @option options [Boolean] :validate (false)
@@ -572,7 +572,7 @@ module RDF
       #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       #
-      # @overload URI(options = {})
+      # @overload URI(**options)
       #   @param  [Hash{Symbol => Object}] options
       #   @option options options [Boolean] :validate (false)
       #   @option options options [Boolean] :canonicalize (false)

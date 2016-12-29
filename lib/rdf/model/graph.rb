@@ -273,7 +273,7 @@ module RDF
     ##
     # @private
     # @see RDF::Queryable#query_pattern
-    def query_pattern(pattern, options = {}, &block)
+    def query_pattern(pattern, **options, &block)
       pattern = pattern.dup
       pattern.graph_name = graph_name || false
       @data.query(pattern, &block)

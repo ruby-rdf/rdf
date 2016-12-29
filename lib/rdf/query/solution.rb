@@ -35,7 +35,7 @@ class RDF::Query
     #
     # @param  [Hash{Symbol => RDF::Term}] bindings
     # @yield  [solution]
-    def initialize(bindings = {}, &block)
+    def initialize(**bindings, &block)
       @bindings = bindings.to_hash
 
       if block_given?

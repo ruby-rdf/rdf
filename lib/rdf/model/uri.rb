@@ -200,10 +200,10 @@ module RDF
     end
 
     ##
-    # @overload URI(uri, options = {})
+    # @overload URI(uri, **options)
     #   @param  [URI, String, #to_s]    uri
     #
-    # @overload URI(options = {})
+    # @overload URI(**options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option [String, #to_s] :scheme The scheme component.
     #   @option [String, #to_s] :user The user component.

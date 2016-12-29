@@ -57,7 +57,7 @@ module RDF; module Util
       #   Don't verify SSL certificates
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
       # @raise [IOError] if not found
-      def self.open_url(base_uri, options)
+      def self.open_url(base_uri, **options)
         raise NoMethodError.new("#{self.inspect} does not implement required method `open_url` for ", "open_url")
       end
     end
@@ -74,7 +74,7 @@ module RDF; module Util
       # @param  [Hash{Symbol => Object}] options
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
       # @raise [IOError] if not found
-      def self.open_url(base_uri, options)
+      def self.open_url(base_uri, **options)
         ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         # If RestClient is loaded, prefer it
@@ -114,7 +114,7 @@ module RDF; module Util
       # @param  [Hash{Symbol => Object}] options
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
       # @raise [IOError] if not found
-      def self.open_url(base_uri, options)
+      def self.open_url(base_uri, **options)
         ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         redirect_count = 0
@@ -197,7 +197,7 @@ module RDF; module Util
       # @param [String] base_uri to open
       # @param  [Hash{Symbol => Object}] options
       # @return [RemoteDocument, Object] A {RemoteDocument}.
-      def self.open_url(base_uri, options)
+      def self.open_url(base_uri, **options)
         response = conn.get do |req|
           req.url base_uri
           headers(options).each do |k,v|
@@ -298,7 +298,7 @@ module RDF; module Util
     # @yield [ RemoteDocument] A {RemoteDocument} for local files
     # @yieldreturn [Object] returned from open_file
     # @raise [IOError] if not found
-    def self.open_file(filename_or_url, options = {}, &block)
+    def self.open_file(filename_or_url, **options, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       remote_document = nil
 

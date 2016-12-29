@@ -339,7 +339,7 @@ module RDF
     #
     # @param  [Array<String>] args
     # @return [Boolean]
-    def self.exec(args, options = {})
+    def self.exec(args, **options)
       out = options[:output] || $stdout
       out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
       cmds, args = args.partition {|e| commands.include?(e.to_s)}
@@ -409,7 +409,7 @@ module RDF
     # @yieldparam [Array<String>] argv
     # @yieldparam [Hash] opts
     # @yieldreturn [void]
-    def self.add_command(command, options = {}, &block)
+    def self.add_command(command, **options, &block)
       options[:lambda] = block if block_given?
       COMMANDS[command.to_sym] ||= options
     end
@@ -434,7 +434,7 @@ module RDF
     # @yield  [reader]
     # @yieldparam [RDF::Reader]
     # @return [nil]
-    def self.parse(files, options = {}, &block)
+    def self.parse(files, **options, &block)
       if files.empty?
         # If files are empty, either use options[:execute]
         input = options[:evaluate] ? StringIO.new(options[:evaluate]) : $stdin

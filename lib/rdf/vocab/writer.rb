@@ -71,7 +71,7 @@ module RDF
       # @yield  [writer] `self`
       # @yieldparam  [RDF::Writer] writer
       # @yieldreturn [void]
-      def initialize(output = $stdout, options = {}, &block)
+      def initialize(output = $stdout, **options, &block)
         options.fetch(:base_uri) {raise ArgumentError, "base_uri option required"}
         @graph = RDF::Repository.new
         super

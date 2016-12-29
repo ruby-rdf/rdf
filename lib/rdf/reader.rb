@@ -237,7 +237,7 @@ module RDF
     # @yield  [reader] `self`
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
-    def initialize(input = $stdin, options = {}, &block)
+    def initialize(input = $stdin, **options, &block)
       @options = options.dup
       @options[:validate]     ||= false
       @options[:canonicalize] ||= false
@@ -623,7 +623,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     # @option options [String]         :token  (nil)
     # @option options [Integer]        :lineno (nil)
-    def initialize(message, options = {})
+    def initialize(message, **options)
       @token      = options[:token]
       @lineno     = options[:lineno] || (@token.lineno if @token.respond_to?(:lineno))
       super(message.to_s)

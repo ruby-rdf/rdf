@@ -92,7 +92,7 @@ module RDF::NTriples
     # @param [{Symbol => Object}] options
     #   From {RDF::Reader#initialize}
     # @return [RDF::Term]
-    def self.unserialize(input, options = {})
+    def self.unserialize(input, **options)
       case input
         when nil then nil
         else self.new(input, {logger: []}.merge(options)).read_value
@@ -102,27 +102,27 @@ module RDF::NTriples
     ##
     # (see unserialize)
     # @return [RDF::Resource]
-    def self.parse_subject(input, options = {})
+    def self.parse_subject(input, **options)
       parse_uri(input, options) || parse_node(input, options)
     end
 
     ##
     # (see unserialize)
     # @return [RDF::URI]
-    def self.parse_predicate(input, options = {})
+    def self.parse_predicate(input, *options)
       parse_uri(input, intern: true)
     end
 
     ##
     # (see unserialize)
-    def self.parse_object(input, options = {})
+    def self.parse_object(input, **options)
       parse_uri(input, options) || parse_node(input, options) || parse_literal(input, options)
     end
 
     ##
     # (see unserialize)
     # @return [RDF::Node]
-    def self.parse_node(input, options = {})
+    def self.parse_node(input, **options)
       if input =~ NODEID
         RDF::Node.new($1)
       end
@@ -131,7 +131,7 @@ module RDF::NTriples
     ##
     # (see unserialize)
     # @return [RDF::URI]
-    def self.parse_uri(input, options = {})
+    def self.parse_uri(input, **options)
       if input =~ URIREF
         uri_str = unescape($1)
         RDF::URI.send(options[:intern] ? :intern : :new, unescape($1))
@@ -141,7 +141,7 @@ module RDF::NTriples
     ##
     # (see unserialize)
     # @return [RDF::Literal]
-    def self.parse_literal(input, options = {})
+    def self.parse_literal(input, **options)
       case input
         when LITERAL_WITH_LANGUAGE
           RDF::Literal.new(unescape($1), language: $4)
@@ -220,7 +220,7 @@ module RDF::NTriples
     ##
     # @return [RDF::URI]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
-    def read_uriref(options = {})
+    def read_uriref(**options)
       if uri_str = match(URIREF)
         uri_str = self.class.unescape(uri_str)
         uri = RDF::URI.send(intern? && options[:intern] ? :intern : :new, uri_str)

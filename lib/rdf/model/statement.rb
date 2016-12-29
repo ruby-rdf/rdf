@@ -31,7 +31,7 @@ module RDF
     ##
     # @private
     # @since 0.2.2
-    def self.from(statement, options = {})
+    def self.from(statement, **options)
       case statement
         when Array, Query::Pattern
           graph_name = statement[3] == false ? nil : statement[3]
@@ -58,7 +58,7 @@ module RDF
     attr_accessor :object
 
     ##
-    # @overload initialize(options = {})
+    # @overload initialize(**options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Term]  :subject   (nil)
     #     A symbol is converted to an interned {Node}.
@@ -70,7 +70,7 @@ module RDF
     #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
     #   @return [RDF::Statement]
     #
-    # @overload initialize(subject, predicate, object, options = {})
+    # @overload initialize(subject, predicate, object, **options)
     #   @param  [RDF::Term]          subject
     #     A symbol is converted to an interned {Node}.
     #   @param  [RDF::URI]               predicate
@@ -400,7 +400,7 @@ module RDF
     # @param  [Hash{Symbol => Object}] options
     # @return [RDF::Graph]
     # @see    http://www.w3.org/TR/rdf-primer/#reification
-    def reified(options = {})
+    def reified(**options)
       RDF::Graph.new(graph_name: options[:graph_name]) do |graph|
         subject = options[:subject] || RDF::Node.new(options[:id])
         graph << [subject, RDF.type,      RDF[:Statement]]

@@ -104,7 +104,7 @@ module RDF
 
     ##
     # @private
-    def self.new(value, options = {})
+    def self.new(value, **options)
       raise ArgumentError, "datatype with language must be rdf:langString" if options[:language] && (options[:datatype] || RDF.langString).to_s != RDF.langString.to_s
 
       klass = case
@@ -161,7 +161,7 @@ module RDF
     #   or datatype is rdf:langString and there is no language
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
-    def initialize(value, options = {})
+    def initialize(value, **options)
       @object   = value.freeze
       @string   = options[:lexical] if options[:lexical]
       @string   = value if !defined?(@string) && value.is_a?(String)

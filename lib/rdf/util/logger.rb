@@ -13,7 +13,7 @@ module RDF; module Util
     # @param [Hash{Symbol => Object}] options
     # @option options [Logger, #<<] :logger
     # @return [Logger, #write, #<<]
-    def logger(options = {})
+    def logger(**options)
       logger = options.fetch(:logger, @logger)
       logger = @options[:logger] if logger.nil? && @options
       if logger.nil?
@@ -33,14 +33,14 @@ module RDF; module Util
     # @param [Hash{Symbol => Object}] options
     # @option options [Logger, #<<] :logger
     # @return [Hash{Symbol => Integer}]
-    def log_statistics(options = {})
+    def log_statistics(**options)
       logger(options).log_statistics
     end
 
     ##
     # Used for fatal errors where processing cannot continue. If `logger` is not configured, it logs to `$stderr`.
     #
-    # @overload log_fatal(*args, options = {}, &block)
+    # @overload log_fatal(*args, **options, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
@@ -65,7 +65,7 @@ module RDF; module Util
     #
     # As a side-effect of setting `@logger_in_error`, which will suppress further error messages until cleared using {#log_recover}.
     #
-    # @overload log_error(*args, options = {}, &block)
+    # @overload log_error(*args, **options, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
@@ -92,14 +92,14 @@ module RDF; module Util
     # @param [Hash{Symbol => Object}] options
     # @option options [Logger, #<<] :logger
     # @return [Boolean]
-    def log_recovering?(options = {})
+    def log_recovering?(**options)
       self.logger(options).recovering
     end
 
     ##
     # Warning message.
     #
-    # @overload log_warn(*args, options = {}, &block)
+    # @overload log_warn(*args, **options, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
@@ -120,7 +120,7 @@ module RDF; module Util
     #
     # As a side-effect of clearing `@logger_in_error`.
     #
-    # @overload log_recover(*args, options = {}, &block)
+    # @overload log_recover(*args, **options, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
@@ -141,7 +141,7 @@ module RDF; module Util
     ##
     # Informational message.
     #
-    # @overload log_info(*args, options = {}, &block)
+    # @overload log_info(*args, **options, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
@@ -159,7 +159,7 @@ module RDF; module Util
     ##
     # Debug message.
     #
-    # @overload log_debug(*args, options = {}, &block)
+    # @overload log_debug(*args, **options, &block)
     #   @param [Array<String>] args
     #   @param [Array<String>] args Messages
     #   @param [Hash{Symbol => Object}] options
@@ -188,7 +188,7 @@ module RDF; module Util
     # @overload log_depth
     #   # Return the current log depth
     #   @return [Integer]
-    def log_depth(options = {}, &block)
+    def log_depth(**options, &block)
       self.logger(options).log_depth(&block)
     end
 
@@ -245,7 +245,7 @@ module RDF; module Util
       # @overload log_depth
       #   # Return the current log depth
       #   @return [Integer]
-      def log_depth(options = {})
+      def log_depth(**options)
         @log_depth ||= 0
         if block_given?
           @log_depth += options.fetch(:depth, 1)
