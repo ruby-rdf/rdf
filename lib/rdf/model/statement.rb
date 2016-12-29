@@ -337,9 +337,14 @@ module RDF
     def to_triple
       [subject, predicate, object]
     end
+    alias_method :to_a, :to_triple
 
-    alias_method :to_a,   :to_triple
-    alias_method :to_ary, :to_triple
+    ##
+    # @deprecated use {#to_a} or {#to_triple} instead
+    # @see #to_triple
+    def to_ary
+      to_triple
+    end
 
     ##
     # Canonicalizes each unfrozen term in the statement

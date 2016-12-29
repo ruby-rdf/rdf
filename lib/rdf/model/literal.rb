@@ -477,5 +477,27 @@ module RDF
     def inspect
       sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, RDF::NTriples.serialize(self))
     end
+
+    protected
+
+    ##
+    # @overload #to_str
+    #   This method is implemented when the datatype is `xsd:string` or `rdf:langString`
+    #   @return [String]
+    def method_missing(name, *args)
+      case name
+      when :to_str
+        return to_s if @datatype == RDF.langString || @datatype == RDF::XSD.string
+      end
+      super
+    end
+
+    def respond_to_missing?(name, include_private = false)
+      case name
+      when :to_str
+        return true if @datatype == RDF.langString || @datatype == RDF::XSD.string
+      end
+      super
+    end
   end # Literal
 end # RDF
