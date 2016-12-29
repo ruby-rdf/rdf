@@ -4,7 +4,7 @@ require 'set'
 
 ::RSpec::Matchers.define :have_result_set do |expected|
   match do |result|
-    expect(result.map(&:to_hash).to_set).to eq expected.to_set
+    expect(result.map(&:to_h).to_set).to eq expected.to_set
   end
 end
 
@@ -65,13 +65,13 @@ describe RDF::Query do
       }.each do |which, graph|
         context which do
           it "returns a single empty solution (query execute)" do
-            expect(subject.execute(graph).map(&:to_hash)).to eq [{}]
+            expect(subject.execute(graph).map(&:to_h)).to eq [{}]
           end
           it "yields a single empty solution (query execute)" do
             expect {|b| subject.execute(graph, &b)}.to yield_successive_args(RDF::Query::Solution.new)
           end
           it "returns a single empty solution (graph execute)" do
-            expect(graph.query(subject).map(&:to_hash)).to eq [{}]
+            expect(graph.query(subject).map(&:to_h)).to eq [{}]
           end
           it "yields a single empty solution (graph execute)" do
             expect {|b| graph.query(subject, &b)}.to yield_successive_args(RDF::Query::Solution.new)
@@ -108,8 +108,8 @@ describe RDF::Query do
         query = RDF::Query.new do |q|
           q << [EX.x1, EX.p1, EX.x2]
         end
-        expect(query.execute(graph).map(&:to_hash)).to eq [{}]
-        expect(graph.query(query).map(&:to_hash)).to eq [{}]
+        expect(query.execute(graph).map(&:to_h)).to eq [{}]
+        expect(graph.query(query).map(&:to_h)).to eq [{}]
       end
     end
 
@@ -121,8 +121,8 @@ describe RDF::Query do
         query = RDF::Query.new do |q|
           q << [:s, EX.p1, 123.0]
         end
-        expect(query.execute(graph).map(&:to_hash)).to eq [{s: EX.x1}]
-        expect(graph.query(query).map(&:to_hash)).to eq [{s: EX.x1}]
+        expect(query.execute(graph).map(&:to_h)).to eq [{s: EX.x1}]
+        expect(graph.query(query).map(&:to_h)).to eq [{s: EX.x1}]
       end
     end
 
@@ -137,12 +137,12 @@ describe RDF::Query do
 
        context "with no graph_name" do
          it "returns statements differing in context (direct execute)" do
-           expect(subject.execute(repo).map(&:to_hash))
+           expect(subject.execute(repo).map(&:to_h))
              .to contain_exactly({s: EX.s1, p: EX.p1, o: EX.o1},
                                  {s: EX.s2, p: EX.p2, o: EX.o2})
          end
          it "returns statements differing in context (graph execute)" do
-           expect(repo.query(subject).map(&:to_hash))
+           expect(repo.query(subject).map(&:to_h))
              .to contain_exactly({s: EX.s1, p: EX.p1, o: EX.o1},
                                  {s: EX.s2, p: EX.p2, o: EX.o2})
          end
@@ -151,9 +151,9 @@ describe RDF::Query do
        context "with default graph" do
          it "returns statement from default graph" do
            subject.graph_name = false
-           expect(subject.execute(repo).map(&:to_hash)).to eq [
+           expect(subject.execute(repo).map(&:to_h)).to eq [
              {s: EX.s1, p: EX.p1, o: EX.o1}]
-           expect(repo.query(subject).map(&:to_hash)).to eq [
+           expect(repo.query(subject).map(&:to_h)).to eq [
              {s: EX.s1, p: EX.p1, o: EX.o1}]
          end
        end
@@ -161,9 +161,9 @@ describe RDF::Query do
        context "with constant graph_name" do
          it "returns statement from specified graph_name" do
            subject.graph_name = EX.c
-           expect(subject.execute(repo).map(&:to_hash)).to eq [
+           expect(subject.execute(repo).map(&:to_h)).to eq [
              {s: EX.s2, p: EX.p2, o: EX.o2}]
-           expect(repo.query(subject).map(&:to_hash)).to eq [
+           expect(repo.query(subject).map(&:to_h)).to eq [
              {s: EX.s2, p: EX.p2, o: EX.o2}]
          end
        end
@@ -171,9 +171,9 @@ describe RDF::Query do
        context "with variable graph_name" do
          it "returns statement having a graph_name" do
            subject.graph_name = RDF::Query::Variable.new(:c)
-           expect(subject.execute(repo).map(&:to_hash)).to eq [
+           expect(subject.execute(repo).map(&:to_h)).to eq [
              {s: EX.s2, p: EX.p2, o: EX.o2, c: EX.c}]
-           expect(repo.query(subject).map(&:to_hash)).to eq [
+           expect(repo.query(subject).map(&:to_h)).to eq [
              {s: EX.s2, p: EX.p2, o: EX.o2, c: EX.c}]
          end
        end
@@ -449,7 +449,7 @@ describe RDF::Query do
         end
         # FIXME: so?
         # Use set comparison for unordered compare on 1.8.7
-        expect(query.execute(graph).map(&:to_hash).to_set).to eq [
+        expect(query.execute(graph).map(&:to_h).to_set).to eq [
           {s1: EX.x1, o1: RDF::Literal(1), s2: EX.x1, o2: RDF::Literal(1)},
           {s1: EX.x1, o1: RDF::Literal(1), s2: EX.x2, o2: RDF::Literal(2)},
           {s1: EX.x2, o1: RDF::Literal(2), s2: EX.x1, o2: RDF::Literal(1)},
@@ -599,7 +599,7 @@ describe RDF::Query do
           query.pattern [:s, EX.p, EX.o]
           query.pattern [:s, EX.p2, :o], optional: true
         end
-        expect(query.execute(@graph).map(&:to_hash).to_set).to eq [
+        expect(query.execute(@graph).map(&:to_h).to_set).to eq [
           {s: EX.s1},
           {s: EX.s2, o: EX.o2}
         ].to_set

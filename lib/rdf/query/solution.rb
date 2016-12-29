@@ -18,7 +18,7 @@ class RDF::Query
   #   solution.mbox
   #
   # @example Retrieving all bindings in the solution as a `Hash`
-  #   solution.to_hash       #=> {mbox: "jrhacker@example.org", ...}
+  #   solution.to_h       #=> {mbox: "jrhacker@example.org", ...}
   #
   class Solution
     # Undefine all superfluous instance methods:
@@ -152,12 +152,12 @@ class RDF::Query
     # Merges the bindings from the given `other` query solution into this
     # one, overwriting any existing ones having the same name.
     #
-    # @param  [RDF::Query::Solution, #to_hash] other
+    # @param  [RDF::Query::Solution, #to_h] other
     #   another query solution or hash bindings
     # @return [void] self
     # @since  0.3.0
     def merge!(other)
-      @bindings.merge!(other.to_hash)
+      @bindings.merge!(other.to_h)
       self
     end
 
@@ -165,7 +165,7 @@ class RDF::Query
     # Merges the bindings from the given `other` query solution with a copy
     # of this one.
     #
-    # @param  [RDF::Query::Solution, #to_hash] other
+    # @param  [RDF::Query::Solution, #to_h] other
     #   another query solution or hash bindings
     # @return [RDF::Query::Solution]
     # @since  0.3.0
@@ -185,13 +185,13 @@ class RDF::Query
     #
     # Two solution mappings u1 and u2 are compatible if, for every variable v in dom(u1) and in dom(u2), u1(v) = u2(v).
     #
-    # @param [RDF::Query::Solution, #to_hash] other
+    # @param [RDF::Query::Solution, #to_h] other
     #   another query solution or hash bindings
     # @return [Boolean]
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algCompatibleMapping
     def compatible?(other)
       @bindings.all? do |k, v|
-        !other.to_hash.has_key?(k) || other[k].eql?(v)
+        !other.to_h.has_key?(k) || other[k].eql?(v)
       end
     end
 
@@ -205,7 +205,7 @@ class RDF::Query
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
     def disjoint?(other)
       @bindings.none? do |k, v|
-        v && other.to_hash.has_key?(k) && other[k].eql?(v)
+        v && other.to_h.has_key?(k) && other[k].eql?(v)
       end
     end
 
@@ -214,12 +214,12 @@ class RDF::Query
     # Two solution mappings u1 and u2 are isomorphic if,
     # for every variable v in dom(u1) and in dom(u2), u1(v) = u2(v).
     #
-    # @param [RDF::Query::Solution, #to_hash] other
+    # @param [RDF::Query::Solution, #to_h] other
     #   another query solution or hash bindings
     # @return [Boolean]
     def isomorphic_with?(other)
       @bindings.all? do |k, v|
-        !other.to_hash.has_key?(k) || other[k].eql?(v)
+        !other.to_h.has_key?(k) || other[k].eql?(v)
       end
     end
     
@@ -231,7 +231,7 @@ class RDF::Query
 
     ##
     # @return [Hash{Symbol => RDF::Term}}
-    def to_hash
+    def to_h
       @bindings.dup
     end
     
@@ -264,10 +264,21 @@ class RDF::Query
   protected
 
     ##
-    # @param  [Symbol] name
-    # @return [RDF::Term]
+    # @overload #to_hash
+    #   Returns object representation of this URI, broken into components
+    #
+    #   @return (see #to_h)
+    #   @deprecated Use {#to_h} instead.
+    # @overload
+    #   Return the binding for this name
+    #
+    #   @param  [Symbol] name
+    #   @return [RDF::Term]
     def method_missing(name, *args, &block)
-      if args.empty? && @bindings.has_key?(name.to_sym)
+      if name == :to_hash
+        warn "[DEPRECATION] Solution#to_hash is deprecated, use Solution#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        self.to_h
+      elsif args.empty? && @bindings.has_key?(name.to_sym)
         @bindings[name.to_sym]
       else
         super # raises NoMethodError

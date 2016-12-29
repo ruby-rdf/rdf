@@ -819,7 +819,7 @@ module RDF
     def object
       @object ||= parse(@value)
     end
-    alias_method :to_hash, :object
+    alias_method :to_h, :object
 
     ##{
     # Parse a URI into it's components
@@ -1285,6 +1285,23 @@ module RDF
         format_userinfo("@") + @object[:host] + (object[:port] ? ":#{object[:port]}" : "")
       else
         ""
+      end
+    end
+
+  protected
+    ##
+    # @overload #to_hash
+    #   Returns object representation of this URI, broken into components
+    #
+    #   @return (see #object)
+    #   @deprecated Use {#to_h} instead.
+    def method_missing(meth, *args)
+      case meth
+      when :to_hash
+        warn "[DEPRECATION] URI#to_hash is deprecated, use URI#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        self.to_h
+      else
+        super
       end
     end
   end
