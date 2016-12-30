@@ -109,7 +109,7 @@ module RDF
     #   @param [Array<Solution>] args
     #   @return [Solutions] returns new solutions including the arguments, which must each be a {Solution}
     def self.Solutions(*args)
-       if args.length == 1
+      if args.length == 1
         return args[0] if args[0].is_a?(Solutions)
         args = args[0] if args[0].is_a?(Array)
       end
@@ -165,33 +165,28 @@ module RDF
     # @overload initialize(patterns, **options)
     #   @param  [Hash{Object => Object}] patterns
     #     ...
-    #   @param [RDF::Query::Solutions] :solutions (Solutions.new)
-    #   @param [RDF::Resource, RDF::Query::Variable, false] :graph_name (nil)
+    #   @param [RDF::Query::Solutions] solutions (Solutions.new)
+    #   @param [RDF::Resource, RDF::Query::Variable, false] graph_name (false)
     #     Default graph name for matching against queryable.
     #     Named queries either match against a specifically named
     #     graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
     #     Names that are against unbound variables match either default
     #     or named graphs.
     #     The name of `false` will only match against the default graph.
-    #   @param [RDF::Resource, RDF::Query::Variable, false] :name (nil)
+    #   @param [RDF::Resource, RDF::Query::Variable, false] name (false)
     #     Alias for `:graph_name`.
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
-    #
-    # FIXME: Once `Statement#to_hash` has been removed completely, this can change to:
-    #         def initialize(*patterns, solutions: nil, graph_name: nil, name: nil, **options, &block)
-
-    def initialize(*patterns, &block)
-      @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
-      patterns << @options if patterns.empty?
+    def initialize(*patterns, solutions: nil, graph_name: nil, name: nil, **options, &block)
+      @options = options.dup
       @variables = {}
-      @solutions = Query::Solutions(@options.delete(:solutions))
-      graph_name = @options.fetch(:graph_name, @options.fetch(:name, nil))
-      @options.delete(:graph_name)
-      @options.delete(:name)
+      @solutions = Query::Solutions(solutions)
+      graph_name = name if graph_name.nil?
+
+      patterns << @options if patterns.empty?
 
       @patterns  = case patterns.first
         when Hash  then compile_hash_patterns(HashPatternNormalizer.normalize!(patterns.first.dup, @options))
@@ -278,15 +273,20 @@ module RDF
     #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
+    # @param [RDF::Query::Solutions] solutions (Solutions.new)
+    # @param [RDF::Resource, RDF::Query::Variable, false] graph_name (nil)
+    #   Default graph name for matching against queryable.
+    #   Named queries either match against a specifically named
+    #   graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
+    #   Names that are against unbound variables match either default
+    #   or named graphs.
+    #   The name of `false` will only match against the default graph.
+    # @param [RDF::Resource, RDF::Query::Variable, false] name (nil)
+    #   Alias for `:graph_name`.
     # @param  [Hash{Symbol => Object}] options
     #   any additional keyword options
     # @option options [Hash{Symbol => RDF::Term}] bindings
     #   optional variable bindings to use
-    # @option options [RDF::Resource, RDF::Query::Variable, false] graph_name (nil)
-    #   Specific graph name for matching against queryable;
-    #   overrides default graph defined on query.
-    # @option options [RDF::Resource, RDF::Query::Variable, false] name (nil)
-    #   Alias for `:graph_name`.
     # @option options [RDF::Query::Solutions] solutions
     #   optional initial solutions for chained queries
     # @yield  [solution]
@@ -297,17 +297,14 @@ module RDF
     #   the resulting solution sequence
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
-    def execute(queryable, options = {}, &block)
+    def execute(queryable, solutions: Solution.new, graph_name: nil, name: nil, **options, &block)
       validate!
-      options = options.dup
-
-      # just so we can call #keys below without worrying
-      options[:bindings] ||= {}
+      options = {bindings: {}}.merge(options)
 
       # Use provided solutions to allow for query chaining
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
-      @solutions = Query::Solutions(options[:solutions] || Solution.new)
+      @solutions = Query::Solutions(solutions)
 
       # If there are no patterns, just return the empty solution
       if empty?
@@ -316,7 +313,9 @@ module RDF
       end
 
       patterns = @patterns
-      graph_name = options.fetch(:graph_name, options.fetch(:name, self.graph_name))
+      graph_name = name if graph_name.nil?
+      graph_name = self.graph_name if graph_name.nil?
+      options[:graph_name] = graph_name unless graph_name.nil?
 
       # Add graph_name to pattern, if necessary
       unless graph_name.nil?

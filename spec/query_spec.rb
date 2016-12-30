@@ -24,7 +24,7 @@ describe RDF::Query do
     end
 
     it "adds patterns from argument" do
-      expect(RDF::Query.new(pattern).patterns).to eq [pattern]
+      expect(RDF::Query.new(pattern, {}).patterns).to eq [pattern]
     end
 
     it "adds patterns from array" do
