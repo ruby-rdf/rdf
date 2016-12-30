@@ -454,6 +454,7 @@ describe RDF::Literal do
         BigDecimal('1.0') => ["1.0", "1.0"],
         BigDecimal('0') => ["0.0", "0.0"],
         BigDecimal('10.10') => ["10.1", "10.1"],
+        1.1                 => ["1.1", "1.1"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
           expect(RDF::Literal::Decimal.new(obj).to_s).to eql str
