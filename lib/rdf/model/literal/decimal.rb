@@ -21,8 +21,9 @@ module RDF; class Literal
       @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
       @string   = lexical || (value if value.is_a?(String))
       @object   = case
-        when value.is_a?(BigDecimal) then value
-        when value.is_a?(Numeric) then BigDecimal(value)
+        when value.is_a?(::BigDecimal) then value
+        when value.is_a?(::Float)      then BigDecimal(value.to_s)
+        when value.is_a?(::Numeric)    then BigDecimal(value)
         else
           value = value.to_s
           value += "0" if value.end_with?(".")  # Normalization required in Ruby 2.4
