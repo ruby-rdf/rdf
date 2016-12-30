@@ -1219,13 +1219,7 @@ module RDF
         return
       end
 
-      value = if value.respond_to?(:to_h)
-        value.to_h
-      elsif value.respond_to?(:to_hash)
-        value.to_hash
-      else
-        value
-      end
+      value = value.to_hash if value.respond_to?(:to_hash)
       self.query = case value
       when Array, Hash
         value.map do |(k,v)|
