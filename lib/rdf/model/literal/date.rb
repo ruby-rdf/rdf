@@ -10,12 +10,11 @@ module RDF; class Literal
     FORMAT   = '%Y-%m-%d'.freeze
 
     ##
-    # @param  [Date] value
-    # @option options [String] :lexical (nil)
-    def initialize(value, **options)
-      @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   ||= value if value.is_a?(String)
+    # @param  [String, Date, #to_date] value
+    # @param  (see Literal#initialize)
+    def initialize(value, datatype: nil, lexical: nil)
+      @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
+      @string   = lexical || (value if value.is_a?(String))
       @object   = case
         when value.is_a?(::Date)         then value
         when value.respond_to?(:to_date) then value.to_date

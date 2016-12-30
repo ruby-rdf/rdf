@@ -182,15 +182,14 @@ module RDF::NTriples
     #
     # @param  [IO, File] output
     #   the output stream
-    # @param  [Hash{Symbol => Object}] options = ({})
-    #   any additional options. See {RDF::Writer#initialize}
-    # @option options [Boolean]  :validate (true)
+    # @param [Boolean]  validate (true)
     #   whether to validate terms when serializing
+    # @param  [Hash{Symbol => Object}] options ({})
+    #   any additional options. See {RDF::Writer#initialize}
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
-    def initialize(output = $stdout, **options, &block)
-      options = {validate: true}.merge(options)
+    def initialize(output = $stdout, validate: true, **options, &block)
       super
     end
 
@@ -218,10 +217,10 @@ module RDF::NTriples
     # Returns the N-Triples representation of a statement.
     #
     # @param  [RDF::Statement] statement
-    # @param  [Hash{Symbol => Object}] options = ({})
+    # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
     def format_statement(statement, **options)
-      format_triple(*statement.to_triple, options)
+      format_triple(*statement.to_triple, **options)
     end
 
     ##
@@ -230,29 +229,29 @@ module RDF::NTriples
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Term]     object
-    # @param  [Hash{Symbol => Object}] options = ({})
+    # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
     def format_triple(subject, predicate, object, **options)
-      "%s %s %s ." % [subject, predicate, object].map { |value| format_term(value, options) }
+      "%s %s %s ." % [subject, predicate, object].map { |value| format_term(value, **options) }
     end
 
     ##
     # Returns the N-Triples representation of a blank node.
     #
     # @param  [RDF::Node] node
-    # @param  [Hash{Symbol => Object}] options = ({})
-    # @option options [Boolean] :unique_bnodes (false)
+    # @param [Boolean] unique_bnodes (false)
     #   Serialize node using unique identifier, rather than any used to create the node.
+    # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
-    def format_node(node, **options)
-      options[:unique_bnodes] ? node.to_unique_base : node.to_s
+    def format_node(node, unique_bnodes: false, **options)
+      unique_bnodes ? node.to_unique_base : node.to_s
     end
 
     ##
     # Returns the N-Triples representation of a URI reference using write encoding.
     #
     # @param  [RDF::URI] uri
-    # @param  [Hash{Symbol => Object}] options = ({})
+    # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
     def format_uri(uri, **options)
       string = uri.to_s
@@ -296,7 +295,7 @@ module RDF::NTriples
     # Returns the N-Triples representation of a literal.
     #
     # @param  [RDF::Literal, String, #to_s] literal
-    # @param  [Hash{Symbol => Object}] options = ({})
+    # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
     def format_literal(literal, **options)
       case literal

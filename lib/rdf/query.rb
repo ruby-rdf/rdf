@@ -165,21 +165,25 @@ module RDF
     # @overload initialize(patterns, **options)
     #   @param  [Hash{Object => Object}] patterns
     #     ...
-    #   @param  [Hash{Symbol => Object}] options
-    #     any additional keyword options
-    #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
-    #   @option options [RDF::Resource, RDF::Query::Variable, false] :graph_name (nil)
+    #   @param [RDF::Query::Solutions] :solutions (Solutions.new)
+    #   @param [RDF::Resource, RDF::Query::Variable, false] :graph_name (nil)
     #     Default graph name for matching against queryable.
     #     Named queries either match against a specifically named
     #     graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
     #     Names that are against unbound variables match either default
     #     or named graphs.
     #     The name of `false` will only match against the default graph.
-    #   @option options [RDF::Resource, RDF::Query::Variable, false] :name (nil)
+    #   @param [RDF::Resource, RDF::Query::Variable, false] :name (nil)
     #     Alias for `:graph_name`.
+    #   @param  [Hash{Symbol => Object}] options
+    #     any additional keyword options
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
+    #
+    # FIXME: Once `Statement#to_hash` has been removed completely, this can change to:
+    #         def initialize(*patterns, solutions: nil, graph_name: nil, name: nil, **options, &block)
+
     def initialize(*patterns, &block)
       @options  = patterns.last.is_a?(Hash) ? patterns.pop.dup : {}
       patterns << @options if patterns.empty?

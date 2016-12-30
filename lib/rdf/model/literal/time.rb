@@ -15,12 +15,11 @@ module RDF; class Literal
     FORMAT   = '%H:%M:%S%:z'.freeze
 
     ##
-    # @param  [Time] value
-    # @option options [String] :lexical (nil)
-    def initialize(value, **options)
-      @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   ||= value if value.is_a?(String)
+    # @param  [String, DateTime, #to_datetime] value
+    # @param  (see Literal#initialize)
+    def initialize(value, datatype: nil, lexical: nil)
+      @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
+      @string   = lexical || (value if value.is_a?(String))
       @object   = case
         when value.is_a?(::DateTime)         then value
         when value.respond_to?(:to_datetime) then value.to_datetime rescue ::DateTime.parse(value.to_s)

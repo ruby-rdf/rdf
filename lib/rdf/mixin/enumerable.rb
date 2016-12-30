@@ -738,11 +738,10 @@ module RDF
     # @see    RDF::Writer.dump
     # @raise [RDF::WriterError] if no writer found
     # @since  0.2.0
-    def dump(*args)
-      options = args.last.is_a?(Hash) ? args.pop : {}
+    def dump(*args, **options)
       writer = RDF::Writer.for(*args)
       raise RDF::WriterError, "No writer found using #{args.inspect}" unless writer
-      writer.dump(self, nil, options)
+      writer.dump(self, nil, **options)
     end
 
   protected

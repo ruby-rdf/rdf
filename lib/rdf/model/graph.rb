@@ -87,12 +87,12 @@ module RDF
     end
 
     ##
-    # @param  [RDF::Resource]          graph_name
+    # @param  [RDF::Resource] graph_name
     #   The graph_name from the associated {RDF::Queryable} associated
     #   with this graph as provided with the `:data` option
     #   (only for {RDF::Queryable} instances supporting
     #   named graphs).
-    # @param [RDF::Queryable] :data (RDF::Repository.new)
+    # @param [RDF::Queryable] data (RDF::Repository.new)
     #   Storage behind this graph.
     #
     # @raise [ArgumentError] if a `data` does not support named graphs.
@@ -294,7 +294,7 @@ module RDF
     def insert_statements(statements)
       enum = Enumerable::Enumerator.new do |yielder|
         
-        statements.send(method = statements.respond_to?(:each_statement) ? :each_statement : :each) do |s|
+        statements.send(statements.respond_to?(:each_statement) ? :each_statement : :each) do |s|
           s = s.dup
           s.graph_name = graph_name
           yielder << s

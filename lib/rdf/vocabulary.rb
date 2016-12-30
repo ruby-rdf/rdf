@@ -154,7 +154,7 @@ module RDF
       #     Shortcut for `rdf:type`, values are String interpreted as a {URI}.
       #   @return [RDF::Vocabulary::Term]
       #
-      # @note If the ontology URI has the vocabulary namespace URI as a prefix, it may also be defined using {#property} or {#term}
+      # @note If the ontology URI has the vocabulary namespace URI as a prefix, it may also be defined using `#property` or `#term`
       def ontology(*args)
         case args.length
         when 0
@@ -566,14 +566,16 @@ module RDF
       ##
       # @overload URI(uri, **options)
       #   @param  [URI, String, #to_s]    uri
+      #   @param [Hash{Symbol,Resource => Term, #to_s}] attributes
+      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       #   @param  [Hash{Symbol => Object}] options
       #   @option options [Boolean] :validate (false)
       #   @option options [Boolean] :canonicalize (false)
-      #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
-      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       #
       # @overload URI(**options)
       #   @param  [Hash{Symbol => Object}] options
+      #   @param [Hash{Symbol,Resource => Term, #to_s}] attributes
+      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       #   @option options options [Boolean] :validate (false)
       #   @option options options [Boolean] :canonicalize (false)
       #   @option options [Vocabulary] :vocab The {Vocabulary} associated with this term.
@@ -591,14 +593,10 @@ module RDF
       #   @option options [String, #to_s] :path The path component.
       #   @option options [String, #to_s] :query The query component.
       #   @option options [String, #to_s] :fragment The fragment component.
-      #   @option options [Hash{Symbol,Resource => Term, #to_s}] :attributes
-      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
-      def initialize(*args, **options)
-        @attributes = options.fetch(:attributes)
+      def initialize(*args, attributes:, **options)
+        @attributes = attributes
         if RUBY_ENGINE == "rbx"
-          # FIXME: Somehow, this gets messed up in Rubinius
-          args << options
-          super(*args)
+          super(*args, **options)
         else
           super
         end

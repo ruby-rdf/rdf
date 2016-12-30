@@ -281,7 +281,7 @@ module RDF
     #
     # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/URI_scheme
-    # @see    {NON_HIER_SCHEMES}
+    # @see    NON_HIER_SCHEMES
     # @since  1.0.10
     def hier?
       !NON_HIER_SCHEMES.include?(scheme)

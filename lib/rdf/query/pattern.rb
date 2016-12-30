@@ -5,11 +5,12 @@ module RDF; class Query
     ##
     # @private
     # @since 0.2.2
-    def self.from(pattern, **options)
+    def self.from(pattern, graph_name: nil, **options)
       case pattern
         when Pattern then pattern
         when Array, Statement
-          self.new(pattern[0], pattern[1], pattern[2], options.merge(graph_name: pattern[3]))
+          graph_name ||= pattern[3]
+          self.new(pattern[0], pattern[1], pattern[2], graph_name: graph_name, **options)
         when Hash    then self.new(options.merge(pattern))
         else raise ArgumentError, "expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}"
       end

@@ -91,6 +91,7 @@ module RDF::NTriples
     # @param  [String] input
     # @param [{Symbol => Object}] options
     #   From {RDF::Reader#initialize}
+    # @option options  [RDF::Util::Logger] :logger ([])
     # @return [RDF::Term]
     def self.unserialize(input, **options)
       case input
@@ -130,11 +131,12 @@ module RDF::NTriples
 
     ##
     # (see unserialize)
+    # @param [Boolean] intern (false) Use Interned URI
     # @return [RDF::URI]
-    def self.parse_uri(input, **options)
+    def self.parse_uri(input, intern: false, **options)
       if input =~ URIREF
         uri_str = unescape($1)
-        RDF::URI.send(options[:intern] ? :intern : :new, unescape($1))
+        RDF::URI.send(intern ? :intern : :new, unescape($1))
       end
     end
 
@@ -218,12 +220,13 @@ module RDF::NTriples
     end
 
     ##
+    # @param [Boolean] intern (false) Use Interned Node
     # @return [RDF::URI]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (uriref)
-    def read_uriref(**options)
+    def read_uriref(intern: false, **options)
       if uri_str = match(URIREF)
         uri_str = self.class.unescape(uri_str)
-        uri = RDF::URI.send(intern? && options[:intern] ? :intern : :new, uri_str)
+        uri = RDF::URI.send(intern? && intern ? :intern : :new, uri_str)
         uri.validate!     if validate?
         uri.canonicalize! if canonicalize?
         uri

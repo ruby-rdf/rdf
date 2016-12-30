@@ -338,23 +338,24 @@ module RDF
     # Execute one or more commands, parsing input as necessary
     #
     # @param  [Array<String>] args
+    # @param  [IO] output
+    # @param  [Hash{Symbol => Object}] options
     # @return [Boolean]
-    def self.exec(args, **options)
-      out = options[:output] || $stdout
-      out.set_encoding(Encoding::UTF_8) if out.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
+    def self.exec(args, output: $stdout, option_parser: self.options, **options)
+      output.set_encoding(Encoding::UTF_8) if output.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
       cmds, args = args.partition {|e| commands.include?(e.to_s)}
 
       if cmds.empty?
-        usage(options.fetch(:option_parser, self.options))
+        usage(option_parser)
         abort "No command given"
       end
 
       if cmds.first == 'help'
         on_cmd = cmds[1]
         if on_cmd && COMMANDS.fetch(on_cmd.to_sym, {})[:help]
-          usage(options.fetch(:option_parser, self.options), banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
+          usage(option_parser, banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
         else
-          usage(options.fetch(:option_parser, self.options))
+          usage(option_parser)
         end
         return
       end
@@ -431,15 +432,19 @@ module RDF
     # yielding a reader
     #
     # @param  [Array<String>] files
+    # @param  [String] evaluate from command-line, rather than referenced file
+    # @param  [Symbol] format (:ntriples) Reader symbol for finding reader
+    # @param  [Encoding] encoding set on the input
+    # @param  [Hash{Symbol => Object}] options sent to reader
     # @yield  [reader]
     # @yieldparam [RDF::Reader]
     # @return [nil]
-    def self.parse(files, **options, &block)
+    def self.parse(files, evaluate: nil, format: :ntriples, encoding: Encoding::UTF_8, **options, &block)
       if files.empty?
         # If files are empty, either use options[:execute]
-        input = options[:evaluate] ? StringIO.new(options[:evaluate]) : $stdin
-        input.set_encoding(options.fetch(:encoding, Encoding::UTF_8))
-        r = RDF::Reader.for(options[:format] || :ntriples)
+        input = evaluate ? StringIO.new(evaluate) : $stdin
+        input.set_encoding(encoding)
+        r = RDF::Reader.for(format)
         (@readers ||= []) << r
         r.new(input, options) do |reader|
           yield(reader)

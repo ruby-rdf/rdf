@@ -16,15 +16,14 @@ module RDF; class Literal
     GRAMMAR  = /^[\+\-]?\d+$/.freeze
 
     ##
-    # @param  [Integer, #to_i] value
-    # @option options [String] :lexical (nil)
-    def initialize(value, **options)
-      @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   ||= value if value.is_a?(String)
+    # @param  [String, Integer, #to_i] value
+    # @param  (see Literal#initialize)
+    def initialize(value, datatype: nil, lexical: nil)
+      @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
+      @string   = lexical || (value if value.is_a?(String))
       @object   = case
+      when value.is_a?(::Integer)   then value
         when value.respond_to?(:to_i) then value.to_i
-        when value.is_a?(::Integer)   then value
         else Integer(value.to_s) rescue nil
       end
     end
