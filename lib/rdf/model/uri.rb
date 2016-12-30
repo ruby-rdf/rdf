@@ -143,6 +143,7 @@ module RDF
     # @return [RDF::URI] an immutable, frozen URI object
     def self.intern(*args)
       str = args.first
+      args << {} unless args.last.is_a?(Hash)  # FIXME: needed until #to_hash is removed to avoid DEPRECATION warning.
       (cache[(str = str.to_s).to_sym] ||= self.new(*args)).freeze
     end
 
@@ -200,10 +201,10 @@ module RDF
     end
 
     ##
-    # @overload URI(uri, options = {})
+    # @overload URI(uri, **options)
     #   @param  [URI, String, #to_s]    uri
     #
-    # @overload URI(options = {})
+    # @overload URI(**options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option [String, #to_s] :scheme The scheme component.
     #   @option [String, #to_s] :user The user component.
@@ -281,7 +282,7 @@ module RDF
     #
     # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/URI_scheme
-    # @see    {NON_HIER_SCHEMES}
+    # @see    NON_HIER_SCHEMES
     # @since  1.0.10
     def hier?
       !NON_HIER_SCHEMES.include?(scheme)
@@ -1218,7 +1219,13 @@ module RDF
         return
       end
 
-      value = value.to_hash if value.respond_to?(:to_hash)
+      value = if value.respond_to?(:to_h)
+        value.to_h
+      elsif value.respond_to?(:to_hash)
+        value.to_hash
+      else
+        value
+      end
       self.query = case value
       when Array, Hash
         value.map do |(k,v)|

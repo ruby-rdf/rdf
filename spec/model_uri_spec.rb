@@ -16,6 +16,10 @@ describe RDF::URI do
     it "freezes instance" do
       expect(RDF::URI.intern("a")).to be_frozen
     end
+
+    it "does not use #to_hash given a URI" do
+      expect {RDF::URI.intern(RDF::URI("a"))}.not_to write.to(:error)
+    end
   end
 
   describe ".parse" do
