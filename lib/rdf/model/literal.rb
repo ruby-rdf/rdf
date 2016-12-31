@@ -126,11 +126,7 @@ module RDF
         end
       end
       literal = klass.allocate
-      if klass.equal?(RDF::Literal)
-        literal.send(:initialize, value, language: language, datatype: datatype)
-      else
-        literal.send(:initialize, value, datatype: datatype)
-      end
+      literal.send(:initialize, value, language: language, datatype: datatype, **options)
       literal.validate!     if validate
       literal.canonicalize! if canonicalize
       literal
@@ -165,7 +161,7 @@ module RDF
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
     # @see #to_s
-    def initialize(value, language: nil, datatype: nil, lexical: nil, validate: false, canonicalize: false)
+    def initialize(value, language: nil, datatype: nil, lexical: nil, validate: false, canonicalize: false, **options)
       @object   = value.freeze
       @string   = lexical if lexical
       @string   = value if !defined?(@string) && value.is_a?(String)
