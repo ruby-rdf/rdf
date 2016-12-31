@@ -375,7 +375,7 @@ module RDF
 
       # Run each command in sequence
       cmds.each do |command|
-        COMMANDS[command.to_sym][:lambda].call(args, options)
+        COMMANDS[command.to_sym][:lambda].call(args, output: output, **options)
       end
     rescue ArgumentError => e
       abort e.message
