@@ -30,8 +30,7 @@ module RDF; module Util
       # @option options [Array, String] :headers
       #   HTTP Request headers
       # @return [Hash] A hash of HTTP request headers
-      def self.headers options
-        headers = options.fetch(:headers, {})
+      def self.headers headers: {}
         headers['Accept'] ||= default_accept_header
         headers
       end
@@ -45,19 +44,19 @@ module RDF; module Util
       ##
       # @abstract
       # @param [String] base_uri to open
+      # @param [String] proxy
+      #   HTTP Proxy to use for requests.
+      # @param [Array, String] headers ({})
+      #   HTTP Request headers
+      # @param [Boolean] verify_none (false)
+      #   Don't verify SSL certificates
       # @param  [Hash{Symbol => Object}] options
       #   options are ignored in this implementation. Applications are encouraged
       #   to override this implementation to provide more control over HTTP
       #   headers and redirect following.
-      # @option options [String] :proxy
-      #   HTTP Proxy to use for requests.
-      # @option options [Array, String] :headers
-      #   HTTP Request headers
-      # @option options [Boolean] :verify_none (false)
-      #   Don't verify SSL certificates
       # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
       # @raise [IOError] if not found
-      def self.open_url(base_uri, options)
+      def self.open_url(base_uri, proxy: nil, headers: {}, verify_none: false, **options)
         raise NoMethodError.new("#{self.inspect} does not implement required method `open_url` for ", "open_url")
       end
     end
@@ -69,18 +68,14 @@ module RDF; module Util
     # allowing the use of `Rack::Cache` to avoid network access.
     # @since 1.2
     class RestClientAdapter < HttpAdapter
-      # @see HttpAdapter.open_url
-      # @param [String] base_uri to open
-      # @param  [Hash{Symbol => Object}] options
-      # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
-      # @raise [IOError] if not found
-      def self.open_url(base_uri, options)
-        ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
+      # (see HttpAdapter.open_url)
+      def self.open_url(base_uri, proxy: nil, headers: {}, verify_none: false, **options)
+        ssl_verify = verify_none ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         # If RestClient is loaded, prefer it
-        RestClient.proxy = options[:proxy].to_s if options[:proxy]
+        RestClient.proxy = proxy.to_s if proxy
         client = RestClient::Resource.new(base_uri, verify_ssl: ssl_verify)
-        client.get(headers(options)) do |response, request, res, &blk|
+        client.get(headers(headers: headers)) do |response, request, res, &blk|
           case response.code
           when 200..299
             # found object
@@ -109,18 +104,14 @@ module RDF; module Util
     # Net::HTTP adapter to retrieve resources without additional dependencies
     # @since 1.2
     class NetHttpAdapter < HttpAdapter
-      # @see HttpAdapter.open_url
-      # @param [String] base_uri to open
-      # @param  [Hash{Symbol => Object}] options
-      # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
-      # @raise [IOError] if not found
-      def self.open_url(base_uri, options)
-        ssl_verify = options[:verify_none] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
+      # (see HttpAdapter.open_url)
+      def self.open_url(base_uri, proxy: nil, headers: {}, verify_none: false, **options)
+        ssl_verify = verify_none ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
         redirect_count = 0
         max_redirects = 5
         parsed_url = ::URI.parse(base_uri)
-        parsed_proxy = ::URI.parse(options[:proxy].to_s)
+        parsed_proxy = ::URI.parse(proxy.to_s)
         base_uri = parsed_url.to_s
         remote_document = nil
 
@@ -131,7 +122,7 @@ module RDF; module Util
                           use_ssl: parsed_url.scheme == 'https',
                           verify_mode: ssl_verify
           ) do |http|
-            request = Net::HTTP::Get.new(parsed_url.request_uri, headers(options))
+            request = Net::HTTP::Get.new(parsed_url.request_uri, headers(headers: headers))
             http.request(request) do |response|
               case response
               when Net::HTTPSuccess
@@ -193,14 +184,11 @@ module RDF; module Util
         end
       end
 
-      # @see HttpAdapter.open_url
-      # @param [String] base_uri to open
-      # @param  [Hash{Symbol => Object}] options
-      # @return [RemoteDocument, Object] A {RemoteDocument}.
-      def self.open_url(base_uri, options)
+      # (see HttpAdapter.open_url)
+      def self.open_url(base_uri, proxy: nil, headers: {}, verify_none: false, **options)
         response = conn.get do |req|
           req.url base_uri
-          headers(options).each do |k,v|
+          headers(headers: headers).each do |k,v|
             req.headers[k] = v
           end
         end
@@ -283,29 +271,34 @@ module RDF; module Util
     #      # => Cached resource if current, otherwise returned resource
     #
     # @param [String] filename_or_url to open
+    # @param [String] proxy
+    #   HTTP Proxy to use for requests.
+    # @param [Array, String] headers ({})
+    #   HTTP Request headers
+    # @param [Boolean] verify_none (false)
+    #   Don't verify SSL certificates
     # @param  [Hash{Symbol => Object}] options
     #   options are ignored in this implementation. Applications are encouraged
     #   to override this implementation to provide more control over HTTP
     #   headers and redirect following. If opening as a file,
     #   options are passed to `Kernel.open`.
-    # @option options [String] :proxy
-    #   HTTP Proxy to use for requests.
-    # @option options [Array, String] :headers
-    #   HTTP Request headers, passed to Kernel.open.
-    # @option options [Boolean] :verify_none (false)
-    #   Don't verify SSL certificates
     # @return [RemoteDocument, Object] A {RemoteDocument}. If a block is given, the result of evaluating the block is returned.
     # @yield [ RemoteDocument] A {RemoteDocument} for local files
     # @yieldreturn [Object] returned from open_file
     # @raise [IOError] if not found
-    def self.open_file(filename_or_url, options = {}, &block)
+    def self.open_file(filename_or_url, proxy: nil, headers: {}, verify_none: false, **options, &block)
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       remote_document = nil
 
       if filename_or_url.to_s =~ /^https?/
         base_uri = filename_or_url.to_s
 
-        remote_document = self.http_adapter(!!options[:use_net_http]).open_url(base_uri, options)
+        remote_document = self.http_adapter(!!options[:use_net_http]).
+          open_url(base_uri,
+                   proxy:       proxy,
+                   headers:     headers,
+                   verify_none: verify_none,
+                   **options)
       else
         # Fake content type based on found format
         format = RDF::Format.for(filename_or_url.to_s)

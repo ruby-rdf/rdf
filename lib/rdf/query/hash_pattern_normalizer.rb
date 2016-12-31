@@ -173,7 +173,7 @@ module RDF; class Query
     #   any additional normalization options.
     # @option options [String] :anonymous_subject_format ("__%s__")
     #   the string format for anonymous subjects.
-    def initialize(options = {})
+    def initialize(**options)
       @options = options.dup
     end
     
@@ -184,7 +184,7 @@ module RDF; class Query
     #   the query pattern as a hash.
     # @return [Hash{Symbol => Object}]
     #   the resulting query pattern as a normalized hash.
-    def normalize!(hash_pattern = {})
+    def normalize!(**hash_pattern)
       self.class.normalize!(hash_pattern, @options)
     end
   end # RDF::Query::HashPatternNormalizer

@@ -9,13 +9,12 @@ module RDF; class Literal
     GRAMMAR  = /\A[^\x0D\x0A\x09]+\z/i.freeze # FIXME
 
     ##
-    # @param  [Symbol, #to_s]  value
-    # @option options [String] :lexical (nil)
-    def initialize(value, options = {})
-      @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   ||= value if value.is_a?(String)
-      @object   = value.is_a?(Symbol) ? value : value.to_s
+    # @param  [String, Symbol, #to_sym]  value
+    # @param  (see Literal#initialize)
+    def initialize(value, datatype: nil, lexical: nil, **options)
+      @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
+      @string   = lexical || (value if value.is_a?(String))
+      @object   = value.is_a?(Symbol) ? value : value.to_sym
     end
 
     ##

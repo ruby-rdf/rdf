@@ -88,7 +88,7 @@ module RDF
     # @yieldparam [RDF::Transaction] tx
     # @return [void]
     def self.begin(repository, mutable: false, **options, &block)
-      self.new(repository, options.merge(mutable: mutable), &block)
+      self.new(repository, mutable: mutable, **options, &block)
     end
 
     ##

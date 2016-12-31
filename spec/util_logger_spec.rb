@@ -140,6 +140,49 @@ describe RDF::Util::Logger do
       end
     end
 
+    describe "#log_debug" do
+      it "Logs messages, and yield return" do
+        subject.log_debug("a", "b") {"c"}
+        expect(subject.logger.to_s).to eql "DEBUG a: b: c\n"
+      end
+
+      it "adds lineno" do
+        subject.log_debug("a", lineno: 10)
+        expect(subject.logger.to_s).to eql "DEBUG [line 10] a\n"
+      end
+
+      it "adds depth with option" do
+        subject.log_debug("a", depth: 2)
+        expect(subject.logger.to_s).to eql "DEBUG   a\n"
+      end
+
+      it "adds depth with option" do
+        subject.log_debug("a", depth: 2)
+        expect(subject.logger.to_s).to eql "DEBUG   a\n"
+      end
+
+      it "uses logger from @options" do
+        logger = LogTester.new
+        logger.options[:logger] = RDF::Spec.logger
+        logger.log_debug("a")
+        expect(logger.instance_variable_get(:@logger).to_s).to be_empty
+        expect(logger.options[:logger].to_s).to eql "DEBUG a\n"
+      end
+
+      it "uses logger from options" do
+        logger = LogTester.new
+        l = RDF::Spec.logger
+        logger.log_debug("a", logger: l)
+        expect(logger.instance_variable_get(:@logger).to_s).to be_empty
+        expect(l.to_s).to eql "DEBUG a\n"
+      end
+
+      it "increments log_statistics" do
+        subject.log_debug("foo") rescue nil
+        expect(subject.log_statistics[:debug]).to eql 1
+      end
+    end
+
     describe "#log_depth" do
       specify {expect {|b| subject.log_depth(&b)}.to yield_with_no_args}
 

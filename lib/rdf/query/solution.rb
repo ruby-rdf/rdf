@@ -269,7 +269,8 @@ class RDF::Query
     #
     #   @return (see #to_h)
     #   @deprecated Use {#to_h} instead.
-    # @overload
+    #
+    # @overload binding(name)
     #   Return the binding for this name
     #
     #   @param  [Symbol] name

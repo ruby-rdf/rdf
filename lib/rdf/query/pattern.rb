@@ -5,18 +5,19 @@ module RDF; class Query
     ##
     # @private
     # @since 0.2.2
-    def self.from(pattern, options = {})
+    def self.from(pattern, graph_name: nil, **options)
       case pattern
         when Pattern then pattern
         when Array, Statement
-          self.new(pattern[0], pattern[1], pattern[2], options.merge(graph_name: pattern[3]))
+          graph_name ||= pattern[3]
+          self.new(pattern[0], pattern[1], pattern[2], graph_name: graph_name, **options)
         when Hash    then self.new(options.merge(pattern))
         else raise ArgumentError, "expected RDF::Query::Pattern, RDF::Statement, Hash, or Array, but got #{pattern.inspect}"
       end
     end
 
     ##
-    # @overload initialize(options = {})
+    # @overload initialize(**options)
     #   @param  [Hash{Symbol => Object}]     options
     #   @option options [Variable, Resource, Symbol, nil] :subject   (nil)
     #   @option options [Variable, URI, Symbol, nil]      :predicate (nil)
@@ -25,7 +26,7 @@ module RDF; class Query
     #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
     #   @option options [Boolean]            :optional  (false)
     #
-    # @overload initialize(subject, predicate, object, options = {})
+    # @overload initialize(subject, predicate, object, **options)
     #   @param  [Variable, Resource, Symbol, nil]         subject
     #   @param  [Variable, URI, Symbol, nil]              predicate
     #   @param  [Variable, Termm, Symbol, nil]            object

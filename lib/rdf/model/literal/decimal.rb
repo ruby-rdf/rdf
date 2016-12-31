@@ -15,12 +15,11 @@ module RDF; class Literal
     GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
 
     ##
-    # @param  [BigDecimal] value
-    # @option options [String] :lexical (nil)
-    def initialize(value, options = {})
-      @datatype = RDF::URI(options[:datatype] || self.class.const_get(:DATATYPE))
-      @string   = options[:lexical] if options.has_key?(:lexical)
-      @string   ||= value if value.is_a?(String)
+    # @param  [String, BidDecimal, Numeric] value
+    # @param  (see Literal#initialize)
+    def initialize(value, datatype: nil, lexical: nil, **options)
+      @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
+      @string   = lexical || (value if value.is_a?(String))
       @object   = case
         when value.is_a?(::BigDecimal) then value
         when value.is_a?(::Float)      then BigDecimal(value.to_s)
