@@ -959,7 +959,7 @@ describe RDF::NTriples do
     end
   end
 
-  def parse(input, options = {})
+  def parse(input, **options)
     options = {
       validate: false,
       canonicalize: false,

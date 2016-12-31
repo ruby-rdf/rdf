@@ -104,13 +104,13 @@ module RDF
 
     ##
     # @private
-    def self.new(value, options = {})
-      raise ArgumentError, "datatype with language must be rdf:langString" if options[:language] && (options[:datatype] || RDF.langString).to_s != RDF.langString.to_s
+    def self.new(value, language: nil, datatype: nil, lexical: nil, validate: false, canonicalize: false, **options)
+      raise ArgumentError, "datatype with language must be rdf:langString" if language && (datatype || RDF.langString).to_s != RDF.langString.to_s
 
       klass = case
         when !self.equal?(RDF::Literal)
           self # subclasses can be directly constructed without type dispatch
-        when typed_literal = datatyped_class(options[:datatype].to_s)
+        when typed_literal = datatyped_class(datatype.to_s)
           typed_literal
         else case value
           when ::TrueClass  then RDF::Literal::Boolean
@@ -126,9 +126,9 @@ module RDF
         end
       end
       literal = klass.allocate
-      literal.send(:initialize, value, options)
-      literal.validate!     if options[:validate]
-      literal.canonicalize! if options[:canonicalize]
+      literal.send(:initialize, value, language: language, datatype: datatype, **options)
+      literal.validate!     if validate
+      literal.canonicalize! if canonicalize
       literal
     end
 
@@ -147,28 +147,28 @@ module RDF
     # depending on if there is language
     #
     # @param  [Object] value
-    # @option options [Symbol]  :language (nil)
+    # @param  [Symbol]  language (nil)
     #   Language is downcased to ensure proper matching
-    # @option options [String]  :lexical (nil)
+    # @param [String]  lexical (nil)
     #   Supplied lexical representation of this literal,
-    #   otherwise it comes from transforming `value` to a string form
-    #   See {#to_s}.
-    # @option options [URI]     :datatype (nil)
-    # @option options [Boolean] :validate (false)
-    # @option options [Boolean] :canonicalize (false)
+    #   otherwise it comes from transforming `value` to a string form..
+    # @param [URI]     datatype (nil)
+    # @param [Boolean] validate (false)
+    # @param [Boolean] canonicalize (false)
     # @raise [ArgumentError]
     #   if there is a language and datatype is no rdf:langString
     #   or datatype is rdf:langString and there is no language
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
-    def initialize(value, options = {})
+    # @see #to_s
+    def initialize(value, language: nil, datatype: nil, lexical: nil, validate: false, canonicalize: false, **options)
       @object   = value.freeze
-      @string   = options[:lexical] if options[:lexical]
+      @string   = lexical if lexical
       @string   = value if !defined?(@string) && value.is_a?(String)
       @string   = @string.encode(Encoding::UTF_8).freeze if @string
       @object   = @string if @string && @object.is_a?(String)
-      @language = options[:language].to_s.downcase.to_sym if options[:language]
-      @datatype = RDF::URI(options[:datatype]).freeze if options[:datatype]
+      @language = language.to_s.downcase.to_sym if language
+      @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= @language ? RDF.langString : RDF::XSD.string
       raise ArgumentError, "datatype of rdf:langString requires a language" if !@language && @datatype == RDF::langString
@@ -233,7 +233,7 @@ module RDF
     ##
     # Returns a hash code for this literal.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def hash
       @hash ||= [to_s, datatype, language].hash
     end
@@ -242,7 +242,7 @@ module RDF
     ##
     # Returns a hash code for the value.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def value_hash
       @value_hash ||= value.hash
     end
@@ -441,7 +441,7 @@ module RDF
     #
     # @param  [String] string
     # @return [String]
-    # @see {RDF::Term#escape}
+    # @see RDF::Term#escape
     def escape(string)
       string.gsub('\\', '\\\\').
              gsub("\t", '\\t').
@@ -476,6 +476,28 @@ module RDF
     # @return [String]
     def inspect
       sprintf("#<%s:%#0x(%s)>", self.class.name, __id__, RDF::NTriples.serialize(self))
+    end
+
+    protected
+
+    ##
+    # @overload #to_str
+    #   This method is implemented when the datatype is `xsd:string` or `rdf:langString`
+    #   @return [String]
+    def method_missing(name, *args)
+      case name
+      when :to_str
+        return to_s if @datatype == RDF.langString || @datatype == RDF::XSD.string
+      end
+      super
+    end
+
+    def respond_to_missing?(name, include_private = false)
+      case name
+      when :to_str
+        return true if @datatype == RDF.langString || @datatype == RDF::XSD.string
+      end
+      super
     end
   end # Literal
 end # RDF

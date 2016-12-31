@@ -143,6 +143,7 @@ module RDF
     # @return [RDF::URI] an immutable, frozen URI object
     def self.intern(*args)
       str = args.first
+      args << {} unless args.last.is_a?(Hash)  # FIXME: needed until #to_hash is removed to avoid DEPRECATION warning.
       (cache[(str = str.to_s).to_sym] ||= self.new(*args)).freeze
     end
 
@@ -200,10 +201,10 @@ module RDF
     end
 
     ##
-    # @overload URI(uri, options = {})
+    # @overload URI(uri, **options)
     #   @param  [URI, String, #to_s]    uri
     #
-    # @overload URI(options = {})
+    # @overload URI(**options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option [String, #to_s] :scheme The scheme component.
     #   @option [String, #to_s] :user The user component.
@@ -281,7 +282,7 @@ module RDF
     #
     # @return [Boolean] `true` or `false`
     # @see    http://en.wikipedia.org/wiki/URI_scheme
-    # @see    {NON_HIER_SCHEMES}
+    # @see    NON_HIER_SCHEMES
     # @since  1.0.10
     def hier?
       !NON_HIER_SCHEMES.include?(scheme)
@@ -807,7 +808,7 @@ module RDF
     ##
     # Returns a hash code for this URI.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def hash
       @hash ||= (value.hash * -1)
     end
@@ -819,7 +820,7 @@ module RDF
     def object
       @object ||= parse(@value)
     end
-    alias_method :to_hash, :object
+    alias_method :to_h, :object
 
     ##{
     # Parse a URI into it's components
@@ -1285,6 +1286,23 @@ module RDF
         format_userinfo("@") + @object[:host] + (object[:port] ? ":#{object[:port]}" : "")
       else
         ""
+      end
+    end
+
+  protected
+    ##
+    # @overload #to_hash
+    #   Returns object representation of this URI, broken into components
+    #
+    #   @return (see #object)
+    #   @deprecated Use {#to_h} instead.
+    def method_missing(meth, *args)
+      case meth
+      when :to_hash
+        warn "[DEPRECATION] URI#to_hash is deprecated, use URI#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        self.to_h
+      else
+        super
       end
     end
   end

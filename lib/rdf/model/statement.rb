@@ -31,11 +31,11 @@ module RDF
     ##
     # @private
     # @since 0.2.2
-    def self.from(statement, options = {})
+    def self.from(statement, graph_name: nil, **options)
       case statement
         when Array, Query::Pattern
-          graph_name = statement[3] == false ? nil : statement[3]
-          self.new(statement[0], statement[1], statement[2], options.merge(graph_name: graph_name))
+          graph_name ||= statement[3] == false ? nil : statement[3]
+          self.new(statement[0], statement[1], statement[2], graph_name: graph_name, **options)
         when Statement then statement
         when Hash      then self.new(options.merge(statement))
         else raise ArgumentError, "expected RDF::Statement, Hash, or Array, but got #{statement.inspect}"
@@ -58,7 +58,7 @@ module RDF
     attr_accessor :object
 
     ##
-    # @overload initialize(options = {})
+    # @overload initialize(**options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Term]  :subject   (nil)
     #     A symbol is converted to an interned {Node}.
@@ -70,11 +70,11 @@ module RDF
     #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
     #   @return [RDF::Statement]
     #
-    # @overload initialize(subject, predicate, object, options = {})
+    # @overload initialize(subject, predicate, object, **options)
     #   @param  [RDF::Term]          subject
     #     A symbol is converted to an interned {Node}.
-    #   @param  [RDF::URI]               predicate
-    #   @param  [RDF::Resource]              object
+    #   @param  [RDF::URI]           predicate
+    #   @param  [RDF::Resource]      object
     #     if not a {Resource}, it is coerced to {Literal} or {Node} depending on if it is a symbol or something other than a {Term}.
     #   @param  [Hash{Symbol => Object}] options
     #   @option options [RDF::Term]  :graph_name   (nil)
@@ -244,7 +244,7 @@ module RDF
     end
 
     ##
-    # Generates a Fixnum hash value as a quad.
+    # Generates a Integer hash value as a quad.
     def hash
       @hash ||= to_quad.hash
     end
@@ -337,9 +337,14 @@ module RDF
     def to_triple
       [subject, predicate, object]
     end
+    alias_method :to_a, :to_triple
 
-    alias_method :to_a,   :to_triple
-    alias_method :to_ary, :to_triple
+    ##
+    # @deprecated use {#to_a} or {#to_triple} instead
+    # @see #to_triple
+    def to_ary
+      to_triple
+    end
 
     ##
     # Canonicalizes each unfrozen term in the statement
@@ -375,7 +380,7 @@ module RDF
     # @param  [Symbol] predicate_key
     # @param  [Symbol] object_key
     # @return [Hash{Symbol => RDF::Term}]
-    def to_hash(subject_key = :subject, predicate_key = :predicate, object_key = :object, graph_key = :graph_name)
+    def to_h(subject_key = :subject, predicate_key = :predicate, object_key = :object, graph_key = :graph_name)
       {subject_key => subject, predicate_key => predicate, object_key => object, graph_key => graph_name}
     end
 
@@ -392,16 +397,39 @@ module RDF
     ##
     # Returns a graph containing this statement in reified form.
     #
-    # @param  [Hash{Symbol => Object}] options
+    # @param [RDF::Term]  subject   (nil)
+    #   Subject of reification.
+    # @param [RDF::Term]  id   (nil)
+    #   Node identifier, when subject is anonymous
+    # @param [RDF::Term]  graph_name   (nil)
+    #   Note, in RDF 1.1, a graph name MUST be an {Resource}.
     # @return [RDF::Graph]
     # @see    http://www.w3.org/TR/rdf-primer/#reification
-    def reified(options = {})
-      RDF::Graph.new(graph_name: options[:graph_name]) do |graph|
-        subject = options[:subject] || RDF::Node.new(options[:id])
+    def reified(subject: nil, id: nil, graph_name: nil)
+      RDF::Graph.new(graph_name: graph_name) do |graph|
+        subject = subject || RDF::Node.new(id)
         graph << [subject, RDF.type,      RDF[:Statement]]
         graph << [subject, RDF.subject,   self.subject]
         graph << [subject, RDF.predicate, self.predicate]
         graph << [subject, RDF.object,    self.object]
+      end
+    end
+
+  protected
+    ##
+    # @overload #to_hash
+    # Returns the terms of this statement as a `Hash`.
+    #
+    # @param  (see #to_h)
+    # @return (see #to_h)
+    #   @deprecated Use {#to_h} instead.
+    def method_missing(meth, *args)
+      case meth
+      when :to_hash
+        warn "[DEPRECATION] Statement#to_hash is deprecated, use Statement#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        self.to_h
+      else
+        super
       end
     end
   end

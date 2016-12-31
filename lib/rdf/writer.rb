@@ -79,7 +79,7 @@ module RDF
     #   @param  [String] filename
     #   @return [Class]
     #
-    # @overload for(options = {})
+    # @overload for(**options)
     #   Finds an RDF writer class based on various options.
     #
     #   @param  [Hash{Symbol => Object}] options
@@ -154,26 +154,29 @@ module RDF
     #   the graph or repository to dump
     # @param  [IO, File, String] io
     #   the output stream or file to write to
+    # @param [Encoding, String, Symbol] encoding
+    #   the encoding to use on the output stream.
+    #   Defaults to the format associated with `content_encoding`.
     # @param  [Hash{Symbol => Object}] options
     #   passed to {RDF::Writer#initialize} or {RDF::Writer.buffer}
     # @return [void]
-    def self.dump(data, io = nil, options = {})
+    def self.dump(data, io = nil, encoding: nil, **options)
       if io.is_a?(String)
         io = File.open(io, 'w')
       elsif io.respond_to?(:external_encoding) && io.external_encoding
-        options = {encoding: io.external_encoding}.merge(options)
+        encoding ||= io.external_encoding
       end
-      io.set_encoding(options[:encoding]) if io.respond_to?(:set_encoding) && options[:encoding]
+      io.set_encoding(encoding) if io.respond_to?(:set_encoding) && encoding
       method = data.respond_to?(:each_statement) ? :each_statement : :each
       if io
-        new(io, options) do |writer|
+        new(io, encoding: encoding, **options) do |writer|
           data.send(method) do |statement|
             writer << statement
           end
           writer.flush
         end
       else
-        buffer(options) do |writer|
+        buffer(encoding: encoding, **options) do |writer|
           data.send(method) do |statement|
             writer << statement
           end
@@ -184,19 +187,23 @@ module RDF
     ##
     # Buffers output into a string buffer.
     #
+    # @param [Encoding, String, Symbol] encoding
+    #   the encoding to use on the output stream.
+    #   Defaults to the format associated with `content_encoding`.
+    # @param  [Hash{Symbol => Object}] options
+    #   passed to {RDF::Writer#initialize}
     # @yield  [writer]
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
     # @return [String]
     # @raise [ArgumentError] if no block is provided
-    def self.buffer(*args, &block)
-      options = args.last.is_a?(Hash) ? args.last : {}
-      options[:encoding] ||= Encoding::UTF_8 if RUBY_PLATFORM == "java"
+    def self.buffer(*args, encoding: nil, **options, &block)
+      encoding ||= Encoding::UTF_8 if RUBY_PLATFORM == "java"
       raise ArgumentError, "block expected" unless block_given?
 
       StringIO.open do |buffer|
-        buffer.set_encoding(options[:encoding]) if options[:encoding]
-        self.new(buffer, *args) { |writer| block.call(writer) }
+        buffer.set_encoding(encoding) if encoding
+        self.new(buffer, *args, encoding: encoding, **options) { |writer| block.call(writer) }
         buffer.string
       end
     end
@@ -205,16 +212,19 @@ module RDF
     # Writes output to the given `filename`.
     #
     # @param  [String, #to_s] filename
+    # @param [Encoding, String, Symbol] encoding
+    #   the encoding to use on the output stream.
+    #   Defaults to the format associated with `content_encoding`.
+    # @param [Symbol] format (nil)
     # @param  [Hash{Symbol => Object}] options
     #   any additional options (see {RDF::Writer#initialize} and {RDF::Format.for})
-    # @option options [Symbol] :format (nil)
     # @return [RDF::Writer]
-    def self.open(filename, options = {}, &block)
+    def self.open(filename, encoding: nil, format: nil, **options, &block)
       File.open(filename, 'wb') do |file|
-        file.set_encoding(options[:encoding]) if options[:encoding]
+        file.set_encoding(encoding) if encoding
         format_options = options.dup
         format_options[:file_name] ||= filename
-        self.for(options[:format] || format_options).new(file, options, &block)
+        self.for(format || format_options).new(file, encoding: encoding, **options, &block)
       end
     end
 
@@ -256,7 +266,7 @@ module RDF
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
-    def initialize(output = $stdout, options = {}, &block)
+    def initialize(output = $stdout, **options, &block)
       @output, @options = output, options.dup
       @nodes, @node_id, @node_id_map  = {}, 0, {}
 
@@ -421,7 +431,7 @@ module RDF
 
       # Make sure BNodes in statement use unique identifiers
       if statement.node?
-        terms = statement.to_quad.map do |term|
+        statement.to_quad.map do |term|
           if term.is_a?(RDF::Node)
             term = term.original while term.original
             @nodes[term] ||= begin
@@ -480,7 +490,7 @@ module RDF
     # @param  [RDF::Term] term
     # @return [String]
     # @since  0.3.0
-    def format_term(term, options = {})
+    def format_term(term, **options)
       case term
         when String       then format_literal(RDF::Literal(term, options), options)
         when RDF::List    then format_list(term, options)
@@ -499,7 +509,7 @@ module RDF
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
-    def format_node(value, options = {})
+    def format_node(value, **options)
       raise NotImplementedError.new("#{self.class}#format_node") # override in subclasses
     end
 
@@ -509,7 +519,7 @@ module RDF
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
-    def format_uri(value, options = {})
+    def format_uri(value, **options)
       raise NotImplementedError.new("#{self.class}#format_uri") # override in subclasses
     end
 
@@ -519,7 +529,7 @@ module RDF
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
-    def format_literal(value, options = {})
+    def format_literal(value, **options)
       raise NotImplementedError.new("#{self.class}#format_literal") # override in subclasses
     end
 
@@ -529,7 +539,7 @@ module RDF
     # @return [String]
     # @abstract
     # @since  0.2.3
-    def format_list(value, options = {})
+    def format_list(value, **options)
       format_term(value.subject, options)
     end
 

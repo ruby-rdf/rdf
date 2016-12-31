@@ -219,31 +219,43 @@ module RDF
     #
     # @param  [IO, File, String] input
     #   the input stream to read
-    # @param  [Hash{Symbol => Object}] options
-    #   any additional options
-    # @option options [Encoding] :encoding     (Encoding::UTF_8)
+    # @param [Encoding] encoding     (Encoding::UTF_8)
     #   the encoding of the input stream
-    # @option options [Boolean]  :validate     (false)
+    # @param [Boolean]  validate     (false)
     #   whether to validate the parsed statements and values
-    # @option options [Boolean]  :canonicalize (false)
+    # @param [Boolean]  canonicalize (false)
     #   whether to canonicalize parsed literals
-    # @option options [Boolean]  :intern       (true)
+    # @param [Boolean]  intern       (true)
     #   whether to intern all parsed URIs
-    # @option options [Hash]     :prefixes     (Hash.new)
+    # @param [Hash]     prefixes     (Hash.new)
     #   the prefix mappings to use (not supported by all readers)
-    # @option options [#to_s]    :base_uri     (nil)
+    # @param [#to_s]    base_uri     (nil)
     #   the base URI to use when resolving relative URIs (not supported by
     #   all readers)
+    # @param  [Hash{Symbol => Object}] options
+    #   any additional options
     # @yield  [reader] `self`
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
-    def initialize(input = $stdin, options = {}, &block)
-      @options = options.dup
-      @options[:validate]     ||= false
-      @options[:canonicalize] ||= false
-      @options[:intern]       ||= true
-      @options[:prefixes]     ||= Hash.new
-      @options[:base_uri]     ||= input.base_uri if input.respond_to?(:base_uri)
+    def initialize(input = $stdin,
+                   encoding:      Encoding::UTF_8,
+                   validate:      false,
+                   canonicalize:  false,
+                   intern:        true,
+                   prefixes:      Hash.new,
+                   base_uri:      nil,
+                   **options,
+                   &block)
+
+      base_uri     ||= input.base_uri if input.respond_to?(:base_uri)
+      @options = options.merge({
+        encoding:       encoding,
+        validate:       validate,
+        canonicalize:   canonicalize,
+        intern:         intern,
+        prefixes:       prefixes,
+        base_uri:       base_uri
+      })
 
       @input = case input
         when String then StringIO.new(input)
@@ -619,13 +631,12 @@ module RDF
     ##
     # Initializes a new lexer error instance.
     #
-    # @param  [String, #to_s]          message
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [String]         :token  (nil)
-    # @option options [Integer]        :lineno (nil)
-    def initialize(message, options = {})
-      @token      = options[:token]
-      @lineno     = options[:lineno] || (@token.lineno if @token.respond_to?(:lineno))
+    # @param  [String, #to_s]  message
+    # @param  [String]         token  (nil)
+    # @param  [Integer]        lineno (nil)
+    def initialize(message, token: nil, lineno: nil)
+      @token      = token
+      @lineno     = lineno || (token.lineno if token.respond_to?(:lineno))
       super(message.to_s)
     end
   end # ReaderError

@@ -151,7 +151,7 @@ class RDF::Query
     def variables
       {name => self}
     end
-    alias_method :to_hash, :variables
+    alias_method :to_h, :variables
 
     ##
     # Returns this variable's bindings (if any) as a `Hash`.
@@ -164,7 +164,7 @@ class RDF::Query
     ##
     # Returns a hash code for this variable.
     #
-    # @return [Fixnum]
+    # @return [Integer]
     # @since  0.3.0
     def hash
       @name.hash
@@ -218,6 +218,24 @@ class RDF::Query
     def to_s
       prefix = distinguished? ? '?' : "??"
       unbound? ? "#{prefix}#{name}" : "#{prefix}#{name}=#{value}"
+    end
+
+  protected
+    ##
+    # @overload #to_hash
+    #   Returns object representation of this URI, broken into components
+    #
+    #   @return (see #object)
+    #   @deprecated Use {#to_h} instead.
+    def method_missing(name, *args, &block)
+      if name == :to_hash
+        warn "[DEPRECATION] Variable#to_hash is deprecated, use Variable#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        self.to_h
+      elsif args.empty? && @bindings.has_key?(name.to_sym)
+        @bindings[name.to_sym]
+      else
+        super # raises NoMethodError
+      end
     end
   end # Variable
 end # RDF::Query

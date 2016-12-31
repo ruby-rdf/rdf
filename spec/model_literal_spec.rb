@@ -221,6 +221,30 @@ describe RDF::Literal do
     end
   end
 
+  # to_str is implemented for stringy xsd types, but not others
+  describe "#to_str" do
+    literals(:all_plain).each do |args|
+      it "is implemented for #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).to respond_to :to_str
+      end
+
+      it "matches #to_s for #{args.inspect}" do
+        literal = RDF::Literal.new(*args)
+        expect(literal.to_str).to eq literal.to_s
+      end
+    end
+
+    (literals(:all) - literals(:all_plain)).each do |args|
+      it "is not implemented for #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).not_to respond_to :to_str
+      end
+
+      it "raises NoMethodError for #{args.inspect}" do
+        expect { RDF::Literal.new(*args).to_str }.to raise_error NoMethodError
+      end
+    end
+  end
+
   describe "#object" do
     literals(:all_plain).each do |args|
       it "returns value for #{args.inspect}" do
@@ -430,6 +454,7 @@ describe RDF::Literal do
         BigDecimal('1.0') => ["1.0", "1.0"],
         BigDecimal('0') => ["0.0", "0.0"],
         BigDecimal('10.10') => ["10.1", "10.1"],
+        1.1                 => ["1.1", "1.1"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
           expect(RDF::Literal::Decimal.new(obj).to_s).to eql str

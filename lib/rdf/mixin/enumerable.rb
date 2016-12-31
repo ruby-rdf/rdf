@@ -121,7 +121,7 @@ module RDF
     # @return [Array<RDF::Statement>]
     # @see    #each_statement
     # @see    #enum_statement
-    def statements(options = {})
+    def statements(**options)
       Array(enum_statement)
     end
 
@@ -184,7 +184,7 @@ module RDF
     # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term)>]
     # @see    #each_triple
     # @see    #enum_triple
-    def triples(options = {})
+    def triples(**options)
       enum_statement.map(&:to_triple) # TODO: optimize
     end
 
@@ -245,7 +245,7 @@ module RDF
     # @return [Array<Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)>]
     # @see    #each_quad
     # @see    #enum_quad
-    def quads(options = {})
+    def quads(**options)
       enum_statement.map(&:to_quad) # TODO: optimize
     end
 
@@ -711,7 +711,7 @@ module RDF
     # `{subject => {predicate => [*objects]}}`.
     #
     # @return [Hash]
-    def to_hash
+    def to_h
       result = {}
       each_statement do |statement|
         result[statement.subject] ||= {}
@@ -738,14 +738,24 @@ module RDF
     # @see    RDF::Writer.dump
     # @raise [RDF::WriterError] if no writer found
     # @since  0.2.0
-    def dump(*args)
-      options = args.last.is_a?(Hash) ? args.pop : {}
+    def dump(*args, **options)
       writer = RDF::Writer.for(*args)
       raise RDF::WriterError, "No writer found using #{args.inspect}" unless writer
-      writer.dump(self, nil, options)
+      writer.dump(self, nil, **options)
     end
 
+  protected
+
     ##
+    # @overload #to_hash
+    #   Returns all RDF object terms indexed by their subject and predicate
+    #   terms.
+    #
+    #   The return value is a `Hash` instance that has the structure:
+    #   `{subject => {predicate => [*objects]}}`.
+    #
+    #   @return [Hash]
+    #   @deprecated Use {#to_h} instead.
     # @overload #to_writer
     #   Implements #to_writer for each available instance of {RDF::Writer},
     #   based on the writer symbol.
@@ -753,6 +763,11 @@ module RDF
     #   @return [String]
     #   @see {RDF::Writer.sym}
     def method_missing(meth, *args)
+      case meth
+      when :to_hash
+        warn "[DEPRECATION] Enumerable#to_hash is deprecated, use Enumerable#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        return self.to_h
+      end
       writer = RDF::Writer.for(meth.to_s[3..-1].to_sym) if meth.to_s[0,3] == "to_"
       if writer
         writer.buffer(standard_prefixes: true) {|w| w << self}

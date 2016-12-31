@@ -54,10 +54,10 @@ module RDF
       #
       # @param  [IO, File] output
       #   the output stream
+      # @param [RDF::URI]  base_uri
+      #   URI of this vocabulary
       # @param  [Hash{Symbol => Object}] options = ({})
       #   any additional options. See {RDF::Writer#initialize}
-      # @option options [RDF::URI]  :base_uri
-      #   URI of this vocabulary
       # @option options [String]  :class_name
       #   Class name for this vocabulary
       # @option options [String]  :module_name ("RDF")
@@ -71,9 +71,9 @@ module RDF
       # @yield  [writer] `self`
       # @yieldparam  [RDF::Writer] writer
       # @yieldreturn [void]
-      def initialize(output = $stdout, options = {}, &block)
-        options.fetch(:base_uri) {raise ArgumentError, "base_uri option required"}
+      def initialize(output = $stdout, base_uri:, **options, &block)
         @graph = RDF::Repository.new
+        options.merge(base_uri: base_uri)
         super
       end
 

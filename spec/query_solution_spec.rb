@@ -201,9 +201,11 @@ describe RDF::Query::Solution do
       expect(solution).to respond_to :mbox
     end
 
-
     it "Retrieving all bindings in the solution as a Hash" do
-      expect(solution.to_hash).to eq({title: "foo", mbox: "jrhacker@example.org"})
+      expect(solution.to_h).to eq({title: "foo", mbox: "jrhacker@example.org"})
+      expect {
+        expect(solution.to_hash).to eq({title: "foo", mbox: "jrhacker@example.org"})
+      }.to write("DEPRECATION").to(:error)
     end
   end
 end

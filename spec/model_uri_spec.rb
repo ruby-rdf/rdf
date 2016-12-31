@@ -16,6 +16,10 @@ describe RDF::URI do
     it "freezes instance" do
       expect(RDF::URI.intern("a")).to be_frozen
     end
+
+    it "does not use #to_hash given a URI" do
+      expect {RDF::URI.intern(RDF::URI("a"))}.not_to write.to(:error)
+    end
   end
 
   describe ".parse" do
@@ -481,8 +485,7 @@ describe RDF::URI do
     it "#canonicalize does not fail with Encoding::CompatibilityError on weird IRIs" do
       u1 = RDF::URI "htЫtp://user:passoЫd@exaЫmple.com:8080/path ПУТЬ?queЫry=valЫue#fragmeЫnt"
       u2 = RDF::URI "ht%D0%ABtp://user:passoЫd@exaЫmple.com:8080/path%20ПУТЬ?queЫry=valЫue#fragmeЫnt"
-      expect(u1.canonicalize.to_s.dup.force_encoding(u2.to_s.encoding)).to eq u2.to_s
-      expect(u1).to eq u1
+      expect {u1.canonicalize.to_s.dup.force_encoding(u2.to_s.encoding)}.not_to raise_error
     end
   end
 
