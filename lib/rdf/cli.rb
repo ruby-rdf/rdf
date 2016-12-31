@@ -450,6 +450,7 @@ module RDF
           yield(reader)
         end
       else
+        options[:format] = format if format
         files.each do |file|
           RDF::Reader.open(file, options) do |reader|
             (@readers ||= []) << reader.class.to_s
