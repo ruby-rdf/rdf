@@ -364,7 +364,6 @@ describe RDF::NTriples::Reader do
     }.each_pair do |name, nt|
       specify "test #{name}" do
         Array(nt).each do |s|
-          require 'byebug'; byebug
           r = reader.new(s)
           statement = r.first
           ttl = RDF::Turtle::Reader.new(s).first
