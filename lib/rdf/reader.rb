@@ -585,7 +585,7 @@ module RDF
         # Encoding::UndefinedConversionError is raised by MRI.
         # Encoding::InvalidByteSequenceError is raised by jruby >= 1.7.5
         # Encoding::ConverterNotFoundError is raised by jruby < 1.7.5
-        @line = RDF::NTriples::Reader.unescape(@line).encode(encoding)
+        @line.force_encoding(encoding)
       end
       @line
     end
