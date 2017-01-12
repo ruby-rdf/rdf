@@ -277,7 +277,10 @@ class RDF::Query
     #   @return [RDF::Term]
     def method_missing(name, *args, &block)
       if name == :to_hash
-        warn "[DEPRECATION] Solution#to_hash is deprecated, use Solution#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        warn "[DEPRECATION] RDF::Query::Solution#to_hash is deprecated, use RDF::Query::Solution#to_h instead.\n" +
+             "This is due to the introduction of keyword arugments that attempt to turn the last argument into a hash using #to_hash.\n" +
+             "This can be avoided by explicitly passing an options hash as the last argument.\n" +
+             "Called from #{Gem.location_of_caller.join(':')}"
         self.to_h
       elsif args.empty? && @bindings.has_key?(name.to_sym)
         @bindings[name.to_sym]
