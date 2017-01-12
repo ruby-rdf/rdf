@@ -1299,7 +1299,7 @@ module RDF
     def method_missing(meth, *args)
       case meth
       when :to_hash
-        warn "[DEPRECATION] URI#to_hash is deprecated, use URI#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        warn "[DEPRECATION] RDF::URI#to_hash is deprecated, use RDF::URI#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
         self.to_h
       else
         super
