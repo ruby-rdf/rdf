@@ -43,8 +43,8 @@ module RDF
   # Repositories support transactions with a variety of ACID semantics:
   # 
   # Atomicity is indicated by `#supports?(:atomic_write)`. When atomicity is
-  # supported, writes through `#transaction`, `#apply_changeset` and 
-  # `#delete_insert` are applied atomically.
+  # supported, writes through {#transaction}, {#apply_changeset} and 
+  # {#delete_insert} are applied atomically.
   #
   # Consistency should be guaranteed, in general. Repositories that don't 
   # support consistency, or that have specialized definitions of consistency 
@@ -52,7 +52,7 @@ module RDF
   # their documentation.
   #
   # Isolation may be supported at various levels, indicated by 
-  # `#isolation_level`:
+  # {#isolation_level}:
   #   - `:read_uncommitted`: Inserts & deletes in an uncommitted transaction 
   #      scope may be visible to other transactions (or via `#each`, etc...)
   #   - `:read_committed`: Inserts & deletes may be visible to other 
@@ -64,8 +64,8 @@ module RDF
   #      When two or more transactions attempt conflicting writes, only one of
   #      them may succeed.
   #
-  # Durability is noted via `RDF::Durable` support and `#durable?`
-  # /`#nondurable?`.
+  # Durability is noted via {RDF::Durable} support and {#durable?}
+  # /{#nondurable?}.
   #
   # @example Transational read from a repository
   #   repository.transaction do |tx|
