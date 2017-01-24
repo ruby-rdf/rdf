@@ -195,7 +195,7 @@ module RDF
         if reader
           reader.new(file, options, &block)
         else
-          raise FormatError, "unknown RDF format: #{format_options.inspect}" + ("\nThis may be resolved with a require of the 'linkeddata' gem." unless Object.const_defined?(:LinkedData))
+          raise FormatError, "unknown RDF format: #{format_options.inspect}#{"\nThis may be resolved with a require of the 'linkeddata' gem." unless Object.const_defined?(:LinkedData)}"
         end
       end
     end
