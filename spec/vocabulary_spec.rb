@@ -4,7 +4,7 @@ describe RDF::Vocabulary do
   VOCABS = %w(owl rdf rdfs xsd)
   STRICT_VOCABS = %w(owl rdf rdfs)
 
-  context "#new" do
+  context "#initialize" do
     it "should require one argument" do
       expect { RDF::Vocabulary.new }.to raise_error(ArgumentError)
       expect { RDF::Vocabulary.new("http://example.org/") }.not_to raise_error
@@ -34,7 +34,7 @@ describe RDF::Vocabulary do
     end
   end
 
-  describe "#each" do
+  describe ".each" do
     it "inumerates pre-defined vocabularies" do
       expect {|b| RDF::Vocabulary.each(&b)}.to yield_control.at_least(3).times
       expect(RDF::Vocabulary.each.to_a).to include(RDF, RDF::RDFS, RDF::OWL)

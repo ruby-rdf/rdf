@@ -61,7 +61,7 @@ module RDF
     # @yieldreturn [void] ignored
     # @return [Enumerator]
     def self.each(&block)
-      @@subclasses.each(&block)
+      RDF::Format.map(&:writer).reject(&:nil?).each(&block)
     end
 
     ##

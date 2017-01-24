@@ -50,7 +50,7 @@ module RDF
     # @yieldparam [Class] klass
     # @return [Enumerator]
     def self.each(&block)
-      @@subclasses.each(&block)
+      RDF::Format.map(&:reader).reject(&:nil?).each(&block)
     end
 
     ##
@@ -195,7 +195,7 @@ module RDF
         if reader
           reader.new(file, options, &block)
         else
-          raise FormatError, "unknown RDF format: #{format_options.inspect}\nThis may be resolved with a require of the 'linkeddata' gem."
+          raise FormatError, "unknown RDF format: #{format_options.inspect}" + ("\nThis may be resolved with a require of the 'linkeddata' gem." unless Object.const_defined?(:LinkedData))
         end
       end
     end
