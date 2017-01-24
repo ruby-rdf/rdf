@@ -426,7 +426,10 @@ module RDF
     def method_missing(meth, *args)
       case meth
       when :to_hash
-        warn "[DEPRECATION] Statement#to_hash is deprecated, use Statement#to_h instead. Called from #{Gem.location_of_caller.join(':')}"
+        warn "[DEPRECATION] RDF::Statement#to_hash is deprecated, use RDF::Statement#to_h instead.\n" +
+             "This is due to the introduction of keyword arugments that attempt to turn the last argument into a hash using #to_hash.\n" +
+             "This can be avoided by explicitly passing an options hash as the last argument.\n" +
+             "Called from #{Gem.location_of_caller.join(':')}"
         self.to_h
       else
         super
