@@ -8,13 +8,6 @@ require 'rdf/turtle'
 
 describe RDF::NTriples::Format do
 
-  # Restrict detected formats
-  before(:all) do
-    @formats = RDF::Format.class_variable_get(:@@subclasses)
-    RDF::Format.class_variable_set(:@@subclasses, [])
-  end
-  before(:all) {RDF::Format.class_variable_set(:@@subclasses, @formats)}
-
   # @see lib/rdf/spec/format.rb in rdf-spec
   it_behaves_like 'an RDF::Format' do
     let(:format_class) { described_class }

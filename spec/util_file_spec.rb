@@ -13,6 +13,8 @@ describe RDF::Util::File do
 
     it "returns Net::HTTP if rest-client is not available" do
       hide_const("RestClient")
+      RDF::Util::File.remove_instance_variable(:@http_adapter)
+      RDF::Util::File.http_adapter
       expect(RDF::Util::File.http_adapter).to eq RDF::Util::File::NetHttpAdapter
     end
 
