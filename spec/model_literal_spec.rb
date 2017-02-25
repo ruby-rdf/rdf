@@ -353,8 +353,8 @@ describe RDF::Literal do
       %w(0 false)
     ]
     it_behaves_like 'RDF::Literal validation', RDF::XSD.boolean,
-      %w(true false tRuE FaLsE 1 0),
-      %w(foo 10) + ['true false', 'true foo']
+      %w(true false 1 0),
+      %w(foo 10) + ['true false', 'true foo', 'tRuE' 'FaLsE']
 
     context "object values" do
       {
