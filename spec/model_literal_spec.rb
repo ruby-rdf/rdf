@@ -487,7 +487,10 @@ describe RDF::Literal do
       %w(+INF      INF),
       %w(INF       INF),
       %w(-INF      -INF),
+      %w(+INF      INF),
       #%w(NaN       NaN),
+      #%w(NAN        NaN),
+      %w(InF        INF),
       %w(3E1       3.0E1)
     ]
     it_behaves_like 'RDF::Literal validation', RDF::XSD.double,
@@ -500,12 +503,9 @@ describe RDF::Literal do
         1.0e+1
         1.0e-10
         123.456e4
-        +INF
         INF
         -INF
-        Inf
         NaN
-        NAN
         3E1
       ),
       %w(foo 12.xyz 1.0ez) + ['1.1e1 foo', 'foo 1.1e1']
