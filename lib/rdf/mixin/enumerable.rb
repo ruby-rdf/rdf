@@ -122,7 +122,7 @@ module RDF
     # @see    #each_statement
     # @see    #enum_statement
     def statements(**options)
-      Array(enum_statement)
+      enum_statement.to_a
     end
 
     ##
@@ -311,7 +311,7 @@ module RDF
       unless unique
         enum_statement.map(&:subject) # TODO: optimize
       else
-        Array(enum_subject)
+        enum_subject.to_a
       end
     end
 
@@ -376,7 +376,7 @@ module RDF
       unless unique
         enum_statement.map(&:predicate) # TODO: optimize
       else
-        Array(enum_predicate)
+        enum_predicate.to_a
       end
     end
 
@@ -441,7 +441,7 @@ module RDF
       unless unique
         enum_statement.map(&:object) # TODO: optimize
       else
-        Array(enum_object)
+        enum_object.to_a
       end
     end
 
@@ -514,7 +514,7 @@ module RDF
           flatten.
           compact
       else
-        Array(enum_term)
+        enum_term.to_a
       end
     end
 
@@ -759,7 +759,7 @@ module RDF
     # @overload #to_writer
     #   Implements #to_writer for each available instance of {RDF::Writer},
     #   based on the writer symbol.
-    #  
+    #
     #   @return [String]
     #   @see {RDF::Writer.sym}
     def method_missing(meth, *args)
@@ -780,7 +780,7 @@ module RDF
     end
 
     ##
-    # @note this instantiates an writer; it could probably be done more 
+    # @note this instantiates an writer; it could probably be done more
     #   efficiently by refactoring `RDF::Reader` and/or `RDF::Format` to expose
     #   a list of valid format symbols.
     def respond_to_missing?(name, include_private = false)

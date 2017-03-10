@@ -79,6 +79,14 @@ describe RDF::Enumerable do
       end
     end
 
+    context "Not using any deprecated method" do
+      %w(subjects predicates objects statements triples quads).each do |method|
+        it "##{method}" do
+          expect { subject.send(method.to_sym).to_a }.not_to output.to_stderr
+        end
+      end
+    end
+
     context "Obtaining all unique values" do
       %w(subjects predicates objects).each do |method|
         it "##{method}" do
