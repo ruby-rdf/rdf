@@ -84,7 +84,10 @@ operations on RDF files using available readers and writers.
 * `serialize`: Parse an RDF input and re-serializing to [N-Triples][] or another available format using `--output-format` option.
 * `subjects`: Returns unique subjects from parsed input.
 
-The `serialize` command can also be used to serialize as a vocabulary
+The `serialize` command can also be used to serialize as a vocabulary.
+
+Different RDF gems will augment the `rdf` script with more capabilities, which may require specifying the appropriate `--input-format` option to revel.
+
 ## Examples
 
     require 'rdf'
