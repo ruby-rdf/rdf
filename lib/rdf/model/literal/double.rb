@@ -12,7 +12,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Double < Numeric
     DATATYPE = RDF::XSD.double
-    GRAMMAR  = /^(?:NaN|(?:[\+\-]?(?:INF|(?:\d+(\.\d*)?(e[\+\-]?\d+)?))))$/i.freeze
+    GRAMMAR  = /^(?:NaN|\-?INF|[+\-]?(?:\d+(:?\.\d*)?|\.\d+)(?:[eE][\+\-]?\d+)?)$/.freeze
 
     ##
     # @param  [String, Float, #to_f] value
@@ -21,11 +21,11 @@ module RDF; class Literal
       @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
       @string   = lexical || (value if value.is_a?(String))
       @object   = case
-        when value.is_a?(::String) then case value
+        when value.is_a?(::String) then case value.upcase
           when '+INF'  then 1/0.0
           when 'INF'  then 1/0.0
           when '-INF' then -1/0.0
-          when 'NaN'  then 0/0.0
+          when 'NAN'  then 0/0.0
           else Float(value.sub(/\.[eE]/, '.0E')) rescue nil
         end
         when value.is_a?(::Float)     then value

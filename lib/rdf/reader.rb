@@ -180,18 +180,37 @@ module RDF
     # @yieldreturn [void] ignored
     # @raise  [RDF::FormatError] if no reader found for the specified format
     def self.open(filename, format: nil, **options, &block)
+      # If we're the abstract reader, and we can figure out a concrete reader from format and options, use that.
+      if self == RDF::Reader && reader = self.for(format || {file_name: filename}.merge(options))
+        return reader.open(filename, format: format, **options, &block)
+      end
+
+      # If we are a concrete reader class or format is not nil, set accept header from our content_types.
+      unless self == RDF::Reader
+        headers = (options[:headers] ||= {})
+        headers['Accept'] ||= (self.format.accept_type + %w(*/*;q=0.1)).join(", ")
+      end
+
       Util::File.open_file(filename, options) do |file|
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
         format_options[:file_name] ||= filename
+        reader = if self == RDF::Reader
+          # We are the abstract reader class, find an appropriate reader
+          self.for(format || format_options) do
+            # Return a sample from the input file
+            sample = file.read(1000)
+            file.rewind
+            sample
+          end
+        else
+          # We are a concrete reader class
+          self
+        end
+
         options[:encoding] ||= file.encoding if file.respond_to?(:encoding)
         options[:filename] ||= filename
-        reader = self.for(format || format_options) do
-          # Return a sample from the input file
-          sample = file.read(1000)
-          file.rewind
-          sample
-        end
+
         if reader
           reader.new(file, options, &block)
         else

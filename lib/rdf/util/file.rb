@@ -305,7 +305,7 @@ module RDF; module Util
         content_type = format ? format.content_type.first : 'text/plain'
         # Open as a file, passing any options
         begin
-          url_no_frag_or_query = RDF::URI(filename_or_url)
+          url_no_frag_or_query = RDF::URI(filename_or_url).dup
           url_no_frag_or_query.query = nil
           url_no_frag_or_query.fragment = nil
           options[:encoding] ||= Encoding::UTF_8
