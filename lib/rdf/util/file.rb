@@ -1,6 +1,7 @@
 require 'net/http'
 require 'link_header'
 require 'time'
+require 'openssl'
 
 module RDF; module Util
   ##
