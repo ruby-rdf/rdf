@@ -110,7 +110,7 @@ module RDF
               content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
             # Find a format based on the file name:
             when file_name = options[:file_name]
-              self.for(file_extension: File.extname(RDF::URI(file_name).path)[1..-1]) { yield if block_given? }
+              self.for(file_extension: File.extname(RDF::URI(file_name).path.to_s)[1..-1]) { yield if block_given? }
             # Find a format based on the file extension:
             when file_ext  = options[:file_extension]
               file_extensions[file_ext.to_sym]
