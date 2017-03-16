@@ -37,6 +37,7 @@ describe RDF::Format do
     {
       "symbol"              => :foo_bar,
       "path with extension" => "filename.test",
+      "domain with no path" => {file_name: "http://example.org"},
       "file_name"           => {file_name: "filename.test"},
       "file_extension"      => {file_extension: "test"},
       "content_type"        => {content_type: "application/test"},
@@ -49,8 +50,8 @@ describe RDF::Format do
           expect {|b| RDF::Format.for(arg, &b)}.to yield_control
         end
 
-        it "returns last defined format for duplicates" do
-          expect(RDF::Format.for(arg)).to eq RDF::Format::BarFormat
+        it "returns nil last defined format for duplicates" do
+          expect(RDF::Format.for(arg) || RDF::Format::BarFormat).to eq RDF::Format::BarFormat
         end
 
         it "returns detected format for duplicates" do
