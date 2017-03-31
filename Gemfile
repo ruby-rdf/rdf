@@ -19,6 +19,7 @@ group :debug do
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
   gem 'rubinius-debugger', platform: :rbx
+  gem 'ruby-debug', platform: :jruby
   gem 'guard-rspec'
 end
 
