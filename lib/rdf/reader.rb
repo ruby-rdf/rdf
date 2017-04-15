@@ -180,8 +180,8 @@ module RDF
     # @yieldreturn [void] ignored
     # @raise  [RDF::FormatError] if no reader found for the specified format
     def self.open(filename, format: nil, **options, &block)
-      # If we're the abstract reader, and we can figure out a concrete reader from format and options, use that.
-      if self == RDF::Reader && reader = self.for(format || {file_name: filename}.merge(options))
+      # If we're the abstract reader, and we can figure out a concrete reader from format, use that.
+      if self == RDF::Reader && format && reader = self.for(format)
         return reader.open(filename, format: format, **options, &block)
       end
 
@@ -383,7 +383,7 @@ module RDF
       if block_given?
         begin
           loop { block.call(read_statement) }
-        rescue EOFError => e
+        rescue EOFError
           rewind rescue nil
         end
       end
@@ -417,7 +417,7 @@ module RDF
       if block_given?
         begin
           loop { block.call(*read_triple) }
-        rescue EOFError => e
+        rescue EOFError
           rewind rescue nil
         end
       end

@@ -56,5 +56,20 @@ describe RDF::Reader do
         reader_mock.got_here
       end
     end
+
+    it "uses content type in preference to file extension" do
+      uri = "http://example/foo.nq"
+      accept = (RDF::Format.accept_types + %w(*/*;q=0.1)).join(", ")
+      reader_mock = double("reader")
+      expect(reader_mock).to receive(:got_here)
+      WebMock.
+        stub_request(:get, uri).
+        to_return(body: "foo", status: 200, headers: { 'Content-Type' => 'text/turtle'})
+
+      described_class.open(uri) do |r|
+        expect(r).to be_a(RDF::Turtle::Reader)
+        reader_mock.got_here
+      end
+    end
   end
 end
