@@ -12,6 +12,10 @@ group :develop do
 
   gem 'rest-client-components'
   gem 'benchmark-ips'
+
+  # Soft dependencies
+  gem 'uuid'
+  gem 'uuidtools'
 end
 
 group :debug do

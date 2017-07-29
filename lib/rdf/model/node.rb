@@ -30,19 +30,28 @@ module RDF
     ##
     # Returns a blank node with a random UUID-based identifier.
     #
+    # (Depends on availability of either `uuid` or `uuidtools` gems).
+    #
+    # @param  [:default, :compact] format (:default)
+    # Formats supported by the UUID generator:
+    #   * `:default` Produces 36 characters, including hyphens separating the UUID value parts
+    #   * `:compact` Produces a 32 digits (hexadecimal) value with no hyphens
+    #   * `:urn` Adds the prefix urn:uuid: to the default format
     # @param [Regexp] grammar (nil)
     #   a grammar specification that the generated UUID must match
+    #   The UUID is generated such that its initial part is guaranteed
+    #   to match the given `grammar`, e.g. `/^[A-Za-z][A-Za-z0-9]*/`.
+    #   Some RDF storage systems (e.g. AllegroGraph) require this.
+    # Requires that the `uuid` gem be loadable to use `format`
     # @return [RDF::Node]
-    def self.uuid(grammar: nil)
+    def self.uuid(format: :default, grammar: nil)
       case
         when grammar
-          # The UUID is generated such that its initial part is guaranteed
-          # to match the given `grammar`, e.g. `/^[A-Za-z][A-Za-z0-9]*/`.
-          # Some RDF storage systems (e.g. AllegroGraph) require this.
-          # @see http://github.com/bendiken/rdf/pull/43
-          uuid = RDF::Util::UUID.generate(options) until uuid =~ grammar
+          warn "[DEPRECATION] The grammar parameter to RDF::Node#uri is deprecated.\n" +
+               "Called from #{Gem.location_of_caller.join(':')}"
+          uuid = RDF::Util::UUID.generate(format: format) until uuid =~ grammar
         else
-          uuid = RDF::Util::UUID.generate(options)
+          uuid = RDF::Util::UUID.generate(format: format)
       end
       self.new(uuid)
     end

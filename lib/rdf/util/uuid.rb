@@ -14,13 +14,11 @@ module RDF; module Util
     # [UUIDTools]: http://rubygems.org/gems/uuidtools
     #
     # @param  [:default, :compact, :urn] format (:default)
-    # @param  [Hash{Symbol => Object}] options
-    #   any options to pass through to the underlying UUID library
     # @return [String] a UUID string
     # @raise  [LoadError] if no UUID library is available
     # @see    http://rubygems.org/gems/uuid
     # @see    http://rubygems.org/gems/uuidtools
-    def self.generate(format: :default, **options)
+    def self.generate(format: :default)
       begin
         require 'uuid'
         ::UUID.generate(format)
