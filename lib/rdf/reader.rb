@@ -118,22 +118,27 @@ module RDF
           symbol: :canonicalize,
           datatype: TrueClass,
           on: ["--canonicalize"],
+          control: :checkbox,
+          default: false,
           description: "Canonicalize input/output.") {true},
         RDF::CLI::Option.new(
           symbol: :encoding,
           datatype: Encoding,
+          control: :text,
           on: ["--encoding ENCODING"],
           description: "The encoding of the input stream.") {|arg| Encoding.find arg},
         RDF::CLI::Option.new(
           symbol: :intern,
           datatype: TrueClass,
+          control: :checkbox,
           on: ["--intern"],
-          description: "Intern all parsed URIs.") {true},
+          description: "Intern all parsed URIs."),
         RDF::CLI::Option.new(
           symbol: :prefixes,
           datatype: Hash,
+          control: :textbox,
           multiple: true,
-          on: ["--prefixes PREFIX,PREFIX"],
+          on: ["--prefixes PREFIX:URI,PREFIX:URI"],
           description: "A comma-separated list of prefix:uri pairs.") do |arg|
             arg.split(',').inject({}) do |memo, pfxuri|
               pfx,uri = pfxuri.split(':', 2)
@@ -142,14 +147,23 @@ module RDF
         end,
         RDF::CLI::Option.new(
           symbol: :base_uri,
+          control: :url,
           datatype: RDF::URI,
           on: ["--uri URI"],
           description: "Base URI of input file, defaults to the filename.") {|arg| RDF::URI(arg)},
         RDF::CLI::Option.new(
           symbol: :validate,
           datatype: TrueClass,
+          control: :checkbox,
           on: ["--validate"],
-          description: "Validate input file.") {true},
+          description: "Validate input file."),
+        RDF::CLI::Option.new(
+          symbol: :verifySSL,
+          datatype: TrueClass,
+          default: true,
+          control: :checkbox,
+          on: ["--[no-]verifySSL"],
+          description: "Verify SSL results on HTTP GET")
       ]
     end
 
