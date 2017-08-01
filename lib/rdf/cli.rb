@@ -124,7 +124,7 @@ module RDF
       def to_hash
         {
           symbol: symbol,
-          datatype: datatype,
+          datatype: (datatype.is_a?(Class) ? datatype.name : datatype),
           control: control,
           description: description
         }
@@ -253,16 +253,19 @@ module RDF
       RDF::CLI::Option.new(
         symbol: :debug,
         control: :checkbox,
+        datatype: TrueClass,
         on: ["-d", "--debug"],
         description: 'Enable debug output for troubleshooting.'),
       RDF::CLI::Option.new(
         symbol: :verbose,
         control: :checkbox,
+        datatype: TrueClass,
         on: ['-v', '--verbose'],
         description: 'Enable verbose output. May be given more than once.'),
       RDF::CLI::Option.new(
         symbol: :evaluate,
         control: :textbox,
+        datatype: TrueClass,
         on: ["-e", "--evaluate STRING"],
         description: "Evaluate argument as RDF input, if no files are specified"),
       RDF::CLI::Option.new(
@@ -340,7 +343,6 @@ module RDF
       opts = options.options = {
         logger:         logger
       }
-
 
       # Pre-load commands
       load_commands
@@ -465,6 +467,7 @@ module RDF
       case format
       when :json
         COMMANDS.inject({}) do |memo, (k, v)|
+          v = v.dup
           v.delete(:lambda)
           v.delete(:help)
           v[:options] = Array(v[:options]).map(&:to_hash)

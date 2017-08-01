@@ -107,6 +107,13 @@ describe RDF::CLI do
   end
 
   context "commands" do
+    around(:each) do |example|
+      orig_commands = RDF::CLI::COMMANDS.dup
+      example.run
+      RDF::CLI::COMMANDS.clear
+      RDF::CLI::COMMANDS.merge!(orig_commands)
+    end
+
     describe "serialize" do
       after(:each) do
         $stdin = STDIN
