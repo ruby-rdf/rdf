@@ -603,8 +603,13 @@ module RDF
       if files.empty?
         # If files are empty, either use options[:execute]
         input = evaluate ? StringIO.new(evaluate) : $stdin
-        input.set_encoding(encoding)
-        r = RDF::Reader.for(format)
+        input.set_encoding(encoding )
+        if !format
+          sample = input.read
+          input.rewind
+        end
+        r = RDF::Reader.for(format|| {sample: sample})
+        raise ArgumentError, "Unknown format for evaluated input" unless r
         (@readers ||= []) << r
         r.new(input, options) do |reader|
           yield(reader)

@@ -23,7 +23,8 @@ module RDF
             symbol: :class_name,
             datatype: String,
             control: :text,
-            on: ["--class-name NAME"],
+            on: ["--class-name NAME", :REQUIRED],
+            required: true,
             description: "Name of created Ruby class (vocabulary format)."),
           RDF::CLI::Option.new(
             symbol: :module_name,
