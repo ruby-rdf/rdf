@@ -19,6 +19,11 @@ describe RDF::CLI do
       expect(options.options[:logger].level).to eql Logger::DEBUG
     end
 
+    it "extracts non-option arguments into options.args" do
+      options = RDF::CLI.options(%w(help --debug along with other args))
+      expect(options.args).to eql %w(help along with other args)
+    end
+
     describe "--input-format" do
       it "sets :format given a legitimate format (using --format)" do
         options = RDF::CLI.options(%w(help --format ntriples))
@@ -37,7 +42,7 @@ describe RDF::CLI do
 
       it "aborts given an illegitimate format" do
         expect(RDF::CLI).to receive(:abort)
-        options = RDF::CLI.options(%w(help --format foo))
+        RDF::CLI.options(%w(help --format foo))
       end
     end
 
@@ -61,7 +66,7 @@ describe RDF::CLI do
 
       it "aborts given an illegitimate format" do
         expect(RDF::CLI).to receive(:abort)
-        options = RDF::CLI.options(%w(help --output-format foo))
+        RDF::CLI.options(%w(help --output-format foo))
       end
     end
 
@@ -70,6 +75,10 @@ describe RDF::CLI do
         options = RDF::CLI.options(%w(helpcount --format ntriples --evaluate) << triple)
         expect(options.options[:evaluate]).to eql triple
       end
+    end
+
+    it "returns an array of Option format: :json" do
+      expect(RDF::CLI.options([], format: :json)).to all(be_a(Hash))
     end
   end
 
@@ -85,8 +94,8 @@ describe RDF::CLI do
       expect(RDF::CLI.commands).to all(be_a(String))
     end
 
-    it "returns an hash with format: :json" do
-      expect(RDF::CLI.commands(format: :json)).to be_a(Hash)
+    it "returns an array with format: :json" do
+      expect(RDF::CLI.commands(format: :json)).to all(be_a(Hash))
     end
   end
 

@@ -130,13 +130,13 @@ module RDF
         RDF::CLI::Option.new(
           symbol: :intern,
           datatype: TrueClass,
-          control: :checkbox,
+          control: :none,
           on: ["--intern"],
           description: "Intern all parsed URIs."),
         RDF::CLI::Option.new(
           symbol: :prefixes,
           datatype: Hash,
-          control: :textbox,
+          control: :none,
           multiple: true,
           on: ["--prefixes PREFIX:URI,PREFIX:URI"],
           description: "A comma-separated list of prefix:uri pairs.") do |arg|

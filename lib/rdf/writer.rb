@@ -132,7 +132,7 @@ module RDF
           symbol: :prefixes,
           datatype: Hash,
           multiple: true,
-          control: :textbox,
+          control: :none,
           on: ["--prefixes PREFIX,PREFIX"],
           description: "A comma-separated list of prefix:uri pairs.") do |arg|
             arg.split(',').inject({}) do |memo, pfxuri|

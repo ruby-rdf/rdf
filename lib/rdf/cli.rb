@@ -17,12 +17,19 @@ rescue LoadError
 end
 
 class OptionParser
+  # Actual parsed options
   def options; @options || {}; end
   def options=(value); @options = value; end
+
+  # Arguments remaining after extracting options
+  def args; @args || []; end
+  def args=(value); @args = value; end
 end
 
 module RDF
   # Individual formats can modify options by updating {Reader.options} or {Writer.options}. Format-specific commands are taken from {Format.cli_commands} for each loaded format, which returns an array of lambdas taking arguments and options.
+  #
+  # Status updates should be logged to `opts[:logger].info`. More complicated information can be added to `:messages` key within `opts`, if present.
   #
   # Other than `help`, all commands parse an input file.
   #
@@ -64,7 +71,7 @@ module RDF
   #           count += 1
   #         end
   #       end
-  #       $stdout.puts "Parsed #{count} statements"
+  #       options[:logger].info "Parsed #{count} statements"
   #     end
   #   end
   #     
@@ -93,6 +100,10 @@ module RDF
       # @return [:text, :textarea, :radio, :checkbox, :select, :url, :url2, :none]
       attr_reader :control
 
+      # Is this a required option?
+      # @return [Boolean]
+      attr_reader :required
+
       ##
       # Create a new option with optional callback.
       #
@@ -103,10 +114,11 @@ module RDF
       # @yieldparam [Object] value The option value as parsed using `on` argument
       # @yieldparam [OptionParser] options (nil) optional OptionParser
       # @yieldreturn [Object] a possibly modified input value
-      def initialize(symbol: nil, on: nil, datatype: nil, control: nil, description: nil, **options, &block)
+      def initialize(symbol: nil, on: nil, datatype: nil, control: nil,
+                     description: nil, required: false, **options, &block)
         raise ArgumentError, "symbol is a required argument" unless symbol
         raise ArgumentError, "on is a required argument" unless on
-        @symbol, @on, @datatype, @control, @description, @callback = symbol.to_sym, Array(on), datatype, control, description, block
+        @symbol, @on, @datatype, @control, @description, @required, @callback = symbol.to_sym, Array(on), datatype, control, description, required, block
       end
 
       def call(arg, options)
@@ -123,10 +135,11 @@ module RDF
       # Return version of commands appropriate for use in JSON
       def to_hash
         {
-          symbol: symbol,
-          datatype: (datatype.is_a?(Class) ? datatype.name : datatype),
-          control: control,
-          description: description
+          symbol:       symbol,
+          datatype:     (datatype.is_a?(Class) ? datatype.name : datatype),
+          control:      control,
+          description:  description,
+          required:     required
         }
       end
     end
@@ -136,6 +149,8 @@ module RDF
     # * `parse` Boolean value to determine if input files should automatically be parsed into `repository`.
     # * `help` used for the CLI help output.
     # * `lambda` code run to execute command.
+    # * `filter` Option values that must match for command to be used
+    # * `control` Used to indicate how (if) command is displayed
     # * `options` an optional array of `RDF::CLI::Option` describing command-specific options, which may also be used to remove general options.
     # @return [Hash{Symbol => Hash{Symbol => Object}}]
     COMMANDS = {
@@ -153,7 +168,7 @@ module RDF
               end
             end
             secs = Time.new - start
-            $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
+            opts[:output].puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
           end
         end,
         options: [
@@ -163,6 +178,7 @@ module RDF
       help: {
         description: "This message",
         parse: false,
+        control: :none,
         lambda: ->(argv, opts) {self.usage(self.options)}
       },
       lengths: {
@@ -170,8 +186,9 @@ module RDF
         parse: true,
         help: "lengths [options] [args...]\nreturns lengths of each parsed statement",
         lambda: ->(argv, opts) do
+          opts[:output].puts "Lengths"
           repository.each_statement do |statement|
-            $stdout.puts statement.to_s.size
+            opts[:output].puts statement.to_s.size
           end
         end,
         options: [
@@ -183,9 +200,9 @@ module RDF
         parse: true,
         help: "objects [options] [args...]\nreturns unique objects serialized in N-Triples format",
         lambda: ->(argv, opts) do
-          $stdout.puts "Objects"
+          opts[:output].puts "Objects"
           repository.each_object do |object|
-            $stdout.puts object.to_ntriples
+            opts[:output].puts object.to_ntriples
           end
         end,
         options: [
@@ -197,9 +214,9 @@ module RDF
         description: "Serialize each parsed predicate to N-Triples",
         help: "predicates [options] [args...]\nreturns unique predicates serialized in N-Triples format",
         lambda: ->(argv, opts) do
-          $stdout.puts "Predicates"
+          opts[:output].puts "Predicates"
           repository.each_predicate do |predicate|
-            $stdout.puts predicate.to_ntriples
+            opts[:output].puts predicate.to_ntriples
           end
         end,
         options: [
@@ -212,7 +229,7 @@ module RDF
         help: "serialize [options] [args...]\nserialize output using specified format (or N-Triples if not specified)",
         lambda: ->(argv, opts) do
           writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
-          out = opts[:output] || $stdout
+          out = opts[:output]
           opts = opts.merge(prefixes: {})
           writer_opts = opts.merge(standard_prefixes: true)
           writer_class.new(out, writer_opts) do |writer|
@@ -225,9 +242,9 @@ module RDF
         description: "Serialize each parsed subject to N-Triples",
         help: "subjects [options] [args...]\nreturns unique subjects serialized in N-Triples format",
         lambda: ->(argv, opts) do
-          $stdout.puts "Subjects"
+          opts[:output].puts "Subjects"
           repository.each_subject do |subject|
-            $stdout.puts subject.to_ntriples
+            opts[:output].puts subject.to_ntriples
           end
         end,
         options: [
@@ -239,7 +256,7 @@ module RDF
         parse: true,
         help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
         lambda: ->(argv, opts) do
-          $stdout.puts "Input is " + (repository.valid? ? "" : "in") + "valid"
+          opts[:output].puts "Input is " + (repository.valid? ? "" : "in") + "valid"
         end,
         options: [
           RDF::CLI::Option.new(symbol: :output_format, on: [])
@@ -249,7 +266,7 @@ module RDF
 
     # Options to setup, may be modified by selected command. Options are also read from {RDF::Reader#options} and {RDF::Writer#options}. When a specific input- or ouput-format is selected, options are also discovered from the associated subclass reader or writer.
     # @return [Array<RDF::CLI::Option>]
-    OPTIONS = [
+    OPTIONS = ([
       RDF::CLI::Option.new(
         symbol: :debug,
         control: :checkbox,
@@ -264,7 +281,7 @@ module RDF
         description: 'Enable verbose output. May be given more than once.'),
       RDF::CLI::Option.new(
         symbol: :evaluate,
-        control: :textbox,
+        control: :none,
         datatype: TrueClass,
         on: ["-e", "--evaluate STRING"],
         description: "Evaluate argument as RDF input, if no files are specified"),
@@ -317,7 +334,7 @@ module RDF
           end if writer
           arg.downcase.to_sym
         end,
-    ] + RDF::Reader.options + RDF::Writer.options
+    ] + RDF::Reader.options + RDF::Writer.options).uniq(&:symbol)
 
     class << self
       # Repository containing parsed statements
@@ -333,16 +350,21 @@ module RDF
     # Return OptionParser set with appropriate options
     #
     # The yield return should provide one or more commands from which additional options will be extracted.
-    # @param [Array<String>] argv
-    def self.options(argv)
+    # @overload options(argv)
+    #   @param [Array<String>] argv
+    #   @return [OptionParser]
+    # @overload options(argv, format: :json)
+    #   @param [Array<String>] argv
+    #   @param [:json] format (:json)
+    #   @return [Array<RDF::CLI::Option>]
+    #     Returns discovered options
+    def self.options(argv, format: nil)
       options = OptionParser.new
       cli_opts = OPTIONS.dup
       logger = Logger.new($stderr)
-      logger.level = Logger::ERROR
+      logger.level = Logger::WARN
       logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity} #{msg}\n"}
-      opts = options.options = {
-        logger:         logger
-      }
+      opts = options.options = {logger: logger}
 
       # Pre-load commands
       load_commands
@@ -365,30 +387,38 @@ module RDF
         on_args << cli_opt.description if cli_opt.description
         options.on(*on_args) do |arg|
           opts[cli_opt.symbol] = cli_opt.call(arg, options)
-
-          # Hacks for specific options
-          opts[:logger].level = Logger::INFO if cli_opt.symbol == :verbose
-          opts[:logger].level = Logger::DEBUG if cli_opt.symbol == :debug
         end
       end
 
-      options.banner = "Usage: #{self.basename} command+ [options] [args...]"
+      if format == :json
+        # Return options
+        OPTIONS.map(&:to_hash)
+      else
+        options.banner = "Usage: #{self.basename} command+ [options] [args...]"
 
-      options.on_tail('-V', '--version', 'Display the RDF.rb version and exit.') do
-        puts RDF::VERSION; exit(0)
+        options.on_tail('-V', '--version', 'Display the RDF.rb version and exit.') do
+          puts RDF::VERSION; exit(0)
+        end
+
+        show_help = false
+        options.on_tail("-h", "--help", "Show this message") do
+          show_help = true
+        end
+
+        begin
+          args = options.parse!(args)
+        rescue OptionParser::InvalidOption, OptionParser::InvalidArgument, ArgumentError => e
+          abort e
+        end
+
+        # Make sure options are processed first
+        if show_help
+          self.usage(options); exit(0)
+        end
+
+        options.args = cmds + args
+        options
       end
-
-      options.on_tail("-h", "--help", "Show this message") do
-        self.usage(options); exit(0)
-      end
-
-      begin
-        options.parse!(args)
-      rescue OptionParser::InvalidOption, OptionParser::InvalidArgument, ArgumentError => e
-        abort e
-      end
-
-      options
     end
 
     ##
@@ -397,7 +427,7 @@ module RDF
       options.banner = banner if banner
       $stdout.puts options
       $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
-      $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
+      $stdout.puts "Available commands:\n\t#{self.commands(**options.options).join("\n\t")}"
       $stdout.puts "Available formats:\n\t#{(self.formats).join("\n\t")}"
     end
 
@@ -412,11 +442,13 @@ module RDF
     def self.exec(args, output: $stdout, option_parser: nil, **options)
       option_parser ||= self.options(args)
       output.set_encoding(Encoding::UTF_8) if output.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
+
+      # Separate commands from file options; arguments already extracted
       cmds, args = args.partition {|e| COMMANDS.include?(e.to_sym)}
 
       if cmds.empty?
         usage(option_parser)
-        abort "No command given"
+        raise ArgumentError, "No command given"
       end
 
       if cmds.first == 'help'
@@ -432,6 +464,22 @@ module RDF
         return
       end
 
+      # Make sure any selected command isn't filtered out
+      cmds.each do |c|
+        COMMANDS[c.to_sym].fetch(:filter, {}).each do |opt, val|
+          if options[opt].to_s != val.to_s
+            usage(option_parser, banner: "Command #{c.inspect} requires #{opt}: #{val}, not #{options.fetch(opt, 'null')}")
+            return
+          end
+        end
+      end
+
+      # Hacks for specific options
+      options[:logger].level = Logger::INFO if options[:verbose]
+      options[:logger].level = Logger::DEBUG if options[:debug]
+      options[:format] = options[:format].to_sym if options[:format]
+      options[:output_format] = options[:output_format].to_sym if options[:output_format]
+
       @repository = RDF::Repository.new
 
       # Parse input files if any command requires it
@@ -442,42 +490,53 @@ module RDF
           @repository << reader
         end
         secs = Time.new - start
-        $stdout.puts "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
+        options[:logger].info "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
       end
 
       # Run each command in sequence
       cmds.each do |command|
         COMMANDS[command.to_sym][:lambda].call(args, output: output, **options)
       end
-    rescue ArgumentError => e
-      abort e.message
+
+      if options[:statistics]
+        options[:statistics][:reader] = @readers.first unless @readers.empty?
+        options[:statistics][:count] = @repository.count
+      end
     end
 
     ##
-    # @overload commands
+    # @overload commands(**options)
+    #   @param [Hash{Symbol => Object}] options already set
     #   @return [Array<String>] list of executable commands
-    # @overload commands
+    # @overload commands(format: :json, **options)
     #   @param [:json] format (:json)
-    #   @return [Hash{Symbol => Object}]
-    #     Returns a hash structure suitably for serializing to JSON
-    def self.commands(format: nil)
+    #   @param [Hash{Symbol => Object}] options already set
+    #   @return [Array{Object}]
+    #     Returns an array of commands including the command symbol
+    def self.commands(format: nil, **options)
       # First, load commands from other formats
       load_commands
 
       case format
       when :json
-        COMMANDS.inject({}) do |memo, (k, v)|
-          v = v.dup
+        COMMANDS.map do |k, v|
+          v = v.merge(symbol: k, options: v.fetch(:options, []).map(&:to_hash))
           v.delete(:lambda)
           v.delete(:help)
-          v[:options] = Array(v[:options]).map(&:to_hash)
           v.delete(:options) if v[:options].empty?
-          memo.merge(k => v)
-        end.to_hash
+          v[:control] == :none ? nil : v
+        end.compact
       else
-        sym_len = COMMANDS.keys.map {|k| k.to_s.length}.max
-        COMMANDS.keys.sort.map do |k|
-          "%*s: %s" % [sym_len, k, COMMANDS[k][:description]]
+        # Subset commands based on filter options
+        cmds = COMMANDS.reject do |k, c|
+          c.fetch(:filter, {}).any? do |opt, val|
+            options[opt].to_s != val.to_s
+          end
+        end
+
+        sym_len = cmds.keys.map {|k| k.to_s.length}.max
+        cmds.keys.sort.map do |k|
+          "%*s: %s" % [sym_len, k, cmds[k][:description]]
         end
       end
     end
@@ -540,7 +599,7 @@ module RDF
     # @yield  [reader]
     # @yieldparam [RDF::Reader]
     # @return [nil]
-    def self.parse(files, evaluate: nil, format: :ntriples, encoding: Encoding::UTF_8, **options, &block)
+    def self.parse(files, evaluate: nil, format: nil, encoding: Encoding::UTF_8, **options, &block)
       if files.empty?
         # If files are empty, either use options[:execute]
         input = evaluate ? StringIO.new(evaluate) : $stdin

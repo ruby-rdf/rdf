@@ -8,4 +8,8 @@ options = RDF::CLI.options(ARGV)
 abort options.banner if ARGV.empty? && !options.options[:evaluate]
 
 # Add option_parser to parsed options to enable help
-RDF::CLI.exec(ARGV, option_parser: options, **options.options)
+begin
+  RDF::CLI.exec(options.args, option_parser: options, **options.options)
+rescue ArgumentError => e
+  RDF::CLI.abort e.message
+end
