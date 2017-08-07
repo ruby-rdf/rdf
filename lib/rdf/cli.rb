@@ -441,6 +441,7 @@ module RDF
     # @return [Boolean]
     def self.exec(args, output: $stdout, option_parser: nil, **options)
       option_parser ||= self.options(args)
+      options[:logger] ||= option_parser.options[:logger]
       output.set_encoding(Encoding::UTF_8) if output.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
 
       # Separate commands from file options; arguments already extracted

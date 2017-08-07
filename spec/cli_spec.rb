@@ -16,7 +16,7 @@ describe RDF::CLI do
   describe "options" do
     it "sets debug logging with --debug" do
       options = RDF::CLI.options(%w(help --debug))
-      expect(options.options[:logger].level).to eql Logger::DEBUG
+      expect(options.options[:debug]).to be_truthy
     end
 
     it "extracts non-option arguments into options.args" do
