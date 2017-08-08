@@ -100,25 +100,28 @@ module RDF
       # @return [:text, :textarea, :radio, :checkbox, :select, :url, :url2, :none]
       attr_reader :control
 
-      # Is this a required option?
-      # @return [Boolean]
-      attr_reader :required
+      # Use of this option
+      # @return [:optional, :disabled, :removed, :required]
+      attr_accessor :use
 
       ##
       # Create a new option with optional callback.
       #
       # @param [Symbol] symbol
       # @param [Array<String>] on
+      # @param [String] datatype
+      # @param [String] control
       # @param [String] description
+      # @param [[:optional, :disabled, :removed, :required]] use
       # @yield value which may be used within `OptionParser#on`
       # @yieldparam [Object] value The option value as parsed using `on` argument
       # @yieldparam [OptionParser] options (nil) optional OptionParser
       # @yieldreturn [Object] a possibly modified input value
       def initialize(symbol: nil, on: nil, datatype: nil, control: nil,
-                     description: nil, required: false, **options, &block)
+                     description: nil, use: :optional, **options, &block)
         raise ArgumentError, "symbol is a required argument" unless symbol
         raise ArgumentError, "on is a required argument" unless on
-        @symbol, @on, @datatype, @control, @description, @required, @callback = symbol.to_sym, Array(on), datatype, control, description, required, block
+        @symbol, @on, @datatype, @control, @description, @use, @callback = symbol.to_sym, Array(on), datatype, control, description, use, block
       end
 
       def call(arg, options)
@@ -139,7 +142,7 @@ module RDF
           datatype:     (datatype.is_a?(Class) ? datatype.name : datatype),
           control:      control,
           description:  description,
-          required:     required
+          use:          use
         }
       end
     end
@@ -151,12 +154,14 @@ module RDF
     # * `lambda` code run to execute command.
     # * `filter` Option values that must match for command to be used
     # * `control` Used to indicate how (if) command is displayed
-    # * `options` an optional array of `RDF::CLI::Option` describing command-specific options, which may also be used to remove general options.
+    # * `options` an optional array of `RDF::CLI::Option` describing command-specific options.
+    # * `option_use`: A hash of option symbol to option usage, used for overriding the default status of an option for this command.
     # @return [Hash{Symbol => Hash{Symbol => Object}}]
     COMMANDS = {
       count: {
         description: "Count statements in parsed input",
         parse: false,
+        control: :none,
         help: "count [options] [args...]\nreturns number of parsed statements",
         lambda: ->(argv, opts) do
           unless repository.count > 0
@@ -171,9 +176,7 @@ module RDF
             opts[:output].puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
           end
         end,
-        options: [
-          RDF::CLI::Option.new(symbol: :output_format, on: [])
-        ]
+        option_use: {output_format: :disabled}
       },
       help: {
         description: "This message",
@@ -184,6 +187,7 @@ module RDF
       lengths: {
         description: "Lengths of each parsed statement",
         parse: true,
+        control: :none,
         help: "lengths [options] [args...]\nreturns lengths of each parsed statement",
         lambda: ->(argv, opts) do
           opts[:output].puts "Lengths"
@@ -191,13 +195,12 @@ module RDF
             opts[:output].puts statement.to_s.size
           end
         end,
-        options: [
-          RDF::CLI::Option.new(symbol: :output_format, on: [])
-        ]
+        option_use: {output_format: :disabled}
       },
       objects: {
         description: "Serialize each parsed object to N-Triples",
         parse: true,
+        control: :none,
         help: "objects [options] [args...]\nreturns unique objects serialized in N-Triples format",
         lambda: ->(argv, opts) do
           opts[:output].puts "Objects"
@@ -205,13 +208,12 @@ module RDF
             opts[:output].puts object.to_ntriples
           end
         end,
-        options: [
-          RDF::CLI::Option.new(symbol: :output_format, on: [])
-        ]
+        option_use: {output_format: :disabled}
       },
       predicates: {
         parse: true,
         description: "Serialize each parsed predicate to N-Triples",
+        control: :none,
         help: "predicates [options] [args...]\nreturns unique predicates serialized in N-Triples format",
         lambda: ->(argv, opts) do
           opts[:output].puts "Predicates"
@@ -219,9 +221,7 @@ module RDF
             opts[:output].puts predicate.to_ntriples
           end
         end,
-        options: [
-          RDF::CLI::Option.new(symbol: :output_format, on: [])
-        ]
+        option_use: {output_format: :disabled}
       },
       serialize: {
         description: "Serialize using output-format (or N-Triples)",
@@ -239,6 +239,7 @@ module RDF
       },
       subjects: {
         parse: true,
+        control: :none,
         description: "Serialize each parsed subject to N-Triples",
         help: "subjects [options] [args...]\nreturns unique subjects serialized in N-Triples format",
         lambda: ->(argv, opts) do
@@ -247,20 +248,17 @@ module RDF
             opts[:output].puts subject.to_ntriples
           end
         end,
-        options: [
-          RDF::CLI::Option.new(symbol: :output_format, on: [])
-        ]
+        option_use: {output_format: :disabled}
       },
       validate: {
         description: "Validate parsed input",
+        control: :none,
         parse: true,
         help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
         lambda: ->(argv, opts) do
           opts[:output].puts "Input is " + (repository.valid? ? "" : "in") + "valid"
         end,
-        options: [
-          RDF::CLI::Option.new(symbol: :output_format, on: [])
-        ]
+        option_use: {output_format: :disabled}
       }
     }
 
@@ -376,8 +374,15 @@ module RDF
           # Replace any existing option with the same symbol
           cli_opts.delete_if {|cli_opt| cli_opt.symbol == option.symbol}
 
-          # Add the option, unless `on` is empty
-          cli_opts.unshift(option) unless option.on.empty?
+          # Add the option, unless disabled or removed
+          cli_opts.unshift(option)
+        end
+
+        # Update usage of options for this command
+        RDF::CLI::COMMANDS[cmd.to_sym].fetch(:option_use, {}).each do |sym, use|
+          if opt = cli_opts.find {|cli_opt| cli_opt.symbol == sym}
+            opt.use = use
+          end
         end
       end
 
@@ -392,7 +397,7 @@ module RDF
 
       if format == :json
         # Return options
-        OPTIONS.map(&:to_hash)
+        cli_opts.map(&:to_hash)
       else
         options.banner = "Usage: #{self.basename} command+ [options] [args...]"
 
@@ -437,9 +442,10 @@ module RDF
     # @param  [Array<String>] args
     # @param  [IO] output
     # @param  [OptionParser] option_parser
+    # @param [Hash{Symbol => Hash{Symbol => Array[String]}}] messages used for confeying non primary-output which is structured.
     # @param  [Hash{Symbol => Object}] options
     # @return [Boolean]
-    def self.exec(args, output: $stdout, option_parser: nil, **options)
+    def self.exec(args, output: $stdout, option_parser: nil, messages: {}, **options)
       option_parser ||= self.options(args)
       options[:logger] ||= option_parser.options[:logger]
       output.set_encoding(Encoding::UTF_8) if output.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
@@ -470,7 +476,7 @@ module RDF
         COMMANDS[c.to_sym].fetch(:filter, {}).each do |opt, val|
           if options[opt].to_s != val.to_s
             usage(option_parser, banner: "Command #{c.inspect} requires #{opt}: #{val}, not #{options.fetch(opt, 'null')}")
-            return
+            raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
           end
         end
       end
@@ -496,7 +502,7 @@ module RDF
 
       # Run each command in sequence
       cmds.each do |command|
-        COMMANDS[command.to_sym][:lambda].call(args, output: output, **options)
+        COMMANDS[command.to_sym][:lambda].call(args, output: output, **options.merge(messages: messages))
       end
 
       if options[:statistics]

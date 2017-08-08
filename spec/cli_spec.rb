@@ -12,6 +12,12 @@ describe RDF::CLI do
   }
 
   #before(:each) {expect(RDF::CLI).not_to receive(:abort)    }
+  around(:each) do |example|
+    orig_commands = RDF::CLI::COMMANDS.dup
+    example.run
+    RDF::CLI::COMMANDS.clear
+    RDF::CLI::COMMANDS.merge!(orig_commands)
+  end
 
   describe "options" do
     it "sets debug logging with --debug" do
@@ -77,19 +83,29 @@ describe RDF::CLI do
       end
     end
 
+    describe "with commands" do
+      it "adds options from specified commands" do
+        foo_opt = RDF::CLI::Option.new(symbol: :foo, on: [])
+        RDF::CLI.add_command(:foo, {options: foo_opt})
+        expect(RDF::CLI.options([:foo], format: :json)).to include(foo_opt.to_hash)
+      end
+
+      it "replaces equivalent options from command" do
+        verbose_opt = RDF::CLI::Option.new(
+          symbol: :verbose,
+          on: ['-v', '--verbose'],
+          description: 'Replaced option.')
+        RDF::CLI.add_command(:foo, {options: verbose_opt})
+        expect(RDF::CLI.options([:foo], format: :json)).to include(verbose_opt.to_hash)
+      end
+    end
+
     it "returns an array of Option format: :json" do
       expect(RDF::CLI.options([], format: :json)).to all(be_a(Hash))
     end
   end
 
   describe ".commands" do
-    around(:each) do |example|
-      orig_commands = RDF::CLI::COMMANDS.dup
-      example.run
-      RDF::CLI::COMMANDS.clear
-      RDF::CLI::COMMANDS.merge!(orig_commands)
-    end
-
     it "returns an array of strings" do
       expect(RDF::CLI.commands).to all(be_a(String))
     end
@@ -100,13 +116,6 @@ describe RDF::CLI do
   end
 
   describe ".add_command" do
-    around(:each) do |example|
-      orig_commands = RDF::CLI::COMMANDS.dup
-      example.run
-      RDF::CLI::COMMANDS.clear
-      RDF::CLI::COMMANDS.merge!(orig_commands)
-    end
-
     it "adds a command" do
       RDF::CLI.add_command(:foo) do |argv, opts|
         $stdout.puts "Hello, World!"
@@ -116,13 +125,6 @@ describe RDF::CLI do
   end
 
   context "commands" do
-    around(:each) do |example|
-      orig_commands = RDF::CLI::COMMANDS.dup
-      example.run
-      RDF::CLI::COMMANDS.clear
-      RDF::CLI::COMMANDS.merge!(orig_commands)
-    end
-
     describe "serialize" do
       after(:each) do
         $stdin = STDIN
@@ -203,6 +205,15 @@ describe RDF::CLI do
           expect {RDF::CLI.exec(["validate", file])}.to write(/Input is valid/)
         end
       end
+    end
+
+    it "complains if filtered command is attempted" do
+      RDF::CLI.add_command(:foo, {filter: {output_format: :nquads}})
+      expect do
+        expect do
+          RDF::CLI.exec(["foo"], {output_format: :ntriples})
+        end.to raise_error(ArgumentError)
+      end.to write(%(Command "foo" requires output_format: nquads, not ntriples)).to(:output)
     end
 
     context "chaining" do
