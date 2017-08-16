@@ -506,7 +506,7 @@ module RDF
       end
 
       if options[:statistics]
-        options[:statistics][:reader] = @readers.first unless @readers.empty?
+        options[:statistics][:reader] = @readers.first unless (@readers || []).empty?
         options[:statistics][:count] = @repository.count
       end
     end
