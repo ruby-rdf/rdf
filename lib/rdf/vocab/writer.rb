@@ -22,22 +22,27 @@ module RDF
           RDF::CLI::Option.new(
             symbol: :class_name,
             datatype: String,
+            control: :text,
             on: ["--class-name NAME"],
+            use: :required,
             description: "Name of created Ruby class (vocabulary format)."),
           RDF::CLI::Option.new(
             symbol: :module_name,
             datatype: String,
+            control: :text,
             on: ["--module-name NAME"],
             description: "Name of Ruby module containing class-name (vocabulary format)."),
           RDF::CLI::Option.new(
             symbol: :strict,
             datatype: TrueClass,
+            control: :checkbox,
             on: ["--strict"],
             description: "Make strict vocabulary"
           ) {true},
           RDF::CLI::Option.new(
             symbol: :extra,
             datatype: String,
+            control: :none,
             on: ["--extra URIEncodedJSON"],
             description: "URI Encoded JSON representation of extra data"
           ) do |arg|

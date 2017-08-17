@@ -17,12 +17,19 @@ rescue LoadError
 end
 
 class OptionParser
+  # Actual parsed options
   def options; @options || {}; end
   def options=(value); @options = value; end
+
+  # Arguments remaining after extracting options
+  def args; @args || []; end
+  def args=(value); @args = value; end
 end
 
 module RDF
   # Individual formats can modify options by updating {Reader.options} or {Writer.options}. Format-specific commands are taken from {Format.cli_commands} for each loaded format, which returns an array of lambdas taking arguments and options.
+  #
+  # Status updates should be logged to `opts[:logger].info`. More complicated information can be added to `:messages` key within `opts`, if present.
   #
   # Other than `help`, all commands parse an input file.
   #
@@ -34,12 +41,10 @@ module RDF
   #       [
   #         RDF::CLI::Option.new(
   #           symbol: :canonicalize,
-  #           datatype: TrueClass,
   #           on: ["--canonicalize"],
   #           description: "Canonicalize input/output.") {true},
   #         RDF::CLI::Option.new(
   #           symbol: :uri,
-  #           datatype: RDF::URI,
   #           on: ["--uri STRING"],
   #           description: "URI.") {|v| RDF::URI(v)},
   #       ]
@@ -66,7 +71,7 @@ module RDF
   #           count += 1
   #         end
   #       end
-  #       $stdout.puts "Parsed #{count} statements"
+  #       options[:logger].info "Parsed #{count} statements"
   #     end
   #   end
   #     
@@ -87,41 +92,76 @@ module RDF
       # @return [String]
       attr_reader :description
 
-      # Argument datatype, which may be enumerated string values
-      # @return [Class, Array<String>]
+      # Potential values (for select or radio) or Ruby datatype
+      # @return  [Class, Array<String>]
       attr_reader :datatype
 
-      # Allows multiple comma-spearated values.
-      # @return [Boolean]
-      attr_reader :multiple
+      # Associated HTML form control
+      # @return [:text, :textarea, :radio, :checkbox, :select, :url, :url2, :none]
+      attr_reader :control
+
+      # Use of this option
+      # @return [:optional, :disabled, :removed, :required]
+      attr_accessor :use
 
       ##
       # Create a new option with optional callback.
       #
       # @param [Symbol] symbol
       # @param [Array<String>] on
+      # @param [String] datatype
+      # @param [String] control
       # @param [String] description
-      # @param [Class, Array<String>] datatype of value
-      # @param [Boolean] multiple can have multiple comma-separated values
+      # @param [[:optional, :disabled, :removed, :required]] use
       # @yield value which may be used within `OptionParser#on`
       # @yieldparam [Object] value The option value as parsed using `on` argument
+      # @yieldparam [OptionParser] options (nil) optional OptionParser
       # @yieldreturn [Object] a possibly modified input value
-      def initialize(symbol: nil, on: nil, description: nil, datatype: String, multiple: false, &block)
+      def initialize(symbol: nil, on: nil, datatype: nil, control: nil,
+                     description: nil, use: :optional, **options, &block)
         raise ArgumentError, "symbol is a required argument" unless symbol
         raise ArgumentError, "on is a required argument" unless on
-        @symbol, @on, @description, @datatype, @multiple, @callback = symbol.to_sym, Array(on), description, datatype, multiple, block
+        @symbol, @on, @datatype, @control, @description, @use, @callback = symbol.to_sym, Array(on), datatype, control, description, use, block
       end
 
-      def call(arg)
-        @callback ? @callback.call(arg) : arg
+      def call(arg, options)
+        if @callback
+          case @callback.arity
+          when 1 then @callback.call(arg)
+          when 2 then @callback.call(arg, options)
+          end
+        else
+          arg
+        end
+      end
+
+      # Return version of commands appropriate for use in JSON
+      def to_hash
+        {
+          symbol:       symbol,
+          datatype:     (datatype.is_a?(Class) ? datatype.name : datatype),
+          control:      control,
+          description:  description,
+          use:          use
+        }
       end
     end
 
-    # @private
+    # Built-in commands. Other commands are imported from the Format class of different readers/writers using {RDF::Format#cli_commands}. `COMMANDS` is a Hash who's keys are commands that may be executed by {RDF::CLI.exec}. The value is a hash containing the following keys:
+    # * `description` used for providing information about the command.
+    # * `parse` Boolean value to determine if input files should automatically be parsed into `repository`.
+    # * `help` used for the CLI help output.
+    # * `lambda` code run to execute command.
+    # * `filter` Option values that must match for command to be used
+    # * `control` Used to indicate how (if) command is displayed
+    # * `options` an optional array of `RDF::CLI::Option` describing command-specific options.
+    # * `option_use`: A hash of option symbol to option usage, used for overriding the default status of an option for this command.
+    # @return [Hash{Symbol => Hash{Symbol => Object}}]
     COMMANDS = {
       count: {
         description: "Count statements in parsed input",
         parse: false,
+        control: :none,
         help: "count [options] [args...]\nreturns number of parsed statements",
         lambda: ->(argv, opts) do
           unless repository.count > 0
@@ -133,54 +173,63 @@ module RDF
               end
             end
             secs = Time.new - start
-            $stdout.puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
+            opts[:output].puts "Parsed #{count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
           end
-        end
+        end,
+        option_use: {output_format: :disabled}
       },
       help: {
         description: "This message",
         parse: false,
+        control: :none,
         lambda: ->(argv, opts) {self.usage(self.options)}
       },
       lengths: {
         description: "Lengths of each parsed statement",
         parse: true,
-        help: "lengths [options] [args...]\nreturns statement lengths",
+        control: :none,
+        help: "lengths [options] [args...]\nreturns lengths of each parsed statement",
         lambda: ->(argv, opts) do
+          opts[:output].puts "Lengths"
           repository.each_statement do |statement|
-            $stdout.puts statement.to_s.size
+            opts[:output].puts statement.to_s.size
           end
-        end
+        end,
+        option_use: {output_format: :disabled}
       },
       objects: {
         description: "Serialize each parsed object to N-Triples",
         parse: true,
-        help: "objects [options] [args...]\nreturns unique objects",
+        control: :none,
+        help: "objects [options] [args...]\nreturns unique objects serialized in N-Triples format",
         lambda: ->(argv, opts) do
-          $stdout.puts "Objects"
+          opts[:output].puts "Objects"
           repository.each_object do |object|
-            $stdout.puts object.to_ntriples
+            opts[:output].puts object.to_ntriples
           end
-        end
+        end,
+        option_use: {output_format: :disabled}
       },
       predicates: {
-        description: "Serialize each parsed predicate to N-Triples",
         parse: true,
-        help: "predicates [options] [args...]\nreturns unique predicates",
+        description: "Serialize each parsed predicate to N-Triples",
+        control: :none,
+        help: "predicates [options] [args...]\nreturns unique predicates serialized in N-Triples format",
         lambda: ->(argv, opts) do
-          $stdout.puts "Predicates"
+          opts[:output].puts "Predicates"
           repository.each_predicate do |predicate|
-            $stdout.puts predicate.to_ntriples
+            opts[:output].puts predicate.to_ntriples
           end
-        end
+        end,
+        option_use: {output_format: :disabled}
       },
       serialize: {
-        description: "Serialize each parsed statement to N-Triples, or the specified output format",
+        description: "Serialize using output-format (or N-Triples)",
         parse: true,
-        help: "serialize [options] [args...]\nserialize output using specified format (or n-triples if not specified)",
+        help: "serialize [options] [args...]\nserialize output using specified format (or N-Triples if not specified)",
         lambda: ->(argv, opts) do
           writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
-          out = opts[:output] || $stdout
+          out = opts[:output]
           opts = opts.merge(prefixes: {})
           writer_opts = opts.merge(standard_prefixes: true)
           writer_class.new(out, writer_opts) do |writer|
@@ -189,25 +238,101 @@ module RDF
         end
       },
       subjects: {
-        description: "Serialize each parsed subject to N-Triples",
         parse: true,
-        help: "subjects [options] [args...]\nreturns unique subjects",
+        control: :none,
+        description: "Serialize each parsed subject to N-Triples",
+        help: "subjects [options] [args...]\nreturns unique subjects serialized in N-Triples format",
         lambda: ->(argv, opts) do
-          $stdout.puts "Subjects"
+          opts[:output].puts "Subjects"
           repository.each_subject do |subject|
-            $stdout.puts subject.to_ntriples
+            opts[:output].puts subject.to_ntriples
           end
-        end
+        end,
+        option_use: {output_format: :disabled}
       },
       validate: {
         description: "Validate parsed input",
+        control: :none,
         parse: true,
         help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
         lambda: ->(argv, opts) do
-          $stdout.puts "Input is " + (repository.valid? ? "" : "in") + "valid"
-        end
+          opts[:output].puts "Input is " + (repository.valid? ? "" : "in") + "valid"
+        end,
+        option_use: {output_format: :disabled}
       }
     }
+
+    # Options to setup, may be modified by selected command. Options are also read from {RDF::Reader#options} and {RDF::Writer#options}. When a specific input- or ouput-format is selected, options are also discovered from the associated subclass reader or writer.
+    # @return [Array<RDF::CLI::Option>]
+    OPTIONS = ([
+      RDF::CLI::Option.new(
+        symbol: :debug,
+        control: :checkbox,
+        datatype: TrueClass,
+        on: ["-d", "--debug"],
+        description: 'Enable debug output for troubleshooting.'),
+      RDF::CLI::Option.new(
+        symbol: :verbose,
+        control: :checkbox,
+        datatype: TrueClass,
+        on: ['-v', '--verbose'],
+        description: 'Enable verbose output. May be given more than once.'),
+      RDF::CLI::Option.new(
+        symbol: :evaluate,
+        control: :none,
+        datatype: TrueClass,
+        on: ["-e", "--evaluate STRING"],
+        description: "Evaluate argument as RDF input, if no files are specified"),
+      RDF::CLI::Option.new(
+        symbol: :output,
+        control: :none,
+        on: ["-o", "--output FILE"],
+        description: "File to write output, defaults to STDOUT") {|arg| File.open(arg, "w")},
+      RDF::CLI::Option.new(
+        symbol: :format,
+        control: :select,
+        datatype: RDF::Format.select {|ft| ft.reader}.map(&:to_sym).sort,
+        on: ["--input-format FORMAT", "--format FORMAT"],
+        description: "Format of input file, uses heuristic if not specified"
+      ) do |arg, options|
+          unless reader = RDF::Reader.for(arg.downcase.to_sym)
+            RDF::CLI.abort "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{RDF::CLI.formats(reader: true).join("\n  ")}"
+          end
+
+          # Add format-specific reader options
+          reader.options.each do |cli_opt|
+            next if options.options.has_key?(cli_opt.symbol)
+            on_args = cli_opt.on || []
+            on_args << cli_opt.description if cli_opt.description
+            options.on(*on_args) do |opt_arg|
+              options.options[cli_opt.symbol] = cli_opt.call(opt_arg)
+            end
+          end if reader
+          arg.downcase.to_sym
+        end,
+      RDF::CLI::Option.new(
+        symbol: :output_format,
+        control: :select,
+        datatype: RDF::Format.select {|ft| ft.writer}.map(&:to_sym).sort,
+        on: ["--output-format FORMAT"],
+        description: "Format of output file, defaults to NTriples"
+      ) do |arg, options|
+          unless writer = RDF::Writer.for(arg.downcase.to_sym)
+            RDF::CLI.abort "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.formats(writer: true).join("\n  ")}"
+          end
+
+          # Add format-specific writer options
+          writer.options.each do |cli_opt|
+            next if options.options.has_key?(cli_opt.symbol)
+            on_args = cli_opt.on || []
+            on_args << cli_opt.description if cli_opt.description
+            options.on(*on_args) do |opt_arg|
+              options.options[cli_opt.symbol] = cli_opt.call(opt_arg)
+            end
+          end if writer
+          arg.downcase.to_sym
+        end,
+    ] + RDF::Reader.options + RDF::Writer.options).uniq(&:symbol)
 
     class << self
       # Repository containing parsed statements
@@ -220,117 +345,94 @@ module RDF
     def self.basename() File.basename($0) end
 
     ##
-    # @yield  [options]
-    # @yieldparam [OptionParser]
-    # @return [OptionParser]
-    def self.options(&block)
+    # Return OptionParser set with appropriate options
+    #
+    # The yield return should provide one or more commands from which additional options will be extracted.
+    # @overload options(argv)
+    #   @param [Array<String>] argv
+    #   @return [OptionParser]
+    # @overload options(argv, format: :json)
+    #   @param [Array<String>] argv
+    #   @param [:json] format (:json)
+    #   @return [Array<RDF::CLI::Option>]
+    #     Returns discovered options
+    def self.options(argv, format: nil)
       options = OptionParser.new
+      cli_opts = OPTIONS.dup
       logger = Logger.new($stderr)
-      logger.level = Logger::ERROR
+      logger.level = Logger::WARN
       logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity} #{msg}\n"}
-      opts = options.options = {
-        debug:          false,
-        evaluate:       nil,
-        format:         nil,
-        output:         $stdout,
-        output_format:  :ntriples,
-        logger:         logger
-      }
+      opts = options.options = {logger: logger}
 
-      # Add default Reader and Writer options
-      RDF::Reader.options.each do |cli_opt|
+      # Pre-load commands
+      load_commands
+
+      # Add options for the specified command(s)
+      cmds, args = argv.partition {|e| COMMANDS.include?(e.to_sym)}
+      cmds.each do |cmd|
+        Array(RDF::CLI::COMMANDS[cmd.to_sym][:options]).each do |option|
+          # Replace any existing option with the same symbol
+          cli_opts.delete_if {|cli_opt| cli_opt.symbol == option.symbol}
+
+          # Add the option, unless disabled or removed
+          cli_opts.unshift(option)
+        end
+
+        # Update usage of options for this command
+        RDF::CLI::COMMANDS[cmd.to_sym].fetch(:option_use, {}).each do |sym, use|
+          if opt = cli_opts.find {|cli_opt| cli_opt.symbol == sym}
+            opt.use = use
+          end
+        end
+      end
+
+      cli_opts.each do |cli_opt|
         next if opts.has_key?(cli_opt.symbol)
         on_args = cli_opt.on || []
         on_args << cli_opt.description if cli_opt.description
         options.on(*on_args) do |arg|
-          opts[cli_opt.symbol] = cli_opt.call(arg)
-        end
-      end
-      RDF::Writer.options.each do |cli_opt|
-        next if opts.has_key?(cli_opt.symbol)
-        on_args = cli_opt.on || []
-        on_args << cli_opt.description if cli_opt.description
-        options.on(*on_args) do |arg|
-          opts[cli_opt.symbol] = cli_opt.call(arg)
+          opts[cli_opt.symbol] = cli_opt.call(arg, options)
         end
       end
 
-      # Command-specific options
-      if block_given?
-        case block.arity
-          when 1 then block.call(options)
-          else options.instance_eval(&block)
-        end
-      end
-      options.banner = "Usage: #{self.basename} command+ [options] [args...]"
+      if format == :json
+        # Return options
+        cli_opts.map(&:to_hash)
+      else
+        options.banner = "Usage: #{self.basename} command+ [options] [args...]"
 
-      options.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
-        opts[:logger].level = Logger::DEBUG
-      end
-
-      options.on("-e", "--evaluate STRING", "Evaluate argument as RDF input, if no files are specified") do |arg|
-        opts[:evaluate] = arg
-      end
-
-      options.on("--input-format FORMAT", "--format FORMAT", "Format of input file, uses heuristic if not specified") do |arg|
-        unless reader = RDF::Reader.for(arg.downcase.to_sym)
-          self.abort "No reader found for #{arg.downcase.to_sym}. Available readers:\n  #{self.formats(reader: true).join("\n  ")}"
+        options.on_tail('-V', '--version', 'Display the RDF.rb version and exit.') do
+          puts RDF::VERSION; exit(0)
         end
 
-        # Add format-specific reader options
-        reader.options.each do |cli_opt|
-          next if opts.has_key?(cli_opt.symbol)
-          on_args = cli_opt.on || []
-          on_args << cli_opt.description if cli_opt.description
-          options.on(*on_args) do |arg|
-            opts[cli_opt.symbol] = cli_opt.call(arg)
-          end
-        end
-        opts[:format] = arg.downcase.to_sym
-      end
-
-      options.on("-o", "--output FILE", "File to write output, defaults to STDOUT") do |arg|
-        opts[:output] = File.open(arg, "w")
-      end
-
-      options.on("--output-format FORMAT", "Format of output file, defaults to NTriples") do |arg|
-        unless writer = RDF::Writer.for(arg.downcase.to_sym)
-          self.abort "No writer found for #{arg.downcase.to_sym}. Available writers:\n  #{self.formats(writer: true).join("\n  ")}"
+        show_help = false
+        options.on_tail("-h", "--help", "Show this message") do
+          show_help = true
         end
 
-        # Add format-specific writer options
-        writer.options.each do |cli_opt|
-          next if opts.has_key?(cli_opt.symbol)
-          on_args = cli_opt.on || []
-          on_args << cli_opt.description if cli_opt.description
-          options.on(*on_args) do |arg|
-            opts[cli_opt.symbol] = cli_opt.call(arg)
-          end
+        begin
+          args = options.parse!(args)
+        rescue OptionParser::InvalidOption, OptionParser::InvalidArgument, ArgumentError => e
+          abort e
         end
-        opts[:output_format] = arg.downcase.to_sym
-      end
 
-      options.on_tail("-h", "--help", "Show this message") do
-        self.usage(options)
-        exit(0)
-      end
+        # Make sure options are processed first
+        if show_help
+          self.usage(options); exit(0)
+        end
 
-      begin
-        options.parse!
-      rescue OptionParser::InvalidOption => e
-        abort e
+        options.args = cmds + args
+        options
       end
-
-      options
     end
 
     ##
     # Output usage message
-    def self.usage(options, banner: nil)
+    def self.usage(options, cmd_opts = {}, banner: nil)
       options.banner = banner if banner
       $stdout.puts options
       $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
-      $stdout.puts "Available commands:\n\t#{self.commands.join("\n\t")}"
+      $stdout.puts "Available commands:\n\t#{self.commands(**options.options).join("\n\t")}"
       $stdout.puts "Available formats:\n\t#{(self.formats).join("\n\t")}"
     end
 
@@ -339,26 +441,51 @@ module RDF
     #
     # @param  [Array<String>] args
     # @param  [IO] output
+    # @param  [OptionParser] option_parser
+    # @param [Hash{Symbol => Hash{Symbol => Array[String]}}] messages used for confeying non primary-output which is structured.
     # @param  [Hash{Symbol => Object}] options
     # @return [Boolean]
-    def self.exec(args, output: $stdout, option_parser: self.options, **options)
+    def self.exec(args, output: $stdout, option_parser: nil, messages: {}, **options)
+      option_parser ||= self.options(args)
+      options[:logger] ||= option_parser.options[:logger]
       output.set_encoding(Encoding::UTF_8) if output.respond_to?(:set_encoding) && RUBY_PLATFORM == "java"
-      cmds, args = args.partition {|e| commands.include?(e.to_s)}
+
+      # Separate commands from file options; arguments already extracted
+      cmds, args = args.partition {|e| COMMANDS.include?(e.to_sym)}
 
       if cmds.empty?
         usage(option_parser)
-        abort "No command given"
+        raise ArgumentError, "No command given"
       end
 
       if cmds.first == 'help'
         on_cmd = cmds[1]
-        if on_cmd && COMMANDS.fetch(on_cmd.to_sym, {})[:help]
-          usage(option_parser, banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
+        cmd_opts = COMMANDS.fetch(on_cmd.to_s.to_sym, {})
+        if on_cmd && cmd_opts[:help]
+          usage(option_parser, cmd_opts: cmd_opts, banner: "Usage: #{self.basename.split('/').last} #{COMMANDS[on_cmd.to_sym][:help]}")
+        elsif on_cmd
+          usage(option_parser, cmd_opts: cmd_opts)
         else
           usage(option_parser)
         end
         return
       end
+
+      # Make sure any selected command isn't filtered out
+      cmds.each do |c|
+        COMMANDS[c.to_sym].fetch(:filter, {}).each do |opt, val|
+          if options[opt].to_s != val.to_s
+            usage(option_parser, banner: "Command #{c.inspect} requires #{opt}: #{val}, not #{options.fetch(opt, 'null')}")
+            raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
+          end
+        end
+      end
+
+      # Hacks for specific options
+      options[:logger].level = Logger::INFO if options[:verbose]
+      options[:logger].level = Logger::DEBUG if options[:debug]
+      options[:format] = options[:format].to_sym if options[:format]
+      options[:output_format] = options[:output_format].to_sym if options[:output_format]
 
       @repository = RDF::Repository.new
 
@@ -370,21 +497,61 @@ module RDF
           @repository << reader
         end
         secs = Time.new - start
-        $stdout.puts "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
+        options[:logger].info "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
       end
 
       # Run each command in sequence
       cmds.each do |command|
-        COMMANDS[command.to_sym][:lambda].call(args, output: output, **options)
+        COMMANDS[command.to_sym][:lambda].call(args, output: output, **options.merge(messages: messages))
       end
-    rescue ArgumentError => e
-      abort e.message
+
+      if options[:statistics]
+        options[:statistics][:reader] = @readers.first unless (@readers || []).empty?
+        options[:statistics][:count] = @repository.count
+      end
     end
 
     ##
-    # @return [Array<String>] list of executable commands
-    def self.commands
+    # @overload commands(**options)
+    #   @param [Hash{Symbol => Object}] options already set
+    #   @return [Array<String>] list of executable commands
+    # @overload commands(format: :json, **options)
+    #   @param [:json] format (:json)
+    #   @param [Hash{Symbol => Object}] options already set
+    #   @return [Array{Object}]
+    #     Returns an array of commands including the command symbol
+    def self.commands(format: nil, **options)
       # First, load commands from other formats
+      load_commands
+
+      case format
+      when :json
+        COMMANDS.map do |k, v|
+          v = v.merge(symbol: k, options: v.fetch(:options, []).map(&:to_hash))
+          v.delete(:lambda)
+          v.delete(:help)
+          v.delete(:options) if v[:options].empty?
+          v[:control] == :none ? nil : v
+        end.compact
+      else
+        # Subset commands based on filter options
+        cmds = COMMANDS.reject do |k, c|
+          c.fetch(:filter, {}).any? do |opt, val|
+            options[opt].to_s != val.to_s
+          end
+        end
+
+        sym_len = cmds.keys.map {|k| k.to_s.length}.max
+        cmds.keys.sort.map do |k|
+          "%*s: %s" % [sym_len, k, cmds[k][:description]]
+        end
+      end
+    end
+
+    ##
+    # Load commands from formats
+    # @return [Hash{Symbol => Hash{Symbol => Object}}]
+    def self.load_commands
       unless @commands_loaded
         RDF::Format.each do |format|
           format.cli_commands.each do |command, options|
@@ -394,7 +561,7 @@ module RDF
         end
         @commands_loaded = true
       end
-      COMMANDS.keys.map(&:to_s).sort
+      COMMANDS
     end
 
     ##
@@ -418,10 +585,10 @@ module RDF
     ##
     # @return [Array<String>] list of available formats
     def self.formats(reader: false, writer: false)
-      f = RDF::Format.sort_by(&:to_sym).each.
-        select {|f| (reader ? f.reader : (writer ? f.writer : (f.reader || f.writer)))}.
-        inject({}) do |memo, reader|
-          memo.merge(reader.to_sym => reader.name)
+      f = RDF::Format.sort_by(&:to_sym).
+        select {|ft| (reader ? ft.reader : (writer ? ft.writer : (ft.reader || ft.writer)))}.
+        inject({}) do |memo, r|
+          memo.merge(r.to_sym => r.name)
       end
       sym_len = f.keys.map {|k| k.to_s.length}.max
       f.map {|s, t| "%*s: %s" % [sym_len, s, t]}
@@ -439,12 +606,17 @@ module RDF
     # @yield  [reader]
     # @yieldparam [RDF::Reader]
     # @return [nil]
-    def self.parse(files, evaluate: nil, format: :ntriples, encoding: Encoding::UTF_8, **options, &block)
+    def self.parse(files, evaluate: nil, format: nil, encoding: Encoding::UTF_8, **options, &block)
       if files.empty?
         # If files are empty, either use options[:execute]
         input = evaluate ? StringIO.new(evaluate) : $stdin
-        input.set_encoding(encoding)
-        r = RDF::Reader.for(format)
+        input.set_encoding(encoding )
+        if !format
+          sample = input.read
+          input.rewind
+        end
+        r = RDF::Reader.for(format|| {sample: sample})
+        raise ArgumentError, "Unknown format for evaluated input" unless r
         (@readers ||= []) << r
         r.new(input, options) do |reader|
           yield(reader)

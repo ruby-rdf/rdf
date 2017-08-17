@@ -3,28 +3,24 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
 require 'rubygems'
 require 'rdf/cli'
 
-options = RDF::CLI.options do
-  self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
-    self.options[:logger].level = Logger::INFO
-  end
-
-  self.on('-V', '--version', 'Display the RDF.rb version and exit.') do
-    puts RDF::VERSION; exit
-  end
-
-  ARGV.select {|a| RDF::CLI.commands.include?(a)}.each do |cmd|
-    # Load command-specific options
-    Array(RDF::CLI::COMMANDS[cmd.to_sym][:options]).each do |cli_opt|
-      on_args = cli_opt.on || []
-      on_args << cli_opt.description if cli_opt.description
-      self.on(*on_args) do |arg|
-        self.options[cli_opt.symbol] = cli_opt.call(arg)
-      end
-    end
-  end
-end
+options = RDF::CLI.options(ARGV)
 
 abort options.banner if ARGV.empty? && !options.options[:evaluate]
 
 # Add option_parser to parsed options to enable help
-RDF::CLI.exec(ARGV, options.options.merge(option_parser: options))
+begin
+  messages = {}
+  RDF::CLI.exec(options.args, option_parser: options, **options.options.merge(messages: messages))
+
+  unless messages.empty?
+    $stdout.puts "Messages:"
+    messages.each do |kind, term_messages|
+      term_messages.each do |term, messages|
+        $stdout.puts "#{kind}  #{term}"
+        messages.each {|m| $stdout.puts "  #{m}"}
+      end
+    end
+  end
+rescue ArgumentError => e
+  RDF::CLI.abort e.message
+end
