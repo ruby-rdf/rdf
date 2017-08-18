@@ -124,7 +124,7 @@ module RDF
         @symbol, @on, @datatype, @control, @description, @use, @callback = symbol.to_sym, Array(on), datatype, control, description, use, block
       end
 
-      def call(arg, options)
+      def call(arg, options = {})
         if @callback
           case @callback.arity
           when 1 then @callback.call(arg)
@@ -305,7 +305,7 @@ module RDF
             on_args = cli_opt.on || []
             on_args << cli_opt.description if cli_opt.description
             options.on(*on_args) do |opt_arg|
-              options.options[cli_opt.symbol] = cli_opt.call(opt_arg)
+              options.options[cli_opt.symbol] = cli_opt.call(opt_arg, options)
             end
           end if reader
           arg.downcase.to_sym
@@ -327,7 +327,7 @@ module RDF
             on_args = cli_opt.on || []
             on_args << cli_opt.description if cli_opt.description
             options.on(*on_args) do |opt_arg|
-              options.options[cli_opt.symbol] = cli_opt.call(opt_arg)
+              options.options[cli_opt.symbol] = cli_opt.call(opt_arg, options)
             end
           end if writer
           arg.downcase.to_sym
