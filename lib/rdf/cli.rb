@@ -127,8 +127,10 @@ module RDF
       def call(arg, options = {})
         if @callback
           case @callback.arity
+          when 0 then @callback.call
           when 1 then @callback.call(arg)
           when 2 then @callback.call(arg, options)
+          else arg
           end
         else
           arg
