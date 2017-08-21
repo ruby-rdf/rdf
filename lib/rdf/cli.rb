@@ -360,7 +360,7 @@ module RDF
     #     Returns discovered options
     def self.options(argv, format: nil)
       options = OptionParser.new
-      cli_opts = OPTIONS.dup
+      cli_opts = OPTIONS.map(&:dup)
       logger = Logger.new($stderr)
       logger.level = Logger::WARN
       logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity} #{msg}\n"}
