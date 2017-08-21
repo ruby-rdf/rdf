@@ -23,7 +23,7 @@ module RDF
   # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
   # @see http://www.ietf.org/rfc/rfc3986.txt
   # @see http://www.ietf.org/rfc/rfc3987.txt
-  # @see http://addressable.rubyforge.org/
+  # @see http://www.rubydoc.info/gems/addressable
   class URI
     include RDF::Resource
 

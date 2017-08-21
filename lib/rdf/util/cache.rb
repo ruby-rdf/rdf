@@ -9,8 +9,8 @@ module RDF; module Util
   #
   # While this cache is something of an internal implementation detail of
   # RDF.rb, some external libraries do currently make use of it as well,
-  # including [SPARQL](http://ruby-rdf/sparql/) and
-  # [Spira](http://spira.rubyforge.org/). Do be sure to include any changes
+  # including [SPARQL](http://github.com/ruby-rdf/sparql/) and
+  # [Spira](http://github.com/ruby-rdf/spira). Do be sure to include any changes
   # here in the RDF.rb changelog.
   #
   # @see   RDF::URI.intern
