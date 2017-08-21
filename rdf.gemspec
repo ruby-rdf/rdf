@@ -10,7 +10,6 @@ Gem::Specification.new do |gem|
   gem.license            = 'Unlicense'
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
-  gem.rubyforge_project  = 'rdf'
 
   gem.authors            = ['Arto Bendiken', 'Ben Lavender', 'Gregg Kellogg']
   gem.email              = 'public-rdf-ruby@w3.org'
