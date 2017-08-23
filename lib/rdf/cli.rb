@@ -507,6 +507,17 @@ module RDF
         COMMANDS[command.to_sym][:lambda].call(args, output: output, **options.merge(messages: messages))
       end
 
+      # Normalize messages
+      messages.each do |kind, term_messages|
+        case term_messages
+        when Hash
+        when Array
+          messages[kind] = {result: term_messages}
+        else
+          messages[kind] = {result: [term_messages]}
+        end
+      end
+
       if options[:statistics]
         options[:statistics][:reader] = @readers.first unless (@readers || []).empty?
         options[:statistics][:count] = @repository.count
