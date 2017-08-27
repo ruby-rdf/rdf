@@ -430,7 +430,7 @@ module RDF
 
     ##
     # Output usage message
-    def self.usage(options, cmd_opts = {}, banner: nil)
+    def self.usage(options, cmd_opts: {}, banner: nil)
       options.banner = banner if banner
       $stdout.puts options
       $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
