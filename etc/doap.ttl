@@ -18,7 +18,7 @@
   doap:implements    <http://www.w3.org/TR/rdf11-concepts/>,
                      <http://www.w3.org/TR/n-quads/>,
                      <http://www.w3.org/TR/n-triples/> ;
-  doap:download-page <http://rubyforge.org/projects/rdf/> ;
+  doap:download-page <http://rubygems.org/gems/rdf/> ;
   doap:bug-database  <http://github.com/ruby-rdf/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:vendor        <http://datagraph.org/> ;

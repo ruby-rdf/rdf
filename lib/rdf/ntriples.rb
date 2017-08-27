@@ -13,7 +13,7 @@ module RDF
   #
   # An example of an RDF statement in N-Triples format:
   #
-  #     <http://rubyforge.org/> <http://purl.org/dc/terms/title> "RubyForge" .
+  #     <http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/title> "rdf" .
   #
   # Installation
   # ------------

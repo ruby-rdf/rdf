@@ -360,7 +360,6 @@ follows:
 * <http://rubydoc.info/github/ruby-rdf/rdf/frames>
 * <http://github.com/ruby-rdf/rdf>
 * <http://rubygems.org/gems/rdf>
-* <http://rubyforge.org/projects/rdf/>
 * <http://raa.ruby-lang.org/project/rdf/>
 * <http://www.ohloh.net/p/rdf>
 

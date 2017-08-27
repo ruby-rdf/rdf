@@ -124,11 +124,13 @@ module RDF
         @symbol, @on, @datatype, @control, @description, @use, @callback = symbol.to_sym, Array(on), datatype, control, description, use, block
       end
 
-      def call(arg, options)
+      def call(arg, options = {})
         if @callback
           case @callback.arity
+          when 0 then @callback.call
           when 1 then @callback.call(arg)
           when 2 then @callback.call(arg, options)
+          else arg
           end
         else
           arg
@@ -305,7 +307,7 @@ module RDF
             on_args = cli_opt.on || []
             on_args << cli_opt.description if cli_opt.description
             options.on(*on_args) do |opt_arg|
-              options.options[cli_opt.symbol] = cli_opt.call(opt_arg)
+              options.options[cli_opt.symbol] = cli_opt.call(opt_arg, options)
             end
           end if reader
           arg.downcase.to_sym
@@ -327,7 +329,7 @@ module RDF
             on_args = cli_opt.on || []
             on_args << cli_opt.description if cli_opt.description
             options.on(*on_args) do |opt_arg|
-              options.options[cli_opt.symbol] = cli_opt.call(opt_arg)
+              options.options[cli_opt.symbol] = cli_opt.call(opt_arg, options)
             end
           end if writer
           arg.downcase.to_sym
@@ -358,7 +360,7 @@ module RDF
     #     Returns discovered options
     def self.options(argv, format: nil)
       options = OptionParser.new
-      cli_opts = OPTIONS.dup
+      cli_opts = OPTIONS.map(&:dup)
       logger = Logger.new($stderr)
       logger.level = Logger::WARN
       logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity} #{msg}\n"}
@@ -428,7 +430,7 @@ module RDF
 
     ##
     # Output usage message
-    def self.usage(options, cmd_opts = {}, banner: nil)
+    def self.usage(options, cmd_opts: {}, banner: nil)
       options.banner = banner if banner
       $stdout.puts options
       $stdout.puts "Note: available commands and options may be different depending on selected --input-format and/or --output-format."
@@ -503,6 +505,17 @@ module RDF
       # Run each command in sequence
       cmds.each do |command|
         COMMANDS[command.to_sym][:lambda].call(args, output: output, **options.merge(messages: messages))
+      end
+
+      # Normalize messages
+      messages.each do |kind, term_messages|
+        case term_messages
+        when Hash
+        when Array
+          messages[kind] = {result: term_messages}
+        else
+          messages[kind] = {result: [term_messages]}
+        end
       end
 
       if options[:statistics]
