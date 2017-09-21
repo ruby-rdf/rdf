@@ -81,7 +81,7 @@ module RDF
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
 
     # Split an IRI into it's component parts
-    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/
+    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/.freeze
 
     # Remove dot expressions regular expressions
     RDS_2A = /^\.?\.\/(.*)$/.freeze
