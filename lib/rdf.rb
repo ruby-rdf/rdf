@@ -220,12 +220,14 @@ module RDF
     super || RDF::RDFV.respond_to?(method, include_all)
   end
 
+  RDF_N_REGEXP = %r{_\d+}.freeze
+
   ##
   # Delegate other methods to RDF::RDFV
   def self.method_missing(property, *args, &block)
     if args.empty?
       # Special-case rdf:_n for all integers
-      property.to_s =~ %r{_\d+} ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
+      RDF_N_REGEXP.match(property) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
     else
       super
     end
