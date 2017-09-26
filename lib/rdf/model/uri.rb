@@ -141,10 +141,9 @@ module RDF
     #
     # @param (see #initialize)
     # @return [RDF::URI] an immutable, frozen URI object
-    def self.intern(*args)
-      str = args.first
+    def self.intern(str, *args)
       args << {} unless args.last.is_a?(Hash)  # FIXME: needed until #to_hash is removed to avoid DEPRECATION warning.
-      (cache[(str = str.to_s).to_sym] ||= self.new(*args)).freeze
+      (cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
     end
 
     ##
