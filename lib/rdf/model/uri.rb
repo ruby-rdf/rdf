@@ -223,6 +223,7 @@ module RDF
     #   @param [Boolean] validate (false)
     #   @param [Boolean] canonicalize (false)
     def initialize(*args, validate: false, canonicalize: false, **options)
+      @value = @object = @hash = nil
       uri = args.first
       if uri
         @value = uri.to_s
@@ -795,7 +796,8 @@ module RDF
     # lexical representation of URI, either absolute or relative
     # @return [String] 
     def value
-      @value ||= [
+      return @value if @value
+      @value = [
         ("#{scheme}:" if absolute?),
         ("//#{authority}" if authority),
         path,
@@ -809,7 +811,7 @@ module RDF
     #
     # @return [Integer]
     def hash
-      @hash ||= (value.hash * -1)
+      @hash || @hash = (value.hash * -1)
     end
 
     ##
@@ -817,7 +819,7 @@ module RDF
     #
     # @return [Hash{Symbol => String}]
     def object
-      @object ||= parse(@value)
+      @object || @object = parse(@value)
     end
     alias_method :to_h, :object
 
