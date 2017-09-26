@@ -343,7 +343,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      to_s.match(RDF::URI::IRI) || false
+      RDF::URI::IRI.match(to_s) || false
     end
 
     ##
@@ -829,7 +829,7 @@ module RDF
     def parse(value)
       value = value.to_s.dup.force_encoding(Encoding::ASCII_8BIT)
       parts = {}
-      if matchdata = value.to_s.match(IRI_PARTS)
+      if matchdata = IRI_PARTS.match(value)
         scheme, authority, path, query, fragment = matchdata[1..-1]
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
@@ -927,11 +927,13 @@ module RDF
       ::URI.encode(::URI.decode(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
     end
 
+    HOST_FROM_AUTHORITY_RE = /(?:[^@]+@)?([^:]+)(?::.*)?$/.freeze
+
     ##
     # @return [String]
     def host
       object.fetch(:host) do
-        @object[:host] = ($1 if @object[:authority].to_s.match(/(?:[^@]+@)?([^:]+)(?::.*)?$/))
+        @object[:host] = ($1 if HOST_FROM_AUTHORITY_RE.match(@object[:authority]))
       end
     end
 
@@ -953,11 +955,13 @@ module RDF
       normalize_segment(host, IHOST, true).chomp('.') if host
     end
 
+    PORT_FROM_AUTHORITY_RE = /:(\d+)$/.freeze
+
     ##
     # @return [String]
     def port
       object.fetch(:port) do
-        @object[:port] = ($1 if @object[:authority].to_s.match(/:(\d+)$/))
+        @object[:port] = ($1 if PORT_FROM_AUTHORITY_RE.match(@object[:authority]))
       end
     end
 
