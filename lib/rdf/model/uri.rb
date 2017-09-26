@@ -831,7 +831,7 @@ module RDF
       value = value.to_s.dup.force_encoding(Encoding::ASCII_8BIT)
       parts = {}
       if matchdata = value.to_s.match(IRI_PARTS)
-        scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
+        scheme, authority, path, query, fragment = matchdata[1..-1]
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)
