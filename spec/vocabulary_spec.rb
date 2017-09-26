@@ -27,6 +27,16 @@ describe RDF::Vocabulary do
       expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
     end
 
+    it "allows #send" do
+      expect {subject.send(:foo)}.not_to raise_error
+      expect(subject.send(:foo)).to be_a(RDF::Vocabulary::Term)
+    end
+
+    it "allows #public_send" do
+      expect {subject.public_send(:foo)}.not_to raise_error
+      expect(subject.public_send(:foo)).to be_a(RDF::Vocabulary::Term)
+    end
+
     it "does not add to @@uris" do
       RDF::Vocabulary.new("http://example/")
       expect(RDF::Vocabulary.class_variable_get(:"@@uris")).to be_a(Hash)

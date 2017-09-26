@@ -448,7 +448,7 @@ module RDF
     undef_method(*instance_methods.
                   map(&:to_s).
                   select {|m| m =~ /^\w+$/}.
-                  reject {|m| %w(object_id dup instance_eval inspect to_s class).include?(m) || m[0,2] == '__'}.
+                  reject {|m| %w(object_id dup instance_eval inspect to_s class send public_send).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 
     ##
