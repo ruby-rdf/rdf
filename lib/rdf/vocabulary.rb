@@ -273,7 +273,7 @@ module RDF
       #
       # @return [RDF::URI]
       def to_uri
-        RDF::URI.intern(to_s)
+        RDF::URI.intern(@@uris[self].to_s)
       end
 
       # For IRI compatibility

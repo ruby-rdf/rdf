@@ -357,6 +357,14 @@ describe RDF::Vocabulary do
       end
     end
 
+    context 'without a uri' do
+      let!(:vocab) { @vocab ||= RDF::Vocabulary.from_graph(graph) }
+
+      it "gives a null relative uri" do
+        expect(vocab.to_uri).to eq RDF::URI.new(nil)
+      end
+    end
+
     context "with existing Vocabulary" do
       let!(:nt) {%{
         <http://example/Klass> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
