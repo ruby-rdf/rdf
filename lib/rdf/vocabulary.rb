@@ -273,7 +273,7 @@ module RDF
       #
       # @return [RDF::URI]
       def to_uri
-        RDF::URI.intern(to_s)
+        RDF::URI.intern(@@uris[self].to_s)
       end
 
       # For IRI compatibility
@@ -448,7 +448,7 @@ module RDF
     undef_method(*instance_methods.
                   map(&:to_s).
                   select {|m| m =~ /^\w+$/}.
-                  reject {|m| %w(object_id dup instance_eval inspect to_s class).include?(m) || m[0,2] == '__'}.
+                  reject {|m| %w(object_id dup instance_eval inspect to_s class send public_send).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 
     ##
@@ -623,7 +623,7 @@ module RDF
       # @since 0.3.9
       def valid?
         # Validate relative to RFC3987
-        to_s.match(RDF::URI::IRI) || false
+        RDF::URI::IRI.match(to_s) || false
       end
 
       ##

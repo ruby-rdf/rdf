@@ -93,8 +93,8 @@ module RDF
   #
   # @param (see RDF::URI#initialize)
   # @return [RDF::URI]
-  def self.URI(*args, &block)
-    (uri = args.first).respond_to?(:to_uri) ? uri.to_uri : URI.new(*args, &block)
+  def self.URI(uri, *args, &block)
+    uri.respond_to?(:to_uri) ? uri.to_uri : URI.new(uri, *args, &block)
   end
 
   ##
@@ -102,10 +102,10 @@ module RDF
   #
   # @param (see RDF::Literal#initialize)
   # @return [RDF::Literal]
-  def self.Literal(*args, &block)
-    case literal = args.first
+  def self.Literal(literal, *args, &block)
+    case literal
       when RDF::Literal then literal
-      else Literal.new(*args, &block)
+      else Literal.new(literal, *args, &block)
     end
   end
 
@@ -220,12 +220,14 @@ module RDF
     super || RDF::RDFV.respond_to?(method, include_all)
   end
 
+  RDF_N_REGEXP = %r{_\d+}.freeze
+
   ##
   # Delegate other methods to RDF::RDFV
   def self.method_missing(property, *args, &block)
     if args.empty?
       # Special-case rdf:_n for all integers
-      property.to_s =~ %r{_\d+} ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
+      RDF_N_REGEXP.match(property) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
     else
       super
     end

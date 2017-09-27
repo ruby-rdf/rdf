@@ -192,6 +192,11 @@ module RDF; module Util
     end
 
   private
+    LOGGER_COMMON_LEVELS = {
+      fatal: 4, error: 3, warn: 2, info: 1, debug: 0
+    }.freeze
+    LOGGER_COMMON_LEVELS_REVERSE = LOGGER_COMMON_LEVELS.invert.freeze
+
     ##
     # Common method for logging messages
     #
@@ -212,8 +217,8 @@ module RDF; module Util
       logger = self.logger(options)
       logger.log_statistics[level] = logger.log_statistics[level].to_i + 1
       # Some older code uses integer level numbers
-      level = [:debug, :info, :warn, :error, :fatal][level] if level.is_a?(Integer)
-      return if logger.level > {fatal: 4, error: 3, warn: 2, info: 1, debug: 0}[level]
+      level = LOGGER_COMMON_LEVELS_REVERSE.fetch(level) if level.is_a?(Integer)
+      return if logger.level > LOGGER_COMMON_LEVELS.fetch(level)
 
       depth = options.fetch(:depth, logger.log_depth)
       args << yield if block_given?

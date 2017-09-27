@@ -27,6 +27,16 @@ describe RDF::Vocabulary do
       expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
     end
 
+    it "allows #send" do
+      expect {subject.send(:foo)}.not_to raise_error
+      expect(subject.send(:foo)).to be_a(RDF::Vocabulary::Term)
+    end
+
+    it "allows #public_send" do
+      expect {subject.public_send(:foo)}.not_to raise_error
+      expect(subject.public_send(:foo)).to be_a(RDF::Vocabulary::Term)
+    end
+
     it "does not add to @@uris" do
       RDF::Vocabulary.new("http://example/")
       expect(RDF::Vocabulary.class_variable_get(:"@@uris")).to be_a(Hash)
@@ -344,6 +354,14 @@ describe RDF::Vocabulary do
 
       it "adds extra properties to vocabulary" do
         expect(subject).to have_properties("http://example/", %w(id))
+      end
+    end
+
+    context 'without a uri' do
+      let!(:vocab) { @vocab ||= RDF::Vocabulary.from_graph(graph) }
+
+      it "gives a null relative uri" do
+        expect(vocab.to_uri).to eq RDF::URI.new(nil)
       end
     end
 

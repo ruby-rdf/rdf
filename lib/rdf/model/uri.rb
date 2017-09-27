@@ -81,7 +81,7 @@ module RDF
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
 
     # Split an IRI into it's component parts
-    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/
+    IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/.freeze
 
     # Remove dot expressions regular expressions
     RDS_2A = /^\.?\.\/(.*)$/.freeze
@@ -141,10 +141,9 @@ module RDF
     #
     # @param (see #initialize)
     # @return [RDF::URI] an immutable, frozen URI object
-    def self.intern(*args)
-      str = args.first
+    def self.intern(str, *args)
       args << {} unless args.last.is_a?(Hash)  # FIXME: needed until #to_hash is removed to avoid DEPRECATION warning.
-      (cache[(str = str.to_s).to_sym] ||= self.new(*args)).freeze
+      (cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
     end
 
     ##
@@ -224,6 +223,7 @@ module RDF
     #   @param [Boolean] validate (false)
     #   @param [Boolean] canonicalize (false)
     def initialize(*args, validate: false, canonicalize: false, **options)
+      @value = @object = @hash = nil
       uri = args.first
       if uri
         @value = uri.to_s
@@ -344,7 +344,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      to_s.match(RDF::URI::IRI) || false
+      RDF::URI::IRI.match(to_s) || false
     end
 
     ##
@@ -796,7 +796,8 @@ module RDF
     # lexical representation of URI, either absolute or relative
     # @return [String] 
     def value
-      @value ||= [
+      return @value if @value
+      @value = [
         ("#{scheme}:" if absolute?),
         ("//#{authority}" if authority),
         path,
@@ -810,7 +811,7 @@ module RDF
     #
     # @return [Integer]
     def hash
-      @hash ||= (value.hash * -1)
+      @hash || @hash = (value.hash * -1)
     end
 
     ##
@@ -818,7 +819,7 @@ module RDF
     #
     # @return [Hash{Symbol => String}]
     def object
-      @object ||= parse(@value)
+      @object || @object = parse(@value)
     end
     alias_method :to_h, :object
 
@@ -830,8 +831,8 @@ module RDF
     def parse(value)
       value = value.to_s.dup.force_encoding(Encoding::ASCII_8BIT)
       parts = {}
-      if matchdata = value.to_s.match(IRI_PARTS)
-        scheme, authority, path, query, fragment = matchdata.to_a[1..-1]
+      if matchdata = IRI_PARTS.match(value)
+        scheme, authority, path, query, fragment = matchdata[1..-1]
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)
@@ -928,11 +929,13 @@ module RDF
       ::URI.encode(::URI.decode(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
     end
 
+    HOST_FROM_AUTHORITY_RE = /(?:[^@]+@)?([^:]+)(?::.*)?$/.freeze
+
     ##
     # @return [String]
     def host
       object.fetch(:host) do
-        @object[:host] = ($1 if @object[:authority].to_s.match(/(?:[^@]+@)?([^:]+)(?::.*)?$/))
+        @object[:host] = ($1 if HOST_FROM_AUTHORITY_RE.match(@object[:authority]))
       end
     end
 
@@ -954,11 +957,13 @@ module RDF
       normalize_segment(host, IHOST, true).chomp('.') if host
     end
 
+    PORT_FROM_AUTHORITY_RE = /:(\d+)$/.freeze
+
     ##
     # @return [String]
     def port
       object.fetch(:port) do
-        @object[:port] = ($1 if @object[:authority].to_s.match(/:(\d+)$/))
+        @object[:port] = ($1 if PORT_FROM_AUTHORITY_RE.match(@object[:authority]))
       end
     end
 
