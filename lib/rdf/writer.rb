@@ -400,6 +400,7 @@ module RDF
     # @return [self]
     # @abstract
     def write_prologue
+      @logged_errors_at_prolog = log_statistics[:error].to_i
       self
     end
 
@@ -408,7 +409,7 @@ module RDF
     # @raise [RDF::WriterError] if errors logged during processing.
     # @abstract
     def write_epilogue
-      if log_statistics[:error]
+      if log_statistics[:error].to_i > @logged_errors_at_prolog
         raise RDF::WriterError, "Errors found during processing"
       end
       self
