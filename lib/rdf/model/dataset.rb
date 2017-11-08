@@ -61,24 +61,18 @@ module RDF
 
     ##
     # @private
-    # @see RDF::Enumerable#each_statement
-    def each_statement
-      if block_given?
-        @statements.each do |st| 
-          if st.graph_name.equal?(DEFAULT_GRAPH)
-            st = st.dup
-            st.graph_name = nil
-          end
-
-          yield st
+    # @see RDF::Enumerable#each
+    def each
+      @statements.each do |st| 
+        if st.graph_name.equal?(DEFAULT_GRAPH)
+          st = st.dup
+          st.graph_name = nil
         end
 
-        self
+        yield st
       end
-
-      enum_statement 
+      self
     end
-    alias_method :each, :each_statement
 
     ##
     # Returns a developer-friendly representation of this object.
