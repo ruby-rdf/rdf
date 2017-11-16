@@ -186,18 +186,6 @@ describe RDF::Statement do
     })
   end
 
-  it {is_expected.not_to respond_to(:to_hash)}
-  its(:to_hash) do
-    expect {
-      is_expected.to eql({
-        subject:    stmt.subject,
-        predicate:  stmt.predicate,
-        object:     stmt.object,
-        graph_name: stmt.graph_name,
-      })
-    }.to write("DEPRECATION").to(:error)
-  end
-
   it {is_expected.to respond_to(:to_s)}
   its(:to_s) {is_expected.to eql "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."}
 
