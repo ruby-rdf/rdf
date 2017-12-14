@@ -44,15 +44,8 @@ module RDF
     #   Some RDF storage systems (e.g. AllegroGraph) require this.
     # Requires that the `uuid` gem be loadable to use `format`
     # @return [RDF::Node]
-    def self.uuid(format: :default, grammar: nil)
-      case
-        when grammar
-          warn "[DEPRECATION] The grammar parameter to RDF::Node#uri is deprecated.\n" +
-               "Called from #{Gem.location_of_caller.join(':')}"
-          uuid = RDF::Util::UUID.generate(format: format) until uuid =~ grammar
-        else
-          uuid = RDF::Util::UUID.generate(format: format)
-      end
+    def self.uuid(format: :default)
+      uuid = RDF::Util::UUID.generate(format: format)
       self.new(uuid)
     end
 
