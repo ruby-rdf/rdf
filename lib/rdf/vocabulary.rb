@@ -349,12 +349,13 @@ module RDF
 
           key = case statement.predicate
           when RDF.type                                     then :type
+          when RDF::RDFS.comment                            then :comment
+          when RDF::RDFS.domain                             then :domain
+          when RDF::RDFS.isDefinedBy                        then :isDefinedBy
+          when RDF::RDFS.label                              then :label
+          when RDF::RDFS.range                              then :range
           when RDF::RDFS.subClassOf                         then :subClassOf
           when RDF::RDFS.subPropertyOf                      then :subPropertyOf
-          when RDF::RDFS.range                              then :range
-          when RDF::RDFS.domain                             then :domain
-          when RDF::RDFS.comment                            then :comment
-          when RDF::RDFS.label                              then :label
           when RDF::URI("http://schema.org/inverseOf")      then :inverseOf
           when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
           when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
@@ -549,10 +550,13 @@ module RDF
       # @!attribute [r] range
       #   `rdfs:range` accessor
       #   @return [Array<Term>]
+      # @!attribute [r] isDefinedBy
+      #   `rdfs:isDefinedBy` accessor
+      #   @return [Array<Term>]
+
       # @!attribute [r] inverseOf
       #   `owl:inverseOf` accessor
       #   @return [Array<Term>]
-
       # @!attribute [r] domainIncludes
       #   `schema:domainIncludes` accessor
       #   @return [Array<Term>]
@@ -682,6 +686,14 @@ module RDF
               when :range
                 prop = RDFS.range
                 value = RDF::Vocabulary.expand_pname(value)
+              when :isDefinedBy
+                prop = RDF::URI("http://schema.org/isDefinedBy")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :label
+                prop = RDF::RDFS.label
+              when :comment
+                prop = RDF::RDFS.comment
+
               when :inverseOf
                 prop = RDF::URI("http://schema.org/inverseOf")
                 value = RDF::Vocabulary.expand_pname(value)
@@ -691,10 +703,6 @@ module RDF
               when :rangeIncludes
                 prop = RDF::URI("http://schema.org/rangeIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
-              when :label
-                prop = RDF::RDFS.label
-              when :comment
-                prop = RDF::RDFS.comment
               else
                 prop = RDF::Vocabulary.expand_pname(prop.to_s)
                 next unless prop
@@ -771,8 +779,8 @@ module RDF
           @attributes.fetch(method, "")
         when :label
           @attributes.fetch(method, to_s.split(/[\/\#]/).last)
-        when :type, :subClassOf, :subPropertyOf, :domain, :range, :inverseOf,
-             :domainIncludes, :rangeIncludes
+        when :type, :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy,
+             :inverseOf, :domainIncludes, :rangeIncludes
           Array(@attributes[method]).map {|v| RDF::Vocabulary.expand_pname(v)}
         else
           super
