@@ -359,6 +359,19 @@ module RDF
           when RDF::URI("http://schema.org/inverseOf")      then :inverseOf
           when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
           when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel")       then :altLabel
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#broader")        then :broader
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#definition")     then :definition
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#editorialNote")  then :editorialNote
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#exactMatch")     then :exactMatch
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#hasTopConcept")  then :hasTopConcept
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#inScheme")       then :inScheme
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#member")         then :member
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#narrower")       then :narrower
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#notation")       then :notation
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#note")           then :note
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#prefLabel")      then :prefLabel
+          when RDF::URI("http://www.w3.org/2004/02/skos/core#related")        then :related
           else                                              statement.predicate.pname.to_sym
           end
 
@@ -564,6 +577,46 @@ module RDF
       #   `schema:rangeIncludes` accessor
       #   @return [Array<Term>]
 
+      # @!attribute [r] altLabel
+      #   `skos:altLabel` accessor
+      #   @return [String]
+      # @!attribute [r] broader
+      #   `skos:broader` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] definition
+      #   `skos:definition` accessor
+      #   @return [String]
+      # @!attribute [r] editorialNote
+      #   `skos:editorialNote` accessor
+      #   @return [Array<String>]
+      # @!attribute [r] exactMatch
+      #   `skos:exactMatch` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] hasTopConcept
+      #   `skos:hasTopConcept` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] inScheme
+      #   `skos:inScheme` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] member
+      #   `skos:member` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] narrower
+      #   `skos:narrower` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] notation
+      #   `skos:notation` accessor
+      #   @return [Array<String>]
+      # @!attribute [r] note
+      #   `skos:note` accessor
+      #   @return [Array<String>]
+      # @!attribute [r] prefLabel
+      #   `skos:prefLabel` accessor
+      #   @return [String]
+      # @!attribute [r] related
+      #   `skos:related` accessor
+      #   @return [Array<Term>]
+
       # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
       # @return [Hash{Symbol=>Term,String}]
       attr_reader :attributes
@@ -703,6 +756,40 @@ module RDF
               when :rangeIncludes
                 prop = RDF::URI("http://schema.org/rangeIncludes")
                 value = RDF::Vocabulary.expand_pname(value)
+
+              when :altLabel
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel")
+              when :broader
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#broader")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :definition
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#definition")
+              when :editorialNote
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#editorialNote")
+              when :exactMatch
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#exactMatch")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :hasTopConcept
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#hasTopConcept")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :inScheme
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#inScheme")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :member
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#member")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :narrower
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#narrower")
+                value = RDF::Vocabulary.expand_pname(value)
+              when :notation
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#notation")
+              when :note
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#note")
+              when :prefLabel
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#prefLabel")
+              when :related
+                prop = RDF::URI("http://www.w3.org/2004/02/skos/core#related")
+                value = RDF::Vocabulary.expand_pname(value)
               else
                 prop = RDF::Vocabulary.expand_pname(prop.to_s)
                 next unless prop
@@ -775,12 +862,13 @@ module RDF
       # Implement accessor to symbol attributes
       def method_missing(method, *args, &block)
         case method
-        when :comment
+        when :comment, :notation, :note, :editorialNote
           @attributes.fetch(method, "")
-        when :label
+        when :label, :altLabel, :prefLabel, :definition
           @attributes.fetch(method, to_s.split(/[\/\#]/).last)
         when :type, :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy,
-             :inverseOf, :domainIncludes, :rangeIncludes
+             :inverseOf, :domainIncludes, :rangeIncludes,
+             :broader, :exactMatch, :hasTopConcept, :inScheme, :member, :narrower, :related
           Array(@attributes[method]).map {|v| RDF::Vocabulary.expand_pname(v)}
         else
           super

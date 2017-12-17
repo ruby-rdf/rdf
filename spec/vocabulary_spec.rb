@@ -481,6 +481,73 @@ describe RDF::Vocabulary do
           predicate: RDF::Vocab::SCHEMA.rangeIncludes,
           value: RDF::RDFS.Resource
         },
+
+        "skos:altLabel" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {altLabel: "foo"}),
+          predicate: RDF::Vocab::SKOS.altLabel,
+          value: RDF::Literal("foo")
+        },
+        "skos:broader" => {
+          term: RDF::Vocabulary::Term.new(:foo, broader: "foo", attributes: {broader: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.broader,
+          value: RDF::URI("http://example/Concept")
+        },
+        "skos:definition" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {definition: "foo"}),
+          predicate: RDF::Vocab::SKOS.definition,
+          value: RDF::Literal("foo")
+        },
+        "skos:editorialNote" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {editorialNote: "foo"}),
+          predicate: RDF::Vocab::SKOS.editorialNote,
+          value: RDF::Literal("foo")
+        },
+        "skos:exactMatch" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {exactMatch: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.exactMatch,
+          value: RDF::URI("http://example/Concept")
+        },
+        "skos:hasTopConcept" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {hasTopConcept: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.hasTopConcept,
+          value: RDF::URI("http://example/Concept")
+        },
+        "skos:inScheme" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {inScheme: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.inScheme,
+          value: RDF::URI("http://example/Concept")
+        },
+        "skos:member" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {member: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.member,
+          value: RDF::URI("http://example/Concept")
+        },
+        "skos:narrower" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {narrower: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.narrower,
+          value: RDF::URI("http://example/Concept")
+        },
+        "skos:notation" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {notation: "foo"}),
+          predicate: RDF::Vocab::SKOS.notation,
+          value: RDF::Literal("foo")
+        },
+        "skos:note" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {note: "foo"}),
+          predicate: RDF::Vocab::SKOS.note,
+          value: RDF::Literal("foo")
+        },
+        "skos:prefLabel" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {prefLabel: "foo"}),
+          predicate: RDF::Vocab::SKOS.prefLabel,
+          value: RDF::Literal("foo")
+        },
+        "skos:related" => {
+          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {related: "http://example/Concept"}),
+          predicate: RDF::Vocab::SKOS.related,
+          value: RDF::URI("http://example/Concept")
+        },
+
         "vocab value" => {term: RDF::RDFS.isDefinedBy, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
         "term value" => {
           term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdfs:seeAlso": "rdfs:seeAlso"}),
