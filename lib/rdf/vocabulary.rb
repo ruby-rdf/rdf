@@ -356,9 +356,9 @@ module RDF
           when RDF::RDFS.range                              then :range
           when RDF::RDFS.subClassOf                         then :subClassOf
           when RDF::RDFS.subPropertyOf                      then :subPropertyOf
-          when RDF::URI("http://schema.org/inverseOf")      then :inverseOf
           when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
           when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
+          when RDF::URI("http://www.w3.org/2002/07/owl#inverseOf")            then :inverseOf
           when RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel")       then :altLabel
           when RDF::URI("http://www.w3.org/2004/02/skos/core#broader")        then :broader
           when RDF::URI("http://www.w3.org/2004/02/skos/core#definition")     then :definition
@@ -570,6 +570,7 @@ module RDF
       # @!attribute [r] inverseOf
       #   `owl:inverseOf` accessor
       #   @return [Array<Term>]
+
       # @!attribute [r] domainIncludes
       #   `schema:domainIncludes` accessor
       #   @return [Array<Term>]
@@ -748,8 +749,9 @@ module RDF
                 prop = RDF::RDFS.comment
 
               when :inverseOf
-                prop = RDF::URI("http://schema.org/inverseOf")
+                prop = RDF::URI("http://www.w3.org/2002/07/owl#inverseOf")
                 value = RDF::Vocabulary.expand_pname(value)
+
               when :domainIncludes
                 prop = RDF::URI("http://schema.org/domainIncludes")
                 value = RDF::Vocabulary.expand_pname(value)

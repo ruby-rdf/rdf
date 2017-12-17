@@ -466,11 +466,12 @@ describe RDF::Vocabulary do
         "rdfs:range" => {term: RDF::RDFS.range, predicate: RDF::RDFS.range, value: RDF::RDFS.Class},
         "rdfs:isDefinedBy" => {term: RDF::RDFS.Class, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
 
-        "schema:inverseOf" => {
+        "owl:inverseOf" => {
           term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {inverseOf: RDF::RDFS.Resource.to_s}),
-          predicate: RDF::Vocab::SCHEMA.inverseOf,
+          predicate: RDF::OWL.inverseOf,
           value: RDF::RDFS.Resource
         },
+
         "schema:domainIncludes" => {
           term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {domainIncludes: RDF::RDFS.Resource.to_s}),
           predicate: RDF::Vocab::SCHEMA.domainIncludes,
