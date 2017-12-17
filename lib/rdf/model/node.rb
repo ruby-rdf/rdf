@@ -37,11 +37,7 @@ module RDF
     #   * `:default` Produces 36 characters, including hyphens separating the UUID value parts
     #   * `:compact` Produces a 32 digits (hexadecimal) value with no hyphens
     #   * `:urn` Adds the prefix urn:uuid: to the default format
-    # @param [Regexp] grammar (nil)
-    #   a grammar specification that the generated UUID must match
-    #   The UUID is generated such that its initial part is guaranteed
-    #   to match the given `grammar`, e.g. `/^[A-Za-z][A-Za-z0-9]*/`.
-    #   Some RDF storage systems (e.g. AllegroGraph) require this.
+    #
     # Requires that the `uuid` gem be loadable to use `format`
     # @return [RDF::Node]
     def self.uuid(format: :default)

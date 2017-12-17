@@ -184,7 +184,7 @@ module RDF
       # Attempt to expand a Compact IRI/PName/QName using loaded vocabularies
       #
       # @param [String, #to_s] pname
-      # @return [RDF::URI]
+      # @return [Term]
       # @raise [KeyError] if pname suffix not found in identified vocabulary
       def expand_pname(pname)
         prefix, suffix = pname.to_s.split(":", 2)
@@ -528,40 +528,41 @@ module RDF
 
     # A Vocabulary Term is a URI that can also act as an {Enumerable} to generate the RDF definition of vocabulary terms as defined within the vocabulary definition.
     class Term < RDF::URI
-      # @!method comment
+      # @!attribute [r] comment
       #   `rdfs:comment` accessor
-      #   @return [String]
-      # @!method label
+      #   @return [Array<String>]
+      # @!attribute [r] label
       #   `rdfs:label` accessor
       #   @return [String]
-      # @!method type
+      # @!attribute [r] type
       #   `rdf:type` accessor
-      #   @return [RDF::URI]
-      # @!method subClassOf
+      #   @return [[Array<Term>]
+      # @!attribute [r] subClassOf
       #   `rdfs:subClassOf` accessor
-      #   @return [RDF::URI]
-      # @!method subPropertyOf
+      #   @return [Array<Term>]
+      # @!attribute [r] subPropertyOf
       #   `rdfs:subPropertyOf` accessor
-      #   @return [RDF::URI]
-      # @!method domain
+      #   @return [Array<Term>]
+      # @!attribute [r] domain
       #   `rdfs:domain` accessor
-      #   @return [RDF::URI]
-      # @!method range
+      #   @return [Array<Term>]
+      # @!attribute [r] range
       #   `rdfs:range` accessor
-      #   @return [RDF::URI]
-      # @!method inverseOf
+      #   @return [Array<Term>]
+      # @!attribute [r] inverseOf
       #   `owl:inverseOf` accessor
-      #   @return [RDF::URI]
-      # @!method domainIncludes
+      #   @return [Array<Term>]
+
+      # @!attribute [r] domainIncludes
       #   `schema:domainIncludes` accessor
-      #   @return [RDF::URI]
-      # @!method rangeIncludes
-      #   `schema:rangeIncludes` accoessor
-      #   @return [RDF::URI]
-      # @!attribute [rw] attributes
-      #   Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
-      #   @return [Hash{Symbol,Resource => Term, #to_s}]
-      attr_accessor :attributes
+      #   @return [Array<Term>]
+      # @!attribute [r] rangeIncludes
+      #   `schema:rangeIncludes` accessor
+      #   @return [Array<Term>]
+
+      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      # @return [Hash{Symbol=>Term,String}]
+      attr_reader :attributes
 
       ##
       # @overload URI(uri, **options)
@@ -583,13 +584,13 @@ module RDF
       #   @option options [String, #to_s] :user The user component.
       #   @option options [String, #to_s] :password The password component.
       #   @option options [String, #to_s] :userinfo
-      #     The u optionsserinfo component. If this is supplied, the user and password
+      #     The userinfo component. If this is supplied, the user and password
       #     compo optionsnents must be omitted.
       #   @option options [String, #to_s] :host The host component.
       #   @option options [String, #to_s] :port The port component.
       #   @option options [String, #to_s] :authority
-      #     The a optionsuthority component. If this is supplied, the user, password,
-      #     useri optionsnfo, host, and port components must be omitted.
+      #     The authority component. If this is supplied, the user, password,
+      #     userinfo, host, and port components must be omitted.
       #   @option options [String, #to_s] :path The path component.
       #   @option options [String, #to_s] :query The query component.
       #   @option options [String, #to_s] :fragment The fragment component.
@@ -770,7 +771,8 @@ module RDF
           @attributes.fetch(method, "")
         when :label
           @attributes.fetch(method, to_s.split(/[\/\#]/).last)
-        when :type, :subClassOf, :subPropertyOf, :domain, :range, :inverseOf, :domainIncludes, :rangeIncludes
+        when :type, :subClassOf, :subPropertyOf, :domain, :range, :inverseOf,
+             :domainIncludes, :rangeIncludes
           Array(@attributes[method]).map {|v| RDF::Vocabulary.expand_pname(v)}
         else
           super
