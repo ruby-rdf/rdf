@@ -92,22 +92,56 @@ module RDF
       #   Defines a new property or class in the vocabulary.
       #
       #   @param [String, #to_s] name
-      #   @param [Hash{Symbol => Object}] options
-      #     Any other values are expected to be String which expands to a {URI} using built-in vocabulary prefixes. The value is a `String` or `Array<String>` which is interpreted according to the `range` of the associated property.
-      #   @option options [String, Array<String>] :label
-      #     Shortcut for `rdfs:label`, values are String interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :comment
-      #     Shortcut for `rdfs:comment`, values are String interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :subClassOf
-      #     Shortcut for `rdfs:subClassOf`, values are String interpreted as a {URI}.
-      #   @option options [String, Array<String>] :subPropertyOf
-      #     Shortcut for `rdfs:subPropertyOf`, values are String interpreted as a {URI}.
-      #   @option options [String, Array<String>] :domain
-      #     Shortcut for `rdfs:domain`, values are String interpreted as a {URI}.
-      #   @option options [String, Array<String>] :range
-      #     Shortcut for `rdfs:range`, values are String interpreted as a {URI}.
+      #   @param [Hash{Symbol=>String,Array<String>,Array<Term>}] options
+      #     Any other values are expected to expands to a {URI} using built-in vocabulary prefixes. The value is a `String`, `Array<String>` or `Array<Term>` which is interpreted according to the `range` of the associated property.
       #   @option options [String, Array<String>] :type
-      #     Shortcut for `rdf:type`, values are String interpreted as a {URI}.
+      #     Shortcut for `rdf:type`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :comment
+      #     Shortcut for `rdfs:comment`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :domain
+      #     Shortcut for `rdfs:domain`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :isDefinedBy
+      #     Shortcut for `rdfs:isDefinedBy`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :label
+      #     Shortcut for `rdfs:label`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :range
+      #     Shortcut for `rdfs:range`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :subClassOf
+      #     Shortcut for `rdfs:subClassOf`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :subPropertyOf
+      #     Shortcut for `rdfs:subPropertyOf`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :inverseOf
+      #     Shortcut for `owl:inverseOf`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :domainIncludes
+      #     Shortcut for `schema:domainIncludes`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :rangeIncludes
+      #     Shortcut for `schema:rangeIncludes`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :altLabel
+      #     Shortcut for `skos:altLabel`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :broader
+      #     Shortcut for `skos:broader`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :definition
+      #     Shortcut for `skos:definition`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :editorialNote
+      #     Shortcut for `skos:editorialNote`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :exactMatch
+      #     Shortcut for `skos:exactMatch`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :hasTopConcept
+      #     Shortcut for `skos:hasTopConcept`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :inScheme
+      #     Shortcut for `skos:inScheme`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :member
+      #     Shortcut for `skos:member`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :narrower
+      #     Shortcut for `skos:narrower`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String>] :notation
+      #     Shortcut for `skos:notation`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :note
+      #     Shortcut for `skos:note`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :prefLabel
+      #     Shortcut for `skos:prefLabel`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String>] :related
+      #     Shortcut for `skos:related`, values are interpreted as a {Term}.
       #   @return [RDF::Vocabulary::Term]
       def property(*args)
         case args.length
@@ -618,7 +652,7 @@ module RDF
       #   `skos:related` accessor
       #   @return [Array<Term>]
 
-      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF. Keys are the same as for the `options` of {Vocabulary.property}.
       # @return [Hash{Symbol=>Term,String}]
       attr_reader :attributes
 
