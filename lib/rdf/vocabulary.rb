@@ -91,48 +91,73 @@ module RDF
       # @overload property(name, options)
       #   Defines a new property or class in the vocabulary.
       #
+      #   @example A simple term definition
+      #       property :domain,
+      #         comment: %(A domain of the subject property.).freeze,
+      #         domain: "rdf:Property".freeze,
+      #         label: "domain".freeze,
+      #         range: "rdfs:Class".freeze,
+      #         isDefinedBy: %(rdfs:).freeze,
+      #         type: "rdf:Property".freeze
+      #
+      #   @example A SKOS term with anonymous values
+      #         term: :af,
+      #           type: "jur:Country",
+      #           isDefinedBy: "http://eulersharp.sourceforge.net/2003/03swap/countries#",
+      #           "skos:exactMatch": [
+      #             Term.new(nil,
+      #               type: "skos:Concept",
+      #               inScheme: "iso3166-1-alpha-2",
+      #               notation: "ax"),
+      #             Term.new(nil,
+      #               type: "skos:Concept",
+      #               inScheme: "iso3166-1-alpha-3",
+      #               notation: "ala")
+      #           ],
+      #           "foaf:name": "Aland Islands"
+      #
       #   @param [String, #to_s] name
-      #   @param [Hash{Symbol=>String,Array<String>,Array<Term>}] options
+      #   @param [Hash{Symbol=>String,Array<String,Term>}] options
       #     Any other values are expected to expands to a {URI} using built-in vocabulary prefixes. The value is a `String`, `Array<String>` or `Array<Term>` which is interpreted according to the `range` of the associated property.
-      #   @option options [String, Array<String>] :type
+      #   @option options [String, Array<String,Term>] :type
       #     Shortcut for `rdf:type`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :comment
       #     Shortcut for `rdfs:comment`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :domain
+      #   @option options [String, Array<String,Term>] :domain
       #     Shortcut for `rdfs:domain`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :isDefinedBy
+      #   @option options [String, Array<String,Term>] :isDefinedBy
       #     Shortcut for `rdfs:isDefinedBy`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :label
       #     Shortcut for `rdfs:label`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :range
+      #   @option options [String, Array<String,Term>] :range
       #     Shortcut for `rdfs:range`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :subClassOf
+      #   @option options [String, Array<String,Term>] :subClassOf
       #     Shortcut for `rdfs:subClassOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :subPropertyOf
+      #   @option options [String, Array<String,Term>] :subPropertyOf
       #     Shortcut for `rdfs:subPropertyOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :inverseOf
+      #   @option options [String, Array<String,Term>] :inverseOf
       #     Shortcut for `owl:inverseOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :domainIncludes
+      #   @option options [String, Array<String,Term>] :domainIncludes
       #     Shortcut for `schema:domainIncludes`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :rangeIncludes
+      #   @option options [String, Array<String,Term>] :rangeIncludes
       #     Shortcut for `schema:rangeIncludes`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :altLabel
       #     Shortcut for `skos:altLabel`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :broader
+      #   @option options [String, Array<String,Term>] :broader
       #     Shortcut for `skos:broader`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :definition
       #     Shortcut for `skos:definition`, values are interpreted as a {Literal}.
       #   @option options [String, Array<String>] :editorialNote
       #     Shortcut for `skos:editorialNote`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :exactMatch
+      #   @option options [String, Array<String,Term>] :exactMatch
       #     Shortcut for `skos:exactMatch`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :hasTopConcept
+      #   @option options [String, Array<String,Term>] :hasTopConcept
       #     Shortcut for `skos:hasTopConcept`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :inScheme
+      #   @option options [String, Array<String,Term>] :inScheme
       #     Shortcut for `skos:inScheme`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :member
+      #   @option options [String, Array<String,Term>] :member
       #     Shortcut for `skos:member`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :narrower
+      #   @option options [String, Array<String,Term>] :narrower
       #     Shortcut for `skos:narrower`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :notation
       #     Shortcut for `skos:notation`, values are interpreted as a {Literal}.
@@ -140,7 +165,7 @@ module RDF
       #     Shortcut for `skos:note`, values are interpreted as a {Literal}.
       #   @option options [String, Array<String>] :prefLabel
       #     Shortcut for `skos:prefLabel`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :related
+      #   @option options [String, Array<String,Term>] :related
       #     Shortcut for `skos:related`, values are interpreted as a {Term}.
       #   @return [RDF::Vocabulary::Term]
       def property(*args)
@@ -151,7 +176,7 @@ module RDF
           name, options = args
           options = {label: name.to_s, vocab: self}.merge(options || {})
           uri_str = [to_s, name.to_s].join('')
-          Term.cache.delete(uri_str.to_sym)  # Clear any previous entry
+          URI.cache.delete(uri_str.to_sym)  # Clear any previous entry
           prop = Term.intern(uri_str, attributes: options)
           props[name.to_sym] = prop
 
@@ -180,56 +205,26 @@ module RDF
       #     The URI of the ontology.
       #   @param [Hash{Symbol => Object}] options
       #     See {property}
-      #   @param [Hash{Symbol=>String,Array<String>,Array<Term>}] options
+      #   @param [Hash{Symbol=>String,Array<String,Term>}] options
       #     Any other values are expected to expands to a {URI} using built-in vocabulary prefixes. The value is a `String`, `Array<String>` or `Array<Term>` which is interpreted according to the `range` of the associated property.
-      #   @option options [String, Array<String>] :type
+      #   @option options [String, Array<String,Term>] :type
       #     Shortcut for `rdf:type`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :comment
       #     Shortcut for `rdfs:comment`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :domain
-      #     Shortcut for `rdfs:domain`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :isDefinedBy
+      #   @option options [String, Array<String,Term>] :isDefinedBy
       #     Shortcut for `rdfs:isDefinedBy`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :label
       #     Shortcut for `rdfs:label`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :range
-      #     Shortcut for `rdfs:range`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :subClassOf
-      #     Shortcut for `rdfs:subClassOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :subPropertyOf
-      #     Shortcut for `rdfs:subPropertyOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :inverseOf
-      #     Shortcut for `owl:inverseOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :domainIncludes
-      #     Shortcut for `schema:domainIncludes`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :rangeIncludes
-      #     Shortcut for `schema:rangeIncludes`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :altLabel
       #     Shortcut for `skos:altLabel`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :broader
-      #     Shortcut for `skos:broader`, values are interpreted as a {Term}.
       #   @option options [String, Array<String>] :definition
       #     Shortcut for `skos:definition`, values are interpreted as a {Literal}.
       #   @option options [String, Array<String>] :editorialNote
       #     Shortcut for `skos:editorialNote`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :exactMatch
-      #     Shortcut for `skos:exactMatch`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :hasTopConcept
-      #     Shortcut for `skos:hasTopConcept`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :inScheme
-      #     Shortcut for `skos:inScheme`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :member
-      #     Shortcut for `skos:member`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :narrower
-      #     Shortcut for `skos:narrower`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :notation
-      #     Shortcut for `skos:notation`, values are interpreted as a {Literal}.
       #   @option options [String, Array<String>] :note
       #     Shortcut for `skos:note`, values are interpreted as a {Literal}.
       #   @option options [String, Array<String>] :prefLabel
       #     Shortcut for `skos:prefLabel`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :related
-      #     Shortcut for `skos:related`, values are interpreted as a {Term}.
       #   @return [RDF::Vocabulary::Term]
       #
       # @note If the ontology URI has the vocabulary namespace URI as a prefix, it may also be defined using `#property` or `#term`
@@ -240,7 +235,7 @@ module RDF
         else
           uri, options = args
           options = {vocab: self}.merge(options || {})
-          Term.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
+          URI.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
           @ontology = Term.intern(uri.to_s, attributes: options)
 
           # If the URI is the same as the vocabulary namespace, also define it as a term
@@ -265,6 +260,7 @@ module RDF
       # @return [Term]
       # @raise [KeyError] if pname suffix not found in identified vocabulary
       def expand_pname(pname)
+        return pname unless pname.is_a?(String) || pname.is_a?(Symbol)
         prefix, suffix = pname.to_s.split(":", 2)
         if prefix == "rdf"
           RDF[suffix]
@@ -618,8 +614,10 @@ module RDF
     @@uris       = {}      # @private
     @@uri        = nil     # @private
 
-    # A Vocabulary Term is a URI that can also act as an {Enumerable} to generate the RDF definition of vocabulary terms as defined within the vocabulary definition.
-    class Term < RDF::URI
+    # A Vocabulary Term is a {RDF::Resource} that can also act as an {Enumerable} to generate the RDF definition of vocabulary terms as defined within the vocabulary definition.
+    module Term
+      include RDF::Resource
+
       # @!attribute [r] comment
       #   `rdfs:comment` accessor
       #   @return [Array<String>]
@@ -711,8 +709,8 @@ module RDF
       #
       # @overload URI(**options)
       #   @param  [Hash{Symbol => Object}] options
-      #   @param [Hash{Symbol,Resource => Term, #to_s}] attributes
-      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
+      #   @param [Hash{Symbol => String,Array<String,Term>}] attributes
+      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
       #   @option options options [Boolean] :validate (false)
       #   @option options options [Boolean] :canonicalize (false)
       #   @option options [Vocabulary] :vocab The {Vocabulary} associated with this term.
@@ -730,13 +728,39 @@ module RDF
       #   @option options [String, #to_s] :path The path component.
       #   @option options [String, #to_s] :query The query component.
       #   @option options [String, #to_s] :fragment The fragment component.
-      def initialize(*args, attributes:, **options)
-        @attributes = attributes
-        if RUBY_ENGINE == "rbx"
-          super(*args, **options)
-        else
-          super
+      def self.new(*args, attributes:, **options)
+        klass = if args.first.nil?
+          Node
+        elsif args.first.to_s.start_with?("_:")
+          args = args[1..-1].unshift($1)
+          Node
+        else URI
         end
+        term = klass.allocate.extend(Term)
+        term.send(:initialize, *args)
+        term.instance_variable_set(:@attributes, attributes)
+        term
+      end
+
+      ##
+      # Returns an interned `RDF::URI` instance based on the given `uri`
+      # string.
+      #
+      # The maximum number of cached interned URI references is given by the
+      # `CACHE_SIZE` constant. This value is unlimited by default, in which
+      # case an interned URI object will be purged only when the last strong
+      # reference to it is garbage collected (i.e., when its finalizer runs).
+      #
+      # Excepting special memory-limited circumstances, it should always be
+      # safe and preferred to construct new URI references using
+      # `RDF::URI.intern` instead of `RDF::URI.new`, since if an interned
+      # object can't be returned for some reason, this method will fall back
+      # to returning a freshly-allocated one.
+      #
+      # @param (see #initialize)
+      # @return [RDF::URI] an immutable, frozen URI object
+      def self.intern(str, *args)
+        (URI.cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
       end
 
       ##
@@ -874,8 +898,8 @@ module RDF
                 prop = RDF::Vocabulary.expand_pname(prop.to_s)
                 next unless prop
 
-                v = value.to_s
-                value = RDF::Vocabulary.expand_pname(v)
+                v = value.is_a?(Symbol) ? value.to_s : value
+                value = RDF::Vocabulary.expand_pname(v) if v.is_a?(String)
                 unless value && value.valid?
                   # Use as most appropriate literal
                   value = [

@@ -111,6 +111,16 @@ describe RDF::Vocabulary do
       expect(subject[:""].label).to eq "Ontology"
       expect(subject.ontology).to eql subject[:""]
     end
+
+    it "defines property with Term values" do
+      subject.property :Foo, subClassOf: RDF::Vocabulary::Term.new("_:bar",
+        attributes: {
+          label: "Bar"
+        })
+      expect(subject[:Foo]).to eq "http://www.w3.org/2001/XMLSchema#Foo"
+      expect(subject[:Foo].subClassOf).to all(be_a(RDF::Node))
+      expect(subject[:Foo].subClassOf).to all(be_a(RDF::Term))
+    end
   end
 
   describe "#ontology" do
@@ -170,6 +180,7 @@ describe RDF::Vocabulary do
     it "should expand PName for vocabulary" do
       expect(RDF::Vocabulary.expand_pname("rdfs:")).to eql RDF::RDFS.to_uri
       expect(RDF::Vocabulary.expand_pname("rdfs:label")).to eql RDF::RDFS.label
+      expect(RDF::Vocabulary.expand_pname(RDF::Value)).to eql RDF::Value
     end
 
     it "should support Web Ontology Language (OWL)" do
@@ -430,22 +441,53 @@ describe RDF::Vocabulary do
       its(:vocab) {is_expected.to eql RDF::XSD}
     end
 
-    context "#initialize" do
+    context ".new" do
       subject {
         RDF::Vocabulary::Term.new(:foo,
-                                  label: "foo",
                                   attributes: {
+                                    label: "foo",
                                     domain: RDF::RDFS.Resource,
                                     range: [RDF::RDFS.Resource, RDF::RDFS.Class],
                                     "schema:domainIncludes" => RDF::RDFS.Resource,
                                     "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
                                   })
-          }
+      }
+      it {is_expected.to be_a(RDF::URI)}
+      it {is_expected.to be_a(RDF::Vocabulary::Term)}
       its(:label) {is_expected.to eq "foo"}
       its(:domain) {is_expected.to include(RDF::RDFS.Resource)}
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
       its(:attributes) {is_expected.to include("schema:domainIncludes" => RDF::RDFS.Resource)}
       its(:attributes) {is_expected.to include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+    end
+
+    describe "with a BNode Label" do
+      subject {
+        RDF::Vocabulary::Term.new(:"_:foo",
+                                  attributes: {
+                                    label: "foo",
+                                    domain: RDF::RDFS.Resource,
+                                    range: [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                    "schema:domainIncludes" => RDF::RDFS.Resource,
+                                    "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                  })
+      }
+      it {is_expected.to be_a(RDF::Node)}
+      it {is_expected.to be_a(RDF::Vocabulary::Term)}
+      its(:label) {is_expected.to eq "foo"}
+      its(:domain) {is_expected.to include(RDF::RDFS.Resource)}
+      its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      its(:attributes) {is_expected.to include("schema:domainIncludes" => RDF::RDFS.Resource)}
+      its(:attributes) {is_expected.to include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+    end
+
+    describe "with a nil Label" do
+      subject {
+        RDF::Vocabulary::Term.new(nil, attributes: {label: "foo"})
+      }
+      it {is_expected.to be_a(RDF::Node)}
+      it {is_expected.to be_a(RDF::Vocabulary::Term)}
+      its(:label) {is_expected.to eq "foo"}
     end
 
     context "#each_statement" do
@@ -467,24 +509,24 @@ describe RDF::Vocabulary do
         "rdfs:isDefinedBy" => {term: RDF::RDFS.Class, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
 
         "owl:inverseOf" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {inverseOf: RDF::RDFS.Resource.to_s}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {inverseOf: RDF::RDFS.Resource.to_s}),
           predicate: RDF::OWL.inverseOf,
           value: RDF::RDFS.Resource
         },
 
         "schema:domainIncludes" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {domainIncludes: RDF::RDFS.Resource.to_s}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {domainIncludes: RDF::RDFS.Resource.to_s}),
           predicate: RDF::Vocab::SCHEMA.domainIncludes,
           value: RDF::RDFS.Resource
         },
         "schema:rangeIncludes" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {rangeIncludes: RDF::RDFS.Resource.to_s}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {rangeIncludes: RDF::RDFS.Resource.to_s}),
           predicate: RDF::Vocab::SCHEMA.rangeIncludes,
           value: RDF::RDFS.Resource
         },
 
         "skos:altLabel" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {altLabel: "foo"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {altLabel: "foo"}),
           predicate: RDF::Vocab::SKOS.altLabel,
           value: RDF::Literal("foo")
         },
@@ -494,95 +536,95 @@ describe RDF::Vocabulary do
           value: RDF::URI("http://example/Concept")
         },
         "skos:definition" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {definition: "foo"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {definition: "foo"}),
           predicate: RDF::Vocab::SKOS.definition,
           value: RDF::Literal("foo")
         },
         "skos:editorialNote" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {editorialNote: "foo"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {editorialNote: "foo"}),
           predicate: RDF::Vocab::SKOS.editorialNote,
           value: RDF::Literal("foo")
         },
         "skos:exactMatch" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {exactMatch: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {exactMatch: "http://example/Concept"}),
           predicate: RDF::Vocab::SKOS.exactMatch,
           value: RDF::URI("http://example/Concept")
         },
         "skos:hasTopConcept" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {hasTopConcept: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {hasTopConcept: "http://example/Concept"}),
           predicate: RDF::Vocab::SKOS.hasTopConcept,
           value: RDF::URI("http://example/Concept")
         },
         "skos:inScheme" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {inScheme: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {inScheme: "http://example/Concept"}),
           predicate: RDF::Vocab::SKOS.inScheme,
           value: RDF::URI("http://example/Concept")
         },
         "skos:member" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {member: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {member: "http://example/Concept"}),
           predicate: RDF::Vocab::SKOS.member,
           value: RDF::URI("http://example/Concept")
         },
         "skos:narrower" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {narrower: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {narrower: "http://example/Concept"}),
           predicate: RDF::Vocab::SKOS.narrower,
           value: RDF::URI("http://example/Concept")
         },
         "skos:notation" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {notation: "foo"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {notation: "foo"}),
           predicate: RDF::Vocab::SKOS.notation,
           value: RDF::Literal("foo")
         },
         "skos:note" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {note: "foo"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {note: "foo"}),
           predicate: RDF::Vocab::SKOS.note,
           value: RDF::Literal("foo")
         },
         "skos:prefLabel" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {prefLabel: "foo"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {prefLabel: "foo"}),
           predicate: RDF::Vocab::SKOS.prefLabel,
           value: RDF::Literal("foo")
         },
         "skos:related" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {related: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {related: "http://example/Concept"}),
           predicate: RDF::Vocab::SKOS.related,
           value: RDF::URI("http://example/Concept")
         },
 
         "vocab value" => {term: RDF::RDFS.isDefinedBy, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
         "term value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdfs:seeAlso": "rdfs:seeAlso"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdfs:seeAlso": "rdfs:seeAlso"}),
           predicate: RDF::RDFS.seeAlso,
           value: RDF::RDFS.seeAlso
         },
         "uri value" => {term: RDF::RDFS[""], predicate: RDF::RDFS.seeAlso, value: RDF::URI("http://www.w3.org/2000/01/rdf-schema-more")},
         "date value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdf:value": "2016-04-24"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "2016-04-24"}),
           predicate: RDF.value,
           value: RDF::Literal::Date.new("2016-04-24")
         },
         "dateTime value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdf:value": "2016-04-24T15:22:00"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "2016-04-24T15:22:00"}),
           predicate: RDF.value,
           value: RDF::Literal::DateTime.new("2016-04-24T15:22:00")
         },
         "boolean value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdf:value": "true"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "true"}),
           predicate: RDF.value,
           value: RDF::Literal::Boolean.new(true)
         },
         "integer value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdf:value": "1"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "1"}),
           predicate: RDF.value,
           value: RDF::Literal::Integer.new(1)
         },
         "decimal value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdf:value": "1.1"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "1.1"}),
           predicate: RDF.value,
           value: RDF::Literal::Decimal.new(1.1)
         },
         "double value" => {
-          term: RDF::Vocabulary::Term.new(:foo, label: "foo", attributes: {"rdf:value": "1.1e1"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "1.1e1"}),
           predicate: RDF.value,
           value: RDF::Literal::Double.new(1.1e1)
         },
