@@ -173,22 +173,23 @@ module RDF
         attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|
           next if key == :vocab
           value = Array(attributes[key])
-          component = key.inspect.start_with?(':"') ? "#{key.inspect} => " : "#{key.to_s}: "
+          component = key.inspect.start_with?(':"') ? "#{key.to_s.inspect}: " : "#{key}: "
           value = value.first if value.length == 1
           component << if value.is_a?(Array)
-            '[' + value.map {|v| serialize_value(v, key)}.sort.join(", ") + "]"
+            '[' + value.map {|v| serialize_value(v, key, indent: "      ")}.sort.join(", ") + "]"
           else
-            serialize_value(value, key)
+            serialize_value(value, key, indent: "      ")
           end
           components << component
         end
         @output.puts components.join(",\n      ")
       end
 
-      def serialize_value(value, key)
-        case key.to_s
-        when "comment", /:/
+      def serialize_value(value, key, indent: "")
+        if value.is_a?(String) && %w(: comment definition notation note editorialNote).include?(key.to_s)
           "%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze"
+        elsif value.respond_to?(:to_ruby)
+          value.to_ruby(indent: indent + "  ")
         else
           "#{value.inspect}.freeze"
         end

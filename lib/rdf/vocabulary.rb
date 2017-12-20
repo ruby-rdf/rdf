@@ -414,12 +414,17 @@ module RDF
 
         ont_url = url.to_s.sub(%r([/#]$), '')
         term_defs = {}
+        embedded_defs = {}
         graph.each do |statement|
-          next unless statement.subject.uri?
-          next unless statement.subject.start_with?(url) || statement.subject == ont_url
-          name = statement.subject.to_s[url.to_s.length..-1].to_s
-          term = (term_defs[name.to_sym] ||= {})
-          term[:uri] = statement.subject if name.empty?
+          #next unless statement.subject.uri?
+          if statement.subject.start_with?(url) || statement.subject == ont_url
+            name = statement.subject.to_s[url.to_s.length..-1].to_s
+            term = (term_defs[name.to_sym] ||= {})
+          else
+            # subject is not a URI or is not associated with the vocabulary
+            term = (embedded_defs[statement.subject] ||= {})
+          end
+          term[:uri] = statement.subject if name.to_s.empty?
 
           key = case statement.predicate
           when RDF.type                                     then :type
@@ -453,6 +458,9 @@ module RDF
             statement.object.pname
           elsif statement.object.literal? && (statement.object.language || :en).to_s =~ /^en-?/
             statement.object.to_s
+          elsif statement.object.node?
+            # This will be scanned and replaced with an embedded Term refrence
+            statement.object
           end
 
           (term[key] ||= []) << value if value
@@ -468,7 +476,36 @@ module RDF
           term_defs
         end
 
+        # Pass over embedded_defs with anonymous references, just once
+        embedded_defs.each do |term, attributes|
+          attributes.each do |ak, avs|
+            # Turn embedded BNodes into either their Term definition or a List
+            attributes[ak] = avs.is_a?(Array) ? avs.map do |av|
+              if av.is_a?(RDF::Node) && RDF::List.new(subject: av, graph: graph).valid?
+                RDF::List.new(subject: av, graph: graph)
+              elsif av.is_a?(RDF::Node)
+                Term.new(nil, attributes: embedded_defs[av]) if embedded_defs[av]
+              else
+                av
+              end
+            end.compact : avs
+          end
+        end
+
         term_defs.each do |term, attributes|
+          # Turn embedded BNodes into either their Term definition or a List
+          attributes.each do |ak, avs|
+            attributes[ak] = avs.is_a?(Array) ? avs.map do |av|
+              if av.is_a?(RDF::Node) && RDF::List.new(subject: av, graph: graph).valid?
+                RDF::List.new(subject: av, graph: graph)
+              elsif av.is_a?(RDF::Node)
+                Term.new(nil, attributes: embedded_defs[av]) if embedded_defs[av]
+              else
+                av
+              end
+            end.compact : avs
+          end
+
           if term == :""
             uri = attributes.delete(:uri)
             vocab.__ontology__ uri, attributes
@@ -774,7 +811,7 @@ module RDF
       #
       # @return [RDF::URI]
       def dup
-        self.class.new((@value || @object).dup, attributes: @attributes)
+        self.class.new((@value || @object).dup, attributes: @attributes).extend(Term)
       end
 
       ##
@@ -791,28 +828,28 @@ module RDF
       # Is this a class term?
       # @return [Boolean]
       def class?
-        !!(self.type.to_s =~ /Class/)
+        Array(self.type).any? {|t| t.to_s.include?('Class')}
       end
 
       ##
       # Is this a class term?
       # @return [Boolean]
       def property?
-        !!(self.type.to_s =~ /Property/)
+        Array(self.type).any? {|t| t.to_s.include?('Property')}
       end
 
       ##
       # Is this a class term?
       # @return [Boolean]
       def datatype?
-        !!(self.type.to_s =~ /Datatype/)
+        Array(self.type).any? {|t| t.to_s.include?('Datatype')}
       end
 
       ##
       # Is this neither a class, property or datatype term?
       # @return [Boolean]
       def other?
-        !!(self.type.to_s !~ /(Class|Property|Datatype)/)
+        Array(self.type).none? {|t| t.to_s =~ /(Class|Property|Datatype)/}
       end
 
       ##
@@ -829,22 +866,22 @@ module RDF
               case prop
               when :type
                 prop = RDF.type
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :subClassOf
                 prop = RDFS.subClassOf
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :subPropertyOf
                 prop = RDFS.subPropertyOf
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :domain
                 prop = RDFS.domain
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :range
                 prop = RDFS.range
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :isDefinedBy
                 prop = RDF::URI("http://schema.org/isDefinedBy")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :label
                 prop = RDF::RDFS.label
               when :comment
@@ -852,39 +889,39 @@ module RDF
 
               when :inverseOf
                 prop = RDF::URI("http://www.w3.org/2002/07/owl#inverseOf")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
 
               when :domainIncludes
                 prop = RDF::URI("http://schema.org/domainIncludes")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :rangeIncludes
                 prop = RDF::URI("http://schema.org/rangeIncludes")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
 
               when :altLabel
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel")
               when :broader
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#broader")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :definition
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#definition")
               when :editorialNote
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#editorialNote")
               when :exactMatch
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#exactMatch")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :hasTopConcept
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#hasTopConcept")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :inScheme
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#inScheme")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :member
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#member")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :narrower
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#narrower")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               when :notation
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#notation")
               when :note
@@ -893,9 +930,9 @@ module RDF
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#prefLabel")
               when :related
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#related")
-                value = RDF::Vocabulary.expand_pname(value)
+                value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               else
-                prop = RDF::Vocabulary.expand_pname(prop.to_s)
+                prop = RDF::Vocabulary.expand_pname(prop) if value.is_a?(String)
                 next unless prop
 
                 v = value.is_a?(Symbol) ? value.to_s : value
@@ -916,7 +953,13 @@ module RDF
                   end
                 end
               end
+              value = RDF::Literal(value) if value.is_a?(String)
               yield RDF::Statement(self, prop, value)
+
+              # Enumerate over value statements, if enumerable
+              if value.is_a?(RDF::Enumerable)
+                value.each_statement {|s| yield s}
+              end
             rescue KeyError
               # Skip things eroneously defined in the vocabulary
             end
