@@ -939,6 +939,27 @@ module RDF
       end
     end
 
+    # Serialize back to a Ruby source initializer
+    # @note This does not use initializers for RDF Value types, just strings.
+    # @param [String] indent
+    # @return [String]
+    def to_ruby(indent: "")
+      return "#{List}[]" if empty?
+      "#{List}[\n" +
+      "#{indent}  " +
+      self.map do |v|
+        if v.is_a?(String)
+          "%(#{v.gsub('(', '\(').gsub(')', '\)')}).freeze"
+        elsif v.respond_to?(:to_ruby)
+          v.to_ruby(indent: indent + "  ")
+        elsif v.is_a?(Node)
+          'nil'
+        else
+          "#{v.to_s.inspect}.freeze"
+        end
+      end.join(",\n#{indent}  ") + "]"
+    end
+
     private
 
     ##

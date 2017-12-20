@@ -471,6 +471,17 @@ module RDF
     end
 
     ##
+    # Returns a form appropriate for initializing the object from Ruby source
+    # @param [String] indent
+    # @return [String]
+    def to_ruby(indent: "")
+      "#{Literal}(%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze" +
+      (has_language? ? ", language: #{language.inspect}" : '') +
+      (has_datatype? ? ", datatype: #{RDF::URI(datatype.to_s).to_ruby}" : '') +
+      ')'
+    end
+
+    ##
     # Returns a developer-friendly representation of `self`.
     #
     # @return [String]

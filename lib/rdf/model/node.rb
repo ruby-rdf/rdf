@@ -175,6 +175,14 @@ module RDF
     end
 
     ##
+    # Returns a form appropriate for initializing the object from Ruby source
+    # @param [String] indent
+    # @return [String]
+    def to_ruby(indent: "")
+      "#{Node}(#{id ? id.inspect + '.freeze' : ''})"
+    end
+
+    ##
     # Returns a symbol representation of this blank node.
     #
     # @return [Symbol]

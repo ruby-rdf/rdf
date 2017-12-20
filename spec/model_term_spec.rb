@@ -26,6 +26,10 @@ describe RDF::Term do
     expect(subject.to_term).to equal subject
   end
 
+  it "#to_ruby" do
+    expect {subject.to_ruby}.not_to raise_error
+  end
+
   it "#to_base" do
     expect(subject.to_base).to be_a(String)
   end

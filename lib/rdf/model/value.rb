@@ -214,6 +214,14 @@ module RDF
     end
 
     ##
+    # Returns a form appropriate for initializing the object from Ruby source
+    # @param [String] indent
+    # @return [String]
+    def to_ruby(indent: "")
+      inspect
+    end
+
+    ##
     # Returns a developer-friendly representation of `self`.
     #
     # The result will be of the format `#<RDF::Value::0x12345678(...)>`,

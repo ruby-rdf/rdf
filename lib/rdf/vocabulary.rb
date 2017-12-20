@@ -942,7 +942,7 @@ module RDF
       #
       # @return [String] The URI object's state, as a <code>String</code>.
       def inspect
-        sprintf("#<%s:%#0x URI:%s>", Term.to_s, self.object_id, self.to_s)
+        sprintf("#<%s:%#0x ID:%s attributes: %s>", Term.to_s, self.object_id, self.to_s, self.attributes.inspect)
       end
 
       # Implement accessor to symbol attributes
@@ -962,6 +962,30 @@ module RDF
         Array(@attributes[:rangeIncludes]).map  {|v| RDF::Vocabulary.expand_pname(v)}
       end
 
+      # Serialize back to a Ruby source initializer
+      # @param [String] indent
+      # @return [String]
+      def to_ruby(indent: "")
+        "#{Term}.new(" +
+        (self.node? ? 'nil' : self.to_s.inspect) + ",\n" +
+        "#{indent}  attributes: {\n#{indent}    " +
+        attributes.map do |k, values|
+          values = Array(values).map do |v|
+            if v.is_a?(String)
+              "%(#{v.gsub('(', '\(').gsub(')', '\)')}).freeze"
+            elsif v.is_a?(Node)
+              'nil'
+            elsif v.respond_to?(:to_ruby)
+              v.to_ruby(indent: indent + "    ")
+            else
+              "#{v.inspect}.freeze"
+            end
+          end
+          "#{k.to_s.include?(':') ? k.to_s.inspect : k}: " +
+          (values.length == 1 ? values.first : ('[' + values.join(',') + ']'))
+        end.join(",\n#{indent}    ") + "\n#{indent}})"
+        
+      end
     protected
       # Implement accessor to symbol attributes
       def method_missing(method, *args, &block)

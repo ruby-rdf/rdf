@@ -221,6 +221,25 @@ describe RDF::Literal do
     end
   end
 
+  describe "#to_ruby" do
+
+    {
+      literal(:int)      => "RDF::Literal(%(123).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#integer\".freeze))",
+      literal(:true)     => "RDF::Literal(%(true).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#boolean\".freeze))",
+      literal(:false)    => "RDF::Literal(%(false).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#boolean\".freeze))",
+      literal(:long)     => "RDF::Literal(%(9223372036854775807).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#integer\".freeze))",
+      literal(:double)   => "RDF::Literal(%(3.1415).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#double\".freeze))",
+      literal(:date)     => "RDF::Literal(%(2010-01-01).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#date\".freeze))",
+      literal(:datetime) => "RDF::Literal(%(2011-01-01T00:00:00Z).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#dateTime\".freeze))",
+      literal(:time)     => "RDF::Literal(%(01:02:03Z).freeze, datatype: RDF::URI(\"http://www.w3.org/2001/XMLSchema#time\".freeze))"
+    }.each_pair do |args, rep|
+      it "returns #{rep} for #{args.inspect}" do
+        literal = RDF::Literal.new(*args)
+        expect(literal.to_ruby).to eql(rep)
+      end
+    end
+  end
+
   # to_str is implemented for stringy xsd types, but not others
   describe "#to_str" do
     literals(:all_plain).each do |args|

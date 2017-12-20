@@ -146,6 +146,12 @@ describe RDF::Value do
     end
   end
 
+  it "#to_ruby" do
+    [statement, uri, node, literal, graph, statement, variable, list].each do |v|
+      expect {v.to_ruby}.not_to raise_error
+    end
+  end
+
   it "#to_term" do
     [uri, node, literal, variable, list].each do |v|
       expect {v.to_term}.not_to raise_error
