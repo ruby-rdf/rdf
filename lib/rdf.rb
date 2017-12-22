@@ -55,7 +55,7 @@ module RDF
   # RDF vocabularies
   autoload :Vocabulary,        'rdf/vocabulary'
   autoload :StrictVocabulary,  'rdf/vocabulary'
-  VOCABS = Dir.glob(File.join(File.dirname(__FILE__), 'rdf', 'vocab', '*.rb')).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
+  VOCABS = Dir.glob(File.expand_path("../rdf/vocab/*.rb", __FILE__)).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
 
   # Use const_missing instead of autoload to load most vocabularies so we can provide deprecation messages
   def self.const_missing(constant)

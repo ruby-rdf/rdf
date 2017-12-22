@@ -139,7 +139,7 @@ module RDF
     # object can't be returned for some reason, this method will fall back
     # to returning a freshly-allocated one.
     #
-    # @param (see #initialize)
+    # (see #initialize)
     # @return [RDF::URI] an immutable, frozen URI object
     def self.intern(str, *args)
       (cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
@@ -199,10 +199,10 @@ module RDF
     end
 
     ##
-    # @overload URI(uri, **options)
+    # @overload initialize(uri, **options)
     #   @param  [URI, String, #to_s]    uri
     #
-    # @overload URI(**options)
+    # @overload initialize(**options)
     #   @param  [Hash{Symbol => Object}] options
     #   @option [String, #to_s] :scheme The scheme component.
     #   @option [String, #to_s] :user The user component.
