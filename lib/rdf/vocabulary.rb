@@ -424,7 +424,6 @@ module RDF
             # subject is not a URI or is not associated with the vocabulary
             term = (embedded_defs[statement.subject] ||= {})
           end
-          term[:uri] = statement.subject if name.to_s.empty?
 
           key = case statement.predicate
           when RDF.type                                     then :type
@@ -932,11 +931,11 @@ module RDF
                 prop = RDF::URI("http://www.w3.org/2004/02/skos/core#related")
                 value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
               else
-                prop = RDF::Vocabulary.expand_pname(prop) if value.is_a?(String)
-                next unless prop
+                prop = RDF::Vocabulary.expand_pname(prop)
+                next unless prop.is_a?(RDF::URI)
 
                 v = value.is_a?(Symbol) ? value.to_s : value
-                value = RDF::Vocabulary.expand_pname(v) if v.is_a?(String)
+                value = RDF::Vocabulary.expand_pname(v) if v.is_a?(String) || value.is_a?(Symbol)
                 unless value && value.valid?
                   # Use as most appropriate literal
                   value = [
@@ -954,10 +953,10 @@ module RDF
                 end
               end
               value = RDF::Literal(value) if value.is_a?(String)
-              yield RDF::Statement(self, prop, value)
+              yield RDF::Statement(self, prop, value) if prop.is_a?(RDF::URI)
 
               # Enumerate over value statements, if enumerable
-              if value.is_a?(RDF::Enumerable)
+              if value.is_a?(RDF::Enumerable) || (value.is_a?(Term) && value.node?)
                 value.each_statement {|s| yield s}
               end
             rescue KeyError
