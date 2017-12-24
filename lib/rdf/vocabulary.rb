@@ -105,11 +105,11 @@ module RDF
       #           type: "jur:Country",
       #           isDefinedBy: "http://eulersharp.sourceforge.net/2003/03swap/countries#",
       #           "skos:exactMatch": [
-      #             Term.new(nil,
+      #             Term.new(
       #               type: "skos:Concept",
       #               inScheme: "iso3166-1-alpha-2",
       #               notation: "ax"),
-      #             Term.new(nil,
+      #             Term.new(
       #               type: "skos:Concept",
       #               inScheme: "iso3166-1-alpha-3",
       #               notation: "ala")
@@ -171,20 +171,28 @@ module RDF
       def property(*args)
         case args.length
         when 0
-          Term.intern("#{self}property", attributes: {label: "property", vocab: self})
+          Term.intern("#{self}property", vocab: self, attributes: {})
         else
-          name, options = args
-          options = {label: name.to_s, vocab: self}.merge(options || {})
-          uri_str = [to_s, name.to_s].join('')
-          URI.cache.delete(uri_str.to_sym)  # Clear any previous entry
-          prop = Term.intern(uri_str, attributes: options)
-          props[name.to_sym] = prop
+          name = args.shift unless args.first.is_a?(Hash)
+          options = args.last
+          if name
+            uri_str = [to_s, name.to_s].join('')
+            URI.cache.delete(uri_str.to_sym)  # Clear any previous entry
 
-          # If name is empty, also treat it as the ontology
-          @ontology ||= prop if name.to_s.empty?
+            # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
+            prop = Term.intern(uri_str, vocab: self, attributes: options)
+            props[name.to_sym] = prop
 
-          # Define an accessor, except for problematic properties
-          (class << self; self; end).send(:define_method, name) { prop } unless %w(property hash).include?(name.to_s)
+            # If name is empty, also treat it as the ontology
+            @ontology ||= prop if name.to_s.empty?
+
+            # Define an accessor, except for problematic properties
+            (class << self; self; end).send(:define_method, name) { prop } unless %w(property hash).include?(name.to_s)
+          else
+            # Define the term without a name
+            # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
+            prop = Term.intern(vocab: self, attributes: options)
+          end
           prop
         end
       end
@@ -234,9 +242,8 @@ module RDF
           @ontology
         else
           uri, options = args
-          options = {vocab: self}.merge(options || {})
           URI.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
-          @ontology = Term.intern(uri.to_s, attributes: options)
+          @ontology = Term.intern(uri.to_s, vocab: self) {expand_options(options)}
 
           # If the URI is the same as the vocabulary namespace, also define it as a term
           props[:""] ||= @ontology if self.to_s == uri.to_s
@@ -312,7 +319,7 @@ module RDF
         if props.has_key?(property.to_sym)
           props[property.to_sym]
         else
-          Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self})
+          Term.intern([to_s, property.to_s].join(''), vocab: self, attributes: {})
         end
       end
 
@@ -483,7 +490,7 @@ module RDF
               if av.is_a?(RDF::Node) && RDF::List.new(subject: av, graph: graph).valid?
                 RDF::List.new(subject: av, graph: graph)
               elsif av.is_a?(RDF::Node)
-                Term.new(nil, attributes: embedded_defs[av]) if embedded_defs[av]
+                Term.new(attributes: embedded_defs[av]) if embedded_defs[av]
               else
                 av
               end
@@ -498,7 +505,7 @@ module RDF
               if av.is_a?(RDF::Node) && RDF::List.new(subject: av, graph: graph).valid?
                 RDF::List.new(subject: av, graph: graph)
               elsif av.is_a?(RDF::Node)
-                Term.new(nil, attributes: embedded_defs[av]) if embedded_defs[av]
+                Term.new(attributes: embedded_defs[av]) if embedded_defs[av]
               else
                 av
               end
@@ -554,10 +561,8 @@ module RDF
 
       def method_missing(property, *args, &block)
         property = RDF::Vocabulary.camelize(property.to_s)
-        if %w(to_ary).include?(property.to_s)
-          super
-        elsif args.empty? && !to_s.empty?
-          Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self})
+        if args.empty? && !to_s.empty?
+          Term.intern([to_s, property.to_s].join(''), vocab: self, attributes: {})
         else
           super
         end
@@ -590,7 +595,7 @@ module RDF
     # @param  [#to_s] property
     # @return [URI]
     def [](property)
-      Term.intern([to_s, property.to_s].join(''), attributes: {vocab: self.class})
+      Term.intern([to_s, property.to_s].join(''), vocab: self.class, attributes: {})
     end
 
     ##
@@ -735,45 +740,41 @@ module RDF
       attr_reader :attributes
 
       ##
-      # @overload URI(uri, **options)
+      # Vocabulary of this term.
+      #
+      # @return [RDF::Vocabulary]
+      attr_reader :vocab
+
+      ##
+      # @overload new(uri, attributes:, **options)
       #   @param  [URI, String, #to_s]    uri
+      #   @param [Vocabulary] vocab Vocabulary of this term.
       #   @param [Hash{Symbol,Resource => Term, #to_s}] attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
       #   @param  [Hash{Symbol => Object}] options
-      #   @option options [Boolean] :validate (false)
-      #   @option options [Boolean] :canonicalize (false)
+      #     Options from {URI#initialize}
       #
-      # @overload URI(**options)
+      # @overload new(attributes:, **options)
       #   @param  [Hash{Symbol => Object}] options
+      #   @param [Vocabulary] vocab Vocabulary of this term.
       #   @param [Hash{Symbol => String,Array<String,Term>}] attributes
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
-      #   @option options options [Boolean] :validate (false)
-      #   @option options options [Boolean] :canonicalize (false)
-      #   @option options [Vocabulary] :vocab The {Vocabulary} associated with this term.
-      #   @option options [String, #to_s] :scheme The scheme component.
-      #   @option options [String, #to_s] :user The user component.
-      #   @option options [String, #to_s] :password The password component.
-      #   @option options [String, #to_s] :userinfo
-      #     The userinfo component. If this is supplied, the user and password
-      #     compo optionsnents must be omitted.
-      #   @option options [String, #to_s] :host The host component.
-      #   @option options [String, #to_s] :port The port component.
-      #   @option options [String, #to_s] :authority
-      #     The authority component. If this is supplied, the user, password,
-      #     userinfo, host, and port components must be omitted.
-      #   @option options [String, #to_s] :path The path component.
-      #   @option options [String, #to_s] :query The query component.
-      #   @option options [String, #to_s] :fragment The fragment component.
-      def self.new(*args, attributes:, **options)
+      #   @param  [Hash{Symbol => Object}] options
+      #     Options from {URI#initialize}
+      def self.new(*args, vocab: nil, attributes: {}, **options)
         klass = if args.first.nil?
-          Node
+          RDF::Node
+        elsif args.first.is_a?(Hash)
+          args.unshift(nil)
+          RDF::Node
         elsif args.first.to_s.start_with?("_:")
           args = args[1..-1].unshift($1)
-          Node
-        else URI
+          RDF::Node
+        else RDF::URI
         end
         term = klass.allocate.extend(Term)
         term.send(:initialize, *args)
+        term.instance_variable_set(:@vocab, vocab)
         term.instance_variable_set(:@attributes, attributes)
         term
       end
@@ -800,12 +801,6 @@ module RDF
       end
 
       ##
-      # Vocabulary of this term.
-      #
-      # @return [RDF::Vocabulary]
-      def vocab; @attributes.fetch(:vocab); end
-
-      ##
       # Returns a duplicate copy of `self`.
       #
       # @return [RDF::URI]
@@ -820,7 +815,7 @@ module RDF
       # @since 0.3.9
       def valid?
         # Validate relative to RFC3987
-        RDF::URI::IRI.match(to_s) || false
+        node? || RDF::URI::IRI.match(to_s) || false
       end
 
       ##
@@ -984,7 +979,7 @@ module RDF
       #
       # @return [String] The URI object's state, as a <code>String</code>.
       def inspect
-        sprintf("#<%s:%#0x ID:%s attributes: %s>", Term.to_s, self.object_id, self.to_s, self.attributes.inspect)
+        sprintf("#<%s:%#0x ID:%s>", Term.to_s, self.object_id, self.to_s)
       end
 
       # Implement accessor to symbol attributes

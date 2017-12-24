@@ -72,7 +72,7 @@ describe RDF::Vocabulary do
     context "RDFS" do
       subject {RDF::RDFS.to_enum}
       it "yields rdfs:label" do
-        expect(subject).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
+        expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.label, RDF::RDFS.comment.label))
       end
       it "yields rdfs:comment" do
         expect(subject.to_a).to include(RDF::Statement(RDF::RDFS.comment, RDF::RDFS.comment, RDF::RDFS.comment.comment))
