@@ -560,18 +560,18 @@ describe RDF::Vocabulary do
         "rdfs:isDefinedBy" => {term: RDF::RDFS.Class, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
 
         "owl:inverseOf" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {inverseOf: RDF::RDFS.Resource.to_s}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {inverseOf: RDF::RDFS.Resource}),
           predicate: RDF::OWL.inverseOf,
           value: RDF::RDFS.Resource
         },
 
         "schema:domainIncludes" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {domainIncludes: RDF::RDFS.Resource.to_s}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {domainIncludes: RDF::RDFS.Resource}),
           predicate: RDF::Vocab::SCHEMA.domainIncludes,
           value: RDF::RDFS.Resource
         },
         "schema:rangeIncludes" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {rangeIncludes: RDF::RDFS.Resource.to_s}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {rangeIncludes: RDF::RDFS.Resource}),
           predicate: RDF::Vocab::SCHEMA.rangeIncludes,
           value: RDF::RDFS.Resource
         },
@@ -582,7 +582,7 @@ describe RDF::Vocabulary do
           value: RDF::Literal("foo")
         },
         "skos:broader" => {
-          term: RDF::Vocabulary::Term.new(:foo, broader: "foo", attributes: {broader: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, broader: "foo", attributes: {broader: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.broader,
           value: RDF::URI("http://example/Concept")
         },
@@ -597,27 +597,27 @@ describe RDF::Vocabulary do
           value: RDF::Literal("foo")
         },
         "skos:exactMatch" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {exactMatch: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {exactMatch: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.exactMatch,
           value: RDF::URI("http://example/Concept")
         },
         "skos:hasTopConcept" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {hasTopConcept: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {hasTopConcept: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.hasTopConcept,
           value: RDF::URI("http://example/Concept")
         },
         "skos:inScheme" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {inScheme: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {inScheme: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.inScheme,
           value: RDF::URI("http://example/Concept")
         },
         "skos:member" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {member: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {member: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.member,
           value: RDF::URI("http://example/Concept")
         },
         "skos:narrower" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {narrower: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {narrower: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.narrower,
           value: RDF::URI("http://example/Concept")
         },
@@ -637,49 +637,52 @@ describe RDF::Vocabulary do
           value: RDF::Literal("foo")
         },
         "skos:related" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {related: "http://example/Concept"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {related: RDF::URI("http://example/Concept")}),
           predicate: RDF::Vocab::SKOS.related,
           value: RDF::URI("http://example/Concept")
         },
 
         "vocab value" => {term: RDF::RDFS.isDefinedBy, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
         "term value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdfs:seeAlso": "rdfs:seeAlso"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdfs:seeAlso": RDF::RDFS.seeAlso}),
           predicate: RDF::RDFS.seeAlso,
           value: RDF::RDFS.seeAlso
         },
         "uri value" => {term: RDF::RDFS[""], predicate: RDF::RDFS.seeAlso, value: RDF::URI("http://www.w3.org/2000/01/rdf-schema-more")},
         "date value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "2016-04-24"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": RDF::Literal::Date.new("2016-04-24")}),
           predicate: RDF.value,
           value: RDF::Literal::Date.new("2016-04-24")
         },
         "dateTime value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "2016-04-24T15:22:00"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": RDF::Literal::DateTime.new("2016-04-24T15:22:00")}),
           predicate: RDF.value,
           value: RDF::Literal::DateTime.new("2016-04-24T15:22:00")
         },
         "boolean value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "true"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": RDF::Literal::Boolean.new(true)}),
           predicate: RDF.value,
           value: RDF::Literal::Boolean.new(true)
         },
         "integer value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "1"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": RDF::Literal::Integer.new(1)}),
           predicate: RDF.value,
           value: RDF::Literal::Integer.new(1)
         },
         "decimal value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "1.1"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": RDF::Literal::Decimal.new(1.1)}),
           predicate: RDF.value,
           value: RDF::Literal::Decimal.new(1.1)
         },
         "double value" => {
-          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": "1.1e1"}),
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {"rdf:value": RDF::Literal::Double.new(1.1e1)}),
           predicate: RDF.value,
           value: RDF::Literal::Double.new(1.1e1)
         },
-        "literal value" => {term: RDF::RDFS[""], predicate: RDF::Vocab::DC11.title, value: RDF::Literal("The RDF Schema vocabulary \(RDFS\)")},
+        "literal value" => {
+          term: RDF::RDFS[""],
+          predicate: RDF::Vocab::DC11.title,
+          value: RDF::Literal("The RDF Schema vocabulary \(RDFS\)")},
       }.each do |pred, props|
         it "emits #{pred}" do
           graph = RDF::Graph.new {|g| props[:term].each_statement {|s| g << s}}
@@ -687,103 +690,6 @@ describe RDF::Vocabulary do
           expect(graph.map(&:subject)).to all(eql(props[:term]))
           expect(graph.query(predicate: props[:predicate]).map(&:object)).to all(be_a(props[:value].class))
           expect(graph.query(predicate: props[:predicate]).map(&:object)).to include props[:value]
-        end
-      end
-    end
-  end
-
-  require 'rdf/vocab/writer'
-  describe RDF::Vocabulary::Writer do
-    after(:each) do
-      Object.send(:remove_const, :Foo)
-    end
-    let!(:ttl) {%{
-      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-      <http://example/Class> a rdfs:Class ; rdfs:Datatype "Class" .
-      <http://example/prop> a rdf:Property ; rdfs:Datatype "prop" .
-    }}
-    let!(:graph) {
-      RDF::Graph.new << RDF::Turtle::Reader.new(ttl)
-    }
-    let!(:serialization) {RDF::Vocabulary::Writer.buffer(class_name: "Foo", module_name: "Bar", base_uri: "http://example/") {|w| w << graph}}
-
-    [
-      /module Bar/,
-      /class Foo/,
-      /term :Class,\s+label: "Class".freeze,\s+"rdfs:Datatype": "Class".freeze,\s+type: "rdfs:Class".freeze/m,
-      /term :prop,\s+label: "prop".freeze,\s+"rdfs:Datatype": "prop".freeze,\s+type: "rdf:Property".freeze/m,
-    ].each do |regexp,|
-      it "matches #{regexp}" do
-        expect(serialization).to match(regexp)
-      end
-    end
-
-    context "Embedded Concept" do
-      let!(:ttl) {%{
-        @prefix jur: <http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#>.
-        @prefix dce: <http://purl.org/dc/elements/1.1/>.
-        @prefix dct: <http://purl.org/dc/terms/>.
-        @prefix foaf: <http://xmlns.com/foaf/0.1/>.
-        @prefix owl: <http://www.w3.org/2002/07/owl#>.
-        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-        @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-        @prefix country: <http://eulersharp.sourceforge.net/2003/03swap/countries#>.
-        country:af
-        	a jur:Country;
-        	rdfs:isDefinedBy <http://eulersharp.sourceforge.net/2003/03swap/countries#>;
-        	skos:exactMatch [
-        		a skos:Concept; skos:inScheme country:iso3166-1-alpha-2; skos:notation "af"^^country:iso3166-1-alpha-2DT], [
-        		a skos:Concept; skos:inScheme country:iso3166-1-alpha-3; skos:notation "afg"^^country:iso3166-1-alpha-3DT];
-        	foaf:name """Afghanistan"""@en.
-      }}
-      let!(:serialization) {RDF::Vocabulary::Writer.buffer(class_name: "Foo", module_name: "Bar", base_uri: "http://eulersharp.sourceforge.net/2003/03swap/countries#") {|w| w << graph}}
-
-      [
-        /module Bar/,
-        /class Foo/,
-        /term :af/,
-        /exactMatch: \[RDF::Vocabulary::Term.new\(nil/,
-        /type: %\(skos:Concept\).freeze/,
-        /notation: %\(af\).freeze/,
-        /inScheme: %\(foo:iso3166-1-alpha-2\).freeze/,
-        /notation: %\(afg\).freeze/,
-        /inScheme: %\(foo:iso3166-1-alpha-3\).freeze/,
-        /"foaf:name": "Afghanistan".freeze/,
-        /isDefinedBy: "foo:".freeze/,
-        /label: "af".freeze/,
-        /type: "http:\/\/sweet.jpl.nasa.gov\/2.3\/humanJurisdiction.owl\#Country".freeze/,
-      ].each do |regexp,|
-        it "matches #{regexp}" do
-          expect(serialization).to match(regexp)
-        end
-      end
-    end
-
-    context "owl:unionOf" do
-      let!(:ttl) {%{
-        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-        @prefix owl: <http://www.w3.org/2002/07/owl#> .
-        <http://example/Class> a rdfs:Class;
-          rdfs:label "Class";
-          rdfs:subClassOf [owl:unionOf (<http://example/C1> <http://example/C2>)] .
-      }}
-      let!(:serialization) {RDF::Vocabulary::Writer.buffer(class_name: "Foo", module_name: "Bar", base_uri: "http://example/") {|w| w << graph}}
-
-      [
-        /module Bar/,
-        /class Foo/,
-        /term :Class/,
-        /label: "Class".freeze/,
-        /subClassOf: RDF::Vocabulary::Term.new\(nil,/,
-        /"owl:unionOf": RDF::List\[/,
-        /RDF::URI\("http:\/\/example\/C1".freeze\)/,
-        /RDF::URI\("http:\/\/example\/C2".freeze\)/,
-        /type: "rdfs:Class".freeze/,
-      ].each do |regexp,|
-        it "matches #{regexp}" do
-          expect(serialization).to match(regexp)
         end
       end
     end

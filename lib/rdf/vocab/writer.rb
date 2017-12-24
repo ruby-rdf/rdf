@@ -171,7 +171,6 @@ module RDF
 
         components = ["    #{op} #{name.to_sym.inspect}"]
         attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|
-          next if key == :vocab
           value = Array(attributes[key])
           component = key.inspect.start_with?(':"') ? "#{key.to_s.inspect}: " : "#{key}: "
           value = value.first if value.length == 1
@@ -186,8 +185,14 @@ module RDF
       end
 
       def serialize_value(value, key, indent: "")
-        if value.is_a?(String) && %w(: comment definition notation note editorialNote).include?(key.to_s)
-          "%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze"
+        if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
+          "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
+        elsif value.is_a?(RDF::URI)
+          "#{value.pname.inspect}.freeze"
+        elsif value.is_a?(RDF::Vocabulary::Term)
+          value.to_ruby(indent: indent + "  ")
+        elsif value.is_a?(RDF::Term)
+          "#{value.to_s.inspect}.freeze"
         elsif value.respond_to?(:to_ruby)
           value.to_ruby(indent: indent + "  ")
         else
