@@ -474,19 +474,25 @@ module RDF
           term_defs
         end
 
-        # Pass over embedded_defs with anonymous references, just once
+        # Pass over embedded_defs with anonymous references, once
         embedded_defs.each do |term, attributes|
           attributes.each do |ak, avs|
             # Turn embedded BNodes into either their Term definition or a List
-            attributes[ak] = avs.is_a?(Array) ? avs.map do |av|
-              if av.is_a?(RDF::Node) && RDF::List.new(subject: av, graph: graph).valid?
-                RDF::List.new(subject: av, graph: graph)
+            avs = [avs] unless avs.is_a?(Array)
+            attributes[ak] = avs.map do |av|
+              l = RDF::List.new(subject: av, graph: graph)
+              if l.valid?
+                RDF::List.new(subject: av) do |nl|
+                  l.each do |lv|
+                    nl << (embedded_defs[lv] ? Term.new(vocab: vocab, attributes: embedded_defs[lv]) : lv)
+                  end
+                end
               elsif av.is_a?(RDF::Node)
                 Term.new(vocab: vocab, attributes: embedded_defs[av]) if embedded_defs[av]
               else
                 av
               end
-            end.compact : avs
+            end.compact
           end
         end
 
@@ -494,8 +500,13 @@ module RDF
           # Turn embedded BNodes into either their Term definition or a List
           attributes.each do |ak, avs|
             attributes[ak] = avs.is_a?(Array) ? avs.map do |av|
-              if av.is_a?(RDF::Node) && RDF::List.new(subject: av, graph: graph).valid?
-                RDF::List.new(subject: av, graph: graph)
+              l = RDF::List.new(subject: av, graph: graph)
+              if l.valid?
+                RDF::List.new(subject: av) do |nl|
+                  l.each do |lv|
+                    nl << (embedded_defs[lv] ? Term.new(vocab: vocab, attributes: embedded_defs[lv]) : lv)
+                  end
+                end
               elsif av.is_a?(RDF::Node)
                 Term.new(vocab: vocab, attributes: embedded_defs[av]) if embedded_defs[av]
               else
@@ -505,8 +516,7 @@ module RDF
           end
 
           if term == :""
-            uri = attributes.delete(:uri)
-            vocab.__ontology__ uri, attributes
+            vocab.__ontology__ vocab, attributes
           else
             vocab.__property__ term, attributes
           end
@@ -586,14 +596,14 @@ module RDF
                  :broader, :definition, :exactMatch, :hasTopConcept, :inScheme,
                  :member, :narrower, :related
               # String value treated as URI
-              value = RDF::Vocabulary.expand_pname(value) if value.is_a?(String)
+              value = (RDF::Vocabulary.expand_pname(value) rescue value) if value.is_a?(String)
             when :label, :comment, :altLabel, :definition, :editorialNote,
                  :notation, :note, :prefLabel
               # String value treated as string literal
               value = RDF::Literal(value)
             else
               v = value.is_a?(Symbol) ? value.to_s : value
-              value = RDF::Vocabulary.expand_pname(v) if v.is_a?(String)
+              value = (RDF::Vocabulary.expand_pname(v) rescue nil) if v.is_a?(String)
               value = value.to_uri if value.respond_to?(:to_uri)
               unless value.is_a?(RDF::Value) && value.valid?
                 # Use as most appropriate literal
@@ -998,7 +1008,16 @@ module RDF
             elsif value.is_a?(RDF::Term)
               "#{value.to_s.inspect}.freeze"
             elsif value.is_a?(RDF::List)
-              "list(#{value.map {|u| "#{u.pname.inspect}.freeze"}.join(', ')})"
+              list_elements = value.map do |u|
+                if u.uri?
+                  "#{u.pname.inspect}.freeze"
+                elsif u.respond_to?(:to_ruby)
+                  u.to_ruby(indent: indent + "  ")
+                else
+                  "#{u.to_s.inspect}.freeze"
+                end
+              end
+              "list(#{list_elements.join(', ')})"
             else
               "#{value.inspect}.freeze"
             end
