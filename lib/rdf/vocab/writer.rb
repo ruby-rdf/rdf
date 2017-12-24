@@ -5,6 +5,44 @@ module RDF
   ##
   # Vocabulary format specification. This can be used to generate a Ruby class definition from a loaded vocabulary.
   #
+  # Definitions can include recursive term definitions, when the value of a property is a blank-node term. They can also include list definitions, to provide a reasonable way to represent `owl:unionOf`-type relationships.
+  #
+  # @example a simple term definition
+  #     property :comment,
+  #       comment: %(A description of the subject resource.).freeze,
+  #       domain: "rdfs:Resource".freeze,
+  #       label: "comment".freeze,
+  #       range: "rdfs:Literal".freeze,
+  #       isDefinedBy: %(rdfs:).freeze,
+  #       type: "rdf:Property".freeze
+  #
+  # @example an embedded skos:Concept
+  #     term :ad,
+  #       exactMatch: [term(
+  #           type: "skos:Concept".freeze,
+  #           inScheme: "country:iso3166-1-alpha-2".freeze,
+  #           notation: %(ad).freeze
+  #         ), term(
+  #           type: "skos:Concept".freeze,
+  #           inScheme: "country:iso3166-1-alpha-3".freeze,
+  #           notation: %(and).freeze
+  #         )],
+  #       "foaf:name": "Andorra".freeze,
+  #       isDefinedBy: "country:".freeze,
+  #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country".freeze
+  #
+  # @example owl:unionOf
+  #     property :duration,
+  #       comment: %(The duration of a track or a signal in ms).freeze,
+  #       domain: term(
+  #           "owl:unionOf": list("mo:Track".freeze, "mo:Signal".freeze),
+  #           type: "owl:Class".freeze
+  #         ),
+  #       isDefinedBy: "mo:".freeze,
+  #       "mo:level": "1".freeze,
+  #       range: "xsd:float".freeze,
+  #       type: "owl:DatatypeProperty".freeze,
+  #       "vs:term_status": "testing".freeze
   class Vocabulary
     class Format < RDF::Format
       content_encoding 'utf-8'
@@ -171,24 +209,28 @@ module RDF
 
         components = ["    #{op} #{name.to_sym.inspect}"]
         attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|
-          next if key == :vocab
           value = Array(attributes[key])
-          component = key.inspect.start_with?(':"') ? "#{key.inspect} => " : "#{key.to_s}: "
+          component = key.inspect.start_with?(':"') ? "#{key.to_s.inspect}: " : "#{key}: "
           value = value.first if value.length == 1
           component << if value.is_a?(Array)
-            '[' + value.map {|v| serialize_value(v, key)}.sort.join(", ") + "]"
+            '[' + value.map {|v| serialize_value(v, key, indent: "      ")}.sort.join(", ") + "]"
           else
-            serialize_value(value, key)
+            serialize_value(value, key, indent: "      ")
           end
           components << component
         end
         @output.puts components.join(",\n      ")
       end
 
-      def serialize_value(value, key)
-        case key.to_s
-        when "comment", /:/
-          "%(#{value.gsub('(', '\(').gsub(')', '\)')}).freeze"
+      def serialize_value(value, key, indent: "")
+        if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
+          "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
+        elsif value.is_a?(RDF::URI)
+          "#{value.pname.inspect}.freeze"
+        elsif value.is_a?(RDF::Vocabulary::Term)
+          value.to_ruby(indent: indent + "  ")
+        elsif value.is_a?(RDF::Term)
+          "#{value.to_s.inspect}.freeze"
         else
           "#{value.inspect}.freeze"
         end

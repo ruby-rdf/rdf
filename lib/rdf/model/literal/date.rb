@@ -19,7 +19,7 @@ module RDF; class Literal
         when value.is_a?(::Date)         then value
         when value.respond_to?(:to_date) then value.to_date
         else ::Date.parse(value.to_s)
-      end rescue nil
+      end rescue ::Date.new
     end
 
     ##
