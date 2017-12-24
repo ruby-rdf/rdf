@@ -7,12 +7,12 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
-  - jruby-9
+  - jruby
   - rbx-3
 cache: bundler
 sudo: false
 matrix:
   allow_failures:
-    - rvm: jruby-9
+    - rvm: jruby
     - rvm: rbx-3
 dist: trusty

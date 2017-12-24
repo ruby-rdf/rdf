@@ -272,13 +272,13 @@ describe RDF::NTriples::Reader do
   end
 
   describe "BNodes" do
-    it "should read two named nodes as the same node", pending: ("#to_ary messing with JRuby" if RUBY_ENGINE == 'jruby') do
+    it "should read two named nodes as the same node" do
       stmt = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
       expect(stmt.subject).to eq stmt.object
       expect(stmt.subject).to be_eql(stmt.object)
     end
 
-    it "should read two named nodes in different instances as different nodes", pending: ("#to_ary messing with JRuby" if RUBY_ENGINE == 'jruby') do
+    it "should read two named nodes in different instances as different nodes" do
       stmt1 = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
       stmt2 = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
       expect(stmt1.subject).to eq stmt2.subject
@@ -300,7 +300,7 @@ describe RDF::NTriples::Reader do
       "é"              => '<http://subj> <http://pred> "\u00E9" .',
       "€"              => '<http://subj> <http://pred> "\u20AC" .',
     }.each_pair do |contents, triple|
-      specify "test #{contents}", pending: ("#to_ary messing with JRuby" if RUBY_ENGINE == 'jruby') do
+      specify "test #{contents}" do
         stmt = reader.new(triple).first
         expect(stmt.object.value).to eq contents
         ttl = RDF::Turtle::Reader.new(triple).first
