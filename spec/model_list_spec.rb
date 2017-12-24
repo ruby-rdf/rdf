@@ -1005,15 +1005,6 @@ describe RDF::List do
     end
   end
 
-  describe "#to_ruby" do
-    {
-      empty: [RDF::List[], "RDF::List[]"],
-      abc: [RDF::List['a', 'b', 'c'], "RDF::List[\n  RDF::Literal(%(a).freeze),\n  RDF::Literal(%(b).freeze),\n  RDF::Literal(%(c).freeze)]"],
-    }.each do |label, (list, serialization)|
-      it(label) {expect(list.to_ruby).to eql serialization}
-    end
-  end
-
   describe RDF::List::NIL do
     it "#subject returns rdf:nil" do
       expect(RDF::List::NIL.subject).to eq RDF.nil

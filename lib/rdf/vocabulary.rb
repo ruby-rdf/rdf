@@ -999,8 +999,6 @@ module RDF
               "#{value.to_s.inspect}.freeze"
             elsif value.is_a?(RDF::List)
               "list(#{value.map {|u| "#{u.pname.inspect}.freeze"}.join(', ')})"
-            elsif value.respond_to?(:to_ruby)
-              value.to_ruby(indent: indent + "  ")
             else
               "#{value.inspect}.freeze"
             end

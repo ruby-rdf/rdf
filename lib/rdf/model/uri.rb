@@ -784,14 +784,6 @@ module RDF
     alias_method :to_s, :to_str
 
     ##
-    # Returns a form appropriate for initializing the object from Ruby source
-    # @param [String] indent
-    # @return [String]
-    def to_ruby(indent: "")
-      "#{URI}(#{to_s.inspect}.freeze)"
-    end
-
-    ##
     # Returns a <code>String</code> representation of the URI object's state.
     #
     # @return [String] The URI object's state, as a <code>String</code>.

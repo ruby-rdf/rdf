@@ -193,8 +193,6 @@ module RDF
           value.to_ruby(indent: indent + "  ")
         elsif value.is_a?(RDF::Term)
           "#{value.to_s.inspect}.freeze"
-        elsif value.respond_to?(:to_ruby)
-          value.to_ruby(indent: indent + "  ")
         else
           "#{value.inspect}.freeze"
         end
