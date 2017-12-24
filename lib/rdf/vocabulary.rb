@@ -40,8 +40,6 @@ module RDF
   #   foaf['family_name'] #=> RDF::URI("http://xmlns.com/foaf/0.1/family_name")
   #   foaf[:family_name]  #=> RDF::URI("http://xmlns.com/foaf/0.1/family_name")
   #
-  #
-  #
   # @example Generating RDF from a vocabulary definition
   #   graph = RDF::Graph.new << RDF::RDFS.to_enum
   #   graph.dump(:ntriples)
@@ -716,6 +714,8 @@ module RDF
     @@uri        = nil     # @private
 
     # A Vocabulary Term is a {RDF::Resource} that can also act as an {Enumerable} to generate the RDF definition of vocabulary terms as defined within the vocabulary definition.
+    #
+    # Terms include `attributes` where values a embedded resources, lists or other terms. This allows, for example, navigation of a concept heirarchy.
     module Term
       include RDF::Resource
 
