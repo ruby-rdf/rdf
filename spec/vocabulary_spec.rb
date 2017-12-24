@@ -102,7 +102,42 @@ describe RDF::Vocabulary do
     it "defines the named property" do
       subject.property :foo, label: "Foo"
       expect(subject.foo).to eq "http://www.w3.org/2001/XMLSchema#foo"
+      expect(subject.foo.label).to be_a_literal
       expect(subject.foo.label).to eq "Foo"
+    end
+
+    it "defines a property with definition" do
+      subject.property :foo, definition: %(This class comprises people, either individually or in groups, who have the
+potential to perform intentional actions for which they can be held responsible.).freeze
+      expect(subject.foo.definition).to be_a_literal
+      expect(subject.foo.definition).to eq %(This class comprises people, either individually or in groups, who have the
+potential to perform intentional actions for which they can be held responsible.).freeze
+    end
+
+    it "defines a property with equivalentClass using anonymous term" do
+      subject.property :foo, "owl:equivalentClass": subject.term(
+        type: "owl:Restriction",
+        "owl:onProperty": "http://example/prop",
+        "owl:cardinality": "1"
+      )
+      expect(subject.foo.attributes[:"owl:equivalentClass"]).to be_a(RDF::Vocabulary::Term)
+      ec = subject.foo.attributes[:"owl:equivalentClass"]
+      expect(ec.type).to include RDF::OWL.Restriction
+      expect(ec.attributes[:"owl:onProperty"]).to eql RDF::URI("http://example/prop")
+      expect(ec.attributes[:"owl:cardinality"]).to eql RDF::Literal(1)
+    end
+
+    it "defines a property with equivalentClass using anonymous term" do
+      subject.property :foo, "owl:equivalentClass": subject.term(
+        type: "owl:Restriction",
+        "owl:onProperty": "http://example/prop",
+        "owl:cardinality": "1"
+      )
+      expect(subject.foo.attributes[:"owl:equivalentClass"]).to be_a(RDF::Vocabulary::Term)
+      ec = subject.foo.attributes[:"owl:equivalentClass"]
+      expect(ec.type).to include RDF::OWL.Restriction
+      expect(ec.attributes[:"owl:onProperty"]).to eql RDF::URI("http://example/prop")
+      expect(ec.attributes[:"owl:cardinality"]).to eql RDF::Literal(1)
     end
 
     it "defines an ontology if symbol is empty" do
@@ -428,12 +463,12 @@ describe RDF::Vocabulary do
         let(:sub_class_of) {klass.subClassOf.first}
         it "has embedded unionOf" do
           expect(sub_class_of).to be_a(RDF::Vocabulary::Term)
-          expect(sub_class_of.attributes[:"owl:unionOf"]).to be_a(Array)
-          expect(sub_class_of.attributes[:"owl:unionOf"].length).to eql 1
+          expect(sub_class_of.unionOf).to be_a(Array)
+          expect(sub_class_of.unionOf.length).to eql 1
         end
 
         context "unionOf" do
-          let(:union_of) {sub_class_of.attributes[:"owl:unionOf"].first}
+          let(:union_of) {sub_class_of.unionOf.first}
 
           it "has embedded unionOf" do
             expect(union_of).to be_a_list
@@ -559,9 +594,59 @@ describe RDF::Vocabulary do
         "rdfs:range" => {term: RDF::RDFS.range, predicate: RDF::RDFS.range, value: RDF::RDFS.Class},
         "rdfs:isDefinedBy" => {term: RDF::RDFS.Class, predicate: RDF::RDFS.isDefinedBy, value: RDF::RDFS.to_uri},
 
+        "owl:allValuesFrom" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {allValuesFrom: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.allValuesFrom,
+          value: RDF::RDFS.Resource
+        },
+        "owl:cardinality" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {cardinality: RDF::Literal(1)}),
+          predicate: RDF::OWL.cardinality,
+          value: RDF::Literal(1)
+        },
+        "owl:equivalentClass" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {equivalentClass: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.equivalentClass,
+          value: RDF::RDFS.Resource
+        },
+        "owl:equivalentProperty" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {equivalentProperty: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.equivalentProperty,
+          value: RDF::RDFS.Resource
+        },
+        "owl:intersectionOf" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {intersectionOf: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.intersectionOf,
+          value: RDF::RDFS.Resource
+        },
         "owl:inverseOf" => {
           term: RDF::Vocabulary::Term.new(:foo, attributes: {inverseOf: RDF::RDFS.Resource}),
           predicate: RDF::OWL.inverseOf,
+          value: RDF::RDFS.Resource
+        },
+        "owl:maxCardinality" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {maxCardinality: RDF::Literal(1)}),
+          predicate: RDF::OWL.maxCardinality,
+          value: RDF::Literal(1)
+        },
+        "owl:minCardinality" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {minCardinality: RDF::Literal(1)}),
+          predicate: RDF::OWL.minCardinality,
+          value: RDF::Literal(1)
+        },
+        "owl:onProperty" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {onProperty: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.onProperty,
+          value: RDF::RDFS.Resource
+        },
+        "owl:someValuesFrom" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {someValuesFrom: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.someValuesFrom,
+          value: RDF::RDFS.Resource
+        },
+        "owl:unionOf" => {
+          term: RDF::Vocabulary::Term.new(:foo, attributes: {unionOf: RDF::RDFS.Resource}),
+          predicate: RDF::OWL.unionOf,
           value: RDF::RDFS.Resource
         },
 

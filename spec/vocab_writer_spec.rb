@@ -83,7 +83,7 @@ describe RDF::Vocabulary::Writer do
       /term :ClassList/,
       /label: "ClassList".freeze/,
       /subClassOf: term\(/,
-      /"owl:unionOf": list\("foo:C1".freeze, "foo:C2".freeze\)/,
+      /unionOf: list\("foo:C1".freeze, "foo:C2".freeze\)/,
       /type: "rdfs:Class".freeze/,
     ].each do |regexp,|
       it "matches #{regexp}" do

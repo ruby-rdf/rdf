@@ -133,8 +133,28 @@ module RDF
       #     Shortcut for `rdfs:subClassOf`, values are interpreted as a {Term}.
       #   @option options [String, Array<String,Term>] :subPropertyOf
       #     Shortcut for `rdfs:subPropertyOf`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :allValuesFrom
+      #     Shortcut for `owl:allValuesFrom`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :cardinality
+      #     Shortcut for `owl:cardinality`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String,Term>] :equivalentClass
+      #     Shortcut for `owl:equivalentClass`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :equivalentProperty
+      #     Shortcut for `owl:equivalentProperty`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :intersectionOf
+      #     Shortcut for `owl:intersectionOf`, values are interpreted as a {Term}.
       #   @option options [String, Array<String,Term>] :inverseOf
       #     Shortcut for `owl:inverseOf`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :maxCardinality
+      #     Shortcut for `owl:maxCardinality`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String,Term>] :minCardinality
+      #     Shortcut for `owl:minCardinality`, values are interpreted as a {Literal}.
+      #   @option options [String, Array<String,Term>] :onProperty
+      #     Shortcut for `owl:onProperty`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :someValuesFrom
+      #     Shortcut for `owl:someValuesFrom`, values are interpreted as a {Term}.
+      #   @option options [String, Array<String,Term>] :unionOf
+      #     Shortcut for `owl:unionOf`, values are interpreted as a {Term}.
       #   @option options [String, Array<String,Term>] :domainIncludes
       #     Shortcut for `schema:domainIncludes`, values are interpreted as a {Term}.
       #   @option options [String, Array<String,Term>] :rangeIncludes
@@ -189,7 +209,7 @@ module RDF
           else
             # Define the term without a name
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
-            prop = Term.intern(vocab: self) {expand_options(options)}
+            prop = Term.new(vocab: self) {expand_options(options)}
           end
           prop
         end
@@ -265,6 +285,7 @@ module RDF
       # @param [String, #to_s] pname
       # @return [Term]
       # @raise [KeyError] if pname suffix not found in identified vocabulary
+      # @raise [ArgumentError] if resulting URI is not valid
       def expand_pname(pname)
         return pname unless pname.is_a?(String) || pname.is_a?(Symbol)
         prefix, suffix = pname.to_s.split(":", 2)
@@ -273,7 +294,7 @@ module RDF
         elsif vocab = RDF::Vocabulary.each.detect {|v| v.__name__ && v.__prefix__ == prefix.to_sym}
           suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
         else
-          (RDF::Vocabulary.find_term(pname) rescue nil) || RDF::URI(pname)
+          (RDF::Vocabulary.find_term(pname) rescue nil) || RDF::URI(pname, validate: true)
         end
       end
 
@@ -442,7 +463,17 @@ module RDF
           when RDF::RDFS.subPropertyOf                      then :subPropertyOf
           when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
           when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
+          when RDF::URI("http://www.w3.org/2002/07/owl#allValuesFrom")        then :allValuesFrom
+          when RDF::URI("http://www.w3.org/2002/07/owl#cardinality")          then :cardinality
+          when RDF::URI("http://www.w3.org/2002/07/owl#equivalentClass")      then :equivalentClass
+          when RDF::URI("http://www.w3.org/2002/07/owl#equivalentProperty")   then :equivalentProperty
+          when RDF::URI("http://www.w3.org/2002/07/owl#intersectionOf")       then :intersectionOf
           when RDF::URI("http://www.w3.org/2002/07/owl#inverseOf")            then :inverseOf
+          when RDF::URI("http://www.w3.org/2002/07/owl#maxCardinality")       then :maxCardinality
+          when RDF::URI("http://www.w3.org/2002/07/owl#minCardinality")       then :minCardinality
+          when RDF::URI("http://www.w3.org/2002/07/owl#onProperty")           then :onProperty
+          when RDF::URI("http://www.w3.org/2002/07/owl#someValuesFrom")       then :someValuesFrom
+          when RDF::URI("http://www.w3.org/2002/07/owl#unionOf")              then :unionOf
           when RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel")       then :altLabel
           when RDF::URI("http://www.w3.org/2004/02/skos/core#broader")        then :broader
           when RDF::URI("http://www.w3.org/2004/02/skos/core#definition")     then :definition
@@ -573,7 +604,7 @@ module RDF
       #   Each value treated as a URI or PName
       # @return [RDF::List]
       def list(*values)
-        RDF::List[*values.map {|v| expand_pname(v)}]
+        RDF::List[*values.map {|v| expand_pname(v) rescue RDF::Literal(v)}]
       end
     private
 
@@ -588,36 +619,23 @@ module RDF
           prop_values = []
           values = [values] unless values.is_a?(Array)
           values.each do |value|
-            case k
-            when :type, :subClassOf, :subPropertyof, :domain, :range, :isDefinedBy,
-                 :inverseOf, :domainIncludes, :rangeIncludes,
-                 :broader, :definition, :exactMatch, :hasTopConcept, :inScheme,
-                 :member, :narrower, :related
-              # String value treated as URI
-              value = (RDF::Vocabulary.expand_pname(value) rescue value) if value.is_a?(String)
-            when :label, :comment, :altLabel, :definition, :editorialNote,
-                 :notation, :note, :prefLabel
-              # String value treated as string literal
-              value = RDF::Literal(value)
-            else
-              v = value.is_a?(Symbol) ? value.to_s : value
-              value = (RDF::Vocabulary.expand_pname(v) rescue nil) if v.is_a?(String)
-              value = value.to_uri if value.respond_to?(:to_uri)
-              unless value.is_a?(RDF::Value) && value.valid?
-                # Use as most appropriate literal
-                value = [
-                  RDF::Literal::Date,
-                  RDF::Literal::DateTime,
-                  RDF::Literal::Integer,
-                  RDF::Literal::Decimal,
-                  RDF::Literal::Double,
-                  RDF::Literal::Boolean,
-                  RDF::Literal
-                ].inject(nil) do |m, klass|
-                  m || begin
-                    l = klass.new(v)
-                    l if l.valid?
-                  end
+            v = value.is_a?(Symbol) ? value.to_s : value
+            value = (RDF::Vocabulary.expand_pname(v) rescue nil) if v.is_a?(String)
+            value = value.to_uri if value.respond_to?(:to_uri)
+            unless value.is_a?(RDF::Value) && value.valid?
+              # Use as most appropriate literal
+              value = [
+                RDF::Literal::Date,
+                RDF::Literal::DateTime,
+                RDF::Literal::Integer,
+                RDF::Literal::Decimal,
+                RDF::Literal::Double,
+                RDF::Literal::Boolean,
+                RDF::Literal
+              ].inject(nil) do |m, klass|
+                m || begin
+                  l = klass.new(v)
+                  l if l.valid?
                 end
               end
             end
@@ -744,8 +762,38 @@ module RDF
       #   `rdfs:isDefinedBy` accessor
       #   @return [Array<Term>]
 
+      # @!attribute [r] allValuesFrom
+      #   `owl:allValuesFrom` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] cardinality
+      #   `owl:cardinality` accessor
+      #   @return [Array<Literal>]
+      # @!attribute [r] equivalentClass
+      #   `owl:equivalentClass` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] equivalentProperty
+      #   `owl:equivalentProperty` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] intersectionOf
+      #   `owl:intersectionOf` accessor
+      #   @return [Array<Term>]
       # @!attribute [r] inverseOf
       #   `owl:inverseOf` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] maxCardinality
+      #   `owl:maxCardinality` accessor
+      #   @return [Array<Literal>]
+      # @!attribute [r] minCardinality
+      #   `owl:minCardinality` accessor
+      #   @return [Array<Literal>]
+      # @!attribute [r] onProperty
+      #   `owl:onProperty` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] someValuesFrom
+      #   `owl:someValuesFrom` accessor
+      #   @return [Array<Term>]
+      # @!attribute [r] unionOf
+      #   `owl:unionOf` accessor
       #   @return [Array<Term>]
 
       # @!attribute [r] domainIncludes
@@ -927,7 +975,9 @@ module RDF
                 RDF::RDFV[p]
               when :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy, :label, :comment
                 RDF::RDFS[p]
-              when :inverseOf
+              when :allValuesFrom, :cardinality, :equivalentClass, :equivalentProperty,
+                   :intersectionOf, :inverseOf, :maxCardinality, :minCardinality,
+                   :onProperty, :someValuesFrom, :unionOf
                 RDF::OWL[p]
               when :domainIncludes, :rangeIncludes
                 RDF::Vocabulary.find_term("http://schema.org/#{p}")
@@ -1037,7 +1087,10 @@ module RDF
           # Defaults to URI fragment or path tail
           attributes.fetch(method, to_s.split(/[\/\#]/).last)
         when :type, :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy,
-             :inverseOf, :domainIncludes, :rangeIncludes,
+             :allValuesFrom, :cardinality, :equivalentClass,:equivalentProperty,
+             :intersectionOf, :inverseOf, :maxCardinality, :minCardinality,
+             :onProperty, :someValuesFrom, :unionOf,
+             :domainIncludes, :rangeIncludes,
              :broader, :exactMatch, :hasTopConcept, :inScheme, :member, :narrower, :related
           Array(attributes[method])
         else
