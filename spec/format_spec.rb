@@ -62,6 +62,31 @@ describe RDF::Format do
     end
   end
 
+  # Format.each also can take options to filter results
+  describe ".each" do
+    {
+      "file_name"           => {file_name: "filename.test"},
+      "file_extension"      => {file_extension: "test"},
+      "content_type"        => {content_type: "application/test"},
+    }.each do |condition, arg|
+      context condition do
+        it "yields matched formats" do
+          expect {|b| RDF::Format.each(arg, &b)}.to yield_successive_args(RDF::Format::FooFormat, RDF::Format::BarFormat)
+        end
+
+        it "returns detected format for duplicates" do
+          expect(RDF::Format.for(arg, sample: "foo")).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(arg, sample: "bar")).to eq RDF::Format::BarFormat
+        end
+
+        it "returns detected format for duplicates using proc" do
+          expect(RDF::Format.for(arg, sample: -> {"foo"})).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(arg, sample: -> {"bar"})).to eq RDF::Format::BarFormat
+        end
+      end
+    end
+  end
+
   describe ".reader_symbols" do
     it "returns symbols of available readers" do
       [:ntriples, :nquads, :foo_bar].each do |sym|
