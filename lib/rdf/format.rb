@@ -57,6 +57,7 @@ module RDF
     # @param [String, #to_s]   file_name      (nil)
     # @param [Symbol, #to_sym] file_extension (nil)
     # @param [String, #to_s]   content_type   (nil)
+    #   Content type may include wildcard characters, which will select among matching formats.
     #   Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
     # @param [Boolean]   has_reader   (false)
     #   Only return a format having a reader.
@@ -85,8 +86,15 @@ module RDF
         # Ignore text/plain, a historical encoding for N-Triples, which is
         # problematic in format detection, as many web servers will serve
         # content by default text/plain.
-        if mime_type == 'text/plain' && sample
+        if (mime_type == 'text/plain' && sample) || mime_type == '*/*'
+          # All content types
           @@subclasses
+        elsif mime_type.end_with?('/*')
+          # All content types that have the first part of the mime-type as a prefix
+          prefix = mime_type[0..-3]
+          content_types.map do |ct, formats|
+            ct.start_with?(prefix) ? formats : []
+          end.flatten.uniq
         else
           content_types[mime_type]
         end
@@ -140,6 +148,7 @@ module RDF
     #   @option options [String, #to_s]   :file_name      (nil)
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
+    #   Content type may include wildcard characters, which will select among matching formats.
     #     Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
     #   @option options [Boolean]   :has_reader   (false)
     #     Only return a format having a reader.

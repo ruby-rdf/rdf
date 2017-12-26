@@ -60,6 +60,16 @@ describe RDF::Format do
         end
       end
     end
+
+    it "returns any format for content_type: */*" do
+      expect(RDF::Format.for(content_type: '*/*')).to be_a(Class)
+    end
+
+    it "returns any format having appropriate prefix for content_type: application/*" do
+      f = RDF::Format.for(content_type: 'application/*')
+      expect(f).to be_a(Class)
+      expect(f.content_type).to all(start_with('application/'))
+    end
   end
 
   # Format.each also can take options to filter results
