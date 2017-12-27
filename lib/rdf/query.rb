@@ -117,12 +117,6 @@ module RDF
     end
 
     ##
-    # The variables used in this query.
-    #
-    # @return [Hash{Symbol => RDF::Query::Variable}]
-    attr_reader :variables
-
-    ##
     # The patterns that constitute this query.
     #
     # @return [Array<RDF::Query::Pattern>]
@@ -182,7 +176,6 @@ module RDF
     #   @yieldreturn [void] ignored
     def initialize(*patterns, solutions: nil, graph_name: nil, name: nil, **options, &block)
       @options = options.dup
-      @variables = {}
       @solutions = Query::Solutions(solutions)
       graph_name = name if graph_name.nil?
 
@@ -450,7 +443,29 @@ module RDF
     #
     # @return [Boolean]
     def variable?
-      patterns.any?(&:variable?) || graph_name && graph_name.variable?
+      !variables.empty?
+    end
+    alias_method :variables?, :variable?
+    alias_method :has_variables?, :variable?
+
+    ##
+    # The variables used in this query. This includes variables used in patterns along with the graph_name itself, if it is a variable.
+    #
+    # @return [Hash{Symbol => RDF::Query::Variable}]
+    def variables
+      # Set variables used in query
+      vars = patterns.inject({}) do |memo, pattern|
+        memo.merge(pattern.variables)
+      end
+      graph_name.is_a?(Variable) ? vars.merge(graph_name.to_sym => graph_name) : vars
+    end
+
+    ##
+    # Returns the number of variables in this query.
+    #
+    # @return [Integer] (0..3)
+    def variable_count
+      variables.keys.length
     end
 
     ##

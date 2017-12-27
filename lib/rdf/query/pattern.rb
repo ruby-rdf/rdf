@@ -221,12 +221,9 @@ module RDF; class Query
     #
     # @return [Integer] (0..3)
     def variable_count
-      count = 0
-      count += 1 if subject.is_a?(Variable)
-      count += 1 if predicate.is_a?(Variable)
-      count += 1 if object.is_a?(Variable)
-      count += 1 if graph_name.is_a?(Variable)
-      count
+      [subject, predicate, object, graph_name].inject(0) do |memo, term|
+        memo += (term.is_a?(Variable) ? 1 : 0)
+      end
     end
     alias_method :cardinality, :variable_count
     alias_method :arity,       :variable_count
@@ -238,12 +235,9 @@ module RDF; class Query
     #
     # @return [Hash{Symbol => Variable}]
     def variables
-      variables = {}
-      variables.merge!(subject.variables)    if subject.is_a?(Variable)
-      variables.merge!(predicate.variables)  if predicate.is_a?(Variable)
-      variables.merge!(object.variables)     if object.is_a?(Variable)
-      variables.merge!(graph_name.variables) if graph_name.is_a?(Variable)
-      variables
+      [subject, predicate, object, graph_name].inject({}) do |memo, term|
+        term.is_a?(Variable) ? memo.merge(term.variables) : memo
+      end
     end
 
     ##
