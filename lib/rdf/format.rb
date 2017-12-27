@@ -96,7 +96,7 @@ module RDF
             ct.start_with?(prefix) ? formats : []
           end.flatten.uniq
         else
-          content_types[mime_type]
+          content_types[mime_type] || @@subclasses
         end
       # Find a format based on the file name:
       when file_name
