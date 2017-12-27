@@ -92,21 +92,22 @@ module RDF
         elsif mime_type.end_with?('/*')
           # All content types that have the first part of the mime-type as a prefix
           prefix = mime_type[0..-3]
-          content_types.map do |ct, formats|
-            ct.start_with?(prefix) ? formats : []
+          content_types.map do |ct, fmts|
+            ct.start_with?(prefix) ? fmts : []
           end.flatten.uniq
         else
-          content_types[mime_type] || @@subclasses
+          content_types[mime_type]
         end
       # Find a format based on the file name:
       when file_name
         ext = File.extname(RDF::URI(file_name).path.to_s)[1..-1].to_s
-        file_extensions[ext.to_sym] || @@subclasses
+        file_extensions[ext.to_sym]
       # Find a format based on the file extension:
       when file_extension
-        file_extensions[file_extension.to_sym] || @@subclasses
-      else @@subclasses
-      end
+        file_extensions[file_extension.to_sym]
+      else
+        @@subclasses
+      end || (sample ? @@subclasses : []) # If we can sample, check all classes
 
       # Subset by available reader or writer
       formats = formats.select do |f|
