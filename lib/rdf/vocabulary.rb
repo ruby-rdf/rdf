@@ -198,7 +198,7 @@ module RDF
             URI.cache.delete(uri_str.to_sym)  # Clear any previous entry
 
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
-            prop = Term.intern(uri_str, vocab: self) {expand_options(options)}
+            prop = Term.intern(uri_str, vocab: self, attributes: options)
             props[name.to_sym] = prop
 
             # If name is empty, also treat it as the ontology
@@ -209,7 +209,7 @@ module RDF
           else
             # Define the term without a name
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
-            prop = Term.new(vocab: self) {expand_options(options)}
+            prop = Term.new(vocab: self, attributes: options)
           end
           prop
         end
@@ -262,7 +262,7 @@ module RDF
           uri, options = args
           URI.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
           # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
-          @ontology = Term.intern(uri.to_s, vocab: self) {expand_options(options)}
+          @ontology = Term.intern(uri.to_s, vocab: self, attributes: options)
 
           # If the URI is the same as the vocabulary namespace, also define it as a term
           props[:""] ||= @ontology if self.to_s == uri.to_s
@@ -609,44 +609,6 @@ module RDF
     private
 
       def props; @properties ||= {}; end
-
-      # Expand property options into attributes, where string values are interpreted as terms
-      # @param [Hash{symbol => Object}] options
-      # @return [Hash{symbol => Value}]
-      def expand_options(options)
-        # Convert string options into objects
-        options.inject({}) do |memo, (k, values)|
-          prop_values = []
-          values = [values] unless values.is_a?(Array)
-          values.each do |value|
-            v = value.is_a?(Symbol) ? value.to_s : value
-            value = (RDF::Vocabulary.expand_pname(v) rescue nil) if v.is_a?(String)
-            value = value.to_uri if value.respond_to?(:to_uri)
-            unless value.is_a?(RDF::Value) && value.valid?
-              # Use as most appropriate literal
-              value = [
-                RDF::Literal::Date,
-                RDF::Literal::DateTime,
-                RDF::Literal::Integer,
-                RDF::Literal::Decimal,
-                RDF::Literal::Double,
-                RDF::Literal::Boolean,
-                RDF::Literal
-              ].inject(nil) do |m, klass|
-                m || begin
-                  l = klass.new(v)
-                  l if l.valid?
-                end
-              end
-            end
-
-            prop_values << value
-          end
-
-          prop_values = prop_values.first if prop_values.length == 1
-          memo.merge(k => prop_values)
-        end
-      end
     end
 
     # Undefine all superfluous instance methods:
@@ -739,7 +701,7 @@ module RDF
 
       # @!attribute [r] comment
       #   `rdfs:comment` accessor
-      #   @return [Array<Literal>]
+      #   @return [Literal, Array<Literal>]
       # @!attribute [r] label
       #   `rdfs:label` accessor
       #   @return [Literal]
@@ -794,7 +756,7 @@ module RDF
       #   @return [Array<Term>]
       # @!attribute [r] unionOf
       #   `owl:unionOf` accessor
-      #   @return [Array<Term>]
+      #   @return [List<Term>, Array<Term>]
 
       # @!attribute [r] domainIncludes
       #   `schema:domainIncludes` accessor
@@ -805,16 +767,16 @@ module RDF
 
       # @!attribute [r] altLabel
       #   `skos:altLabel` accessor
-      #   @return [Literal]
+      #   @return [Literal, Array<Literal>]
       # @!attribute [r] broader
       #   `skos:broader` accessor
       #   @return [Array<Term>]
       # @!attribute [r] definition
       #   `skos:definition` accessor
-      #   @return [Literal]
+      #   @return [Literal, Array<Literal>]
       # @!attribute [r] editorialNote
       #   `skos:editorialNote` accessor
-      #   @return [Array<Literal>]
+      #   @return [Literal, Array<Literal>]
       # @!attribute [r] exactMatch
       #   `skos:exactMatch` accessor
       #   @return [Array<Term>]
@@ -832,10 +794,10 @@ module RDF
       #   @return [Array<Term>]
       # @!attribute [r] notation
       #   `skos:notation` accessor
-      #   @return [Array<Literal>]
+      #   @return [Literal, Array<Literal>]
       # @!attribute [r] note
       #   `skos:note` accessor
-      #   @return [Array<Literal>]
+      #   @return [Literal, Array<Literal>]
       # @!attribute [r] prefLabel
       #   `skos:prefLabel` accessor
       #   @return [Literal]
@@ -848,6 +810,11 @@ module RDF
       #
       # @return [RDF::Vocabulary]
       attr_reader :vocab
+
+      #   Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      #   @return [Hash{Symbol,Resource => Term, #to_s}]
+      attr_reader :attributes
+
 
       ##
       # @overload new(uri, attributes:, **options)
@@ -865,7 +832,7 @@ module RDF
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
       #   @param  [Hash{Symbol => Object}] options
       #     Options from {URI#initialize}
-      def self.new(*args, vocab: nil, attributes: {}, **options, &block)
+      def self.new(*args, vocab: nil, attributes: {}, **options)
         klass = if args.first.nil?
           RDF::Node
         elsif args.first.is_a?(Hash)
@@ -880,7 +847,6 @@ module RDF
         term.send(:initialize, *args)
         term.instance_variable_set(:@vocab, vocab)
         term.instance_variable_set(:@attributes, attributes)
-        term.instance_variable_set(:@block, block)
         term
       end
 
@@ -901,16 +867,8 @@ module RDF
       #
       # @param (see #initialize)
       # @return [RDF::URI] an immutable, frozen URI object
-      def self.intern(str, *args, &block)
-        (URI.cache[(str = str.to_s).to_sym] ||= self.new(str, *args, &block)).freeze
-      end
-
-      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF. Keys are the same as for the `options` of {Vocabulary.property}.
-      # If attributes are not set by an instance variable, they are evaluated from a block when needed
-      # @return [Hash{Symbol=>String,Array<String,Term>}]
-      def attributes
-        @attributes.merge!(@block.call) if @attributes.empty? && @block
-        @attributes
+      def self.intern(str, *args)
+        (URI.cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
       end
 
       ##
@@ -953,10 +911,63 @@ module RDF
       end
 
       ##
+      # Is this a Restriction term?
+      # @return [Boolean]
+      def restriction?
+        Array(self.type).any? {|t| t.to_s.include?('Restriction')}
+      end
+
+      ##
       # Is this neither a class, property or datatype term?
       # @return [Boolean]
       def other?
-        Array(self.type).none? {|t| t.to_s =~ /(Class|Property|Datatype)/}
+        Array(self.type).none? {|t| t.to_s =~ /(Class|Property|Datatype|Restriction)/}
+      end
+
+      ##
+      # Enumerate attributes with values transformed into {RDF::Value} instances
+      #
+      # @return [Hash{Symbol => Array<RDF::Value>}]
+      def properties
+        attributes.keys.inject({}) do |memo, p|
+          memo.merge(p => attribute_value(p))
+        end
+      end
+
+      ##
+      # Values of an attributes as {RDF::Value}
+      #
+      # @property [Symbol] prop
+      # @return [RDF::Value, Array<RDF::Value>]
+      def attribute_value(prop)
+        values = attributes[prop]
+        values = [values].compact unless values.is_a?(Array)
+        prop_values = values.map do |value|
+          v = value.is_a?(Symbol) ? value.to_s : value
+          value = (RDF::Vocabulary.expand_pname(v) rescue nil) if v.is_a?(String) && v.include?(':')
+          value = value.to_uri if value.respond_to?(:to_uri)
+          unless value.is_a?(RDF::Value) && value.valid?
+            # Use as most appropriate literal
+            value = [
+              RDF::Literal::Date,
+              RDF::Literal::DateTime,
+              RDF::Literal::Integer,
+              RDF::Literal::Decimal,
+              RDF::Literal::Double,
+              RDF::Literal::Boolean,
+              RDF::Literal
+            ].inject(nil) do |m, klass|
+              m || begin
+                l = klass.new(v)
+                l if l.valid?
+              end
+            end
+          end
+
+          value
+        end
+
+        prop_values.length <= 1 ? prop_values.first : prop_values
       end
 
       ##
@@ -967,8 +978,10 @@ module RDF
       # @yield statement
       # @yieldparam [RDF::Statement]
       def each_statement
-        attributes.each do |p, values|
-          Array(values).each do |value|
+        attributes.keys.each do |p|
+          values = attribute_value(p)
+          values = [values].compact unless values.is_a?(Array)
+          values.each do |value|
             begin
               prop = case p
               when :type
@@ -1025,7 +1038,25 @@ module RDF
 
       # Implement accessor to symbol attributes
       def respond_to?(method, include_all = false)
-        (@attributes || {}).has_key?(method) || super
+        case method
+        when :comment, :notation, :note, :editorialNote, :definition,
+             :label, :altLabel, :prefLabel, :type, :isDefinedBy
+          true
+        when :subClassOf, :subPropertyOf,
+             :domainIncludes, :rangeIncludes,
+             :equivalentClass, :intersectionOf, :unionOf
+          self.class?
+        when :domain, :range, :equivalentProperty, :inverseOf
+          self.property?
+        when :allValuesFrom, :cardinality,
+             :maxCardinality, :minCardinality,
+             :onProperty, :someValuesFrom
+          self.restriction?
+        when :broader, :exactMatch, :hasTopConcept, :inScheme, :member, :narrower, :related
+          @attributes.has_key?(method)
+        else
+          super
+        end
       end
 
       # Accessor for `schema:domainIncludes`
@@ -1047,8 +1078,10 @@ module RDF
         "term(" +
         (self.uri? ? self.to_s.inspect + ",\n" : "\n") +
         "#{indent}  " +
-        attributes.map do |k, values|
-          values = Array(values).map do |value|
+        attributes.keys.map do |k|
+          values = attribute_value(k)
+          values = [values].compact unless values.is_a?(Array)
+          values = values.map do |value|
             if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(k.to_s)
               "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
             elsif value.is_a?(RDF::URI)
@@ -1082,17 +1115,26 @@ module RDF
       def method_missing(method, *args, &block)
         case method
         when :comment, :notation, :note, :editorialNote, :definition
-          attributes.fetch(method, "")
+          attribute_value(method)
         when :label, :altLabel, :prefLabel
           # Defaults to URI fragment or path tail
-          attributes.fetch(method, to_s.split(/[\/\#]/).last)
+          begin
+            attribute_value(method)
+          rescue KeyError
+            to_s.split(/[\/\#]/).last
+          end
         when :type, :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy,
-             :allValuesFrom, :cardinality, :equivalentClass,:equivalentProperty,
+             :allValuesFrom, :cardinality, :equivalentClass, :equivalentProperty,
              :intersectionOf, :inverseOf, :maxCardinality, :minCardinality,
              :onProperty, :someValuesFrom, :unionOf,
              :domainIncludes, :rangeIncludes,
              :broader, :exactMatch, :hasTopConcept, :inScheme, :member, :narrower, :related
-          Array(attributes[method])
+
+          # Return value as an Array, unless it is a list
+          case value = attribute_value(method)
+          when Array, RDF::List then value
+          else [value].compact
+          end
         else
           super
         end

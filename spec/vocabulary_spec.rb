@@ -115,29 +115,27 @@ potential to perform intentional actions for which they can be held responsible.
     end
 
     it "defines a property with equivalentClass using anonymous term" do
-      subject.property :foo, "owl:equivalentClass": subject.term(
+      subject.property :foo, equivalentClass: subject.term(
         type: "owl:Restriction",
-        "owl:onProperty": "http://example/prop",
-        "owl:cardinality": "1"
+        onProperty: "http://example/prop",
+        cardinality: "1"
       )
-      expect(subject.foo.attributes[:"owl:equivalentClass"]).to be_a(RDF::Vocabulary::Term)
-      ec = subject.foo.attributes[:"owl:equivalentClass"]
+      expect(subject.foo.equivalentClass).to all(be_a(RDF::Vocabulary::Term))
+      expect(subject.foo.equivalentClass).to all(be_a_node)
+      expect(subject.foo.attributes[:equivalentClass]).to be_a(RDF::Vocabulary::Term)
+      expect(subject.foo.attributes[:equivalentClass]).to be_a_node
+      ec = subject.foo.equivalentClass.first
       expect(ec.type).to include RDF::OWL.Restriction
-      expect(ec.attributes[:"owl:onProperty"]).to eql RDF::URI("http://example/prop")
-      expect(ec.attributes[:"owl:cardinality"]).to eql RDF::Literal(1)
-    end
-
-    it "defines a property with equivalentClass using anonymous term" do
-      subject.property :foo, "owl:equivalentClass": subject.term(
-        type: "owl:Restriction",
-        "owl:onProperty": "http://example/prop",
-        "owl:cardinality": "1"
-      )
-      expect(subject.foo.attributes[:"owl:equivalentClass"]).to be_a(RDF::Vocabulary::Term)
-      ec = subject.foo.attributes[:"owl:equivalentClass"]
-      expect(ec.type).to include RDF::OWL.Restriction
-      expect(ec.attributes[:"owl:onProperty"]).to eql RDF::URI("http://example/prop")
-      expect(ec.attributes[:"owl:cardinality"]).to eql RDF::Literal(1)
+      expect(ec.onProperty).to include RDF::URI("http://example/prop")
+      expect(ec.attributes[:onProperty]).to be_a(String)
+      expect(ec.attributes[:onProperty]).to eql "http://example/prop"
+      expect(ec.properties[:onProperty]).to be_a_uri
+      expect(ec.properties[:onProperty]).to eql RDF::URI("http://example/prop")
+      expect(ec.cardinality).to include RDF::Literal(1)
+      expect(ec.attributes[:cardinality]).to be_a(String)
+      expect(ec.attributes[:cardinality]).to eql "1"
+      expect(ec.properties[:cardinality]).to be_a_literal
+      expect(ec.properties[:cardinality]).to eql RDF::Literal(1)
     end
 
     it "defines an ontology if symbol is empty" do
@@ -463,12 +461,12 @@ potential to perform intentional actions for which they can be held responsible.
         let(:sub_class_of) {klass.subClassOf.first}
         it "has embedded unionOf" do
           expect(sub_class_of).to be_a(RDF::Vocabulary::Term)
-          expect(sub_class_of.unionOf).to be_a(Array)
-          expect(sub_class_of.unionOf.length).to eql 1
+          expect(sub_class_of.unionOf).to be_a_list
+          expect(sub_class_of.unionOf).to all(be_a(RDF::Term))
         end
 
         context "unionOf" do
-          let(:union_of) {sub_class_of.unionOf.first}
+          let(:union_of) {sub_class_of.unionOf}
 
           it "has embedded unionOf" do
             expect(union_of).to be_a_list
@@ -534,8 +532,8 @@ potential to perform intentional actions for which they can be held responsible.
                                     label: "foo",
                                     domain: RDF::RDFS.Resource,
                                     range: [RDF::RDFS.Resource, RDF::RDFS.Class],
-                                    "schema:domainIncludes" => RDF::RDFS.Resource,
-                                    "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                    domainIncludes: RDF::RDFS.Resource,
+                                    rangeIncludes: [RDF::RDFS.Resource, RDF::RDFS.Class],
                                   })
       }
       it {is_expected.to be_a(RDF::URI)}
@@ -543,19 +541,19 @@ potential to perform intentional actions for which they can be held responsible.
       its(:label) {is_expected.to eq "foo"}
       its(:domain) {is_expected.to include(RDF::RDFS.Resource)}
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
-      its(:attributes) {is_expected.to include("schema:domainIncludes" => RDF::RDFS.Resource)}
-      its(:attributes) {is_expected.to include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+      its(:domainIncludes) {is_expected.to include(RDF::RDFS.Resource)}
+      its(:rangeIncludes) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
     end
 
-    describe "with a BNode Label" do
+    context "with a BNode Label" do
       subject {
         RDF::Vocabulary::Term.new(:"_:foo",
                                   attributes: {
                                     label: "foo",
                                     domain: RDF::RDFS.Resource,
                                     range: [RDF::RDFS.Resource, RDF::RDFS.Class],
-                                    "schema:domainIncludes" => RDF::RDFS.Resource,
-                                    "schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class],
+                                    domainIncludes: RDF::RDFS.Resource,
+                                    rangeIncludes: [RDF::RDFS.Resource, RDF::RDFS.Class],
                                   })
       }
       it {is_expected.to be_a(RDF::Node)}
@@ -563,11 +561,11 @@ potential to perform intentional actions for which they can be held responsible.
       its(:label) {is_expected.to eq "foo"}
       its(:domain) {is_expected.to include(RDF::RDFS.Resource)}
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
-      its(:attributes) {is_expected.to include("schema:domainIncludes" => RDF::RDFS.Resource)}
-      its(:attributes) {is_expected.to include("schema:rangeIncludes" => [RDF::RDFS.Resource, RDF::RDFS.Class])}
+      its(:domainIncludes) {is_expected.to include(RDF::RDFS.Resource)}
+      its(:rangeIncludes) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
     end
 
-    describe "with a nil Label" do
+    context "with a nil Label" do
       subject {
         RDF::Vocabulary::Term.new(nil, attributes: {label: "foo"})
       }
@@ -576,7 +574,7 @@ potential to perform intentional actions for which they can be held responsible.
       its(:label) {is_expected.to eq "foo"}
     end
 
-    context "#each_statement" do
+    describe "#each_statement" do
       it "emits statements for a vocabulary" do
         graph = RDF::Graph.new {|g| RDF::RDFS[""].each_statement {|s| g << s}}
 
