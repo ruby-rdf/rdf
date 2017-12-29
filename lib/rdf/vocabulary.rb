@@ -1062,13 +1062,13 @@ module RDF
       # Accessor for `schema:domainIncludes`
       # @return [RDF::URI]
       def domain_includes
-        Array(attributes[:domainIncludes])
+        domainIncludes
       end
 
       # Accessor for `schema:rangeIncludes`
       # @return [RDF::URI]
       def range_includes
-        Array(attributes[:rangeIncludes])
+        rangeIncludes
       end
 
       # Serialize back to a Ruby source initializer
