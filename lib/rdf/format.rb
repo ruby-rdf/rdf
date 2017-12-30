@@ -65,6 +65,8 @@ module RDF
     #   Only return a format having a writer.
     # @param [String, Proc] sample (nil)
     #   A sample of input used for performing format detection. If we find no formats, or we find more than one, and we have a sample, we can perform format detection to find a specific format to use, in which case we pick the last one we find
+    # @param [Boolean] all_if_none (true)
+    #   Returns all formats if none match, otherwise no format. Note that having a `sample` overrides this, and will search through all formats, or all those filtered to find a sample that matches
     # @yield  [klass]
     # @yieldparam [Class]
     # @return [Enumerator]
@@ -74,6 +76,7 @@ module RDF
                   has_reader: false,
                   has_writer: false,
                   sample: nil,
+                  all_if_none: true,
                   **options,
                   &block)
       formats = case
@@ -106,7 +109,7 @@ module RDF
       when file_extension
         file_extensions[file_extension.to_sym]
       else
-        @@subclasses
+        all_if_none ? @@subclasses : nil
       end || (sample ? @@subclasses : []) # If we can sample, check all classes
 
       # Subset by available reader or writer
@@ -181,7 +184,7 @@ module RDF
         end
         classes
       else
-        self.each(options).to_a
+        self.each(options.merge(all_if_none: false)).to_a
       end
 
       # Return the last detected format

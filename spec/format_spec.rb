@@ -61,6 +61,10 @@ describe RDF::Format do
       end
     end
 
+    it "returns no formats if none match" do
+      expect(RDF::Format.for).to be_nil
+    end
+
     it "returns any format for content_type: */*" do
       expect(RDF::Format.for(content_type: '*/*')).to be_a(Class)
     end
