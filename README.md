@@ -333,7 +333,7 @@ from BNode identity (i.e., they each entail the other)
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 2.0)
+* [Ruby](http://ruby-lang.org/) (>= 2.2)
 * [LinkHeader][] (>= 0.0.8)
 * Soft dependency on [RestClient][] (>= 1.7)
 
