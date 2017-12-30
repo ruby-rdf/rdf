@@ -32,11 +32,10 @@ describe RDF::Node do
       expect(described_class.uuid(format: :compact)).to be_a_node
     end
 
-    it "accepts grammar: option with deprecation" do
+    it "rejects grammar: option" do
       expect {
-        expect(described_class.uuid(grammar: /\S+/)).to be_a_node
-      }.to write('[DEPRECATION]').to(:error)
-      expect(described_class.uuid(format: :compact)).to be_a_node
+        described_class.uuid(grammar: /\S+/)
+      }.to raise_error(ArgumentError)
     end
   end
 

@@ -60,6 +60,41 @@ describe RDF::Format do
         end
       end
     end
+
+    it "returns any format for content_type: */*" do
+      expect(RDF::Format.for(content_type: '*/*')).to be_a(Class)
+    end
+
+    it "returns any format having appropriate prefix for content_type: application/*" do
+      f = RDF::Format.for(content_type: 'application/*')
+      expect(f).to be_a(Class)
+      expect(f.content_type).to all(start_with('application/'))
+    end
+  end
+
+  # Format.each also can take options to filter results
+  describe ".each" do
+    {
+      "file_name"           => {file_name: "filename.test"},
+      "file_extension"      => {file_extension: "test"},
+      "content_type"        => {content_type: "application/test"},
+    }.each do |condition, arg|
+      context condition do
+        it "yields matched formats" do
+          expect {|b| RDF::Format.each(arg, &b)}.to yield_successive_args(RDF::Format::FooFormat, RDF::Format::BarFormat)
+        end
+
+        it "returns detected format for duplicates" do
+          expect(RDF::Format.for(arg, sample: "foo")).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(arg, sample: "bar")).to eq RDF::Format::BarFormat
+        end
+
+        it "returns detected format for duplicates using proc" do
+          expect(RDF::Format.for(arg, sample: -> {"foo"})).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(arg, sample: -> {"bar"})).to eq RDF::Format::BarFormat
+        end
+      end
+    end
   end
 
   describe ".reader_symbols" do

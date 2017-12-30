@@ -30,7 +30,7 @@ module RDF; class Literal
         end
         when value.is_a?(::Float)     then value
         when value.respond_to?(:to_f) then value.to_f
-        else Float(value.to_s) rescue nil # FIXME
+        else 0.0 # FIXME
       end
     end
 

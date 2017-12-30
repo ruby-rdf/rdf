@@ -48,11 +48,83 @@ module RDF
     ##
     # Enumerates known RDF serialization format classes.
     #
+    # Given options from {Format.for}, it returns just those formats that match the specified criteria.
+    #
+    # @example finding all formats that have a writer supporting text/html
+    #     RDF::Format.each(content_type: 'text/html', has_writer: true).to_a
+    #       #=> RDF::RDFa::Format
+    #
+    # @param [String, #to_s]   file_name      (nil)
+    # @param [Symbol, #to_sym] file_extension (nil)
+    # @param [String, #to_s]   content_type   (nil)
+    #   Content type may include wildcard characters, which will select among matching formats.
+    #   Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
+    # @param [Boolean]   has_reader   (false)
+    #   Only return a format having a reader.
+    # @param [Boolean]   has_writer   (false)
+    #   Only return a format having a writer.
+    # @param [String, Proc] sample (nil)
+    #   A sample of input used for performing format detection. If we find no formats, or we find more than one, and we have a sample, we can perform format detection to find a specific format to use, in which case we pick the last one we find
     # @yield  [klass]
     # @yieldparam [Class]
     # @return [Enumerator]
-    def self.each(&block)
-      @@subclasses.each(&block)
+    def self.each(file_name: nil,
+                  file_extension: nil,
+                  content_type: nil,
+                  has_reader: false,
+                  has_writer: false,
+                  sample: nil,
+                  **options,
+                  &block)
+      formats = case
+      # Find a format based on the MIME content type:
+      when content_type
+        # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
+        # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
+        mime_type = content_type.to_s.split(';').first # remove any media type parameters
+
+        # Ignore text/plain, a historical encoding for N-Triples, which is
+        # problematic in format detection, as many web servers will serve
+        # content by default text/plain.
+        if (mime_type == 'text/plain' && sample) || mime_type == '*/*'
+          # All content types
+          @@subclasses
+        elsif mime_type.end_with?('/*')
+          # All content types that have the first part of the mime-type as a prefix
+          prefix = mime_type[0..-3]
+          content_types.map do |ct, fmts|
+            ct.start_with?(prefix) ? fmts : []
+          end.flatten.uniq
+        else
+          content_types[mime_type]
+        end
+      # Find a format based on the file name:
+      when file_name
+        ext = File.extname(RDF::URI(file_name).path.to_s)[1..-1].to_s
+        file_extensions[ext.to_sym]
+      # Find a format based on the file extension:
+      when file_extension
+        file_extensions[file_extension.to_sym]
+      else
+        @@subclasses
+      end || (sample ? @@subclasses : []) # If we can sample, check all classes
+
+      # Subset by available reader or writer
+      formats = formats.select do |f|
+        has_reader ? f.reader : (has_writer ? f.writer : true)
+      end
+
+      # If we have multiple formats and a sample, use that for format detection
+      if formats.length != 1 && sample
+        sample = case sample
+        when Proc then sample.call.to_s
+        else sample.dup.to_s
+        end.force_encoding(Encoding::ASCII_8BIT)
+        # Given a sample, perform format detection across the appropriate formats, choosing the last that matches
+        # Return last format that has a positive detection
+        formats = formats.select {|f| f.detect(sample)}
+      end
+      formats.each(&block)
     end
 
     ##
@@ -77,6 +149,7 @@ module RDF
     #   @option options [String, #to_s]   :file_name      (nil)
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
+    #   Content type may include wildcard characters, which will select among matching formats.
     #     Note that content_type will be taken from a URL opened using {RDF::Util::File.open_file}.
     #   @option options [Boolean]   :has_reader   (false)
     #     Only return a format having a reader.
@@ -88,73 +161,31 @@ module RDF
     #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
     # @return [Class]
-    def self.for(options = {})
-      format = case options
-        when String, RDF::URI
-          # Find a format based on the file name
-          fn, options = options, {}
-          self.for(file_name: fn) { yield if block_given? }
-
-        when Hash
-          case
-            # Find a format based on the MIME content type:
-            when mime_type = options[:content_type]
-              # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
-              # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
-              mime_type = mime_type.to_s
-              mime_type = mime_type.split(';').first # remove any media type parameters
-
-              # Ignore text/plain, a historical encoding for N-Triples, which is
-              # problematic in format detection, as many web servers will serve
-              # content by default text/plain.
-              content_types[mime_type] unless mime_type == 'text/plain' && (options[:sample] || block_given?)
-            # Find a format based on the file name:
-            when file_name = options[:file_name]
-              self.for(file_extension: File.extname(RDF::URI(file_name).path.to_s)[1..-1]) { yield if block_given? }
-            # Find a format based on the file extension:
-            when file_ext  = options[:file_extension]
-              file_extensions[file_ext.to_sym]
+    def self.for(*args, **options, &block)
+      options = {sample: block}.merge(options) if block_given?
+      formats = case args.first
+      when String, RDF::URI
+        # Find a format based on the file name
+        self.each(file_name: args.first, **options).to_a
+      when Symbol
+        # Try to find a match based on the full class name
+        # We want this to work even if autoloading fails
+        fmt = args.first
+        classes = self.each(options).select {|f| f.symbols.include?(fmt)}
+        if classes.empty?
+          classes = case fmt
+          when :ntriples then [RDF::NTriples::Format]
+          when :nquads   then [RDF::NQuads::Format]
+          else                []
           end
-
-        when Symbol
-          # Try to find a match based on the full class name
-          # We want this to work even if autoloading fails
-          fmt, options = options, {}
-          classes = @@subclasses.select { |klass| klass.symbols.include?(fmt) }
-          if classes.empty?
-            classes = case fmt
-            when :ntriples then [RDF::NTriples::Format]
-            when :nquads   then [RDF::NQuads::Format]
-            else                []
-            end
-          end
-          classes
-      end
-
-      if format.is_a?(Array)
-        format = format.select {|f| f.reader} if options[:has_reader]
-        format = format.select {|f| f.writer} if options[:has_writer]
-        
-        return format.last if format.uniq.length == 1
-      elsif !format.nil?
-        return format
-      end
-
-      # If we have a sample, use that for format detection
-      if sample = (options[:sample] if options.is_a?(Hash)) || (yield if block_given?)
-        sample = sample.dup.to_s
-        sample.force_encoding(Encoding::ASCII_8BIT) if sample.respond_to?(:force_encoding)
-        # Given a sample, perform format detection across the appropriate formats, choosing the last that matches
-        format ||= @@subclasses
-
-        # Return last format that has a positive detection
-        format.reverse.detect {|f| f.detect(sample)} || format.last
-      elsif format.is_a?(Array)
-        # Otherwise, just return the last matching format
-        format.last
+        end
+        classes
       else
-        nil
+        self.each(options).to_a
       end
+
+      # Return the last detected format
+      formats.last
     end
 
     ##

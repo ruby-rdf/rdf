@@ -181,7 +181,7 @@ describe RDF::Graph do
       it 'inserts to graph' do
         st = [RDF::URI('s'), RDF::URI('p'), 'o']
         expect { transactable.transaction(mutable: true) { insert(st) } }
-          .to change { transactable.statements }.to contain_exactly(st)
+          .to change { transactable.statements }.to contain_exactly(RDF::Statement.from(st, graph_name: name))
       end
       
       it 'deletes from graph' do

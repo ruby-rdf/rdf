@@ -24,7 +24,7 @@ module RDF; class Literal
       @object   = case
       when value.is_a?(::Integer)   then value
         when value.respond_to?(:to_i) then value.to_i
-        else Integer(value.to_s) rescue nil
+        else 0
       end
     end
 

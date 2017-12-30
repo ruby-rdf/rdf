@@ -27,8 +27,7 @@ module RDF; module Util
     # @since 1.2
     class HttpAdapter
       ##
-      # @param  [Hash{Symbol => Object}] options
-      # @option options [Array, String] :headers
+      # @param [Array, String] headers
       #   HTTP Request headers
       # @return [Hash] A hash of HTTP request headers
       def self.headers headers: {}

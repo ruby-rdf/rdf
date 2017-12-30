@@ -515,6 +515,10 @@ describe RDF::Query do
       end
     end
 
+    it {is_expected.not_to be_variable}
+    its(:variable_count) {is_expected.to eql 0}
+    its(:variables) {is_expected.to be_empty}
+
     context "with variables" do
       let!(:graph) {
         # Normally we would not want all of this crap in the graph for each
@@ -540,48 +544,62 @@ describe RDF::Query do
         end
       }
 
-      it "?s p o" do
-        query = RDF::Query.new do |query|
-          query << [RDF::Query::Variable.new("s"), EX.p, 1]
-        end
-        expect(query.execute(graph)).to have_result_set([{ s: EX.x1 }])
+      context "?s p o" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(:s, EX.p, 1))}
+        it {expect(subject.execute(graph)).to have_result_set([{ s: EX.x1 }])}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 1}
+        its(:variables) {is_expected.to include(:s)}
       end
 
-      it "s ?p o" do
-        query = RDF::Query.new do |query|
-          query << [EX.x2, RDF::Query::Variable.new("p"), 2]
-        end
-        expect(query.execute(graph)).to have_result_set [ { p: EX.p } ]
+      context "s ?p o" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(EX.x2, :p, 2))}
+        it {expect(subject.execute(graph)).to have_result_set([{ p: EX.p }])}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 1}
+        its(:variables) {is_expected.to include(:p)}
       end
 
-      it "s p ?o" do
-        query = RDF::Query.new do |query|
-          query << [EX.x3, EX.p, RDF::Query::Variable.new("o")]
-        end
-        expect(query.execute(graph)).to have_result_set [ { o: RDF::Literal.new(3) } ]
+      context "s p ?o" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(EX.x3, EX.p, :o))}
+        it {expect(subject.execute(graph)).to have_result_set([{ o: RDF::Literal.new(3) }])}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 1}
+        its(:variables) {is_expected.to include(:o)}
       end
 
-      it "?s p ?o" do
-        query = RDF::Query.new do |query|
-          query << [RDF::Query::Variable.new("s"), EX.p, RDF::Query::Variable.new("o")]
-        end
-        expect(query.execute(graph)).to have_result_set [ { s: EX.x1, o: RDF::Literal.new(1) },
-                                                       { s: EX.x2, o: RDF::Literal.new(2) },
-                                                       { s: EX.x3, o: RDF::Literal.new(3) }]
+      context "?s p ?o" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(:s, EX.p, :o))}
+        it {expect(subject.execute(graph)).to have_result_set([
+              { s: EX.x1, o: RDF::Literal.new(1) },
+              { s: EX.x2, o: RDF::Literal.new(2) },
+              { s: EX.x3, o: RDF::Literal.new(3) }])}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 2}
+        its(:variables) {is_expected.to include(:s, :o)}
       end
 
-      it "?s ?p o" do
-        query = RDF::Query.new do |query|
-          query << [RDF::Query::Variable.new("s"), RDF::Query::Variable.new("p"), 3]
-        end
-        expect(query.execute(graph)).to have_result_set [ { s: EX.x3, p: EX.p } ]
+      context "?s ?p o" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(:s, :p, 3))}
+        it {expect(subject.execute(graph)).to have_result_set([{ s: EX.x3, p: EX.p }])}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 2}
+        its(:variables) {is_expected.to include(:s, :p)}
       end
 
-      it "s ?p ?o" do
-        query = RDF::Query.new do |query|
-          query << [ EX.x1, RDF::Query::Variable.new("p"), RDF::Query::Variable.new("o")]
-        end
-        expect(query.execute(graph)).to have_result_set [ { p: EX.p, o: RDF::Literal(1) } ]
+      context "s ?p ?o" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(EX.x1, :p, :o))}
+        it {expect(subject.execute(graph)).to have_result_set([{ p: EX.p, o: RDF::Literal(1) }])}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 2}
+        its(:variables) {is_expected.to include(:p, :o)}
+      end
+
+      context "GRAPH ?g {s p o}" do
+        subject {RDF::Query.new(RDF::Query::Pattern.new(EX.x1, EX.p, EX.o), graph_name: RDF::Query::Variable.new("g"))}
+        its(:variables?) {is_expected.to be_truthy}
+        its(:variable_count) {is_expected.to eql 1}
+        its(:variables) {is_expected.to include(:g)}
       end
     end
     

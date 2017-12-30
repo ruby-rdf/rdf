@@ -747,15 +747,6 @@ module RDF
   protected
 
     ##
-    # @overload #to_hash
-    #   Returns all RDF object terms indexed by their subject and predicate
-    #   terms.
-    #
-    #   The return value is a `Hash` instance that has the structure:
-    #   `{subject => {predicate => [*objects]}}`.
-    #
-    #   @return [Hash]
-    #   @deprecated Use {#to_h} instead.
     # @overload #to_writer
     #   Implements #to_writer for each available instance of {RDF::Writer},
     #   based on the writer symbol.
@@ -763,14 +754,6 @@ module RDF
     #   @return [String]
     #   @see {RDF::Writer.sym}
     def method_missing(meth, *args)
-      case meth
-      when :to_hash
-        warn "[DEPRECATION] RDF::Enumerable#to_hash is deprecated, use RDF::Enumerable#to_h instead.\n" +
-             "This is due to the introduction of keyword arugments that attempt to turn the last argument into a hash using #to_hash.\n" +
-             "This can be avoided by explicitly passing an options hash as the last argument.\n" +
-             "Called from #{Gem.location_of_caller.join(':')}"
-        return self.to_h
-      end
       writer = RDF::Writer.for(meth.to_s[3..-1].to_sym) if meth.to_s[0,3] == "to_"
       if writer
         writer.buffer(standard_prefixes: true) {|w| w << self}

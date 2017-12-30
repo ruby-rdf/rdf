@@ -36,7 +36,7 @@ class RDF::Query
     # @param  [Hash{Symbol => RDF::Term}] bindings
     # @yield  [solution]
     def initialize(bindings = {}, &block)
-      @bindings = bindings.to_hash
+      @bindings = bindings.to_h
 
       if block_given?
         case block.arity
@@ -264,25 +264,13 @@ class RDF::Query
   protected
 
     ##
-    # @overload #to_hash
-    #   Returns object representation of this URI, broken into components
-    #
-    #   @return (see #to_h)
-    #   @deprecated Use {#to_h} instead.
-    #
     # @overload binding(name)
     #   Return the binding for this name
     #
     #   @param  [Symbol] name
     #   @return [RDF::Term]
     def method_missing(name, *args, &block)
-      if name == :to_hash
-        warn "[DEPRECATION] RDF::Query::Solution#to_hash is deprecated, use RDF::Query::Solution#to_h instead.\n" +
-             "This is due to the introduction of keyword arugments that attempt to turn the last argument into a hash using #to_hash.\n" +
-             "This can be avoided by explicitly passing an options hash as the last argument.\n" +
-             "Called from #{Gem.location_of_caller.join(':')}"
-        self.to_h
-      elsif args.empty? && @bindings.has_key?(name.to_sym)
+      if args.empty? && @bindings.has_key?(name.to_sym)
         @bindings[name.to_sym]
       else
         super # raises NoMethodError
