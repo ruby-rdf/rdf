@@ -324,6 +324,16 @@ potential to perform intentional actions for which they can be held responsible.
         expect(RDF::Vocabulary.find(term.to_s)).to equal vocab
       end
     end
+    it "returns nil if argument is a BNode" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find(RDF::Node.new("a"))).to be_nil
+      end
+    end
+    it "returns nil if argument an invalid URI" do
+      terms.each do |term, vocab|
+        expect(RDF::Vocabulary.find("a b c")).to be_nil
+      end
+    end
   end
 
   describe ".find_term" do
