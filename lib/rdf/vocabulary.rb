@@ -304,9 +304,11 @@ module RDF
       # @param [RDF::URI] uri
       # @return [Vocabulary]
       def find(uri)
+        uri = RDF::URI(uri) if uri.is_a?(String)
+        return nil unless uri.uri? && uri.valid?
         RDF::Vocabulary.detect do |v|
           if uri.length >= v.to_uri.length
-            RDF::URI(uri).start_with?(v.to_uri)
+            uri.start_with?(v.to_uri)
           else
             v.to_uri.to_s.sub(%r([/#]$), '') == uri.to_s
           end
