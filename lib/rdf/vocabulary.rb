@@ -492,6 +492,10 @@ module RDF
           else                                              statement.predicate.pname.to_sym
           end
 
+          # Skip literals other than plain or english
+          # This is because the ruby representation does not preserve language
+          next if statement.object.literal? && (statement.object.language || :en).to_s !~ /^en-?/
+
           (term[key] ||= []) << statement.object
         end
 
@@ -1080,7 +1084,7 @@ module RDF
         "term(" +
         (self.uri? ? self.to_s.inspect + ",\n" : "\n") +
         "#{indent}  " +
-        attributes.keys.map do |k|
+        attributes.keys.sort.map do |k|
           values = attribute_value(k)
           values = [values].compact unless values.is_a?(Array)
           values = values.map do |value|
