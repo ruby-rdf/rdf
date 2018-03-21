@@ -407,7 +407,7 @@ module RDF
     # @see <http://tools.ietf.org/html/rfc3986#section-5.2>
     # @see RDF::URI#/
     # @see RDF::URI#+
-    # @param  [Array<String, RDF::URI, #to_s>] uris
+    # @param  [Array<String, RDF::URI, #to_s>] uris absolute or relative URIs.
     # @return [RDF::URI]
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.2
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.3
@@ -457,6 +457,8 @@ module RDF
     # RFC3986 section 5.2 as part of the merging and normalization process;
     # this method does not perform any normalization, removal of spurious
     # paths, or removal of parent directory references `(/../)`.
+    #
+    # When `fragment` is a path segment containing a colon, best practice is to prepend a `./` and use {#join}, which resolves dot-segments.
     #
     # See also `#+`, which concatenates the string forms of two URIs without
     # any sort of checking or processing.

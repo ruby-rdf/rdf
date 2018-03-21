@@ -231,6 +231,17 @@ module RDF
           value.to_ruby(indent: indent + "  ")
         elsif value.is_a?(RDF::Term)
           "#{value.to_s.inspect}.freeze"
+        elsif value.is_a?(RDF::List)
+          list_elements = value.map do |u|
+            if u.uri?
+              "#{u.pname.inspect}.freeze"
+            elsif u.respond_to?(:to_ruby)
+              u.to_ruby(indent: indent + "  ")
+            else
+              "#{u.to_s.inspect}.freeze"
+            end
+          end
+          "list(#{list_elements.join(', ')})"
         else
           "#{value.inspect}.freeze"
         end
