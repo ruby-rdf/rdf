@@ -207,7 +207,9 @@ module RDF
 
       Util::File.open_file(filename, options) do |file|
         format_options = options.dup
-        format_options[:content_type] ||= file.content_type if file.respond_to?(:content_type)
+        format_options[:content_type] ||= file.content_type if
+          file.respond_to?(:content_type) &&
+          !file.content_type.to_s.include?('text/plain')
         format_options[:file_name] ||= filename
         reader = if self == RDF::Reader
           # We are the abstract reader class, find an appropriate reader
