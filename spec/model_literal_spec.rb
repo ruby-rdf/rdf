@@ -340,6 +340,31 @@ describe RDF::Literal do
     end
   end
 
+  describe "language-tagged string" do
+    literals(:all_plain_lang).each do |args|
+      it "validates #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).to be_valid
+      end
+    end
+
+    it "invalidates ['foo', :language => 'en f']" do
+      expect(RDF::Literal.new("foo", language: "en f")).not_to be_valid
+    end
+  end
+
+  describe "datatyped literal" do
+    (literals(:all) - literals(:all_simple, :all_plain_lang) +
+     [["foo", datatype: RDF::URI("http://example/bar")]]).each do |args|
+      it "validates #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).to be_valid
+      end
+    end
+
+    it "invalidates ['foo', datatype: 'bar']" do
+      expect(RDF::Literal.new("foo", datatype: "bar")).not_to be_valid
+    end
+  end
+
   describe RDF::Literal::Boolean do
     it_behaves_like 'RDF::Literal with datatype and grammar', "true", RDF::XSD.boolean
     it_behaves_like 'RDF::Literal equality', "true", true
