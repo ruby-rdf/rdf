@@ -5,7 +5,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#date
   # @since 0.2.1
   class Date < Literal
-    DATATYPE = RDF::XSD.date
+    DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#date")
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2})((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
     FORMAT   = '%Y-%m-%d'.freeze
 

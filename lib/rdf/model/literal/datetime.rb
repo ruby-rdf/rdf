@@ -5,7 +5,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#dateTime#boolean
   # @since 0.2.1
   class DateTime < Literal
-    DATATYPE = RDF::XSD.dateTime
+    DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
     FORMAT   = '%Y-%m-%dT%H:%M:%S%:z'.freeze
 
@@ -57,14 +57,14 @@ module RDF; class Literal
     # @return [RDF::Literal]
     def timezone
       if tz == 'Z'
-        RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration)
+        RDF::Literal("PT0S", datatype: RDF::URI("http://www.w3.org/2001/XMLSchema#dayTimeDuration"))
       elsif md = tz.to_s.match(/^([+-])?(\d+):(\d+)?$/)
         plus_minus, hour, min = md[1,3]
         plus_minus = nil unless plus_minus == "-"
         hour = hour.to_i
         min = min.to_i
         res = "#{plus_minus}PT#{hour}H#{"#{min}M" if min > 0}"
-        RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+        RDF::Literal(res, datatype: RDF::URI("http://www.w3.org/2001/XMLSchema#dayTimeDuration"))
       end
     end
 

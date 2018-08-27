@@ -5,7 +5,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#boolean
   # @since 0.2.1
   class Boolean < Literal
-    DATATYPE = RDF::XSD.boolean
+    DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#boolean")
     GRAMMAR  = /^(true|false|1|0)$/.freeze
     TRUES    = %w(true  1).freeze
     FALSES   = %w(false 0).freeze

@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-require 'rdf/vocab/xsd'
 module RDF
   ##
   # An RDF literal.

@@ -11,7 +11,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#decimal
   # @since 0.2.1
   class Decimal < Numeric
-    DATATYPE = RDF::XSD.decimal
+    DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#decimal")
     GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
 
     ##
