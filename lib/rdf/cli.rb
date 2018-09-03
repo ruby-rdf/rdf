@@ -92,6 +92,10 @@ module RDF
       # @return [String]
       attr_reader :description
 
+      # Default value for this option
+      # @return [Object]
+      attr_reader :default
+
       # Potential values (for select or radio) or Ruby datatype
       # @return  [Class, Array<String>]
       attr_reader :datatype
@@ -110,7 +114,7 @@ module RDF
       # @param [Symbol] symbol
       # @param [Array<String>] on
       # @param [String] datatype
-      # @param [String] default
+      # @param [Object] default
       # @param [String] control
       # @param [String] description
       # @param [[:optional, :disabled, :removed, :required]] use
@@ -122,7 +126,7 @@ module RDF
                      description: nil, use: :optional, default: nil, **options, &block)
         raise ArgumentError, "symbol is a required argument" unless symbol
         raise ArgumentError, "on is a required argument" unless on
-        @symbol, @on, @datatype, @control, @description, @use, @callback = symbol.to_sym, Array(on), datatype, control, description, use, block
+        @symbol, @on, @datatype, @control, @description, @use, @default, @callback = symbol.to_sym, Array(on), datatype, control, description, use, default, block
       end
 
       def call(arg, options = {})
