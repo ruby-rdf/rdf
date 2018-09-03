@@ -347,6 +347,10 @@ describe RDF::Literal do
       end
     end
 
+    it "invalidates ['foo', datatype: 'rdf:langString']" do
+      expect(RDF::Literal.new("foo", datatype: RDF::langString)).not_to be_valid
+    end
+
     it "invalidates ['foo', :language => 'en f']" do
       expect(RDF::Literal.new("foo", language: "en f")).not_to be_valid
     end
@@ -1281,7 +1285,6 @@ describe RDF::Literal do
       {
         "language with xsd:string" => {value: "foo", language: "en", datatype: RDF::XSD.string},
         "language with xsd:date" => {value: "foo", language: "en", datatype: RDF::XSD.date},
-        "no language with rdf:langString" => {value: "foo", datatype: RDF::langString},
       }.each do |name, opts|
         it "raises error for #{name}" do
           expect {RDF::Literal.new(opts.delete(:value), opts)}.to raise_error(ArgumentError)

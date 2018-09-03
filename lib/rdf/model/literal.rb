@@ -171,7 +171,6 @@ module RDF
       @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= @language ? RDF.langString : RDF::URI("http://www.w3.org/2001/XMLSchema#string")
-      raise ArgumentError, "datatype of rdf:langString requires a language" if !@language && @datatype == RDF::langString
     end
 
     ##
@@ -363,6 +362,7 @@ module RDF
     def valid?
       return false if language? && language.to_s !~ /^[a-zA-Z]+(-[a-zA-Z0-9]+)*$/
       return false if datatype? && datatype.invalid?
+      return fals if language? && !@language
       grammar = self.class.const_get(:GRAMMAR) rescue nil
       grammar.nil? || !!(value =~ grammar)
     end
