@@ -362,7 +362,7 @@ module RDF
     def valid?
       return false if language? && language.to_s !~ /^[a-zA-Z]+(-[a-zA-Z0-9]+)*$/
       return false if datatype? && datatype.invalid?
-      return fals if language? && !@language
+      return false if language? && !@language
       grammar = self.class.const_get(:GRAMMAR) rescue nil
       grammar.nil? || !!(value =~ grammar)
     end
