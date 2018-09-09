@@ -12,6 +12,10 @@ describe RDF::Literal do
     when :plain       then ['Hello'.freeze]
     when :empty_lang  then [''.freeze, {language: :en}]
     when :plain_lang  then ['Hello'.freeze, {language: :en}]
+    # langString language: must not contain spaces
+    when :wrong_lang  then ['WrongLang'.freeze, {language: "en f"}]
+    # langString language: must be non-empty valid language
+    when :unset_lang  then ['NoLanguage'.freeze, {datatype: RDF::langString}]
     when :string      then ['String.freeze', {datatype: RDF::XSD.string}]
     when :false       then [false]
     when :true        then [true]
@@ -33,6 +37,7 @@ describe RDF::Literal do
       when :all_simple        then [:empty, :plain, :string].map {|s| literal(s)}
       when :all_plain_lang    then [:empty_lang, :plain_lang].map {|s| literal(s)}
       when :all_native        then [:false, :true, :int, :long, :double, :time, :date, :datetime].map {|s| literal(s)}
+      when :all_invalid_lang  then [:wrong_lang, :unset_lang].map {|s| literal(s)}
       when :all_plain         then literals(:all_simple, :all_plain_lang)
       else                         literals(:all_plain, :all_native)
       end
@@ -337,6 +342,43 @@ describe RDF::Literal do
 
     it "returns itself" do
       expect(subject.squish!).to equal subject
+    end
+  end
+
+  describe "language-tagged string" do
+    literals(:all_plain_lang).each do |args|
+      it "validates #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).to be_valid
+      end
+    end
+
+    literals(:all_invalid_lang).each do |args|
+      it "invalidates #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).not_to be_valid
+      end
+    end
+
+    # test to make sure extra validation is not needed 
+    context "when language? && !@language" do
+      langString = RDF::Literal.new("hello", datatype: RDF::langString)
+      it "should be invalid" do
+        expect(langString.language?).to be true
+        expect(!langString.instance_variable_get("@language")).to be true
+        expect(langString).not_to be_valid
+      end
+    end
+  end
+
+  describe "datatyped literal" do
+    (literals(:all) - literals(:all_simple, :all_plain_lang) +
+     [["foo", datatype: RDF::URI("http://example/bar")]]).each do |args|
+      it "validates #{args.inspect}" do
+        expect(RDF::Literal.new(*args)).to be_valid
+      end
+    end
+
+    it "invalidates ['foo', datatype: 'bar']" do
+      expect(RDF::Literal.new("foo", datatype: "bar")).not_to be_valid
     end
   end
 
@@ -1256,7 +1298,6 @@ describe RDF::Literal do
       {
         "language with xsd:string" => {value: "foo", language: "en", datatype: RDF::XSD.string},
         "language with xsd:date" => {value: "foo", language: "en", datatype: RDF::XSD.date},
-        "no language with rdf:langString" => {value: "foo", datatype: RDF::langString},
       }.each do |name, opts|
         it "raises error for #{name}" do
           expect {RDF::Literal.new(opts.delete(:value), opts)}.to raise_error(ArgumentError)

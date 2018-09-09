@@ -170,8 +170,7 @@ module RDF
       @language = language.to_s.downcase.to_sym if language
       @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
-      @datatype ||= @language ? RDF.langString : RDF::XSD.string
-      raise ArgumentError, "datatype of rdf:langString requires a language" if !@language && @datatype == RDF::langString
+      @datatype ||= @language ? RDF.langString : RDF::URI("http://www.w3.org/2001/XMLSchema#string")
     end
 
     ##
@@ -226,8 +225,8 @@ module RDF
       # * The arguments are plain literals with identical language tags
       # * The first argument is a plain literal with language tag and the second argument is a simple literal or literal typed as xsd:string
       has_language? ?
-        (language == other.language || other.datatype == RDF::XSD.string) :
-        other.datatype == RDF::XSD.string
+        (language == other.language || other.datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")) :
+        other.datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
     end
 
     ##
@@ -317,7 +316,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def plain?
-      [RDF.langString, RDF::XSD.string].include?(datatype)
+      [RDF.langString, RDF::URI("http://www.w3.org/2001/XMLSchema#string")].include?(datatype)
     end
 
     ##
@@ -327,7 +326,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/sparql11-query/#simple_literal
     def simple?
-      datatype == RDF::XSD.string
+      datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
     end
 
     ##
@@ -361,6 +360,8 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since  0.2.1
     def valid?
+      return false if language? && language.to_s !~ /^[a-zA-Z]+(-[a-zA-Z0-9]+)*$/
+      return false if datatype? && datatype.invalid?
       grammar = self.class.const_get(:GRAMMAR) rescue nil
       grammar.nil? || !!(value =~ grammar)
     end
@@ -487,7 +488,7 @@ module RDF
     def method_missing(name, *args)
       case name
       when :to_str
-        return to_s if @datatype == RDF.langString || @datatype == RDF::XSD.string
+        return to_s if @datatype == RDF.langString || @datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
       end
       super
     end
@@ -495,7 +496,7 @@ module RDF
     def respond_to_missing?(name, include_private = false)
       case name
       when :to_str
-        return true if @datatype == RDF.langString || @datatype == RDF::XSD.string
+        return true if @datatype == RDF.langString || @datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
       end
       super
     end

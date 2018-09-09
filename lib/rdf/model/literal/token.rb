@@ -5,7 +5,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/xmlschema11-2/#token
   # @since 0.2.3
   class Token < Literal
-    DATATYPE = RDF::XSD.token
+    DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#token")
     GRAMMAR  = /\A[^\x0D\x0A\x09]+\z/i.freeze # FIXME
 
     ##

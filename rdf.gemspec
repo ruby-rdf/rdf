@@ -18,11 +18,7 @@ Gem::Specification.new do |gem|
   gem.files              = %w(AUTHORS CREDITS README.md UNLICENSE VERSION bin/rdf etc/doap.nt) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w(rdf)
-  gem.default_executable = gem.executables.first
   gem.require_paths      = %w(lib)
-  gem.extensions         = %w()
-  gem.test_files         = %w()
-  gem.has_rdoc           = false
 
   gem.required_ruby_version      = '>= 2.2.2'
   gem.requirements               = []

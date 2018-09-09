@@ -12,7 +12,7 @@ module RDF; class Literal
   # @see   http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#integer
   # @since 0.2.1
   class Integer < Decimal
-    DATATYPE = RDF::XSD.integer
+    DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#integer")
     GRAMMAR  = /^[\+\-]?\d+$/.freeze
 
     ##
