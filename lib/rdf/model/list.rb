@@ -105,7 +105,6 @@ module RDF
     # * each subject has exactly one value for `rdf:first` and
     #   `rdf:rest`.
     # * The value of `rdf:rest` must be either a BNode or `rdf:nil`.
-    # * rdf:type, if present, must be rdf:List.
     # * only the list head may have any other properties
     # @return [Boolean]
     def valid?
@@ -126,7 +125,6 @@ module RDF
             return false unless rest.node? || rest == RDF.nil
             rests += 1
           when RDF.type
-            return false unless st.object == RDF.List || li == subject
           else
             # It may have no other properties
             return false unless li == subject
