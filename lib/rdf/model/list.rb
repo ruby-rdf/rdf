@@ -100,11 +100,13 @@ module RDF
 
     ##
     # Validate the list ensuring that
+    # * each node is referenced exactly once (except for the head, which may have no reference)
     # * rdf:rest values are all BNodes are nil
     # * each subject has exactly one value for `rdf:first` and
     #   `rdf:rest`.
     # * The value of `rdf:rest` must be either a BNode or `rdf:nil`.
-    # * All other properties are ignored.
+    # * rdf:type, if present, must be rdf:List.
+    # * only the list head may have any other properties
     # @return [Boolean]
     def valid?
       li = subject
@@ -123,12 +125,26 @@ module RDF
             rest = st.object
             return false unless rest.node? || rest == RDF.nil
             rests += 1
+          when RDF.type
+            return false unless st.object == RDF.List || li == subject
+          else
+            # It may have no other properties
+            return false unless li == subject
           end
         end
         return false unless firsts == 1 && rests == 1
         li = rest
       end
-      true
+
+      # All elements other than the head must be referenced exactly once
+      return list_nodes.all? do |li|
+        refs = @graph.query(object: li).count
+        case refs
+        when 0 then li == subject
+        when 1 then true
+        else        false
+        end
+      end
     end
 
     # @!attribute [r] subject
