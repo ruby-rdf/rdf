@@ -1,5 +1,6 @@
 # coding: utf-8
 require 'logger'
+require 'delegate'
 
 module RDF; module Util
   ##
@@ -18,7 +19,7 @@ module RDF; module Util
       logger = @options[:logger] if logger.nil? && @options
       if logger.nil?
         # Unless otherwise specified, use $stderr
-        logger = (@options || options)[:logger] = $stderr
+        logger = (@options || options)[:logger] = DelegateClass(IO).new($stderr)
 
         # Reset log_statistics so that it's not inherited across different instances
         logger.log_statistics.clear if logger.respond_to?(:log_statistics)

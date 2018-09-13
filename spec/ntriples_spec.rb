@@ -852,6 +852,27 @@ describe RDF::NTriples::Writer do
       include_examples "c14n", st, result
     end
   end
+
+  context "logging behavior when dumping invalid statements multiple times in a row" do
+    before do
+      allow($stderr).to receive(:write)
+    end
+
+    it "raises each time an invalid statement is dumped (not only the first time)" do
+      g = RDF::Graph.new
+      g.from_ntriples('<http://rubygems.org/gems/rdf/resource/0cb45b70-4c37-4270-9955-350c636496fc> <http://rubygems.org/gems/rdf/ontology/xxx/1.1#testDate> "2018-06-01T16:30:00Z"^^<http://www.w3.org/2001/XMLSchema#date> .')
+
+      errors = (1..5).map do |_|
+        begin
+          g.dump(:ntriples)
+          'noraise'
+        rescue RDF::WriterError
+          'raise'
+        end
+      end
+      expect(errors).to eq(['raise'] * 5)
+    end
+  end
 end
 
 describe RDF::NTriples do

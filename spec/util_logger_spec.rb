@@ -202,7 +202,7 @@ describe RDF::Util::Logger do
     subject {LogTester.new}
 
     it "sets logger to $stderr" do
-      expect(subject.logger).to equal $stderr
+      expect(subject.logger).to eq $stderr
     end
 
     it "forgets log_statistics between instances" do
