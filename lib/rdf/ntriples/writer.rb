@@ -164,7 +164,7 @@ module RDF::NTriples
     # @return [String]
     # @raise  [ArgumentError] if `value` is not an `RDF::Statement` or `RDF::Term`
     def self.serialize(value)
-      writer = self.new
+      writer = (@serialize_writer_memo ||= self.new)
       case value
         when nil then nil
         when FalseClass then value.to_s
