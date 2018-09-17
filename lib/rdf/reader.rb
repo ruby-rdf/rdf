@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RDF
   ##
   # The base class for RDF parsers.
@@ -610,7 +611,8 @@ module RDF
     def readline
       @line = @line_rest || @input.readline
       @line, @line_rest = @line.split("\r", 2)
-      @line = @line.to_s.chomp
+      @line = String.new if @line.nil? # not frozen
+      @line.chomp!
       begin
         @line.encode!(encoding)
       rescue Encoding::UndefinedConversionError, Encoding::InvalidByteSequenceError, Encoding::ConverterNotFoundError
