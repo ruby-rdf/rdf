@@ -154,6 +154,14 @@ module RDF::NTriples
       end
     end
 
+    # cache constantes to optimize escaping the escape chars in self.unescape
+    ESCAPE_CHARS_ESCAPED = ESCAPE_CHARS.each_with_object({}) do |escape, memo|
+      memo[escape.inspect[1...-1]] = escape
+    end.freeze
+    ESCAPE_CHARS_ESCAPED_REGEXP = Regexp.union(
+      ESCAPE_CHARS_ESCAPED.keys
+    ).freeze
+
     ##
     # @param  [String] string
     # @return [String]
@@ -163,8 +171,10 @@ module RDF::NTriples
     def self.unescape(string)
       string = string.dup.force_encoding(Encoding::UTF_8)
 
-      # Decode \t|\n|\r|\"|\\ character escapes:
-      ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
+      # Decode \t|\n|\r|\"|\\ character escapes using Regexp:
+      string.gsub!(ESCAPE_CHARS_ESCAPED_REGEXP) do
+        ESCAPE_CHARS_ESCAPED.fetch($~[0])
+      end
 
       # Decode \uXXXX and \UXXXXXXXX code points:
       string.gsub!(UCHAR) do
