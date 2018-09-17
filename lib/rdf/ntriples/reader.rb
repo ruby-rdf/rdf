@@ -169,17 +169,27 @@ module RDF::NTriples
     # @see    http://blog.grayproductions.net/articles/understanding_m17n
     # @see    http://yehudakatz.com/2010/05/17/encodings-unabridged/
     def self.unescape(string)
-      string = string.dup.force_encoding(Encoding::UTF_8)
+      # Note: avoiding copying the input string when no escaping is needed
+      # greatly reduces the number of allocations and the processing time.
+      unless string.encoding == Encoding::UTF_8
+        string = string.dup.force_encoding(Encoding::UTF_8)
+      end
+
+      # note: Ruby 2.4 should use `match?` of `=~` for better performance.
+      has_escape_chars = (string =~ ESCAPE_CHARS_ESCAPED_REGEXP)
+      has_uchar = (string =~ UCHAR)
+
+      string = string.dup if has_escape_chars || has_uchar
 
       # Decode \t|\n|\r|\"|\\ character escapes using Regexp:
       string.gsub!(ESCAPE_CHARS_ESCAPED_REGEXP) do
         ESCAPE_CHARS_ESCAPED.fetch($~[0])
-      end
+      end if has_escape_chars
 
       # Decode \uXXXX and \UXXXXXXXX code points:
       string.gsub!(UCHAR) do
         [($1 || $2).hex].pack('U*')
-      end
+      end if has_uchar
 
       string
     end
