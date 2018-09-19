@@ -4,6 +4,7 @@ require 'date'
 require 'time'
 
 require 'rdf/version'
+require 'rdf/extensions'
 
 module RDF
   # RDF mixins
