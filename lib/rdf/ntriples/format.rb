@@ -32,7 +32,7 @@ module RDF::NTriples
     # @param [String] sample Beginning several bytes (about 1K) of input.
     # @return [Boolean]
     def self.detect(sample)
-      !!sample.match(%r(
+      sample.match?(%r(
         (?:(?:<[^>]*>) | (?:_:\w+))                             # Subject
         \s*
         (?:<[^>]*>)                                             # Predicate
@@ -40,8 +40,8 @@ module RDF::NTriples
         (?:(?:<[^>]*>) | (?:_:\w+) | (?:"[^"\n]*"(?:^^|@\S+)?)) # Object
         \s*\.
       )x) && !(
-        sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
-        sample.match(%r(<(html|rdf))i)                          # Not HTML or XML
+        sample.match?(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
+        sample.match?(%r(<(html|rdf))i)                          # Not HTML or XML
       ) && !RDF::NQuads::Format.detect(sample)
     end
 
