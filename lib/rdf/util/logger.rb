@@ -9,6 +9,9 @@ module RDF; module Util
   # Modules must provide `@logger`, which returns an instance of `Logger`, or something responding to `#<<`. Logger may also be specified using an `@options` hash containing a `:logger` entry.
   # @since 2.0.0
   module Logger
+    # The IOWrapper class is used to store per-logger state while wrapping an IO such as $stderr.
+    IOWrapper = DelegateClass(IO)
+
     ##
     # Logger instance, found using `options[:logger]`, `@logger`, or `@options[:logger]`
     # @param [Hash{Symbol => Object}] options
@@ -19,7 +22,7 @@ module RDF; module Util
       logger = @options[:logger] if logger.nil? && @options
       if logger.nil?
         # Unless otherwise specified, use $stderr
-        logger = (@options || options)[:logger] = DelegateClass(IO).new($stderr)
+        logger = (@options || options)[:logger] = IOWrapper.new($stderr)
 
         # Reset log_statistics so that it's not inherited across different instances
         logger.log_statistics.clear if logger.respond_to?(:log_statistics)
