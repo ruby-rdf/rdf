@@ -1006,7 +1006,7 @@ module RDF
     def path=(value)
       if value
         # Always lead with a slash
-        value = "/#{value}" if host && value.to_s =~ /^[^\/]/
+        value = "/#{value}" if host && value.to_s.match?(/^[^\/]/)
         object[:path] = value.to_s.force_encoding(Encoding::UTF_8)
       else
         object[:path] = nil

@@ -198,7 +198,7 @@ module RDF
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
-    property.to_s =~ %r{_\d+} ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV[property]
+    property.to_s.match?(%r{_\d+}) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV[property]
   end
 
   ##
