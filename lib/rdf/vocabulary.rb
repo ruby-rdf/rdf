@@ -892,7 +892,7 @@ module RDF
       # @since 0.3.9
       def valid?
         # Validate relative to RFC3987
-        node? || RDF::URI::IRI.match(to_s) || false
+        node? || RDF::URI::IRI.match?(to_s) || false
       end
 
       ##

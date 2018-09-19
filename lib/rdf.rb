@@ -228,7 +228,7 @@ module RDF
   def self.method_missing(property, *args, &block)
     if args.empty?
       # Special-case rdf:_n for all integers
-      RDF_N_REGEXP.match(property) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
+      RDF_N_REGEXP.match?(property) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
     else
       super
     end
