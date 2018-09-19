@@ -154,7 +154,7 @@ module RDF::NTriples
       end
     end
 
-    # cache constantes to optimize escaping the escape chars in self.unescape
+    # cache constants to optimize escaping the escape chars in self.unescape
     ESCAPE_CHARS_ESCAPED = ESCAPE_CHARS.each_with_object({}) do |escape, memo|
       memo[escape.inspect[1...-1]] = escape
     end.freeze
@@ -175,9 +175,8 @@ module RDF::NTriples
         string = string.dup.force_encoding(Encoding::UTF_8)
       end
 
-      # note: Ruby 2.4 should use `match?` of `=~` for better performance.
-      has_escape_chars = (string =~ ESCAPE_CHARS_ESCAPED_REGEXP)
-      has_uchar = (string =~ UCHAR)
+      has_escape_chars = ESCAPE_CHARS_ESCAPED_REGEXP.match?(string)
+      has_uchar = UCHAR.match?(string)
 
       string = string.dup if has_escape_chars || has_uchar
 
