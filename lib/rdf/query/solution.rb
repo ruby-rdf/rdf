@@ -24,7 +24,7 @@ class RDF::Query
     # Undefine all superfluous instance methods:
     undef_method(*instance_methods.
                   map(&:to_s).
-                  select {|m| m =~ /^\w+$/}.
+                  select {|m| m.match?(/^\w+$/)}.
                   reject {|m| %w(object_id dup instance_eval inspect to_s private_methods class should should_not pretty_print).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 

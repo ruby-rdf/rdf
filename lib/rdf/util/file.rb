@@ -290,7 +290,7 @@ module RDF; module Util
       filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       remote_document = nil
 
-      if filename_or_url.to_s =~ /^https?/
+      if filename_or_url.to_s.match?(/^https?/)
         base_uri = filename_or_url.to_s
 
         remote_document = self.http_adapter(!!options[:use_net_http]).
