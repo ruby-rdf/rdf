@@ -36,7 +36,7 @@ module RDF
       # @param [String] sample Beginning several bytes (about 1K) of input.
       # @return [Boolean]
       def self.detect(sample)
-        !!sample.match(%r(
+        sample.match?(%r(
           (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Subject
           \s*
           (?:\s*<[^>]*>)                                          # Predicate
@@ -46,8 +46,8 @@ module RDF
           (?:\s*(?:<[^>]*>) | (?:_:\w+))                          # Graph Name
           \s*\.
         )x) && !(
-          sample.match(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
-          sample.match(%r(<(html|rdf))i)                          # Not HTML or XML
+          sample.match?(%r(@(base|prefix|keywords)|\{)) ||         # Not Turtle/N3/TriG
+          sample.match?(%r(<(html|rdf))i)                          # Not HTML or XML
         )
       end
 

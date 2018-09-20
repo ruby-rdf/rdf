@@ -154,6 +154,14 @@ module RDF::NTriples
       end
     end
 
+    # cache constants to optimize escaping the escape chars in self.unescape
+    ESCAPE_CHARS_ESCAPED = ESCAPE_CHARS.each_with_object({}) do |escape, memo|
+      memo[escape.inspect[1...-1]] = escape
+    end.freeze
+    ESCAPE_CHARS_ESCAPED_REGEXP = Regexp.union(
+      ESCAPE_CHARS_ESCAPED.keys
+    ).freeze
+
     ##
     # @param  [String] string
     # @return [String]
@@ -161,15 +169,26 @@ module RDF::NTriples
     # @see    http://blog.grayproductions.net/articles/understanding_m17n
     # @see    http://yehudakatz.com/2010/05/17/encodings-unabridged/
     def self.unescape(string)
-      string = string.dup.force_encoding(Encoding::UTF_8)
+      # Note: avoiding copying the input string when no escaping is needed
+      # greatly reduces the number of allocations and the processing time.
+      unless string.encoding == Encoding::UTF_8
+        string = string.dup.force_encoding(Encoding::UTF_8)
+      end
 
-      # Decode \t|\n|\r|\"|\\ character escapes:
-      ESCAPE_CHARS.each { |escape| string.gsub!(escape.inspect[1...-1], escape) }
+      has_escape_chars = ESCAPE_CHARS_ESCAPED_REGEXP.match?(string)
+      has_uchar = UCHAR.match?(string)
+
+      string = string.dup if has_escape_chars || has_uchar
+
+      # Decode \t|\n|\r|\"|\\ character escapes using Regexp:
+      string.gsub!(ESCAPE_CHARS_ESCAPED_REGEXP) do
+        ESCAPE_CHARS_ESCAPED.fetch($~[0])
+      end if has_escape_chars
 
       # Decode \uXXXX and \UXXXXXXXX code points:
       string.gsub!(UCHAR) do
         [($1 || $2).hex].pack('U*')
-      end
+      end if has_uchar
 
       string
     end

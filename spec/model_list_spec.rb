@@ -121,6 +121,7 @@ describe RDF::List do
         n = RDF::Node.new
         graph.insert(RDF::Statement(n, RDF.first, "foo"))
         graph.insert(RDF::Statement(n, RDF.rest, RDF.nil))
+        RDF::List.new(subject: n, graph: graph).valid?
         expect(RDF::List.new(subject: n, graph: graph)).to be_valid
       end
 
@@ -163,9 +164,17 @@ describe RDF::List do
           RDF::Statement(:node2, RDF.first, "b"),
           RDF::Statement(:node2, RDF.rest, RDF.nil),
         ],
-        "list with other properties within" => [
+        "list node types rdf:List" => [
           RDF::Statement(:node1, RDF.first, "a"),
           RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+          RDF::Statement(:node2, RDF.type, RDF.List),
+        ],
+        "list node types owl:Class" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node1, RDF.type, RDF::OWL.Class),
           RDF::Statement(:node2, RDF.first, "b"),
           RDF::Statement(:node2, RDF.rest, RDF.nil),
           RDF::Statement(:node2, RDF.type, RDF::OWL.Class),
@@ -205,6 +214,32 @@ describe RDF::List do
           RDF::Statement(:node1, RDF.rest, :node2),
           RDF::Statement(:node2, RDF.first, "b"),
           RDF::Statement(:node2, RDF.rest, :node1),
+        ],
+        "list with other properties within" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+          RDF::Statement(:node2, RDF::RDFS.label, "bar"),
+        ],
+        "list without rdf:nil" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+        ],
+        "list URI rdf:rest" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, RDF::URI("node2")),
+          RDF::Statement(RDF::URI("node2"), RDF.first, "b"),
+          RDF::Statement(RDF::URI("node2"), RDF.rest, RDF.nil),
+        ],
+        "list extra internal references" => [
+          RDF::Statement(:node1, RDF.first, "a"),
+          RDF::Statement(:node1, RDF.rest, :node2),
+          RDF::Statement(:node2, RDF.first, "b"),
+          RDF::Statement(:node2, RDF.rest, RDF.nil),
+          RDF::Statement(:node3, RDF.first, "c"),
+          RDF::Statement(:node3, RDF.rest, :node2),
         ],
       }.each do |name, list|
         it name do

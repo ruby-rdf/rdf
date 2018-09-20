@@ -56,7 +56,7 @@ module RDF::NTriples
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     def self.escape(string, encoding = nil)
       ret = case
-        when string =~ ESCAPE_PLAIN # a shortcut for the simple case
+        when string.match?(ESCAPE_PLAIN) # a shortcut for the simple case
           string
         when string.ascii_only?
           StringIO.open do |buffer|
@@ -164,7 +164,7 @@ module RDF::NTriples
     # @return [String]
     # @raise  [ArgumentError] if `value` is not an `RDF::Statement` or `RDF::Term`
     def self.serialize(value)
-      writer = self.new
+      writer = (@serialize_writer_memo ||= self.new)
       case value
         when nil then nil
         when FalseClass then value.to_s
@@ -256,7 +256,7 @@ module RDF::NTriples
     def format_uri(uri, **options)
       string = uri.to_s
       iriref = case
-        when string =~ ESCAPE_PLAIN_U # a shortcut for the simple case
+        when string.match?(ESCAPE_PLAIN_U) # a shortcut for the simple case
           string
         when string.ascii_only? || (encoding && encoding != Encoding::ASCII)
           StringIO.open do |buffer|

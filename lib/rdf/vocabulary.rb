@@ -620,7 +620,7 @@ module RDF
     # Undefine all superfluous instance methods:
     undef_method(*instance_methods.
                   map(&:to_s).
-                  select {|m| m =~ /^\w+$/}.
+                  select {|m| m.match?(/^\w+$/)}.
                   reject {|m| %w(object_id dup instance_eval inspect to_s class send public_send).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 
@@ -892,7 +892,7 @@ module RDF
       # @since 0.3.9
       def valid?
         # Validate relative to RFC3987
-        node? || RDF::URI::IRI.match(to_s) || false
+        node? || RDF::URI::IRI.match?(to_s) || false
       end
 
       ##
@@ -927,7 +927,7 @@ module RDF
       # Is this neither a class, property or datatype term?
       # @return [Boolean]
       def other?
-        Array(self.type).none? {|t| t.to_s =~ /(Class|Property|Datatype|Restriction)/}
+        Array(self.type).none? {|t| t.to_s.match?(/(Class|Property|Datatype|Restriction)/)}
       end
 
       ##

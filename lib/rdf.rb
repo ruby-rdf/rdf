@@ -4,6 +4,7 @@ require 'date'
 require 'time'
 
 require 'rdf/version'
+require 'rdf/extensions'
 
 module RDF
   # RDF mixins
@@ -197,7 +198,7 @@ module RDF
   # @return [#to_s] property
   # @return [URI]
   def self.[](property)
-    property.to_s =~ %r{_\d+} ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV[property]
+    property.to_s.match?(%r{_\d+}) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV[property]
   end
 
   ##
@@ -227,7 +228,7 @@ module RDF
   def self.method_missing(property, *args, &block)
     if args.empty?
       # Special-case rdf:_n for all integers
-      RDF_N_REGEXP.match(property) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
+      RDF_N_REGEXP.match?(property) ? RDF::URI("#{to_uri}#{property}") : RDF::RDFV.send(property)
     else
       super
     end
