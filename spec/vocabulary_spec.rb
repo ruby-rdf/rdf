@@ -260,6 +260,7 @@ potential to perform intentional actions for which they can be held responsible.
         property :Class
         property :prop
         property :prop2, label: "Test property label", comment: " Test property comment"
+        property :snake_case
       end
     end
 
@@ -270,6 +271,11 @@ potential to perform intentional actions for which they can be held responsible.
     it "camelizes on method_missing" do
       expect(test_vocab.a_missing_method)
         .to eq (test_vocab.to_uri / 'aMissingMethod')
+    end
+
+    it "does not camelize if snake-case term found" do
+      expect(test_vocab.snake_case).to be_a(RDF::Vocabulary::Term)
+      expect(test_vocab.snake_case).to eq (test_vocab.to_uri / 'snake_case')
     end
 
     it "should respond to [] with properties that have been defined" do
