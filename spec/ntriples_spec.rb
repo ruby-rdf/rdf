@@ -662,13 +662,6 @@ describe RDF::NTriples::Writer do
           s = writer.dump(graph, output, encoding: encoding)
           expect(output.external_encoding).to eq encoding
         end
-
-        it "takes encoding from file external_encoding" do
-          output = StringIO.new
-          output.set_encoding encoding
-          s = writer.dump(graph, output)
-          expect(output.external_encoding).to eq encoding
-        end
       end
     end
 

@@ -534,7 +534,7 @@ module RDF
         term_defs.each do |term, attributes|
           # Turn embedded BNodes into either their Term definition or a List
           attributes.each do |ak, avs|
-            attributes[ak] = avs.is_a?(Array) ? avs.map do |av|
+            attributes[ak] = avs.is_a?(Array) ? (avs.map do |av|
               l = RDF::List.new(subject: av, graph: graph)
               if l.valid?
                 RDF::List.new(subject: av) do |nl|
@@ -547,7 +547,7 @@ module RDF
               else
                 av
               end
-            end.compact : avs
+            end).compact : avs
           end
 
           if term == :""
