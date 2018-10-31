@@ -57,7 +57,7 @@ module RDF
 
     IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*").freeze
 
-    IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*").freeze.freeze
+    IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*").freeze
 
     ISEGMENT = Regexp.compile("(?:#{IPCHAR})*").freeze
     ISEGMENT_NZ = Regexp.compile("(?:#{IPCHAR})+").freeze
