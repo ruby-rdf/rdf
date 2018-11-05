@@ -57,7 +57,7 @@ module RDF
 
     IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*").freeze
 
-    IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*").freeze.freeze
+    IFRAGMENT = Regexp.compile("(?:#{IPCHAR}|/|\\?)*").freeze
 
     ISEGMENT = Regexp.compile("(?:#{IPCHAR})*").freeze
     ISEGMENT_NZ = Regexp.compile("(?:#{IPCHAR})+").freeze
@@ -223,6 +223,7 @@ module RDF
     #   @param [Boolean] canonicalize (false)
     def initialize(*args, validate: false, canonicalize: false, **options)
       @value = @object = @hash = nil
+      @mutex = Mutex.new
       uri = args.first
       if uri
         @value = uri.to_s
@@ -665,12 +666,14 @@ module RDF
     # @private
     def freeze
       unless frozen?
-        # Create derived components
-        authority; userinfo; user; password; host; port
-        @value  = value.freeze
-        @object = object.freeze
-        @hash = hash.freeze
-        super
+        @mutex.synchronize do
+          # Create derived components
+          authority; userinfo; user; password; host; port
+          @value  = value.freeze
+          @object = object.freeze
+          @hash = hash.freeze
+          super
+        end
       end
       self
     end

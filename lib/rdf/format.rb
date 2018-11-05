@@ -84,7 +84,7 @@ module RDF
       when content_type
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
-        mime_type = content_type.to_s.split(';').first # remove any media type parameters
+        mime_type = content_type.to_s.split(';').first.to_s # remove any media type parameters
 
         # Ignore text/plain, a historical encoding for N-Triples, which is
         # problematic in format detection, as many web servers will serve
