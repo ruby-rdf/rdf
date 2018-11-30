@@ -6,7 +6,7 @@ module RDF; class Literal
   # @since 0.2.1
   class DateTime < Literal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
-    GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    GRAMMAR  = %r(\A(-?(?:\d{4}|[1-9]\d{4,})-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
     FORMAT   = '%Y-%m-%dT%H:%M:%S%:z'.freeze
 
     ##
