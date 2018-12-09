@@ -13,7 +13,7 @@ describe RDF::Util::File do
 
     it "returns Net::HTTP if rest-client is not available" do
       hide_const("RestClient")
-      RDF::Util::File.remove_instance_variable(:@http_adapter)
+      RDF::Util::File.remove_instance_variable(:@http_adapter) if RDF::Util::File.instance_variable_defined?(:@http_adapter)
       RDF::Util::File.http_adapter
       expect(RDF::Util::File.http_adapter).to eq RDF::Util::File::NetHttpAdapter
     end
@@ -150,6 +150,34 @@ describe RDF::Util::File do
       expect {RDF::Util::File.open_file("file:" + fixture_path("not-here"))}.to raise_error IOError
       opened.opened
     end
+  end
+
+  describe RDF::Util::File::RemoteDocument do
+    subject {
+      described_class.new("body",
+        headers: {
+          content_type: %(text/turtle ; charset=UTF-8 ; foo="a B c"),
+          last_modified: "Thu, 24 Oct 2013 23:46:56 GMT",
+          etag: "abc123",
+          location: "http://location.example.org/",
+          content_encoding: "gzip, identity",
+          link: %(<http://example.com/foo>; rel="self"),
+        },
+        base_uri: "http://base.example.org/",
+        code: 200
+      )
+    }
+
+    its(:read) {is_expected.to eq "body"}
+    its(:base_uri) {is_expected.to eq "http://base.example.org/"}
+    its(:content_type) {is_expected.to eq "text/turtle"}
+    its(:charset) {is_expected.to eq "utf-8"}
+    its(:code) {is_expected.to eq 200}
+    its(:etag) {is_expected.to eq "abc123"}
+    its(:parameters) {is_expected.to eq({charset: "UTF-8", foo: "a B c"})}
+    its(:last_modified) {is_expected.to eq DateTime.parse("Thu, 24 Oct 2013 23:46:56 GMT")}
+    its(:content_encoding) {is_expected.to eq %w(gzip identity)}
+    its(:links) {expect(subject.links.to_a).to eq [["http://example.com/foo", [%w(rel self)]]]}
   end
 
   context "HTTP Adapters" do
