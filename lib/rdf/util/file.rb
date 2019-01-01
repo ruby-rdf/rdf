@@ -348,8 +348,12 @@ module RDF; module Util
       attr_reader :content_type
 
       # Encoding of resource (from Content-Type), downcased. Also applied to content if it is UTF
-      # @return [String}]
+      # @return [String]
       attr_reader :charset
+
+      # Parameters from Content-Type
+      # @return {Symbol => String}]
+      attr_reader :parameters
 
       # Response code
       # @return [Integer]
@@ -385,8 +389,9 @@ module RDF; module Util
         end
         @headers = options.fetch(:headers, {})
         @charset = options[:charset].to_s.downcase if options[:charset]
+        @parameters = {}
 
-        # Find Content-Type
+        # Find Content-Type and extract other parameters
         if headers[:content_type]
           ct, *params = headers[:content_type].split(';').map(&:strip)
           @content_type ||= ct
@@ -394,8 +399,8 @@ module RDF; module Util
           # Find charset
           params.each do |param|
             p, v = param.split('=')
-            next unless p.downcase == 'charset'
-            @charset ||= v.sub(/^["']?(.*)["']?$/, '\1').downcase
+            @parameters[p.downcase.to_sym] = v.sub(/^["']?([^"']*)["']?$/, '\1')
+            @charset ||= @parameters[p.downcase.to_sym].downcase if p.downcase == 'charset'
           end
         end
 

@@ -17,4 +17,13 @@ describe RDF::Writer do
       end
     end
   end
+
+  describe ".accept?" do
+    it "returns true by default" do
+      expect(RDF::Writer.accept?({})).to be_truthy
+    end
+    it "returns block, if given" do
+      expect(RDF::Writer.accept?({}) {false}).to be_falsy
+    end
+  end
 end

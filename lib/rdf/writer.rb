@@ -151,6 +151,22 @@ module RDF
 
     class << self
       alias_method :format_class, :format
+
+      ##
+      # Use parameters from accept-params to determine if the parameters are acceptable to invoke this writer. The `accept_params` will subsequently be provided to the writer instance.
+      #
+      # @example rejecting a writer based on a profile
+      #   JSON::LD::Writer.accept?(profile: "http://www.w3.org/ns/json-ld#compacted http://example.org/black-listed")
+      #     # => false
+      #
+      # @param [Hash{Symbol => String}] accept_params
+      # @yield [accept_params] if a block is given, returns the result of evaluating that block
+      # @yieldparam [Hash{Symbol => String}] accept_params
+      # @return [Boolean]
+      # @see    http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+      def accept?(accept_params)
+        block_given? ? yield(accept_params) : true
+      end
     end
 
     ##
@@ -257,6 +273,8 @@ module RDF
     #   by all writers)
     # @option options [Boolean]  :unique_bnodes   (false)
     #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples::Writer#format_node}
+    # @option options [Hash{Symbol => String}] :accept_params
+    #   Parameters from ACCEPT header entry for the media-range matching this writer.
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
