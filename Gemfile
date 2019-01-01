@@ -22,7 +22,6 @@ group :debug do
   gem 'psych', platforms: [:mri, :rbx]
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
-  gem 'rubinius-debugger', platform: :rbx
   gem 'ruby-debug', platform: :jruby
   gem 'guard-rspec'
 end
@@ -33,9 +32,4 @@ group :test do
   gem 'fasterer'
   gem 'simplecov',  require: false, platform: :mri
   gem 'coveralls',  require: false, platform: :mri
-end
-
-platforms :rbx do
-  gem 'rubysl', '~> 2.0'
-  gem 'rubinius', '~> 2.0'
 end
