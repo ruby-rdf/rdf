@@ -178,7 +178,7 @@ describe RDF::Query do
          end
        end
     end
-    
+
     context "triple pattern combinations" do
       let(:graph) {
         # Normally we would not want all of this crap in the graph for each
@@ -295,7 +295,7 @@ describe RDF::Query do
         sol3 = q3.execute(graph, solutions: sol2)
         expect(sol3).to have_result_set [ { s: EX.x6, o: EX.target, o2: EX.target2, o3: EX.target3 } ]
       end
-      
+
       it "has bindings" do
         query = RDF::Query.new do |query|
           query << [:s, EX.p, :o]
@@ -478,7 +478,7 @@ describe RDF::Query do
           graph << [EX.xu, EX.p, EX.z]
         end
       }
-      
+
       describe "graph-1" do
         subject {
           query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Integer.new(1)]}
@@ -488,17 +488,17 @@ describe RDF::Query do
         it "has two solutions" do
           expect(subject.count).to eq 2
         end
-        
+
         it "has xi1 as a solution" do
           expect(subject.filter(x: EX.xi1)).not_to be_empty
         end
-        
+
         it "has xi2 as a solution" do
           expect(subject.filter(x: EX.xi2)).not_to be_empty
         end
       end
 
-      
+
       describe "graph-2" do
         subject {
           query = RDF::Query.new {pattern [:x, EX.p, RDF::Literal::Double.new("1.0e0")]}
@@ -508,7 +508,7 @@ describe RDF::Query do
         it "has one solution" do
           expect(subject.count).to eq 1
         end
-        
+
         it "has xd1 as a solution" do
           expect(subject.filter(x: EX.xd1)).not_to be_empty
         end
@@ -629,7 +629,7 @@ describe RDF::Query do
         # restrictions, because the semantics of leading optional patterns
         # are hard to get right.
         expect do
-          query = RDF::Query.new do |query|
+          query = RDF::Query.new(validate: true) do |query|
             query.pattern [:s, EX.p2, :o], optional: true
             query.pattern [:s, EX.p, EX.o]
           end
@@ -637,7 +637,7 @@ describe RDF::Query do
         end.to raise_error(ArgumentError)
 
         expect do
-          query = RDF::Query.new do |query|
+          query = RDF::Query.new(validate: true) do |query|
             query.pattern [:s, EX.p, EX.o]
             query.pattern [:s, EX.p2, :o], optional: true
             query.pattern [:s, EX.x, EX.x]
@@ -716,7 +716,7 @@ describe RDF::Query do
               count
           ).to eq 1
         end
-        
+
         it "accepts a block" do
           expect(
             subject.
@@ -725,7 +725,7 @@ describe RDF::Query do
           ).to eq 1
         end
       end
-      
+
       context "order" do
         it "returns ordered solutions using a symbol" do
           orig = subject.dup
@@ -750,7 +750,7 @@ describe RDF::Query do
           subject.order {|a, b| a[:p] <=> b[:p]}
         end
       end
-      
+
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
           solutions = RDF::Query::Solutions(subject.to_a * 2)
@@ -776,7 +776,7 @@ describe RDF::Query do
     it "returns nil by default" do
       expect(subject.graph_name).to be_nil
     end
-    
+
     it "sets and returns a graph_name" do
       subject.graph_name = RDF.first
       expect(subject.graph_name).to eq RDF.first
@@ -794,24 +794,24 @@ describe RDF::Query do
     it "returns false with no graph_name" do
       expect(subject.named?).to be_falsey
     end
-    
+
     it "returns true with a graph_name" do
       subject.graph_name = RDF.first
       expect(subject.named?).to be_truthy
     end
   end
-  
+
   describe "#unnamed?" do
     it "returns true with no graph_name" do
       expect(subject.unnamed?).to be_truthy
     end
-    
+
     it "returns false with a graph_name" do
       subject.graph_name = RDF.first
       expect(subject.unnamed?).to be_falsey
     end
   end
-  
+
   describe "#+" do
     it "returns a new RDF::Query" do
       rhs = RDF::Query.new
@@ -819,7 +819,7 @@ describe RDF::Query do
       expect(q).not_to be_equal(subject)
       expect(q).not_to be_equal(rhs)
     end
-    
+
     it "contains patterns from each query in order" do
       subject.pattern [EX.first, EX.second, EX.third]
       rhs = RDF::Query.new
