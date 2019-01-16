@@ -65,9 +65,12 @@ class RDF::Query
     #   the variable name
     # @param  [RDF::Term] value
     #   an optional variable value
-    def initialize(name = nil, value = nil)
+    # @param [Boolean] distinguished (true)
+    #   defaults to false, unless name looks like a bnode
+    def initialize(name = nil, value = nil, distinguished: true)
       @name  = (name || "g#{__id__.to_i.abs}").to_sym
       @value = value
+      @distinguished = distinguished
     end
 
     ##
@@ -109,7 +112,7 @@ class RDF::Query
     #
     # @return [Boolean]
     def distinguished?
-      @distinguished.nil? || @distinguished
+      @distinguished
     end
 
     ##

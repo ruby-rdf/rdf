@@ -1,12 +1,12 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Query::Variable do
-  context ".new(:x)" do
+  context ".new unbound" do
     let(:var) {RDF::Query::Variable.new(:x)}
     subject {var}
 
     it "is named" do
-      expect(subject.named?).to be_truthy
+      expect(subject).to be_named
       expect(subject.name).to eq :x
     end
 
@@ -35,6 +35,10 @@ describe RDF::Query::Variable do
         expect(subject).to_not be_distinguished
       end
 
+      it "can be created as non-distinguished" do
+        expect(described_class.new(:x, distinguished: false)).not_to be_distinguished
+      end
+
       it "can be made distinguished" do
         subject.distinguished = true
         expect(subject).to be_distinguished
@@ -48,7 +52,6 @@ describe RDF::Query::Variable do
     it "is convertible to a symbol" do
       expect(subject.to_sym).to eq :x
     end
-
 
     it "has no value" do
       expect(subject.value).to be_nil
@@ -104,7 +107,33 @@ describe RDF::Query::Variable do
     end
   end
 
-  context ".new(:x, 123)" do
+  context ".new non-distinguished" do
+    subject {RDF::Query::Variable.new(:x, RDF::Literal(123))}
+
+    it "has a value" do
+      expect(subject.value).to eq RDF::Literal(123)
+    end
+
+    it "is bound" do
+      expect(subject).not_to be_unbound
+      expect(subject).to be_bound
+      expect(subject.variables).to eq({x: subject})
+      expect(subject.bindings).to eq({x: RDF::Literal(123)})
+    end
+
+    it "matches only its value" do
+      [nil, true, false, RDF::Literal(456)].each do |value|
+        expect((subject === value)).to be_falsey
+      end
+      expect((subject === RDF::Literal(123))).to be_truthy
+    end
+
+    it "has a string representation" do
+      expect(subject.to_s).to eq "?x=123"
+    end
+  end
+
+  context ".new bound" do
     subject {RDF::Query::Variable.new(:x, RDF::Literal(123))}
 
     it "has a value" do

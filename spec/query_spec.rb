@@ -602,7 +602,27 @@ describe RDF::Query do
         its(:variables) {is_expected.to include(:g)}
       end
     end
-    
+
+    context "with non-distinguished variables" do
+      before :each do
+        @graph = RDF::Graph.new do |graph|
+          graph << [EX.s1, EX.p, EX.o]
+          graph << [EX.s2, EX.p, EX.o]
+          graph << [EX.s2, EX.p2, EX.o2]
+        end
+      end
+
+      it "matches graphs with a bound non-distinguished variable" do
+        query = RDF::Query.new do |query|
+          query.pattern [:s, EX.p, EX.o]
+          query.pattern [RDF::Query::Variable.new(:s2, distinguished: false), EX.p2, EX.o2]
+        end
+        expect(query.execute(@graph)).to have_result_set([{ s: EX.s1, s2: EX.s2 }, { s: EX.s2, s2: EX.s2 }])
+      end
+
+      it "matches graphs with a unbound non-distinguished variable"
+    end
+
     context "with an optional pattern" do
       before :each do
         @graph = RDF::Graph.new do |graph|

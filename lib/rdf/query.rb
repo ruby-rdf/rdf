@@ -359,8 +359,9 @@ module RDF
         return @solutions if @solutions.empty?
 
         if !pattern.optional?
-          # We have no solutions for variables we should have solutions for:
-          need_vars = pattern.variables.keys
+          # We have no solutions for variables we should have solutions for
+          # (excludes non-distinguished variables):
+          need_vars = pattern.variables.select {|k,v| v.distinguished?}.keys
           @solutions.each do |solution|
             break if need_vars.empty?
             need_vars -= solution.bindings.keys
