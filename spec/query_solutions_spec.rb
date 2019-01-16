@@ -259,4 +259,26 @@ describe RDF::Query::Solutions do
       expect {|b| solutions.each(&b)}.to yield_successive_args(uri, lit)
     end
   end
+
+  describe "#bindings" do
+    subject {
+      RDF::Query::Solutions(
+        RDF::Query::Solution.new(
+          author: RDF::URI("http://ar.to/#self"),
+          age: RDF::Literal(0)
+        ),
+        RDF::Query::Solution.new(
+          author: RDF::Literal("Gregg Kellogg"),
+          age: RDF::Literal(0)
+        )
+      )
+    }
+    it "binds author twice" do
+      expect(subject.bindings).to include(author: [RDF::URI("http://ar.to/#self"), RDF::Literal("Gregg Kellogg")])
+    end
+
+    it "binds age twice" do
+      expect(subject.bindings).to include(age: [RDF::Literal(0), RDF::Literal(0)])
+    end
+  end
 end
