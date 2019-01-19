@@ -206,8 +206,9 @@ module RDF
     # @private
     # @see RDF::Enumerable#project_graph
     def project_graph(graph_name, &block)
-      RDF::Graph.new(graph_name: graph_name, data: self).
-        project_graph(graph_name, &block)
+      graph = RDF::Graph.new(graph_name: graph_name, data: self)
+      graph.each(&block) if block_given?
+      graph
     end
 
     ##

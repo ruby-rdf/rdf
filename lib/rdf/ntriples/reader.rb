@@ -32,7 +32,7 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    ESCAPE_CHARS    = ["\b", "\f", "\t", "\n", "\r", "\"", "\\"].freeze
+    ESCAPE_CHARS    = ["\b", "\f", "\t", "\n", "\r", "\"", "'", "\\"].freeze
     UCHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
     UCHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
     UCHAR           = Regexp.union(UCHAR4, UCHAR8).freeze
@@ -60,7 +60,7 @@ module RDF::NTriples
     # 166s
     PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/.freeze
     # 159s
-    ECHAR                = /\\[tbnrf\\"]/.freeze
+    ECHAR                = /\\[tbnrf"'\\]/.freeze
     # 18
     IRIREF               = /<((?:#{IRI_RANGE}|#{UCHAR})*)>/.freeze
     # 141s
@@ -155,9 +155,16 @@ module RDF::NTriples
     end
 
     # cache constants to optimize escaping the escape chars in self.unescape
-    ESCAPE_CHARS_ESCAPED = ESCAPE_CHARS.each_with_object({}) do |escape, memo|
-      memo[escape.inspect[1...-1]] = escape
-    end.freeze
+    ESCAPE_CHARS_ESCAPED = {
+      "\\b"   =>  "\b",
+      "\\f"   =>  "\f",
+      "\\t"   =>  "\t",
+      "\\n"   =>  "\n",
+      "\\r"   =>  "\r",
+      "\\\""  =>  "\"",
+      "\\'"   =>  "'",
+      "\\\\"  =>  "\\"
+    } .freeze
     ESCAPE_CHARS_ESCAPED_REGEXP = Regexp.union(
       ESCAPE_CHARS_ESCAPED.keys
     ).freeze
@@ -180,7 +187,7 @@ module RDF::NTriples
 
       string = string.dup if has_escape_chars || has_uchar
 
-      # Decode \t|\n|\r|\"|\\ character escapes using Regexp:
+      # Decode \t|\n|\r|\"\'\|\\ character escapes using Regexp:
       string.gsub!(ESCAPE_CHARS_ESCAPED_REGEXP) do
         ESCAPE_CHARS_ESCAPED.fetch($~[0])
       end if has_escape_chars

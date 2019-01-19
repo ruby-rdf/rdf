@@ -42,7 +42,7 @@ module RDF::NTriples
     format RDF::NTriples::Format
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    ESCAPE_PLAIN = /\A[\x20-\x21\x23-#{Regexp.escape '['}#{Regexp.escape ']'}-\x7E]*\z/m.freeze
+    ESCAPE_PLAIN = /\A[\x20-\x21\x23-\x26\x28#{Regexp.escape '['}#{Regexp.escape ']'}-\x7E]*\z/m.freeze
     ESCAPE_PLAIN_U = /\A(?:#{Reader::IRI_RANGE}|#{Reader::UCHAR})*\z/.freeze
 
     ##
@@ -132,6 +132,7 @@ module RDF::NTriples
         when (0x0D)       then "\\r"
         when (0x0E..0x1F) then escape_utf16(u)
         when (0x22)       then "\\\""
+        when (0x27)       then "\\'"
         when (0x5C)       then "\\\\"
         when (0x7F)       then escape_utf16(u)
         when (0x00..0x7F) then u.chr
@@ -264,7 +265,7 @@ module RDF::NTriples
             string.each_char do |u|
               buffer << case u.ord
                 when (0x00..0x20) then self.class.escape_utf16(u)
-                when 0x22, 0x3c, 0x3e, 0x5c, 0x5e, 0x60, 0x7b, 0x7c, 0x7d # <>"{}|`\
+                when 0x22, 0x3c, 0x3e, 0x5c, 0x5e, 0x60, 0x7b, 0x7c, 0x7d # "<>\^`{|}
                   self.class.escape_utf16(u)
                 else u
               end
@@ -278,7 +279,7 @@ module RDF::NTriples
             string.each_byte do |u|
               buffer << case u
                 when (0x00..0x20) then self.class.escape_utf16(u)
-                when 0x22, 0x3c, 0x3e, 0x5c, 0x5e, 0x60, 0x7b, 0x7c, 0x7d # <>"{}|`\
+                when 0x22, 0x3c, 0x3e, 0x5c, 0x5e, 0x60, 0x7b, 0x7c, 0x7d # "<>\^`{|}
                   self.class.escape_utf16(u)
                 when (0x80..0xFFFF)                then self.class.escape_utf16(u)
                 when (0x10000..0x10FFFF)           then self.class.escape_utf32(u)

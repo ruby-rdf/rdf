@@ -291,6 +291,7 @@ describe RDF::NTriples::Reader do
       'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',
       'simple literal' => '<http://subj> <http://pred>  "simple literal" .',
       'backslash:\\'   => '<http://subj> <http://pred> "backslash:\\\\" .',
+      'squote:\''      => '<http://subj> <http://pred> "squote:\'" .',
       'dquote:"'       => '<http://subj> <http://pred> "dquote:\"" .',
       "newline:\n"     => '<http://subj> <http://pred> "newline:\n" .',
       "return\r"       => '<http://subj> <http://pred> "return\r" .',
@@ -334,10 +335,11 @@ describe RDF::NTriples::Reader do
       "line ending with CR NL" => "<http://example.org/resource4> <http://example.org/property> <http://example.org/resource2> .\r\n",
       "literal escapes (1)" => '<http://example.org/resource7> <http://example.org/property> "simple literal" .',
       "literal escapes (2)" => '<http://example.org/resource8> <http://example.org/property> "backslash:\\\\" .',
-      "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
-      "literal escapes (4)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
-      "literal escapes (5)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
-      "literal escapes (6)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
+      "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "squote:\'" .',
+      "literal escapes (4)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
+      "literal escapes (5)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
+      "literal escapes (6)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
+      "literal escapes (7)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
       "Space is optional before final . (2)" => ['<http://example.org/resource14> <http://example.org/property> "x".', '<http://example.org/resource14> <http://example.org/property> "x" .'],
 
       "XML Literals as Datatyped Literals (1)" => '<http://example.org/resource21> <http://example.org/property> ""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
@@ -678,7 +680,9 @@ describe RDF::NTriples::Writer do
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
-        (0x23..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        expect(writer.escape(0x27.chr, encoding)).to eq "\\'"
+        (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x7F.chr, encoding)).to eq "\\u007F"
@@ -738,7 +742,9 @@ describe RDF::NTriples::Writer do
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
-        (0x23..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        expect(writer.escape(0x27.chr, encoding)).to eq "\\'"
+        (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x7F.chr, encoding)).to eq "\\u007F"
