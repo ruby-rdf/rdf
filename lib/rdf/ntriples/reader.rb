@@ -135,7 +135,6 @@ module RDF::NTriples
     # @return [RDF::URI]
     def self.parse_uri(input, intern: false, **options)
       if input =~ URIREF
-        uri_str = unescape($1)
         RDF::URI.send(intern ? :intern : :new, unescape($1))
       end
     end
@@ -178,26 +177,23 @@ module RDF::NTriples
     def self.unescape(string)
       # Note: avoiding copying the input string when no escaping is needed
       # greatly reduces the number of allocations and the processing time.
-      unless string.encoding == Encoding::UTF_8
-        string = string.dup.force_encoding(Encoding::UTF_8)
+      string = string.dup.force_encoding(Encoding::UTF_8) unless string.encoding == Encoding::UTF_8
+      scanner = StringScanner.new(string)
+
+      buffer = ""
+
+      while !scanner.eos?
+        buffer << if scanner.scan(ESCAPE_CHARS_ESCAPED_REGEXP)
+          ESCAPE_CHARS_ESCAPED[scanner.matched]
+        elsif scanner.scan(UCHAR)
+          scanner.matched.sub(UCHAR) {[($1 || $2).hex].pack('U*')}
+        else
+          # Scan one character
+          scanner.getch
+        end
       end
 
-      has_escape_chars = ESCAPE_CHARS_ESCAPED_REGEXP.match?(string)
-      has_uchar = UCHAR.match?(string)
-
-      string = string.dup if has_escape_chars || has_uchar
-
-      # Decode \t|\n|\r|\"\'\|\\ character escapes using Regexp:
-      string.gsub!(ESCAPE_CHARS_ESCAPED_REGEXP) do
-        ESCAPE_CHARS_ESCAPED.fetch($~[0])
-      end if has_escape_chars
-
-      # Decode \uXXXX and \UXXXXXXXX code points:
-      string.gsub!(UCHAR) do
-        [($1 || $2).hex].pack('U*')
-      end if has_uchar
-
-      string
+      buffer
     end
 
     ##
@@ -257,7 +253,7 @@ module RDF::NTriples
         uri.canonicalize! if canonicalize?
         uri
       end
-    rescue ArgumentError => e
+    rescue ArgumentError
       log_error("Invalid URI (found: \"<#{uri_str}>\")", lineno: lineno, token: "<#{uri_str}>", exception: RDF::ReaderError)
     end
 
@@ -265,7 +261,7 @@ module RDF::NTriples
     # @return [RDF::Node]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (nodeID)
     def read_node
-       if node_id = match(NODEID)
+      if node_id = match(NODEID)
         @nodes ||= {}
         @nodes[node_id] ||= RDF::Node.new(node_id)
       end

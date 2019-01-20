@@ -213,12 +213,13 @@ describe RDF::NTriples::Reader do
         "_\\u6C34_"                    => "_\xE6\xB0\xB4_",
         "\\u677E\\u672C \\u540E\\u5B50"=> "松本 后子",
         "D\\u00FCrst"                  => "Dürst",
+        "\\u0039"                      => "9",
+        "\\\\u0039"                    => "\\u0039",
       }
       strings.each do |string, unescaped|
         specify string do
           unescaped = unescaped.encode(Encoding::UTF_8)
           expect(reader.unescape(string.freeze)).to eq unescaped
-
         end
       end
     end
