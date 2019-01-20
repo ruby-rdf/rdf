@@ -116,6 +116,8 @@ module RDF::NTriples
     # sequences, otherwise, assume the test-cases escape sequences. Otherwise,
     # the N-Triples recommendation includes `\b` and `\f` escape sequences.
     #
+    # Within STRING_LITERAL_QUOTE, only the characters `U+0022`, `U+005C`, `U+000A`, `U+000D` are encoded using `ECHAR`. `ECHAR` must not be used for characters that are allowed directly in STRING_LITERAL_QUOTE.
+    #
     # @param  [Integer, #ord] u
     # @return [String]
     # @raise  [ArgumentError] if `u` is not a valid Unicode codepoint
@@ -124,15 +126,10 @@ module RDF::NTriples
     def self.escape_ascii(u, encoding)
       case (u = u.ord)
         when (0x00..0x07) then escape_utf16(u)
-        when (0x08)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\b")
-        when (0x09)       then "\\t"
         when (0x0A)       then "\\n"
-        when (0x0B)       then escape_utf16(u)
-        when (0x0C)       then (encoding && encoding == Encoding::ASCII ? escape_utf16(u) : "\\f")
         when (0x0D)       then "\\r"
         when (0x0E..0x1F) then escape_utf16(u)
         when (0x22)       then "\\\""
-        when (0x27)       then "\\'"
         when (0x5C)       then "\\\\"
         when (0x7F)       then escape_utf16(u)
         when (0x00..0x7F) then u.chr
