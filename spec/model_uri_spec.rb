@@ -983,4 +983,17 @@ describe RDF::URI do
       end
     end
   end
+
+  describe 'marshaling' do
+    subject { RDF::URI("http://example/") }
+
+    it "marshals them" do
+      marshaled = Marshal.dump(subject)
+      loaded    = Marshal.load(marshaled)
+
+      expect(loaded).to eq subject
+      # It should have a mutex
+      expect { loaded.freeze }.not_to raise_error
+    end
+  end
 end

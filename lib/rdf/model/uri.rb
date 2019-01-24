@@ -1263,6 +1263,26 @@ module RDF
       return res
     end
 
+    ##
+    # Dump of data needed to reconsitute this object using Marshal.load
+    # This override is needed to avoid serializing @mutex.
+    #
+    # @param [Integer] level The maximum depth of objects to dump.
+    # @return [String] The dump of data needed to reconsitute this object.
+    def _dump(level)
+      value
+    end
+
+    ##
+    # Load dumped data to reconsitute marshaled object
+    # This override is needed to avoid serializing @mutex.
+    #
+    # @param [String] data The dump of data needed to reconsitute this object.
+    # @return [RDF::URI] The reconsituted object.
+    def self._load(data)
+      new(data)
+    end
+
   private
 
     ##
