@@ -169,8 +169,7 @@ module RDF
     def self.normalize_path(path)
       output, input = "", path.to_s
       if input.encoding != Encoding::ASCII_8BIT
-        input = input.dup if input.frozen?
-        input = input.force_encoding(Encoding::ASCII_8BIT)
+        input = input.dup.force_encoding(Encoding::ASCII_8BIT)
       end
       until input.empty?
         if input.match(RDS_2A)
@@ -228,8 +227,7 @@ module RDF
       if uri
         @value = uri.to_s
         if @value.encoding != Encoding::UTF_8
-          @value = @value.dup if @value.frozen?
-          @value.force_encoding(Encoding::UTF_8)
+          @value.dup.force_encoding(Encoding::UTF_8)
           @value.freeze
         end
       else
@@ -842,16 +840,16 @@ module RDF
         user, password = userinfo.to_s.split(':', 2)
         host, port = hostport.to_s.split(':', 2)
 
-        parts[:scheme] = (scheme.force_encoding(Encoding::UTF_8) if scheme)
-        parts[:authority] = (authority.force_encoding(Encoding::UTF_8) if authority)
-        parts[:userinfo] = (userinfo.force_encoding(Encoding::UTF_8) if userinfo)
-        parts[:user] = (user.force_encoding(Encoding::UTF_8) if user)
-        parts[:password] = (password.force_encoding(Encoding::UTF_8) if password)
-        parts[:host] = (host.force_encoding(Encoding::UTF_8) if host)
+        parts[:scheme] = (scheme.dup.force_encoding(Encoding::UTF_8) if scheme)
+        parts[:authority] = (authority.dup.force_encoding(Encoding::UTF_8) if authority)
+        parts[:userinfo] = (userinfo.dup.force_encoding(Encoding::UTF_8) if userinfo)
+        parts[:user] = (user.dup.force_encoding(Encoding::UTF_8) if user)
+        parts[:password] = (password.dup.force_encoding(Encoding::UTF_8) if password)
+        parts[:host] = (host.dup.force_encoding(Encoding::UTF_8) if host)
         parts[:port] = (::URI.decode(port).to_i if port)
-        parts[:path] = (path.to_s.force_encoding(Encoding::UTF_8) unless path.empty?)
-        parts[:query] = (query[1..-1].force_encoding(Encoding::UTF_8) if query)
-        parts[:fragment] = (fragment[1..-1].force_encoding(Encoding::UTF_8) if fragment)
+        parts[:path] = (path.to_s.dup.force_encoding(Encoding::UTF_8) unless path.empty?)
+        parts[:query] = (query[1..-1].dup.force_encoding(Encoding::UTF_8) if query)
+        parts[:fragment] = (fragment[1..-1].dup.force_encoding(Encoding::UTF_8) if fragment)
       end
       
       parts
@@ -869,7 +867,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def scheme=(value)
-      object[:scheme] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:scheme] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       @value = nil
       self
     end
@@ -893,7 +891,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def user=(value)
-      object[:user] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:user] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       @object[:userinfo] = format_userinfo("")
       @object[:authority] = format_authority
       @value = nil
@@ -919,7 +917,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def password=(value)
-      object[:password] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:password] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       @object[:userinfo] = format_userinfo("")
       @object[:authority] = format_authority
       @value = nil
@@ -947,7 +945,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def host=(value)
-      object[:host] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:host] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       @object[:authority] = format_authority
       @value = nil
       self
@@ -1010,7 +1008,7 @@ module RDF
       if value
         # Always lead with a slash
         value = "/#{value}" if host && value.to_s.match?(/^[^\/]/)
-        object[:path] = value.to_s.force_encoding(Encoding::UTF_8)
+        object[:path] = value.to_s.dup.force_encoding(Encoding::UTF_8)
       else
         object[:path] = nil
       end
@@ -1069,7 +1067,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def query=(value)
-      object[:query] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:query] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       @value = nil
       self
     end
@@ -1093,7 +1091,7 @@ module RDF
     # @param [String, #to_s] value
     # @return [RDF::URI] self
     def fragment=(value)
-      object[:fragment] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:fragment] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       @value = nil
       self
     end
@@ -1118,7 +1116,7 @@ module RDF
     # @return [RDF::URI] self
     def authority=(value)
       object.delete_if {|k, v| [:user, :password, :host, :port, :userinfo].include?(k)}
-      object[:authority] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:authority] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       user; password; userinfo; host; port
       @value = nil
       self
@@ -1148,7 +1146,7 @@ module RDF
     # @return [RDF::URI] self
     def userinfo=(value)
       object.delete_if {|k, v| [:user, :password, :authority].include?(k)}
-      object[:userinfo] = (value.to_s.force_encoding(Encoding::UTF_8) if value)
+      object[:userinfo] = (value.to_s.dup.force_encoding(Encoding::UTF_8) if value)
       user; password; authority
       @value = nil
       self
@@ -1294,8 +1292,7 @@ module RDF
     # @return [String]
     def normalize_segment(value, expr, downcase = false)
       if value
-        value = value.dup if value.frozen?
-        value = value.force_encoding(Encoding::UTF_8)
+        value = value.dup.force_encoding(Encoding::UTF_8)
         decoded = ::URI.decode(value)
         decoded.downcase! if downcase
         ::URI.encode(decoded, /[^(?:#{expr})]/)
