@@ -50,10 +50,10 @@ module RDF; class Query
 
       # Estmate cost positionally, with variables being least expensive as objects, then predicates, then subjects, then graph_names.
       # XXX does not consider bound variables, which would need to be dynamically calculated.
-      @cost = (@object.nil?     || @object.variable?      ? 1 : 0) +
-              (@predicate.nil?  || @predicate.variable?   ? 2 : 0) +
-              (@subject.nil?    || @subject.variable?     ? 4 : 0) +
-              (@graph_name      && @graph_name.variable?  ? 8 : 0)
+      @cost = (@object.nil?     || @object.is_a?(Variable)      ? 1 : 0) +
+              (@predicate.nil?  || @predicate.is_a?(Variable)   ? 2 : 0) +
+              (@subject.nil?    || @subject.is_a?(Variable)     ? 4 : 0) +
+              (@graph_name.is_a?(Variable)                      ? 8 : 0)
       super
     end
 
