@@ -29,6 +29,22 @@ describe RDF::Query::Variable do
       end
     end
     
+    context "existential" do
+      subject { var.existential = true; var }
+      it "is existential" do
+        expect(subject).to be_existential
+      end
+
+      it "can be made universal" do
+        subject.existential = false
+        expect(subject).not_to be_existential
+      end
+
+      it "has a string representation" do
+        expect(subject.to_s).to eq "$x"
+      end
+    end
+    
     context "non-distinguished" do
       subject { var.distinguished = false; var }
       it "is nondistinguished" do
@@ -46,6 +62,22 @@ describe RDF::Query::Variable do
 
       it "has a string representation" do
         expect(subject.to_s).to eq "??x"
+      end
+    
+      context "existential" do
+        subject { var.existential = true; var.distinguished = false; var }
+        it "is existential" do
+          expect(subject).to be_existential
+        end
+
+        it "can be made universal" do
+          subject.existential = false
+          expect(subject).not_to be_existential
+        end
+
+        it "has a string representation" do
+          expect(subject.to_s).to eq "$$x"
+        end
       end
     end
     
