@@ -104,7 +104,14 @@ module RDF; class Query
       end
       bindings
     end
-    
+
+    ##
+    # Duplicates each solution.
+    # @return [RDF::Query::Solutions]
+    def dup
+      RDF::Query::Solutions.new(self.map(&:dup))
+    end
+
     ##
     # Filters this solution sequence by the given `criteria`.
     #
