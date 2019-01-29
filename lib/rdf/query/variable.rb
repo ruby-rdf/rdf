@@ -65,13 +65,25 @@ class RDF::Query
     #   the variable name
     # @param  [RDF::Term] value
     #   an optional variable value
-    # @param [Boolean] distinguished (true)
-    #   defaults to false, unless name looks like a bnode
-    def initialize(name = nil, value = nil, distinguished: true, existential: false)
-      @name  = (name || "g#{__id__.to_i.abs}").to_sym
+    # @param [Boolean] distinguished (true) Also interpreted by leading '??' or '$$' in name.
+    # @param [Boolean] existential (true) Also interpreted by leading '$' in name
+    def initialize(name = nil, value = nil, distinguished: nil, existential: nil)
+      name = (name || "g#{__id__.to_i.abs}").to_s
+      if name.start_with?('??')
+        name, dis, ex = name[2..-1], false, false
+      elsif name.start_with?('?')
+        name, dis, ex = name[1..-1], true, false
+      elsif name.start_with?('$$')
+        name, dis, ex = name[2..-1], false, true
+      elsif name.start_with?('$')
+        name, dis, ex = name[1..-1], true, true
+      else
+        dis, ex = true, false
+      end
+      @name = name.to_sym
       @value = value
-      @distinguished = distinguished
-      @existential = existential
+      @distinguished = distinguished.nil? ? dis : distinguished
+      @existential = existential.nil? ? ex : existential
     end
 
     ##

@@ -1,67 +1,137 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::Query::Solution do
+  subject {described_class.new(a: 1, "?b": 2, "??c": 3, "$d": 4, "$$e": 5)}
+
   describe "new" do
     it "is instantiable" do
-      expect { RDF::Query::Solution.new }.not_to raise_error
+      expect { described_class.new }.not_to raise_error
     end
   end
-  
+
+  describe "#each_binding" do
+    it "returns an enumerator" do
+      expect(subject.each_binding).to be_an Enumerator
+    end
+
+    it "yields each binding" do
+      expect{|b| subject.each_binding(&b)}.to yield_successive_args([:a, 1], [:"?b", 2], [:"??c", 3], [:"$d", 4], [:"$$e", 5])
+    end
+  end
+
+  describe "#enum_binding" do
+    it "returns each binding" do
+      expect(subject.enum_binding.to_a).to include([:a, 1], [:"?b", 2], [:"??c", 3], [:"$d", 4], [:"$$e", 5])
+    end
+  end
+
+  describe "#each_name" do
+    it "returns an enumerator" do
+      expect(subject.each_name).to be_an Enumerator
+    end
+
+    it "yields each name" do
+      expect{|b| subject.each_name(&b)}.to yield_successive_args(:a, :"?b", :"??c", :"$d", :"$$e")
+    end
+  end
+
+  describe "#enum_name" do
+    it "returns each name" do
+      expect(subject.enum_name.to_a).to include(:a, :"?b", :"??c", :"$d", :"$$e")
+    end
+  end
+
+  describe "#each_value" do
+    it "returns an enumerator" do
+      expect(subject.each_value).to be_an Enumerator
+    end
+
+    it "yields each value" do
+      expect{|b| subject.each_value(&b)}.to yield_successive_args(1, 2, 3, 4, 5)
+    end
+  end
+
+  describe "#enum_value" do
+    it "returns each value" do
+      expect(subject.enum_value.to_a).to include(1, 2, 3, 4, 5)
+    end
+  end
+
+  describe "#each_variable" do
+    it "returns an enumerator" do
+      expect(subject.each_variable).to be_an Enumerator
+    end
+
+    it "yields each variable" do
+      expect{|b| subject.each_variable(&b)}.to yield_control.exactly(5).times
+    end
+  end
+
+  describe "#enum_variable" do
+    it "creates distinguished variables" do
+      expect(subject.enum_variable.map(&:distinguished?)).to eq([true, true, false, true, false])
+    end
+
+    it "creates existential variables" do
+      expect(subject.enum_variable.map(&:existential?)).to eq([false, false, false, true, true])
+    end
+  end
+
   describe "#compatible?" do
     it "returns true if two solutions have equivalent bindings" do
-      s1 = RDF::Query::Solution.new({a: "1"})
-      s2 = RDF::Query::Solution.new({a: "1"})
+      s1 = described_class.new({a: "1"})
+      s2 = described_class.new({a: "1"})
       expect(s1.compatible?(s2)).to be_truthy
     end
 
     it "returns true if two solutions have overlapping equivalent bindings" do
-      s1 = RDF::Query::Solution.new({a: "1", c: "3"})
-      s2 = RDF::Query::Solution.new({a: "1", b: "2"})
+      s1 = described_class.new({a: "1", c: "3"})
+      s2 = described_class.new({a: "1", b: "2"})
       expect(s1.compatible?(s2)).to be_truthy
     end
-    
+
     it "returns false if two solutions any mappings which are different" do
-      s1 = RDF::Query::Solution.new({a: "1", c: "3"})
-      s2 = RDF::Query::Solution.new({a: "3", c: "3"})
+      s1 = described_class.new({a: "1", c: "3"})
+      s2 = described_class.new({a: "3", c: "3"})
       expect(s1.compatible?(s2)).to be_falsey
     end
 
     context "subsetByExcl02" do
       {
         "lifeForm1 and lifeForm2" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           false
         ],
         "lifeForm1 and lifeForm3" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
           false
         ],
         "lifeForm2 and lifeForm2" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           true
         ],
         "lifeForm2 and lifeForm3" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
           false
         ],
         "lifeForm3 and lifeForm2" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           false
         ],
         "lifeForm3 and lifeForm3" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
           true
         ],
       }.each do |name, (l, r, expect)|
@@ -75,23 +145,23 @@ describe RDF::Query::Solution do
       end
     end
   end
-  
+
   describe "#eql?" do
     it "returns true if two solutions have equivalent bindings" do
-      s1 = RDF::Query::Solution.new({a: "1"})
-      s2 = RDF::Query::Solution.new({a: "1"})
+      s1 = described_class.new({a: "1"})
+      s2 = described_class.new({a: "1"})
       expect(s1.eql?(s2)).to be_truthy
     end
 
     it "returns false if two solutions have overlapping equivalent bindings" do
-      s1 = RDF::Query::Solution.new({a: "1", c: "3"})
-      s2 = RDF::Query::Solution.new({a: "1", b: "2"})
+      s1 = described_class.new({a: "1", c: "3"})
+      s2 = described_class.new({a: "1", b: "2"})
       expect(s1.eql?(s2)).to be_falsey
     end
-    
+
     it "returns false if two solutions any mappings which are different" do
-      s1 = RDF::Query::Solution.new({a: "1", c: "3"})
-      s2 = RDF::Query::Solution.new({a: "3", c: "3"})
+      s1 = described_class.new({a: "1", c: "3"})
+      s2 = described_class.new({a: "3", c: "3"})
       expect(s1.eql?(s2)).to be_falsey
     end
   end
@@ -99,18 +169,18 @@ describe RDF::Query::Solution do
   describe "#disjoint?" do
     {
       "with equivalent solutions" => [
-        RDF::Query::Solution.new({a: "1", c: "3"}),
-        RDF::Query::Solution.new({a: "1", c: "3"}),
+        described_class.new({a: "1", c: "3"}),
+        described_class.new({a: "1", c: "3"}),
         false
       ],
       "with overlapping solutions" => [
-        RDF::Query::Solution.new({a: "1", b: "3"}),
-        RDF::Query::Solution.new({a: "1", c: "3"}),
+        described_class.new({a: "1", b: "3"}),
+        described_class.new({a: "1", c: "3"}),
         false
       ],
       "with disjoint solutions" => [
-        RDF::Query::Solution.new({a: "1", b: "3"}),
-        RDF::Query::Solution.new({A: "1", B: "3"}),
+        described_class.new({a: "1", b: "3"}),
+        described_class.new({A: "1", B: "3"}),
         true
       ]
     }.each do |name, (l, r, expect)|
@@ -126,39 +196,39 @@ describe RDF::Query::Solution do
     context "subsetByExcl02" do
       {
         "lifeForm1 and lifeForm2" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           true
         ],
         "lifeForm1 and lifeForm3" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm1")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
           true
         ],
         "lifeForm2 and lifeForm2" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           false
         ],
         "lifeForm2 and lifeForm3" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
           true
         ],
         "lifeForm3 and lifeForm2" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm2"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Reptile")),
           true
         ],
         "lifeForm3 and lifeForm3" => [
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
-          RDF::Query::Solution.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
-                                   type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3")),
+          described_class.new(animal: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#lifeForm3"),
+                                type: RDF::URI("http://www.w3.org/2009/sparql/docs/tests/data-sparql11/negation#Insect")),
           false
         ],
       }.each do |name, (l, r, expect)|
@@ -176,7 +246,7 @@ describe RDF::Query::Solution do
   context "Examples" do
     let(:foo) {RDF::Query::Variable.new(:title, "foo")}
     let(:bar) {RDF::Query::Variable.new(:mbox, "jrhacker@example.org")}
-    let!(:solution) {RDF::Query::Solution.new(title: "foo", mbox: "jrhacker@example.org")}
+    let!(:solution) {described_class.new(title: "foo", mbox: "jrhacker@example.org")}
 
     it "Iterating over every binding in the solution" do
       expect {|b| solution.each_binding(&b)}.to yield_successive_args([:title, "foo"], [:mbox, "jrhacker@example.org"])
