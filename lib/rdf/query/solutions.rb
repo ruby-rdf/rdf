@@ -109,7 +109,7 @@ module RDF; class Query
     # Duplicates each solution.
     # @return [RDF::Query::Solutions]
     def dup
-      RDF::Query::Solutions.new(self.map(&:dup))
+      RDF::Query::Solutions.new(self.compact.map(&:dup))
     end
 
     ##
