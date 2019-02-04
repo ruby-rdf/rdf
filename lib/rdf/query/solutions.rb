@@ -113,6 +113,21 @@ module RDF; class Query
     end
 
     ##
+    # Merge solutions in `other` into a new solutions instance. Each solution in `other` is merged into those solutions in `self` that are compatible.
+    #
+    # @param [RDF::Query::Solutions] other
+    # @return [RDF::Query::Solutions]
+    def merge(other)
+      other ||= RDF::Query::Solutions()
+      return other if self.empty?
+      return self if other.empty?
+
+      RDF::Query::Solutions(self.map do |s1|
+        other.map { |s2| s2.merge(s1) if s2.compatible?(s1) }
+      end.flatten.compact)
+    end
+
+    ##
     # Filters this solution sequence by the given `criteria`.
     #
     # @param  [Hash{Symbol => Object}] criteria
