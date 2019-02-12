@@ -7,7 +7,7 @@ module RDF; class Literal
   class DateTime < Literal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
     GRAMMAR  = %r(\A(-?(?:\d{4}|[1-9]\d{4,})-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%Y-%m-%dT%H:%M:%S%:z'.freeze
+    FORMAT   = '%Y-%m-%dT%H:%M:%S.%L%:z'.freeze
 
     ##
     # @param  [DateTime] value
@@ -31,9 +31,9 @@ module RDF; class Literal
     def canonicalize!
       if self.valid?
         @string = if has_timezone?
-          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z')
+          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z').sub('.000', '')
         else
-          @object.strftime(FORMAT[0..-4])
+          @object.strftime(FORMAT[0..-4]).sub('.000', '')
         end
       end
       self
@@ -81,6 +81,16 @@ module RDF; class Literal
     end
 
     ##
+    # Does the literal representation include millisectonds?
+    #
+    # @return [Boolean]
+    # @since 1.1.6
+    def has_milliseconds?
+      self.format("%L").to_i > 0
+    end
+    alias_method :has_ms?, :has_milliseconds?
+
+    ##
     # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
     #
     # @return [Boolean]
@@ -98,7 +108,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime(FORMAT).sub("+00:00", 'Z')
+      @string || @object.strftime(FORMAT).sub("+00:00", 'Z').sub('.000', '')
     end
 
     ##
