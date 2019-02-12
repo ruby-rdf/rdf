@@ -22,7 +22,6 @@ group :debug do
   gem 'psych', platforms: [:mri, :rbx]
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
-  gem 'ruby-debug', platform: :jruby
   gem 'guard-rspec'
 end
 

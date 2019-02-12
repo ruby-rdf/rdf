@@ -206,8 +206,9 @@ module RDF
     # @private
     # @see RDF::Enumerable#project_graph
     def project_graph(graph_name, &block)
-      RDF::Graph.new(graph_name: graph_name, data: self).
-        project_graph(graph_name, &block)
+      graph = RDF::Graph.new(graph_name: graph_name, data: self)
+      graph.each(&block) if block_given?
+      graph
     end
 
     ##
@@ -324,8 +325,8 @@ module RDF
           @data.each do |g, ss|
             ss.each do |s, ps|
               ps.each do |p, os|
-                os.each do |o|
-                  yield RDF::Statement.new(s, p, o, graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g)
+                os.each do |o, object_options|
+                  yield RDF::Statement.new(s, p, o, object_options.merge(graph_name: g.equal?(DEFAULT_GRAPH) ? nil : g))
                 end
               end
             end
@@ -402,9 +403,9 @@ module RDF
                      []
                    end
               ps.each do |p, os|
-                os.each do |o|
+                os.each do |o, object_options|
                   next unless object.nil? || object.eql?(o)
-                  yield RDF::Statement.new(s, p, o, graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c)
+                  yield RDF::Statement.new(s, p, o, object_options.merge(graph_name: c.equal?(DEFAULT_GRAPH) ? nil : c))
                 end
               end
             end
@@ -461,7 +462,7 @@ module RDF
         data.has_key?(g) &&
           data[g].has_key?(s) &&
           data[g][s].has_key?(p) &&
-          data[g][s][p].include?(o)
+          data[g][s][p].has_key?(o)
       end
 
       ##
@@ -475,9 +476,9 @@ module RDF
           c ||= DEFAULT_GRAPH
           
           return data.put(c) do |subs|
-            subs = (subs || Hamster::Hash.new).put(s) do |preds|
-              preds = (preds || Hamster::Hash.new).put(p) do |objs|
-                (objs || Hamster::Set.new).add(o)
+            (subs || Hamster::Hash.new).put(s) do |preds|
+              (preds || Hamster::Hash.new).put(p) do |objs|
+                (objs || Hamster::Hash.new).put(o, statement.options)
               end
             end
           end

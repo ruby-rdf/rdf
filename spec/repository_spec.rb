@@ -55,4 +55,11 @@ describe RDF::Repository do
       expect(solutions.size).to eq unnamed_statements.size
     end
   end
+
+  it "remembers statement obtions" do
+    subject << existing_statement = RDF::Statement(:s, RDF.type, :o, inferred: true)
+    expect(subject).to have_statement(existing_statement)
+    expect(subject.statements.first).to eq existing_statement
+    expect(subject.statements.first).to be_inferred
+  end
 end

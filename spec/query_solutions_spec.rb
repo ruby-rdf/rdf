@@ -67,6 +67,64 @@ describe RDF::Query::Solutions do
     end
   end
 
+  describe "merge" do
+    {
+      "add x dijoint" => [
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/b")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/c")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(x: RDF::URI("http://example.org/x")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), x: RDF::URI("http://example.org/x")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/b"), x: RDF::URI("http://example.org/x")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/c"), x: RDF::URI("http://example.org/x")),
+        ]),
+      ],
+      "add x shared" => [
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), x: RDF::URI("http://example.org/x")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/b"), x: RDF::URI("http://example.org/x")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/c"), x: RDF::URI("http://example.org/x")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), y: RDF::URI("http://example.org/y")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/b"), y: RDF::URI("http://example.org/y")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/c"), y: RDF::URI("http://example.org/y")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), x: RDF::URI("http://example.org/x"), y: RDF::URI("http://example.org/y")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/b"), x: RDF::URI("http://example.org/x"), y: RDF::URI("http://example.org/y")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/c"), x: RDF::URI("http://example.org/x"), y: RDF::URI("http://example.org/y")),
+        ]),
+      ],
+      "add x disjoint" => [
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), x: RDF::URI("http://example.org/x")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/b"), x: RDF::URI("http://example.org/x")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/c"), x: RDF::URI("http://example.org/x")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), y: RDF::URI("http://example.org/y")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/d"), y: RDF::URI("http://example.org/y")),
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/e"), y: RDF::URI("http://example.org/y")),
+        ]),
+        RDF::Query::Solutions.new.concat([
+          RDF::Query::Solution.new(animal: RDF::URI("http://example.org/a"), x: RDF::URI("http://example.org/x"), y: RDF::URI("http://example.org/y")),
+        ]),
+      ],
+    }.each do |name, (left, right, result)|
+      it name do
+        expect(left.merge(right)).to be_a(Enumerable)
+        expect(left.merge(right)).to be_a(RDF::Query::Solutions)
+        expect(left.merge(right).to_a).to eq result.to_a
+      end
+    end
+  end
+
   describe "#-" do
     {
       "subsetByExcl01" => [
@@ -257,6 +315,28 @@ describe RDF::Query::Solutions do
   describe "#each" do
     it "Iterating over all found solutions" do
       expect {|b| solutions.each(&b)}.to yield_successive_args(uri, lit)
+    end
+  end
+
+  describe "#bindings" do
+    subject {
+      RDF::Query::Solutions(
+        RDF::Query::Solution.new(
+          author: RDF::URI("http://ar.to/#self"),
+          age: RDF::Literal(0)
+        ),
+        RDF::Query::Solution.new(
+          author: RDF::Literal("Gregg Kellogg"),
+          age: RDF::Literal(0)
+        )
+      )
+    }
+    it "binds author twice" do
+      expect(subject.bindings).to include(author: [RDF::URI("http://ar.to/#self"), RDF::Literal("Gregg Kellogg")])
+    end
+
+    it "binds age twice" do
+      expect(subject.bindings).to include(age: [RDF::Literal(0), RDF::Literal(0)])
     end
   end
 end

@@ -65,9 +65,25 @@ class RDF::Query
     #   the variable name
     # @param  [RDF::Term] value
     #   an optional variable value
-    def initialize(name = nil, value = nil)
-      @name  = (name || "g#{__id__.to_i.abs}").to_sym
+    # @param [Boolean] distinguished (true) Also interpreted by leading '??' or '$$' in name.
+    # @param [Boolean] existential (true) Also interpreted by leading '$' in name
+    def initialize(name = nil, value = nil, distinguished: nil, existential: nil)
+      name = (name || "g#{__id__.to_i.abs}").to_s
+      if name.start_with?('??')
+        name, dis, ex = name[2..-1], false, false
+      elsif name.start_with?('?')
+        name, dis, ex = name[1..-1], true, false
+      elsif name.start_with?('$$')
+        name, dis, ex = name[2..-1], false, true
+      elsif name.start_with?('$')
+        name, dis, ex = name[1..-1], true, true
+      else
+        dis, ex = true, false
+      end
+      @name = name.to_sym
       @value = value
+      @distinguished = distinguished.nil? ? dis : distinguished
+      @existential = existential.nil? ? ex : existential
     end
 
     ##
@@ -109,7 +125,7 @@ class RDF::Query
     #
     # @return [Boolean]
     def distinguished?
-      @distinguished.nil? || @distinguished
+      @distinguished
     end
 
     ##
@@ -119,6 +135,23 @@ class RDF::Query
     # @return [Boolean]
     def distinguished=(value)
       @distinguished = value
+    end
+
+    ##
+    # Returns `true` if this variable is existential.
+    #
+    # @return [Boolean]
+    def existential?
+      @existential
+    end
+
+    ##
+    # Sets if variable is existential or univeresal.
+    # By default, variables are universal
+    #
+    # @return [Boolean]
+    def existential=(value)
+      @existential = value
     end
 
     ##
@@ -208,6 +241,7 @@ class RDF::Query
     #
     # Non-distinguished variables are indicated with a double `??`
     #
+    # Existential variables are indicated using a single `$`, or with `$$` if also non-distinguished
     # @example
     #   v = Variable.new("a")
     #   v.to_s => '?a'
@@ -216,7 +250,7 @@ class RDF::Query
     #
     # @return [String]
     def to_s
-      prefix = distinguished? ? '?' : "??"
+      prefix = distinguished? ? (existential? ? '$' : '?') : (existential? ? '$$' : '??')
       unbound? ? "#{prefix}#{name}" : "#{prefix}#{name}=#{value}"
     end
   end # Variable

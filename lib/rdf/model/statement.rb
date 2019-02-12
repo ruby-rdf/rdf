@@ -57,6 +57,9 @@ module RDF
     # @return [RDF::Term]
     attr_accessor :object
 
+    # @return [Hash{Symbol => Object}]
+    attr_accessor :options
+
     ##
     # @overload initialize(**options)
     #   @param  [Hash{Symbol => Object}] options

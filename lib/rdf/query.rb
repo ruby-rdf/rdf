@@ -171,10 +171,12 @@ module RDF
     #     Alias for `:graph_name`.
     #   @param  [Hash{Symbol => Object}] options
     #     any additional keyword options
+    # @option options [Boolean] validate (false)
+    #   validate patterns
     #   @yield  [query]
     #   @yieldparam  [RDF::Query] query
     #   @yieldreturn [void] ignored
-    def initialize(*patterns, solutions: nil, graph_name: nil, name: nil, **options, &block)
+    def initialize(*patterns, solutions: nil, graph_name: nil, name: nil, validate: false, **options, &block)
       @options = options.dup
       @solutions = Query::Solutions(solutions)
       graph_name = name if graph_name.nil?
@@ -195,6 +197,8 @@ module RDF
           else instance_eval(&block)
         end
       end
+
+      validate! if validate
     end
 
     ##
@@ -291,7 +295,6 @@ module RDF
     # @see    http://www.holygoat.co.uk/blog/entry/2005-10-25-1
     # @see    http://www.w3.org/TR/sparql11-query/#emptyGroupPattern
     def execute(queryable, solutions: Solution.new, graph_name: nil, name: nil, **options, &block)
-      validate!
       options = {bindings: {}}.merge(options)
 
       # Use provided solutions to allow for query chaining
@@ -356,8 +359,9 @@ module RDF
         return @solutions if @solutions.empty?
 
         if !pattern.optional?
-          # We have no solutions for variables we should have solutions for:
-          need_vars = pattern.variables.keys
+          # We have no solutions for variables we should have solutions for
+          # (excludes non-distinguished variables):
+          need_vars = pattern.variables.select {|k,v| v.distinguished?}.keys
           @solutions.each do |solution|
             break if need_vars.empty?
             need_vars -= solution.bindings.keys
@@ -516,12 +520,12 @@ module RDF
     end
 
     ##
-    # Determine if the URI is a valid according to RFC3987
+    # Determine if the query containts valid patterns
     #
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      !!validate!
+      !!validate! rescue raise false
     rescue
       false
     end

@@ -213,12 +213,13 @@ describe RDF::NTriples::Reader do
         "_\\u6C34_"                    => "_\xE6\xB0\xB4_",
         "\\u677E\\u672C \\u540E\\u5B50"=> "松本 后子",
         "D\\u00FCrst"                  => "Dürst",
+        "\\u0039"                      => "9",
+        "\\\\u0039"                    => "\\u0039",
       }
       strings.each do |string, unescaped|
         specify string do
           unescaped = unescaped.encode(Encoding::UTF_8)
           expect(reader.unescape(string.freeze)).to eq unescaped
-
         end
       end
     end
@@ -291,6 +292,7 @@ describe RDF::NTriples::Reader do
       'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',
       'simple literal' => '<http://subj> <http://pred>  "simple literal" .',
       'backslash:\\'   => '<http://subj> <http://pred> "backslash:\\\\" .',
+      'squote:\''      => '<http://subj> <http://pred> "squote:\'" .',
       'dquote:"'       => '<http://subj> <http://pred> "dquote:\"" .',
       "newline:\n"     => '<http://subj> <http://pred> "newline:\n" .',
       "return\r"       => '<http://subj> <http://pred> "return\r" .',
@@ -334,10 +336,11 @@ describe RDF::NTriples::Reader do
       "line ending with CR NL" => "<http://example.org/resource4> <http://example.org/property> <http://example.org/resource2> .\r\n",
       "literal escapes (1)" => '<http://example.org/resource7> <http://example.org/property> "simple literal" .',
       "literal escapes (2)" => '<http://example.org/resource8> <http://example.org/property> "backslash:\\\\" .',
-      "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
-      "literal escapes (4)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
-      "literal escapes (5)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
-      "literal escapes (6)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
+      "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "squote:\'" .',
+      "literal escapes (4)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
+      "literal escapes (5)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
+      "literal escapes (6)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
+      "literal escapes (7)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
       "Space is optional before final . (2)" => ['<http://example.org/resource14> <http://example.org/property> "x".', '<http://example.org/resource14> <http://example.org/property> "x" .'],
 
       "XML Literals as Datatyped Literals (1)" => '<http://example.org/resource21> <http://example.org/property> ""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
@@ -670,15 +673,19 @@ describe RDF::NTriples::Writer do
 
       # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       it "should correctly escape ASCII characters (#x0-#x7F)" do
-        (0x00..0x08).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x09.chr, encoding)).to eq "\\t"
+        (0x00..0x07).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+        expect(writer.escape(0x08.chr, encoding)).to eq "\b"
+        expect(writer.escape(0x09.chr, encoding)).to eq "\t"
         expect(writer.escape(0x0A.chr, encoding)).to eq "\\n"
-        (0x0B..0x0C).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
+        expect(writer.escape(0x0B.chr, encoding)).to eq "\v"
+        expect(writer.escape(0x0C.chr, encoding)).to eq "\f"
         expect(writer.escape(0x0D.chr, encoding)).to eq "\\r"
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
-        (0x23..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        expect(writer.escape(0x27.chr, encoding)).to eq "'"
+        (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x7F.chr, encoding)).to eq "\\u007F"
@@ -729,16 +736,18 @@ describe RDF::NTriples::Writer do
       # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       it "should correctly escape ASCII characters (#x0-#x7F)" do
         (0x00..0x07).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x08.chr, encoding)).to eq (encoding ? "\\b" : "\\u0008")
-        expect(writer.escape(0x09.chr, encoding)).to eq "\\t"
+        expect(writer.escape(0x08.chr, encoding)).to eq "\b"
+        expect(writer.escape(0x09.chr, encoding)).to eq "\t"
         expect(writer.escape(0x0A.chr, encoding)).to eq "\\n"
-        (0x0B..0x0B).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x0C.chr, encoding)).to eq (encoding ? "\\f" : "\\u000C")
+        expect(writer.escape(0x0B.chr, encoding)).to eq "\v"
+        expect(writer.escape(0x0C.chr, encoding)).to eq "\f"
         expect(writer.escape(0x0D.chr, encoding)).to eq "\\r"
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
-        (0x23..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
+        expect(writer.escape(0x27.chr, encoding)).to eq "'"
+        (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x7F.chr, encoding)).to eq "\\u007F"

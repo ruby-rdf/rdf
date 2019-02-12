@@ -12,7 +12,7 @@ module RDF; class Literal
   class Time < Literal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#time")
     GRAMMAR  = %r(\A(\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%H:%M:%S%:z'.freeze
+    FORMAT   = '%H:%M:%S.%L%:z'.freeze
 
     ##
     # @param  [String, DateTime, #to_datetime] value
@@ -43,9 +43,9 @@ module RDF; class Literal
     def canonicalize!
       if self.valid?
         @string = if has_timezone?
-          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z')
+          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z').sub('.000', '')
         else
-          @object.strftime(FORMAT[0..-4])
+          @object.strftime(FORMAT[0..-4]).sub('.000', '')
         end
       end
       self
@@ -91,7 +91,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || @object.strftime(FORMAT).sub("+00:00", 'Z')
+      @string || @object.strftime(FORMAT).sub("+00:00", 'Z').sub('.000', '')
     end
 
     ##
@@ -122,7 +122,7 @@ module RDF; class Literal
         return super unless other.valid?
         # Compare as strings, as time includes a date portion, and adjusting for UTC
         # can create a mismatch in the date portion.
-        self.object.new_offset.strftime('%H%M%S') == other.object.new_offset.strftime('%H%M%S')
+        self.object.new_offset.strftime('%H%M%S.%L') == other.object.new_offset.strftime('%H%M%S.%L')
       when Literal::DateTime, Literal::Date
         false
       else
