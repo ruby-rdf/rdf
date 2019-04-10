@@ -205,7 +205,7 @@ module RDF
             @ontology ||= prop if name.to_s.empty?
 
             # Define an accessor, except for problematic properties
-            (class << self; self; end).send(:define_method, name) { prop } unless %w(property hash).include?(name.to_s)
+            (class << self; self; end).send(:define_method, name) { prop } unless %w(property term hash).include?(name.to_s)
           else
             # Define the term without a name
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
