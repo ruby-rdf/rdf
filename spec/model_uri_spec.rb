@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe RDF::URI do
   it "should be instantiable" do
-    expect { described_class.new('http://rubygems.org/gems/rdf') }.not_to raise_error
+    expect { described_class.new('https://rubygems.org/gems/rdf') }.not_to raise_error
   end
 
   describe ".intern" do
@@ -228,14 +228,14 @@ describe RDF::URI do
 
   describe "#hash" do
     it "should have a consistent hash code" do
-      hash1 = described_class.new('http://rubygems.org/gems/rdf').hash
-      hash2 = described_class.new('http://rubygems.org/gems/rdf').hash
+      hash1 = described_class.new('https://rubygems.org/gems/rdf').hash
+      hash2 = described_class.new('https://rubygems.org/gems/rdf').hash
       expect(hash1).to eq hash2
     end
   end
 
   describe "#dup" do
-    let!(:uri1) {described_class.new('http://rubygems.org/gems/rdf')}
+    let!(:uri1) {described_class.new('https://rubygems.org/gems/rdf')}
     let!(:uri2) {uri1.dup}
     
     describe "original" do
@@ -642,7 +642,7 @@ describe RDF::URI do
     {
       "http://example/"                       => "http://example/",
       "http://example/foo"                    => "http://example/",
-      'http://rubygems.org/gems/rdf'          => 'http://rubygems.org/',
+      'https://rubygems.org/gems/rdf'          => 'https://rubygems.org/',
       "mailto:gregg@greggkellogg.net"         => "mailto:gregg@greggkellogg.net",
       "urn:isbn:12345"                        => "urn:isbn:12345"
     }.each do |uri, root|
@@ -658,7 +658,7 @@ describe RDF::URI do
       "http://example/"                       => nil,
       "http://example/foo"                    => "http://example/",
       "http://example/foo/bar"                => "http://example/foo/",
-      'http://rubygems.org/gems/rdf'          => 'http://rubygems.org/gems/',
+      'https://rubygems.org/gems/rdf'          => 'https://rubygems.org/gems/',
       "mailto:gregg@greggkellogg.net"         => nil,
       "urn:isbn:12345"                        => nil
     }.each do |uri, parent|
@@ -803,7 +803,7 @@ describe RDF::URI do
 
   context "Examples" do
     it "Creating a URI reference (1)" do
-      expect(RDF::URI.new("http://rubygems.org/gems/rdf")).to be_a_uri
+      expect(RDF::URI.new("https://rubygems.org/gems/rdf")).to be_a_uri
     end
 
     it "Creating a URI reference (2)" do
@@ -812,14 +812,14 @@ describe RDF::URI do
     end
 
     it "Creating an interned URI reference" do
-      uri = RDF::URI.intern("http://rubygems.org/gems/rdf")
+      uri = RDF::URI.intern("https://rubygems.org/gems/rdf")
       expect(uri).to be_frozen
     end
 
     it "Getting the string representation of a URI" do
-      uri = RDF::URI.new("http://rubygems.org/gems/rdf")
+      uri = RDF::URI.new("https://rubygems.org/gems/rdf")
       expect(uri.to_s).to be_a(String)
-      expect(uri.to_s).to eql "http://rubygems.org/gems/rdf"
+      expect(uri.to_s).to eql "https://rubygems.org/gems/rdf"
     end
 
     it "#urn?" do

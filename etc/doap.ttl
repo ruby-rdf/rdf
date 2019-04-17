@@ -1,4 +1,4 @@
-@base         <http://rubygems.org/gems/rdf> .
+@base         <https://rubygems.org/gems/rdf> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc:   <http://purl.org/dc/terms/> .
@@ -7,7 +7,7 @@
 
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
-  doap:homepage      <http://rubygems.org/gems/rdf> ;
+  doap:homepage      <https://rubygems.org/gems/rdf> ;
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
@@ -18,7 +18,7 @@
   doap:implements    <http://www.w3.org/TR/rdf11-concepts/>,
                      <http://www.w3.org/TR/n-quads/>,
                      <http://www.w3.org/TR/n-triples/> ;
-  doap:download-page <http://rubygems.org/gems/rdf/> ;
+  doap:download-page <https://rubygems.org/gems/rdf/> ;
   doap:bug-database  <http://github.com/ruby-rdf/rdf/issues> ;
   doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:vendor        <http://datagraph.org/> ;

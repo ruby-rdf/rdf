@@ -21,14 +21,14 @@ module RDF
     #
     # @example running a transaction
     #   repository.transaction(mutable: true) do |tx|
-    #     tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
+    #     tx.insert [RDF::URI("https://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
     #   end
     #
     # Raising an error within the transaction block causes automatic rollback.
     #
     # @example manipulating a live transaction
     #   tx = repository.transaction(mutable: true)
-    #   tx.insert [RDF::URI("http://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
+    #   tx.insert [RDF::URI("https://rubygems.org/gems/rdf"), RDF::RDFS.label, "RDF.rb"]
     #   tx.execute
     #
     # @overload transaction(mutable: false)

@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rdf',            git: 'git://github.com/ruby-rdf/rdf.git'
 gem 'rdf-do',         git: 'git://github.com/ruby-rdf/rdf-do.git'

@@ -3,14 +3,14 @@
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
-* <http://ruby-rdf.github.com/rdf>
-* <http://blog.datagraph.org/2010/12/rdf-for-ruby>
-* <http://blog.datagraph.org/2010/03/rdf-for-ruby>
-* <http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
-* <http://blog.datagraph.org/2010/04/rdf-repository-howto>
+* <https://ruby-rdf.github.com/rdf>
+* <https://blog.datagraph.org/2010/12/rdf-for-ruby>
+* <https://blog.datagraph.org/2010/03/rdf-for-ruby>
+* <https://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
+* <https://blog.datagraph.org/2010/04/rdf-repository-howto>
 
-[![Gem Version](https://badge.fury.io/rb/rdf.png)](http://badge.fury.io/rb/rdf)
-[![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf)
+[![Gem Version](https://badge.fury.io/rb/rdf.png)](https://badge.fury.io/rb/rdf)
+[![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf)
 [![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf)
 [![Join the chat at https://gitter.im/ruby-rdf/rdf](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-rdf/rdf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -18,7 +18,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 
 * 100% pure Ruby with minimal dependencies and no bloat.
 * Fully compatible with [RDF 1.1][] specifications.
-* 100% free and unencumbered [public domain](http://unlicense.org/) software.
+* 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
   serialization format support available through add-on extensions.
@@ -50,11 +50,11 @@ the 1.1 release of RDF.rb:
 * Introduces {RDF::IRI}, as a synonym for {RDF::URI} either {RDF::IRI} or {RDF::URI} can be used interchangeably. Versions of RDF.rb prior to the 1.1 release were already compatible with IRIs. Internationalized Resource Identifiers (see [RFC3987][]) are a super-set of URIs (see [RFC3986][]) which allow for characters other than standard US-ASCII.
 * {RDF::URI} no longer uses the `Addressable` gem. As URIs typically don't need to be parsed, this provides a substantial performance improvement when enumerating or querying graphs and repositories.
 * {RDF::List} no longer emits a `rdf:List` type. However, it will now recognize any subjects that are {RDF::Node} instances as being list elements, as long as they have both `rdf:first` and `rdf:rest` predicates.
-* {RDF::Graph} adding a `graph_name` to a graph may only be done when the underlying storage model supports graph_names (the default {RDF::Repository} does). The notion of `graph_name` in RDF.rb is treated equivalently to [Named Graphs](http://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF Dataset, and graphs on their own are not named.
+* {RDF::Graph} adding a `graph_name` to a graph may only be done when the underlying storage model supports graph_names (the default {RDF::Repository} does). The notion of `graph_name` in RDF.rb is treated equivalently to [Named Graphs](https://www.w3.org/TR/rdf11-concepts/#dfn-named-graph) within an RDF Dataset, and graphs on their own are not named.
 * {RDF::Graph}, {RDF::Statement} and {RDF::List} now include {RDF::Value}, and not {RDF::Resource}. Made it clear that using {RDF::Graph} does not mean that it may be used within an {RDF::Statement}, for this see {RDF::Term}.
 * {RDF::Statement} now is stricter about checking that all elements are valid when validating.
 * {RDF::NTriples::Writer} and {RDF::NQuads::Writer} now default to validate output, only allowing valid statements to be emitted. This may disabled by setting the `:validate` option to `false`.
-* {RDF::Dataset} is introduced as a class alias of {RDF::Repository}. This allows closer alignment to the RDF concept of [Dataset](http://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
+* {RDF::Dataset} is introduced as a class alias of {RDF::Repository}. This allows closer alignment to the RDF concept of [Dataset](https://www.w3.org/TR/rdf11-concepts/#dfn-dataset).
 * The `graph_name` of a graph within a Dataset or Repository may be either an {RDF::IRI} or {RDF::Node}. Implementations of repositories may restrict this to being only {RDF::IRI}.
 * There are substantial and somewhat incompatible changes to {RDF::Literal}. In [RDF 1.1][], all literals are typed, including plain literals and language tagged literals. Internally, plain literals are given the `xsd:string` datatype and language tagged literals are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language tagged literals. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
 * {RDF::Query#execute} now accepts a block and returns {RDF::Query::Solutions}. This allows `enumerable.query(query)` to behave like `query.execute(enumerable)` and either return an enumerable or yield each solution.
@@ -70,9 +70,9 @@ Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symm
 
 ## Tutorials
 
-* [Getting data from the Semantic Web using Ruby and RDF.rb](http://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
-* [Using RDF.rb and Spira to process RDF data from the British Ordnance Survey](http://stephenpope.co.uk/?p=85)
-* [Getting started with RDF and SPARQL using 4store and RDF.rb](http://www.jenitennison.com/blog/node/152)
+* [Getting data from the Semantic Web using Ruby and RDF.rb](https://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
+* [Using RDF.rb and Spira to process RDF data from the British Ordnance Survey](https://stephenpope.co.uk/?p=85)
+* [Getting started with RDF and SPARQL using 4store and RDF.rb](https://www.jenitennison.com/blog/node/152)
 
 ## Command Line
 When installed, RDF.rb includes a `rdf` shell script which acts as a wrapper to perform a number of different
@@ -106,11 +106,11 @@ or
 ### Reading RDF data in the [N-Triples][] format
 
     require 'rdf/ntriples'
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
+    graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nt")
     
 or
 
-    RDF::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
+    RDF::Reader.open("https://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -124,13 +124,13 @@ MimeType or file extension, where available.
 
     require 'rdf/nquads'
     
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
+    graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
 
 A specific sub-type of Reader can also be invoked directly:
 
     require 'rdf/nquads'
     
-    RDF::NQuads::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nq") do |reader|
+    RDF::NQuads::Reader.open("https://ruby-rdf.github.com/rdf/etc/doap.nq") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -182,7 +182,7 @@ Note that no prefixes are loaded automatically, however they can be provided as 
 
     require 'rdf/ntriples'
     
-    graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nt")
+    graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nt")
     query = RDF::Query.new({
       person: {
         RDF.type  => FOAF.Person,
@@ -203,7 +203,7 @@ The same query may also be run from the graph:
 
 In general, querying from using the `queryable` instance allows a specific implementation of `queryable` to perform query optimizations specific to the datastore on which it is based.
 
-A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full support for [SPARQL 1.0](http://www.w3.org/TR/rdf-sparql-query/) queries.
+A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full support for [SPARQL 1.1][] queries.
 
 ### Using pre-defined RDF vocabularies
 
@@ -224,11 +224,9 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 
 ## Documentation
 
-<http://rubydoc.info/github/ruby-rdf/rdf/frames>
+<https://rubydoc.info/github/ruby-rdf/rdf>
 
 ### RDF Object Model
-
-<http://blog.datagraph.org/2010/03/rdf-for-ruby>
 
 * {RDF::Value}
   * {RDF::Term}
@@ -240,7 +238,7 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
       * {RDF::Literal::Double}
       * {RDF::Literal::Integer}
       * {RDF::Literal::Time}
-      * [RDF::XSD](http://rubydoc.info/github/gkellogg/rdf-xsd/master/frames) (extension)
+      * [RDF::XSD](https://rubydoc.info/github/gkellogg/rdf-xsd) (extension)
     * {RDF::Resource}
       * {RDF::Node}
       * {RDF::URI}
@@ -250,7 +248,7 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 
 ### RDF Serialization
 
-<http://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
+<https://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 
 * {RDF::Format}
 * {RDF::Reader}
@@ -267,8 +265,8 @@ other gems:
 * [RDF::JSON][] (extension)
 * [RDF::Microdata][] (extension)
 * [RDF::N3][] (extension)
-* [RDF::Raptor::RDFXML](http://ruby-rdf.github.io/rdf-raptor) (extension)
-* [RDF::Raptor::Turtle](http://ruby-rdf.github.io/rdf-raptor) (extension)
+* [RDF::Raptor::RDFXML](https://ruby-rdf.github.io/rdf-raptor) (extension)
+* [RDF::Raptor::Turtle](https://ruby-rdf.github.io/rdf-raptor) (extension)
 * [RDF::RDFa][] (extension)
 * [RDF::RDFXML][] (extension)
 * [RDF::TriG][] (extension)
@@ -280,7 +278,7 @@ The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 ### RDF Datatypes
 
 RDF.rb only implements core datatypes from the
-[RDF Datatype Map](http://www.w3.org/TR/rdf11-concepts/#datatype-maps). Most other
+[RDF Datatype Map](https://www.w3.org/TR/rdf11-concepts/#datatype-maps). Most other
 XSD and RDF datatype implementations can be find in the following:
 
 * {RDF::XSD}
@@ -296,7 +294,7 @@ from BNode identity (i.e., they each entail the other)
 
 ### RDF Storage
 
-<http://blog.datagraph.org/2010/04/rdf-repository-howto>
+<https://blog.datagraph.org/2010/04/rdf-repository-howto>
 
 * {RDF::Repository}
   * {RDF::Countable}
@@ -306,10 +304,10 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Mutable}
   * {RDF::Durable}
 * {RDF::Transaction}
-* [RDF::AllegroGraph](http://rubydoc.info/github/ruby-rdf/rdf-agraph) (extension)
-* [RDF::Mongo](http://rubydoc.info/github/ruby-rdf/rdf-mongo) (extension)
-* [RDF::DataObjects](http://rubydoc.info/github/ruby-rdf/rdf-do) (extension)
-* [RDF::Sesame](http://www.rubydoc.info/github/ruby-rdf/rdf-sesame) (extension)
+* [RDF::AllegroGraph](https://rubydoc.info/github/ruby-rdf/rdf-agraph) (extension)
+* [RDF::Mongo](https://rubydoc.info/github/ruby-rdf/rdf-mongo) (extension)
+* [RDF::DataObjects](https://rubydoc.info/github/ruby-rdf/rdf-do) (extension)
+* [RDF::Sesame](https://rubydoc.info/github/ruby-rdf/rdf-sesame) (extension)
 
 ### RDF Querying
 
@@ -319,7 +317,7 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
-* [SPARQL](http://rubydoc.info/github/ruby-rdf/sparql) (extension)
+* [SPARQL](https://rubydoc.info/github/ruby-rdf/sparql) (extension)
 
 
 ### RDF Vocabularies
@@ -333,13 +331,13 @@ from BNode identity (i.e., they each entail the other)
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 2.2)
+* [Ruby](https://ruby-lang.org/) (>= 2.2)
 * [LinkHeader][] (>= 0.0.8)
 * Soft dependency on [RestClient][] (>= 1.7)
 
 ## Installation
 
-The recommended installation method is via [RubyGems](http://rubygems.org/).
+The recommended installation method is via [RubyGems](https://rubygems.org/).
 To install the latest official release of RDF.rb, do:
 
     % [sudo] gem install rdf             # Ruby 2+
@@ -353,39 +351,38 @@ To get a local working copy of the development repository, do:
 Alternatively, download the latest development version as a tarball as
 follows:
 
-    % wget http://github.com/ruby-rdf/rdf/tarball/master
+    % wget https://github.com/ruby-rdf/rdf/tarball/master
 
 ## Resources
 
-* <http://rubydoc.info/github/ruby-rdf/rdf/frames>
-* <http://github.com/ruby-rdf/rdf>
-* <http://rubygems.org/gems/rdf>
-* <http://raa.ruby-lang.org/project/rdf/>
-* <http://www.ohloh.net/p/rdf>
+* <https://rubydoc.info/github/ruby-rdf/rdf>
+* <https://github.com/ruby-rdf/rdf>
+* <https://rubygems.org/gems/rdf>
+* <https://www.ohloh.net/p/rdf>
 
 ## Mailing List
 
-* <http://lists.w3.org/Archives/Public/public-rdf-ruby/>
+* <https://lists.w3.org/Archives/Public/public-rdf-ruby/>
 
 ## Authors
 
-* [Arto Bendiken](http://github.com/bendiken) - <http://ar.to/>
-* [Ben Lavender](http://github.com/bhuga) - <http://bhuga.net/>
-* [Gregg Kellogg](http://github.com/gkellogg) - <http://greggkellogg.net/>
+* [Arto Bendiken](https://github.com/artob) - <https://ar.to/>
+* [Ben Lavender](https://github.com/bhuga) - <https://bhuga.net/>
+* [Gregg Kellogg](https://github.com/gkellogg) - <https://greggkellogg.net/>
 
 ## Contributors
 
-* [Călin Ardelean](http://github.com/clnx) - <http://github.com/clnx>
-* [Mark Borkum](http://github.com/markborkum) - <http://github.com/markborkum>
-* [Danny Gagne](http://github.com/danny) - <http://www.dannygagne.com/>
-* [Joey Geiger](http://github.com/jgeiger) - <http://github.com/jgeiger>
-* [Fumihiro Kato](http://github.com/fumi) - <http://fumi.me/>
-* [Naoki Kawamukai](http://github.com/kna) - <http://github.com/kna>
+* [Călin Ardelean](https://github.com/clnx) - <https://github.com/clnx>
+* [Mark Borkum](https://github.com/markborkum) - <https://github.com/markborkum>
+* [Danny Gagne](https://github.com/danny) - <http://www.dannygagne.com/>
+* [Joey Geiger](https://github.com/jgeiger) - <https://github.com/jgeiger>
+* [Fumihiro Kato](https://github.com/fumi) - <https://fumi.me/>
+* [Naoki Kawamukai](https://github.com/kna) - <https://github.com/kna>
 * [Tom Nixon](https://github.com/tomjnixon) - <https://github.com/tomjnixon>
-* [Hellekin O. Wolf](http://github.com/hellekin) - <http://hellekin.cepheide.org/>
-* [John Fieber](http://github.com/jfieber) - <http://github.com/jfieber>
-* [Keita Urashima](http://github.com/ursm) - <http://ursm.jp/>
-* [Pius Uzamere](http://github.com/pius) - <http://pius.me/>
+* [Hellekin O. Wolf](https://github.com/hellekin) - <https://hellekin.cepheide.org/>
+* [John Fieber](https://github.com/jfieber) - <https://github.com/jfieber>
+* [Keita Urashima](https://github.com/ursm) - <https://ursm.jp/>
+* [Pius Uzamere](https://github.com/pius) - <http://pius.me/>
 * [Judson Lester](https://github.com/nyarly) - <https://github.com/nyarly>
 * [Peter Vandenabeele](https://github.com/petervandenabeele) - <https://github.com/petervandenabeele>
 * [Tom Johnson](https://github.com/no-reply) - <https://github.com/no-reply>
@@ -412,40 +409,40 @@ This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange develo
 ## License
 
 This is free and unencumbered public domain software. For more information,
-see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
+see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
-[RDF]:              http://www.w3.org/RDF/
-[N-Triples]:        http://www.w3.org/TR/n-triples/
-[N-Quads]:          http://www.w3.org/TR/n-quads/
-[YARD]:             http://yardoc.org/
-[YARD-GS]:          http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:              http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[JSONLD doc]:       http://rubydoc.info/github/ruby-rdf/json-ld/frames
-[LinkedData doc]:   http://rubydoc.info/github/datagraph/linkeddata/master/frames
-[Microdata doc]:    http://rubydoc.info/github/ruby-rdf/rdf-microdata/frames
-[N3 doc]:           http://rubydoc.info/github/ruby-rdf/rdf-n3/master/frames
-[RDFa doc]:         http://rubydoc.info/github/ruby-rdf/rdf-rdfa/master/frames
-[RDFXML doc]:       http://rubydoc.info/github/ruby-rdf/rdf-rdfxml/master/frames
-[Turtle doc]:       http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/frames
-[SPARQL doc]:       http://rubydoc.info/github/ruby-rdf/sparql/frames
-[RDF 1.0]:          http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
-[RDF 1.1]:          http://www.w3.org/TR/rdf11-concepts/
-[SPARQL 1.0]:       http://www.w3.org/TR/rdf-sparql-query/
-[RDF.rb]:           http://ruby-rdf.github.com/
-[RDF::DO]:          http://ruby-rdf.github.com/rdf-do
-[RDF::Mongo]:       http://ruby-rdf.github.com/rdf-mongo
-[RDF::Sesame]:      http://ruby-rdf.github.com/rdf-sesame
-[RDF::JSON]:        http://ruby-rdf.github.com/rdf-json
-[RDF::Microdata]:   http://ruby-rdf.github.com/rdf-microdata
-[RDF::N3]:          http://ruby-rdf.github.com/rdf-n3
-[RDF::RDFa]:        http://ruby-rdf.github.com/rdf-rdfa
-[RDF::RDFXML]:      http://ruby-rdf.github.com/rdf-rdfxml
-[RDF::TriG]:        http://ruby-rdf.github.com/rdf-trig
-[RDF::TriX]:        http://ruby-rdf.github.com/rdf-trix
-[RDF::Turtle]:      http://ruby-rdf.github.com/rdf-turtle
-[RDF::Raptor]:      http://ruby-rdf.github.com/rdf-raptor
-[LinkedData]:       http://ruby-rdf.github.com/linkeddata
-[JSON::LD]:         http://gkellogg.github.com/json-ld
+[RDF]:              https://www.w3.org/RDF/
+[N-Triples]:        https://www.w3.org/TR/n-triples/
+[N-Quads]:          https://www.w3.org/TR/n-quads/
+[YARD]:             https://yardoc.org/
+[YARD-GS]:          https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
+[PDD]:              https://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[JSONLD doc]:       https://rubydoc.info/github/ruby-rdf/json-ld
+[LinkedData doc]:   https://rubydoc.info/github/datagraph/linkeddata
+[Microdata doc]:    https://rubydoc.info/github/ruby-rdf/rdf-microdata
+[N3 doc]:           https://rubydoc.info/github/ruby-rdf/rdf-n3
+[RDFa doc]:         https://rubydoc.info/github/ruby-rdf/rdf-rdfa
+[RDFXML doc]:       https://rubydoc.info/github/ruby-rdf/rdf-rdfxml
+[Turtle doc]:       https://rubydoc.info/github/ruby-rdf/rdf-turtle
+[SPARQL doc]:       https://rubydoc.info/github/ruby-rdf/sparql
+[RDF 1.0]:          https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
+[RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
+[SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
+[RDF.rb]:           https://ruby-rdf.github.com/
+[RDF::DO]:          https://ruby-rdf.github.com/rdf-do
+[RDF::Mongo]:       https://ruby-rdf.github.com/rdf-mongo
+[RDF::Sesame]:      https://ruby-rdf.github.com/rdf-sesame
+[RDF::JSON]:        https://ruby-rdf.github.com/rdf-json
+[RDF::Microdata]:   https://ruby-rdf.github.com/rdf-microdata
+[RDF::N3]:          https://ruby-rdf.github.com/rdf-n3
+[RDF::RDFa]:        https://ruby-rdf.github.com/rdf-rdfa
+[RDF::RDFXML]:      https://ruby-rdf.github.com/rdf-rdfxml
+[RDF::TriG]:        https://ruby-rdf.github.com/rdf-trig
+[RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
+[RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
+[RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
+[LinkedData]:       https://ruby-rdf.github.com/linkeddata
+[JSON::LD]:         https://ruby-rdf.github.com/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client
 [RestClient Components]: https://rubygems.org/gems/rest-client-components
-[Rack::Cache]:      http://rtomayko.github.io/rack-cache/
+[Rack::Cache]:      https://rtomayko.github.io/rack-cache/

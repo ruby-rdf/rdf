@@ -10,15 +10,15 @@ describe RDF::Resource do
   end
 
   it "should instantiate URIs" do
-    resource = subject.call('http://rubygems.org/gems/rdf')
+    resource = subject.call('https://rubygems.org/gems/rdf')
     expect(resource).to be_a_uri
-    expect(resource.to_s).to eq 'http://rubygems.org/gems/rdf'
+    expect(resource.to_s).to eq 'https://rubygems.org/gems/rdf'
   end
 
   context "as method" do
     it "with positional arg" do
-      expect(described_class).to receive(:new).with('http://rubygems.org/gems/rdf')
-      subject.call('http://rubygems.org/gems/rdf')
+      expect(described_class).to receive(:new).with('https://rubygems.org/gems/rdf')
+      subject.call('https://rubygems.org/gems/rdf')
     end
   end
 end

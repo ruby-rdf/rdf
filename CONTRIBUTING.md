@@ -6,7 +6,7 @@ Community contributions are essential for keeping Ruby RDF great. We want to kee
 
 This repository uses [Git Flow](https://github.com/nvie/gitflow) to manage development and release activity. All submissions _must_ be on a feature branch based on the _develop_ branch to ease staging and integration.
 
-* create or respond to an issue on the [Github Repository](http://github.com/ruby-rdf/rdf/issues)
+* create or respond to an issue on the [Github Repository](https://github.com/ruby-rdf/rdf/issues)
 * Fork and clone the repo:
   `git clone git@github.com:your-username/rdf.git`
 * Install bundle:
@@ -30,7 +30,7 @@ This repository uses [Git Flow](https://github.com/nvie/gitflow) to manage devel
   of thumb, additions larger than about 15 lines of code), we need an
   explicit [public domain dedication][PDD] on record from you.
 
-[YARD]:    http://yardoc.org/
-[YARD-GS]: http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:     http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[YARD]:    https://yardoc.org/
+[YARD-GS]: https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
+[PDD]:     https://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
 [pr]:      https://github.com/ruby-rdf/rdf/compare/
