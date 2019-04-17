@@ -259,11 +259,11 @@ module RDF
     ##
     # Graph equivalence based on the contents of each graph being _exactly_
     # the same. To determine if the have the same _meaning_, consider
-    # [rdf-isomorphic](http://rubygems.org/gems/rdf-isomorphic).
+    # [rdf-isomorphic](https://rubygems.org/gems/rdf-isomorphic).
     #
     # @param [RDF::Graph] other
     # @return [Boolean]
-    # @see http://rubygems.org/gems/rdf-isomorphic
+    # @see https://rubygems.org/gems/rdf-isomorphic
     def ==(other)
       other.is_a?(RDF::Graph) &&
       graph_name == other.graph_name &&

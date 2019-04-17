@@ -6,10 +6,13 @@ Gem::Specification.new do |gem|
   gem.date               = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name               = 'rdf'
-  gem.homepage           = 'http://ruby-rdf.github.com/'
+  gem.homepage           = 'https://ruby-rdf.github.com/'
   gem.license            = 'Unlicense'
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
+  gem.metadata           = {
+    "documentation_uri" => "https://rubydoc.info/github/ruby-rdf/rdf"
+  }
 
   gem.authors            = ['Arto Bendiken', 'Ben Lavender', 'Gregg Kellogg']
   gem.email              = 'public-rdf-ruby@w3.org'

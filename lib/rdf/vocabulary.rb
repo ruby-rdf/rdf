@@ -16,7 +16,7 @@ module RDF
   # * {RDF::RDFS}   - RDF Schema (RDFS)
   # * {RDF::XSD}    - XML Schema (XSD)
   #
-  # Other vocabularies are defined in the [rdf-vocab](http://rubygems.org/gems/rdf-vocab) gem
+  # Other vocabularies are defined in the [rdf-vocab](https://rubygems.org/gems/rdf-vocab) gem
   #
   # @example Using pre-defined RDF vocabularies
   #   include RDF

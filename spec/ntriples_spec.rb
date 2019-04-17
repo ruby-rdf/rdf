@@ -267,7 +267,7 @@ describe RDF::NTriples::Reader do
     expect(hello).to be_a_literal
     expect(hello.value).to eq 'Hello'
 
-    stmt = reader.unserialize("<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .".freeze)
+    stmt = reader.unserialize("<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .".freeze)
     expect(stmt).not_to be_nil
     expect(stmt).to be_a_statement
   end
@@ -459,13 +459,13 @@ describe RDF::NTriples::Writer do
   let(:logger) {RDF::Spec.logger}
   let(:writer) { RDF::NTriples::Writer }
   let!(:stmt) {
-    s = RDF::URI("http://rubygems.org/gems/rdf")
+    s = RDF::URI("https://rubygems.org/gems/rdf")
     p = RDF::URI("http://purl.org/dc/terms/creator")
     o = RDF::URI("http://ar.to/#self")
     RDF::Statement(s, p, o)
   }
   let!(:stmt_string) {
-    "<http://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
+    "<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> ."
   }
   let!(:graph) {RDF::Graph.new << stmt}
   subject { RDF::NTriples::Writer.new }
@@ -532,7 +532,7 @@ describe RDF::NTriples::Writer do
     end
 
     it "should correctly format URI references" do
-      expect(writer.new.format_uri(RDF::URI('http://rubygems.org/gems/rdf'))).to eq '<http://rubygems.org/gems/rdf>'
+      expect(writer.new.format_uri(RDF::URI('https://rubygems.org/gems/rdf'))).to eq '<https://rubygems.org/gems/rdf>'
     end
 
     it "should correctly format plain literals" do
@@ -805,17 +805,17 @@ describe RDF::NTriples::Writer do
     end
 
     {
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
       RDF::Statement(RDF::Node("node"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => true,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node")) => true,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal")) => true,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Node("node")) => true,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::Literal("literal")) => true,
       RDF::Statement(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
       RDF::Statement(nil, RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => false,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator"), nil) => false,
       RDF::Statement(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::Node("node"), RDF::URI("http://ar.to/#self")) => false,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => false,
       RDF::Statement(RDF::URI('scheme://auth/\\u0000'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
       RDF::Statement(RDF::URI('scheme://auth/^'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
       RDF::Statement(RDF::URI('scheme://auth/`'), RDF::URI("http://purl.org/dc/terms/creator"), RDF::URI("http://ar.to/#self")) => false,
@@ -839,17 +839,17 @@ describe RDF::NTriples::Writer do
     end
 
     {
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")) =>
-        RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")),
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
+        RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")) =>
+        RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")),
       RDF::Statement(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
         RDF::Statement(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
       RDF::Statement(nil, RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, nil) => nil,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, nil) => nil,
       RDF::Statement(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement(RDF::URI("http://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
+      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
     }.each do |st, result|
       include_examples "c14n", st, result
     end
@@ -862,7 +862,7 @@ describe RDF::NTriples::Writer do
 
     it "raises each time an invalid statement is dumped (not only the first time)" do
       g = RDF::Graph.new
-      g.from_ntriples('<http://rubygems.org/gems/rdf/resource/0cb45b70-4c37-4270-9955-350c636496fc> <http://rubygems.org/gems/rdf/ontology/xxx/1.1#testDate> "2018-06-01T16:30:00Z"^^<http://www.w3.org/2001/XMLSchema#date> .')
+      g.from_ntriples('<https://rubygems.org/gems/rdf/resource/0cb45b70-4c37-4270-9955-350c636496fc> <https://rubygems.org/gems/rdf/ontology/xxx/1.1#testDate> "2018-06-01T16:30:00Z"^^<http://www.w3.org/2001/XMLSchema#date> .')
 
       errors = (1..5).map do |_|
         begin

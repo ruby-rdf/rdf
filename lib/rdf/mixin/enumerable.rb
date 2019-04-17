@@ -17,7 +17,7 @@ module RDF
   #   enumerable.has_quad?([subject, predicate, object, graph_name])
   #
   # @example Checking whether a specific value exists
-  #   enumerable.has_subject?(RDF::URI("http://rubygems.org/gems/rdf"))
+  #   enumerable.has_subject?(RDF::URI("https://rubygems.org/gems/rdf"))
   #   enumerable.has_predicate?(RDF::RDFS.label)
   #   enumerable.has_object?(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", language: :en))
   #   enumerable.has_graph?(RDF::URI("http://ar.to/#self"))

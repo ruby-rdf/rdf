@@ -7,23 +7,23 @@ module RDF
   # Also compatible with International Resource Identifier (IRI)
   #
   # @example Creating a URI reference (1)
-  #   uri = RDF::URI.new("http://rubygems.org/gems/rdf")
+  #   uri = RDF::URI.new("https://rubygems.org/gems/rdf")
   #
   # @example Creating a URI reference (2)
   #   uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/gems/rdf')
-  #     #=> RDF::URI.new("http://rubygems.org/gems/rdf")
+  #     #=> RDF::URI.new("https://rubygems.org/gems/rdf")
   #
   # @example Creating an interned URI reference
-  #   uri = RDF::URI.intern("http://rubygems.org/gems/rdf")
+  #   uri = RDF::URI.intern("https://rubygems.org/gems/rdf")
   #
   # @example Getting the string representation of a URI
-  #   uri.to_s #=> "http://rubygems.org/gems/rdf"
+  #   uri.to_s #=> "https://rubygems.org/gems/rdf"
   #
-  # http://en.wikipedia.org/wiki/Internationalized_Resource_Identifier
-  # @see http://en.wikipedia.org/wiki/Uniform_Resource_Identifier
-  # @see http://www.ietf.org/rfc/rfc3986.txt
-  # @see http://www.ietf.org/rfc/rfc3987.txt
-  # @see http://www.rubydoc.info/gems/addressable
+  # @see https://en.wikipedia.org/wiki/Internationalized_Resource_Identifier
+  # @see https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+  # @see https://www.ietf.org/rfc/rfc3986.txt
+  # @see https://www.ietf.org/rfc/rfc3987.txt
+  # @see https://rubydoc.info/gems/addressable
   class URI
     include RDF::Resource
 

@@ -37,7 +37,7 @@ module RDF
   #   logger = Logger.new([])
   #   RDF::Writer.for(:ntriples).buffer(logger: logger) do |writer|
   #     statement = RDF::Statement.new(
-  #       RDF::URI("http://rubygems.org/gems/rdf"),
+  #       RDF::URI("https://rubygems.org/gems/rdf"),
   #       RDF::URI("http://purl.org/dc/terms/creator"),
   #       nil)
   #     writer << statement
