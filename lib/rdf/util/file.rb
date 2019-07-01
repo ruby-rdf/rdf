@@ -32,6 +32,7 @@ module RDF; module Util
       # @return [Hash] A hash of HTTP request headers
       def self.headers headers: {}
         headers['Accept'] ||= default_accept_header
+        headers['User-Agent'] ||= default_user_agent
         headers
       end
 
@@ -40,7 +41,13 @@ module RDF; module Util
       def self.default_accept_header
         (RDF::Format.accept_types + %w(*/*;q=0.1)).join(", ")
       end
-      
+
+      ##
+      # @return [String] the default User-Agent used when fetching resources.
+      def self.default_user_agent
+        "Ruby RDF.rb/#{RDF::VERSION}"
+      end
+
       ##
       # @abstract
       # @param [String] base_uri to open
@@ -48,6 +55,10 @@ module RDF; module Util
       #   HTTP Proxy to use for requests.
       # @param [Array, String] headers ({})
       #   HTTP Request headers
+      #
+      #   Defaults `Accept` header based on available reader content types to allow for content negotiation based on available readers.
+      #
+      #   Defaults  `User-Agent` header, unless one is specified.
       # @param [Boolean] verify_none (false)
       #   Don't verify SSL certificates
       # @param  [Hash{Symbol => Object}] options
@@ -249,19 +260,13 @@ module RDF; module Util
     ##
     # Open the file, returning or yielding {RemoteDocument}.
     #
-    # Adds Accept header based on available reader content types to allow
-    # for content negotiation based on available readers.
-    #
     # Input received as non-unicode, is transformed to UTF-8. With Ruby >= 2.2, all UTF is normalized to [Unicode Normalization Form C (NFC)](http://unicode.org/reports/tr15/#Norm_Forms).
     #
     # HTTP resources may be retrieved via proxy using the `proxy` option. If `RestClient` is loaded, they will use the proxy globally by setting something like the following:
     #     `RestClient.proxy = "http://proxy.example.com/"`.
     # When retrieving documents over HTTP(S), use the mechanism described in [Providing and Discovering URI Documentation](http://www.w3.org/2001/tag/awwsw/issue57/latest/) to pass the appropriate `base_uri` to the block or as the return.
     #
-    # Applications needing HTTP caching may consider
-    # [Rest Client](https://rubygems.org/gems/rest-client) and
-    # [REST Client Components](https://rubygems.org/gems/rest-client-components)
-    # allowing the use of `Rack::Cache` as a local file cache.
+    # Applications needing HTTP caching may consider [Rest Client](https://rubygems.org/gems/rest-client) and [REST Client Components](https://rubygems.org/gems/rest-client-components) allowing the use of `Rack::Cache` as a local file cache.
     #
     # @example using a local HTTP cache
     #    require 'restclient/components'
@@ -275,6 +280,11 @@ module RDF; module Util
     #   HTTP Proxy to use for requests.
     # @param [Array, String] headers ({})
     #   HTTP Request headers
+    #
+    #   Defaults `Accept` header based on available reader content types to allow for content negotiation based on available readers.
+    #
+    #   Defaults  `User-Agent` header, unless one is specified.
+    #
     # @param [Boolean] verify_none (false)
     #   Don't verify SSL certificates
     # @param  [Hash{Symbol => Object}] options

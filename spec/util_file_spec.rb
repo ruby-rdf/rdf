@@ -51,6 +51,11 @@ describe RDF::Util::File do
         expect(subject).to include "application/xhtml+xml;q=0.7"
       end
     end
+
+    describe ".default_user_agent" do
+      subject {RDF::Util::File::HttpAdapter.default_user_agent}
+      specify {is_expected.to eq "Ruby RDF.rb/#{RDF::VERSION}"}
+    end
   end
 
   describe RDF::Util::File::FaradayAdapter do
@@ -103,7 +108,7 @@ describe RDF::Util::File do
         to_return(body: File.read(File.expand_path("../../etc/doap.nt", __FILE__)),
                   status: 200,
                   headers: { 'Content-Type' => RDF::NTriples::Format.content_type.first})
-      r = RDF::Util::File.open_file(uri) do |f|
+        r = RDF::Util::File.open_file(uri) do |f|
         expect(f).to respond_to(:read)
         expect(f.content_type).to eq RDF::NTriples::Format.content_type.first
         expect(f.code).to eq 200
