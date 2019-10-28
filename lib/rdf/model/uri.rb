@@ -431,7 +431,9 @@ module RDF
           joined_parts[:query] = uri.query
         else
           # Merge path segments from section 5.2.3
-          base_path = path.to_s.sub(/\/[^\/]*$/, '/')
+          # Note that if the path includes no segments, the entire path is removed
+          #  > return a string consisting of the reference's path component appended to all but the last segment of the base URI's path (i.e., excluding any characters after the right-most "/" in the base URI path, or excluding the entire base URI path if it does not contain any "/" characters).
+          base_path = path.to_s.include?('/') ? path.to_s.sub(/\/[^\/]*$/, '/') : ''
           joined_parts[:path] = self.class.normalize_path(base_path + uri.path)
           joined_parts[:query] = uri.query
         end

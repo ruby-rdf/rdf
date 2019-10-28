@@ -606,6 +606,8 @@ describe RDF::URI do
       %w(http://a/bb/ccc/.. g#s) => "<http://a/bb/ccc/g#s>",
 
       %w(file:///a/bb/ccc/d;p?q g) => "<file:///a/bb/ccc/g>",
+      # merging rootless base URL paths (json-ld-api 397f48b959c4517fef55a7b2623ad432e923240c)
+      %w(tag:example a) => "<tag:a>",
     }.each_pair do |(lhs, rhs), result|
       it "creates #{result} from <#{lhs}> and '#{rhs}'" do
         expect(RDF::URI.new(lhs).join(rhs.to_s).to_base).to eq result
