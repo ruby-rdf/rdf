@@ -138,7 +138,7 @@ describe RDF::Literal do
       3.1415 => "double",
       Date.new(2010) => "date",
       DateTime.new(2011) => "dateTime",
-      Time.parse("01:02:03Z") => "time"
+      Time.parse("01:02:03Z") => "dateTime"
     }.each_pair do |value, type|
       it "returns xsd.#{type} for #{value.inspect} #{value.class}" do
         expect(RDF::Literal.new(value).datatype).to eq XSD[type]
@@ -217,7 +217,7 @@ describe RDF::Literal do
       literal(:double)   => "3.1415",
       literal(:date)     => "2010-01-01",
       literal(:datetime) => "2011-01-01T00:00:00Z",
-      literal(:time)     => "01:02:03Z"
+      literal(:time)     => "#{Date.today}T01:02:03Z"
     }.each_pair do |args, rep|
       it "returns #{rep} for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
