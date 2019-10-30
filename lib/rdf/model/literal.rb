@@ -119,8 +119,8 @@ module RDF
           when ::Float      then RDF::Literal::Double
           when ::BigDecimal then RDF::Literal::Decimal
           when ::DateTime   then RDF::Literal::DateTime
+          when ::Time       then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date
-          when ::Time       then RDF::Literal::Time # FIXME: Ruby's Time class can represent datetimes as well
           when ::Symbol     then RDF::Literal::Token
           else self
         end
