@@ -262,7 +262,7 @@ module RDF
         description: "Validate parsed input",
         control: :none,
         parse: true,
-        help: "validate [options] [args...]\nvalidates parsed input (may also be used with --validate)",
+        help: "validate [options] [args...]\nvalidates resulting repository (may also be used with --validate to check for parse-time errors)",
         lambda: ->(argv, opts) do
           opts[:output].puts "Input is " + (repository.valid? ? "" : "in") + "valid"
         end,

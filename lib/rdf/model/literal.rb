@@ -49,7 +49,7 @@ module RDF
   #   RDF::Literal.new(123).datatype                 #=> XSD.integer
   #   RDF::Literal.new(9223372036854775807).datatype #=> XSD.integer
   #   RDF::Literal.new(3.1415).datatype              #=> XSD.double
-  #   RDF::Literal.new(Time.now).datatype            #=> XSD.time
+  #   RDF::Literal.new(Time.now).datatype            #=> XSD.dateTime
   #   RDF::Literal.new(Date.new(2010)).datatype      #=> XSD.date
   #   RDF::Literal.new(DateTime.new(2010)).datatype  #=> XSD.dateTime
   #
@@ -119,8 +119,8 @@ module RDF
           when ::Float      then RDF::Literal::Double
           when ::BigDecimal then RDF::Literal::Decimal
           when ::DateTime   then RDF::Literal::DateTime
+          when ::Time       then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date
-          when ::Time       then RDF::Literal::Time # FIXME: Ruby's Time class can represent datetimes as well
           when ::Symbol     then RDF::Literal::Token
           else self
         end
@@ -360,7 +360,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since  0.2.1
     def valid?
-      return false if language? && language.to_s !~ /^[a-zA-Z]+(-[a-zA-Z0-9]+)*$/
+      return false if language? && language.to_s !~ /^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$/
       return false if datatype? && datatype.invalid?
       grammar = self.class.const_get(:GRAMMAR) rescue nil
       grammar.nil? || value.match?(grammar)
