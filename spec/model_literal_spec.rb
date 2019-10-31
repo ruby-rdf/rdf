@@ -25,7 +25,6 @@ describe RDF::Literal do
     when :date        then [Date.new(2010)]
     when :datetime    then [DateTime.new(2011)]
     when :time        then [Time.parse('01:02:03Z')]
-    when :date        then [Date.new(2010)]
     else
       raise("unexpected literal: :#{selector}")
     end
