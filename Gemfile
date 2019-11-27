@@ -12,6 +12,7 @@ group :develop do
 
   gem 'rest-client-components'
   gem 'benchmark-ips'
+  gem "listen", "=3.1.0", platform: :mri_22
 
   # Soft dependencies
   gem 'uuid'
