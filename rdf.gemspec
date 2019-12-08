@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.executables        = %w(rdf)
   gem.require_paths      = %w(lib)
 
-  gem.required_ruby_version      = '>= 2.2.2'
+  gem.required_ruby_version      = '>= 2.4'
   gem.requirements               = []
   gem.add_runtime_dependency     'link_header', '~> 0.0', '>= 0.0.8'
   gem.add_runtime_dependency     'hamster',     '~> 3.0'

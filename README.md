@@ -29,7 +29,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby Ruby >= 2.2.2, Rubinius and JRuby 9.0+.
+* Compatible with Ruby Ruby >= 2.4, Rubinius and JRuby 9.0+.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
 
