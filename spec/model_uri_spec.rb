@@ -30,7 +30,7 @@ describe RDF::URI do
 
   context "as method" do
     it "with URI args" do
-      expect(described_class).to receive(:new).with("http://example/", anything)
+      expect(described_class).to receive(:new).with("http://example/", any_args)
       RDF::URI("http://example/")
     end
 
