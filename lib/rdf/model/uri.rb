@@ -225,11 +225,9 @@ module RDF
       @mutex = Mutex.new
       uri = args.first
       if uri
-        @value = uri.to_s
-        if @value.encoding != Encoding::UTF_8
-          @value.dup.force_encoding(Encoding::UTF_8)
-          @value.freeze
-        end
+        @value = uri.to_s.dup
+        @value.dup.force_encoding(Encoding::UTF_8) if @value.encoding != Encoding::UTF_8
+        @value.freeze
       else
         %w(
           scheme
@@ -659,7 +657,7 @@ module RDF
     #
     # @return [RDF::URI]
     def dup
-      self.class.new((@value || @object).dup)
+      self.class.new(@value, **(@object || {}))
     end
 
     ##
