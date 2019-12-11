@@ -6,10 +6,12 @@ rvm:
   - 2.4
   - 2.5
   - 2.6
+  - 2.7
   - jruby
 cache: bundler
 sudo: false
 matrix:
   allow_failures:
     - rvm: jruby
+    - rvm: 2.7
 dist: trusty
