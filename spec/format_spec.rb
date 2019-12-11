@@ -85,17 +85,17 @@ describe RDF::Format do
     }.each do |condition, arg|
       context condition do
         it "yields matched formats" do
-          expect {|b| RDF::Format.each(arg, &b)}.to yield_successive_args(RDF::Format::FooFormat, RDF::Format::BarFormat)
+          expect {|b| RDF::Format.each(**arg, &b)}.to yield_successive_args(RDF::Format::FooFormat, RDF::Format::BarFormat)
         end
 
         it "returns detected format for duplicates" do
-          expect(RDF::Format.for(arg, sample: "foo")).to eq RDF::Format::FooFormat
-          expect(RDF::Format.for(arg, sample: "bar")).to eq RDF::Format::BarFormat
+          expect(RDF::Format.for(**arg, sample: "foo")).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(**arg, sample: "bar")).to eq RDF::Format::BarFormat
         end
 
         it "returns detected format for duplicates using proc" do
-          expect(RDF::Format.for(arg, sample: -> {"foo"})).to eq RDF::Format::FooFormat
-          expect(RDF::Format.for(arg, sample: -> {"bar"})).to eq RDF::Format::BarFormat
+          expect(RDF::Format.for(**arg, sample: -> {"foo"})).to eq RDF::Format::FooFormat
+          expect(RDF::Format.for(**arg, sample: -> {"bar"})).to eq RDF::Format::BarFormat
         end
       end
     end

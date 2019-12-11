@@ -982,7 +982,7 @@ def parse(input, **options)
     canonicalize: false,
   }.merge(options)
   graph = options[:graph] || RDF::Graph.new
-  RDF::NTriples::Reader.new(input, options).each do |statement|
+  RDF::NTriples::Reader.new(input, **options).each do |statement|
     graph << statement
   end
   graph

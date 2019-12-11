@@ -206,7 +206,7 @@ module RDF
         headers['Accept'] ||= (self.format.accept_type + %w(*/*;q=0.1)).join(", ")
       end
 
-      Util::File.open_file(filename, options) do |file|
+      Util::File.open_file(filename, **options) do |file|
         format_options = options.dup
         format_options[:content_type] ||= file.content_type if
           file.respond_to?(:content_type) &&
@@ -229,7 +229,7 @@ module RDF
         options[:filename] ||= filename
 
         if reader
-          reader.new(file, options, &block)
+          reader.new(file, **options, &block)
         else
           raise FormatError, "unknown RDF format: #{format_options.inspect}#{"\nThis may be resolved with a require of the 'linkeddata' gem." unless Object.const_defined?(:LinkedData)}"
         end

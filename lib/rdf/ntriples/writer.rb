@@ -208,7 +208,7 @@ module RDF::NTriples
     # @param  [RDF::Term]     object
     # @return [void]
     def write_triple(subject, predicate, object)
-      puts format_triple(subject, predicate, object, @options)
+      puts format_triple(subject, predicate, object, **@options)
     end
 
     ##

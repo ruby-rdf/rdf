@@ -79,8 +79,8 @@ module RDF
   #
   # @param (see RDF::Resource#initialize)
   # @return [RDF::Resource]
-  def self.Resource(*args, &block)
-    Resource.new(*args, &block)
+  def self.Resource(*args)
+    Resource.new(*args)
   end
 
   ##
@@ -88,8 +88,8 @@ module RDF
   #
   # @param (see RDF::Node#initialize)
   # @return [RDF::Node]
-  def self.Node(*args, &block)
-    Node.new(*args, &block)
+  def self.Node(*args)
+    Node.new(*args)
   end
 
   ##
@@ -97,8 +97,15 @@ module RDF
   #
   # @param (see RDF::URI#initialize)
   # @return [RDF::URI]
-  def self.URI(uri, *args, &block)
-    uri.respond_to?(:to_uri) ? uri.to_uri : URI.new(uri, *args, &block)
+  def self.URI(*args)
+    if args.first.respond_to?(:to_uri)
+      args.first.to_uri
+    elsif args.first.is_a?(Hash)
+      URI.new(**args.first)
+    else
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      URI.new(*args, **opts)
+    end
   end
 
   ##
@@ -106,10 +113,10 @@ module RDF
   #
   # @param (see RDF::Literal#initialize)
   # @return [RDF::Literal]
-  def self.Literal(literal, *args, &block)
+  def self.Literal(literal, **options)
     case literal
       when RDF::Literal then literal
-      else Literal.new(literal, *args, &block)
+      else Literal.new(literal, **options)
     end
   end
 
@@ -119,7 +126,7 @@ module RDF
   # @param (see RDF::Graph#initialize)
   # @return [RDF::Graph]
   def self.Graph(**options, &block)
-    Graph.new(options, &block)
+    Graph.new(**options, &block)
   end
 
   ##
@@ -171,11 +178,11 @@ module RDF
   #   @option options [RDF::Resource]  :graph_name   (nil)
   #   @return [RDF::Statement]
   #
-  def self.Statement(*args)
+  def self.Statement(*args, **options)
     if args.empty?
       RDF[:Statement]
     else
-      Statement.new(*args)
+      Statement.new(*args, **options)
     end
   end
 

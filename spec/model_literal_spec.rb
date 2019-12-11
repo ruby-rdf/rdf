@@ -16,7 +16,7 @@ describe RDF::Literal do
     when :wrong_lang  then ['WrongLang'.freeze, {language: "en f"}]
     # langString language: must be non-empty valid language
     when :unset_lang  then ['NoLanguage'.freeze, {datatype: RDF::langString}]
-    when :string      then ['String.freeze', {datatype: RDF::XSD.string}]
+    when :string      then ['String'.freeze, {datatype: RDF::XSD.string}]
     when :false       then [false]
     when :true        then [true]
     when :int         then [123]
@@ -24,7 +24,7 @@ describe RDF::Literal do
     when :double      then [3.1415]
     when :date        then [Date.new(2010)]
     when :datetime    then [DateTime.new(2011)]
-    when :time        then [Time.parse('01:02:03Z')]
+    when :time        then ['01:02:03Z', {datatype: RDF::XSD.time}]
     else
       raise("unexpected literal: :#{selector}")
     end
@@ -216,7 +216,7 @@ describe RDF::Literal do
       literal(:double)   => "3.1415",
       literal(:date)     => "2010-01-01",
       literal(:datetime) => "2011-01-01T00:00:00Z",
-      literal(:time)     => "#{Date.today}T01:02:03Z"
+      literal(:time)     => "01:02:03Z"
     }.each_pair do |args, rep|
       it "returns #{rep} for #{args.inspect}" do
         literal = RDF::Literal.new(*args)
@@ -1309,7 +1309,7 @@ describe RDF::Literal do
         "language with xsd:date" => {value: "foo", language: "en", datatype: RDF::XSD.date},
       }.each do |name, opts|
         it "raises error for #{name}" do
-          expect {RDF::Literal.new(opts.delete(:value), opts)}.to raise_error(ArgumentError)
+          expect {RDF::Literal.new(opts.delete(:value), **opts)}.to raise_error(ArgumentError)
         end
       end
 
@@ -1319,7 +1319,7 @@ describe RDF::Literal do
         "language with rdf:langString" => {value: "foo", language: "en", datatype: RDF::langString},
       }.each do |name, opts|
         it "should not raise error for #{name}" do
-          expect {RDF::Literal.new(opts.delete(:value), opts)}.not_to raise_error
+          expect {RDF::Literal.new(opts.delete(:value), **opts)}.not_to raise_error
         end
       end
     end

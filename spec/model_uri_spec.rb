@@ -30,7 +30,7 @@ describe RDF::URI do
 
   context "as method" do
     it "with URI args" do
-      expect(described_class).to receive(:new).with("http://example/")
+      expect(described_class).to receive(:new).with("http://example/", anything)
       RDF::URI("http://example/")
     end
 
@@ -92,7 +92,7 @@ describe RDF::URI do
     context "with hash" do
       context "simple" do
         subject {
-          RDF::URI.new({
+          RDF::URI.new(
             scheme: "http",
             user: "user",
             password: "password",
@@ -101,7 +101,7 @@ describe RDF::URI do
             path: "/path",
             query: "query=value",
             fragment: "fragment"
-          })
+          )
         }
 
         {
@@ -130,7 +130,7 @@ describe RDF::URI do
         "http://resource1" => {scheme: "http", host: "resource1", path: ""}
       }.each do |value, object|
         it "creates #{value}" do
-          expect(RDF::URI(object).to_s).to eq value
+          expect(RDF::URI(**object).to_s).to eq value
         end
       end
     end

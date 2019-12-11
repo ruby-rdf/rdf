@@ -774,20 +774,20 @@ describe RDF::Query do
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
           solutions = RDF::Query::Solutions(subject.to_a * 2)
-          solutions.count == graph.size * 2
+          expect(solutions.count).to eq graph.size * 2
           solutions.send(op)
-          solutions.count == graph.size
+          expect(solutions.count).to eq graph.size
         end
       end
 
       it "should support offsets" do
         subject.offset(10)
-        subject.count == (graph.size - 10)
+        expect(subject.count).to eq graph.size - 10
       end
 
       it "should support limits" do
         subject.limit(10)
-        subject.count == 10
+        expect(subject.count).to eq 10
       end
     end
   end

@@ -17,7 +17,7 @@ module RDF; class Query
     end
 
     ##
-    # @overload initialize(**options)
+    # @overload initialize(options = {})
     #   @param  [Hash{Symbol => Object}]     options
     #   @option options [Variable, Resource, Symbol, nil] :subject   (nil)
     #   @option options [Variable, URI, Symbol, nil]      :predicate (nil)
@@ -26,7 +26,7 @@ module RDF; class Query
     #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
     #   @option options [Boolean]            :optional  (false)
     #
-    # @overload initialize(subject, predicate, object, **options)
+    # @overload initialize(subject, predicate, object, options = {})
     #   @param  [Variable, Resource, Symbol, nil]         subject
     #   @param  [Variable, URI, Symbol, nil]              predicate
     #   @param  [Variable, Termm, Symbol, nil]            object

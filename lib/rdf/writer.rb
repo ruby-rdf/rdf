@@ -79,7 +79,7 @@ module RDF
     #   @param  [String] filename
     #   @return [Class]
     #
-    # @overload for(**options)
+    # @overload for(options = {})
     #   Finds an RDF writer class based on various options.
     #
     #   @param  [Hash{Symbol => Object}] options
@@ -505,11 +505,11 @@ module RDF
     # @since  0.3.0
     def format_term(term, **options)
       case term
-        when String       then format_literal(RDF::Literal(term, options), options)
-        when RDF::List    then format_list(term, options)
-        when RDF::Literal then format_literal(term, options)
-        when RDF::URI     then format_uri(term, options)
-        when RDF::Node    then format_node(term, options)
+        when String       then format_literal(RDF::Literal(term, **options), **options)
+        when RDF::List    then format_list(term, **options)
+        when RDF::Literal then format_literal(term, **options)
+        when RDF::URI     then format_uri(term, **options)
+        when RDF::Node    then format_node(term, **options)
         else nil
       end
     end
@@ -553,7 +553,7 @@ module RDF
     # @abstract
     # @since  0.2.3
     def format_list(value, **options)
-      format_term(value.subject, options)
+      format_term(value.subject, **options)
     end
 
   protected

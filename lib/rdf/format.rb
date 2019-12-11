@@ -122,7 +122,7 @@ module RDF
         sample = case sample
         when Proc then sample.call.to_s
         else sample.dup.to_s
-        end.force_encoding(Encoding::ASCII_8BIT)
+        end.dup.force_encoding(Encoding::ASCII_8BIT)
         # Given a sample, perform format detection across the appropriate formats, choosing the last that matches
         # Return last format that has a positive detection
         formats = formats.select {|f| f.detect(sample)}
@@ -174,7 +174,7 @@ module RDF
         # Try to find a match based on the full class name
         # We want this to work even if autoloading fails
         fmt = args.first
-        classes = self.each(options).select {|f| f.symbols.include?(fmt)}
+        classes = self.each(**options).select {|f| f.symbols.include?(fmt)}
         if classes.empty?
           classes = case fmt
           when :ntriples then [RDF::NTriples::Format]
@@ -184,7 +184,7 @@ module RDF
         end
         classes
       else
-        self.each(options.merge(all_if_none: false)).to_a
+        self.each(**options.merge(all_if_none: false)).to_a
       end
 
       # Return the last detected format
