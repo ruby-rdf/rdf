@@ -183,7 +183,7 @@ describe 'README' do
           RDF::Vocab::FOAF.name => :name,
           RDF::Vocab::FOAF.mbox => :email,
         }
-      })
+      }, **{})
     end
 
     context "using query" do

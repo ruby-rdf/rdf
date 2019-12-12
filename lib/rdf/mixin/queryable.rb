@@ -19,7 +19,7 @@ module RDF
     #
     # @example Querying for statements having a given predicate
     #     queryable.query([nil, RDF::Vocab::DOAP.developer, nil])
-    #     queryable.query(predicate: RDF::Vocab::DOAP.developer) do |statement|
+    #     queryable.query({predicate: RDF::Vocab::DOAP.developer}) do |statement|
     #       puts statement.inspect
     #     end
     #
@@ -116,7 +116,7 @@ module RDF
       # query execution by breaking down the query into its constituent
       # triple patterns and invoking `RDF::Query::Pattern#execute` on each
       # pattern.
-      query.execute(self, options, &block)
+      query.execute(self, **options, &block)
     end
     protected :query_execute
 

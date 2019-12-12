@@ -30,6 +30,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
 * Compatible with Ruby Ruby >= 2.4, Rubinius and JRuby 9.0+.
+  * Note, changes in mapping hashes to keyword arguments for Ruby 2.7+ may require that arguments be passed more explicitly, especially when the first argument is a Hash and there are optional keyword arguments. In this case, Hash argument may need to be explicitly included within `{}` and the optional keyword arguments may need to be specified using `**{}` if there are no keyword arguments.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
 
@@ -189,7 +190,7 @@ Note that no prefixes are loaded automatically, however they can be provided as 
         FOAF.name => :name,
         FOAF.mbox => :email,
       }
-    })
+    }, **{})
     
     query.execute(graph) do |solution|
       puts "name=#{solution.name} email=#{solution.email}"

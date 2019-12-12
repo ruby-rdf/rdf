@@ -966,7 +966,7 @@ describe RDF::Query do
           FOAF.name => :name,
           FOAF.mbox => :email,
         }
-      })
+      }, **{})
       expect(query).to be_a(RDF::Query)
       expect(query.patterns.size).to eq 3
       expect(query.patterns[0]).to eq RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)

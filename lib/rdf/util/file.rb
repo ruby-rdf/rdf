@@ -430,7 +430,7 @@ module RDF; module Util
           end if body.respond_to?(:unicode_normalized?)
         end
 
-        super(body, "r:#{encoding}")
+        super(body).set_encoding encoding
       end
 
       ##

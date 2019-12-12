@@ -5,7 +5,8 @@ gemspec
 group :develop do
   gem 'rdf-isomorphic', git: "https://github.com/ruby-rdf/rdf-isomorphic",  branch: "develop"
   gem "rdf-reasoner",   git: "https://github.com/ruby-rdf/rdf-reasoner",    branch: "develop"
-  gem "rdf-spec",       git: "https://github.com/ruby-rdf/rdf-spec",        branch: "develop"
+  gem 'rdf-spec', path: '../rdf-spec'
+  #gem "rdf-spec",       git: "https://github.com/ruby-rdf/rdf-spec",        branch: "develop"
   gem "rdf-turtle",     git: "https://github.com/ruby-rdf/rdf-turtle",      branch: "develop"
   gem "rdf-vocab",      git: "https://github.com/ruby-rdf/rdf-vocab",       branch: "develop"
   gem "rdf-xsd",        git: "https://github.com/ruby-rdf/rdf-xsd",         branch: "develop"

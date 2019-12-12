@@ -85,12 +85,13 @@ module RDF; class Query
       #   the string format for anonymous subjects.
       # @return [Hash{Symbol => Object}]
       #   the resulting query pattern as a normalized hash.
-      def normalize!(hash_pattern = {}, options = {})
+      def normalize!(*args)
+        hash_pattern = args.shift
+        options = args.shift || {}
+        anonymous_subject_format = options.fetch(:anonymous_subject_format, '__%s__')
         raise ArgumentError, "invalid hash pattern: #{hash_pattern.inspect}" unless hash_pattern.is_a?(Hash)
         
         counter = RDF::Query::HashPatternNormalizer::Counter.new
-        
-        anonymous_subject_format = (options[:anonymous_subject_format] || '__%s__').to_s
         
         hash_pattern.inject({}) { |acc, pair|
           subject, predicate_to_object = pair
@@ -184,7 +185,7 @@ module RDF; class Query
     #   the query pattern as a hash.
     # @return [Hash{Symbol => Object}]
     #   the resulting query pattern as a normalized hash.
-    def normalize!(**hash_pattern)
+    def normalize!(hash_pattern)
       self.class.normalize!(hash_pattern, @options)
     end
   end # RDF::Query::HashPatternNormalizer

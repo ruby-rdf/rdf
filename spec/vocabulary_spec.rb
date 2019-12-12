@@ -595,7 +595,7 @@ potential to perform intentional actions for which they can be held responsible.
         graph = RDF::Graph.new {|g| RDF::RDFS[""].each_statement {|s| g << s}}
 
         expect(graph.map(&:subject)).to all(eql(RDF::RDFS.to_uri))
-        expect(graph.query(predicate: RDF.type).map(&:object)).to include RDF::OWL.Ontology
+        expect(graph.query({predicate: RDF.type}).map(&:object)).to include RDF::OWL.Ontology
       end
 
       {
@@ -787,8 +787,8 @@ potential to perform intentional actions for which they can be held responsible.
           graph = RDF::Graph.new {|g| props[:term].each_statement {|s| g << s}}
 
           expect(graph.map(&:subject)).to all(eql(props[:term]))
-          expect(graph.query(predicate: props[:predicate]).map(&:object)).to all(be_a(props[:value].class))
-          expect(graph.query(predicate: props[:predicate]).map(&:object)).to include props[:value]
+          expect(graph.query({predicate: props[:predicate]}).map(&:object)).to all(be_a(props[:value].class))
+          expect(graph.query({predicate: props[:predicate]}).map(&:object)).to include props[:value]
         end
       end
     end

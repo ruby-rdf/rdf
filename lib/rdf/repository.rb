@@ -512,8 +512,8 @@ module RDF
       class SerializedTransaction < Transaction
         ##
         # @see Transaction#initialize
-        def initialize(*)
-          super
+        def initialize(*args, **options, &block)
+          super(*args, **options, &block)
           @base_snapshot = @snapshot
         end
         

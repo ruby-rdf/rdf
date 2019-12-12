@@ -88,9 +88,9 @@ module RDF
     #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
     # @return [Class]
-    def self.for(options = {}, &block)
-      options = options.merge(has_reader: true) if options.is_a?(Hash)
-      if format = self.format || Format.for(options, &block)
+    def self.for(arg, &block)
+      arg = arg.merge(has_reader: true) if arg.is_a?(Hash)
+      if format = self.format || Format.for(arg, &block)
         format.reader
       end
     end

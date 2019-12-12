@@ -24,7 +24,7 @@ module RDF
   #   repository = RDF::Repository.new
   #
   #   RDF::Transaction.begin(repository) do |tx|
-  #     tx.query(predicate: RDF::Vocab::DOAP.developer) do |statement|
+  #     tx.query({predicate: RDF::Vocab::DOAP.developer}) do |statement|
   #       puts statement.inspect
   #     end
   #   end
