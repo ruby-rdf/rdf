@@ -89,9 +89,15 @@ module RDF
     #   @return [Class]
     #
     # @return [Class]
-    def self.for(options = {})
-      options = options.merge(has_writer: true) if options.is_a?(Hash)
-      if format = self.format || Format.for(options)
+    def self.for(*arg, &block)
+      case arg.length
+      when 0 then arg = nil
+      when 1 then arg = arg.first
+      else
+        raise ArgumentError, "Format.for accepts zero or one argument, got #{arg.length}."
+      end
+      arg = arg.merge(has_writer: true) if arg.is_a?(Hash)
+      if format = self.format || Format.for(arg)
         format.writer
       end
     end
