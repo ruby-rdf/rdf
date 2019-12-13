@@ -141,8 +141,8 @@ module RDF
     #
     # (see #initialize)
     # @return [RDF::URI] an immutable, frozen URI object
-    def self.intern(str, *args)
-      (cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
+    def self.intern(str, *args, **options)
+      (cache[(str = str.to_s).to_sym] ||= self.new(str, *args, **options)).freeze
     end
 
     ##
