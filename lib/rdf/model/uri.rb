@@ -1315,7 +1315,6 @@ module RDF
       end
     end
 
-    protected
     # URI encode matching characters in value
     # From URI gem, as this is now generally deprecated
     def self.encode(str, expr)
