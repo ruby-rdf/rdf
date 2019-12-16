@@ -96,7 +96,7 @@ module RDF::NTriples
     def self.unserialize(input, **options)
       case input
         when nil then nil
-        else self.new(input, {logger: []}.merge(options)).read_value
+        else self.new(input, logger: [], **options).read_value
       end
     end
 
@@ -104,20 +104,20 @@ module RDF::NTriples
     # (see unserialize)
     # @return [RDF::Resource]
     def self.parse_subject(input, **options)
-      parse_uri(input, options) || parse_node(input, options)
+      parse_uri(input, **options) || parse_node(input, **options)
     end
 
     ##
     # (see unserialize)
     # @return [RDF::URI]
-    def self.parse_predicate(input, *options)
+    def self.parse_predicate(input, **options)
       parse_uri(input, intern: true)
     end
 
     ##
     # (see unserialize)
     def self.parse_object(input, **options)
-      parse_uri(input, options) || parse_node(input, options) || parse_literal(input, options)
+      parse_uri(input, **options) || parse_node(input, **options) || parse_literal(input, **options)
     end
 
     ##

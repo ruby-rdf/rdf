@@ -319,7 +319,7 @@ module RDF; module Util
           url_no_frag_or_query.query = nil
           url_no_frag_or_query.fragment = nil
           options[:encoding] ||= Encoding::UTF_8
-          Kernel.open(url_no_frag_or_query, "r", options) do |file|
+          Kernel.open(url_no_frag_or_query, "r", **options) do |file|
             document_options = {
               base_uri:     filename_or_url.to_s,
               charset:      file.external_encoding.to_s,
@@ -430,7 +430,7 @@ module RDF; module Util
           end if body.respond_to?(:unicode_normalized?)
         end
 
-        super(body, "r:#{encoding}")
+        super(body).set_encoding encoding
       end
 
       ##

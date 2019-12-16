@@ -10,7 +10,7 @@ describe RDF::Query::Pattern do
       end
 
       it "creates using hash" do
-        expect(described_class.from(subject: :s, predicate: :p, object: :o)).to eq described_class.new(:s, :p, :o)
+        expect(described_class.from({subject: :s, predicate: :p, object: :o})).to eq described_class.new(:s, :p, :o)
       end
 
       it "creates using quad array" do
@@ -18,7 +18,8 @@ describe RDF::Query::Pattern do
       end
 
       it "creates using hash" do
-        expect(described_class.from(subject: :s, predicate: :p, object: :o, graph_name: :c)).to eq described_class.new(:s, :p, :o, graph_name: :c)
+        expect(described_class.from({subject: :s, predicate: :p, object: :o}, graph_name: :c)).to eq described_class.new(:s, :p, :o, graph_name: :c)
+        expect(described_class.from({subject: :s, predicate: :p, object: :o, graph_name: :c})).to eq described_class.new(:s, :p, :o, graph_name: :c)
       end
     end
 

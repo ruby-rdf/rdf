@@ -79,7 +79,7 @@ module RDF
     #   @param  [String] filename
     #   @return [Class]
     #
-    # @overload for(**options)
+    # @overload for(options = {})
     #   Finds an RDF writer class based on various options.
     #
     #   @param  [Hash{Symbol => Object}] options
@@ -89,9 +89,15 @@ module RDF
     #   @return [Class]
     #
     # @return [Class]
-    def self.for(options = {})
-      options = options.merge(has_writer: true) if options.is_a?(Hash)
-      if format = self.format || Format.for(options)
+    def self.for(*arg, &block)
+      case arg.length
+      when 0 then arg = nil
+      when 1 then arg = arg.first
+      else
+        raise ArgumentError, "Format.for accepts zero or one argument, got #{arg.length}."
+      end
+      arg = arg.merge(has_writer: true) if arg.is_a?(Hash)
+      if format = self.format || Format.for(arg)
         format.writer
       end
     end
@@ -505,11 +511,11 @@ module RDF
     # @since  0.3.0
     def format_term(term, **options)
       case term
-        when String       then format_literal(RDF::Literal(term, options), options)
-        when RDF::List    then format_list(term, options)
-        when RDF::Literal then format_literal(term, options)
-        when RDF::URI     then format_uri(term, options)
-        when RDF::Node    then format_node(term, options)
+        when String       then format_literal(RDF::Literal(term, **options), **options)
+        when RDF::List    then format_list(term, **options)
+        when RDF::Literal then format_literal(term, **options)
+        when RDF::URI     then format_uri(term, **options)
+        when RDF::Node    then format_node(term, **options)
         else nil
       end
     end
@@ -553,7 +559,7 @@ module RDF
     # @abstract
     # @since  0.2.3
     def format_list(value, **options)
-      format_term(value.subject, options)
+      format_term(value.subject, **options)
     end
 
   protected

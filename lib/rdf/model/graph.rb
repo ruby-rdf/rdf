@@ -211,7 +211,7 @@ module RDF
     # @return [Integer]
     # @see    RDF::Enumerable#count
     def count
-      @data.query(graph_name: graph_name || false).count
+      @data.query({graph_name: graph_name || false}).count
     end
 
     ##
@@ -237,7 +237,7 @@ module RDF
     # @see    RDF::Enumerable#each_statement
     def each(&block)
       if @data.respond_to?(:query)
-        @data.query(graph_name: graph_name || false, &block)
+        @data.query({graph_name: graph_name || false}, &block)
       elsif @data.respond_to?(:each)
         @data.each(&block)
       else

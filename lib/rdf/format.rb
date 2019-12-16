@@ -122,7 +122,7 @@ module RDF
         sample = case sample
         when Proc then sample.call.to_s
         else sample.dup.to_s
-        end.force_encoding(Encoding::ASCII_8BIT)
+        end.dup.force_encoding(Encoding::ASCII_8BIT)
         # Given a sample, perform format detection across the appropriate formats, choosing the last that matches
         # Return last format that has a positive detection
         formats = formats.select {|f| f.detect(sample)}
@@ -145,10 +145,10 @@ module RDF
     #   @param  [String, RDF::URI] filename
     #   @return [Class]
     #
-    # @overload for(**options)
+    # @overload for(options)
     #   Finds an RDF serialization format class based on various options.
     #
-    #   @param  [Hash{Symbol => Object}] options
+    #   @param  [Hash{Symbol => Object}] options ({})
     #   @option options [String, #to_s]   :file_name      (nil)
     #   @option options [Symbol, #to_sym] :file_extension (nil)
     #   @option options [String, #to_s]   :content_type   (nil)
@@ -164,19 +164,26 @@ module RDF
     #   @yieldreturn [String] another way to provide a sample, allows lazy for retrieving the sample.
     #
     # @return [Class]
-    def self.for(*args, **options, &block)
+    def self.for(*arg, &block)
+      case arg.length
+      when 0 then arg = nil
+      when 1 then arg = arg.first
+      else
+        raise ArgumentError, "Format.for accepts zero or one argument, got #{arg.length}."
+      end
+
+      options =  arg.is_a?(Hash) ? arg : {}
       options = {sample: block}.merge(options) if block_given?
-      formats = case args.first
+      formats = case arg
       when String, RDF::URI
         # Find a format based on the file name
-        self.each(file_name: args.first, **options).to_a
+        self.each(file_name: arg, **options).to_a
       when Symbol
         # Try to find a match based on the full class name
         # We want this to work even if autoloading fails
-        fmt = args.first
-        classes = self.each(options).select {|f| f.symbols.include?(fmt)}
+        classes = self.each(**options).select {|f| f.symbols.include?(arg)}
         if classes.empty?
-          classes = case fmt
+          classes = case arg
           when :ntriples then [RDF::NTriples::Format]
           when :nquads   then [RDF::NQuads::Format]
           else                []
@@ -184,7 +191,7 @@ module RDF
         end
         classes
       else
-        self.each(options.merge(all_if_none: false)).to_a
+        self.each(**options.merge(all_if_none: false)).to_a
       end
 
       # Return the last detected format

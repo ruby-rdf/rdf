@@ -24,7 +24,7 @@ describe RDF::Query do
     end
 
     it "adds patterns from argument" do
-      expect(RDF::Query.new(pattern, {}).patterns).to eq [pattern]
+      expect(RDF::Query.new(pattern).patterns).to eq [pattern]
     end
 
     it "adds patterns from array" do
@@ -33,6 +33,14 @@ describe RDF::Query do
 
     it "adds patterns from hash" do
       expect(RDF::Query.new(RDF::URI("a") => { RDF::URI("b")  => "c" }).patterns).to eq [pattern]
+    end
+
+    it "sets graph_name to a URI" do
+      expect(RDF::Query.new(graph_name: RDF::URI("a")).graph_name).to eq RDF::URI("a")
+    end
+
+    it "sets graph_name to false" do
+      expect(RDF::Query.new(graph_name: false).graph_name).to be_falsey
     end
   end
 
@@ -54,6 +62,11 @@ describe RDF::Query do
     it {is_expected.not_to equal orig}
     its(:patterns) {is_expected.not_to equal orig.patterns}
     its(:patterns) {is_expected.to eq orig.patterns}
+  end
+
+  describe "#options" do
+    subject {RDF::Query.new(RDF::Query::Pattern.new(), extra: :value)}
+    its(:options) {is_expected.to include(extra: :value)}
   end
 
   context "BGPs" do
@@ -774,20 +787,20 @@ describe RDF::Query do
       it "should support duplicate elimination" do
         [:distinct, :reduced].each do |op|
           solutions = RDF::Query::Solutions(subject.to_a * 2)
-          solutions.count == graph.size * 2
+          expect(solutions.count).to eq graph.size * 2
           solutions.send(op)
-          solutions.count == graph.size
+          expect(solutions.count).to eq graph.size
         end
       end
 
       it "should support offsets" do
         subject.offset(10)
-        subject.count == (graph.size - 10)
+        expect(subject.count).to eq graph.size - 10
       end
 
       it "should support limits" do
         subject.limit(10)
-        subject.count == 10
+        expect(subject.count).to eq 10
       end
     end
   end
@@ -953,7 +966,7 @@ describe RDF::Query do
           FOAF.name => :name,
           FOAF.mbox => :email,
         }
-      })
+      }, **{})
       expect(query).to be_a(RDF::Query)
       expect(query.patterns.size).to eq 3
       expect(query.patterns[0]).to eq RDF::Query::Pattern.new(:person, RDF.type,  FOAF.Person)

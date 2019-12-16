@@ -119,9 +119,9 @@ module RDF
     # @yieldparam [Repository]
     # @return [void]
     def self.load(urls, **options, &block)
-      self.new(options) do |repository|
+      self.new(**options) do |repository|
         Array(urls).each do |url|
-          repository.load(url, options)
+          repository.load(url, **options)
         end
 
         if block_given?
@@ -411,7 +411,7 @@ module RDF
             end
           end
         else
-          enum_for(:query_pattern, pattern, options)
+          enum_for(:query_pattern, pattern, **options)
         end
       end
 
@@ -512,8 +512,8 @@ module RDF
       class SerializedTransaction < Transaction
         ##
         # @see Transaction#initialize
-        def initialize(*)
-          super
+        def initialize(*args, **options, &block)
+          super(*args, **options, &block)
           @base_snapshot = @snapshot
         end
         

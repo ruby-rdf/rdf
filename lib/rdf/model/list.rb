@@ -59,7 +59,7 @@ module RDF
     def initialize(subject: nil, graph: nil, values: nil, &block)
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
-      is_empty = @graph.query(subject: subject, predicate: RDF.first).empty?
+      is_empty = @graph.query({subject: subject, predicate: RDF.first}).empty?
 
       if subject && is_empty
         # An empty list with explicit subject and value initializers
@@ -115,7 +115,7 @@ module RDF
         list_nodes << li
         rest = nil
         firsts = rests = 0
-        @graph.query(subject: li) do |st|
+        @graph.query({subject: li}) do |st|
           return false unless st.subject.node?
           case st.predicate
           when RDF.first
@@ -136,7 +136,7 @@ module RDF
 
       # All elements other than the head must be referenced exactly once
       return list_nodes.all? do |li|
-        refs = @graph.query(object: li).count
+        refs = @graph.query({object: li}).count
         case refs
         when 0 then li == subject
         when 1 then true
@@ -479,7 +479,7 @@ module RDF
     # @return [Boolean]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-empty-3F
     def empty?
-      graph.query(subject: subject, predicate: RDF.first).empty?
+      graph.query({subject: subject, predicate: RDF.first}).empty?
     end
 
     ##
@@ -822,7 +822,7 @@ module RDF
       return enum_statement unless block_given?
 
       each_subject do |subject|
-        graph.query(subject: subject, &block)
+        graph.query({subject: subject}, &block)
       end
     end
     alias_method :to_rdf, :each_statement

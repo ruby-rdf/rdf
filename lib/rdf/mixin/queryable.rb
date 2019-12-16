@@ -19,7 +19,7 @@ module RDF
     #
     # @example Querying for statements having a given predicate
     #     queryable.query([nil, RDF::Vocab::DOAP.developer, nil])
-    #     queryable.query(predicate: RDF::Vocab::DOAP.developer) do |statement|
+    #     queryable.query({predicate: RDF::Vocab::DOAP.developer}) do |statement|
     #       puts statement.inspect
     #     end
     #
@@ -50,7 +50,7 @@ module RDF
           solutions = RDF::Query::Solutions.new
           block = lambda {|solution| solutions << solution} unless block_given?
           before_query(pattern) if respond_to?(:before_query)
-          query_execute(pattern, options, &block)
+          query_execute(pattern, **options, &block)
           after_query(pattern) if respond_to?(:after_query)
           # Returns the solutions, not an enumerator
           solutions
@@ -85,7 +85,7 @@ module RDF
 
             # Otherwise, we delegate to `#query_pattern`:
             else # pattern.variable?
-              query_pattern(pattern, options, &block)
+              query_pattern(pattern, **options, &block)
           end
           after_query(pattern) if respond_to?(:after_query)
           enum
@@ -116,7 +116,7 @@ module RDF
       # query execution by breaking down the query into its constituent
       # triple patterns and invoking `RDF::Query::Pattern#execute` on each
       # pattern.
-      query.execute(self, options, &block)
+      query.execute(self, **options, &block)
     end
     protected :query_execute
 

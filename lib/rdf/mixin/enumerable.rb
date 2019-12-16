@@ -220,7 +220,7 @@ module RDF
     def each_triple
       if block_given?
         each_statement do |statement|
-          yield *statement.to_triple
+          yield(*statement.to_triple)
         end
       end
       enum_triple
@@ -282,7 +282,7 @@ module RDF
     def each_quad
       if block_given?
         each_statement do |statement|
-          yield *statement.to_quad
+          yield(*statement.to_quad)
         end
       end
       enum_quad

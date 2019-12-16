@@ -16,7 +16,7 @@ describe RDF::Literal do
     when :wrong_lang  then ['WrongLang'.freeze, {language: "en f"}]
     # langString language: must be non-empty valid language
     when :unset_lang  then ['NoLanguage'.freeze, {datatype: RDF::langString}]
-    when :string      then ['String.freeze', {datatype: RDF::XSD.string}]
+    when :string      then ['String'.freeze, {datatype: RDF::XSD.string}]
     when :false       then [false]
     when :true        then [true]
     when :int         then [123]
@@ -24,7 +24,7 @@ describe RDF::Literal do
     when :double      then [3.1415]
     when :date        then [Date.new(2010)]
     when :datetime    then [DateTime.new(2011)]
-    when :time        then [Time.parse('01:02:03Z')]
+    when :time        then ['01:02:03Z', {datatype: RDF::XSD.time}]
     else
       raise("unexpected literal: :#{selector}")
     end
@@ -82,13 +82,15 @@ describe RDF::Literal do
   describe "#plain?" do
     literals(:all_plain).each do |args|
       it "returns true for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to be_plain
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to be_plain
       end
     end
 
     (literals(:all) - literals(:all_plain)).each do |args|
       it "returns false for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).not_to be_plain
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).not_to be_plain
       end
     end
   end
@@ -96,13 +98,15 @@ describe RDF::Literal do
   describe "#simple?" do
     literals(:all_simple).each do |args|
       it "returns true for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to be_simple
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to be_simple
       end
     end
 
     (literals(:all) - literals(:all_simple)).each do |args|
       it "returns false for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).not_to be_simple
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).not_to be_simple
       end
     end
   end
@@ -110,13 +114,15 @@ describe RDF::Literal do
   describe "#language" do
     literals(:all_plain_lang).each do |args|
       it "returns language for #{args.inspect}" do
-        expect(RDF::Literal.new(*args).language).to eq :en
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options).language).to eq :en
       end
     end
 
     (literals(:all) - literals(:all_plain_lang)).each do |args|
       it "returns nil for #{args.inspect}" do
-        expect(RDF::Literal.new(*args).language).to be_nil
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options).language).to be_nil
       end
     end
   end
@@ -124,7 +130,8 @@ describe RDF::Literal do
   describe "#datatype" do
     literals(:all_simple).each do |args|
       it "returns xsd:string for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        literal = RDF::Literal.new(*args, **options)
         expect(literal.datatype).to eq RDF::XSD.string
       end
     end
@@ -148,13 +155,15 @@ describe RDF::Literal do
   describe "#typed?" do
     literals(:all_simple, :all_plain_lang).each do |args|
       it "returns false for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).not_to be_typed
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).not_to be_typed
       end
     end
 
     (literals(:all) - literals(:all_simple, :all_plain_lang)).each do |args|
       it "returns true for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to be_typed
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to be_typed
       end
     end
   end
@@ -167,25 +176,29 @@ describe RDF::Literal do
   describe "#==" do
     literals(:all_plain).each do |args|
       it "returns true for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to eq RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to eq RDF::Literal.new(*args, **options)
       end
     end
 
     literals(:all_simple).each do |args|
       it "returns true for value of #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to eq RDF::Literal.new(*args).value
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to eq RDF::Literal.new(*args, **options).value
       end
     end
 
     literals(:all_plain_lang).each do |args|
       it "returns false for value of #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).not_to eq RDF::Literal.new(*args).value
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).not_to eq RDF::Literal.new(*args, **options).value
       end
     end
 
     literals(:all_native).each do |args|
       it "returns true for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to eq RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to eq RDF::Literal.new(*args, **options)
       end
 
       it "returns true for value of #{args.inspect}" do
@@ -203,7 +216,8 @@ describe RDF::Literal do
   describe "#to_s" do
     literals(:all_plain).each do |args|
       it "returns value for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        literal = RDF::Literal.new(*args, **options)
         expect(literal.to_s).to eql(literal.value)
       end
     end
@@ -216,10 +230,11 @@ describe RDF::Literal do
       literal(:double)   => "3.1415",
       literal(:date)     => "2010-01-01",
       literal(:datetime) => "2011-01-01T00:00:00Z",
-      literal(:time)     => "#{Date.today}T01:02:03Z"
+      literal(:time)     => "01:02:03Z"
     }.each_pair do |args, rep|
       it "returns #{rep} for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        literal = RDF::Literal.new(*args, **options)
         expect(literal.to_s).to eql(rep)
       end
     end
@@ -229,22 +244,25 @@ describe RDF::Literal do
   describe "#to_str" do
     literals(:all_plain).each do |args|
       it "is implemented for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to respond_to :to_str
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to respond_to :to_str
       end
 
       it "matches #to_s for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        literal = RDF::Literal.new(*args, **options)
         expect(literal.to_str).to eq literal.to_s
       end
     end
 
     (literals(:all) - literals(:all_plain)).each do |args|
+      options = args.last.is_a?(Hash) ? args.pop : {}
       it "is not implemented for #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).not_to respond_to :to_str
+        expect(RDF::Literal.new(*args, **options)).not_to respond_to :to_str
       end
 
       it "raises NoMethodError for #{args.inspect}" do
-        expect { RDF::Literal.new(*args).to_str }.to raise_error NoMethodError
+        expect { RDF::Literal.new(*args, **options).to_str }.to raise_error NoMethodError
       end
     end
   end
@@ -252,7 +270,8 @@ describe RDF::Literal do
   describe "#object" do
     literals(:all_plain).each do |args|
       it "returns value for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        literal = RDF::Literal.new(*args, **options)
         expect(literal.object).to eql(literal.value)
       end
     end
@@ -269,7 +288,8 @@ describe RDF::Literal do
       #literal(:time)     => ::DateTime.parse('01:02:03Z')
     }.each_pair do |args, value|
       it "returns object for #{args.inspect}" do
-        literal = RDF::Literal.new(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        literal = RDF::Literal.new(*args, **options)
         expect(literal.object).to eql(value)
       end
     end
@@ -347,13 +367,15 @@ describe RDF::Literal do
   describe "language-tagged string" do
     literals(:all_plain_lang).each do |args|
       it "validates #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to be_valid
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to be_valid
       end
     end
 
     literals(:all_invalid_lang).each do |args|
       it "invalidates #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).not_to be_valid
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).not_to be_valid
       end
     end
 
@@ -372,7 +394,8 @@ describe RDF::Literal do
     (literals(:all) - literals(:all_simple, :all_plain_lang) +
      [["foo", datatype: RDF::URI("http://example/bar")]]).each do |args|
       it "validates #{args.inspect}" do
-        expect(RDF::Literal.new(*args)).to be_valid
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        expect(RDF::Literal.new(*args, **options)).to be_valid
       end
     end
 
@@ -1309,7 +1332,7 @@ describe RDF::Literal do
         "language with xsd:date" => {value: "foo", language: "en", datatype: RDF::XSD.date},
       }.each do |name, opts|
         it "raises error for #{name}" do
-          expect {RDF::Literal.new(opts.delete(:value), opts)}.to raise_error(ArgumentError)
+          expect {RDF::Literal.new(opts.delete(:value), **opts)}.to raise_error(ArgumentError)
         end
       end
 
@@ -1319,7 +1342,7 @@ describe RDF::Literal do
         "language with rdf:langString" => {value: "foo", language: "en", datatype: RDF::langString},
       }.each do |name, opts|
         it "should not raise error for #{name}" do
-          expect {RDF::Literal.new(opts.delete(:value), opts)}.not_to raise_error
+          expect {RDF::Literal.new(opts.delete(:value), **opts)}.not_to raise_error
         end
       end
     end

@@ -38,7 +38,7 @@ module RDF; module Util
     # @option options [Logger, #<<] :logger
     # @return [Hash{Symbol => Integer}]
     def log_statistics(**options)
-      logger(options).log_statistics
+      logger(**options).log_statistics
     end
 
     ##
@@ -84,7 +84,7 @@ module RDF; module Util
     #   @return [void]
     #   @raise Raises the provided exception class using the first element from args as the message component, if `:exception` option is provided.
     def log_error(*args, level: :error, **options, &block)
-      logger = self.logger(options)
+      logger = self.logger(**options)
       return if logger.recovering
       logger.recovering = true
       logger_common(*args, level: level, **options, &block)
@@ -96,7 +96,7 @@ module RDF; module Util
     # @option options [Logger, #<<] :logger
     # @return [Boolean]
     def log_recovering?(**options)
-      self.logger(options).recovering
+      self.logger(**options).recovering
     end
 
     ##
@@ -135,7 +135,7 @@ module RDF; module Util
     #   @yieldreturn [String] added to message
     #   @return [void]
     def log_recover(*args, level: :info, **options, &block)
-      logger = self.logger(options)
+      logger = self.logger(**options)
       logger.recovering = false
       return if args.empty? && !block_given?
       logger_common(*args, level: level, **options, &block)
@@ -192,7 +192,7 @@ module RDF; module Util
     #   # Return the current log depth
     #   @return [Integer]
     def log_depth(**options, &block)
-      self.logger(options).log_depth(&block)
+      self.logger(**options).log_depth(&block)
     end
 
   private
@@ -218,7 +218,7 @@ module RDF; module Util
     #   @yieldreturn [String] added to message
     #   @return [void]
     def logger_common(*args, level:, **options)
-      logger = self.logger(options)
+      logger = self.logger(**options)
       logger.log_statistics[level] = logger.log_statistics[level].to_i + 1
       # Some older code uses integer level numbers
       level = LOGGER_COMMON_LEVELS_REVERSE.fetch(level) if level.is_a?(Integer)

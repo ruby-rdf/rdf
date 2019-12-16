@@ -141,8 +141,8 @@ module RDF
     #
     # (see #initialize)
     # @return [RDF::URI] an immutable, frozen URI object
-    def self.intern(str, *args)
-      (cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
+    def self.intern(str, *args, **options)
+      (cache[(str = str.to_s).to_sym] ||= self.new(str, *args, **options)).freeze
     end
 
     ##
@@ -225,11 +225,9 @@ module RDF
       @mutex = Mutex.new
       uri = args.first
       if uri
-        @value = uri.to_s
-        if @value.encoding != Encoding::UTF_8
-          @value.dup.force_encoding(Encoding::UTF_8)
-          @value.freeze
-        end
+        @value = uri.to_s.dup
+        @value.dup.force_encoding(Encoding::UTF_8) if @value.encoding != Encoding::UTF_8
+        @value.freeze
       else
         %w(
           scheme
@@ -441,7 +439,7 @@ module RDF
       end
 
       # Return joined URI
-      RDF::URI.new(joined_parts)
+      RDF::URI.new(**joined_parts)
     end
 
     ##
@@ -509,7 +507,7 @@ module RDF
           case fragment.to_s[0,1]
           when '#'
             # Base ending with '/', fragment beginning with '#'. The fragment wins, we use '#'.
-            res.path = res.path.to_s.sub!(/\/*$/, '')
+            res.path = res.path.to_s.sub(/\/*$/, '')
             # Add fragment
             res.fragment = fragment.to_s.sub(/^#+/,'')
           else
@@ -574,7 +572,7 @@ module RDF
         self
       else
         RDF::URI.new(
-          object.merge(path: '/').
+          **object.merge(path: '/').
           keep_if {|k, v| [:scheme, :authority, :path].include?(k)})
       end
     end
@@ -659,7 +657,7 @@ module RDF
     #
     # @return [RDF::URI]
     def dup
-      self.class.new((@value || @object).dup)
+      self.class.new(@value, **(@object || {}))
     end
 
     ##
@@ -848,7 +846,7 @@ module RDF
         parts[:user] = (user.dup.force_encoding(Encoding::UTF_8) if user)
         parts[:password] = (password.dup.force_encoding(Encoding::UTF_8) if password)
         parts[:host] = (host.dup.force_encoding(Encoding::UTF_8) if host)
-        parts[:port] = (::URI.decode(port).to_i if port)
+        parts[:port] = (URI.decode(port).to_i if port)
         parts[:path] = (path.to_s.dup.force_encoding(Encoding::UTF_8) unless path.empty?)
         parts[:query] = (query[1..-1].dup.force_encoding(Encoding::UTF_8) if query)
         parts[:fragment] = (fragment[1..-1].dup.force_encoding(Encoding::UTF_8) if fragment)
@@ -904,7 +902,7 @@ module RDF
     # Normalized version of user
     # @return [String]
     def normalized_user
-      ::URI.encode(::URI.decode(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
+      URI.encode(URI.decode(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
     end
 
     ##
@@ -930,7 +928,7 @@ module RDF
     # Normalized version of password
     # @return [String]
     def normalized_password
-      ::URI.encode(::URI.decode(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
+      URI.encode(URI.decode(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
     end
 
     HOST_FROM_AUTHORITY_RE = /(?:[^@]+@)?([^:]+)(?::.*)?$/.freeze
@@ -939,7 +937,7 @@ module RDF
     # @return [String]
     def host
       object.fetch(:host) do
-        @object[:host] = ($1 if HOST_FROM_AUTHORITY_RE.match(@object[:authority]))
+        @object[:host] = ($1 if @object[:authority] && HOST_FROM_AUTHORITY_RE.match(@object[:authority]))
       end
     end
 
@@ -967,7 +965,7 @@ module RDF
     # @return [String]
     def port
       object.fetch(:port) do
-        @object[:port] = ($1 if PORT_FROM_AUTHORITY_RE.match(@object[:authority]))
+        @object[:port] = ($1 if @object[:authority] && PORT_FROM_AUTHORITY_RE.match(@object[:authority]))
       end
     end
 
@@ -1182,8 +1180,8 @@ module RDF
         inject(return_type == Hash ? {} : []) do |memo,kv|
           k,v = kv.to_s.split('=', 2)
           next if k.to_s.empty?
-          k = ::URI.decode(k)
-          v = ::URI.decode(v) if v
+          k = URI.decode(k)
+          v = URI.decode(v) if v
           if return_type == Hash
             case memo[k]
             when nil then memo[k] = v
@@ -1295,9 +1293,9 @@ module RDF
     def normalize_segment(value, expr, downcase = false)
       if value
         value = value.dup.force_encoding(Encoding::UTF_8)
-        decoded = ::URI.decode(value)
+        decoded = URI.decode(value)
         decoded.downcase! if downcase
-        ::URI.encode(decoded, /[^(?:#{expr})]/)
+        URI.encode(decoded, /[^(?:#{expr})]/)
       end
     end
 
@@ -1315,6 +1313,27 @@ module RDF
       else
         ""
       end
+    end
+
+    # URI encode matching characters in value
+    # From URI gem, as this is now generally deprecated
+    def self.encode(str, expr)
+      str.gsub(expr) do
+        us = $&
+        tmp = ''
+        us.each_byte do |uc|
+          tmp << sprintf('%%%02X', uc)
+        end
+        tmp
+      end.force_encoding(Encoding::US_ASCII)
+    end
+
+    # URI decode escape sequences in value
+    # From URI gem, as this is now generally deprecated
+    def self.decode(str)
+      enc = str.encoding
+      enc = Encoding::UTF_8 if enc == Encoding::US_ASCII
+      str.gsub(PCT_ENCODED) { [$&[1, 2]].pack('H2').force_encoding(enc) }
     end
   end
 

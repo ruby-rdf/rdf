@@ -17,6 +17,10 @@ describe RDF::URI do
       expect(RDF::URI.intern("a")).to be_frozen
     end
 
+    it "freezes an instance with options" do
+      expect(RDF::URI.intern("http://example.org/", validate: true)).to be_frozen
+    end
+
     it "does not use #to_hash given a URI" do
       expect {RDF::URI.intern(RDF::URI("a"))}.not_to write.to(:error)
     end
@@ -30,7 +34,7 @@ describe RDF::URI do
 
   context "as method" do
     it "with URI args" do
-      expect(described_class).to receive(:new).with("http://example/")
+      expect(described_class).to receive(:new).with("http://example/", any_args)
       RDF::URI("http://example/")
     end
 
@@ -92,7 +96,7 @@ describe RDF::URI do
     context "with hash" do
       context "simple" do
         subject {
-          RDF::URI.new({
+          RDF::URI.new(
             scheme: "http",
             user: "user",
             password: "password",
@@ -101,7 +105,7 @@ describe RDF::URI do
             path: "/path",
             query: "query=value",
             fragment: "fragment"
-          })
+          )
         }
 
         {
@@ -130,7 +134,7 @@ describe RDF::URI do
         "http://resource1" => {scheme: "http", host: "resource1", path: ""}
       }.each do |value, object|
         it "creates #{value}" do
-          expect(RDF::URI(object).to_s).to eq value
+          expect(RDF::URI(**object).to_s).to eq value
         end
       end
     end

@@ -37,10 +37,10 @@ module RDF
     # @option options [RDF::Resource] :graph_name
     #   Set set graph name of each loaded statement
     # @return [void]
-     def load(url, graph_name: nil, **options)
+    def load(url, graph_name: nil, **options)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      Reader.open(url, {base_uri: url}.merge(options)) do |reader|
+      Reader.open(url, base_uri: url, **options) do |reader|
         if graph_name
           statements = []
           reader.each_statement do |statement|

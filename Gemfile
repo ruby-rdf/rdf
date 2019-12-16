@@ -10,6 +10,9 @@ group :develop do
   gem "rdf-vocab",      git: "https://github.com/ruby-rdf/rdf-vocab",       branch: "develop"
   gem "rdf-xsd",        git: "https://github.com/ruby-rdf/rdf-xsd",         branch: "develop"
 
+  gem "ebnf",           git: "https://github.com/gkellogg/ebnf",            branch: "develop"
+  gem "sxp",            git: "https://github.com/dryruby/sxp",              branch: "develop"
+
   gem 'rest-client-components'
   gem 'benchmark-ips'
 
@@ -29,6 +32,6 @@ group :test do
   gem "rake"
   gem "equivalent-xml"
   gem 'fasterer'
-  gem 'simplecov',  require: false, platform: :mri
-  gem 'coveralls',  require: false, platform: :mri
+  gem 'simplecov',  platforms: :mri
+  gem 'coveralls',  '~> 0.8', platforms: :mri
 end

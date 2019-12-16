@@ -175,7 +175,7 @@ module RDF
           unless repository.count > 0
             start = Time.new
             count = 0
-            self.parse(argv, opts) do |reader|
+            self.parse(argv, **opts) do |reader|
               reader.each_statement do |statement|
                 count += 1
               end
@@ -240,7 +240,7 @@ module RDF
           out = opts[:output]
           opts = opts.merge(prefixes: {})
           writer_opts = opts.merge(standard_prefixes: true)
-          writer_class.new(out, writer_opts) do |writer|
+          writer_class.new(out, **writer_opts) do |writer|
             writer << repository
           end
         end
@@ -501,7 +501,7 @@ module RDF
       if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
         start = Time.new
         count = 0
-        self.parse(args, options) do |reader|
+        self.parse(args, **options) do |reader|
           @repository << reader
         end
         secs = Time.new - start
@@ -575,7 +575,7 @@ module RDF
         RDF::Format.each do |format|
           format.cli_commands.each do |command, options|
             options = {lambda: options} unless options.is_a?(Hash)
-            add_command(command, options)
+            add_command(command, **options)
           end
         end
         @commands_loaded = true
@@ -637,13 +637,13 @@ module RDF
         r = RDF::Reader.for(format|| {sample: sample})
         raise ArgumentError, "Unknown format for evaluated input" unless r
         (@readers ||= []) << r
-        r.new(input, options) do |reader|
+        r.new(input, **options) do |reader|
           yield(reader)
         end
       else
         options[:format] = format if format
         files.each do |file|
-          RDF::Reader.open(file, options) do |reader|
+          RDF::Reader.open(file, **options) do |reader|
             (@readers ||= []) << reader.class.to_s
             yield(reader)
           end

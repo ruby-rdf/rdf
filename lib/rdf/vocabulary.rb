@@ -873,8 +873,8 @@ module RDF
       #
       # @param (see #initialize)
       # @return [RDF::URI] an immutable, frozen URI object
-      def self.intern(str, *args)
-        (URI.cache[(str = str.to_s).to_sym] ||= self.new(str, *args)).freeze
+      def self.intern(str, *args, **options)
+        (URI.cache[(str = str.to_s).to_sym] ||= self.new(str, *args, **options)).freeze
       end
 
       ##
@@ -1001,7 +1001,7 @@ module RDF
               when :domainIncludes, :rangeIncludes
                 RDF::Vocabulary.find_term("http://schema.org/#{p}")
               when :broader, :definition, :exactMatch, :hasTopConcept, :inScheme,
-                   :member, :narrower, :related, :altLabel, :definition, :editorialNote,
+                   :member, :narrower, :related, :altLabel, :editorialNote,
                    :notation, :note, :prefLabel
                 RDF::Vocabulary.find_term("http://www.w3.org/2004/02/skos/core##{p}")
               else
