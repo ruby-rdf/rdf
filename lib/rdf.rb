@@ -179,7 +179,7 @@ module RDF
   #   @return [RDF::Statement]
   #
   def self.Statement(*args, **options)
-    if args.empty?
+    if args.empty? && options.empty?
       RDF[:Statement]
     else
       Statement.new(*args, **options)
