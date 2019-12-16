@@ -55,7 +55,7 @@ xsd:base64Binary a rdfs:Datatype;
 
 xsd:boolean a rdfs:Datatype;
   rdfs:subClassOf xsd:anyAtomicType;
-  rdfs:label "base64Binary";
+  rdfs:label "boolean";
   rdfs:comment """
     boolean represents the values of two-valued logic.
   """ .
