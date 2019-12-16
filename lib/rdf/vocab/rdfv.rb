@@ -33,6 +33,12 @@ module RDF
       isDefinedBy: %(rdf:).freeze,
       subClassOf: "rdfs:Container".freeze,
       type: "rdfs:Class".freeze
+    term :CompoundLiteral,
+      comment: %(A class representing a compound literal.).freeze,
+      label: "CompoundLiteral".freeze,
+      isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
+      subClassOf: "rdfs:Class".freeze,
+      type: "rdfs:Class".freeze
     term :List,
       comment: %(The class of RDF Lists.).freeze,
       label: "List".freeze,
@@ -59,6 +65,13 @@ module RDF
       type: "rdfs:Class".freeze
 
     # Property definitions
+    property :direction,
+      comment: %(The direction component of a CompoundLiteral.).freeze,
+      domain: "rdf:CompoundLiteral".freeze,
+      label: "direction".freeze,
+      range: "rdfs:Resource".freeze,
+      isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
+      type: "rdf:Property".freeze
     property :first,
       comment: %(The first item in the subject RDF list.).freeze,
       domain: "rdf:List".freeze,
@@ -72,6 +85,13 @@ module RDF
       label: "object".freeze,
       range: "rdfs:Resource".freeze,
       isDefinedBy: %(rdf:).freeze,
+      type: "rdf:Property".freeze
+    property :language,
+      comment: %(The language component of a CompoundLiteral.).freeze,
+      domain: "rdf:CompoundLiteral".freeze,
+      label: "language".freeze,
+      range: "rdfs:Resource".freeze,
+      isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
       type: "rdf:Property".freeze
     property :predicate,
       comment: %(The predicate of the subject RDF statement.).freeze,
@@ -116,6 +136,11 @@ module RDF
       isDefinedBy: %(rdf:).freeze,
       "rdfs:seeAlso": %(http://www.w3.org/TR/rdf11-concepts/#section-html).freeze,
       subClassOf: "rdfs:Literal".freeze,
+      type: "rdfs:Datatype".freeze
+    property :JSON,
+      comment: %(The datatype of RDF literals storing JSON content.).freeze,
+      label: "JSON".freeze,
+      isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
       type: "rdfs:Datatype".freeze
     term :PlainLiteral,
       comment: %(The class of plain \(i.e. untyped\) literal values, as used in RIF and OWL 2).freeze,
