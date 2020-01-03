@@ -156,6 +156,12 @@ module RDF
       self.deletes << statement
     end
 
+    # This simply returns its argument as an array in order to trick
+    # {RDF::Mutable#delete} into working.
+    def query stmt
+      [stmt]
+    end
+
     undef_method :load, :update, :clear
   end # Changeset
 end # RDF

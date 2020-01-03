@@ -340,7 +340,14 @@ module RDF
       # @see Mutable#apply_changeset
       def apply_changeset(changeset)
         data = @data
-        changeset.deletes.each { |del| data = delete_from(data, del) }
+        changeset.deletes.each do |del|
+          if del.constant?
+            data = delete_from(data, del)
+          else
+            # we need this condition to handle wildcard statements
+            query_pattern(del) { |stmt| data = delete_from(data, stmt) }
+          end
+        end
         changeset.inserts.each { |ins| data = insert_to(data, ins) }
         @data = data
       end
