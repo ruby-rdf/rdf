@@ -58,25 +58,52 @@ module RDF
     #   @param  [Enumerable<RDF::Statement>] statements
     #   @return [self]
     def insert(*statements)
-      statements.map! do |value|
-        case
-          when value.respond_to?(:each_statement)
-            insert_statements(value)
-            nil
-          when (statement = Statement.from(value))
-            statement
-          else
-            raise ArgumentError.new("not a valid statement: #{value.inspect}")
-        end
-      end
-      statements.compact!
-      insert_statements(statements) unless statements.empty?
+      process_statements(statements) { |value| insert_statements(value) }
 
       return self
     end
     alias_method :insert!, :insert
 
   protected
+
+  ##
+  # Coerce a set of arguments into {RDF::Statement} objects and then
+  # operate over them with a block.
+  # 
+  # @example
+  #  process_statements(statements) { |value| do_something(value) }
+  #
+  # @param statements [#map] The arbitrary-ish input to be manipulated
+  # @param query [false, true] Whether to call +query+ before the block
+  # @param constant [false, true] Whether to test if the statements
+  #  are constant
+  # @yield [RDF::Statement, RDF::Enumerable] 
+  # @return statements
+  def process_statements(statements, query: false, constant: false, &block)
+    raise ArgumentError, 'expecting a block' unless block_given?
+
+    statements = statements.map do |value|
+      case
+      when value.respond_to?(:each_statement)
+        block.call(value)
+        nil
+      when (statement = Statement.from(value)) &&
+          (!constant || statement.constant?)
+        statement
+      when query
+        block.call(query(value))
+        nil
+      else
+        raise ArgumentError, "Not a valid statement: #{value.inspect}"
+      end
+    end.compact
+
+    block.call(statements) unless statements.empty?
+
+    # eh might as well return these
+    statements
+  end
+
 
     ##
     # Inserts statements from the given RDF reader into the underlying
