@@ -73,6 +73,14 @@ describe RDF::Changeset do
         expect { subject.apply(repo) }
           .to change { repo.statements }.to contain_exactly(new_statement)
       end
+
+      it "correctly applies a wildcard/pattern" do
+        repo << st
+
+        subject.delete RDF::Statement(nil, RDF::URI('p'), nil)
+
+        expect { subject.apply(repo) }.to change { repo.statements }.to be_empty
+      end
     end
   end
 
