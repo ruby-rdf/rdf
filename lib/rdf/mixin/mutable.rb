@@ -154,20 +154,9 @@ module RDF
     def delete(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      statements.map! do |value|
-        case
-          when value.respond_to?(:each_statement)
-            delete_statements(value)
-            nil
-          when (statement = Statement.from(value)).constant?
-            statement
-          else
-            delete_statements(query(value))
-            nil
-        end
+      process_statements(statements, query: true, constant: true) do |value|
+        delete_statements(value)
       end
-      statements.compact!
-      delete_statements(statements) unless statements.empty?
 
       return self
     end
