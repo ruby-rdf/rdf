@@ -158,7 +158,7 @@ module RDF
 
     # This simply returns its argument as a query in order to trick
     # {RDF::Mutable#delete} into working.
-    def query stmt
+    def query(stmt)
       RDF::Query.new RDF::Query::Pattern.from(stmt)
     end
 
