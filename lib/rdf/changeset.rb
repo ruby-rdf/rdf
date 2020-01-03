@@ -159,7 +159,7 @@ module RDF
     # This simply returns its argument as an array in order to trick
     # {RDF::Mutable#delete} into working.
     def query stmt
-      [stmt]
+      RDF::Query.new RDF::Query::Pattern.from(stmt)
     end
 
     undef_method :load, :update, :clear
