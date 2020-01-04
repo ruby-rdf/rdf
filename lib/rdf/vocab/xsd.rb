@@ -190,7 +190,7 @@ module RDF
       comment: %(
     boolean represents the values of two-valued logic.
   ).freeze,
-      label: "base64Binary".freeze,
+      label: "boolean".freeze,
       subClassOf: "xsd:anyAtomicType".freeze,
       type: "rdfs:Datatype".freeze
     term :byte,
