@@ -99,10 +99,20 @@ module RDF
       false
     end
 
+    ##
+    # Returns +false+ to indicate that this changeset _itself_ is not writable.
+    #
+    # @return [Boolean]
+    # @see    RDF::Writable#writable?
     def writable?
       false
     end
 
+    ##
+    # Returns +false+ to indicate that this changeset _itself_ is not mutable.
+    #
+    # @return [Boolean]
+    # @see    RDF::Mutable#mutable?
     def mutable?
       false
     end
