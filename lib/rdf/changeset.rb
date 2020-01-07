@@ -31,10 +31,11 @@ module RDF
   #
   # @since 2.0.0
   class Changeset
-    include RDF::Mutable
+    # include RDF::Mutable
+    include RDF::Util::Coercions
 
     ##
-    # Applies a changeset to the given mutable RDF::Enumerable .
+    # Applies a changeset to the given {RDF::Mutable} object.
     #
     # @param  [RDF::Mutable] mutable
     # @param  [Hash{Symbol => Object}] options
@@ -86,15 +87,23 @@ module RDF
     end
 
     ##
-    # Returns `false` to indicate that this changeset is append-only.
+    # Returns +false+ to indicate that this changeset is append-only.
     #
-    # Changesets do not support the `RDF::Enumerable` protocol directly.
+    # Changesets do not support the +RDF::Enumerable+ protocol directly.
     # To enumerate the RDF statements to be inserted or deleted, use the
     # {RDF::Changeset#inserts} and {RDF::Changeset#deletes} accessors.
     #
     # @return [Boolean]
     # @see    RDF::Readable#readable?
     def readable?
+      false
+    end
+
+    def writable?
+      false
+    end
+
+    def mutable?
       false
     end
 
@@ -111,7 +120,7 @@ module RDF
     end
 
     ##
-    # @return [Boolean] `true` iff inserts and deletes are both empty
+    # @return [Boolean] +true+ iff inserts and deletes are both empty
     def empty?
       deletes.empty? && inserts.empty?
     end
@@ -127,41 +136,77 @@ module RDF
 
     ##
     # Outputs a developer-friendly representation of this changeset to
-    # `stderr`.
+    # +$stderr+.
     #
     # @return [void]
     def inspect!
       $stderr.puts(self.inspect)
     end
 
-    protected
+    ##
+    # Returns the sum of both the +inserts+ and +deletes+ counts.
+    #
+    # @return [Integer]
+    def count
+      inserts.count + deletes.count
+    end
+
+    # Append statements to +inserts+. Statements _should_ be constant
+    # as variable statements will at best be ignored or at worst raise
+    # an error when applied.
+    #
+    # @param statements [Enumerable, # RDF::Statement] Some statements
+    # @return [self]
+    def insert(*statements)
+      process_statements(statements) do |stmts|
+        append_statements :inserts, stmts
+      end
+
+      self
+    end
+    alias_method :insert!, :insert
+    alias_method :<<, :insert
+
+    # Append statements to +deletes+. Statements _may_ contain
+    # variables, although support will depend on the {RDF::Mutable}
+    # target.
+    #
+    # @param statements [Enumerable, RDF::Statement] Some statements
+    # @return [self]
+    def delete(*statements)
+      process_statements(statements) do |stmts|
+        append_statements :deletes, stmts
+      end
+
+      self
+    end
+    alias_method :delete!, :delete
+    alias_method :>>, :delete
+
+    private
 
     ##
-    # Appends an RDF statement to the sequence to insert when applied.
+    # Append statements to the appropriate target. This is a crappy
+    # little shim to go in between the other shim and the target.
     #
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    # @see    RDF::Writable#insert_statement
-    def insert_statement(statement)
-      self.inserts << statement
-    end
-
-    ##
-    # Appends an RDF statement to the sequence to delete when applied.
+    # @param target [Symbol] the method to send
+    # @param arg [Enumerable, RDF::Statement]
     #
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    # @see    RDF::Mutable#delete_statement
-    def delete_statement(statement)
-      self.deletes << statement
+    def append_statements(target, arg)
+      # coerce to an enumerator 
+      stmts = case
+              when arg.is_a?(RDF::Statement)
+                [arg]
+              when arg.respond_to?(:each_statement)
+                arg.each_statement
+              when arg.respond_to?(:each)
+                arg
+              else
+                raise ArgumentError, "Invalid statement: #{arg.class}"
+              end
+
+      stmts.each { |s| send(target) << s }
     end
 
-    # This simply returns its argument as a query in order to trick
-    # {RDF::Mutable#delete} into working.
-    def query(stmt)
-      RDF::Query.new RDF::Query::Pattern.from(stmt)
-    end
-
-    undef_method :load, :update, :clear
   end # Changeset
 end # RDF
