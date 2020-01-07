@@ -12,3 +12,5 @@ Gemfile.lock
 benchmark/
 /.byebug_history
 /coverage/
+\#*\#
+.\#*

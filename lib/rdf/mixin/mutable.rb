@@ -9,6 +9,7 @@ module RDF
     extend  RDF::Util::Aliasing::LateBound
     include RDF::Readable
     include RDF::Writable
+    include RDF::Util::Coercions
 
     ##
     # Returns `true` if `self` is mutable.
