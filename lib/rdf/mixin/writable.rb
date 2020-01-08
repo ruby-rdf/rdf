@@ -7,6 +7,7 @@ module RDF
   # @see RDF::Repository
   module Writable
     extend RDF::Util::Aliasing::LateBound
+    include RDF::Util::Coercions
 
     ##
     # Returns `true` if `self` is writable.
@@ -58,26 +59,13 @@ module RDF
     #   @param  [Enumerable<RDF::Statement>] statements
     #   @return [self]
     def insert(*statements)
-      statements.map! do |value|
-        case
-          when value.respond_to?(:each_statement)
-            insert_statements(value)
-            nil
-          when (statement = Statement.from(value))
-            statement
-          else
-            raise ArgumentError.new("not a valid statement: #{value.inspect}")
-        end
-      end
-      statements.compact!
-      insert_statements(statements) unless statements.empty?
+      coerce_statements(statements) { |value| insert_statements value }
 
       return self
     end
     alias_method :insert!, :insert
 
   protected
-
     ##
     # Inserts statements from the given RDF reader into the underlying
     # storage or output stream.
