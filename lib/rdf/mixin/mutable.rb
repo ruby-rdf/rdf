@@ -155,7 +155,7 @@ module RDF
     def delete(*statements)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      process_statements(statements, query: true, constant: true) do |value|
+      coerce_statements(statements, query: true, constant: true) do |value|
         delete_statements(value)
       end
 

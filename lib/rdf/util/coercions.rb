@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module RDF
   module Util
     module Coercions
@@ -6,20 +7,29 @@ module RDF
       # preprocessor that is used in e.g. {RDF::Writable#insert} and
       # {RDF::Mutable#delete}.
 
+      protected
+
       ##
-      # Coerce a set of arguments into {RDF::Statement} objects and then
-      # operate over them with a block.
+      # Coerce an array of arguments into {RDF::Statement}, or
+      # {RDF::Enumerable} and then yield to a block. Note that this
+      # code was amalgamated from that which was sandwiched around
+      # both {RDF::Writable#insert_statements} and
+      # {RDF::Mutable#delete_statements}. The parameters `query` and
+      # `constant` are therefore present to handle the conditions
+      # where the statements contain wildcards and what to do about
+      # them.
       # 
       # @example
-      #  process_statements(statements) { |value| do_something(value) }
+      #  coerce_statements(statements) { |value| do_something(value) }
       #
       # @param statements [#map] The arbitrary-ish input to be manipulated
-      # @param query [false, true] Whether to call +query+ before the block
+      # @param query [false, true] Whether to call `query` before the block
+      #  (as expected by {Mutable#delete_statements})
       # @param constant [false, true] Whether to test if the statements
-      #  are constant
+      #  are constant (as expected by {Mutable#delete_statements})
       # @yield [RDF::Statement, RDF::Enumerable] 
       # @return statements
-      def process_statements(statements, query: false, constant: false, &block)
+      def coerce_statements(statements, query: false, constant: false, &block)
         raise ArgumentError, 'expecting a block' unless block_given?
 
         statements = statements.map do |value|
@@ -32,7 +42,7 @@ module RDF
             statement
           when query
             # XXX note that this only makes sense when the module is include()d
-            block.call(query(value))
+            block.call(self.query(value))
             nil
           else
             raise ArgumentError, "Not a valid statement: #{value.inspect}"
@@ -45,8 +55,6 @@ module RDF
         statements
       end
 
-      # so you can include or call
-      extend self
     end
   end
 end
