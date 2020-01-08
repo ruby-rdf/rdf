@@ -59,7 +59,7 @@ module RDF
     #   @param  [Enumerable<RDF::Statement>] statements
     #   @return [self]
     def insert(*statements)
-      process_statements(statements) { |value| insert_statements value }
+      coerce_statements(statements) { |value| insert_statements value }
 
       return self
     end

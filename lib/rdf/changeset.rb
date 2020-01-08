@@ -87,9 +87,9 @@ module RDF
     end
 
     ##
-    # Returns +false+ to indicate that this changeset is append-only.
+    # Returns `false` to indicate that this changeset is append-only.
     #
-    # Changesets do not support the +RDF::Enumerable+ protocol directly.
+    # Changesets do not support the `RDF::Enumerable` protocol directly.
     # To enumerate the RDF statements to be inserted or deleted, use the
     # {RDF::Changeset#inserts} and {RDF::Changeset#deletes} accessors.
     #
@@ -100,7 +100,7 @@ module RDF
     end
 
     ##
-    # Returns +false+ to indicate that this changeset _itself_ is not writable.
+    # Returns `false` as changesets are not {RDF::Writable}.
     #
     # @return [Boolean]
     # @see    RDF::Writable#writable?
@@ -109,7 +109,7 @@ module RDF
     end
 
     ##
-    # Returns +false+ to indicate that this changeset _itself_ is not mutable.
+    # Returns `false` as changesets are not {RDF::Mutable}.
     #
     # @return [Boolean]
     # @see    RDF::Mutable#mutable?
@@ -130,7 +130,7 @@ module RDF
     end
 
     ##
-    # @return [Boolean] +true+ iff inserts and deletes are both empty
+    # @return [Boolean] `true` iff inserts and deletes are both empty
     def empty?
       deletes.empty? && inserts.empty?
     end
@@ -146,7 +146,7 @@ module RDF
 
     ##
     # Outputs a developer-friendly representation of this changeset to
-    # +$stderr+.
+    # `$stderr`.
     #
     # @return [void]
     def inspect!
@@ -154,21 +154,21 @@ module RDF
     end
 
     ##
-    # Returns the sum of both the +inserts+ and +deletes+ counts.
+    # Returns the sum of both the `inserts` and `deletes` counts.
     #
     # @return [Integer]
     def count
       inserts.count + deletes.count
     end
 
-    # Append statements to +inserts+. Statements _should_ be constant
+    # Append statements to `inserts`. Statements _should_ be constant
     # as variable statements will at best be ignored or at worst raise
     # an error when applied.
     #
-    # @param statements [Enumerable, # RDF::Statement] Some statements
+    # @param statements [Enumerable, RDF::Statement] Some statements
     # @return [self]
     def insert(*statements)
-      process_statements(statements) do |stmts|
+      coerce_statements(statements) do |stmts|
         append_statements :inserts, stmts
       end
 
@@ -177,14 +177,14 @@ module RDF
     alias_method :insert!, :insert
     alias_method :<<, :insert
 
-    # Append statements to +deletes+. Statements _may_ contain
+    # Append statements to `deletes`. Statements _may_ contain
     # variables, although support will depend on the {RDF::Mutable}
     # target.
     #
     # @param statements [Enumerable, RDF::Statement] Some statements
     # @return [self]
     def delete(*statements)
-      process_statements(statements) do |stmts|
+      coerce_statements(statements) do |stmts|
         append_statements :deletes, stmts
       end
 
@@ -196,8 +196,8 @@ module RDF
     private
 
     ##
-    # Append statements to the appropriate target. This is a crappy
-    # little shim to go in between the other shim and the target.
+    # Append statements to the appropriate target. This is a little
+    # shim to go in between the other shim and the target.
     #
     # @param target [Symbol] the method to send
     # @param arg [Enumerable, RDF::Statement]
