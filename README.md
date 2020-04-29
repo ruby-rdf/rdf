@@ -419,7 +419,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD-GS]:          https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              https://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
 [JSONLD doc]:       https://rubydoc.info/github/ruby-rdf/json-ld
-[LinkedData doc]:   https://rubydoc.info/github/datagraph/linkeddata
+[LinkedData doc]:   https://rubydoc.info/github/ruby-rdf/linkeddata
 [Microdata doc]:    https://rubydoc.info/github/ruby-rdf/rdf-microdata
 [N3 doc]:           https://rubydoc.info/github/ruby-rdf/rdf-n3
 [RDFa doc]:         https://rubydoc.info/github/ruby-rdf/rdf-rdfa

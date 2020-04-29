@@ -721,7 +721,7 @@ describe RDF::NTriples::Writer do
         end
       end
 
-      # @see http://github.com/bendiken/rdf/issues/#issue/7
+      # @see http://github.com/ruby-rdf/rdf/issues/#issue/7
       it "should correctly handle RDF.rb issue #7" do
         input  = %Q(<http://openlibrary.org/b/OL3M> <http://RDVocab.info/Elements/titleProper> "Jh\xC5\xABl\xC4\x81." .)
         output = %Q(<http://openlibrary.org/b/OL3M> <http://RDVocab.info/Elements/titleProper> "Jh\\u016Bl\\u0101." .)
