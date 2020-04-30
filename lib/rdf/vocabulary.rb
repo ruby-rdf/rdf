@@ -817,10 +817,9 @@ module RDF
       # @return [RDF::Vocabulary]
       attr_reader :vocab
 
-      #   Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
-      #   @return [Hash{Symbol,Resource => Term, #to_s}]
+      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      # @return [Hash{Symbol,Resource => Term, #to_s}]
       attr_reader :attributes
-
 
       ##
       # @overload new(uri, attributes:, **options)
@@ -943,7 +942,7 @@ module RDF
       ##
       # Values of an attributes as {RDF::Value}
       #
-      # @property [Symbol] prop
+      # @param [Symbol] prop
       # @return [RDF::Value, Array<RDF::Value>]
       def attribute_value(prop)
         values = attributes[prop]

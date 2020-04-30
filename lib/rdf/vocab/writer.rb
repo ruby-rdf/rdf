@@ -145,10 +145,26 @@ module RDF
           module #{module_name}
             # @!parse
             #   # Vocabulary for <#{base_uri}>
-            #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary
-            #   end
-            class #{class_name} < RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")
+            #   #
           ).gsub(/^          /, '')
+
+        if vocab.ontology
+          [:"dc:title", :"dc11:title", :label, :comment, :"dc:description", :"dc11:description"].each do |attr|
+            next unless vocab.ontology.attributes[attr]
+            Array(vocab.ontology.attributes[attr]).each do |v|
+              @output.puts "  #   # " + v.to_s.gsub(/\n/, ' ')
+            end
+          end
+          # Version Info
+          Array(vocab.ontology.attributes[:"owl:versionInfo"]).each do |vers|
+            @output.puts "  #   # @version #{vers}"
+          end
+          # See Also
+          Array(vocab.ontology.attributes[:"rdfs:seeAlso"]).each do |see|
+            @output.puts "  #   # @see #{see}"
+          end
+        end
+        @output.puts %(  #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary)
 
         # Split nodes into Class/Property/Datatype/Other
         term_nodes = {
@@ -181,6 +197,24 @@ module RDF
           term_nodes[kind][name] = term.attributes
         end
 
+        # Yard attribute information for terms
+        term_nodes.each do |tt, ttv|
+          next if tt == :ontology
+          ttv.each do |name, attributes|
+            Array(attributes[:comment]).each do |comment|
+              @output.puts "  #     # #{comment.to_s.gsub(/\n/, ' ')}"
+            end
+            @output.puts "  #     # @return [RDF::Vocabulary::Term]"
+            @output.puts "  #     attr_reader :#{name}"
+            @output.puts "  #"
+          end
+        end
+
+        # End of yard preamble
+        @output.puts "  #   end"
+        @output.puts %(  #{class_name} = Class.new(RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")) do)
+
+        # Output term definitions
         {
           ontology: "Ontology definition",
           class: "Class definitions",
