@@ -47,7 +47,7 @@ module RDF
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :Name
   #
-  #     #      QName represents XML qualified names. The ·value space· of QName is the set     of tuples `{namespace name, local part}`, where namespace name is an anyURI     and local part is an NCName. The ·lexical space· of QName is the set of     strings that ·match· the QName production of [Namespaces in XML].   
+  #     #      QName represents XML qualified names. The ·value space· of QName is the set     of tuples {namespace name, local part}, where namespace name is an anyURI     and local part is an NCName. The ·lexical space· of QName is the set of     strings that ·match· the QName production of [Namespaces in XML].   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :QName
   #
@@ -139,11 +139,11 @@ module RDF
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :int
   #
-  #     #       integer is ·derived· from decimal by fixing the value of ·fractionDigits·      to be 0 and disallowing the trailing decimal point. This results in the      standard mathematical concept of the integer numbers. The ·value space· of      integer is the infinite set `{...,-2,-1,0,1,2,...}`. The ·base type· of      integer is decimal.   
+  #     #       integer is ·derived· from decimal by fixing the value of ·fractionDigits·      to be 0 and disallowing the trailing decimal point. This results in the      standard mathematical concept of the integer numbers. The ·value space· of      integer is the infinite set {...,-2,-1,0,1,2,...}. The ·base type· of      integer is decimal.   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :integer
   #
-  #     #      language represents formal natural language identifiers, as defined by [BCP     47] (currently represented by [RFC 4646] and [RFC 4647]) or its     successor(s). The ·value space· and ·lexical space· of language are the set     of all strings that conform to the pattern `[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*`   
+  #     #      language represents formal natural language identifiers, as defined by [BCP     47] (currently represented by [RFC 4646] and [RFC 4647]) or its     successor(s). The ·value space· and ·lexical space· of language are the set     of all strings that conform to the pattern [a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :language
   #
@@ -151,15 +151,15 @@ module RDF
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :long
   #
-  #     #       negativeInteger is ·derived· from nonPositiveInteger by setting the value      of ·maxInclusive· to be -1. This results in the standard mathematical      concept of the negative integers. The ·value space· of negativeInteger is      the infinite set `{...,-2,-1}`. The ·base type· of negativeInteger is      nonPositiveInteger.   
+  #     #       negativeInteger is ·derived· from nonPositiveInteger by setting the value      of ·maxInclusive· to be -1. This results in the standard mathematical      concept of the negative integers. The ·value space· of negativeInteger is      the infinite set {...,-2,-1}. The ·base type· of negativeInteger is      nonPositiveInteger.   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :negativeInteger
   #
-  #     #       nonNegativeInteger is ·derived· from integer by setting the value of      ·minInclusive· to be 0. This results in the standard mathematical concept      of the non-negative integers. The ·value space· of nonNegativeInteger is      the infinite set `{0,1,2,...}`. The ·base type· of nonNegativeInteger is      integer.   
+  #     #       nonNegativeInteger is ·derived· from integer by setting the value of      ·minInclusive· to be 0. This results in the standard mathematical concept      of the non-negative integers. The ·value space· of nonNegativeInteger is      the infinite set {0,1,2,...}. The ·base type· of nonNegativeInteger is      integer.   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :nonNegativeInteger
   #
-  #     #      nonPositiveInteger is ·derived· from integer by setting the value of     ·maxInclusive· to be 0. This results in the standard mathematical concept     of the non-positive integers. The ·value space· of nonPositiveInteger is     the infinite set `{...,-2,-1,0}`. The ·base type· of nonPositiveInteger is     integer.   
+  #     #      nonPositiveInteger is ·derived· from integer by setting the value of     ·maxInclusive· to be 0. This results in the standard mathematical concept     of the non-positive integers. The ·value space· of nonPositiveInteger is     the infinite set {...,-2,-1,0}. The ·base type· of nonPositiveInteger is     integer.   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :nonPositiveInteger
   #
@@ -167,7 +167,7 @@ module RDF
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :normalizedString
   #
-  #     #       positiveInteger is ·derived· from nonNegativeInteger by setting the value      of ·minInclusive· to be 1. This results in the standard mathematical      concept of the positive integer numbers. The ·value space· of      positiveInteger is the infinite set `{1,2,...}`. The ·base type· of      positiveInteger is nonNegativeInteger.   
+  #     #       positiveInteger is ·derived· from nonNegativeInteger by setting the value      of ·minInclusive· to be 1. This results in the standard mathematical      concept of the positive integer numbers. The ·value space· of      positiveInteger is the infinite set {1,2,...}. The ·base type· of      positiveInteger is nonNegativeInteger.   
   #     # @return [RDF::Vocabulary::Term]
   #     attr_reader :positiveInteger
   #
