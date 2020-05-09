@@ -15,15 +15,17 @@ module RDF
   #
   #     <https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/title> "rdf" .
   #
-  # Installation
-  # ------------
+  # ** RDFStar (RDF*)
+  #
+  # Supports statements as resources using `<<s p o>>`.
+  #
+  # ## Installation
   #
   # This is the only RDF serialization format that is directly supported by
   # RDF.rb. Support for other formats is available in the form of add-on
   # gems, e.g. 'rdf-xml' or 'rdf-json'.
   #
-  # Documentation
-  # -------------
+  # ## Documentation
   #
   # * {RDF::NTriples::Format}
   # * {RDF::NTriples::Reader}

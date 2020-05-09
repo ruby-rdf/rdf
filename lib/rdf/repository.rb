@@ -266,6 +266,7 @@ module RDF
         when :validity         then @options.fetch(:with_validity, true)
         when :literal_equality then true
         when :atomic_write     then true
+        when :rdfstar          then true
         when :snapshots        then true
         else false
         end

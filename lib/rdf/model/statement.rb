@@ -26,7 +26,7 @@ module RDF
   #   RDF::Statement(s, p, "o")
   #
   class Statement
-    include RDF::Value
+    include RDF::Resource
 
     ##
     # @private

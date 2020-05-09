@@ -182,6 +182,74 @@ describe RDF::NQuads::Reader do
     end
   end
 
+  context "RDF*" do
+    statements = {
+      "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
+      "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
+      "subject-iil": '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> <http://example/g> .',
+      "subject-bii": '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
+      "subject-bib": '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
+      "subject-bil": '<<_:s1 <http://example/p1> "o">> <http://example/p> <http://example/o> <http://example/g> .',
+      "subject-ws":  '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/p> <http://example/o> <http://example/g> .',
+      "object-iii":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/g> .',
+      "object-iib":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> <http://example/g> .',
+      "object-iil":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> <http://example/g> .',
+      "object-ws":   '<http://example/s> <http://example/p> << <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/g> .',
+    }
+
+    context "without rdfstar option" do
+      it "Raises an error" do
+        expect do
+          expect {RDF::Graph.new << described_class.new(statements.values.first)}.to raise_error(RDF::ReaderError)
+        end.to write(:something).to(:error)
+      end
+    end
+
+    context "in property graph mode" do
+      statements.each do |name, st|
+        context name do
+          let(:graph) {RDF::Graph.new << RDF::NQuads::Reader.new(st, rdfstar: :PG)}
+
+          it "creates two statements" do
+            expect(graph.count).to eql(2)
+          end
+
+          it "has a statement whose subject or object is a statement" do
+            referencing = graph.statements.detect {|s| s.predicate == RDF::URI("http://example/p")}
+            expect(referencing).to be_a_statement
+            if referencing.subject.statement?
+              expect(referencing.subject).to be_a_statement
+            else
+              expect(referencing.object).to be_a_statement
+            end
+          end
+        end
+      end
+    end
+
+    context "in separate assertions mode" do
+      statements.each do |name, st|
+        context name do
+          let(:graph) {RDF::Graph.new << RDF::NQuads::Reader.new(st, rdfstar: :SA)}
+
+          it "creates two statements" do
+            expect(graph.count).to eql(1)
+          end
+
+          it "has a statement whose subject or object is a statement" do
+            referencing = graph.statements.first
+            expect(referencing).to be_a_statement
+            if referencing.subject.statement?
+              expect(referencing.subject).to be_a_statement
+            else
+              expect(referencing.object).to be_a_statement
+            end
+          end
+        end
+      end
+    end
+  end
+
   it "should parse W3C's test data" do
     expect(described_class.new(File.open(testfile)).to_a.size).to eq 19
   end

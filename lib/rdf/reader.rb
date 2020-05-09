@@ -122,6 +122,12 @@ module RDF
     def self.options
       [
         RDF::CLI::Option.new(
+          symbol: :base_uri,
+          control: :url,
+          datatype: RDF::URI,
+          on: ["--uri URI"],
+          description: "Base URI of input file, defaults to the filename.") {|arg| RDF::URI(arg)},
+        RDF::CLI::Option.new(
           symbol: :canonicalize,
           datatype: TrueClass,
           on: ["--canonicalize"],
@@ -153,11 +159,11 @@ module RDF
             end
         end,
         RDF::CLI::Option.new(
-          symbol: :base_uri,
-          control: :url,
-          datatype: RDF::URI,
-          on: ["--uri URI"],
-          description: "Base URI of input file, defaults to the filename.") {|arg| RDF::URI(arg)},
+          symbol: :rdfstar,
+          control: :select,
+          datatype: [:PG, :SA],
+          on: ["--rdf-star "],
+          description: "Parse RDF*, either in Property Graph mode (PG) or Separate Assertions mode (SA).") {|arg| arg.to_sym},
         RDF::CLI::Option.new(
           symbol: :validate,
           datatype: TrueClass,
@@ -261,42 +267,48 @@ module RDF
     #
     # @param  [IO, File, String] input
     #   the input stream to read
-    # @param [Encoding] encoding     (Encoding::UTF_8)
-    #   the encoding of the input stream
-    # @param [Boolean]  validate     (false)
-    #   whether to validate the parsed statements and values
-    # @param [Boolean]  canonicalize (false)
-    #   whether to canonicalize parsed literals
-    # @param [Boolean]  intern       (true)
-    #   whether to intern all parsed URIs
-    # @param [Hash]     prefixes     (Hash.new)
-    #   the prefix mappings to use (not supported by all readers)
     # @param [#to_s]    base_uri     (nil)
     #   the base URI to use when resolving relative URIs (not supported by
     #   all readers)
+    # @param [Boolean]  canonicalize (false)
+    #   whether to canonicalize parsed literals
+    # @param [Encoding] encoding     (Encoding::UTF_8)
+    #   the encoding of the input stream
+    # @param [Boolean]  intern       (true)
+    #   whether to intern all parsed URIs
+    # @param [:PG, :SA] rdfstar      (nil)
+    #   support parsing RDF* statement resources.
+    #   If `:PG`, referenced statements are also emitted.
+    #   If `:SA`, referenced statements are not emitted.
+    # @param [Hash]     prefixes     (Hash.new)
+    #   the prefix mappings to use (not supported by all readers)
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
+    # @param [Boolean]  validate     (false)
+    #   whether to validate the parsed statements and values
     # @yield  [reader] `self`
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
     def initialize(input = $stdin,
-                   encoding:      Encoding::UTF_8,
-                   validate:      false,
+                   base_uri:      nil,
                    canonicalize:  false,
+                   encoding:      Encoding::UTF_8,
                    intern:        true,
                    prefixes:      Hash.new,
-                   base_uri:      nil,
+                   rdfstar:       nil,
+                   validate:      false,
                    **options,
                    &block)
 
       base_uri     ||= input.base_uri if input.respond_to?(:base_uri)
       @options = options.merge({
-        encoding:       encoding,
-        validate:       validate,
+        base_uri:       base_uri,
         canonicalize:   canonicalize,
+        encoding:       encoding,
         intern:         intern,
         prefixes:       prefixes,
-        base_uri:       base_uri
+        rdfstar:        rdfstar,
+        validate:       validate
       })
 
       @input = case input
@@ -389,6 +401,9 @@ module RDF
     # Statements are yielded in the order that they are read from the input
     # stream.
     #
+    # If the `rdfstar` option is `:PG` and triples include
+    # embedded statements, they are also enumerated.
+    #
     # @overload each_statement
     #   @yield  [statement]
     #     each statement
@@ -405,7 +420,14 @@ module RDF
     def each_statement(&block)
       if block_given?
         begin
-          loop { block.call(read_statement) }
+          loop do
+            st = read_statement
+            block.call(st)
+            if options[:rdfstar] == :PG
+              block.call(st.subject) if st.subject.is_a?(Statement)
+              block.call(st.object) if st.object.is_a?(Statement)
+            end
+          end
         rescue EOFError
           rewind rescue nil
         end
@@ -421,6 +443,9 @@ module RDF
     #
     # Triples are yielded in the order that they are read from the input
     # stream.
+    #
+    # If the `rdfstar` option is `:PG` and triples include
+    # embedded statements, they are also enumerated.
     #
     # @overload each_triple
     #   @yield  [subject, predicate, object]
@@ -439,7 +464,14 @@ module RDF
     def each_triple(&block)
       if block_given?
         begin
-          loop { block.call(*read_triple) }
+          loop do
+            triple = read_triple
+            block.call(*triple)
+            if options[:rdfstar] == :PG
+              block.call(*triple[0].to_a) if triple[0].is_a?(Statement)
+              block.call(*triple[2].to_a) if triple[2].is_a?(Statement)
+            end
+          end
         rescue EOFError
           rewind rescue nil
         end

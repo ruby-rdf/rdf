@@ -511,11 +511,12 @@ module RDF
     # @since  0.3.0
     def format_term(term, **options)
       case term
-        when String       then format_literal(RDF::Literal(term, **options), **options)
-        when RDF::List    then format_list(term, **options)
-        when RDF::Literal then format_literal(term, **options)
-        when RDF::URI     then format_uri(term, **options)
-        when RDF::Node    then format_node(term, **options)
+        when String         then format_literal(RDF::Literal(term, **options), **options)
+        when RDF::List      then format_list(term, **options)
+        when RDF::Literal   then format_literal(term, **options)
+        when RDF::URI       then format_uri(term, **options)
+        when RDF::Node      then format_node(term, **options)
+        when RDF::Statement then format_rdfstar(term, **options)
         else nil
       end
     end
@@ -560,6 +561,21 @@ module RDF
     # @since  0.2.3
     def format_list(value, **options)
       format_term(value.subject, **options)
+    end
+
+    ##
+    # Formats a referenced triple.
+    #
+    # @example
+    #     <<<s> <p> <o>>> <p> <o> .
+    #
+    # @param  [RDF::Statement] value
+    # @param  [Hash{Symbol => Object}] options = ({})
+    # @return [String]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    def format_rdfstar(value, **options)
+      raise NotImplementedError.new("#{self.class}#format_statement") # override in subclasses
     end
 
   protected
