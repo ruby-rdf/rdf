@@ -147,6 +147,14 @@ module RDF
     end
 
     ##
+    # Returns `true` if any element of the statement is, itself, a statement.
+    #
+    # @return [Boolean]
+    def nested?
+      subject && subject.statement? || object && object.statement?
+    end
+
+    ##
     # @return [Boolean]
     def invalid?
       !valid?

@@ -54,10 +54,12 @@ module RDF
     # @overload insert(*statements)
     #   @param  [Array<RDF::Statement>] statements
     #   @return [self]
+    #   @raise [ArgumentError] on an attempt to insert a nested statement when it is not supported
     #
     # @overload insert(statements)
     #   @param  [Enumerable<RDF::Statement>] statements
     #   @return [self]
+    #   @raise [ArgumentError] on an attempt to insert a nested statement when it is not supported
     def insert(*statements)
       coerce_statements(statements) { |value| insert_statements value }
 
@@ -120,10 +122,14 @@ module RDF
     #
     # @param  [RDF::Enumerable] statements
     # @return [void]
+    # @raise [ArgumentError] on an attempt to insert a nested statement when it is not supported
     # @since  0.1.6
     def insert_statements(statements)
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
+        if statement.nested? && !supports?(:rdfstar)
+          raise ArgumentError, "Graph does not support nested statements"
+        end
         insert_statement(statement)
       end
     end
@@ -138,6 +144,7 @@ module RDF
     #
     # @param  [RDF::Statement] statement
     # @return [void]
+    # @raise [ArgumentError] on an attempt to insert a nested statement when it is not supported
     # @abstract
     def insert_statement(statement)
       raise NotImplementedError.new("#{self.class}#insert_statement")
