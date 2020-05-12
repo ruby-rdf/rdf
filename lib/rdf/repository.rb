@@ -397,20 +397,25 @@ module RDF
                         graph_name.eql?(c)
 
             ss = if subject.nil? || subject.is_a?(RDF::Query::Variable)
-                   ss
-                 elsif ss.has_key?(subject)
-                   { subject => ss[subject] }
-                 else
-                   []
-                 end
+              ss
+            elsif subject.is_a?(RDF::Query::Pattern)
+              # Match subjects which are statements matching this pattern
+              ss.keys.select {|s| s.statement? && subject.eql?(s)}.inject({}) do |memo, st|
+                memo.merge(st => ss[st])
+              end
+            elsif ss.has_key?(subject)
+              { subject => ss[subject] }
+            else
+              []
+            end
             ss.each do |s, ps|
               ps = if predicate.nil? || predicate.is_a?(RDF::Query::Variable)
-                     ps
-                   elsif ps.has_key?(predicate)
-                     { predicate => ps[predicate] }
-                   else
-                     []
-                   end
+                  ps
+                elsif ps.has_key?(predicate)
+                  { predicate => ps[predicate] }
+                else
+                  []
+                end
               ps.each do |p, os|
                 os.each do |o, object_options|
                   next unless object.nil? || object.eql?(o)
