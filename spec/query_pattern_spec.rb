@@ -267,6 +267,201 @@ describe RDF::Query::Pattern do
     end
   end
 
+  context "RDF*" do
+    let(:s) {RDF::Query::Variable.new(:s)}
+    let(:p) {RDF::Query::Variable.new(:p)}
+    let(:o) {RDF::Query::Variable.new(:o)}
+    context "with variable subject pattern" do
+      let(:pattern) {described_class.new(s, p, o)}
+      subject {described_class.new(pattern, RDF::URI("ex:p"), "o")}
+
+      its(:cost) {is_expected.to be (4+2+1+4)}
+
+      specify {is_expected.not_to be_constant}
+      specify {is_expected.to be_variable}
+      specify {is_expected.not_to be_bound}
+
+      it "should have three variables" do
+        expect(subject).to be_variables
+        expect(subject.variable_count).to eq 3
+        expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
+        expect(subject.variables).to eq({s: s, p: p, o: o})
+      end
+
+      it "should have three unbound variables" do
+        expect(subject.unbound_variables.size).to eq 3
+      end
+
+      context "with three bound variables" do
+        let(:s) {RDF::Query::Variable.new(:s, true)}
+        let(:p) {RDF::Query::Variable.new(:p, true)}
+        let(:o) {RDF::Query::Variable.new(:o, true)}
+        let(:pattern) {described_class.new(s, p, o)}
+        subject {described_class.new(pattern, RDF::URI("ex:p"), "o")}
+
+        specify {is_expected.to be_bound}
+
+        it "should have no unbound variables" do
+          expect(subject.unbound_variables.size).to eq 0
+        end
+
+        it "should have three variables" do
+          expect(subject).to be_variables
+          expect(subject.variable_count).to eq 3
+          expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
+          expect(subject.variables).to eq({s: s, p: p, o: o})
+        end
+
+        it "should have three bound variables" do
+          expect(subject.bound_variables.size).to eq 3
+          expect(subject.bound_variables).to eq({s: s, p: p, o: o})
+        end
+
+        it "should be fully bound" do
+          is_expected.not_to be_unbound
+          is_expected.to be_bound
+        end
+
+        it "should have three bindings" do
+          expect(subject).to be_bindings
+          expect(subject.binding_count).to eq 3
+          expect(subject.bindings).to eq({s: true, p: true, o: true})
+        end
+      end
+
+      describe "#execute" do
+        let!(:repo) do
+          RDF::Repository.new do |r|
+            r << RDF::Statement(
+              RDF::Statement(RDF::URI("ex:s1"), RDF::URI("ex:p1"), RDF::URI("ex:o1")),
+              RDF::URI("ex:p"), "o")
+          end
+        end
+
+        it "executes query against repo" do
+          ss = subject
+          ss.execute(repo)
+          expect(subject.execute(repo).to_a.size).to eql 1
+        end
+      end
+    end
+
+    context "with constant subject pattern" do
+      let(:pattern) {described_class.new(RDF::URI("ex:s"), RDF::URI("ex:p"), "o")}
+      let(:subject) {described_class.new(pattern, p, o)}
+      its(:cost) {is_expected.to be (4+2+1)}
+
+      specify {is_expected.not_to be_constant}
+      specify {is_expected.to be_variable}
+      specify {is_expected.not_to be_bound}
+
+      it "should have two variables" do
+        expect(subject).to be_variables
+        expect(subject.variable_count).to eq 2
+        expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:p, :o].map { |key| key.to_s }.sort
+        expect(subject.variables).to eq({p: p, o: o})
+      end
+
+      it "should have two unbound variables" do
+        expect(subject.unbound_variables.size).to eq 2
+      end
+    end
+
+    context "with variable object pattern" do
+      let(:pattern) {described_class.new(s, p, o)}
+      let(:subject) {described_class.new(RDF::URI("ex:s"), RDF::URI("ex:p"), pattern)}
+      its(:cost) {is_expected.to be (4+2+1)}
+
+      specify {is_expected.not_to be_constant}
+      specify {is_expected.to be_variable}
+      specify {is_expected.not_to be_bound}
+
+      it "should have three variables" do
+        expect(subject).to be_variables
+        expect(subject.variable_count).to eq 3
+        expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
+        expect(subject.variables).to eq({s: s, p: p, o: o})
+      end
+
+      it "should have three unbound variables" do
+        expect(subject.unbound_variables.size).to eq 3
+      end
+
+      context "with three bound variables" do
+        let(:s) {RDF::Query::Variable.new(:s, true)}
+        let(:p) {RDF::Query::Variable.new(:p, true)}
+        let(:o) {RDF::Query::Variable.new(:o, true)}
+        let(:pattern) {described_class.new(s, p, o)}
+        subject {described_class.new(RDF::URI("ex:s"), RDF::URI("ex:p"), pattern)}
+
+        specify {is_expected.to be_bound}
+
+        it "should have no unbound variables" do
+          expect(subject.unbound_variables.size).to eq 0
+        end
+
+        it "should have three variables" do
+          expect(subject).to be_variables
+          expect(subject.variable_count).to eq 3
+          expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p, :o].map { |key| key.to_s }.sort
+          expect(subject.variables).to eq({s: s, p: p, o: o})
+        end
+
+        it "should have three bound variables" do
+          expect(subject.bound_variables.size).to eq 3
+          expect(subject.bound_variables).to eq({s: s, p: p, o: o})
+        end
+
+        it "should be fully bound" do
+          is_expected.not_to be_unbound
+          is_expected.to be_bound
+        end
+
+        it "should have three bindings" do
+          expect(subject).to be_bindings
+          expect(subject.binding_count).to eq 3
+          expect(subject.bindings).to eq({s: true, p: true, o: true})
+        end
+      end
+
+      describe "#execute" do
+        let!(:repo) do
+          RDF::Repository.new do |r|
+            r << RDF::Statement(RDF::URI("ex:s"), RDF::URI("ex:p"),
+                  RDF::Statement(RDF::URI("ex:s1"), RDF::URI("ex:p1"), RDF::URI("ex:o1")))
+          end
+        end
+
+        it "executes query against repo" do
+          ss = subject
+          ss.execute(repo)
+          expect(subject.execute(repo).to_a.size).to eql 1
+        end
+      end
+    end
+
+    context "with constant object pattern" do
+      let(:pattern) {described_class.new(RDF::URI("ex:s1"), RDF::URI("ex:p1"), "o1")}
+      let(:subject) {described_class.new(s, p, pattern)}
+      its(:cost) {is_expected.to be (4+2)}
+
+      specify {is_expected.not_to be_constant}
+      specify {is_expected.to be_variable}
+      specify {is_expected.not_to be_bound}
+
+      it "should have two variables" do
+        expect(subject).to be_variables
+        expect(subject.variable_count).to eq 2
+        expect(subject.variables.keys.map { |key| key.to_s }.sort).to eq [:s, :p].map { |key| key.to_s }.sort
+        expect(subject.variables).to eq({s: s, p: p})
+      end
+
+      it "should have two unbound variables" do
+        expect(subject.unbound_variables.size).to eq 2
+      end
+    end
+  end
+
   context "Examples" do
     let!(:repo) {RDF::Repository.new {|r| r.insert(RDF::Spec.triples.extend(RDF::Enumerable))}}
     let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}

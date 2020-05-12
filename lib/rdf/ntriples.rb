@@ -15,7 +15,7 @@ module RDF
   #
   #     <https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/title> "rdf" .
   #
-  # ** RDFStar (RDF*)
+  # ## RDFStar (RDF*)
   #
   # Supports statements as resources using `<<s p o>>`.
   #

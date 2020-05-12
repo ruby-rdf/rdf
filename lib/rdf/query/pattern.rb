@@ -53,7 +53,9 @@ module RDF; class Query
       @cost = (@object.nil?     || @object.is_a?(Variable)      ? 1 : 0) +
               (@predicate.nil?  || @predicate.is_a?(Variable)   ? 2 : 0) +
               (@subject.nil?    || @subject.is_a?(Variable)     ? 4 : 0) +
-              (@graph_name.is_a?(Variable)                      ? 8 : 0)
+              (@graph_name.is_a?(Variable)                      ? 8 : 0) +
+              (@object.is_a?(Pattern)                           ? @object.cost : 0) +
+              (@subject.is_a?(Pattern)                          ? (@subject.cost + 4) : 0)
       super
     end
 
@@ -84,10 +86,10 @@ module RDF; class Query
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
     def has_variables?
-      subject.is_a?(Variable) ||
-        predicate.is_a?(Variable) ||
-        object.is_a?(Variable) ||
-        graph_name.is_a?(Variable)
+      subject    && subject.variable? ||
+      predicate  && predicate.variable? ||
+      object     && object.variable? ||
+      graph_name && graph_name.variable?
     end
     alias_method :variables?, :has_variables?
 
@@ -118,12 +120,32 @@ module RDF; class Query
     end
 
     ##
+    # Checks pattern equality against a statement, considering nesting.
+    #
+    # * A pattern which has a pattern as a subject or an object, matches
+    #   a statement having a statement as a subject or an object using {#eql?}.
+    #
+    # @param  [Statement] other
+    # @return [Boolean]
+    #
+    # @see RDF::URI#==
+    # @see RDF::Node#==
+    # @see RDF::Literal#==
+    # @see RDF::Query::Variable#==
+    def eql?(other)
+      return false unless other.is_a?(Statement) && (self.graph_name || false) == (other.graph_name || false)
+
+      predicate == other.predicate &&
+      (subject.is_a?(Pattern) ? subject.eql?(other.subject) : subject == other.subject) &&
+      (object.is_a?(Pattern) ? object.eql?(other.object) : object == other.object)
+    end
+
+    ##
     # Executes this query pattern on the given `queryable` object.
     #
     # Values are matched using using Queryable#query_pattern.
     #
-    # If the optional `bindings` are given, variables will be substituted with their values
-    # when executing the query.
+    # If the optional `bindings` are given, variables will be substituted with their values when executing the query.
     #
     # To match triples only in the default graph, set graph_name to `false`.
     #
@@ -198,6 +220,8 @@ module RDF; class Query
         solution[predicate.to_sym]  = statement.predicate  if predicate.is_a?(Variable)
         solution[object.to_sym]     = statement.object     if object.is_a?(Variable)
         solution[graph_name.to_sym] = statement.graph_name if graph_name.is_a?(Variable)
+        solution.merge!(subject.solution(statement.subject)) if subject.is_a?(Pattern)
+        solution.merge!(object.solution(statement.object)) if object.is_a?(Pattern)
       end
     end
 
@@ -229,7 +253,8 @@ module RDF; class Query
     # @return [Integer] (0..3)
     def variable_count
       [subject, predicate, object, graph_name].inject(0) do |memo, term|
-        memo += (term.is_a?(Variable) ? 1 : 0)
+        memo += (term.is_a?(Variable) ? 1 :
+                 (term.is_a?(Pattern) ? term.variable_count : 0))
       end
     end
     alias_method :cardinality, :variable_count
@@ -243,7 +268,7 @@ module RDF; class Query
     # @return [Hash{Symbol => Variable}]
     def variables
       [subject, predicate, object, graph_name].inject({}) do |memo, term|
-        term.is_a?(Variable) ? memo.merge(term.variables) : memo
+        term && term.variable? ? memo.merge(term.variables) : memo
       end
     end
 
@@ -254,8 +279,10 @@ module RDF; class Query
     # @return [self]
     def bind(solution)
       self.to_quad.each_with_index do |term, index|
-        if term && term.variable? && solution[term]
+        if term.is_a?(Variable) && solution[term]
           self[index] = solution[term] 
+        elsif term.is_a?(Pattern)
+          term.bind(solution)
         end
       end
       self
@@ -283,9 +310,9 @@ module RDF; class Query
     # @return [Hash{Symbol => RDF::Term}]
     def bindings
       bindings = {}
-      bindings.merge!(subject.bindings)    if subject.is_a?(Variable)
+      bindings.merge!(subject.bindings)    if subject && subject.variable?
       bindings.merge!(predicate.bindings)  if predicate.is_a?(Variable)
-      bindings.merge!(object.bindings)     if object.is_a?(Variable)
+      bindings.merge!(object.bindings)     if object && object.variable?
       bindings.merge!(graph_name.bindings) if graph_name.is_a?(Variable)
       bindings
     end
@@ -330,7 +357,13 @@ module RDF; class Query
       StringIO.open do |buffer| # FIXME in RDF::Statement
         buffer << 'OPTIONAL ' if optional?
         buffer << [subject, predicate, object].map do |r|
-          r.is_a?(RDF::Query::Variable) ? r.to_s : RDF::NTriples.serialize(r)
+          if r.is_a?(RDF::Query::Variable)
+            r.to_s
+          elsif r.is_a?(RDF::Query::Pattern)
+            "<<#{r.to_s[0..-3]}>>"
+          else
+            RDF::NTriples.serialize(r)
+          end
         end.join(" ")
         buffer << case graph_name
           when nil, false then " ."
