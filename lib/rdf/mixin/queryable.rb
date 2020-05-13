@@ -130,11 +130,11 @@ module RDF
     #
     # ## RDFStar (RDF*)
     #
-    # Statements may have statements as either a subject or object, recursively.
+    # Statements may have embedded statements as either a subject or object, recursively.
     #
-    # Patterns may also have patterns as either a subject or object, recursively.
+    # Patterns may also have embedded patterns as either a subject or object, recursively.
     #
-    # When matching, match a nested pattern against nested statements, recursively. (see {RDF::Query::Pattern#eql?})
+    # When matching, match an embedded pattern against embedded statements, recursively. (see {RDF::Query::Pattern#eql?})
     #
     # @param  [RDF::Query::Pattern] pattern
     #   the query pattern to match

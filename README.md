@@ -118,12 +118,6 @@ or
       end
     end
 
-## RDF* (RDFStar)
-
-    require 'rdf/ntriples'
-    graph = RDF::Graph.new << [:hello, RDF::RDFS.label, "Hello, world!"]
-    graph.dump(:ntriples)
-
 ### Reading RDF data in other formats
 {RDF::Reader.open} and {RDF::Repository.load} use a number of mechanisms to determine the appropriate reader
 to use when loading a file. The specific format to use can be forced using, e.g. `format: :ntriples`
@@ -236,7 +230,7 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`. (Currently no prohibition for recursive statements any deeper, but no prohibition, either).
 
-### Serializing a Graph containing statements
+### Serializing a Graph containing embedded statements
 
     require 'rdf/ntriples'
     statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
@@ -244,7 +238,7 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
     graph.dump(:ntriples, validate: false)
     # => '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
 
-### Reading a Graph containing statements
+### Reading a Graph containing embedded statements
 
 By default, the N-Triples reader will reject a document containing a subject resource.
 

@@ -282,16 +282,16 @@ describe RDF::Statement do
   end
 
   context "RDF*" do
-    it "is not nested for plain statements" do
-      expect(RDF::Statement(:s, :p, :o)).not_to be_nested
+    it "is not embedded for plain statements" do
+      expect(RDF::Statement(:s, :p, :o)).not_to be_embedded
     end
 
-    it "is nested for statements having a statement subject" do
-      expect(RDF::Statement(RDF::Statement(:s1, :p1, :o1), :p, :o)).to be_nested
+    it "is embedded for statements having a statement subject" do
+      expect(RDF::Statement(RDF::Statement(:s1, :p1, :o1), :p, :o)).to be_embedded
     end
 
-    it "is nested for statements having a statement object" do
-      expect(RDF::Statement(:s, :p, RDF::Statement(:s1, :p1, :o1))).to be_nested
+    it "is embedded for statements having a statement object" do
+      expect(RDF::Statement(:s, :p, RDF::Statement(:s1, :p1, :o1))).to be_embedded
     end
   end
 
