@@ -205,7 +205,12 @@ class RDF::Query
     # @return [void] self
     # @since  0.3.0
     def merge!(other)
-      @bindings.merge!(other.to_h)
+      @bindings.merge!(other.to_h) do |key, v1, v2|
+        # Don't merge a pattern over a statement
+        # This happens because JOIN does a reverse merge,
+        # and a pattern is set in v2.
+        v2.is_a?(Pattern) ? v1 : v2
+      end
       # Merge bindings from patterns
       embedded_solutions = []
       @bindings.each do |k, v|
