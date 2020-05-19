@@ -4,10 +4,6 @@ This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
 * <https://ruby-rdf.github.com/rdf>
-* <https://blog.datagraph.org/2010/12/rdf-for-ruby>
-* <https://blog.datagraph.org/2010/03/rdf-for-ruby>
-* <https://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
-* <https://blog.datagraph.org/2010/04/rdf-repository-howto>
 
 [![Gem Version](https://badge.fury.io/rb/rdf.png)](https://badge.fury.io/rb/rdf)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf)
@@ -288,8 +284,6 @@ When using the `:SA` mode, only one statement is asserted, although the reified 
 
 ### RDF Serialization
 
-<https://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
-
 * {RDF::Format}
 * {RDF::Reader}
 * {RDF::Writer}
@@ -333,8 +327,6 @@ from BNode identity (i.e., they each entail the other)
 * `RDF::Isomorphic`
 
 ### RDF Storage
-
-<https://blog.datagraph.org/2010/04/rdf-repository-howto>
 
 * {RDF::Repository}
   * {RDF::Countable}

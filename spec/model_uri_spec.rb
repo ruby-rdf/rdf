@@ -813,8 +813,8 @@ describe RDF::URI do
     end
 
     it "Creating a URI reference (2)" do
-      uri = RDF::URI.new(scheme: 'http', host: 'rubygems.org', path: '/gems/rdf')
-      expect(uri).to eql RDF::URI.new("http://rubygems.org/gems/rdf")
+      uri = RDF::URI.new(scheme: 'https', host: 'rubygems.org', path: '/gems/rdf')
+      expect(uri).to eql RDF::URI.new("https://rubygems.org/gems/rdf")
     end
 
     it "Creating an interned URI reference" do

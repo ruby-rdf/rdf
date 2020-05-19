@@ -8,7 +8,7 @@
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
   doap:homepage      <https://rubygems.org/gems/rdf> ;
-  doap:license       <https://creativecommons.org/licenses/publicdomain/> ;
+  doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:created       "2007-10-23" ;
@@ -20,7 +20,7 @@
                      <http://www.w3.org/TR/n-triples/> ;
   doap:download-page <https://rubygems.org/gems/rdf/> ;
   doap:bug-database  <https://github.com/ruby-rdf/rdf/issues> ;
-  doap:blog          <https://ar.to/>, <http://blog.datagraph.org/> ;
+  doap:blog          <https://ar.to/>, <https://greggkellogg.net/> ;
   doap:developer     <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
   doap:maintainer    <https://greggkellogg.net/foaf#me> ;
   doap:documenter    <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
