@@ -559,6 +559,12 @@ potential to perform intentional actions for which they can be held responsible.
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
       its(:domainIncludes) {is_expected.to include(RDF::RDFS.Resource)}
       its(:rangeIncludes) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      it "duplicate has the same attributes" do
+        expect(subject.dup.attributes).to eq (subject.attributes)
+      end
+      it "duplicate has the same vocabulary" do
+        expect(subject.dup.vocab).to eq (subject.vocab)
+      end
     end
 
     context "with a BNode Label" do
@@ -579,6 +585,12 @@ potential to perform intentional actions for which they can be held responsible.
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
       its(:domainIncludes) {is_expected.to include(RDF::RDFS.Resource)}
       its(:rangeIncludes) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      it "duplicate has the same attributes" do
+        expect(subject.dup.attributes).to eq (subject.attributes)
+      end
+      it "duplicate has the same vocabulary" do
+        expect(subject.dup.vocab).to eq (subject.vocab)
+      end
     end
 
     context "with a nil Label" do

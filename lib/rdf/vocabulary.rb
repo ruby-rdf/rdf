@@ -881,7 +881,10 @@ module RDF
       #
       # @return [RDF::URI]
       def dup
-        self.class.new((@value || @object).dup, attributes: attributes).extend(Term)
+        term = super.extend(Term)
+        term.instance_variable_set(:@vocab, vocab)
+        term.instance_variable_set(:@attributes, attributes)
+        term
       end
 
       ##
