@@ -423,10 +423,7 @@ module RDF
           loop do
             st = read_statement
             block.call(st)
-            if options[:rdfstar] == :PG
-              block.call(st.subject) if st.subject.is_a?(Statement)
-              block.call(st.object) if st.object.is_a?(Statement)
-            end
+            each_pg_statement(st, &block) if options[:rdfstar] == :PG
           end
         rescue EOFError
           rewind rescue nil
@@ -580,6 +577,21 @@ module RDF
     # @raise  [RDF::ReaderError]
     def fail_object
       log_error("Expected object (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
+    end
+
+    # Recursively emit embedded statements in Property Graph mode
+    #
+    # @param [RDF::Statement] statement
+    def each_pg_statement(statement, &block)
+      if statement.subject.is_a?(Statement)
+        block.call(statement.subject)
+        each_pg_statement(statement.subject, &block)
+      end
+
+      if statement.object.is_a?(Statement)
+        block.call(statement.object)
+        each_pg_statement(statement.object, &block)
+      end
     end
 
   public

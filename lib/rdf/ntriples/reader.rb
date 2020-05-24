@@ -246,9 +246,9 @@ module RDF::NTriples
     # @return [RDF::Statement]
     def read_rdfstar
       if @options[:rdfstar] && match(ST_START)
-        subject   = read_uriref || read_node || fail_subject
+        subject   = read_uriref || read_node || read_rdfstar || fail_subject
         predicate = read_uriref(intern: true) || fail_predicate
-        object    = read_uriref || read_node || read_literal || fail_object
+        object    = read_uriref || read_node || read_literal || read_rdfstar || fail_object
         if !match(ST_END)
           log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
         end

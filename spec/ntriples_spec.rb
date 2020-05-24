@@ -417,6 +417,7 @@ describe RDF::NTriples::Reader do
       "object-iib":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .',
       "object-iil":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .',
       "object-ws":   '<http://example/s> <http://example/p> << <http://example/s1> <http://example/p1> <http://example/o1> >> .',
+      "recursive-subject": '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
     }
 
     context "without rdfstar option" do
@@ -434,7 +435,11 @@ describe RDF::NTriples::Reader do
 
           it "creates two statements" do
             expect(graph.count).to eql(2)
-          end
+          end unless name.to_s.include?('recursive')
+
+          it "creates multiple statements" do
+            expect(graph.count).to be > 2
+          end if name.to_s.include?('recursive')
 
           it "has a statement whose subject or object is a statement" do
             referencing = graph.statements.detect {|s| s.predicate == RDF::URI("http://example/p")}
@@ -722,58 +727,107 @@ describe RDF::NTriples::Writer do
     {
       "subject-iii": {
         input: RDF::Statement(
-          RDF::Statement(RDF::URI('http://example/s1'), RDF::URI('http://example/p1'), RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
+          RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
+            RDF::URI('http://example/o1')),
+          RDF::URI('http://example/p'),
+          RDF::URI('http://example/o')),
         output: '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
       },
       "subject-iib": {
         input: RDF::Statement(
-          RDF::Statement(RDF::URI('http://example/s1'), RDF::URI('http://example/p1'), RDF::Node.new('o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
+          RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
+            RDF::Node.new('o1')),
+          RDF::URI('http://example/p'),
+          RDF::URI('http://example/o')),
         output: '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .'
       },
       "subject-iil": {
         input: RDF::Statement(
-          RDF::Statement(RDF::URI('http://example/s1'), RDF::URI('http://example/p1'), RDF::Literal('o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
+          RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
+            RDF::Literal('o1')),
+          RDF::URI('http://example/p'),
+          RDF::URI('http://example/o')),
         output: '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .'
       },
       "subject-bii": {
         input: RDF::Statement(
-          RDF::Statement(RDF::Node('s1'), RDF::URI('http://example/p1'), RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
+          RDF::Statement(
+            RDF::Node('s1'),
+            RDF::URI('http://example/p1'),
+            RDF::URI('http://example/o1')),
+          RDF::URI('http://example/p'),
+          RDF::URI('http://example/o')),
         output: '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
       },
       "subject-bib": {
         input: RDF::Statement(
-          RDF::Statement(RDF::Node('s1'), RDF::URI('http://example/p1'), RDF::Node.new('o1')),
+          RDF::Statement(
+            RDF::Node('s1'),
+            RDF::URI('http://example/p1'),
+            RDF::Node.new('o1')),
           RDF::URI('http://example/p'), RDF::URI('http://example/o')),
         output: '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .'
       },
       "subject-bil": {
         input: RDF::Statement(
-          RDF::Statement(RDF::Node('s1'), RDF::URI('http://example/p1'), RDF::Literal('o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
+          RDF::Statement(
+            RDF::Node('s1'),
+            RDF::URI('http://example/p1'),
+            RDF::Literal('o1')),
+          RDF::URI('http://example/p'),
+          RDF::URI('http://example/o')),
         output: '<<_:s1 <http://example/p1> "o1">> <http://example/p> <http://example/o> .'
       },
       "object-iii":  {
         input: RDF::Statement(
-          RDF::URI('http://example/s'), RDF::URI('http://example/p'),
-          RDF::Statement(RDF::URI('http://example/s1'), RDF::URI('http://example/p1'), RDF::URI('http://example/o1'))),
+          RDF::URI('http://example/s'),
+          RDF::URI('http://example/p'),
+          RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
+            RDF::URI('http://example/o1'))),
         output: '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .'
       },
       "object-iib":  {
         input: RDF::Statement(
-          RDF::URI('http://example/s'), RDF::URI('http://example/p'),
-          RDF::Statement(RDF::URI('http://example/s1'), RDF::URI('http://example/p1'), RDF::Node.new('o1'))),
+          RDF::URI('http://example/s'),
+          RDF::URI('http://example/p'),
+          RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
+            RDF::Node.new('o1'))),
         output: '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .'
       },
       "object-iil":  {
         input: RDF::Statement(
-          RDF::URI('http://example/s'), RDF::URI('http://example/p'),
-          RDF::Statement(RDF::URI('http://example/s1'), RDF::URI('http://example/p1'), RDF::Literal('o1'))),
+          RDF::URI('http://example/s'),
+          RDF::URI('http://example/p'),
+          RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
+            RDF::Literal('o1'))),
         output: '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .'
       },
+      "recursive-subject": {
+        input: RDF::Statement(
+          RDF::Statement(
+            RDF::Statement(
+              RDF::URI('http://example/s2'),
+              RDF::URI('http://example/p2'),
+              RDF::URI('http://example/o2')),
+            RDF::URI('http://example/p1'),
+            RDF::URI('http://example/o1')),
+          RDF::URI('http://example/p'),
+          RDF::URI('http://example/o')),
+        output: '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
+      },
+      
     }.each do |name, params|
       it name do
         graph = RDF::Graph.new {|g| g << params[:input]}
