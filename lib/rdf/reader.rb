@@ -579,6 +579,7 @@ module RDF
       log_error("Expected object (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
     end
 
+    ##
     # Recursively emit embedded statements in Property Graph mode
     #
     # @param [RDF::Statement] statement

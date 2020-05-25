@@ -827,7 +827,6 @@ describe RDF::NTriples::Writer do
           RDF::URI('http://example/o')),
         output: '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
       },
-      
     }.each do |name, params|
       it name do
         graph = RDF::Graph.new {|g| g << params[:input]}
