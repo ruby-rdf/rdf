@@ -162,7 +162,7 @@ module RDF
           symbol: :rdfstar,
           control: :select,
           datatype: [:PG, :SA],
-          on: ["--rdf-star "],
+          on: ["--rdf-star MODE"],
           description: "Parse RDF*, either in Property Graph mode (PG) or Separate Assertions mode (SA).") {|arg| arg.to_sym},
         RDF::CLI::Option.new(
           symbol: :validate,
