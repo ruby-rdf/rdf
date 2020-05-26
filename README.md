@@ -224,7 +224,7 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 
 [RDF.rb][] includes provisional support for [RDF*][] with an N-Triples/N-Quads syntax extension that uses inline statements in the _subject_ or _object_ position.
 
-Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`. (Currently no prohibition for recursive statements any deeper, but no prohibition, either).
+Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
 ### Serializing a Graph containing embedded statements
 
@@ -473,7 +473,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
-[RDF*][]:           https://lists.w3.org/Archives/Public/public-rdf-star/
+[RDF*]:             https://lists.w3.org/Archives/Public/public-rdf-star/
 [LinkedData]:       https://ruby-rdf.github.com/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.com/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client
