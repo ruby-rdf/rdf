@@ -84,7 +84,6 @@ module RDF
       # A hash of all vocabularies by prefix showing relevant URI and associated vocabulary Class Name
       # @return [Hash{Symbol => Hash{Symbol => String}}]
       def vocab_map
-        puts "subclasses differs with vocab_map: #{@@subclasses.length} vs #{VOCABS.length}" unless @@subclasses.length == VOCABS.length
         VOCABS
       end
 
