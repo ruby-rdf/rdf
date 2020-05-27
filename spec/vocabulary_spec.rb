@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
+require 'rdf/turtle'
 
 describe RDF::Vocabulary do
   VOCABS = %w(owl rdf rdfs xsd)

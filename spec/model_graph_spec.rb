@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
 require 'rdf/spec/enumerable'
 
 describe RDF::Graph do
