@@ -226,6 +226,8 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
+**Note: This feature is subject to change or elimination as the standards process progresses.**
+
 ### Serializing a Graph containing embedded statements
 
     require 'rdf/ntriples'
