@@ -58,6 +58,9 @@ module RDF
   class Vocabulary
     extend ::Enumerable
 
+    autoload :Format, 'rdf/vocab/writer'
+    autoload :Writer, 'rdf/vocab/writer'
+
     class << self
       ##
       # Enumerates known RDF vocabulary classes.
@@ -70,11 +73,28 @@ module RDF
           # This is needed since all vocabulary classes are defined using
           # Ruby's autoloading facility, meaning that `@@subclasses` will be
           # empty until each subclass has been touched or require'd.
-          RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" unless v == :rdf }
+          RDF::VOCABS.each { |v, p| RDF.const_get(p[:class_name].to_sym) unless v == :rdf }
           @@subclasses.select(&:name).each(&block)
         else
           __properties__.each(&block)
         end
+      end
+
+      ##
+      # A hash of all vocabularies by prefix showing relevant URI and associated vocabulary Class Name
+      # @return [Hash{Symbol => Hash{Symbol => String}}]
+      def vocab_map
+        puts "subclasses differs with vocab_map: #{@@subclasses.length} vs #{VOCABS.length}" unless @@subclasses.length == VOCABS.length
+        VOCABS
+      end
+
+      ##
+      # Return the vocabulary based on it's class_name symbol
+      #
+      # @param [Symbol] sym
+      # @return [RDF::Vocabulary]
+      def from_sym(sym)
+        RDF.const_get(sym.to_sym)
       end
 
       ##
@@ -291,7 +311,8 @@ module RDF
         prefix, suffix = pname.to_s.split(":", 2)
         if prefix == "rdf"
           RDF[suffix]
-        elsif vocab = RDF::Vocabulary.each.detect {|v| v.__name__ && v.__prefix__ == prefix.to_sym}
+        elsif vocab_detail = RDF::Vocabulary.vocab_map[prefix.to_sym]
+          vocab = RDF::Vocabulary.from_sym(vocab_detail[:class_name])
           suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
         else
           (RDF::Vocabulary.find_term(pname) rescue nil) || RDF::URI(pname, validate: true)
@@ -590,6 +611,7 @@ module RDF
         unless @@uri.nil?
           @@subclasses << subclass unless %w(http://www.w3.org/1999/02/22-rdf-syntax-ns#).include?(@@uri)
           subclass.send(:private_class_method, :new)
+          #vocab_map[subclass.__prefix__] ||= {uri: @@uri, class_name: subclass.__name__.split('::').last.downcase}
           @@uris[subclass] = @@uri
           @@uri = nil
         end

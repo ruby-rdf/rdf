@@ -59,16 +59,18 @@ module RDF
   # RDF vocabularies
   autoload :Vocabulary,        'rdf/vocabulary'
   autoload :StrictVocabulary,  'rdf/vocabulary'
-  VOCABS = Dir.glob(File.expand_path("../rdf/vocab/*.rb", __FILE__)).map { |f| File.basename(f)[0...-(File.extname(f).size)].to_sym } rescue []
 
-  # Use const_missing instead of autoload to load most vocabularies so we can provide deprecation messages
-  def self.const_missing(constant)
-    if VOCABS.include?(constant.to_s.downcase.to_sym)
-      require "rdf/vocab/#{constant.to_s.downcase}"
-      const_get(constant)
-    else
-      super
-    end
+  VOCABS = {
+    owl: {uri: "http://www.w3.org/2002/07/owl#", class_name: "OWL"},
+    rdfs: {uri: "http://www.w3.org/2000/01/rdf-schema#", class_name: "RDFS"},
+    rdfv: {uri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#", class_name: "RDFV"},
+    xsd: {uri: "http://www.w3.org/2001/XMLSchema#", class_name: "XSD"},
+  }
+
+  # Autoload vocabularies
+  VOCABS.each do |id, params|
+    v = (params[:class_name] ||= id.to_s.upcase).to_sym
+    autoload v, File.expand_path("../rdf/vocab/#{id}", __FILE__)
   end
 
   # Utilities
@@ -200,8 +202,8 @@ module RDF
   #
   # @param (see RDF::Vocabulary#initialize)
   # @return [Class]
-  def self.StrictVocabulary(prefix)
-    StrictVocabulary.create(prefix)
+  def self.StrictVocabulary(uri)
+    StrictVocabulary.create(uri)
   end
 
   ##
