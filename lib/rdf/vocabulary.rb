@@ -70,11 +70,15 @@ module RDF
       # @return [Enumerator]
       def each(&block)
         if self.equal?(Vocabulary)
-          # This is needed since all vocabulary classes are defined using
-          # Ruby's autoloading facility, meaning that `@@subclasses` will be
-          # empty until each subclass has been touched or require'd.
-          RDF::VOCABS.each { |v, p| RDF.const_get(p[:class_name].to_sym) unless v == :rdf }
-          @@subclasses.select(&:name).each(&block)
+          if @vocabs
+            @vocabs.select(&:name).each(&block)
+          else
+            # This is needed since all vocabulary classes are defined using
+            # Ruby's autoloading facility, meaning that `@@subclasses` will be
+            # empty until each subclass has been touched or require'd.
+            RDF::VOCABS.each { |v, p| RDF.const_get(p[:class_name].to_sym) unless v == :rdf }
+            @@subclasses.select(&:name).each(&block)
+          end
         else
           __properties__.each(&block)
         end
@@ -94,6 +98,38 @@ module RDF
       # @return [RDF::Vocabulary]
       def from_sym(sym)
         RDF.const_get(sym.to_sym)
+      end
+
+      ##
+      # Limits iteration over vocabularies to just those selected
+      #
+      # @example limit to set of vocabularies by symbol
+      #     RDF::Vocabulary.limit_vocabs(:rdf, :rdfs
+      #     RDF::Vocabulary.find_term('http://www.w3.org/2000/01/rdf-schema#Resource').pname
+      #     # => 'rdfs:Resource'
+      #
+      # @example limit to set of vocabularies by class name
+      #     RDF::Vocabulary.limit_vocabs(RDF::RDFV, RDF::RDFS)
+      #     RDF::Vocabulary.find_term('http://www.w3.org/2000/01/rdf-schema#Resource').pname
+      #     # => 'rdfs:Resource'
+      #
+      # @param [Array<symbol, RDF::Vocabulary>] vocabs
+      #   A list of vocabularies (symbols or classes) which may
+      #   be returned by {Vocabulary.each}. Also limits
+      #   vocabularies that will be inspeced for other methods.
+      #   Set to nil, or an empty array to reset.
+      # @return [Array<RDF::Vocabulary>]
+      def limit_vocabs(*vocabs)
+        @vocabs = if Array(vocabs).empty?
+          nil
+        else
+          vocabs.map do |vocab|
+            vocab = :rdfv if vocab == :rdf
+            vocab.is_a?(Symbol) && RDF::VOCABS.key?(vocab) ?
+              RDF.const_get(RDF::VOCABS[vocab][:class_name].to_sym) :
+              vocab
+          end.compact
+        end
       end
 
       ##
@@ -610,7 +646,6 @@ module RDF
         unless @@uri.nil?
           @@subclasses << subclass unless %w(http://www.w3.org/1999/02/22-rdf-syntax-ns#).include?(@@uri)
           subclass.send(:private_class_method, :new)
-          #vocab_map[subclass.__prefix__] ||= {uri: @@uri, class_name: subclass.__name__.split('::').last.downcase}
           @@uris[subclass] = @@uri
           @@uri = nil
         end
