@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
+require 'rdf/turtle'
 
 describe RDF::Vocabulary do
   VOCABS = %w(owl rdf rdfs xsd)
@@ -53,6 +54,66 @@ describe RDF::Vocabulary do
     it "inumerates properties of a subclass" do
       expect {|b| RDF::RDFS.each(&b)}.to yield_control.at_least(5).times
       expect(RDF::RDFS.each.to_a).to include(RDF::RDFS.range, RDF::RDFS.subClassOf, RDF::RDFS.domain)
+    end
+
+    context "with limited vocabularies" do
+      before { RDF::Vocabulary.limit_vocabs(:rdfs)}
+      after { RDF::Vocabulary.limit_vocabs()}
+
+      it "inumerates limited vocabularies" do
+        expect {|b| RDF::Vocabulary.each(&b)}.to yield_control.exactly(1).times
+        expect(RDF::Vocabulary.each.to_a).to include(RDF::RDFS)
+      end
+    end
+  end
+
+  describe ".vocab_map" do
+    it "returns map of vocabularies" do
+      expect(RDF::Vocabulary.vocab_map).to have_key(:rdfv)
+      expect(RDF::Vocabulary.vocab_map).to have_key(:rdfs)
+      expect(RDF::Vocabulary.vocab_map).to have_key(:owl)
+    end
+  end
+
+  describe ".from_sym" do
+    %w(RDFS OWL XSD).each do |sym|
+      it "returns voabulary for #{sym}" do
+        expect(RDF::Vocabulary.from_sym(sym)).to respond_to(:find_term)
+      end
+    end
+  end
+
+  describe ".limit_vocabs" do
+    before { RDF::Vocabulary.limit_vocabs(:rdf, :rdfs)}
+    after { RDF::Vocabulary.limit_vocabs()}
+
+    terms = {
+      'http://www.w3.org/2000/01/rdf-schema#Resource' => RDF::RDFS,
+      'http://www.w3.org/2002/07/owl#Ontology' => nil,
+      'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement' => RDF::RDFV
+    }
+    describe ".find_term" do
+      terms.each do |term, cls|
+        it "#{cls ? 'finds' : 'does not find'} #{term}" do
+          if cls
+            expect(RDF::Vocabulary.find_term(term)).to be_a(RDF::Vocabulary::Term)
+          else
+            expect(RDF::Vocabulary.find_term(term)).to be_nil
+          end
+        end
+      end
+    end
+
+    describe ".find" do
+      terms.each do |term, cls|
+        it "#{cls ? 'finds' : 'does not find'} #{term}" do
+          if cls
+            expect(RDF::Vocabulary.find(term)).to eql cls
+          else
+            expect(RDF::Vocabulary.find_term(term)).to be_nil
+          end
+        end
+      end
     end
   end
 
@@ -559,6 +620,12 @@ potential to perform intentional actions for which they can be held responsible.
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
       its(:domainIncludes) {is_expected.to include(RDF::RDFS.Resource)}
       its(:rangeIncludes) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      it "duplicate has the same attributes" do
+        expect(subject.dup.attributes).to eq (subject.attributes)
+      end
+      it "duplicate has the same vocabulary" do
+        expect(subject.dup.vocab).to eq (subject.vocab)
+      end
     end
 
     context "with a BNode Label" do
@@ -579,6 +646,12 @@ potential to perform intentional actions for which they can be held responsible.
       its(:range) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
       its(:domainIncludes) {is_expected.to include(RDF::RDFS.Resource)}
       its(:rangeIncludes) {is_expected.to include(RDF::RDFS.Resource, RDF::RDFS.Class)}
+      it "duplicate has the same attributes" do
+        expect(subject.dup.attributes).to eq (subject.attributes)
+      end
+      it "duplicate has the same vocabulary" do
+        expect(subject.dup.vocab).to eq (subject.vocab)
+      end
     end
 
     context "with a nil Label" do

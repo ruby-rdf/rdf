@@ -289,6 +289,8 @@ module RDF
     #   any additional keyword options
     # @option options [Hash{Symbol => RDF::Term}] bindings
     #   optional variable bindings to use
+    # @option options [Boolean] :optimize
+    #   Optimize query before execution.
     # @option options [RDF::Query::Solutions] solutions
     #   optional initial solutions for chained queries
     # @yield  [solution]
@@ -311,6 +313,7 @@ module RDF
         return @solutions
       end
 
+      self.optimize! if options[:optimize]
       patterns = @patterns
       graph_name = name if graph_name.nil?
       @graph_name = graph_name unless graph_name.nil?
@@ -505,7 +508,7 @@ module RDF
     # @return [RDF::Query]
     def dup
       patterns = @patterns.map {|p| p.dup}
-      Query.new(patterns, solutions: @solutions.dup, **options)
+      Query.new(patterns, graph_name: graph_name, solutions: @solutions.dup, **options)
     end
 
     ##

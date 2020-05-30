@@ -195,12 +195,31 @@ class RDF::Query
     # Merges the bindings from the given `other` query solution into this
     # one, overwriting any existing ones having the same name.
     #
+    # ## RDFStar (RDF*)
+    #
+    # If merging a binding for a statement to a pattern,
+    # merge their embedded solutions.
+    #
     # @param  [RDF::Query::Solution, #to_h] other
     #   another query solution or hash bindings
     # @return [void] self
     # @since  0.3.0
     def merge!(other)
-      @bindings.merge!(other.to_h)
+      @bindings.merge!(other.to_h) do |key, v1, v2|
+        # Don't merge a pattern over a statement
+        # This happens because JOIN does a reverse merge,
+        # and a pattern is set in v2.
+        v2.is_a?(Pattern) ? v1 : v2
+      end
+      # Merge bindings from patterns
+      embedded_solutions = []
+      @bindings.each do |k, v|
+        if v.is_a?(Pattern) && other[k].is_a?(RDF::Statement)
+          embedded_solutions << v.solution(other[k])
+        end
+      end
+      # Merge embedded solutions
+      embedded_solutions.each {|soln| merge!(soln)}
       self
     end
 

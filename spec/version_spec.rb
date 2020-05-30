@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
 
 describe 'RDF::VERSION' do
   it "should match the VERSION file" do

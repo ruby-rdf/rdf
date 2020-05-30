@@ -157,12 +157,24 @@ class RDF::Query
     ##
     # Rebinds this variable to the given `value`.
     #
-    # @param  [RDF::Term] value
-    # @return [RDF::Term] the previous value, if any.
+    # @overload bind(value)
+    #   @param [RDF::Query::Solution] value
+    #   @return [self] the bound variable
+    #
+    # @overload bind(value)
+    #   @param [RDF::Term] value
+    #   @return [RDF::Term] the previous value, if any.
     def bind(value)
-      old_value = self.value
-      self.value = value
-      old_value
+      if value.is_a?(RDF::Query::Solution)
+        self.value = value.to_h.fetch(name, self.value)
+        self
+      else
+        warn "[DEPRECATION] RDF::Query::Variable#bind should be used with a solution, not a term.\n" +
+             "Called from #{Gem.location_of_caller.join(':')}"
+        old_value = self.value
+        self.value = value
+        old_value
+      end
     end
     alias_method :bind!, :bind
 

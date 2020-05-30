@@ -128,6 +128,14 @@ module RDF
     # method in order to provide for storage-specific optimized triple
     # pattern matching.
     #
+    # ## RDFStar (RDF*)
+    #
+    # Statements may have embedded statements as either a subject or object, recursively.
+    #
+    # Patterns may also have embedded patterns as either a subject or object, recursively.
+    #
+    # When matching, match an embedded pattern against embedded statements, recursively. (see {RDF::Query::Pattern#eql?})
+    #
     # @param  [RDF::Query::Pattern] pattern
     #   the query pattern to match
     # @param  [Hash{Symbol => Object}] options ({})

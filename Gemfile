@@ -26,6 +26,7 @@ group :debug do
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
   gem 'guard-rspec'
+  gem 'awesome_print', github: "akshaymohite/awesome_print", branch: "ruby-2-7-0-warnings-fix"
 end
 
 group :test do

@@ -77,14 +77,15 @@ module RDF; class Query
       ##
       # Returns the normalization of the specified `hash_pattern`.
       #
-      # @param [Hash{Symbol => Object}] hash_pattern (Hash.new)
-      #   the query pattern as a hash.
-      # @param [Hash{Symbol => Object}] options (Hash.new)
-      #   any additional normalization options.
-      # @option options [String] :anonymous_subject_format ("__%s__")
-      #   the string format for anonymous subjects.
-      # @return [Hash{Symbol => Object}]
-      #   the resulting query pattern as a normalized hash.
+      # @overload normalize!(hash_pattern, **options)
+      #   @param [Hash{Symbol => Object}] hash_pattern (Hash.new)
+      #     the query pattern as a hash.
+      #   @param [Hash{Symbol => Object}] **options
+      #     any additional normalization options.
+      #   @option options [String] :anonymous_subject_format ("__%s__")
+      #     the string format for anonymous subjects.
+      #   @return [Hash{Symbol => Object}]
+      #     the resulting query pattern as a normalized hash.
       def normalize!(*args)
         hash_pattern = args.shift
         options = args.shift || {}

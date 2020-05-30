@@ -58,6 +58,9 @@ module RDF
   class Vocabulary
     extend ::Enumerable
 
+    autoload :Format, 'rdf/vocab/writer'
+    autoload :Writer, 'rdf/vocab/writer'
+
     class << self
       ##
       # Enumerates known RDF vocabulary classes.
@@ -67,13 +70,65 @@ module RDF
       # @return [Enumerator]
       def each(&block)
         if self.equal?(Vocabulary)
-          # This is needed since all vocabulary classes are defined using
-          # Ruby's autoloading facility, meaning that `@@subclasses` will be
-          # empty until each subclass has been touched or require'd.
-          RDF::VOCABS.each { |v| require "rdf/vocab/#{v}" unless v == :rdf }
-          @@subclasses.select(&:name).each(&block)
+          if @vocabs
+            @vocabs.select(&:name).each(&block)
+          else
+            # This is needed since all vocabulary classes are defined using
+            # Ruby's autoloading facility, meaning that `@@subclasses` will be
+            # empty until each subclass has been touched or require'd.
+            RDF::VOCABS.each { |v, p| RDF.const_get(p[:class_name].to_sym) unless v == :rdf }
+            @@subclasses.select(&:name).each(&block)
+          end
         else
           __properties__.each(&block)
+        end
+      end
+
+      ##
+      # A hash of all vocabularies by prefix showing relevant URI and associated vocabulary Class Name
+      # @return [Hash{Symbol => Hash{Symbol => String}}]
+      def vocab_map
+        VOCABS
+      end
+
+      ##
+      # Return the vocabulary based on it's class_name symbol
+      #
+      # @param [Symbol] sym
+      # @return [RDF::Vocabulary]
+      def from_sym(sym)
+        RDF.const_get(sym.to_sym)
+      end
+
+      ##
+      # Limits iteration over vocabularies to just those selected
+      #
+      # @example limit to set of vocabularies by symbol
+      #     RDF::Vocabulary.limit_vocabs(:rdf, :rdfs
+      #     RDF::Vocabulary.find_term('http://www.w3.org/2000/01/rdf-schema#Resource').pname
+      #     # => 'rdfs:Resource'
+      #
+      # @example limit to set of vocabularies by class name
+      #     RDF::Vocabulary.limit_vocabs(RDF::RDFV, RDF::RDFS)
+      #     RDF::Vocabulary.find_term('http://www.w3.org/2000/01/rdf-schema#Resource').pname
+      #     # => 'rdfs:Resource'
+      #
+      # @param [Array<symbol, RDF::Vocabulary>] vocabs
+      #   A list of vocabularies (symbols or classes) which may
+      #   be returned by {Vocabulary.each}. Also limits
+      #   vocabularies that will be inspeced for other methods.
+      #   Set to nil, or an empty array to reset.
+      # @return [Array<RDF::Vocabulary>]
+      def limit_vocabs(*vocabs)
+        @vocabs = if Array(vocabs).empty?
+          nil
+        else
+          vocabs.map do |vocab|
+            vocab = :rdfv if vocab == :rdf
+            vocab.is_a?(Symbol) && RDF::VOCABS.key?(vocab) ?
+              RDF.const_get(RDF::VOCABS[vocab][:class_name].to_sym) :
+              vocab
+          end.compact
         end
       end
 
@@ -291,7 +346,8 @@ module RDF
         prefix, suffix = pname.to_s.split(":", 2)
         if prefix == "rdf"
           RDF[suffix]
-        elsif vocab = RDF::Vocabulary.each.detect {|v| v.__name__ && v.__prefix__ == prefix.to_sym}
+        elsif vocab_detail = RDF::Vocabulary.vocab_map[prefix.to_sym]
+          vocab = RDF::Vocabulary.from_sym(vocab_detail[:class_name])
           suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
         else
           (RDF::Vocabulary.find_term(pname) rescue nil) || RDF::URI(pname, validate: true)
@@ -817,10 +873,9 @@ module RDF
       # @return [RDF::Vocabulary]
       attr_reader :vocab
 
-      #   Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
-      #   @return [Hash{Symbol,Resource => Term, #to_s}]
+      # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      # @return [Hash{Symbol,Resource => Term, #to_s}]
       attr_reader :attributes
-
 
       ##
       # @overload new(uri, attributes:, **options)
@@ -882,7 +937,10 @@ module RDF
       #
       # @return [RDF::URI]
       def dup
-        self.class.new((@value || @object).dup, attributes: attributes).extend(Term)
+        term = super.extend(Term)
+        term.instance_variable_set(:@vocab, vocab)
+        term.instance_variable_set(:@attributes, attributes)
+        term
       end
 
       ##
@@ -943,7 +1001,7 @@ module RDF
       ##
       # Values of an attributes as {RDF::Value}
       #
-      # @property [Symbol] prop
+      # @param [Symbol] prop
       # @return [RDF::Value, Array<RDF::Value>]
       def attribute_value(prop)
         values = attributes[prop]

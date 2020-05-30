@@ -145,10 +145,28 @@ module RDF
           module #{module_name}
             # @!parse
             #   # Vocabulary for <#{base_uri}>
-            #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary
-            #   end
-            class #{class_name} < RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")
+            #   #
           ).gsub(/^          /, '')
+
+        if vocab.ontology
+          ont_doc = []
+          [:"dc:title", :"dc11:title", :label, :comment, :"dc:description", :"dc11:description"].each do |attr|
+            next unless vocab.ontology.attributes[attr]
+            Array(vocab.ontology.attributes[attr]).each do |v|
+              ont_doc << "  #   # " + v.to_s.gsub(/\n/, ' ')
+            end
+          end
+          @output.puts ont_doc.join("\n  #   #\n") unless ont_doc.empty?
+          # Version Info
+          Array(vocab.ontology.attributes[:"owl:versionInfo"]).each do |vers|
+            @output.puts "  #   # @version #{vers}"
+          end
+          # See Also
+          Array(vocab.ontology.attributes[:"rdfs:seeAlso"]).each do |see|
+            @output.puts "  #   # @see #{see}"
+          end
+        end
+        @output.puts %(  #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary)
 
         # Split nodes into Class/Property/Datatype/Other
         term_nodes = {
@@ -181,6 +199,26 @@ module RDF
           term_nodes[kind][name] = term.attributes
         end
 
+        # Yard attribute information for terms
+        term_nodes.each do |tt, ttv|
+          next if tt == :ontology
+          ttv.each do |name, attributes|
+            # Only document terms that can be accessed like a Ruby attribute
+            next unless name.to_s.match?(/^[_[:alpha:]](?:\w*)[!?=]?$/)
+            @output.puts(Array(attributes[:comment]).map do |comment|
+              "  #     # #{comment.to_s.gsub(/\n/, ' ')}"
+            end.join("\n  #     #\n")) if attributes[:comment]
+            @output.puts "  #     # @return [RDF::Vocabulary::Term]"
+            @output.puts "  #     attr_reader :#{name}"
+            @output.puts "  #"
+          end
+        end
+
+        # End of yard preamble
+        @output.puts "  #   end"
+        @output.puts %(  #{class_name} = Class.new(RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")) do)
+
+        # Output term definitions
         {
           ontology: "Ontology definition",
           class: "Class definitions",

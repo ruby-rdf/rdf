@@ -283,6 +283,9 @@ module RDF
     # @private
     # @see RDF::Mutable#insert
     def insert_statement(statement)
+      if statement.embedded? && !@data.supports?(:rdfstar)
+        raise ArgumentError, "Graph does not support embedded statements"
+      end
       statement = statement.dup
       statement.graph_name = graph_name
       @data.insert(statement)

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
 
 describe RDF::Query::Solution do
   subject {described_class.new(a: 1, "?b": 2, "??c": 3, "$d": 4, "$$e": 5)}

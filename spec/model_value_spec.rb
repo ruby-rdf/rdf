@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
 
 describe RDF::Value do
   subject {"".extend(RDF::Value)}
@@ -36,19 +36,19 @@ describe RDF::Value do
   end
 
   it "#term?" do
-    [uri, node, literal, variable].each do |v|
+    [uri, node, literal, variable, statement].each do |v|
       expect(v).to be_term
     end
-    [subject, statement, graph, statement, list].each do |v|
+    [subject, graph, list].each do |v|
       expect(v).not_to be_term
     end
   end
 
   it "#resource?" do
-    [uri, node].each do |v|
+    [uri, node, statement].each do |v|
       expect(v).to be_resource
     end
-    [subject, statement, graph, statement, list, literal, variable].each do |v|
+    [subject, graph, list, literal, variable].each do |v|
       expect(v).not_to be_resource
     end
   end
@@ -147,10 +147,10 @@ describe RDF::Value do
   end
 
   it "#to_term" do
-    [uri, node, literal, variable, list].each do |v|
+    [uri, node, literal, statement, variable, list].each do |v|
       expect {v.to_term}.not_to raise_error
     end
-    [statement, graph, statement].each do |v|
+    [graph].each do |v|
       expect {v.to_term}.to raise_error(NotImplementedError)
     end
   end

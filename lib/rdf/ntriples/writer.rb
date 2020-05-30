@@ -222,6 +222,15 @@ module RDF::NTriples
     end
 
     ##
+    # Returns the N-Triples representation of an RDF* reified statement.
+    #
+    # @param  [RDF::Statement] statement
+    # @param  [Hash{Symbol => Object}] options ({})
+    # @return [String]
+    def format_rdfstar(statement, **options)
+      "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
+    end
+    ##
     # Returns the N-Triples representation of a triple.
     #
     # @param  [RDF::Resource] subject
