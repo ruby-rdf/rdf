@@ -23,7 +23,7 @@ describe RDF::Query::Pattern do
       end
     end
 
-    its(:cost) {is_expected.to be (4+2+1)}
+    its(:cost) {is_expected.to be (2+4+8)}
 
     it "should not have variables" do
       expect(subject.variables?).to be_falsey
@@ -59,7 +59,7 @@ describe RDF::Query::Pattern do
     specify {is_expected.to be_variable}
     specify {is_expected.to be_bound}
 
-    its(:cost) {is_expected.to be (4+2+1)}
+    its(:cost) {is_expected.to be (2+4+8)}
 
     it "should have one variable" do
       expect(subject).to be_variables
@@ -99,7 +99,7 @@ describe RDF::Query::Pattern do
     specify {is_expected.to be_variable}
     specify {is_expected.to be_bound}
 
-    its(:cost) {is_expected.to be (4+2+1)}
+    its(:cost) {is_expected.to be (2+4+8)}
 
     it "should have three variables" do
       expect(subject).to be_variables
@@ -132,10 +132,10 @@ describe RDF::Query::Pattern do
   context "with variable in different locations" do
     {
       "spog": [[RDF::URI("s"), RDF::URI("p"), RDF::URI("o"), graph_name: RDF::URI("g")], 0],
-      "spo?": [[RDF::URI("s"), RDF::URI("p"), RDF::URI("o"), graph_name: :g], 8],
-      "sp?g": [[RDF::URI("s"), RDF::URI("p"), :o, graph_name: RDF::URI("g")], 1],
-      "s?og": [[RDF::URI("s"), :p, RDF::URI("o"), graph_name: RDF::URI("g")], 2],
-      "?pog": [[:s, RDF::URI("p"), RDF::URI("o"), graph_name: RDF::URI("g")], 4],
+      "spo?": [[RDF::URI("s"), RDF::URI("p"), RDF::URI("o"), graph_name: :g], 1],
+      "sp?g": [[RDF::URI("s"), RDF::URI("p"), :o, graph_name: RDF::URI("g")], 8],
+      "s?og": [[RDF::URI("s"), :p, RDF::URI("o"), graph_name: RDF::URI("g")], 4],
+      "?pog": [[:s, RDF::URI("p"), RDF::URI("o"), graph_name: RDF::URI("g")], 2],
     }.each do |name, (args, cost)|
       it "cost for #{name} should be #{cost}" do
         pattern = described_class.new(*args)
@@ -146,7 +146,7 @@ describe RDF::Query::Pattern do
 
   context "#cost" do
     it "can be set separately" do
-      expect(subject.cost).to be (4+2+1)
+      expect(subject.cost).to be (2+4+8)
       subject.cost = 0
       expect(subject.cost).to be 0
     end
@@ -162,12 +162,12 @@ describe RDF::Query::Pattern do
       expect(subject.graph_name).to eq RDF::Query::Variable.new(:c)
     end
 
-    its(:cost) {is_expected.to be (8+4+2+1)}
+    its(:cost) {is_expected.to be (1+2+4+8)}
 
     it "uses a constant for :default" do
       pattern = described_class.new(s, p, o, graph_name: false)
       expect(pattern.graph_name).to eq false
-      expect(pattern.cost).to eq (4+2+1)
+      expect(pattern.cost).to eq (2+4+8)
     end
   end
   
@@ -181,7 +181,7 @@ describe RDF::Query::Pattern do
     specify {is_expected.to be_variable}
     specify {is_expected.not_to be_bound}
 
-    its(:cost) {is_expected.to be (4+2+1)}
+    its(:cost) {is_expected.to be (2+4+8)}
 
     describe "#bind" do
       context "complete solution" do
@@ -236,7 +236,7 @@ describe RDF::Query::Pattern do
     specify {is_expected.to be_variable}
     specify {is_expected.not_to be_bound}
 
-    its(:cost) {is_expected.to be (4+2+1)}
+    its(:cost) {is_expected.to be (2+4+8)}
 
     it "should have two variable" do
       expect(subject).to be_variables
@@ -275,7 +275,7 @@ describe RDF::Query::Pattern do
       let(:pattern) {described_class.new(s, p, o)}
       subject {described_class.new(pattern, RDF::URI("ex:p"), "o")}
 
-      its(:cost) {is_expected.to be (4+2+1+4)}
+      its(:cost) {is_expected.to be ((2+4+8)*2)}
 
       specify {is_expected.not_to be_constant}
       specify {is_expected.to be_variable}
@@ -349,7 +349,7 @@ describe RDF::Query::Pattern do
     context "with constant subject pattern" do
       let(:pattern) {described_class.new(RDF::URI("ex:s"), RDF::URI("ex:p"), "o")}
       let(:subject) {described_class.new(pattern, p, o)}
-      its(:cost) {is_expected.to be (4+2+1)}
+      its(:cost) {is_expected.to be (4+8)}
 
       specify {is_expected.not_to be_constant}
       specify {is_expected.to be_variable}
@@ -370,7 +370,7 @@ describe RDF::Query::Pattern do
     context "with variable object pattern" do
       let(:pattern) {described_class.new(s, p, o)}
       let(:subject) {described_class.new(RDF::URI("ex:s"), RDF::URI("ex:p"), pattern)}
-      its(:cost) {is_expected.to be (4+2+1)}
+      its(:cost) {is_expected.to be ((2+4+8)*4)}
 
       specify {is_expected.not_to be_constant}
       specify {is_expected.to be_variable}
@@ -443,7 +443,7 @@ describe RDF::Query::Pattern do
     context "with constant object pattern" do
       let(:pattern) {described_class.new(RDF::URI("ex:s1"), RDF::URI("ex:p1"), "o1")}
       let(:subject) {described_class.new(s, p, pattern)}
-      its(:cost) {is_expected.to be (4+2)}
+      its(:cost) {is_expected.to be (2+4)}
 
       specify {is_expected.not_to be_constant}
       specify {is_expected.to be_variable}
