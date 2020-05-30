@@ -40,7 +40,7 @@ _:g6700 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf
 <https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
 <https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <https://ar.to/> .
 <https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <https://greggkellogg.net/> .
-<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <https://unlicense.org/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <https://unlicense.org/1.0/> .
 <https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Ruby_(programming_language)> .
 <https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Resource_Description_Framework> .
 <https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
