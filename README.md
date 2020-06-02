@@ -4,10 +4,6 @@ This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
 * <https://ruby-rdf.github.com/rdf>
-* <https://blog.datagraph.org/2010/12/rdf-for-ruby>
-* <https://blog.datagraph.org/2010/03/rdf-for-ruby>
-* <https://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
-* <https://blog.datagraph.org/2010/04/rdf-repository-howto>
 
 [![Gem Version](https://badge.fury.io/rb/rdf.png)](https://badge.fury.io/rb/rdf)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf)
@@ -33,6 +29,7 @@ This is a pure-Ruby library for working with [Resource Description Framework
   * Note, changes in mapping hashes to keyword arguments for Ruby 2.7+ may require that arguments be passed more explicitly, especially when the first argument is a Hash and there are optional keyword arguments. In this case, Hash argument may need to be explicitly included within `{}` and the optional keyword arguments may need to be specified using `**{}` if there are no keyword arguments.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
+* Provisional support for [RDF*][].
 
 ### HTTP requests
 
@@ -223,6 +220,46 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
+## RDF* (RDFStar)
+
+[RDF.rb][] includes provisional support for [RDF*][] with an N-Triples/N-Quads syntax extension that uses inline statements in the _subject_ or _object_ position.
+
+Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
+
+**Note: This feature is subject to change or elimination as the standards process progresses.**
+
+### Serializing a Graph containing embedded statements
+
+    require 'rdf/ntriples'
+    statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
+    graph = RDF::Graph.new << [statement, RDF::URI("ex:certainty"), RDF::Literal(0.9)]
+    graph.dump(:ntriples, validate: false)
+    # => '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
+
+### Reading a Graph containing embedded statements
+
+By default, the N-Triples reader will reject a document containing a subject resource.
+
+    nt = '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
+    graph = RDF::Graph.new do |graph|
+      RDF::NTriples::Reader.new(nt) {|reader| graph << reader}
+    end
+    # => RDF::ReaderError
+
+Readers support a `rdfstar` option with either `:PG` (Property Graph) or `:SA` (Separate Assertions) modes. In `:PG` mode, statements that are used in the subject or object positions are also implicitly added to the graph:
+
+    graph = RDF::Graph.new do |graph|
+      RDF::NTriples::Reader.new(nt, rdfstar: :PG) {|reader| graph << reader}
+    end
+    graph.count #=> 2
+
+When using the `:SA` mode, only one statement is asserted, although the reified statement is contained within the graph.
+
+    graph = RDF::Graph.new do |graph|
+      RDF::NTriples::Reader.new(nt, rdfstar: :SA) {|reader| graph << reader}
+    end
+    graph.count #=> 1
+
 ## Documentation
 
 <https://rubydoc.info/github/ruby-rdf/rdf>
@@ -248,8 +285,6 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
   * {RDF::Statement}
 
 ### RDF Serialization
-
-<https://blog.datagraph.org/2010/04/parsing-rdf-with-ruby>
 
 * {RDF::Format}
 * {RDF::Reader}
@@ -294,8 +329,6 @@ from BNode identity (i.e., they each entail the other)
 * `RDF::Isomorphic`
 
 ### RDF Storage
-
-<https://blog.datagraph.org/2010/04/rdf-repository-howto>
 
 * {RDF::Repository}
   * {RDF::Countable}
@@ -419,7 +452,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD-GS]:          https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              https://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
 [JSONLD doc]:       https://rubydoc.info/github/ruby-rdf/json-ld
-[LinkedData doc]:   https://rubydoc.info/github/datagraph/linkeddata
+[LinkedData doc]:   https://rubydoc.info/github/ruby-rdf/linkeddata
 [Microdata doc]:    https://rubydoc.info/github/ruby-rdf/rdf-microdata
 [N3 doc]:           https://rubydoc.info/github/ruby-rdf/rdf-n3
 [RDFa doc]:         https://rubydoc.info/github/ruby-rdf/rdf-rdfa
@@ -442,6 +475,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
+[RDF*]:             https://lists.w3.org/Archives/Public/public-rdf-star/
 [LinkedData]:       https://ruby-rdf.github.com/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.com/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client

@@ -26,7 +26,7 @@ module RDF
   #   RDF::Statement(s, p, "o")
   #
   class Statement
-    include RDF::Value
+    include RDF::Resource
 
     ##
     # @private
@@ -112,7 +112,7 @@ module RDF
       elsif @subject.nil?
         nil
       else
-        raise ArgumentError, "expected subject to be nil or a term, was #{@subject.inspect}"
+        raise ArgumentError, "expected subject to be nil or a resource, was #{@subject.inspect}"
       end
       @predicate = Node.intern(@predicate) if @predicate.is_a?(Symbol)
       @object    = if @object.is_a?(Value)
@@ -123,6 +123,15 @@ module RDF
         nil
       else
         Literal.new(@object)
+      end
+      @graph_name = if @graph_name.is_a?(Value)
+        @graph_name.to_term
+      elsif @graph_name.is_a?(Symbol)
+        Node.intern(@graph_name)
+      elsif !@graph_name
+        @graph_name
+      else
+        raise ArgumentError, "expected graph_name to be nil or a resource, was #{@graph_name.inspect}"
       end
     end
 
@@ -140,10 +149,18 @@ module RDF
     #
     # @return [Boolean]
     def variable?
-      !(has_subject?    && subject.resource? &&
-        has_predicate?  && predicate.resource? &&
-        has_object?     && (object.resource? || object.literal?) &&
-        (has_graph?     ? graph_name.resource? : true))
+      !(has_subject?    && subject.constant? &&
+        has_predicate?  && predicate.constant? &&
+        has_object?     && object.constant? &&
+        (has_graph?     ? graph_name.constant? : true))
+    end
+
+    ##
+    # Returns `true` if any element of the statement is, itself, a statement.
+    #
+    # @return [Boolean]
+    def embedded?
+      subject && subject.statement? || object && object.statement?
     end
 
     ##
@@ -386,7 +403,13 @@ module RDF
     # @return [String]
     def to_s
       (graph_name ? to_quad : to_triple).map do |term|
-        term.respond_to?(:to_base) ? term.to_base : term.inspect
+        if term.is_a?(Statement)
+          "<<#{term.to_s[0..-3]}>>"
+        elsif term.respond_to?(:to_base)
+          term.to_base
+        else
+          term.inspect
+        end
       end.join(" ") + " ."
     end
 

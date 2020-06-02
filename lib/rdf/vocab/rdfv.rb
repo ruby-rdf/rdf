@@ -5,9 +5,130 @@ require 'rdf'
 module RDF
   # @!parse
   #   # Vocabulary for <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  #   #
+  #   # This is the RDF Schema for the RDF vocabulary terms in the RDF Namespace, defined in RDF 1.1 Concepts.
   #   class RDFV < RDF::StrictVocabulary
+  #     # The class of containers of alternatives.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :Alt
+  #
+  #     # The class of unordered containers.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :Bag
+  #
+  #     # A class representing a compound literal.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :CompoundLiteral
+  #
+  #     # The class of RDF Lists.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :List
+  #
+  #     # The class of RDF properties.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :Property
+  #
+  #     # The class of ordered containers.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :Seq
+  #
+  #     # The class of RDF statements.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :Statement
+  #
+  #     # The direction component of a CompoundLiteral.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :direction
+  #
+  #     # The first item in the subject RDF list.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :first
+  #
+  #     # The object of the subject RDF statement.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :object
+  #
+  #     # The language component of a CompoundLiteral.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :language
+  #
+  #     # The predicate of the subject RDF statement.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :predicate
+  #
+  #     # The rest of the subject RDF list after the first item.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :rest
+  #
+  #     # The subject of the subject RDF statement.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :subject
+  #
+  #     # The subject is an instance of a class.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :type
+  #
+  #     # Idiomatic property used for structured values.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :value
+  #
+  #     # The datatype of RDF literals storing fragments of HTML content.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :HTML
+  #
+  #     # The datatype of RDF literals storing JSON content.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :JSON
+  #
+  #     # The class of plain (i.e. untyped) literal values, as used in RIF and OWL 2.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :PlainLiteral
+  #
+  #     # The datatype of XML literal values.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :XMLLiteral
+  #
+  #     # The datatype of language-tagged string values.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :langString
+  #
+  #     # RDF/XML node element.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :Description
+  #
+  #     # RDF/XML attribute creating a Reification.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :ID
+  #
+  #     # RDF/XML attribute declaring subject.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :about
+  #
+  #     # RDF/XML literal datatype.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :datatype
+  #
+  #     # RDF/XML container membership list element.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :li
+  #
+  #     # The empty list, with no items in it. If the rest of a list is nil then the list has no more items in it.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :nil
+  #
+  #     # RDF/XML Blank Node identifier.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :nodeID
+  #
+  #     # Parse type for RDF/XML, either Collection, Literal or Resource.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :parseType
+  #
+  #     # RDF/XML attribute declaring object.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :resource
   #   end
-  class RDFV < RDF::StrictVocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+  RDFV = Class.new(RDF::StrictVocabulary("http://www.w3.org/1999/02/22-rdf-syntax-ns#")) do
 
     class << self
       def name; "RDF"; end

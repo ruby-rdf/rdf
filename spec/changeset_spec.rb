@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
 
 describe RDF::Changeset do
   describe "#initialize" do
@@ -28,7 +28,7 @@ describe RDF::Changeset do
   its(:deletes) { is_expected.to be_a(RDF::Enumerable) }
   its(:inserts) { is_expected.to be_a(RDF::Enumerable) }
 
-  it { is_expected.to be_mutable }
+  it { is_expected.to_not be_mutable }
   it { is_expected.to_not be_readable }
 
   it "does not respond to #load" do
@@ -135,4 +135,5 @@ describe RDF::Changeset do
         .to change { subject.inserts }.to contain_exactly(*statements)
     end
   end
+
 end

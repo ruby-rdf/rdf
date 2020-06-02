@@ -31,10 +31,11 @@ module RDF
   #
   # @since 2.0.0
   class Changeset
-    include RDF::Mutable
+    # include RDF::Mutable
+    include RDF::Util::Coercions
 
     ##
-    # Applies a changeset to the given mutable RDF::Enumerable .
+    # Applies a changeset to the given {RDF::Mutable} object.
     #
     # @param  [RDF::Mutable] mutable
     # @param  [Hash{Symbol => Object}] options
@@ -99,6 +100,24 @@ module RDF
     end
 
     ##
+    # Returns `false` as changesets are not {RDF::Writable}.
+    #
+    # @return [Boolean]
+    # @see    RDF::Writable#writable?
+    def writable?
+      false
+    end
+
+    ##
+    # Returns `false` as changesets are not {RDF::Mutable}.
+    #
+    # @return [Boolean]
+    # @see    RDF::Mutable#mutable?
+    def mutable?
+      false
+    end
+
+    ##
     # Applies this changeset to the given mutable RDF::Enumerable.
     #
     # This operation executes as a single write transaction.
@@ -127,33 +146,76 @@ module RDF
 
     ##
     # Outputs a developer-friendly representation of this changeset to
-    # `stderr`.
+    # `$stderr`.
     #
     # @return [void]
     def inspect!
       $stderr.puts(self.inspect)
     end
 
-    protected
-
     ##
-    # Appends an RDF statement to the sequence to insert when applied.
+    # Returns the sum of both the `inserts` and `deletes` counts.
     #
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    # @see    RDF::Writable#insert_statement
-    def insert_statement(statement)
-      self.inserts << statement
+    # @return [Integer]
+    def count
+      inserts.count + deletes.count
     end
 
-    ##
-    # Appends an RDF statement to the sequence to delete when applied.
+    # Append statements to `inserts`. Statements _should_ be constant
+    # as variable statements will at best be ignored or at worst raise
+    # an error when applied.
     #
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    # @see    RDF::Mutable#delete_statement
-    def delete_statement(statement)
-      self.deletes << statement
+    # @param statements [Enumerable, RDF::Statement] Some statements
+    # @return [self]
+    def insert(*statements)
+      coerce_statements(statements) do |stmts|
+        append_statements :inserts, stmts
+      end
+
+      self
+    end
+    alias_method :insert!, :insert
+    alias_method :<<, :insert
+
+    # Append statements to `deletes`. Statements _may_ contain
+    # variables, although support will depend on the {RDF::Mutable}
+    # target.
+    #
+    # @param statements [Enumerable, RDF::Statement] Some statements
+    # @return [self]
+    def delete(*statements)
+      coerce_statements(statements) do |stmts|
+        append_statements :deletes, stmts
+      end
+
+      self
+    end
+    alias_method :delete!, :delete
+    alias_method :>>, :delete
+
+    private
+
+    ##
+    # Append statements to the appropriate target. This is a little
+    # shim to go in between the other shim and the target.
+    #
+    # @param target [Symbol] the method to send
+    # @param arg [Enumerable, RDF::Statement]
+    #
+    def append_statements(target, arg)
+      # coerce to an enumerator 
+      stmts = case
+              when arg.is_a?(RDF::Statement)
+                [arg]
+              when arg.respond_to?(:each_statement)
+                arg.each_statement
+              when arg.respond_to?(:each)
+                arg
+              else
+                raise ArgumentError, "Invalid statement: #{arg.class}"
+              end
+
+      stmts.each { |s| send(target) << s }
     end
 
     # This simply returns its argument as a query in order to trick

@@ -25,6 +25,10 @@ module RDF::NTriples
   #     end
   #   end
   #
+  # ** RDFStar (RDF*)
+  #
+  # Supports statements as resources using `<<s p o>>`.
+  #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
   class Reader < RDF::Reader
@@ -69,6 +73,10 @@ module RDF::NTriples
     LANGTAG              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*)/.freeze
     # 22
     STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*)"/.freeze
+
+    # RDF*
+    ST_START              = /^<</.freeze
+    ST_END                = /^\s*>>/.freeze
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     COMMENT               = /^#\s*(.*)$/.freeze
@@ -202,7 +210,7 @@ module RDF::NTriples
       begin
         read_statement
       rescue RDF::ReaderError
-        value = read_uriref || read_node || read_literal
+        value = read_uriref || read_node || read_literal || read_rdfstar
         log_recover
         value
       end
@@ -218,9 +226,9 @@ module RDF::NTriples
 
         begin
           unless blank? || read_comment
-            subject   = read_uriref || read_node || fail_subject
+            subject   = read_uriref || read_node || read_rdfstar || fail_subject
             predicate = read_uriref(intern: true) || fail_predicate
-            object    = read_uriref || read_node || read_literal || fail_object
+            object    = read_uriref || read_node || read_literal || read_rdfstar || fail_object
 
             if validate? && !read_eos
               log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
@@ -231,6 +239,20 @@ module RDF::NTriples
           @line = line  # this allows #read_value to work
           raise e
         end
+      end
+    end
+
+    ##
+    # @return [RDF::Statement]
+    def read_rdfstar
+      if @options[:rdfstar] && match(ST_START)
+        subject   = read_uriref || read_node || read_rdfstar || fail_subject
+        predicate = read_uriref(intern: true) || fail_predicate
+        object    = read_uriref || read_node || read_literal || read_rdfstar || fail_object
+        if !match(ST_END)
+          log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
+        end
+        RDF::Statement.new(subject, predicate, object)
       end
     end
 

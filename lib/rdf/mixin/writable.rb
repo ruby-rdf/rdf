@@ -7,6 +7,7 @@ module RDF
   # @see RDF::Repository
   module Writable
     extend RDF::Util::Aliasing::LateBound
+    include RDF::Util::Coercions
 
     ##
     # Returns `true` if `self` is writable.
@@ -53,31 +54,20 @@ module RDF
     # @overload insert(*statements)
     #   @param  [Array<RDF::Statement>] statements
     #   @return [self]
+    #   @raise [ArgumentError] on an attempt to insert an embedded statement when it is not supported
     #
     # @overload insert(statements)
     #   @param  [Enumerable<RDF::Statement>] statements
     #   @return [self]
+    #   @raise [ArgumentError] on an attempt to insert an embedded statement when it is not supported
     def insert(*statements)
-      statements.map! do |value|
-        case
-          when value.respond_to?(:each_statement)
-            insert_statements(value)
-            nil
-          when (statement = Statement.from(value))
-            statement
-          else
-            raise ArgumentError.new("not a valid statement: #{value.inspect}")
-        end
-      end
-      statements.compact!
-      insert_statements(statements) unless statements.empty?
+      coerce_statements(statements) { |value| insert_statements value }
 
       return self
     end
     alias_method :insert!, :insert
 
   protected
-
     ##
     # Inserts statements from the given RDF reader into the underlying
     # storage or output stream.
@@ -132,10 +122,14 @@ module RDF
     #
     # @param  [RDF::Enumerable] statements
     # @return [void]
+    # @raise [ArgumentError] on an attempt to insert an embedded statement when it is not supported
     # @since  0.1.6
     def insert_statements(statements)
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
+        if statement.embedded? && respond_to?(:supports?) && !supports?(:rdfstar)
+          raise ArgumentError, "Wriable does not support embedded statements"
+        end
         insert_statement(statement)
       end
     end
@@ -150,6 +144,7 @@ module RDF
     #
     # @param  [RDF::Statement] statement
     # @return [void]
+    # @raise [ArgumentError] on an attempt to insert an embedded statement when it is not supported
     # @abstract
     def insert_statement(statement)
       raise NotImplementedError.new("#{self.class}#insert_statement")

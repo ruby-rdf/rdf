@@ -66,13 +66,15 @@ module RDF; class Query
     #
     # @return [Array<Symbol>]
     def variable_names
-      variables = self.inject({}) do |result, solution|
-        solution.each_name do |name|
-          result[name] ||= true
+      @variable_names ||= begin
+        variables = self.inject({}) do |result, solution|
+          solution.each_name do |name|
+            result[name] ||= true
+          end
+          result
         end
-        result
+        variables.keys
       end
-      variables.keys
     end
 
     ##
@@ -136,6 +138,7 @@ module RDF; class Query
     # @yieldreturn [Boolean]
     # @return [self]
     def filter(criteria = {})
+      @variable_names = nil
       if block_given?
         self.reject! do |solution|
           !yield(solution.is_a?(Solution) ? solution : Solution.new(solution))
@@ -223,6 +226,13 @@ module RDF; class Query
           solution.bindings.delete_if { |k, v| !variables.include?(k.to_sym) }
         end
       end
+
+      # Make sure variable_names are ordered by projected variables
+      projected_vars, vars = variables.map(&:to_sym), variable_names
+      vars = variable_names
+
+      # Maintain projected order, and add any non-projected variables
+      @variable_names = (projected_vars & vars) + (vars - projected_vars)
       self
     end
     alias_method :select, :project

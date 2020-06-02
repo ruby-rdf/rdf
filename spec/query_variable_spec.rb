@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require_relative 'spec_helper'
 
 describe RDF::Query::Variable do
   context ".new unbound" do
@@ -248,14 +248,33 @@ describe RDF::Query::Variable do
 
   context "when rebound" do
     subject {described_class.new(:x, RDF::Literal(123))}
+    let(:s_456) {RDF::Query::Solution.new(x: RDF::Literal(456))}
+    let(:s_789) {RDF::Query::Solution.new(x: RDF::Literal(789))}
 
-    it "returns the previous value" do
-      expect(subject.bind(RDF::Literal(456))).to eq RDF::Literal(123)
-      expect(subject.bind(RDF::Literal(789))).to eq RDF::Literal(456)
+    it "returns the previous value (DEPRECATED)" do
+      expect {
+        expect(subject.bind(RDF::Literal(456))).to eq RDF::Literal(123)
+      }.to write("[DEPRECATION]").to(:error)
+      expect {
+        expect(subject.bind(RDF::Literal(789))).to eq RDF::Literal(456)
+      }.to write("[DEPRECATION]").to(:error)
+    end
+
+    it "returns itself with solution" do
+      expect(subject.bind(s_456)).to eq subject
+      expect(subject.value).to eq RDF::Literal(456)
+
+      expect(subject.bind(s_789)).to eq subject
+      expect(subject.value).to eq RDF::Literal(789)
+    end
+
+    it "is unchanged when bound to non-matching solution" do
+      s = RDF::Query::Solution.new(y: RDF::Literal(456))
+      expect(subject.bind(s).value).to eql RDF::Literal(123)
     end
 
     it "is still bound" do
-      subject.bind!(RDF::Literal(456))
+      subject.bind!(s_456)
       expect(subject).not_to be_unbound
       expect(subject).to be_bound
     end
@@ -308,9 +327,17 @@ describe RDF::Query::Variable do
       expect(subject.to_sym).to eq :y
     end
 
-    it "Rebinding a variable returns the previous value" do
-      expect(subject.bind!(456)).to eq 123
-      expect(subject.value).to eq 456
+    it "Rebinding a variable returns the previous value (DEPRECATED)" do
+      expect {
+        expect(subject.bind!(456)).to eq 123
+        expect(subject.value).to eq 456
+      }.to write('[DEPRECATION]').to(:error)
+    end
+
+    it "Rebinding a variable with solution returns itself" do
+      s_456 = RDF::Query::Solution.new(y: RDF::Literal(456))
+      expect(subject.bind!(s_456)).to eq subject
+      expect(subject.value).to eq RDF::Literal(456)
     end
 
     it "Unbinding a previously bound variable" do
