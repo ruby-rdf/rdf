@@ -93,7 +93,7 @@ module RDF
         # Create an initial duplicate of RDF::VOCABS. We want to
         # ensure the hash itself is modifiable but the values are
         # frozen.
-        (@vocab_map ||= {}).merge RDF::VOCABS.transform_values(&:freeze)
+        @vocab_map ||= RDF::VOCABS.transform_values(&:freeze)
       end
 
       ##
@@ -132,7 +132,7 @@ module RDF
         params[:class_name] ||= prefix.to_s.upcase
 
         # now freeze and assign; note @vocab_map may not exist yet
-        (@vocab_map ||= {})[prefix.to_s.to_sym] = params.freeze
+        vocab_map[prefix.to_s.to_sym] = params.freeze
       end
 
       ##
