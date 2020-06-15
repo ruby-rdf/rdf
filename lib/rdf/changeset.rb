@@ -224,6 +224,6 @@ module RDF
       RDF::Query.new RDF::Query::Pattern.from(stmt)
     end
 
-    undef_method :load, :update, :clear
+    undef_method :load
   end # Changeset
 end # RDF

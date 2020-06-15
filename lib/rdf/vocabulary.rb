@@ -85,10 +85,15 @@ module RDF
       end
 
       ##
-      # A hash of all vocabularies by prefix showing relevant URI and associated vocabulary Class Name
+      # A hash of all vocabularies by prefix showing relevant URI and
+      # associated vocabulary Class Name
+      #
       # @return [Hash{Symbol => Hash{Symbol => String}}]
       def vocab_map
-        VOCABS
+        # Create an initial duplicate of RDF::VOCABS. We want to
+        # ensure the hash itself is modifiable but the values are
+        # frozen.
+        (@vocab_map ||= {}).merge RDF::VOCABS.transform_values(&:freeze)
       end
 
       ##
@@ -98,6 +103,36 @@ module RDF
       # @return [RDF::Vocabulary]
       def from_sym(sym)
         RDF.const_get(sym.to_sym)
+      end
+
+      ##
+      # Register a vocabulary for internal prefix lookups. Parameters
+      # of interest include `:uri`, `:class_name`, `:source`, and `:skip`.
+      #
+      # @param prefix [Symbol] the prefix to use
+      # @param vocab  [String, Class] either the URI or the vocab class
+      # @param params [Hash{Symbol => String}] Relevant parameters
+      # @return [Hash] The parameter hash, but frozen
+      def register(prefix, vocab, **params)
+        # check the input
+        raise ArgumentError, "#{prefix} must be symbol-able" unless
+          [String, Symbol].any? { |c| prefix.is_a? c }
+
+        # note an explicit uri: param overrides
+        case vocab
+        when String then params[:uri] ||= vocab
+        when Class
+          raise ArgumentError, 'vocab must be an RDF::(Strict)Vocabulary' unless
+            vocab.ancestors.include? RDF::Vocabulary
+          params[:class] = vocab
+          params[:uri] ||= vocab.to_uri.to_s
+        end
+
+        # fill in the class name
+        params[:class_name] ||= prefix.to_s.upcase
+
+        # now freeze and assign; note @vocab_map may not exist yet
+        (@vocab_map ||= {})[prefix.to_s.to_sym] = params.freeze
       end
 
       ##
@@ -347,7 +382,8 @@ module RDF
         if prefix == "rdf"
           RDF[suffix]
         elsif vocab_detail = RDF::Vocabulary.vocab_map[prefix.to_sym]
-          vocab = RDF::Vocabulary.from_sym(vocab_detail[:class_name])
+          vocab = vocab_detail[:class] ||
+            RDF::Vocabulary.from_sym(vocab_detail[:class_name])
           suffix.to_s.empty? ? vocab.to_uri : vocab[suffix]
         else
           (RDF::Vocabulary.find_term(pname) rescue nil) || RDF::URI(pname, validate: true)
