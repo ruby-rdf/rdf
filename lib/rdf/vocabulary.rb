@@ -131,7 +131,7 @@ module RDF
         # fill in the class name
         params[:class_name] ||= prefix.to_s.upcase
 
-        # now freeze and assign; note @vocab_map may not exist yet
+        # now freeze and assign
         vocab_map[prefix.to_s.to_sym] = params.freeze
       end
 
