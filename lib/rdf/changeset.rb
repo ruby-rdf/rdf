@@ -218,5 +218,12 @@ module RDF
       stmts.each { |s| send(target) << s }
     end
 
+    # This simply returns its argument as a query in order to trick
+    # {RDF::Mutable#delete} into working.
+    def query(stmt)
+      RDF::Query.new RDF::Query::Pattern.from(stmt)
+    end
+
+    undef_method :load
   end # Changeset
 end # RDF
