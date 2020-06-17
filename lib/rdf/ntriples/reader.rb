@@ -1,4 +1,7 @@
 # -*- encoding: utf-8 -*-
+
+require 'strscan'
+
 module RDF::NTriples
   ##
   # N-Triples parser.
