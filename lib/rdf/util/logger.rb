@@ -219,9 +219,9 @@ module RDF; module Util
     #   @return [void]
     def logger_common(*args, level:, **options)
       logger = self.logger(**options)
-      logger.log_statistics[level] = logger.log_statistics[level].to_i + 1
       # Some older code uses integer level numbers
       level = LOGGER_COMMON_LEVELS_REVERSE.fetch(level) if level.is_a?(Integer)
+      logger.log_statistics[level] = logger.log_statistics[level].to_i + 1
       return if logger.level > LOGGER_COMMON_LEVELS.fetch(level)
 
       depth = options.fetch(:depth, logger.log_depth)

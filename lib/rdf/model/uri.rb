@@ -1,5 +1,5 @@
 # coding: utf-8
-require 'uri'
+require 'cgi'
 
 module RDF
   ##
@@ -846,7 +846,7 @@ module RDF
         parts[:user] = (user.dup.force_encoding(Encoding::UTF_8) if user)
         parts[:password] = (password.dup.force_encoding(Encoding::UTF_8) if password)
         parts[:host] = (host.dup.force_encoding(Encoding::UTF_8) if host)
-        parts[:port] = (URI.decode(port).to_i if port)
+        parts[:port] = (CGI.unescape(port).to_i if port)
         parts[:path] = (path.to_s.dup.force_encoding(Encoding::UTF_8) unless path.empty?)
         parts[:query] = (query[1..-1].dup.force_encoding(Encoding::UTF_8) if query)
         parts[:fragment] = (fragment[1..-1].dup.force_encoding(Encoding::UTF_8) if fragment)
@@ -902,7 +902,7 @@ module RDF
     # Normalized version of user
     # @return [String]
     def normalized_user
-      URI.encode(URI.decode(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
+      URI.encode(CGI.unescape(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
     end
 
     ##
@@ -928,7 +928,7 @@ module RDF
     # Normalized version of password
     # @return [String]
     def normalized_password
-      URI.encode(URI.decode(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
+      URI.encode(CGI.unescape(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
     end
 
     HOST_FROM_AUTHORITY_RE = /(?:[^@]+@)?([^:]+)(?::.*)?$/.freeze
@@ -1180,8 +1180,8 @@ module RDF
         inject(return_type == Hash ? {} : []) do |memo,kv|
           k,v = kv.to_s.split('=', 2)
           next if k.to_s.empty?
-          k = URI.decode(k)
-          v = URI.decode(v) if v
+          k = CGI.unescape(k)
+          v = CGI.unescape(v) if v
           if return_type == Hash
             case memo[k]
             when nil then memo[k] = v
@@ -1293,7 +1293,7 @@ module RDF
     def normalize_segment(value, expr, downcase = false)
       if value
         value = value.dup.force_encoding(Encoding::UTF_8)
-        decoded = URI.decode(value)
+        decoded = CGI.unescape(value)
         decoded.downcase! if downcase
         URI.encode(decoded, /[^(?:#{expr})]/)
       end
