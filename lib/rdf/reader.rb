@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'cli'
+require 'rdf/cli'
 
 module RDF
   ##

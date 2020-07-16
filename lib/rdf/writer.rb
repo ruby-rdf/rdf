@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'cli'
+require 'rdf/cli'
 
 module RDF
   ##
