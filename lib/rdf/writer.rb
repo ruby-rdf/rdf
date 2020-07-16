@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+require 'cli'
+
 module RDF
   ##
   # The base class for RDF serializers.
