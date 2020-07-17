@@ -1,7 +1,6 @@
 require 'rdf'
 require 'rdf/vocabulary'
 require 'cgi'
-require 'rdf/cli'
 
 module RDF
   ##

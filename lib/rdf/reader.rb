@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'rdf/cli'
-
 module RDF
   ##
   # The base class for RDF parsers.
