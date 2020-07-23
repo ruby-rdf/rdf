@@ -100,22 +100,22 @@ describe RDF::Util::Logger do
     describe "#log_info" do
       it "Logs messages, and yield return" do
         subject.log_info("a", "b") {"c"}
-        expect(subject.logger.to_s).to eql "INFO a: b: c\n"
+        expect(subject.logger.to_s).to eql " INFO a: b: c\n"
       end
 
       it "adds lineno" do
         subject.log_info("a", lineno: 10)
-        expect(subject.logger.to_s).to eql "INFO [line 10] a\n"
+        expect(subject.logger.to_s).to eql " INFO [line 10] a\n"
       end
 
       it "adds depth with option" do
         subject.log_info("a", depth: 2)
-        expect(subject.logger.to_s).to eql "INFO   a\n"
+        expect(subject.logger.to_s).to eql " INFO   a\n"
       end
 
       it "adds depth with option" do
         subject.log_info("a", depth: 2)
-        expect(subject.logger.to_s).to eql "INFO   a\n"
+        expect(subject.logger.to_s).to eql " INFO   a\n"
       end
 
       it "uses logger from @options" do
@@ -123,7 +123,7 @@ describe RDF::Util::Logger do
         logger.options[:logger] = RDF::Spec.logger
         logger.log_info("a")
         expect(logger.instance_variable_get(:@logger).to_s).to be_empty
-        expect(logger.options[:logger].to_s).to eql "INFO a\n"
+        expect(logger.options[:logger].to_s).to eql " INFO a\n"
       end
 
       it "uses logger from options" do
@@ -131,7 +131,7 @@ describe RDF::Util::Logger do
         l = RDF::Spec.logger
         logger.log_info("a", logger: l)
         expect(logger.instance_variable_get(:@logger).to_s).to be_empty
-        expect(l.to_s).to eql "INFO a\n"
+        expect(l.to_s).to eql " INFO a\n"
       end
 
       it "increments log_statistics" do
