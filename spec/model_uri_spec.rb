@@ -470,6 +470,10 @@ describe RDF::URI do
       "urn" => [
         "urn:ex:s001",
         "urn:ex:s001"
+      ],
+      "utf-8" => [
+        "Dürst",
+        "Dürst"
       ]
     }.each do |name, (input, output)|
       it "#canonicalize #{name}" do
@@ -477,7 +481,7 @@ describe RDF::URI do
         u2 = RDF::URI(output)
         expect(u1.canonicalize.hash).to eq u2.hash
         expect(u1.canonicalize.to_s).to eq u2.to_s
-        expect(u1).to eq u1
+        expect(u1.canonicalize).to eq u1.canonicalize
       end
     end
     it "#canonicalize! alters resource" do
