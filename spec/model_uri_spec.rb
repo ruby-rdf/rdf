@@ -486,11 +486,6 @@ describe RDF::URI do
       expect(u1.canonicalize!.to_s).to eq u2.to_s
       expect(u1).to eq u2
     end
-    it "#canonicalize does not fail with Encoding::CompatibilityError on weird IRIs" do
-      u1 = RDF::URI "htЫtp://user:passoЫd@exaЫmple.com:8080/path ПУТЬ?queЫry=valЫue#fragmeЫnt"
-      u2 = RDF::URI "ht%D0%ABtp://user:passoЫd@exaЫmple.com:8080/path%20ПУТЬ?queЫry=valЫue#fragmeЫnt"
-      expect {u1.canonicalize.to_s.dup.force_encoding(u2.to_s.encoding)}.not_to raise_error
-    end
   end
 
   describe "#/" do
