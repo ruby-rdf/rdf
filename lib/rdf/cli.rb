@@ -297,6 +297,12 @@ module RDF
         on: ["-o", "--output FILE"],
         description: "File to write output, defaults to STDOUT") {|arg| File.open(arg, "w")},
       RDF::CLI::Option.new(
+        symbol: :ordered,
+        control: :checkbox,
+        datatype: TrueClass,
+        on: ["--ordered"],
+        description: "Use order preserving repository"),
+      RDF::CLI::Option.new(
         symbol: :format,
         control: :select,
         datatype: RDF::Format.select {|ft| ft.reader}.map(&:to_sym).sort,
@@ -495,14 +501,16 @@ module RDF
       options[:format] = options[:format].to_sym if options[:format]
       options[:output_format] = options[:output_format].to_sym if options[:output_format]
 
-      @repository = RDF::Repository.new
+      @repository = options[:ordered] ?
+        [].extend(RDF::Enumerable, RDF::Queryable) :
+        RDF::Repository.new
 
       # Parse input files if any command requires it
       if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
         start = Time.new
         count = 0
         self.parse(args, **options) do |reader|
-          @repository << reader
+          reader.each_statement {|st| @repository << st}
         end
         secs = Time.new - start
         options[:logger].info "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
