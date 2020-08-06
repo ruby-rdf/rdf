@@ -470,6 +470,10 @@ describe RDF::URI do
       "urn" => [
         "urn:ex:s001",
         "urn:ex:s001"
+      ],
+      "utf-8" => [
+        "Dürst",
+        "Dürst"
       ]
     }.each do |name, (input, output)|
       it "#canonicalize #{name}" do
@@ -477,7 +481,7 @@ describe RDF::URI do
         u2 = RDF::URI(output)
         expect(u1.canonicalize.hash).to eq u2.hash
         expect(u1.canonicalize.to_s).to eq u2.to_s
-        expect(u1).to eq u1
+        expect(u1.canonicalize).to eq u1.canonicalize
       end
     end
     it "#canonicalize! alters resource" do
@@ -485,11 +489,6 @@ describe RDF::URI do
       u2 = RDF::URI("example:example.com/foo")
       expect(u1.canonicalize!.to_s).to eq u2.to_s
       expect(u1).to eq u2
-    end
-    it "#canonicalize does not fail with Encoding::CompatibilityError on weird IRIs" do
-      u1 = RDF::URI "htЫtp://user:passoЫd@exaЫmple.com:8080/path ПУТЬ?queЫry=valЫue#fragmeЫnt"
-      u2 = RDF::URI "ht%D0%ABtp://user:passoЫd@exaЫmple.com:8080/path%20ПУТЬ?queЫry=valЫue#fragmeЫnt"
-      expect {u1.canonicalize.to_s.dup.force_encoding(u2.to_s.encoding)}.not_to raise_error
     end
   end
 

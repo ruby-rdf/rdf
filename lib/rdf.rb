@@ -76,6 +76,9 @@ module RDF
   # Utilities
   autoload :Util,        'rdf/util'
 
+  # CLI
+  autoload :CLI,         'rdf/cli'
+
   ##
   # Alias for `RDF::Resource.new`.
   #

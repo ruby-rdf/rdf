@@ -76,9 +76,16 @@ describe RDF::CLI do
       end
     end
 
+    describe "--ordered" do
+      it "sets :ordered" do
+        options = RDF::CLI.options(%w(help --ordered) << triple)
+        expect(options.options[:ordered]).to be_truthy
+      end
+    end
+
     describe "--evaluate" do
       it "sets :evaluate" do
-        options = RDF::CLI.options(%w(helpcount --format ntriples --evaluate) << triple)
+        options = RDF::CLI.options(%w(help count --format ntriples --evaluate) << triple)
         expect(options.options[:evaluate]).to eql triple
       end
     end

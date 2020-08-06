@@ -902,7 +902,7 @@ module RDF
     # Normalized version of user
     # @return [String]
     def normalized_user
-      URI.encode(CGI.unescape(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if user
+      URI.encode(CGI.unescape(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/).force_encoding(Encoding::UTF_8) if user
     end
 
     ##
@@ -928,7 +928,7 @@ module RDF
     # Normalized version of password
     # @return [String]
     def normalized_password
-      URI.encode(CGI.unescape(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/) if password
+      URI.encode(CGI.unescape(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/).force_encoding(Encoding::UTF_8) if password
     end
 
     HOST_FROM_AUTHORITY_RE = /(?:[^@]+@)?([^:]+)(?::.*)?$/.freeze
@@ -1295,7 +1295,7 @@ module RDF
         value = value.dup.force_encoding(Encoding::UTF_8)
         decoded = CGI.unescape(value)
         decoded.downcase! if downcase
-        URI.encode(decoded, /[^(?:#{expr})]/)
+        URI.encode(decoded, /[^(?:#{expr})]/).force_encoding(Encoding::UTF_8)
       end
     end
 

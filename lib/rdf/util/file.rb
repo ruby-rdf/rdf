@@ -14,7 +14,7 @@ module RDF; module Util
   # allowing the use of `Rack::Cache` to avoid network access.
   #
   # To use other HTTP clients, consumers can subclass 
-  # {RDF::Util::File::HttpAdapter} and set the {RDF::Util::File.http_adapter}.
+  # {RDF::Util::File::HttpAdapter} and set the {RDF::Util::File.}.
   #
   # Also supports the file: scheme for access to local files.
   #
@@ -121,8 +121,8 @@ module RDF; module Util
 
         redirect_count = 0
         max_redirects = 5
-        parsed_url = ::URI.parse(base_uri)
-        parsed_proxy = ::URI.parse(proxy.to_s)
+        parsed_url = RDF::URI.parse(base_uri)
+        parsed_proxy = RDF::URI.parse(proxy.to_s)
         base_uri = parsed_url.to_s
         remote_document = nil
 
