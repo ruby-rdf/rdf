@@ -68,8 +68,8 @@ module RDF
         if first || values.length > 0
           # Intantiate the list from values, and insert the first value using subject.
           values.reverse_each {|value| self.unshift(value)}
-          graph.insert RDF::Statement(subject, RDF.first, first || RDF.nil)
-          graph.insert RDF::Statement(subject, RDF.rest, @subject)
+          @graph.insert RDF::Statement(subject, RDF.first, first || RDF.nil)
+          @graph.insert RDF::Statement(subject, RDF.rest, @subject)
         end
         @subject = subject
       else
