@@ -45,7 +45,7 @@ module RDF
     # identified by `subject`, but will be invalid.
     #
     # @example add constructed list to existing graph
-    #     l = RDF::List(nil, nil (1, 2, 3))
+    #     l = RDF::List(values: (1, 2, 3))
     #     g = RDF::Graph.new << l
     #     g.count # => l.count
     #
@@ -175,7 +175,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-26
     def &(other)
-      RDF::List[*(to_a & other.to_a)]
+      self.class.new(values: (to_a & other.to_a))
     end
 
     ##
@@ -193,7 +193,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-7C
     def |(other)
-      RDF::List[*(to_a | other.to_a)]
+      self.class.new(values: (to_a | other.to_a))
     end
 
     ##
@@ -206,7 +206,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-2B
     def +(other)
-      RDF::List[*(to_a + other.to_a)]
+      self.class.new(values: (to_a + other.to_a))
     end
 
     ##
@@ -220,7 +220,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-2D
     def -(other)
-      RDF::List[*(to_a - other.to_a)]
+      self.class.new(values: (to_a - other.to_a))
     end
 
     ##
@@ -250,7 +250,7 @@ module RDF
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-2A
     def *(int_or_str)
       case int_or_str
-        when Integer then RDF::List[*(to_a * int_or_str)]
+        when Integer then self.class.new(values: (to_a * int_or_str))
         else join(int_or_str.to_s)
       end
     end
@@ -538,13 +538,13 @@ module RDF
     ##
     # @private
     def slice_with_start_and_length(start, length)
-      RDF::List[*to_a.slice(start, length)]
+      self.class.new(values: to_a.slice(start, length))
     end
 
     ##
     # @private
     def slice_with_range(range)
-      RDF::List[*to_a.slice(range)]
+      self.class.new(values: to_a.slice(range))
     end
 
     protected :slice_with_start_and_length
@@ -851,7 +851,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-reverse
     def reverse
-      RDF::List[*to_a.reverse]
+      self.class.new(values: to_a.reverse)
     end
 
     ##
@@ -863,7 +863,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-sort
     def sort(&block)
-      RDF::List[*super]
+      self.class.new(values: super)
     end
 
     ##
@@ -875,7 +875,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-sort_by
     def sort_by(&block)
-      RDF::List[*super]
+      self.class.new(values: super)
     end
 
     ##
@@ -887,7 +887,7 @@ module RDF
     # @return [RDF::List]
     # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-uniq
     def uniq
-      RDF::List[*to_a.uniq]
+      self.class.new(values: to_a.uniq)
     end
 
     ##
@@ -964,7 +964,7 @@ module RDF
       case value
         when nil         then RDF.nil
         when RDF::Value  then value
-        when Array       then RDF::List.new(subject: nil, graph: graph, values: value)
+        when Array       then self.class.new(subject: nil, graph: graph, values: value)
         else value
       end
     end
