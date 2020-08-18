@@ -65,7 +65,7 @@ class RDF::Query
     #   the variable name
     # @param  [RDF::Term] value
     #   an optional variable value
-    # @param [Boolean] distinguished (true) Also interpreted by leading '??' or '$$' in name.
+    # @param [Boolean] distinguished (true) Also interpreted by leading '?' or '$' in name. If non-distinguished, '??' or '$$'.
     # @param [Boolean] existential (true) Also interpreted by leading '$' in name
     def initialize(name = nil, value = nil, distinguished: nil, existential: nil)
       name = (name || "g#{__id__.to_i.abs}").to_s
