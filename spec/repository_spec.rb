@@ -56,7 +56,7 @@ describe RDF::Repository do
     end
   end
 
-  it "remembers statement obtions" do
+  it "remembers statement options" do
     subject << existing_statement = RDF::Statement(:s, RDF.type, :o, inferred: true)
     expect(subject).to have_statement(existing_statement)
     expect(subject.statements.first).to eq existing_statement
