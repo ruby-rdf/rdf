@@ -192,6 +192,16 @@ describe RDF::Query::Variable do
         end
       end
     end
+
+    describe "#var_values" do
+      it "returns term param if variable matches" do
+        expect(subject.var_values(:x, RDF::URI("foo"))).to eql RDF::URI("foo")
+      end
+
+      it "returns term nil if variable does not match" do
+        expect(subject.var_values(:y, RDF::URI("foo"))).to be_nil
+      end
+    end
   end
 
   context ".new non-distinguished" do

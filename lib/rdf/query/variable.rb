@@ -247,6 +247,16 @@ class RDF::Query
     end
 
     ##
+    # Returns term if var is the same as this variable.
+    #
+    # @param [Symbol] var
+    # @param [RDF::Term] term
+    # @return [RDF::Term]
+    def var_values(var, term)
+      term if var == name
+    end
+
+    ##
     # Returns a string representation of this variable.
     #
     # Distinguished variables are indicated with a single `?`.
