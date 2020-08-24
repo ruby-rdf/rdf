@@ -729,23 +729,23 @@ describe RDF::List do
     it "raises IndexError for invalid indexes" do
       expect { ten.fetch(20) }.to raise_error(IndexError)
     end
-  end
 
-  describe "#fetch with a default value" do
-    it "accepts two arguments" do
-      expect { ten.fetch(0, nil) }.not_to raise_error
+    describe "with a default value" do
+      it "accepts two arguments" do
+        expect { ten.fetch(0, nil) }.not_to raise_error
+      end
+
+      it "returns the second argument for invalid indexes" do
+        expect { ten.fetch(20, nil) }.not_to raise_error
+        expect(ten.fetch(20, true)).to eq true
+      end
     end
 
-    it "returns the second argument for invalid indexes" do
-      expect { ten.fetch(20, nil) }.not_to raise_error
-      expect(ten.fetch(20, true)).to eq true
-    end
-  end
-
-  describe "#fetch with a block" do
-    it "yields to the given block for invalid indexes" do
-      expect { ten.fetch(20) { |index| } }.not_to raise_error
-      expect(ten.fetch(20) { |index| true }).to be_truthy
+    describe "with a block" do
+      it "yields to the given block for invalid indexes" do
+        expect { ten.fetch(20) { |index| } }.not_to raise_error
+        expect(ten.fetch(20) { |index| true }).to be_truthy
+      end
     end
   end
 
@@ -815,71 +815,77 @@ describe RDF::List do
     end
   end
 
-  describe "#each_subject without a block" do
-    it "requires no arguments" do
-      expect { ten.each_subject }.not_to raise_error
+  describe "#each_subject" do
+    describe "without a block" do
+      it "requires no arguments" do
+        expect { ten.each_subject }.not_to raise_error
+      end
+
+      it "returns an enumerator" do
+        expect(abc.each_subject).to be_an_enumerator
+      end
     end
 
-    it "returns an enumerator" do
-      expect(abc.each_subject).to be_an_enumerator
-    end
-  end
+    describe "with a block" do
+      it "requires no arguments" do
+        expect { ten.each_subject { |subject| } }.not_to raise_error
+      end
 
-  describe "#each_subject with a block" do
-    it "requires no arguments" do
-      expect { ten.each_subject { |subject| } }.not_to raise_error
-    end
-
-    it "yields all subject terms in the list" do
-      expect {|b| ten.each_subject(&b)}.to yield_control.exactly(10).times
-    end
-  end
-
-  describe "#each without a block" do
-    it "requires no arguments" do
-      expect { ten.each }.not_to raise_error
-    end
-
-    it "returns an enumerator" do
-      expect(abc.each_subject).to be_an_enumerator
+      it "yields all subject terms in the list" do
+        expect {|b| ten.each_subject(&b)}.to yield_control.exactly(10).times
+      end
     end
   end
 
-  describe "#each with a block" do
-    it "requires no arguments" do
-      expect { ten.each { |value| } }.not_to raise_error
+  describe "#each" do
+    describe "without a block" do
+      it "requires no arguments" do
+        expect { ten.each }.not_to raise_error
+      end
+
+      it "returns an enumerator" do
+        expect(abc.each_subject).to be_an_enumerator
+      end
     end
 
-    it "yields the correct number of times" do
-      expect(abc.each.count).to eq 3
-      expect(ten.each.count).to eq 10
+    describe "with a block" do
+      it "requires no arguments" do
+        expect { ten.each { |value| } }.not_to raise_error
+      end
+
+      it "yields the correct number of times" do
+        expect(abc.each.count).to eq 3
+        expect(ten.each.count).to eq 10
+      end
     end
   end
 
-  describe "#each_statement without a block" do
-    it "requires no arguments" do
-      expect { ten.each_statement }.not_to raise_error
+  describe "#each_statement" do
+    describe "without a block" do
+      it "requires no arguments" do
+        expect { ten.each_statement }.not_to raise_error
+      end
+
+      it "returns an enumerator" do
+        expect(abc.each_subject).to be_an_enumerator
+      end
     end
 
-    it "returns an enumerator" do
-      expect(abc.each_subject).to be_an_enumerator
-    end
-  end
+    describe "with a block" do
+      it "requires no arguments" do
+        expect { ten.each_statement { |statement| } }.not_to raise_error
+      end
 
-  describe "#each_statement with a block" do
-    it "requires no arguments" do
-      expect { ten.each_statement { |statement| } }.not_to raise_error
-    end
+      it "yields the correct number of times" do
+        expect(abc.each_statement.count).to eq 3 * 2
+        expect(ten.each_statement.count).to eq 10 * 2
+      end
 
-    it "yields the correct number of times" do
-      expect(abc.each_statement.count).to eq 3 * 2
-      expect(ten.each_statement.count).to eq 10 * 2
-    end
-
-    it "yields statements" do
-      expect {|b| ten.each_statement(&b)}.to yield_control.at_least(10).times
-      ten.each_statement do |statement|
-        expect(statement).to be_a_statement
+      it "yields statements" do
+        expect {|b| ten.each_statement(&b)}.to yield_control.at_least(10).times
+        ten.each_statement do |statement|
+          expect(statement).to be_a_statement
+        end
       end
     end
   end
@@ -930,33 +936,37 @@ describe RDF::List do
     end
   end
 
-  describe "#sort without a block" do
-    it "requires no arguments" do
-      expect { empty.sort }.not_to raise_error
+  describe "#sort" do
+    describe "without a block" do
+      it "requires no arguments" do
+        expect { empty.sort }.not_to raise_error
+      end
+
+      it "returns a list" do
+        expect(ten.sort).to be_a_list
+      end
     end
 
-    it "returns a list" do
-      expect(ten.sort).to be_a_list
+    describe "with a block" do
+      it "requires no arguments" do
+        expect { empty.sort { |a, b| } }.not_to raise_error
+      end
+
+      it "returns a list" do
+        expect(ten.sort { |a, b| a <=> b }).to be_a_list
+      end
     end
   end
 
-  describe "#sort with a block" do
-    it "requires no arguments" do
-      expect { empty.sort { |a, b| } }.not_to raise_error
-    end
+  describe "#sort_by" do
+    describe "with a block" do
+      it "requires no arguments" do
+        expect { empty.sort_by { |value| } }.not_to raise_error
+      end
 
-    it "returns a list" do
-      expect(ten.sort { |a, b| a <=> b }).to be_a_list
-    end
-  end
-
-  describe "#sort_by with a block" do
-    it "requires no arguments" do
-      expect { empty.sort_by { |value| } }.not_to raise_error
-    end
-
-    it "returns a list" do
-      expect(ten.sort_by(&:to_i)).to be_a_list
+      it "returns a list" do
+        expect(ten.sort_by(&:to_i)).to be_a_list
+      end
     end
   end
 
