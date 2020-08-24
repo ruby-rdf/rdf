@@ -265,5 +265,6 @@ class RDF::Query
       prefix = distinguished? ? (existential? ? '$' : '?') : (existential? ? '$$' : '??')
       unbound? ? "#{prefix}#{name}" : "#{prefix}#{name}=#{value}"
     end
+    alias_method :to_base, :to_s
   end # Variable
 end # RDF::Query
