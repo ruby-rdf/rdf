@@ -76,7 +76,7 @@ module RDF; class Literal
     #
     # @return [RDF::Literal::Integer]
     def ceil
-      self.class.new(to_d.ceil)
+      RDF::Literal::Integer.new(to_d.ceil)
     end
 
     ##
@@ -87,7 +87,7 @@ module RDF; class Literal
     #
     # @return [RDF::Literal::Integer]
     def floor
-      self.class.new(to_d.floor)
+      RDF::Literal::Integer.new(to_d.floor)
     end
 
     ##
