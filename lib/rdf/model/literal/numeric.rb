@@ -124,6 +124,40 @@ module RDF; class Literal
     end
 
     ##
+    # Exponent − Performs exponential (power) calculation on operators.
+    #
+    # If other is an instance of xs:integer, the result is self raised to the power of other as defined in the [IEEE 754-2008] specification of the pown function applied to a 64-bit binary floating point value and an integer.
+    #
+    # Otherwise $y is converted to an xs:double by numeric promotion, and the result is the value of $x raised to the power of $y as defined in the [IEEE 754-2008] specification of the pow function applied to two 64-bit binary floating point values.
+    #
+    # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
+    # @return [RDF::Literal::Double]
+    # @since  0.2.3
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-pow
+    def **(other)
+      RDF::Literal::Double.new(to_f ** other.to_f)
+    end
+
+    ##
+    # Exponent − Performs remainder of `self` divided by `other`.
+    #
+    # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
+    # @return [RDF::Literal]
+    # @since  0.2.3
+    # @see https://www.w3.org/TR/xpath-functions/#func-numeric-mod
+    def %(other)
+      if self.class == Double || [Double, ::Float].include?(other.class)
+        self.class.new(to_f % other.to_f)
+      elsif ((self.class == RDF::Literal::Float || other.class == RDF::Literal::Float) rescue false)
+        self.class.new(to_f % other.to_f)
+      elsif self.class == Decimal || other.class == Decimal
+        self.class.new(to_d % (other.respond_to?(:to_d) ? other.to_d : BigDecimal(other.to_s)))
+      else
+        self.class.new(to_i % other.to_i)
+      end
+    end
+
+    ##
     # Returns the quotient of `self` divided by `other`.
     #
     # As a special case, if the types of both $arg1 and $arg2 are xsd:integer,
