@@ -22,6 +22,7 @@ describe RDF::Literal do
     when :int         then [123]
     when :long        then [9223372036854775807]
     when :double      then [3.1415]
+    when :decimal     then [BigDecimal("1.2")]
     when :date        then [Date.new(2010)]
     when :datetime    then [DateTime.new(2011)]
     when :time        then ['01:02:03Z', {datatype: RDF::XSD.time}]
@@ -35,7 +36,7 @@ describe RDF::Literal do
       ary += case sel
       when :all_simple        then [:empty, :plain, :string].map {|s| literal(s)}
       when :all_plain_lang    then [:empty_lang, :plain_lang].map {|s| literal(s)}
-      when :all_native        then [:false, :true, :int, :long, :double, :time, :date, :datetime].map {|s| literal(s)}
+      when :all_native        then [:false, :true, :int, :long, :decimal, :double, :time, :date, :datetime].map {|s| literal(s)}
       when :all_invalid_lang  then [:wrong_lang, :unset_lang].map {|s| literal(s)}
       when :all_plain         then literals(:all_simple, :all_plain_lang)
       else                         literals(:all_plain, :all_native)
@@ -142,8 +143,10 @@ describe RDF::Literal do
       false => "boolean",
       9223372036854775807 => "integer",
       3.1415 => "double",
+      BigDecimal("1.2") => "decimal",
       Date.new(2010) => "date",
       DateTime.new(2011) => "dateTime",
+      Rational("1/3") => "double",
       Time.parse("01:02:03Z") => "dateTime"
     }.each_pair do |value, type|
       it "returns xsd.#{type} for #{value.inspect} #{value.class}" do
@@ -470,13 +473,13 @@ describe RDF::Literal do
 
     describe "#**" do
       {
-        "2^3": [2, 3, 8.0e0],
-        "-2^3": [-2, 3, -8.0e0],
+        "2^3": [2, 3, 8],
+        "-2^3": [-2, 3, -8],
         "2^-3": [2, -3, 0.125e0],
         "-2^-3": [-2, -3, -0.125e0],
-        "2^0": [2, 0, 1.0e0],
-        "0^0": [0, 0, 1.0e0],
-        "0^4": [0, 4, 0.0e0],
+        "2^0": [2, 0, 1],
+        "0^0": [0, 0, 1],
+        "0^4": [0, 4, 0],
         "0^-4": [0, -4, RDF::Literal::Double.new('INF')],
         "16^0.5e0": [16, 0.5e0, 4.0e0],
         "16^0.25e0": [16, 0.25e0, 2.0e0],
@@ -488,6 +491,7 @@ describe RDF::Literal do
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
+          expect((RDF::Literal(n) ** RDF::Literal(e)).datatype).to eq RDF::Literal(result).datatype
         end
       end
     end
@@ -567,10 +571,22 @@ describe RDF::Literal do
 
     describe "#%" do
       {
-        "4.5 % 1.2": [RDF::Literal::Decimal.new("4.5"), RDF::Literal::Decimal.new("1.2"), RDF::Literal::Decimal.new("0.9")],
+        "4.5 % 1.2": [BigDecimal("4.5"), BigDecimal("1.2"), BigDecimal("0.9")],
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) % RDF::Literal(e)).to eq RDF::Literal(result)
+        end
+      end
+    end
+
+    describe "#**" do
+      {
+        "2.7^10": [BigDecimal("2.7"), 10, BigDecimal("20589.1132094649")],
+        "2.7^10.3": [BigDecimal("2.7"), BigDecimal("10.3"), BigDecimal("27736.1879020809118")],
+      }.each do |name, (n, e, result)|
+        it name do
+          expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
+          expect((RDF::Literal(n) ** RDF::Literal(e)).datatype).to eq RDF::Literal(result).datatype
         end
       end
     end
@@ -751,6 +767,7 @@ describe RDF::Literal do
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
+          expect((RDF::Literal(n) ** RDF::Literal(e)).datatype).to eq RDF::Literal(result).datatype
         end
       end
     end

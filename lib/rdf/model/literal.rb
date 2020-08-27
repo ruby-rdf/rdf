@@ -118,6 +118,7 @@ module RDF
           when ::Integer    then RDF::Literal::Integer
           when ::Float      then RDF::Literal::Double
           when ::BigDecimal then RDF::Literal::Decimal
+          when ::Rational   then RDF::Literal::Double
           when ::DateTime   then RDF::Literal::DateTime
           when ::Time       then RDF::Literal::DateTime
           when ::Date       then RDF::Literal::Date

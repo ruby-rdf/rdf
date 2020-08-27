@@ -126,16 +126,16 @@ module RDF; class Literal
     ##
     # Exponent − Performs exponential (power) calculation on operators.
     #
-    # If other is an instance of xs:integer, the result is self raised to the power of other as defined in the [IEEE 754-2008] specification of the pown function applied to a 64-bit binary floating point value and an integer.
-    #
-    # Otherwise $y is converted to an xs:double by numeric promotion, and the result is the value of $x raised to the power of $y as defined in the [IEEE 754-2008] specification of the pow function applied to two 64-bit binary floating point values.
+    # Promotes values, as necessary, with the result type depending on the input values.
     #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
-    # @return [RDF::Literal::Double]
+    # @return [RDF::Literal::Numeric]
     # @since  0.2.3
     # @see https://www.w3.org/TR/xpath-functions/#func-math-pow
     def **(other)
-      RDF::Literal::Double.new(to_f ** other.to_f)
+      RDF::Literal(object ** (other.is_a?(RDF::Literal::Numeric) ? other.object : other))
+    rescue ZeroDivisionError
+      RDF::Literal::Double.new('INF')
     end
 
     ##
