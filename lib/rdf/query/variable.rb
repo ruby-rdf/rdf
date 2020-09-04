@@ -65,7 +65,7 @@ class RDF::Query
     #   the variable name
     # @param  [RDF::Term] value
     #   an optional variable value
-    # @param [Boolean] distinguished (true) Also interpreted by leading '??' or '$$' in name.
+    # @param [Boolean] distinguished (true) Also interpreted by leading '?' or '$' in name. If non-distinguished, '??' or '$$'.
     # @param [Boolean] existential (true) Also interpreted by leading '$' in name
     def initialize(name = nil, value = nil, distinguished: nil, existential: nil)
       name = (name || "g#{__id__.to_i.abs}").to_s
@@ -247,6 +247,16 @@ class RDF::Query
     end
 
     ##
+    # Returns term if var is the same as this variable.
+    #
+    # @param [Symbol] var
+    # @param [RDF::Term] term
+    # @return [RDF::Term]
+    def var_values(var, term)
+      term if var == name
+    end
+
+    ##
     # Returns a string representation of this variable.
     #
     # Distinguished variables are indicated with a single `?`.
@@ -265,5 +275,6 @@ class RDF::Query
       prefix = distinguished? ? (existential? ? '$' : '?') : (existential? ? '$$' : '??')
       unbound? ? "#{prefix}#{name}" : "#{prefix}#{name}=#{value}"
     end
+    alias_method :to_base, :to_s
   end # Variable
 end # RDF::Query

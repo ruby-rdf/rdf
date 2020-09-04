@@ -181,16 +181,10 @@ module RDF; class Query
 
       # No, some terms actually refer to the same variable...
       else
-        # Figure out which terms refer to the same variable:
-        terms = variables.each_key.find do |name|
-          terms = variable_terms(name)
-          break terms if terms.size > 1
-        end
+        # Considering embedding, figure out if variables that may appear more than once resolve to the same value.
+        vars = variables.keys
         queryable.query(query).select do |statement|
-          # Only yield those matching statements where the variable
-          # constraint is also satisfied:
-          # FIXME: `Array#uniq` uses `#eql?` and `#hash`, not `#==`
-          if terms.map { |term| statement.send(term) }.uniq.size.equal?(1)
+          if vars.all? {|var| self.var_values(var, statement).uniq.size == 1}
             yield statement if block_given?
             true
           end
@@ -220,8 +214,8 @@ module RDF; class Query
         solution[predicate.to_sym]  = statement.predicate  if predicate.is_a?(Variable)
         solution[object.to_sym]     = statement.object     if object.is_a?(Variable)
         solution[graph_name.to_sym] = statement.graph_name if graph_name.is_a?(Variable)
-        solution.merge!(subject.solution(statement.subject)) if subject.is_a?(Pattern)
-        solution.merge!(object.solution(statement.object)) if object.is_a?(Pattern)
+        solution.merge!(subject.solution(statement.subject)) if subject.respond_to?(:solution)
+        solution.merge!(object.solution(statement.object)) if object.respond_to?(:solution)
       end
     end
 
@@ -234,14 +228,31 @@ module RDF; class Query
     # @param  [Symbol, #to_sym] name
     #   an optional variable name
     # @return [Array<Symbol>]
+    # @deprecated use {#var_values} instead
     # @since  0.3.0
     def variable_terms(name = nil)
+      warn "[DEPRECATION] RDF::Query::Pattern#variable_terms is deprecated and will be removed in a future version.\n" +
+           "Called from #{Gem.location_of_caller.join(':')}"
       terms = []
       terms << :subject    if subject.is_a?(Variable)    && (!name || name.eql?(subject.name))
       terms << :predicate  if predicate.is_a?(Variable)  && (!name || name.eql?(predicate.name))
       terms << :object     if object.is_a?(Variable)     && (!name || name.eql?(object.name))
       terms << :graph_name if graph_name.is_a?(Variable) && (!name || name.eql?(graph_name.name))
       terms
+    end
+
+    ##
+    # Returns all values the statement in the same pattern position
+    #
+    # @param [Symbol] var
+    # @param [RDF::Statement] statement
+    # @return [Array<RDF::Term>]
+    def var_values(var, statement)
+      [:subject, :predicate, :object, :graph_name].map do |position|
+        po = self.send(position)
+        so = statement.send(position)
+        po.var_values(var, so) if po.respond_to?(:var_values)
+      end.flatten.compact
     end
 
     ##
@@ -254,7 +265,7 @@ module RDF; class Query
     def variable_count
       [subject, predicate, object, graph_name].inject(0) do |memo, term|
         memo += (term.is_a?(Variable) ? 1 :
-                 (term.is_a?(Pattern) ? term.variable_count : 0))
+                 (term.respond_to?(:variable_count) ? term.variable_count : 0))
       end
     end
     alias_method :cardinality, :variable_count
@@ -311,9 +322,9 @@ module RDF; class Query
     def bindings
       bindings = {}
       bindings.merge!(subject.bindings)    if subject && subject.variable?
-      bindings.merge!(predicate.bindings)  if predicate.is_a?(Variable)
+      bindings.merge!(predicate.bindings)  if predicate && predicate.variable?
       bindings.merge!(object.bindings)     if object && object.variable?
-      bindings.merge!(graph_name.bindings) if graph_name.is_a?(Variable)
+      bindings.merge!(graph_name.bindings) if graph_name && graph_name.variable?
       bindings
     end
 
@@ -354,24 +365,7 @@ module RDF; class Query
     #
     # @return [String]
     def to_s
-      StringIO.open do |buffer| # FIXME in RDF::Statement
-        buffer << 'OPTIONAL ' if optional?
-        buffer << [subject, predicate, object].map do |r|
-          if r.is_a?(RDF::Query::Variable)
-            r.to_s
-          elsif r.is_a?(RDF::Query::Pattern)
-            "<<#{r.to_s[0..-3]}>>"
-          else
-            RDF::NTriples.serialize(r)
-          end
-        end.join(" ")
-        buffer << case graph_name
-          when nil, false then " ."
-          when Variable then " #{graph_name.to_s} ."
-          else " #{RDF::NTriples.serialize(graph_name)} ."
-        end
-        buffer.string
-      end
+      (optional? ? 'OPTIONAL ' : '') + super
     end
   end # Pattern
 end; end # RDF::Query

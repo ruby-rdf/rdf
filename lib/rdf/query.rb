@@ -247,15 +247,22 @@ module RDF
     # Optimizes this query by reordering its constituent triple patterns
     # according to their cost estimates.
     #
+    # Optional patterns have greater cost than non-optional patterns so they will always come after non-optional patterns
+    #
     # @param  [Hash{Symbol => Object}] options
     #   any additional options for optimization
     # @return [self]
     # @see    RDF::Query::Pattern#cost
     # @since  0.3.0
     def optimize!(**options)
-      @patterns.sort! do |a, b|
+      optional, required = @patterns.partition(&:optional?)
+      required.sort! do |a, b|
         (a.cost || 0) <=> (b.cost || 0)
       end
+      optional.sort! do |a, b|
+        (a.cost || 0) <=> (b.cost || 0)
+      end
+      @patterns = required + optional
       self
     end
 

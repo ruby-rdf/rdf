@@ -142,7 +142,7 @@ module RDF; class Literal
     end
 
     ##
-    # Returns the smallest number greater than or equal to `self`.
+    # Returns the smallest integer greater than or equal to `self`.
     #
     # @example
     #   RDF::Literal(1.2).ceil            #=> RDF::Literal(2)
@@ -150,14 +150,14 @@ module RDF; class Literal
     #   RDF::Literal(2.0).ceil            #=> RDF::Literal(2)
     #   RDF::Literal(-2.0).ceil           #=> RDF::Literal(-2)
     #
-    # @return [RDF::Literal]
+    # @return [RDF::Literal::Integer]
     # @since  0.2.3
     def ceil
-      self.class.new(to_f.ceil)
+      RDF::Literal::Integer.new(to_f.ceil)
     end
 
     ##
-    # Returns the largest number less than or equal to `self`.
+    # Returns the largest integer less than or equal to `self`.
     #
     # @example
     #   RDF::Literal(1.2).floor           #=> RDF::Literal(1)
@@ -165,10 +165,10 @@ module RDF; class Literal
     #   RDF::Literal(2.0).floor           #=> RDF::Literal(2)
     #   RDF::Literal(-2.0).floor          #=> RDF::Literal(-2)
     #
-    # @return [RDF::Literal]
+    # @return [RDF::Literal::Integer]
     # @since  0.2.3
     def floor
-      self.class.new(to_f.floor)
+      RDF::Literal::Integer.new(to_f.floor)
     end
 
     ##
@@ -181,11 +181,11 @@ module RDF; class Literal
     end
 
     ##
-    # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
+    # Returns the integer with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
     #
-    # @return [RDF::Literal]
+    # @return [RDF::Literal::Integer]
     def round
-      self.class.new(to_f.round)
+      RDF::Literal::Integer.new(to_f.round)
     end
 
     ##

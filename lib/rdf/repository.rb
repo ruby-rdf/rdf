@@ -410,12 +410,12 @@ module RDF
             end
             ss.each do |s, ps|
               ps = if predicate.nil? || predicate.is_a?(RDF::Query::Variable)
-                  ps
-                elsif ps.has_key?(predicate)
-                  { predicate => ps[predicate] }
-                else
-                  []
-                end
+                ps
+              elsif ps.has_key?(predicate)
+                { predicate => ps[predicate] }
+              else
+                []
+              end
               ps.each do |p, os|
                 os.each do |o, object_options|
                   next unless object.nil? || object.eql?(o)
