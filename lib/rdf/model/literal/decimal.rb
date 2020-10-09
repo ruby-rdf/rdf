@@ -63,9 +63,15 @@ module RDF; class Literal
     ##
     # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
     #
-    # @return [RDF::Literal::Integer]
+    # @return [RDF::Literal::Decimal]
     def round
-      RDF::Literal::Integer.new(to_d.round)
+      rounded = to_d.round(half: (to_d < 0 ? :down : :up))
+      if rounded == -0.0
+        # to avoid -0.0
+        self.class.new(0.0)
+      else
+        self.class.new(rounded)
+      end
     end
 
     ##
