@@ -778,10 +778,31 @@ describe RDF::URI do
     {
       "prefix with #" => ["http://example.com/#", "http://example.com/#foo", "foo"],
       "prefix with /" => ["http://example.com/", "http://example.com/#foo", "#foo"],
-      "prefix without / or #" => ["http://example.com/f", "http://example.com/foo", "http://example.com/foo"],
+      "prefix without / or #" => ["http://example.com/f", "http://example.com/foo", "foo"],
     }.each do |name, (base_uri,orig,result)|
       it "<#{base_uri}> + <#{orig}>: <#{result}>" do
         expect(described_class.new(orig).relativize(base_uri)).to eq result
+      end
+    end
+
+    context "json-ld compact#t0066" do
+      {
+        "https://w3c.github.io/json-ld-api/tests/compact/link" => "link",
+        "https://w3c.github.io/json-ld-api/tests/compact/0066-in.jsonld#fragment-works" => "#fragment-works",
+        "https://w3c.github.io/json-ld-api/tests/compact/0066-in.jsonld?query=works" => "?query=works",
+        "https://w3c.github.io/json-ld-api/tests/" =>          "../",
+        "https://w3c.github.io/json-ld-api/" =>                "../../",
+        "https://w3c.github.io/json-ld-api/parent" =>          "../../parent",
+        "https://w3c.github.io/json-ld-api/parent#fragment" => "../../parent#fragment",
+        "https://w3c.github.io/parent-parent-eq-root" =>       "../../../parent-parent-eq-root",
+        "https://w3c.github.io/still-root" =>                  "../../../still-root",
+        "https://w3c.github.io/too-many-dots" =>               "../../../too-many-dots",
+        "https://w3c.github.io/absolute" =>                    "../../../absolute",
+        "http://example.org/scheme-relative" =>                "http://example.org/scheme-relative"
+      }.each do |orig, result|
+        it "relativises #{orig} to #{result}" do
+          expect(described_class.new(orig).relativize("https://w3c.github.io/json-ld-api/tests/compact/0066-in.jsonld")).to eq result
+        end
       end
     end
   end
@@ -950,8 +971,8 @@ describe RDF::URI do
     end
 
     it "#=~" do
-      expect(RDF::URI('http://example.org/')).to match /example/
-      expect(RDF::URI('http://example.org/')).not_to match /foobar/
+      expect(RDF::URI('http://example.org/')).to match(/example/)
+      expect(RDF::URI('http://example.org/')).not_to match(/foobar/)
     end
 
     it "#to_str" do

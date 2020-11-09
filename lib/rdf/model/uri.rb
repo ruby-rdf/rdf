@@ -311,12 +311,22 @@ module RDF
     # @param [#to_s] base_uri
     # @return [RDF::URI]
     def relativize(base_uri)
-      if base_uri.to_s.end_with?("/", "#") &&
+      if self.to_s.start_with?(base_uri.to_s) && %w(# ?).include?(self.to_s[base_uri.to_s.length, 1]) ||
+         base_uri.to_s.end_with?("/", "#") &&
          self.to_s.start_with?(base_uri.to_s)
-        RDF::URI(self.to_s[base_uri.to_s.length..-1])
+        return RDF::URI(self.to_s[base_uri.to_s.length..-1])
       else
-        self
+        # Create a list of parents, for which this IRI may be relative.
+        u = RDF::URI(base_uri)
+        iri_set = u.to_s.end_with?('/') ? [u.to_s] : []
+        iri_set << u.to_s while (u = u.parent)
+        iri_set.each_with_index do |bb, index|
+          next unless self.to_s.start_with?(bb)
+          rel = "../" * index + self.to_s[bb.length..-1]
+          return rel.empty? ? "./" : rel
+        end
       end
+      self
     end
 
     ##
