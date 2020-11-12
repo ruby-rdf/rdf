@@ -731,7 +731,7 @@ module RDF
     # @param  [#to_s] property
     # @return [URI]
     def [](property)
-      Term.intern([to_s, property.to_s].join(''), vocab: self.class, attributes: {})
+      Term.intern([to_s, property.to_s].join(''), vocab: self, attributes: {})
     end
 
     ##
