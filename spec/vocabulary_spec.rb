@@ -16,26 +16,31 @@ describe RDF::Vocabulary do
     it "should allow method_missing" do
       expect {subject.foo}.not_to raise_error
       expect(subject.foo).to be_a(RDF::Vocabulary::Term)
+      expect(subject.foo.vocab.to_s).to eq('http://example.org/')
     end
 
     it "camelizes on method_missing" do
       expect(subject.foo_bar).to be_a(RDF::Vocabulary::Term)
       expect(subject.foo_bar).to eq (subject.to_uri / 'fooBar')
+      expect(subject.foo_bar.vocab.to_s).to eq('http://example.org/')
     end
 
     it "should allow []" do
       expect {subject["foo"]}.not_to raise_error
       expect(subject["foo"]).to be_a(RDF::Vocabulary::Term)
+      expect(subject["foo"].vocab.to_s).to eq('http://example.org/')
     end
 
     it "allows #send" do
       expect {subject.send(:foo)}.not_to raise_error
       expect(subject.send(:foo)).to be_a(RDF::Vocabulary::Term)
+      expect(subject.send(:foo).vocab.to_s).to eq('http://example.org/')
     end
 
     it "allows #public_send" do
       expect {subject.public_send(:foo)}.not_to raise_error
       expect(subject.public_send(:foo)).to be_a(RDF::Vocabulary::Term)
+      expect(subject.public_send(:foo).vocab.to_s).to eq('http://example.org/')
     end
 
     it "does not add to @@uris" do
