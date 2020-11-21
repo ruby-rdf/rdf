@@ -38,7 +38,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rest-client', '~> 2.1'
   gem.add_development_dependency 'rspec',       '~> 3.9'
   gem.add_development_dependency 'rspec-its',   '~> 1.3'
-  gem.add_development_dependency 'rexml',       '~> 3.2'  # For Webmock
   gem.add_development_dependency 'webmock',     '~> 3.7'
   gem.add_development_dependency 'yard',        '~> 0.9.20'
   gem.add_development_dependency 'faraday',     '~> 0.17'
