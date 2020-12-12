@@ -516,7 +516,7 @@ module RDF
         when RDF::Literal   then format_literal(term, **options)
         when RDF::URI       then format_uri(term, **options)
         when RDF::Node      then format_node(term, **options)
-        when RDF::Statement then format_rdfstar(term, **options)
+        when RDF::Statement then format_embTriple(term, **options)
         else nil
       end
     end
@@ -574,7 +574,7 @@ module RDF
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
-    def format_rdfstar(value, **options)
+    def format_embTriple(value, **options)
       raise NotImplementedError.new("#{self.class}#format_statement") # override in subclasses
     end
 

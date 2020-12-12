@@ -428,49 +428,21 @@ describe RDF::NTriples::Reader do
       end
     end
 
-    context "in property graph mode" do
-      statements.each do |name, st|
-        context name do
-          let(:graph) {parse(st, rdfstar: :PG)}
+    statements.each do |name, st|
+      context name do
+        let(:graph) {parse(st, rdfstar: true)}
 
-          it "creates two statements" do
-            expect(graph.count).to eql(2)
-          end unless name.to_s.include?('recursive')
-
-          it "creates multiple statements" do
-            expect(graph.count).to be > 2
-          end if name.to_s.include?('recursive')
-
-          it "has a statement whose subject or object is a statement" do
-            referencing = graph.statements.detect {|s| s.predicate == RDF::URI("http://example/p")}
-            expect(referencing).to be_a_statement
-            if referencing.subject.statement?
-              expect(referencing.subject).to be_a_statement
-            else
-              expect(referencing.object).to be_a_statement
-            end
-          end
+        it "creates two statements" do
+          expect(graph.count).to eql(1)
         end
-      end
-    end
 
-    context "in separate assertions mode" do
-      statements.each do |name, st|
-        context name do
-          let(:graph) {parse(st, rdfstar: :SA)}
-
-          it "creates two statements" do
-            expect(graph.count).to eql(1)
-          end
-
-          it "has a statement whose subject or object is a statement" do
-            referencing = graph.statements.first
-            expect(referencing).to be_a_statement
-            if referencing.subject.statement?
-              expect(referencing.subject).to be_a_statement
-            else
-              expect(referencing.object).to be_a_statement
-            end
+        it "has a statement whose subject or object is a statement" do
+          referencing = graph.statements.first
+          expect(referencing).to be_a_statement
+          if referencing.subject.statement?
+            expect(referencing.subject).to be_a_statement
+          else
+            expect(referencing.object).to be_a_statement
           end
         end
       end

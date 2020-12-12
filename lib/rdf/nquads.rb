@@ -69,9 +69,9 @@ module RDF
 
           begin
             unless blank? || read_comment
-              subject   = read_uriref || read_node || read_rdfstar || fail_subject
+              subject   = read_uriref || read_node || read_embTriple || fail_subject
               predicate = read_uriref(intern: true) || fail_predicate
-              object    = read_uriref || read_node || read_literal || read_rdfstar || fail_object
+              object    = read_uriref || read_node || read_literal || read_embTriple || fail_object
               graph_name    = read_uriref || read_node
               if validate? && !read_eos
                 log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)

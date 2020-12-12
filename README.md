@@ -246,17 +246,10 @@ By default, the N-Triples reader will reject a document containing a subject res
     end
     # => RDF::ReaderError
 
-Readers support a `rdfstar` option with either `:PG` (Property Graph) or `:SA` (Separate Assertions) modes. In `:PG` mode, statements that are used in the subject or object positions are also implicitly added to the graph:
+Readers support a boolean valued `rdfstar` option.
 
     graph = RDF::Graph.new do |graph|
-      RDF::NTriples::Reader.new(nt, rdfstar: :PG) {|reader| graph << reader}
-    end
-    graph.count #=> 2
-
-When using the `:SA` mode, only one statement is asserted, although the reified statement is contained within the graph.
-
-    graph = RDF::Graph.new do |graph|
-      RDF::NTriples::Reader.new(nt, rdfstar: :SA) {|reader| graph << reader}
+      RDF::NTriples::Reader.new(nt, rdfstar: true) {|reader| graph << reader}
     end
     graph.count #=> 1
 
@@ -478,7 +471,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
-[RDF*]:             https://lists.w3.org/Archives/Public/public-rdf-star/
+[RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html/
 [LinkedData]:       https://ruby-rdf.github.com/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.com/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client
