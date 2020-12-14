@@ -471,7 +471,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
-[RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html/
+[RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [LinkedData]:       https://ruby-rdf.github.com/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.com/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client

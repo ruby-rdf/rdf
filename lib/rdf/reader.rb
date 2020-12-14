@@ -161,6 +161,7 @@ module RDF
         RDF::CLI::Option.new(
           symbol: :rdfstar,
           datatype: TrueClass,
+          control: :checkbox,
           on: ["--rdfstar"],
           description: "Parse RDF*."),
         RDF::CLI::Option.new(
