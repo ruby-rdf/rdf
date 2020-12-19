@@ -26,10 +26,10 @@ jobs:
         ruby: [ '2.4', '2.5', '2.6', '2.7', 'ruby-head', 'jruby' ]
     name: Ruby ${{ matrix.ruby }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Clone repository
+        uses: actions/checkout@v2
       - name: Set up Ruby
-        uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Install dependencies
