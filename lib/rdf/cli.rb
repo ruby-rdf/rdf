@@ -506,11 +506,10 @@ module RDF
       options[:output_format] = options[:output_format].to_sym if options[:output_format]
 
       # Allow repository to be set via option.
-      @repository = options.fetch(:repository) {
-        options[:ordered] ?
+      @repository = options[:repository] ||
+        (options[:ordered] ?
           [].extend(RDF::Enumerable, RDF::Queryable) :
-          RDF::Repository.new
-      }
+          RDF::Repository.new)
 
       # Parse input files if any command requires it
       if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
@@ -528,8 +527,7 @@ module RDF
         COMMANDS[command.to_sym][:lambda].call(args,
           output: output,
           messages: messages,
-          repository: repository,
-          **options)
+          **options.merge(repository: repository))
       end
 
       # Normalize messages
