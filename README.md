@@ -6,9 +6,9 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <https://ruby-rdf.github.com/rdf>
 
 [![Gem Version](https://badge.fury.io/rb/rdf.png)](https://badge.fury.io/rb/rdf)
-[![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf)
-[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf)
-[![Join the chat at https://gitter.im/ruby-rdf/rdf](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-rdf/rdf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Build Status](https://github.com/ruby-rdf/rdf/workflows/CI/badge.svg?branch=develop)
+![CI](https://github.com/ruby-rdf/rdf/workflows/CI/badge.svg?branch=develop)
+![Join the chat at https://gitter.im/ruby-rdf/rdf](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-rdf/rdf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Features
 

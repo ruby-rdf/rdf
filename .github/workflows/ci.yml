@@ -17,14 +17,22 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   tests:
+    name: Ruby ${{ matrix.ruby }}
+    if: "contains(github.event.commits[0].message, '[ci skip]') == false"
     runs-on: ubuntu-latest
     env:
       CI: true
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ '2.4', '2.5', '2.6', '2.7', 'ruby-head', 'jruby' ]
-    name: Ruby ${{ matrix.ruby }}
+        ruby:
+          - 2.4
+          - 2.5
+          - 2.6
+          - 2.7
+          - ruby-head
+          - jruby
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'jruby' }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
