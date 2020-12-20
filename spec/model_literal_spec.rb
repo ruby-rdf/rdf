@@ -471,7 +471,7 @@ describe RDF::Literal do
       end
     end
 
-    describe "#**" do
+    describe "#**", skip: (RUBY_ENGINE == "jruby") do
       {
         "2^3": [2, 3, 8],
         "-2^3": [-2, 3, -8],
