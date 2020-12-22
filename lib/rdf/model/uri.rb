@@ -27,11 +27,6 @@ module RDF
   class URI
     include RDF::Resource
 
-    ##
-    # Defines the maximum number of interned URI references that can be held
-    # cached in memory at any one time.
-    CACHE_SIZE = -1 # unlimited by default
-    
     # IRI components
     UCSCHAR = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
       [\\u00A0-\\uD7FF]|[\\uF900-\\uFDCF]|[\\uFDF0-\\uFFEF]|
@@ -117,11 +112,13 @@ module RDF
     ).freeze
 
     ##
+    # Cache size may be set through {RDF.config} using `uri_cache_size`.
+    #
     # @return [RDF::Util::Cache]
     # @private
     def self.cache
       require 'rdf/util/cache' unless defined?(::RDF::Util::Cache)
-      @cache ||= RDF::Util::Cache.new(CACHE_SIZE)
+      @cache ||= RDF::Util::Cache.new(RDF.config.uri_cache_size)
     end
 
     ##
