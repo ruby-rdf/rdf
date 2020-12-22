@@ -39,6 +39,22 @@ resources. Clients may also consider using [RestClient Components][] to enable
 client-side caching of HTTP results using [Rack::Cache][] or other Rack
 middleware.
 
+See {RDF::Util::File} for configuring other mechanisms for retrieving resources.
+
+### Term caching and configuration.
+
+RDF.rb uses a weak-reference cache for storing internalized versions of URIs and Nodes. This is particularly useful for Nodes as two nodes are equivalent only if they're the same node.
+
+By default, each cache can grow to an unlimited size, but this can be configured using {RDF.config}, for general limits, along with URI- or Node-specific limits.
+
+For example, to limit the size of the URI intern cache only:
+
+    RDF.config.uri_cache_size = 10_000
+
+The default for creating new caches without a specific initialization size can be set using:
+
+    RDF.config.cache_size = 100_000
+
 ## Differences between RDF 1.0 and RDF 1.1
 
 This version of RDF.rb is fully compatible with [RDF 1.1][], but it creates some
