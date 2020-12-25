@@ -49,14 +49,23 @@ module RDF
     #     g = RDF::Graph.new << l
     #     g.count # => l.count
     #
+    # @example use a transaction for block initialization
+    #     l = RDF::List(graph: graph, wrap_transaction: true) do |list|
+    #       list << RDF::Literal(1)
+    #       # list.graph.rollback will rollback all list changes within this block.
+    #     end
+    #     list.count #=> 1
+    #
     # @param  [RDF::Resource]         subject (RDF.nil)
     #   Subject should be an {RDF::Node}, not a {RDF::URI}. A list with an IRI head will not validate, but is commonly used to detect if a list is valid.
     # @param  [RDF::Graph]        graph (RDF::Graph.new)
     # @param  [Array<RDF::Term>]  values
     #   Any values which are not terms are coerced to `RDF::Literal`.
+    # @param [Boolean] wrap_transaction (false)
+    #   Wraps the callback in a transaction, and replaces the graph with that transaction for the duraction of the callback. This has the effect of allowing any list changes to be made atomically, or rolled back.
     # @yield  [list]
     # @yieldparam [RDF::List] list
-    def initialize(subject: nil, graph: nil, values: nil, &block)
+    def initialize(subject: nil, graph: nil, values: nil, wrap_transaction: false, &block)
       @subject = subject || RDF.nil
       @graph   = graph   || RDF::Graph.new
       is_empty = @graph.query({subject: subject, predicate: RDF.first}).empty?
@@ -78,9 +87,25 @@ module RDF
       end
 
       if block_given?
-        case block.arity
-          when 1 then block.call(self)
-          else instance_eval(&block)
+        if wrap_transaction
+          old_graph = @graph
+          begin
+            Transaction.begin(@graph, graph_name: @graph.graph_name, mutable: @graph.mutable?) do |trans|
+              @graph = trans
+              case block.arity
+                when 1 then block.call(self)
+                else instance_eval(&block)
+              end
+              trans.execute if trans.mutated?
+            end
+          ensure
+            @graph = old_graph
+          end
+        else
+          case block.arity
+            when 1 then block.call(self)
+            else instance_eval(&block)
+          end
         end
       end
     end

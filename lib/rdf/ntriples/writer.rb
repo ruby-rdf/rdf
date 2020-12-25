@@ -227,7 +227,7 @@ module RDF::NTriples
     # @param  [RDF::Statement] statement
     # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
-    def format_rdfstar(statement, **options)
+    def format_embTriple(statement, **options)
       "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
     end
     ##

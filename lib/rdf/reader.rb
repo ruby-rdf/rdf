@@ -160,10 +160,10 @@ module RDF
         end,
         RDF::CLI::Option.new(
           symbol: :rdfstar,
-          control: :select,
-          datatype: [:PG, :SA],
-          on: ["--rdf-star MODE"],
-          description: "Parse RDF*, either in Property Graph mode (PG) or Separate Assertions mode (SA).") {|arg| arg.to_sym},
+          datatype: TrueClass,
+          control: :checkbox,
+          on: ["--rdfstar"],
+          description: "Parse RDF*."),
         RDF::CLI::Option.new(
           symbol: :validate,
           datatype: TrueClass,
@@ -276,10 +276,8 @@ module RDF
     #   the encoding of the input stream
     # @param [Boolean]  intern       (true)
     #   whether to intern all parsed URIs
-    # @param [:PG, :SA] rdfstar      (nil)
+    # @param [Boolean] rdfstar      (false)
     #   support parsing RDF* statement resources.
-    #   If `:PG`, referenced statements are also emitted.
-    #   If `:SA`, referenced statements are not emitted.
     # @param [Hash]     prefixes     (Hash.new)
     #   the prefix mappings to use (not supported by all readers)
     # @param  [Hash{Symbol => Object}] options
@@ -295,7 +293,7 @@ module RDF
                    encoding:      Encoding::UTF_8,
                    intern:        true,
                    prefixes:      Hash.new,
-                   rdfstar:       nil,
+                   rdfstar:       false,
                    validate:      false,
                    **options,
                    &block)
@@ -401,9 +399,6 @@ module RDF
     # Statements are yielded in the order that they are read from the input
     # stream.
     #
-    # If the `rdfstar` option is `:PG` and triples include
-    # embedded statements, they are also enumerated.
-    #
     # @overload each_statement
     #   @yield  [statement]
     #     each statement
@@ -423,7 +418,6 @@ module RDF
           loop do
             st = read_statement
             block.call(st)
-            each_pg_statement(st, &block) if options[:rdfstar] == :PG
           end
         rescue EOFError
           rewind rescue nil
@@ -440,9 +434,6 @@ module RDF
     #
     # Triples are yielded in the order that they are read from the input
     # stream.
-    #
-    # If the `rdfstar` option is `:PG` and triples include
-    # embedded statements, they are also enumerated.
     #
     # @overload each_triple
     #   @yield  [subject, predicate, object]
@@ -464,10 +455,6 @@ module RDF
           loop do
             triple = read_triple
             block.call(*triple)
-            if options[:rdfstar] == :PG
-              block.call(*triple[0].to_a) if triple[0].is_a?(Statement)
-              block.call(*triple[2].to_a) if triple[2].is_a?(Statement)
-            end
           end
         rescue EOFError
           rewind rescue nil

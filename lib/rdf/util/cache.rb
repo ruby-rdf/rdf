@@ -17,6 +17,9 @@ module RDF; module Util
   # @see   http://en.wikipedia.org/wiki/Weak_reference
   # @since 0.2.0
   class Cache
+    # The configured cache capacity.
+    attr_reader :capacity
+
     ##
     # @private
     def self.new(*args)
@@ -36,8 +39,8 @@ module RDF; module Util
 
     ##
     # @param  [Integer] capacity
-    def initialize(capacity = -1)
-      @capacity = capacity
+    def initialize(capacity = nil)
+      @capacity = capacity || RDF.config.cache_size
       @cache  ||= {}
       @index  ||= {}
     end
@@ -106,7 +109,7 @@ module RDF; module Util
     class WeakRefCache < Cache
       ##
       # @param  [Integer] capacity
-      def initialize(capacity = -1)
+      def initialize(capacity = nil)
         require 'weakref' unless defined?(::WeakRef)
         super
       end

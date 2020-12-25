@@ -123,11 +123,36 @@ describe RDF::CLI do
   end
 
   describe ".add_command" do
-    it "adds a command" do
+    after {RDF::CLI::COMMANDS.delete(:foo)}
+
+    it "adds a command with block" do
       RDF::CLI.add_command(:foo) do |argv, opts|
         $stdout.puts "Hello, World!"
       end
       expect {RDF::CLI.exec(["foo"])}.to write("Hello, World!").to(:output)
+    end
+
+    it "adds a command with lambda option" do
+      lambda = ->(argv, opts) do
+        $stdout.puts "Hello, World!"
+      end
+      RDF::CLI.add_command(:foo, lambda: lambda)
+      expect {RDF::CLI.exec(["foo"])}.to write("Hello, World!").to(:output)
+    end
+
+    it "calls command with repository" do
+      RDF::CLI.add_command(:foo) do |argv, opts|
+        expect(opts).to include(repository: kind_of(RDF::Enumerable))
+      end
+      RDF::CLI.exec(["foo"])
+    end
+
+    it "calls command with specified repository" do
+      repo = double(:repo)
+      RDF::CLI.add_command(:foo, repository: repo) do |argv, opts|
+        expect(opts).to include(repository: repo)
+      end
+      RDF::CLI.exec(["foo"])
     end
   end
 
@@ -215,12 +240,16 @@ describe RDF::CLI do
     end
 
     it "complains if filtered command is attempted" do
-      RDF::CLI.add_command(:foo, filter: {output_format: :nquads})
+      RDF::CLI.add_command(:filtered, filter: {output_format: :nquads})
       expect do
         expect do
-          RDF::CLI.exec(["foo"], output_format: :ntriples)
+          RDF::CLI.exec(["filtered"], output_format: :ntriples)
         end.to raise_error(ArgumentError)
-      end.to write(%(Command "foo" requires output_format: nquads, not ntriples)).to(:output)
+      end.to write(%(Command "filtered" requires output_format: nquads, not ntriples)).to(:output)
+    end
+
+    it "uses repository specified in command" do
+      RDF::CLI.add_command(:with_repo, repository: double(:repo))
     end
 
     context "chaining" do

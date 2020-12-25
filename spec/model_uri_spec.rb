@@ -7,7 +7,11 @@ describe RDF::URI do
   end
 
   describe ".intern" do
-    before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
+    before(:each) do
+      RDF::URI.instance_variable_set(:@cache, nil)
+      RDF.config.cache_size = -1
+      RDF.config.uri_cache_size = nil
+    end
     it "caches URI instance" do
       RDF::URI.intern("a")
       expect(RDF::URI.instance_variable_get(:@cache)[:a]).to eq RDF::URI("a")
@@ -23,6 +27,24 @@ describe RDF::URI do
 
     it "does not use #to_hash given a URI" do
       expect {RDF::URI.intern(RDF::URI("a"))}.not_to write.to(:error)
+    end
+
+    it "defaults cache size to -1" do
+      RDF::URI.intern(RDF::URI("a"))
+      expect(RDF::URI.instance_variable_get(:@cache).capacity).to eq(-1)
+    end
+
+    it "defaults cache size to configured cache_size" do
+      RDF.config.cache_size = 10_000
+      RDF::URI.intern(RDF::URI("a"))
+      expect(RDF::URI.instance_variable_get(:@cache).capacity).to eq(10_000)
+    end
+
+    it "defaults cache size to configured uri_cache_size" do
+      RDF.config.cache_size = 10_000
+      RDF.config.uri_cache_size = 5_000
+      RDF::URI.intern(RDF::URI("a"))
+      expect(RDF::URI.instance_variable_get(:@cache).capacity).to eq(5_000)
     end
   end
 

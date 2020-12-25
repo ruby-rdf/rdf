@@ -255,7 +255,7 @@ module RDF
     # @see    RDF::Query::Pattern#cost
     # @since  0.3.0
     def optimize!(**options)
-      optional, required = @patterns.partition(&:optional?)
+      optional, required = @patterns.uniq.partition(&:optional?)
       required.sort! do |a, b|
         (a.cost || 0) <=> (b.cost || 0)
       end

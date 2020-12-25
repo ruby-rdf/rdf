@@ -876,7 +876,7 @@ potential to perform intentional actions for which they can be held responsible.
     TestVocab = Class.new RDF::Vocabulary(uri)
     RDF::Vocabulary.register :testvocab, TestVocab
     it 'correctly expands the pname of an arbitrary class' do
-      expect(RDF::Vocabulary.expand_pname('testvocab:test')).to equal(TestVocab.test)
+      expect(RDF::Vocabulary.expand_pname('testvocab:test')).to eq(TestVocab.test)
     end
   end
 end

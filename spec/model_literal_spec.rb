@@ -471,7 +471,7 @@ describe RDF::Literal do
       end
     end
 
-    describe "#**" do
+    describe "#**", skip: (RUBY_ENGINE == "jruby") do
       {
         "2^3": [2, 3, 8],
         "-2^3": [-2, 3, -8],
@@ -585,8 +585,9 @@ describe RDF::Literal do
         "2.7^10.3": [BigDecimal("2.7"), BigDecimal("10.3"), BigDecimal("27736.1879020809118")],
       }.each do |name, (n, e, result)|
         it name do
-          expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
-          expect((RDF::Literal(n) ** RDF::Literal(e)).datatype).to eq RDF::Literal(result).datatype
+          value = RDF::Literal(n) ** RDF::Literal(e)
+          expect(value).to be_within(0.00001).of(result)
+          expect(value.datatype).to eq RDF::Literal(result).datatype
         end
       end
     end

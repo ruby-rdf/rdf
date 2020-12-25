@@ -8,7 +8,12 @@ describe RDF::Node do
   end
 
   describe ".intern" do
-    before(:each) {RDF::URI.instance_variable_set(:@cache, nil)}
+    before(:each) do
+      RDF::Node.instance_variable_set(:@cache, nil)
+      RDF.config.cache_size = -1
+      RDF.config.node_cache_size = nil
+    end
+
     it "caches Node instance" do
       RDF::Node.intern("a")
       expect(RDF::Node.instance_variable_get(:@cache)[:a]).to eq RDF::Node.intern("a")
@@ -16,6 +21,24 @@ describe RDF::Node do
 
     it "freezes instance" do
       expect(RDF::Node.intern("a")).to be_frozen
+    end
+
+    it "defaults cache size to -1" do
+      RDF::Node.intern("a")
+      expect(RDF::Node.instance_variable_get(:@cache).capacity).to eq(-1)
+    end
+
+    it "defaults cache size to configured cache_size" do
+      RDF.config.cache_size = 10_000
+      RDF::Node.intern("a")
+      expect(RDF::Node.instance_variable_get(:@cache).capacity).to eq(10_000)
+    end
+
+    it "defaults cache size to configured uri_cache_size" do
+      RDF.config.cache_size = 10_000
+      RDF.config.node_cache_size = 5_000
+      RDF::Node.intern("a")
+      expect(RDF::Node.instance_variable_get(:@cache).capacity).to eq(5_000)
     end
   end
 

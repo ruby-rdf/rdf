@@ -2,6 +2,7 @@ require 'stringio'
 require 'bigdecimal'
 require 'date'
 require 'time'
+require "ostruct"
 
 require 'rdf/version'
 require 'rdf/extensions'
@@ -78,6 +79,29 @@ module RDF
 
   # CLI
   autoload :CLI,         'rdf/cli'
+
+  ##
+  # Configuration, used open for configuring constants used within the codebase.
+  #
+  # @example set default cache size to be at most 10,000 entries
+  #
+  #   RDF.config.cache_size = 10_000
+  #
+  # @example set cache size for interned URIs to 5,000 entries
+  #
+  #   RDF.config.uri_cache_size = 5_000
+  #
+  # Defaults:
+  #   * `cache_size`: -1
+  #   * `uri_cache_size`: `cache_size`
+  #   * `node_cache_size`: `cache_size`
+  #
+  # @note cache configurations must be set before initial use, when the caches are allocated.
+  # @see RDF::Util::Cache.new
+  # @return [Object]
+  def self.config
+    @config ||= OpenStruct.new(cache_size: -1, uri_cache_size: nil, node_cache_size: nil)
+  end
 
   ##
   # Alias for `RDF::Resource.new`.

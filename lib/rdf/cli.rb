@@ -162,6 +162,7 @@ module RDF
     # * `lambda` code run to execute command.
     # * `filter` Option values that must match for command to be used
     # * `control` Used to indicate how (if) command is displayed
+    # * `repository` Use this repository, if set
     # * `options` an optional array of `RDF::CLI::Option` describing command-specific options.
     # * `option_use`: A hash of option symbol to option usage, used for overriding the default status of an option for this command.
     # @return [Hash{Symbol => Hash{Symbol => Object}}]
@@ -493,6 +494,9 @@ module RDF
             raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
           end
         end
+
+        # The command may specify a repository instance to use
+        options[:repository] ||= COMMANDS[c.to_sym][:repository]
       end
 
       # Hacks for specific options
@@ -501,9 +505,11 @@ module RDF
       options[:format] = options[:format].to_sym if options[:format]
       options[:output_format] = options[:output_format].to_sym if options[:output_format]
 
-      @repository = options[:ordered] ?
-        [].extend(RDF::Enumerable, RDF::Queryable) :
-        RDF::Repository.new
+      # Allow repository to be set via option.
+      @repository = options[:repository] ||
+        (options[:ordered] ?
+          [].extend(RDF::Enumerable, RDF::Queryable) :
+          RDF::Repository.new)
 
       # Parse input files if any command requires it
       if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
@@ -518,7 +524,10 @@ module RDF
 
       # Run each command in sequence
       cmds.each do |command|
-        COMMANDS[command.to_sym][:lambda].call(args, output: output, **options.merge(messages: messages))
+        COMMANDS[command.to_sym][:lambda].call(args,
+          output: output,
+          messages: messages,
+          **options.merge(repository: repository))
       end
 
       # Normalize messages

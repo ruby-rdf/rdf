@@ -6,9 +6,9 @@ This is a pure-Ruby library for working with [Resource Description Framework
 * <https://ruby-rdf.github.com/rdf>
 
 [![Gem Version](https://badge.fury.io/rb/rdf.png)](https://badge.fury.io/rb/rdf)
-[![Build Status](https://travis-ci.org/ruby-rdf/rdf.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf)
-[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf)
-[![Join the chat at https://gitter.im/ruby-rdf/rdf](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ruby-rdf/rdf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://github.com/ruby-rdf/rdf/workflows/CI/badge.svg?branch=develop)](https://github.com/ruby-rdf/rdf/actions?query=workflow%3ACI)
+[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf/badge.svg)](https://coveralls.io/github/ruby-rdf/rdf)
+[![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
 
 ## Features
 
@@ -38,6 +38,22 @@ RDF.rb uses `Net::HTTP` for retrieving HTTP and HTTPS resources. If the
 resources. Clients may also consider using [RestClient Components][] to enable
 client-side caching of HTTP results using [Rack::Cache][] or other Rack
 middleware.
+
+See {RDF::Util::File} for configuring other mechanisms for retrieving resources.
+
+### Term caching and configuration.
+
+RDF.rb uses a weak-reference cache for storing internalized versions of URIs and Nodes. This is particularly useful for Nodes as two nodes are equivalent only if they're the same node.
+
+By default, each cache can grow to an unlimited size, but this can be configured using {RDF.config}, for general limits, along with URI- or Node-specific limits.
+
+For example, to limit the size of the URI intern cache only:
+
+    RDF.config.uri_cache_size = 10_000
+
+The default for creating new caches without a specific initialization size can be set using:
+
+    RDF.config.cache_size = 100_000
 
 ## Differences between RDF 1.0 and RDF 1.1
 
@@ -246,17 +262,10 @@ By default, the N-Triples reader will reject a document containing a subject res
     end
     # => RDF::ReaderError
 
-Readers support a `rdfstar` option with either `:PG` (Property Graph) or `:SA` (Separate Assertions) modes. In `:PG` mode, statements that are used in the subject or object positions are also implicitly added to the graph:
+Readers support a boolean valued `rdfstar` option.
 
     graph = RDF::Graph.new do |graph|
-      RDF::NTriples::Reader.new(nt, rdfstar: :PG) {|reader| graph << reader}
-    end
-    graph.count #=> 2
-
-When using the `:SA` mode, only one statement is asserted, although the reified statement is contained within the graph.
-
-    graph = RDF::Graph.new do |graph|
-      RDF::NTriples::Reader.new(nt, rdfstar: :SA) {|reader| graph << reader}
+      RDF::NTriples::Reader.new(nt, rdfstar: true) {|reader| graph << reader}
     end
     graph.count #=> 1
 
@@ -478,7 +487,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
-[RDF*]:             https://lists.w3.org/Archives/Public/public-rdf-star/
+[RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [LinkedData]:       https://ruby-rdf.github.com/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.com/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client

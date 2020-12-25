@@ -148,6 +148,48 @@ describe RDF::List do
           described_class.new(RDF::Node.new, graph)
         }.to raise_error ArgumentError
       end
+
+      it "adds values to graph" do
+        n = RDF::Node.new
+        l = RDF::List.new(subject: n, graph: graph, values: [RDF::Literal(1), RDF::Literal(2)])
+        expect(l.to_a).to include(RDF::Literal(1), RDF::Literal(2))
+        expect(graph.first_object(subject: n, predicate: RDF.first)).to eql(RDF::Literal(1))
+      end
+
+      it "yields itself" do
+        expect {|b| described_class.new(&b)}.to yield_with_args(RDF::List)
+      end
+
+      context :with_transaction do
+        it "uses a transaction for the graph" do
+          n = RDF::Node.new
+          l = RDF::List.new(subject: n, graph: graph, wrap_transaction: true) do |list|
+            expect(list.graph).to be_a(RDF::Transaction)
+            expect(list.graph).not_to equal graph
+          end
+        end
+
+        it "adds values in a transaction" do
+          n = RDF::Node.new
+          l = RDF::List.new(graph: graph, wrap_transaction: true) do |list|
+            list << RDF::Literal(1)
+            expect(graph.first_object(subject: list.subject, predicate: RDF.first)).to be_nil
+          end
+          expect(graph.first_object(subject: l.subject, predicate: RDF.first)).to eql RDF::Literal(1)
+          expect(l.to_a).to include(RDF::Literal(1))
+        end
+
+        it "rollback added values in a transaction" do
+          n = RDF::Node.new
+          l = RDF::List.new(graph: graph, wrap_transaction: true) do |list|
+            list << RDF::Literal(1)
+            expect(graph.first_object(subject: list.subject, predicate: RDF.first)).to be_nil
+            list.graph.rollback
+          end
+          expect(graph.first_object(subject: l.subject, predicate: RDF.first)).to be_nil
+          expect(l.to_a).to be_empty
+        end
+      end
     end
   end
 
