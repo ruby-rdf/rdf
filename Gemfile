@@ -22,7 +22,6 @@ group :develop do
 end
 
 group :debug do
-  gem 'psych', platforms: [:mri, :rbx]
   gem "redcarpet", platforms: :ruby
   gem "byebug", platforms: :mri
   gem 'guard-rspec'
@@ -33,6 +32,6 @@ group :test do
   gem "rake"
   gem "equivalent-xml"
   gem 'fasterer'
-  gem 'simplecov',  platforms: :mri
-  gem 'coveralls',  '~> 0.8', platforms: :mri
+  gem 'simplecov', require: false,  platforms: :mri
+  gem 'coveralls', require: false, platforms: :mri
 end

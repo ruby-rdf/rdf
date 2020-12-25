@@ -39,9 +39,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec',       '~> 3.9'
   gem.add_development_dependency 'rspec-its',   '~> 1.3'
   gem.add_development_dependency 'webmock',     '~> 3.7'
-  gem.add_development_dependency 'yard',        '~> 0.9.20'
-  gem.add_development_dependency 'faraday',     '~> 0.17'
-  gem.add_development_dependency 'faraday_middleware', '~> 0.13'
+  gem.add_development_dependency 'yard',        '~> 0.9'
+  gem.add_development_dependency 'faraday',     '~> 1.2'
+  gem.add_development_dependency 'faraday_middleware', '~> 1.0'
 
   gem.post_install_message       = nil
 end
