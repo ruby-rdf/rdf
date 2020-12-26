@@ -8,7 +8,7 @@ begin
   require 'linkeddata'
 rescue LoadError
   # Silently load without linkeddata, but try some others
-  %w(microdata n3 rdfa rdfxml reasoner tabular trig trix turtle vocab xsd json/ld ld/patch).each do |ser|
+  %w(microdata ordered_repo n3 rdfa rdfxml reasoner tabular trig trix turtle vocab xsd json/ld ld/patch).each do |ser|
     begin
       require ser.include?('/') ? ser : "rdf/#{ser}"
     rescue LoadError
@@ -506,10 +506,12 @@ module RDF
       options[:output_format] = options[:output_format].to_sym if options[:output_format]
 
       # Allow repository to be set via option.
-      @repository = options[:repository] ||
-        (options[:ordered] ?
-          [].extend(RDF::Enumerable, RDF::Queryable) :
-          RDF::Repository.new)
+      # If RDF::OrderedRepo is present, use it if the `ordered` option is specified, otherwise extend an Array.
+      @repository = options[:repository] || case
+        when RDF.const_defined?(:OrderedRepo) then RDF::OrderedRepo.new
+        when options[:ordered] then [].extend(RDF::Enumerable, RDF::Queryable)
+        else RDF::Repository.new
+      end
 
       # Parse input files if any command requires it
       if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
