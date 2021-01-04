@@ -8,9 +8,26 @@ begin
   require 'linkeddata'
 rescue LoadError
   # Silently load without linkeddata, but try some others
-  %w(microdata n3 rdfa rdfxml reasoner tabular trig trix turtle vocab xsd json/ld ld/patch).each do |ser|
+  %w(
+     json/ld
+     ld/patch
+     rdf/microdata
+     rdf/n3
+     rdf/ordered_repo
+     rdf/rdfa
+     rdf/rdfxml
+     rdf/reasoner
+     rdf/tabular
+     rdf/trig
+     rdf/trix
+     rdf/turtle
+     rdf/vocab
+     rdf/xsd
+     shacl
+     shex
+  ).each do |ser|
     begin
-      require ser.include?('/') ? ser : "rdf/#{ser}"
+      require ser
     rescue LoadError
     end
   end
@@ -457,7 +474,7 @@ module RDF
     # @param  [Array<String>] args
     # @param  [IO] output
     # @param  [OptionParser] option_parser
-    # @param [Hash{Symbol => Hash{Symbol => Array[String]}}] messages used for confeying non primary-output which is structured.
+    # @param [Hash{Symbol => Hash{Symbol => Array[String]}}] messages used for conveying non primary-output which is structured.
     # @param  [Hash{Symbol => Object}] options
     # @return [Boolean]
     def self.exec(args, output: $stdout, option_parser: nil, messages: {}, **options)
@@ -506,10 +523,12 @@ module RDF
       options[:output_format] = options[:output_format].to_sym if options[:output_format]
 
       # Allow repository to be set via option.
-      @repository = options[:repository] ||
-        (options[:ordered] ?
-          [].extend(RDF::Enumerable, RDF::Queryable) :
-          RDF::Repository.new)
+      # If RDF::OrderedRepo is present, use it if the `ordered` option is specified, otherwise extend an Array.
+      @repository = options[:repository] || case
+        when RDF.const_defined?(:OrderedRepo) then RDF::OrderedRepo.new
+        when options[:ordered] then [].extend(RDF::Enumerable, RDF::Queryable)
+        else RDF::Repository.new
+      end
 
       # Parse input files if any command requires it
       if cmds.any? {|c| COMMANDS[c.to_sym][:parse]}
