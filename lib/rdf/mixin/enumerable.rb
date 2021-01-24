@@ -511,7 +511,7 @@ module RDF
     def terms(unique: true)
       unless unique
         enum_statement.
-          map(&:to_quad).
+          map(&:terms).
           flatten.
           compact
       else
@@ -551,8 +551,8 @@ module RDF
       if block_given?
         values = {}
         each_statement do |statement|
-          statement.to_quad.each do |value|
-            unless value.nil? || values.include?(value.hash)
+          statement.terms.each do |value|
+            unless values.include?(value.hash)
               values[value.hash] = true
               yield value
             end

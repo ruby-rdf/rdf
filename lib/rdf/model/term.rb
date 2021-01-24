@@ -73,6 +73,14 @@ module RDF
     end
 
     ##
+    # Returns an array including just itself.
+    #
+    # @return [Array<RDF::Value>]
+    def terms
+      [self]
+    end
+
+    ##
     # Returns the base representation of this term.
     #
     # @return [Sring]

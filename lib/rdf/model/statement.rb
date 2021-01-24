@@ -240,7 +240,8 @@ module RDF
     end
 
     ##
-    # Returns `true` if any resource of this statement is a blank node.
+    # Returns `true` if any resource of this statement is a blank node
+    # or has an embedded statement including a blank node.
     #
     # @return [Boolean]
     # @since 2.0
@@ -358,6 +359,13 @@ module RDF
       [subject, predicate, object]
     end
     alias_method :to_a, :to_triple
+
+    ##
+    # Returns an array of all the non-nil non-statement terms.
+    # @return [Array(RDF::Term)]
+    def terms
+      to_quad.map {|t| t.respond_to?(:terms) ? t.terms : t}.flatten.compact
+    end
 
     ##
     # Canonicalizes each unfrozen term in the statement

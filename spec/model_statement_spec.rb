@@ -75,6 +75,7 @@ describe RDF::Statement do
     it {is_expected.not_to be_quoted}
     it {is_expected.to be_statement}
     it {is_expected.not_to be_inferred}
+    its(:terms) {is_expected.to include(s, p, o)}
   end
 
   context "when created with a blank node subject" do
@@ -116,6 +117,12 @@ describe RDF::Statement do
     specify {expect(RDF::Statement(:s, p, o)).to eql (RDF::Statement(:s, p, o))}
     specify {expect(RDF::Statement(s, p, :o)).to eq (RDF::Statement(s, p, :o))}
     specify {expect(RDF::Statement(s, p, :o)).to eql (RDF::Statement(s, p, :o))}
+
+    describe "#terms" do
+      subject {RDF::Statement(:s, p, o)}
+      specify {expect(subject.terms).not_to include(:s)}
+      specify {expect(subject.terms).to include(p, o)}
+    end
   end
 
   context "when used with strings" do
@@ -292,6 +299,14 @@ describe RDF::Statement do
 
     it "is embedded for statements having a statement object" do
       expect(RDF::Statement(:s, :p, RDF::Statement(:s1, :p1, :o1))).to be_embedded
+    end
+
+    context "#terms" do
+      let(:s1) {RDF::URI.new("http://example.org/s1")}
+      let(:p1) {RDF::URI("http://example.org/p1")}
+      let(:o1) {RDF::URI.new("http://example.org/o1")}
+      subject {RDF::Statement(s, p, RDF::Statement(s1, p1, o1))}
+      specify {expect(subject.terms).to include(s, p, s1, p1, o1)}
     end
   end
 
