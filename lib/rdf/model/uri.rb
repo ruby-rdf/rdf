@@ -232,7 +232,7 @@ module RDF
           host port authority
           path query fragment
         ).map(&:to_sym).each do |meth|
-          if options.has_key?(meth)
+          if options.key?(meth)
             self.send("#{meth}=".to_sym, options[meth])
           else
             self.send(meth)
@@ -588,13 +588,14 @@ module RDF
     # Returns `true` if this URI is hierarchical and it's path component isn't equal to `/`.
     #
     # @example
-    #   RDF::URI('http://example.org/').has_parent?             #=> false
-    #   RDF::URI('http://example.org/path/').has_parent?        #=> true
+    #   RDF::URI('http://example.org/').parent?             #=> false
+    #   RDF::URI('http://example.org/path/').parent?        #=> true
     #
     # @return [Boolean] `true` or `false`
-    def has_parent?
+    def parent?
       !root?
     end
+    alias_method :has_parent?, :parent?
 
     ##
     # Returns a copy of this URI with the path component ascended to the

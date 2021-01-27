@@ -12,15 +12,15 @@ module RDF
   #   enumerable.count
   #
   # @example Checking whether a specific statement exists
-  #   enumerable.has_statement?(RDF::Statement(subject, predicate, object))
-  #   enumerable.has_triple?([subject, predicate, object])
-  #   enumerable.has_quad?([subject, predicate, object, graph_name])
+  #   enumerable.statement?(RDF::Statement(subject, predicate, object))
+  #   enumerable.triple?([subject, predicate, object])
+  #   enumerable.quad?([subject, predicate, object, graph_name])
   #
   # @example Checking whether a specific value exists
-  #   enumerable.has_subject?(RDF::URI("https://rubygems.org/gems/rdf"))
-  #   enumerable.has_predicate?(RDF::RDFS.label)
-  #   enumerable.has_object?(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", language: :en))
-  #   enumerable.has_graph?(RDF::URI("http://ar.to/#self"))
+  #   enumerable.subject?(RDF::URI("https://rubygems.org/gems/rdf"))
+  #   enumerable.predicate?(RDF::RDFS.label)
+  #   enumerable.object?(RDF::Literal("A Ruby library for working with Resource Description Framework (RDF) data.", language: :en))
+  #   enumerable.graph?(RDF::URI("http://ar.to/#self"))
   #
   # @example Enumerating all statements
   #   enumerable.each_statement do |statement|
@@ -127,14 +127,20 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` contains the given RDF statement.
+    # @overload statement?
+    #   Returns `false` indicating this is not an RDF::Statemenet.
+    #   @return [Boolean]
+    #   @see RDF::Value#statement?
+    # @overload statement?(statement)
+    #   Returns `true` if `self` contains the given RDF statement.
     #
-    # @param  [RDF::Statement] statement
-    # @return [Boolean]
-    def has_statement?(statement)
-      !enum_statement.find { |s| s.eql?(statement) }.nil?
+    #   @param  [RDF::Statement] statement
+    #   @return [Boolean]
+    def statement?(statement = nil)
+      statement && !enum_statement.find { |s| s.eql?(statement) }.nil?
     end
-    alias_method :include?, :has_statement?
+    alias_method :has_statement?, :statement?
+    alias_method :include?, :statement?
 
     ##
     # Iterates the given block for each RDF statement.
@@ -194,9 +200,10 @@ module RDF
     #
     # @param  [Array(RDF::Resource, RDF::URI, RDF::Term)] triple
     # @return [Boolean]
-    def has_triple?(triple)
+    def triple?(triple)
       triples.include?(triple)
     end
+    alias_method :has_triple?, :triple?
 
     ##
     # Iterates the given block for each RDF triple.
@@ -255,9 +262,10 @@ module RDF
     #
     # @param  [Array(RDF::Resource, RDF::URI, RDF::Term, RDF::Resource)] quad
     # @return [Boolean]
-    def has_quad?(quad)
+    def quad?(quad)
       quads.include?(quad)
     end
+    alias_method :has_quad?, :quad?
 
     ##
     # Iterates the given block for each RDF quad.
@@ -321,9 +329,10 @@ module RDF
     #
     # @param  [RDF::Resource] value
     # @return [Boolean]
-    def has_subject?(value)
+    def subject?(value)
       enum_subject.include?(value)
     end
+    alias_method :has_subject?, :subject?
 
     ##
     # Iterates the given block for each unique RDF subject term.
@@ -386,9 +395,10 @@ module RDF
     #
     # @param  [RDF::URI] value
     # @return [Boolean]
-    def has_predicate?(value)
+    def predicate?(value)
       enum_predicate.include?(value)
     end
+    alias_method :has_predicate?, :predicate?
 
     ##
     # Iterates the given block for each unique RDF predicate term.
@@ -451,9 +461,10 @@ module RDF
     #
     # @param  [RDF::Term] value
     # @return [Boolean]
-    def has_object?(value)
+    def object?(value)
       enum_object.include?(value)
     end
+    alias_method :has_object?, :object?
 
     ##
     # Iterates the given block for each unique RDF object term.
@@ -520,14 +531,20 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` contains the given RDF subject term.
+    # @overload term?
+    #   Returns `false` indicating this is not an RDF::Statemenet.
+    #   @see RDF::Value#statement?
+    #   @return [Boolean]
+    # @overload term?(value)
+    #   Returns `true` if `self` contains the given RDF subject term.
     #
-    # @param  [RDF::Resource] value
-    # @return [Boolean]
-    # @since 2.0
-    def has_term?(value)
-      enum_term.include?(value)
+    #   @param  [RDF::Resource] value
+    #   @return [Boolean]
+    #   @since 2.0
+    def term?(value = nil)
+      value && enum_term.include?(value)
     end
+    alias_method :has_term?, :term?
 
     ##
     # Iterates the given block for each unique RDF term (subject, predicate, object, or graph_name).
@@ -595,9 +612,10 @@ module RDF
     # @param  [RDF::Resource, false] graph_name
     #   Use value `false` to query for the default graph_name
     # @return [Boolean]
-    def has_graph?(graph_name)
+    def graph?(graph_name)
       enum_statement.any? {|s| s.graph_name == graph_name}
     end
+    alias_method :has_graph?, :graph?
 
     ##
     # Limits statements to be from a specific graph.

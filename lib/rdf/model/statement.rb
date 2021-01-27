@@ -96,7 +96,7 @@ module RDF
         @predicate = predicate
         @object    = object
       end
-      @id          = @options.delete(:id) if @options.has_key?(:id)
+      @id          = @options.delete(:id) if @options.key?(:id)
       @graph_name  = @options.delete(:graph_name)
       initialize!
     end
@@ -149,10 +149,10 @@ module RDF
     #
     # @return [Boolean]
     def variable?
-      !(has_subject?    && subject.constant? &&
-        has_predicate?  && predicate.constant? &&
-        has_object?     && object.constant? &&
-        (has_graph?     ? graph_name.constant? : true))
+      !(subject?    && subject.constant? &&
+        predicate?  && predicate.constant? &&
+        object?     && object.constant? &&
+        (graph?     ? graph_name.constant? : true))
     end
 
     ##
@@ -172,10 +172,10 @@ module RDF
     ##
     # @return [Boolean]
     def valid?
-      has_subject?    && subject.resource? && subject.valid? &&
-      has_predicate?  && predicate.uri? && predicate.valid? &&
-      has_object?     && object.term? && object.valid? &&
-      (has_graph?      ? (graph_name.resource? && graph_name.valid?) : true)
+      subject?    && subject.resource? && subject.valid? &&
+      predicate?  && predicate.uri? && predicate.valid? &&
+      object?     && object.term? && object.valid? &&
+      (graph?      ? (graph_name.resource? && graph_name.valid?) : true)
     end
 
     ##
@@ -216,28 +216,33 @@ module RDF
 
     ##
     # @return [Boolean]
-    def has_graph?
+    def graph?
       !!graph_name
     end
-    alias_method :has_name?, :has_graph?
+    alias_method :name?, :graph?
+    alias_method :has_graph?, :graph?
+    alias_method :has_name?, :graph?
 
     ##
     # @return [Boolean]
-    def has_subject?
+    def subject?
       !!subject
     end
+    alias_method :has_subject?, :subject?
 
     ##
     # @return [Boolean]
-    def has_predicate?
+    def predicate?
       !!predicate
     end
+    alias_method :has_predicate?, :predicate?
 
     ##
     # @return [Boolean]
-    def has_object?
+    def object?
       !!object
     end
+    alias_method :has_object?, :object?
 
     ##
     # Returns `true` if any resource of this statement is a blank node
@@ -313,10 +318,10 @@ module RDF
     # @see RDF::Literal#eql?
     # @see RDF::Query::Variable#eql?
     def ===(other)
-      return false if has_object?    && !object.eql?(other.object)
-      return false if has_predicate? && !predicate.eql?(other.predicate)
-      return false if has_subject?   && !subject.eql?(other.subject)
-      return false if has_graph?     && !graph_name.eql?(other.graph_name)
+      return false if object?    && !object.eql?(other.object)
+      return false if predicate? && !predicate.eql?(other.predicate)
+      return false if subject?   && !subject.eql?(other.subject)
+      return false if graph?     && !graph_name.eql?(other.graph_name)
       return true
     end
 
@@ -374,10 +379,10 @@ module RDF
     # @since  1.0.8
     # @raise [ArgumentError] if any element cannot be canonicalized.
     def canonicalize!
-      self.subject.canonicalize!    if has_subject? && !self.subject.frozen?
-      self.predicate.canonicalize!  if has_predicate? && !self.predicate.frozen?
-      self.object.canonicalize!     if has_object? && !self.object.frozen?
-      self.graph_name.canonicalize! if has_graph? && !self.graph_name.frozen?
+      self.subject.canonicalize!    if subject? && !self.subject.frozen?
+      self.predicate.canonicalize!  if predicate? && !self.predicate.frozen?
+      self.object.canonicalize!     if object? && !self.object.frozen?
+      self.graph_name.canonicalize! if graph? && !self.graph_name.frozen?
       self.validate!
       @hash = nil
       self

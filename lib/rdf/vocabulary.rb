@@ -430,7 +430,7 @@ module RDF
       # @param  [#to_s] property
       # @return [RDF::URI]
       def [](property)
-        if props.has_key?(property.to_sym)
+        if props.key?(property.to_sym)
           props[property.to_sym]
         else
           Term.intern([to_s, property.to_s].join(''), vocab: self, attributes: {})
@@ -508,7 +508,7 @@ module RDF
       #
       # @return [String]
       def to_s
-        @@uris.has_key?(self) ? @@uris[self].to_s : super
+        @@uris.key?(self) ? @@uris[self].to_s : super
       end
 
       ##
@@ -1153,7 +1153,7 @@ module RDF
              :onProperty, :someValuesFrom
           self.restriction?
         when :broader, :exactMatch, :hasTopConcept, :inScheme, :member, :narrower, :related
-          @attributes.has_key?(method)
+          @attributes.key?(method)
         else
           super
         end

@@ -42,7 +42,7 @@ module RDF; class Literal
     # @see    http://www.w3.org/TR/xmlschema11-2/#time
     def canonicalize!
       if self.valid?
-        @string = if has_timezone?
+        @string = if timezone?
           @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z').sub('.000', '')
         else
           @object.strftime(FORMAT[0..-4]).sub('.000', '')
@@ -57,7 +57,7 @@ module RDF; class Literal
     # @return [RDF::Literal]
     # @see http://www.w3.org/TR/sparql11-query/#func-tz
     def tz
-      zone =  has_timezone? ? object.zone : ""
+      zone =  timezone? ? object.zone : ""
       zone = "Z" if zone == "+00:00"
       RDF::Literal(zone)
     end
@@ -79,11 +79,13 @@ module RDF; class Literal
     #
     # @return [Boolean]
     # @since 1.1.6
-    def has_timezone?
+    def timezone?
       md = self.to_s.match(GRAMMAR)
       md && !!md[2]
     end
-    alias_method :has_tz?, :has_timezone?
+    alias_method :tz?, :timezone?
+    alias_method :has_tz?, :timezone?
+    alias_method :has_timezone?, :timezone?
 
     ##
     # Returns the value as a string.
@@ -101,7 +103,7 @@ module RDF; class Literal
     # @since 1.1.6
     def humanize(lang = :en)
       t = object.strftime("%r")
-      if has_timezone?
+      if timezone?
         t += if self.tz == 'Z'
           " UTC"
         else

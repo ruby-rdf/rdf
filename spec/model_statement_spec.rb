@@ -67,7 +67,7 @@ describe RDF::Statement do
 
     it {is_expected.to have_subject}
     its(:subject) {is_expected.not_to be_nil}
-    it {expect(subject.has_predicate?).to be_truthy}
+    it {expect(subject.predicate?).to be_truthy}
     its(:predicate) {is_expected.not_to be_nil}
     it {is_expected.to have_object}
     its(:object) {is_expected.not_to be_nil}

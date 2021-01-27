@@ -53,9 +53,10 @@ module RDF; module Util
 
     ##
     # @return [Boolean]
-    def has_capacity?
+    def capacity?
       @capacity.equal?(-1) || @capacity > @cache.size
     end
+    alias_method :has_capacity?, :capacity?
 
     ##
     # This implementation relies on `ObjectSpace#_id2ref` and performs
@@ -80,7 +81,7 @@ module RDF; module Util
       # @param  [Object] value
       # @return [Object]
       def []=(key, value)
-        if has_capacity?
+        if capacity?
           id = value.__id__
           @cache[key] = id
           @index[id] = key
@@ -133,7 +134,7 @@ module RDF; module Util
       # @param  [Object] value
       # @return [Object]
       def []=(key, value)
-        if has_capacity?
+        if capacity?
           @cache[key] = WeakRef.new(value)
         end
         value
