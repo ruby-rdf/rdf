@@ -285,7 +285,7 @@ module RDF; module Util
       
       def respond_to_missing?(name, include_private = false)
         return true if 
-          [:fatal, :error, :warn, :info, :debug, :level, :sev_threshold]
+          %i(fatal error warn info debug level sev_threshold)
           .include?(name.to_sym)
         super
       end

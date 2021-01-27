@@ -104,7 +104,7 @@ module RDF
     # @private
     # @see RDF::Enumerable#supports?
     def supports?(feature)
-      return true if [:graph_name, :rdfstar].include?(feature)
+      return true if %i(graph_name rdfstar).include?(feature)
       super
     end
 

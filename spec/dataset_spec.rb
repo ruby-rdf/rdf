@@ -34,13 +34,13 @@ describe RDF::Dataset do
     end
 
     describe '#supports?' do
-      [:validity, :literal_equality, :graph_name].each do |key|
+      %i(validity literal_equality graph_name).each do |key|
         it "supports #{key}" do
           expect(subject.supports?(key)).to be true
         end
       end
 
-      [:inference, :skolemize].each do |key|
+      %i(inference skolemize).each do |key|
         it "does not support #{key}" do
           expect(subject.supports?(key)).to be false
         end

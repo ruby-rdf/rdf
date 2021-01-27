@@ -248,7 +248,7 @@ module RDF; class Query
     # @param [RDF::Statement] statement
     # @return [Array<RDF::Term>]
     def var_values(var, statement)
-      [:subject, :predicate, :object, :graph_name].map do |position|
+      %i(subject predicate object graph_name).map do |position|
         po = self.send(position)
         so = statement.send(position)
         po.var_values(var, so) if po.respond_to?(:var_values)
