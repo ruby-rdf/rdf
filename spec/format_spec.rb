@@ -103,7 +103,7 @@ describe RDF::Format do
 
   describe ".reader_symbols" do
     it "returns symbols of available readers" do
-      [:ntriples, :nquads, :foo_bar].each do |sym|
+      %i(ntriples nquads foo_bar).each do |sym|
         expect(RDF::Format.reader_symbols).to include(sym)
       end
     end
@@ -131,10 +131,10 @@ describe RDF::Format do
 
   describe ".writer_symbols" do
     it "returns symbols of available writers" do
-      [:ntriples, :nquads].each do |sym|
+      %i(ntriples nquads).each do |sym|
         expect(RDF::Format.writer_symbols).to include(sym)
       end
-      [:fooformat, :barformat].each do |sym|
+      %i(fooformat barformat).each do |sym|
         expect(RDF::Format.writer_symbols).not_to include(sym)
       end
     end

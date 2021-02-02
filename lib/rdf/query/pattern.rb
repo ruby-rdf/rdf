@@ -85,13 +85,13 @@ module RDF; class Query
     #
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
-    def has_variables?
+    def variables?
       subject    && subject.variable? ||
       predicate  && predicate.variable? ||
       object     && object.variable? ||
       graph_name && graph_name.variable?
     end
-    alias_method :variables?, :has_variables?
+    alias_method :has_variables?, :variables?
 
     ##
     # Returns `true` if this is an optional pattern.
@@ -111,10 +111,10 @@ module RDF; class Query
     #
     # @return [Boolean] `true` or `false`
     def valid?
-      (has_subject?   ? (subject.resource? || subject.variable?) && subject.valid? : true) && 
-      (has_predicate? ? (predicate.uri? || predicate.variable?) && predicate.valid? : true) &&
-      (has_object?    ? (object.term? || object.variable?) && object.valid? : true) &&
-      (has_graph?     ? (graph_name.resource? || graph_name.variable?) && graph_name.valid? : true)
+      (subject?   ? (subject.resource? || subject.variable?) && subject.valid? : true) && 
+      (predicate? ? (predicate.uri? || predicate.variable?) && predicate.valid? : true) &&
+      (object?    ? (object.term? || object.variable?) && object.valid? : true) &&
+      (graph?     ? (graph_name.resource? || graph_name.variable?) && graph_name.valid? : true)
     rescue NoMethodError
       false
     end
@@ -248,7 +248,7 @@ module RDF; class Query
     # @param [RDF::Statement] statement
     # @return [Array<RDF::Term>]
     def var_values(var, statement)
-      [:subject, :predicate, :object, :graph_name].map do |position|
+      %i(subject predicate object graph_name).map do |position|
         po = self.send(position)
         so = statement.send(position)
         po.var_values(var, so) if po.respond_to?(:var_values)

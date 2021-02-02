@@ -51,11 +51,13 @@ module RDF; class Literal
     #
     # @return [Boolean]
     # @since 1.1.6
-    def has_timezone?
+    def timezone?
       md = self.to_s.match(GRAMMAR)
       md && !!md[2]
     end
-    alias_method :has_tz?, :has_timezone?
+    alias_method :tz?, :timezone?
+    alias_method :has_tz?, :timezone?
+    alias_method :has_timezone?, :timezone?
 
     ##
     # Returns the value as a string.
@@ -72,7 +74,7 @@ module RDF; class Literal
     # @since 1.1.6
     def humanize(lang = :en)
       d = object.strftime("%A, %d %B %Y")
-      if has_timezone?
+      if timezone?
         d += if self.tz == 'Z'
           " UTC"
         else

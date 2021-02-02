@@ -84,11 +84,13 @@ module RDF; class Query
     # @param  [Array<Symbol, #to_sym>] variables
     #   an array of variables to check
     # @return [Boolean] `true` or `false`
-    # @see    RDF::Query::Solution#has_variables?
+    # @see    RDF::Query::Solution#variable?
     # @see    RDF::Query#execute
-    def have_variables?(variables)
-      self.any? { |solution| solution.has_variables?(variables) }
+    def variable?(variables)
+      self.any? { |solution| solution.variables?(variables) }
     end
+    alias_method :variables?, :variable?
+    alias_method :have_variables?, :variable?
     alias_method :has_variables?, :have_variables?
 
     ##

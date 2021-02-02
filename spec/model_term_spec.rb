@@ -22,6 +22,11 @@ describe RDF::Term do
     is_expected.to be_term
   end
 
+  its(:terms) do
+    is_expected.to be_a(Array)
+    is_expected.to eq [subject]
+  end
+
   it "#to_term" do
     expect(subject.to_term).to equal subject
   end

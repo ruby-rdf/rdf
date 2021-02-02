@@ -215,18 +215,25 @@ module RDF
     end
 
     ##
-    # Returns `true` if this graph contains the given RDF statement.
+    # @overload statement?
+    #   Returns `false` indicating this is not an RDF::Statemenet.
+    #   @see RDF::Value#statement?
+    #   @return [Boolean]
+    # @overload statement?(statement)
+    #   Returns `true` if this graph contains the given RDF statement.
     #
-    # A statement is in a graph if the statement if it has the same triples without regard to graph_name.
+    #   A statement is in a graph if the statement if it has the same triples without regard to graph_name.
     #
-    # @param  [Statement] statement
-    # @return [Boolean]
-    # @see    RDF::Enumerable#has_statement?
-    def has_statement?(statement)
+    #   @param  [Statement] statement
+    #   @return [Boolean]
+    #   @see    RDF::Enumerable#statement?
+    def statement?(statement = nil)
+      return false if statement.nil?
       statement = statement.dup
       statement.graph_name = graph_name
-      @data.has_statement?(statement)
+      @data.statement?(statement)
     end
+    alias_method :has_statement?, :statement?
 
     ##
     # Enumerates each RDF statement in this graph.

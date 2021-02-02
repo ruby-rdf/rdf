@@ -32,5 +32,5 @@ group :test do
   gem "equivalent-xml"
   gem 'fasterer'
   gem 'simplecov', require: false,  platforms: :mri
-  gem 'coveralls', require: false, platforms: :mri
+  gem 'coveralls',  '~> 0.8', require: false, platforms: :mri
 end

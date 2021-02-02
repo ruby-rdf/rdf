@@ -25,7 +25,7 @@ module RDF
   #
   # @example Creating a language-tagged literal (1)
   #   value = RDF::Literal.new("Hello!", language: :en)
-  #   value.has_language?                            #=> true
+  #   value.language?                                #=> true
   #   value.language                                 #=> :en
   #
   # @example Creating a language-tagged literal (2)
@@ -35,12 +35,12 @@ module RDF
   #
   # @example Creating an explicitly datatyped literal
   #   value = RDF::Literal.new("2009-12-31", datatype: RDF::XSD.date)
-  #   value.has_datatype?                            #=> true
+  #   value.datatype?                                #=> true
   #   value.datatype                                 #=> RDF::XSD.date
   #
   # @example Creating an implicitly datatyped literal
   #   value = RDF::Literal.new(Date.today)
-  #   value.has_datatype?                            #=> true
+  #   value.datatype?                                #=> true
   #   value.datatype                                 #=> RDF::XSD.date
   #
   # @example Creating implicitly datatyped literals
@@ -225,7 +225,7 @@ module RDF
       # * The arguments are simple literals or literals typed as xsd:string
       # * The arguments are plain literals with identical language tags
       # * The first argument is a plain literal with language tag and the second argument is a simple literal or literal typed as xsd:string
-      has_language? ?
+      language? ?
         (language == other.language || other.datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")) :
         other.datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
     end
@@ -289,7 +289,7 @@ module RDF
         case
         when self.eql?(other)
           true
-        when self.has_language? && self.language.to_s == other.language.to_s
+        when self.language? && self.language.to_s == other.language.to_s
           # Literals with languages can compare if languages are identical
           self.value_hash == other.value_hash && self.value == other.value
         when self.simple? && other.simple?
@@ -335,10 +335,10 @@ module RDF
     #
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
-    def has_language?
+    def language?
       datatype == RDF.langString
     end
-    alias_method :language?, :has_language?
+    alias_method :has_language?, :language?
 
     ##
     # Returns `true` if this is a datatyped literal.
@@ -347,12 +347,12 @@ module RDF
     #
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
-    def has_datatype?
+    def datatype?
       !plain? && !language?
     end
-    alias_method :datatype?,  :has_datatype?
-    alias_method :typed?,     :has_datatype?
-    alias_method :datatyped?, :has_datatype?
+    alias_method :has_datatype?,  :datatype?
+    alias_method :typed?,         :datatype?
+    alias_method :datatyped?,     :datatype?
 
     ##
     # Returns `true` if the value adheres to the defined grammar of the
@@ -386,16 +386,16 @@ module RDF
     # This behavior is intuited from SPARQL data-r2/expr-equal/eq-2-2
     # @return [Boolean]
     def comperable_datatype?(other)
-      return false unless self.plain? || self.has_language?
+      return false unless self.plain? || self.language?
 
       case other
       when RDF::Literal::Numeric, RDF::Literal::Boolean,
            RDF::Literal::Date, RDF::Literal::Time, RDF::Literal::DateTime
         # Invald types can be compared without raising a TypeError if literal has a language (open-eq-08)
-        !other.valid? && self.has_language?
+        !other.valid? && self.language?
       else
         # An unknown datatype may not be used for comparison, unless it has a language? (open-eq-8)
-        self.has_language?
+        self.language?
       end
     end
 

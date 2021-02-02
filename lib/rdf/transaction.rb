@@ -207,10 +207,16 @@ module RDF
     end
 
     ##
-    # @see RDF::Enumerable#has_statement?
-    def has_statement?(statement)
-      read_target.has_statement?(statement)
+    # @overload statement?
+    #   Returns `false` indicating this is not an RDF::Statemenet.
+    #   @return [Boolean]
+    #   @see RDF::Value#statement?
+    # @overload statement?(statement)
+    #   @see    RDF::Enumerable#statement?
+    def statement?(statement = nil)
+      statement && read_target.has_statement?(statement)
     end
+    alias_method :has_statement?, :statement?
 
     ##
     # Returns a developer-friendly representation of this transaction.

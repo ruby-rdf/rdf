@@ -34,13 +34,13 @@ describe RDF::Dataset do
     end
 
     describe '#supports?' do
-      [:validity, :literal_equality, :graph_name].each do |key|
+      %i(validity literal_equality graph_name).each do |key|
         it "supports #{key}" do
           expect(subject.supports?(key)).to be true
         end
       end
 
-      [:inference, :skolemize].each do |key|
+      %i(inference skolemize).each do |key|
         it "does not support #{key}" do
           expect(subject.supports?(key)).to be false
         end
@@ -67,7 +67,7 @@ describe RDF::Dataset do
           subject.send(:query_pattern, pattern) {|s| solutions << s}
           
           unnamed_statements = subject.statements
-          unnamed_statements.reject! {|st| st.has_name?}
+          unnamed_statements.reject! {|st| st.name?}
 
           expect(solutions.size).to eq unnamed_statements.size
         end

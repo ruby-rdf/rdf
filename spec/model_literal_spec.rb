@@ -34,10 +34,10 @@ describe RDF::Literal do
   def self.literals(*selector)
     selector.inject([]) do |ary, sel|
       ary += case sel
-      when :all_simple        then [:empty, :plain, :string].map {|s| literal(s)}
-      when :all_plain_lang    then [:empty_lang, :plain_lang].map {|s| literal(s)}
-      when :all_native        then [:false, :true, :int, :long, :decimal, :double, :time, :date, :datetime].map {|s| literal(s)}
-      when :all_invalid_lang  then [:wrong_lang, :unset_lang].map {|s| literal(s)}
+      when :all_simple        then %i(empty plain string).map {|s| literal(s)}
+      when :all_plain_lang    then %i(empty_lang plain_lang).map {|s| literal(s)}
+      when :all_native        then %i(false true int long decimal double time date datetime).map {|s| literal(s)}
+      when :all_invalid_lang  then %i(wrong_lang unset_lang).map {|s| literal(s)}
       when :all_plain         then literals(:all_simple, :all_plain_lang)
       else                         literals(:all_plain, :all_native)
       end

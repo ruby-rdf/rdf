@@ -333,7 +333,7 @@ module RDF
 
           # Add format-specific reader options
           reader.options.each do |cli_opt|
-            next if options.options.has_key?(cli_opt.symbol)
+            next if options.options.key?(cli_opt.symbol)
             on_args = cli_opt.on || []
             on_args << cli_opt.description if cli_opt.description
             options.on(*on_args) do |opt_arg|
@@ -355,7 +355,7 @@ module RDF
 
           # Add format-specific writer options
           writer.options.each do |cli_opt|
-            next if options.options.has_key?(cli_opt.symbol)
+            next if options.options.key?(cli_opt.symbol)
             on_args = cli_opt.on || []
             on_args << cli_opt.description if cli_opt.description
             options.on(*on_args) do |opt_arg|
@@ -419,7 +419,7 @@ module RDF
       end
 
       cli_opts.each do |cli_opt|
-        next if opts.has_key?(cli_opt.symbol)
+        next if opts.key?(cli_opt.symbol)
         on_args = cli_opt.on || []
         on_args << cli_opt.description if cli_opt.description
         options.on(*on_args) do |arg|

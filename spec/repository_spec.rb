@@ -50,7 +50,7 @@ describe RDF::Repository do
       subject.send(:query_pattern, pattern) {|s| solutions << s}
       
       unnamed_statements = subject.statements
-      unnamed_statements.reject! {|st| st.has_name?}
+      unnamed_statements.reject! {|st| st.name?}
 
       expect(solutions.size).to eq unnamed_statements.size
     end

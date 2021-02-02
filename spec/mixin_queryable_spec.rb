@@ -14,7 +14,7 @@ describe RDF::Queryable do
       it "calls #query_pattern" do
         is_expected.to receive(:query_pattern)
         is_expected.not_to receive(:query_execute)
-        subject.query([:s, :p, :o]) {}
+        subject.query(%i(s p o)) {}
       end
       it "with array" do
         expect(subject.query([nil, RDF::Vocab::DOAP.developer, nil]).to_a).not_to be_empty
@@ -29,7 +29,7 @@ describe RDF::Queryable do
     end
 
     context "Querying for solutions from a BGP" do
-      let(:query) { query = RDF::Query.new {pattern [:s, :p, :o]} }
+      let(:query) { query = RDF::Query.new {pattern %i(s p o)} }
       it "calls #query_execute" do
         is_expected.to receive(:query_execute)
         is_expected.not_to receive(:query_pattern)

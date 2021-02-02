@@ -121,9 +121,11 @@ class RDF::Query
     #   an array of variables to check
     # @return [Boolean] `true` or `false`
     # @since  0.3.0
-    def has_variables?(variables)
+    def variable?(variables)
       variables.any? { |variable| bound?(variable) }
     end
+    alias_method :variables?, :variable?
+    alias_method :has_variables?, :variable?
 
     ##
     # Enumerates over every variable in this solution.
@@ -253,7 +255,7 @@ class RDF::Query
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algCompatibleMapping
     def compatible?(other)
       @bindings.all? do |k, v|
-        !other.to_h.has_key?(k) || other[k].eql?(v)
+        !other.to_h.key?(k) || other[k].eql?(v)
       end
     end
 
@@ -267,7 +269,7 @@ class RDF::Query
     # @see http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#defn_algMinus
     def disjoint?(other)
       @bindings.none? do |k, v|
-        v && other.to_h.has_key?(k) && other[k].eql?(v)
+        v && other.to_h.key?(k) && other[k].eql?(v)
       end
     end
 
@@ -281,7 +283,7 @@ class RDF::Query
     # @return [Boolean]
     def isomorphic_with?(other)
       @bindings.all? do |k, v|
-        !other.to_h.has_key?(k) || other[k].eql?(v)
+        !other.to_h.key?(k) || other[k].eql?(v)
       end
     end
     
@@ -332,7 +334,7 @@ class RDF::Query
     #   @param  [Symbol] name
     #   @return [RDF::Term]
     def method_missing(name, *args, &block)
-      if args.empty? && @bindings.has_key?(name.to_sym)
+      if args.empty? && @bindings.key?(name.to_sym)
         @bindings[name.to_sym]
       else
         super # raises NoMethodError
@@ -342,7 +344,7 @@ class RDF::Query
     ##
     # @return [Boolean]
     def respond_to_missing?(name, include_private = false)
-      @bindings.has_key?(name.to_sym) || super
+      @bindings.key?(name.to_sym) || super
     end
 
     ##

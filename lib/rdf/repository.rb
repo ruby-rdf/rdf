@@ -20,7 +20,7 @@ module RDF
   #   repository.count
   #
   # @example Checking whether a repository contains a specific statement
-  #   repository.has_statement?(statement)
+  #   repository.statement?(statement)
   #
   # @example Enumerating statements in a repository
   #   repository.each_statement { |statement| statement.inspect! }
@@ -69,7 +69,7 @@ module RDF
   #
   # @example Transational read from a repository
   #   repository.transaction do |tx|
-  #     tx.has_statement?(statement)
+  #     tx.statement?(statement)
   #     tx.query([:s, :p, :o])
   #   end
   #
@@ -288,10 +288,11 @@ module RDF
       
       ##
       # @private
-      # @see RDF::Enumerable#has_graph?      
-      def has_graph?(graph)
-        @data.has_key?(graph)
+      # @see RDF::Enumerable#graph?      
+      def graph?(graph)
+        @data.key?(graph)
       end
+      alias_method :has_graph?, :graph?
 
       ##
       # @private
@@ -312,12 +313,19 @@ module RDF
         enum_graph
       end
 
+
       ##
-      # @private
-      # @see RDF::Enumerable#has_statement?
-      def has_statement?(statement)
-        has_statement_in?(@data, statement)
+      # @overload statement?
+      #   Returns `false` indicating this is not an RDF::Statemenet.
+      #   @return [Boolean]
+      #   @see RDF::Value#statement?
+      # @overload statement?(statement)
+      #   @private
+      #   @see    RDF::Enumerable#statement?
+      def statement?(statement = nil)
+        statement && statement_in?(@data, statement)
       end
+      alias_method :has_statement?, :statement?
 
       ##
       # @private
@@ -389,7 +397,7 @@ module RDF
           predicate   = pattern.predicate
           object      = pattern.object
 
-          cs = snapshot.has_key?(graph_name) ? { graph_name => snapshot[graph_name] } : snapshot
+          cs = snapshot.key?(graph_name) ? { graph_name => snapshot[graph_name] } : snapshot
 
           cs.each do |c, ss|
             next unless graph_name.nil? ||
@@ -403,7 +411,7 @@ module RDF
               ss.keys.select {|s| s.statement? && subject.eql?(s)}.inject({}) do |memo, st|
                 memo.merge(st => ss[st])
               end
-            elsif ss.has_key?(subject)
+            elsif ss.key?(subject)
               { subject => ss[subject] }
             else
               []
@@ -411,7 +419,7 @@ module RDF
             ss.each do |s, ps|
               ps = if predicate.nil? || predicate.is_a?(RDF::Query::Variable)
                 ps
-              elsif ps.has_key?(predicate)
+              elsif ps.key?(predicate)
                 { predicate => ps[predicate] }
               else
                 []
@@ -468,16 +476,17 @@ module RDF
 
       ##
       # @private
-      # @see #has_statement
-      def has_statement_in?(data, statement)
+      # @see #statement?
+      def statement_in?(data, statement)
         s, p, o, g = statement.to_quad
         g ||= DEFAULT_GRAPH
 
-        data.has_key?(g) &&
-          data[g].has_key?(s) &&
-          data[g][s].has_key?(p) &&
-          data[g][s][p].has_key?(o)
+        data.key?(g) &&
+          data[g].key?(s) &&
+          data[g][s].key?(p) &&
+          data[g][s][p].key?(o)
       end
+      alias_method :has_statement_in?, :statement_in?
 
       ##
       # @private
@@ -485,7 +494,7 @@ module RDF
       def insert_to(data, statement)
         raise ArgumentError, "Statement #{statement.inspect} is incomplete" if statement.incomplete?
 
-        unless has_statement_in?(data, statement)
+        unless statement_in?(data, statement)
           s, p, o, c = statement.to_quad
           c ||= DEFAULT_GRAPH
           
@@ -504,7 +513,7 @@ module RDF
       # @private
       # @return [Hamster::Hash] a new, updated hamster hash 
       def delete_from(data, statement)
-        if has_statement_in?(data, statement)
+        if statement_in?(data, statement)
           s, p, o, g = statement.to_quad
           g = DEFAULT_GRAPH unless supports?(:graph_name)
           g ||= DEFAULT_GRAPH
