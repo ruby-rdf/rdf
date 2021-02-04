@@ -61,7 +61,7 @@ middleware.
 
 See {RDF::Util::File} for configuring other mechanisms for retrieving resources.
 
-### Term caching and configuration.
+### Term caching and configuration
 
 RDF.rb uses a weak-reference cache for storing internalized versions of URIs and Nodes. This is particularly useful for Nodes as two nodes are equivalent only if they're the same node.
 
