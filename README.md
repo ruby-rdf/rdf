@@ -10,6 +10,26 @@ This is a pure-Ruby library for working with [Resource Description Framework
 [![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf/badge.svg?branch=develop)](https://coveralls.io/github/ruby-rdf/rdf?branch=develop)
 [![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
 
+## Table of contents
+
+1. [Features](#features)
+2. [Differences between RDF 1.0 and RDF 1.1](#differences-between-rdf-1-0-and-rdf-1-1)
+3. [Tutorials](#tutorials)
+4. [Command Line](#command-line)
+5. [Examples](#examples)
+6. [Reader/Writer convenience methods](#reader/writer-convenience-methods)
+7. [RDF* (RDFStar)](#rdf*-(rdfstar))
+8. [Documentation](#documentation)
+9. [Dependencies](#dependencies)
+10. [Installation](#installation)
+11. [Download](#download)
+12. [Resources](#resources)
+13. [Mailing List](#mailing-list)
+14. [Authors](#authors)
+15. [Contributors](#contributors)
+16. [Contributing](#contributing)
+17. [License](#license)
+
 ## Features
 
 * 100% pure Ruby with minimal dependencies and no bloat.
