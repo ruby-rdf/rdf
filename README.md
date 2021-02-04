@@ -109,6 +109,7 @@ Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symm
 * [Getting started with RDF and SPARQL using 4store and RDF.rb](https://www.jenitennison.com/blog/node/152)
 
 ## Command Line
+
 When installed, RDF.rb includes a `rdf` shell script which acts as a wrapper to perform a number of different
 operations on RDF files using available readers and writers.
 
@@ -151,6 +152,7 @@ or
     end
 
 ### Reading RDF data in other formats
+
 {RDF::Reader.open} and {RDF::Repository.load} use a number of mechanisms to determine the appropriate reader
 to use when loading a file. The specific format to use can be forced using, e.g. `format: :ntriples`
 option where the specific format symbol is determined by the available readers. Both also use
@@ -177,6 +179,7 @@ be detected from filename or other options, or that more than one format is iden
 match will be used to read the input.
 
 ### Writing RDF data using other formats
+
 {RDF::Writer.open}, {RDF::Enumerable#dump}, {RDF::Writer.dump} take similar options to {RDF::Reader.open} to determine the
 appropriate writer to use.
 
@@ -196,6 +199,7 @@ A specific sub-type of Writer can also be invoked directly:
     File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods
+
 {RDF::Enumerable} implements `to_{format}` for each available instance of {RDF::Reader}.
 For example, if `rdf/turtle` is loaded, this allows the following:
 
@@ -470,7 +474,6 @@ This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange develo
   explicit [public domain dedication][PDD] on record from you,
   which you will be asked to agree to on the first commit to a repo within the organization.
   Note that the agreement applies to all repos in the [Ruby RDF](https://github.com/ruby-rdf/) organization.
-
 
 ## License
 
