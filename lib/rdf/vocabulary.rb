@@ -287,6 +287,15 @@ module RDF
             uri_str = [to_s, name.to_s].join('')
             URI.cache.delete(uri_str.to_sym)  # Clear any previous entry
 
+            # Transform attribute keys that are PNames with a warning
+            # FIXME: add back later
+            #if !@is_deprecated && options.is_a?(Hash) &&
+            #   options.keys.map(&:to_s).any? {|k| k.include?(':') && !k.match?(/^https?:/)}
+            #
+            #  @is_deprecated = true
+            #  warn "[DEPRECATION] Vocabulary #{to_uri} includes pname attribute keys, regenerate"
+            #end
+
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
             prop = Term.intern(uri_str, vocab: self, attributes: options)
             props[name.to_sym] = prop
@@ -445,9 +454,7 @@ module RDF
       def imports
         return [] unless self.ontology
         @imports ||= begin
-          Array(self.ontology.attributes[:"owl:imports"]).map do |pn|
-            find(expand_pname(pn)) rescue nil
-          end.compact
+          Array(self.ontology.properties[:"http://www.w3.org/2002/07/owl#imports"]).compact
         rescue KeyError
           []
         end
@@ -546,42 +553,8 @@ module RDF
             term = (embedded_defs[statement.subject] ||= {})
           end
 
-          key = case statement.predicate
-          when RDF.type                                     then :type
-          when RDF::RDFS.comment                            then :comment
-          when RDF::RDFS.domain                             then :domain
-          when RDF::RDFS.isDefinedBy                        then :isDefinedBy
-          when RDF::RDFS.label                              then :label
-          when RDF::RDFS.range                              then :range
-          when RDF::RDFS.subClassOf                         then :subClassOf
-          when RDF::RDFS.subPropertyOf                      then :subPropertyOf
-          when RDF::URI("http://schema.org/domainIncludes") then :domainIncludes
-          when RDF::URI("http://schema.org/rangeIncludes")  then :rangeIncludes
-          when RDF::URI("http://www.w3.org/2002/07/owl#allValuesFrom")        then :allValuesFrom
-          when RDF::URI("http://www.w3.org/2002/07/owl#cardinality")          then :cardinality
-          when RDF::URI("http://www.w3.org/2002/07/owl#equivalentClass")      then :equivalentClass
-          when RDF::URI("http://www.w3.org/2002/07/owl#equivalentProperty")   then :equivalentProperty
-          when RDF::URI("http://www.w3.org/2002/07/owl#intersectionOf")       then :intersectionOf
-          when RDF::URI("http://www.w3.org/2002/07/owl#inverseOf")            then :inverseOf
-          when RDF::URI("http://www.w3.org/2002/07/owl#maxCardinality")       then :maxCardinality
-          when RDF::URI("http://www.w3.org/2002/07/owl#minCardinality")       then :minCardinality
-          when RDF::URI("http://www.w3.org/2002/07/owl#onProperty")           then :onProperty
-          when RDF::URI("http://www.w3.org/2002/07/owl#someValuesFrom")       then :someValuesFrom
-          when RDF::URI("http://www.w3.org/2002/07/owl#unionOf")              then :unionOf
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel")       then :altLabel
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#broader")        then :broader
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#definition")     then :definition
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#editorialNote")  then :editorialNote
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#exactMatch")     then :exactMatch
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#hasTopConcept")  then :hasTopConcept
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#inScheme")       then :inScheme
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#member")         then :member
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#narrower")       then :narrower
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#notation")       then :notation
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#note")           then :note
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#prefLabel")      then :prefLabel
-          when RDF::URI("http://www.w3.org/2004/02/skos/core#related")        then :related
-          else                                              statement.predicate.pname.to_sym
+          key = Term::URI_ATTRs.fetch(statement.predicate) do
+            statement.predicate.to_s.to_sym
           end
 
           # Skip literals other than plain or english
@@ -797,6 +770,53 @@ module RDF
     module Term
       include RDF::Resource
 
+      ##
+      # Look up URIs for attribute symbols
+      #
+      # @return [Hash{Symbol => RDF::URI}]
+      ATTR_URIs = {
+        allValuesFrom:      RDF::URI("http://www.w3.org/2002/07/owl#allValuesFrom"),
+        altLabel:           RDF::URI("http://www.w3.org/2004/02/skos/core#altLabel"),
+        broader:            RDF::URI("http://www.w3.org/2004/02/skos/core#broader"),
+        cardinality:        RDF::URI("http://www.w3.org/2002/07/owl#cardinality"),
+        comment:            RDF::URI("http://www.w3.org/2000/01/rdf-schema#comment"),
+        definition:         RDF::URI("http://www.w3.org/2004/02/skos/core#definition"),
+        domain:             RDF::URI("http://www.w3.org/2000/01/rdf-schema#domain"),
+        domainIncludes:     RDF::URI("http://schema.org/domainIncludes"),
+        editorialNote:      RDF::URI("http://www.w3.org/2004/02/skos/core#editorialNote"),
+        equivalentClass:    RDF::URI("http://www.w3.org/2002/07/owl#equivalentClass"),
+        equivalentProperty: RDF::URI("http://www.w3.org/2002/07/owl#equivalentProperty"),
+        exactMatch:         RDF::URI("http://www.w3.org/2004/02/skos/core#exactMatch"),
+        hasTopConcept:      RDF::URI("http://www.w3.org/2004/02/skos/core#hasTopConcept"),
+        inScheme:           RDF::URI("http://www.w3.org/2004/02/skos/core#inScheme"),
+        intersectionOf:     RDF::URI("http://www.w3.org/2002/07/owl#intersectionOf"),
+        inverseOf:          RDF::URI("http://www.w3.org/2002/07/owl#inverseOf"),
+        isDefinedBy:        RDF::URI("http://www.w3.org/2000/01/rdf-schema#isDefinedBy"),
+        label:              RDF::URI("http://www.w3.org/2000/01/rdf-schema#label"),
+        maxCardinality:     RDF::URI("http://www.w3.org/2002/07/owl#maxCardinality"),
+        member:             RDF::URI("http://www.w3.org/2004/02/skos/core#member"),
+        minCardinality:     RDF::URI("http://www.w3.org/2002/07/owl#minCardinality"),
+        narrower:           RDF::URI("http://www.w3.org/2004/02/skos/core#narrower"),
+        notation:           RDF::URI("http://www.w3.org/2004/02/skos/core#notation"),
+        note:               RDF::URI("http://www.w3.org/2004/02/skos/core#note"),
+        onProperty:         RDF::URI("http://www.w3.org/2002/07/owl#onProperty"),
+        prefLabel:          RDF::URI("http://www.w3.org/2004/02/skos/core#prefLabel"),
+        range:              RDF::URI("http://www.w3.org/2000/01/rdf-schema#range"),
+        rangeIncludes:      RDF::URI("http://schema.org/rangeIncludes"),
+        related:            RDF::URI("http://www.w3.org/2004/02/skos/core#related"),
+        someValuesFrom:     RDF::URI("http://www.w3.org/2002/07/owl#someValuesFrom"),
+        subClassOf:         RDF::URI("http://www.w3.org/2000/01/rdf-schema#subClassOf"),
+        subPropertyOf:      RDF::URI("http://www.w3.org/2000/01/rdf-schema#subPropertyOf"),
+        type:               RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+        unionOf:            RDF::URI("http://www.w3.org/2002/07/owl#unionOf"),
+      }.freeze
+
+      ##
+      # Look up attribute symbols from URIs
+      #
+      # @return [Hash{RDF::URI => Symbol}]
+      URI_ATTRs = ATTR_URIs.invert.freeze
+
       # @!attribute [r] comment
       #   `rdfs:comment` accessor
       #   @return [Literal, Array<Literal>]
@@ -940,6 +960,7 @@ module RDF
           RDF::Node
         else RDF::URI
         end
+
         term = klass.allocate.extend(Term)
         term.send(:initialize, *args)
         term.instance_variable_set(:@vocab, vocab)
@@ -1026,11 +1047,39 @@ module RDF
 
       ##
       # Enumerate attributes with values transformed into {RDF::Value} instances
+      # Uses an empty hash with a default_proc which looks up values in attributes.
+      #
+      # Properties are indexed by symbol. Symbols directly interpreted by a term are the accessors defined for the {RDF::Vocabulary::Term} class. Other keys are interpreted as absolute URIs or PNames for properties defined on this term.
+      #
+      # Symbols which are accessors may also be looked up by their associated URI.
+      #
+      # @note lookup by PName is DEPRECATED and will be removed in a future version.
       #
       # @return [Hash{Symbol => Array<RDF::Value>}]
       def properties
-        attributes.keys.inject({}) do |memo, p|
-          memo.merge(p => attribute_value(p))
+        Hash.new do |hash, key|
+          case key
+          when RDF::URI, String then attribute_value(key.to_s.to_sym)
+          when Symbol
+            sym = case key.to_s
+            when /^https?:/
+              # FIXME: transitional code to look for pname attributes first
+              if attributes.key?(key)
+                key
+              elsif URI_ATTRs.key?(key)
+                URI_ATTRs[key]
+              else
+                RDF::URI(key).pname.to_sym
+              end
+            when /:/
+              # FIXME: transitional code to look for pname attributes first
+              attributes.key?(key) ? key : RDF::Vocabulary.expand_pname(key).to_s.to_sym
+            else
+              key
+            end
+            attribute_value(sym)
+          else nil
+          end
         end
       end
 
@@ -1041,6 +1090,7 @@ module RDF
       # @return [RDF::Value, Array<RDF::Value>]
       def attribute_value(prop)
         values = attributes[prop]
+        return nil if values.nil?
         values = [values].compact unless values.is_a?(Array)
         prop_values = values.map do |value|
           v = value.is_a?(Symbol) ? value.to_s : value
@@ -1079,37 +1129,15 @@ module RDF
       # @yieldparam [RDF::Statement]
       def each_statement
         attributes.keys.each do |p|
+          prop = ATTR_URIs.fetch(p) { RDF::Vocabulary::expand_pname(p)}
           values = attribute_value(p)
           values = [values].compact unless values.is_a?(Array)
           values.each do |value|
-            begin
-              prop = case p
-              when :type
-                RDF::RDFV[p]
-              when :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy, :label, :comment
-                RDF::RDFS[p]
-              when :allValuesFrom, :cardinality, :equivalentClass, :equivalentProperty,
-                   :intersectionOf, :inverseOf, :maxCardinality, :minCardinality,
-                   :onProperty, :someValuesFrom, :unionOf
-                RDF::OWL[p]
-              when :domainIncludes, :rangeIncludes
-                RDF::Vocabulary.find_term("http://schema.org/#{p}")
-              when :broader, :definition, :exactMatch, :hasTopConcept, :inScheme,
-                   :member, :narrower, :related, :altLabel, :editorialNote,
-                   :notation, :note, :prefLabel
-                RDF::Vocabulary.find_term("http://www.w3.org/2004/02/skos/core##{p}")
-              else
-                RDF::Vocabulary.expand_pname(p)
-              end
+            yield RDF::Statement(self, prop, value) if prop.is_a?(RDF::URI)
 
-              yield RDF::Statement(self, prop, value) if prop.is_a?(RDF::URI)
-
-              # Enumerate over value statements, if enumerable
-              if value.is_a?(RDF::Enumerable) || (value.is_a?(Term) && value.node?)
-                value.each_statement {|s| yield s}
-              end
-            rescue KeyError
-              # Skip things eroneously defined in the vocabulary
+            # Enumerate over value statements, if enumerable
+            if value.is_a?(RDF::Enumerable) || (value.is_a?(Term) && value.node?)
+              value.each_statement {|s| yield s}
             end
           end
         end
@@ -1184,18 +1212,16 @@ module RDF
           values = values.map do |value|
             if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(k.to_s)
               "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
-            elsif value.is_a?(RDF::URI)
-              "#{value.pname.inspect}.freeze"
-            elsif value.is_a?(RDF::Vocabulary::Term)
-              value.to_ruby(indent: indent + "  ")
+            # elsif value.is_a?(RDF::Vocabulary::Term)
+            #  value.to_ruby(indent: indent + "  ")
             elsif value.is_a?(RDF::Term)
               "#{value.to_s.inspect}.freeze"
             elsif value.is_a?(RDF::List)
               list_elements = value.map do |u|
                 if u.uri?
-                  "#{u.pname.inspect}.freeze"
-                elsif u.respond_to?(:to_ruby)
-                  u.to_ruby(indent: indent + "  ")
+                  "#{u.to_s.inspect}.freeze"
+                # elsif u.respond_to?(:to_ruby)
+                #  u.to_ruby(indent: indent + "  ")
                 else
                   "#{u.to_s.inspect}.freeze"
                 end
@@ -1208,7 +1234,7 @@ module RDF
           "#{k.to_s.include?(':') ? k.to_s.inspect : k}: " +
           (values.length == 1 ? values.first : ('[' + values.join(',') + ']'))
         end.join(",\n#{indent}  ") + "\n#{indent})"
-        
+
       end
     protected
       # Implement accessor to symbol attributes
@@ -1225,7 +1251,7 @@ module RDF
           end
         when :type, :subClassOf, :subPropertyOf, :domain, :range, :isDefinedBy,
              :allValuesFrom, :cardinality, :equivalentClass, :equivalentProperty,
-             :intersectionOf, :inverseOf, :maxCardinality, :minCardinality,
+             :imports, :intersectionOf, :inverseOf, :maxCardinality, :minCardinality,
              :onProperty, :someValuesFrom, :unionOf,
              :domainIncludes, :rangeIncludes,
              :broader, :exactMatch, :hasTopConcept, :inScheme, :member, :narrower, :related

@@ -265,7 +265,7 @@ module RDF
         if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
           "#{value.to_s.inspect}.freeze"
         elsif value.is_a?(RDF::URI)
-          "#{value.pname.inspect}.freeze"
+          "#{value.to_s.inspect}.freeze"
         elsif value.is_a?(RDF::Vocabulary::Term)
           value.to_ruby(indent: indent + "  ")
         elsif value.is_a?(RDF::Term)
@@ -273,7 +273,7 @@ module RDF
         elsif value.is_a?(RDF::List)
           list_elements = value.map do |u|
             if u.uri?
-              "#{u.pname.inspect}.freeze"
+              "#{u.to_s.inspect}.freeze"
             elsif u.respond_to?(:to_ruby)
               u.to_ruby(indent: indent + "  ")
             else

@@ -6,8 +6,6 @@ module RDF
   # @!parse
   #   # Vocabulary for <http://www.w3.org/2000/01/rdf-schema#>
   #   #
-  #   # The RDF Schema vocabulary (RDFS)
-  #   # @see http://www.w3.org/2000/01/rdf-schema-more
   #   class RDFS < RDF::StrictVocabulary
   #     # The class of classes.
   #     # @return [RDF::Vocabulary::Term]
@@ -74,112 +72,111 @@ module RDF
 
     # Ontology definition
     ontology :"http://www.w3.org/2000/01/rdf-schema#",
-      "dc11:title": "The RDF Schema vocabulary (RDFS)".freeze,
-      "rdfs:seeAlso": "http://www.w3.org/2000/01/rdf-schema-more".freeze,
-      type: "owl:Ontology".freeze
+      "http://purl.org/dc/elements/1.1/title": "The RDF Schema vocabulary (RDFS)".freeze,
+      "http://www.w3.org/2000/01/rdf-schema#seeAlso": "http://www.w3.org/2000/01/rdf-schema-more".freeze,
+      type: "http://www.w3.org/2002/07/owl#Ontology".freeze
 
     # Class definitions
     term :Class,
-      comment: %(The class of classes.).freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The class of classes.".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "Class".freeze,
-      subClassOf: "rdfs:Resource".freeze,
-      type: "rdfs:Class".freeze
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      type: "http://www.w3.org/2000/01/rdf-schema#Class".freeze
     term :Container,
-      comment: %(The class of RDF containers.).freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The class of RDF containers.".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "Container".freeze,
-      subClassOf: "rdfs:Resource".freeze,
-      type: "rdfs:Class".freeze
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      type: "http://www.w3.org/2000/01/rdf-schema#Class".freeze
     term :ContainerMembershipProperty,
-      comment: %(The class of container membership properties, rdf:_1, rdf:_2, ...,
-                    all of which are sub-properties of 'member'.).freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The class of container membership properties, rdf:_1, rdf:_2, ...,\n                    all of which are sub-properties of 'member'.".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "ContainerMembershipProperty".freeze,
-      subClassOf: "rdf:Property".freeze,
-      type: "rdfs:Class".freeze
+      subClassOf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze,
+      type: "http://www.w3.org/2000/01/rdf-schema#Class".freeze
     term :Datatype,
-      comment: %(The class of RDF datatypes.).freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The class of RDF datatypes.".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "Datatype".freeze,
-      subClassOf: "rdfs:Class".freeze,
-      type: "rdfs:Class".freeze
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Class".freeze,
+      type: "http://www.w3.org/2000/01/rdf-schema#Class".freeze
     term :Literal,
-      comment: %(The class of literal values, eg. textual strings and integers.).freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The class of literal values, eg. textual strings and integers.".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "Literal".freeze,
-      subClassOf: "rdfs:Resource".freeze,
-      type: "rdfs:Class".freeze
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      type: "http://www.w3.org/2000/01/rdf-schema#Class".freeze
     term :Resource,
-      comment: %(The class resource, everything.).freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The class resource, everything.".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "Resource".freeze,
-      type: "rdfs:Class".freeze
+      type: "http://www.w3.org/2000/01/rdf-schema#Class".freeze
 
     # Property definitions
     property :comment,
-      comment: %(A description of the subject resource.).freeze,
-      domain: "rdfs:Resource".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "A description of the subject resource.".freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "comment".freeze,
-      range: "rdfs:Literal".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Literal".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :domain,
-      comment: %(A domain of the subject property.).freeze,
-      domain: "rdf:Property".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "A domain of the subject property.".freeze,
+      domain: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "domain".freeze,
-      range: "rdfs:Class".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Class".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :isDefinedBy,
-      comment: %(The defininition of the subject resource.).freeze,
-      domain: "rdfs:Resource".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The defininition of the subject resource.".freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "isDefinedBy".freeze,
-      range: "rdfs:Resource".freeze,
-      subPropertyOf: "rdfs:seeAlso".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      subPropertyOf: "http://www.w3.org/2000/01/rdf-schema#seeAlso".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :label,
-      comment: %(A human-readable name for the subject.).freeze,
-      domain: "rdfs:Resource".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "A human-readable name for the subject.".freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "label".freeze,
-      range: "rdfs:Literal".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Literal".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :member,
-      comment: %(A member of the subject resource.).freeze,
-      domain: "rdfs:Resource".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "A member of the subject resource.".freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "member".freeze,
-      range: "rdfs:Resource".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :range,
-      comment: %(A range of the subject property.).freeze,
-      domain: "rdf:Property".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "A range of the subject property.".freeze,
+      domain: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "range".freeze,
-      range: "rdfs:Class".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Class".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :seeAlso,
-      comment: %(Further information about the subject resource.).freeze,
-      domain: "rdfs:Resource".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "Further information about the subject resource.".freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "seeAlso".freeze,
-      range: "rdfs:Resource".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :subClassOf,
-      comment: %(The subject is a subclass of a class.).freeze,
-      domain: "rdfs:Class".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The subject is a subclass of a class.".freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Class".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "subClassOf".freeze,
-      range: "rdfs:Class".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/2000/01/rdf-schema#Class".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
     property :subPropertyOf,
-      comment: %(The subject is a subproperty of a property.).freeze,
-      domain: "rdf:Property".freeze,
-      isDefinedBy: "rdfs:".freeze,
+      comment: "The subject is a subproperty of a property.".freeze,
+      domain: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze,
+      isDefinedBy: "http://www.w3.org/2000/01/rdf-schema#".freeze,
       label: "subPropertyOf".freeze,
-      range: "rdf:Property".freeze,
-      type: "rdf:Property".freeze
+      range: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
   end
 end
