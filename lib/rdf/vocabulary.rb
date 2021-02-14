@@ -766,7 +766,9 @@ module RDF
 
     # A Vocabulary Term is a {RDF::Resource} that can also act as an {Enumerable} to generate the RDF definition of vocabulary terms as defined within the vocabulary definition.
     #
-    # Terms include `attributes` where values a embedded resources, lists or other terms. This allows, for example, navigation of a concept heirarchy.
+    # Terms include {Term#attributes} where values a embedded resources, lists or other terms. This allows, for example, navigation of a concept heirarchy.
+    #
+    # Term attributes can also be accessed using {Term#properties} where the attribute values are transformed into different types of {RDF::Value}. Properties can be indexed by key, where a key is defined (See {Term::ATTR_URIs}), absolute URI, or PName, where the prefix is associated with a loaded vocabulary.
     module Term
       include RDF::Resource
 
@@ -1049,31 +1051,47 @@ module RDF
       # Enumerate attributes with values transformed into {RDF::Value} instances
       # Uses an empty hash with a default_proc which looks up values in attributes.
       #
-      # Properties are indexed by symbol. Symbols directly interpreted by a term are the accessors defined for the {RDF::Vocabulary::Term} class. Other keys are interpreted as absolute URIs or PNames for properties defined on this term.
+      # Properties are indexed by symbol. Symbols directly interpreted by a term are the accessors defined for the {RDF::Vocabulary::Term} class, also in {Term::ATTR_URIs}. Other keys are interpreted as absolute URIs or PNames for properties defined on this term.
       #
       # Symbols which are accessors may also be looked up by their associated URI.
       #
       # @note lookup by PName is DEPRECATED and will be removed in a future version.
       #
+      # @example looking up term label
+      #   RDF::RDFS.Literal.label #=> RDF::Literal("Literal")
+      #   RDF::RDFS.Literal.properties[:label] #=> RDF::Literal("Literal")
+      #   RDF::RDFS.Literal.properties[:"rdfs:label"] #=> RDF::Literal("Literal")
+      #   RDF::RDFS.Literal.properties[RDF::RDFS.label] #=> RDF::Literal("Literal")
+      #   RDF::RDFS.Literal.properties["http://www.w3.org/2000/01/rdf-schema#label"] #=> RDF::Literal("Literal")
+      #   RDF::RDFS.Literal.properties[:"http://www.w3.org/2000/01/rdf-schema#label"] #=> RDF::Literal("Literal")
+      #
       # @return [Hash{Symbol => Array<RDF::Value>}]
       def properties
         Hash.new do |hash, key|
           case key
-          when RDF::URI, String then attribute_value(key.to_s.to_sym)
+          when RDF::URI
+            sym = URI_ATTRs.fetch(key, key.to_s.to_sym)
+            attribute_value(sym)
+          when String
+            sym = URI_ATTRs.fetch(RDF::URI(key), key.to_s.to_sym)
+            attribute_value(sym)
           when Symbol
             sym = case key.to_s
             when /^https?:/
-              # FIXME: transitional code to look for pname attributes first
               if attributes.key?(key)
                 key
-              elsif URI_ATTRs.key?(key)
-                URI_ATTRs[key]
               else
-                RDF::URI(key).pname.to_sym
+                # Lookup by associated attribute, or pname
+                URI_ATTRs.fetch(RDF::URI(key.to_s), RDF::URI(key).pname.to_sym)
               end
             when /:/
-              # FIXME: transitional code to look for pname attributes first
-              attributes.key?(key) ? key : RDF::Vocabulary.expand_pname(key).to_s.to_sym
+              if attributes.key?(key)
+                key
+              else
+                uri = RDF::Vocabulary.expand_pname(key)
+                # Lookup by associated attribute or URI
+                URI_ATTRs.fetch(uri, uri.to_s.to_sym)
+              end
             else
               key
             end

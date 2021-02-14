@@ -584,6 +584,28 @@ potential to perform intentional actions for which they can be held responsible.
       its(:vocab) {is_expected.to eql RDF::RDFS}
     end
 
+    context RDF::RDFS.Literal do
+      subject {RDF::RDFS.Literal}
+      specify {is_expected.not_to be_property}
+      specify {is_expected.to be_class}
+
+      its(:label) {is_expected.to eq RDF::Literal("Literal")}
+
+      describe "#properties" do
+        [
+          :label,
+          :'rdfs:label',
+          "http://www.w3.org/2000/01/rdf-schema#label",
+          :"http://www.w3.org/2000/01/rdf-schema#label",
+          RDF::RDFS.label,
+        ].each do |key|
+          it key.inspect do
+            expect(subject.properties[key]).to eq RDF::Literal("Literal")
+          end
+        end
+      end
+    end
+
     context RDF::RDFS.Class do
       subject {RDF::RDFS.Class}
       specify {is_expected.to respond_to(:vocab)}
