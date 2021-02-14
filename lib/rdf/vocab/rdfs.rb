@@ -6,6 +6,7 @@ module RDF
   # @!parse
   #   # Vocabulary for <http://www.w3.org/2000/01/rdf-schema#>
   #   #
+  #   # The RDF Schema vocabulary (RDFS)
   #   class RDFS < RDF::StrictVocabulary
   #     # The class of classes.
   #     # @return [RDF::Vocabulary::Term]
