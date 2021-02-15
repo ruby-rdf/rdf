@@ -297,7 +297,7 @@ module RDF
             #end
 
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
-            prop = Term.intern(uri_str, vocab: self, attributes: options)
+            prop = Term.intern(uri_str, vocab: self, attributes: options || {})
             props[name.to_sym] = prop
 
             # If name is empty, also treat it as the ontology
@@ -361,7 +361,7 @@ module RDF
           uri, options = args
           URI.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
           # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
-          @ontology = Term.intern(uri.to_s, vocab: self, attributes: options)
+          @ontology = Term.intern(uri.to_s, vocab: self, attributes: options || {})
 
           # If the URI is the same as the vocabulary namespace, also define it as a term
           props[:""] ||= @ontology if self.to_s == uri.to_s
@@ -932,6 +932,19 @@ module RDF
       attr_reader :vocab
 
       # Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      #
+      # Attributes are indexed by symbol. Symbols directly interpreted by a term are the accessors defined for the {RDF::Vocabulary::Term} class, also in {Term::ATTR_URIs}. Other keys are interpreted as absolute URIs or PNames for properties defined on this term.
+      #
+      # Symbols which are accessors may also be looked up by their associated URI.
+      #
+      # @note lookup by PName is DEPRECATED and will be removed in a future version.
+      #
+      # @example looking up term label
+      #   RDF::RDFS.Literal.attributes[:label] #=> "Literal"
+      #   RDF::RDFS.Literal.attributes[:"rdfs:label"] #=> "Literal"
+      #   RDF::RDFS.Literal.attributes[RDF::RDFS.label] #=> "Literal"
+      #   RDF::RDFS.Literal.attributes["http://www.w3.org/2000/01/rdf-schema#label"] #=> "Literal"
+      #   RDF::RDFS.Literal.attributes[:"http://www.w3.org/2000/01/rdf-schema#label"] #=> "Literal"
       # @return [Hash{Symbol,Resource => Term, #to_s}]
       attr_reader :attributes
 
@@ -939,16 +952,16 @@ module RDF
       # @overload new(uri, attributes:, **options)
       #   @param  [URI, String, #to_s]    uri
       #   @param [Vocabulary] vocab Vocabulary of this term.
-      #   @param [Hash{Symbol,Resource => Term, #to_s}] attributes
-      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF
+      #   @param [Hash{Symbol => Symbol,Array<String,Term>}] attributes ({})
+      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF. See {#attributes} and {#properties} for other ways to access.
       #   @param  [Hash{Symbol => Object}] options
       #     Options from {URI#initialize}
       #
       # @overload new(attributes:, **options)
       #   @param  [Hash{Symbol => Object}] options
       #   @param [Vocabulary] vocab Vocabulary of this term.
-      #   @param [Hash{Symbol => String,Array<String,Term>}] attributes
-      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF.
+      #   @param [Hash{Symbol => Symbol,Array<String,Term>}] attributes ({})
+      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF. See {#attributes} and {#properties} for other ways to access.
       #   @param  [Hash{Symbol => Object}] options
       #     Options from {URI#initialize}
       def self.new(*args, vocab: nil, attributes: {}, **options)
@@ -961,6 +974,28 @@ module RDF
           args = args[1..-1].unshift($1)
           RDF::Node
         else RDF::URI
+        end
+
+        # Create default proc on attributes to allow lookup by different key types.
+        attributes = attributes.dup if attributes.frozen?
+        attributes.default_proc = -> (hash, key) do
+          sym = case key
+          when RDF::URI
+            URI_ATTRs.fetch(key, key.to_s.to_sym)
+          when String
+            URI_ATTRs.fetch(RDF::URI(key), key.to_s.to_sym)
+          when Symbol
+            case key.to_s
+            when /^https?:/
+              # Lookup by associated attribute, or pname
+              URI_ATTRs.fetch(RDF::URI(key.to_s), RDF::URI(key).pname.to_sym)
+            when /:/
+              uri = RDF::Vocabulary.expand_pname(key)
+              # Lookup by associated attribute or URI
+              URI_ATTRs.fetch(uri, uri.to_s.to_sym)
+            end
+          end
+          hash.fetch(sym, nil)
         end
 
         term = klass.allocate.extend(Term)
@@ -1067,38 +1102,7 @@ module RDF
       #
       # @return [Hash{Symbol => Array<RDF::Value>}]
       def properties
-        Hash.new do |hash, key|
-          case key
-          when RDF::URI
-            sym = URI_ATTRs.fetch(key, key.to_s.to_sym)
-            attribute_value(sym)
-          when String
-            sym = URI_ATTRs.fetch(RDF::URI(key), key.to_s.to_sym)
-            attribute_value(sym)
-          when Symbol
-            sym = case key.to_s
-            when /^https?:/
-              if attributes.key?(key)
-                key
-              else
-                # Lookup by associated attribute, or pname
-                URI_ATTRs.fetch(RDF::URI(key.to_s), RDF::URI(key).pname.to_sym)
-              end
-            when /:/
-              if attributes.key?(key)
-                key
-              else
-                uri = RDF::Vocabulary.expand_pname(key)
-                # Lookup by associated attribute or URI
-                URI_ATTRs.fetch(uri, uri.to_s.to_sym)
-              end
-            else
-              key
-            end
-            attribute_value(sym)
-          else nil
-          end
-        end
+        Hash.new {|hash, key| attribute_value(key)}
       end
 
       ##

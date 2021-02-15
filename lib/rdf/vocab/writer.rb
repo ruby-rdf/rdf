@@ -169,16 +169,17 @@ module RDF
           ).each do |attr|
             next unless vocab.ontology.attributes[attr]
             Array(vocab.ontology.attributes[attr]).each do |v|
-              ont_doc << "  #   # " + v.to_s.gsub(/\n/, ' ')
+              ont_doc << "  #   # " + v.to_s.gsub(/\s+/, ' ')
             end
           end
           @output.puts ont_doc.join("\n  #   #\n") unless ont_doc.empty?
           # Version Info
-          Array(vocab.ontology.attributes[:"owl:versionInfo"]).each do |vers|
+          # See Also
+          Array(vocab.ontology.attributes[:'http://www.w3.org/2002/07/owl#versionInfo']).each do |vers|
             @output.puts "  #   # @version #{vers}"
           end
           # See Also
-          Array(vocab.ontology.attributes[:"rdfs:seeAlso"]).each do |see|
+          Array(vocab.ontology.attributes[:'http://www.w3.org/2000/01/rdf-schema#seeAlso']).each do |see|
             @output.puts "  #   # @see #{see}"
           end
         end
@@ -222,7 +223,7 @@ module RDF
             # Only document terms that can be accessed like a Ruby attribute
             next unless name.to_s.match?(/^[_[:alpha:]](?:\w*)[!?=]?$/)
             @output.puts(Array(attributes[:comment]).map do |comment|
-              "  #     # #{comment.to_s.gsub(/\n/, ' ')}"
+              "  #     # #{comment.to_s.gsub(/\s+/, ' ')}"
             end.join("\n  #     #\n")) if attributes[:comment]
             @output.puts "  #     # @return [RDF::Vocabulary::Term]"
             @output.puts "  #     attr_reader :#{name}"
