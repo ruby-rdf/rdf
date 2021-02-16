@@ -40,7 +40,6 @@ module RDF
     #     Use value `false` to query for the default graph_name
     #   @return [Boolean]
     def graph?(*args)
-      false
       case args.length
       when 0, 1 then false
       else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
@@ -48,11 +47,20 @@ module RDF
     end
 
     ##
-    # Is this a {RDF::Statement}?
+    # @overload statement?
+    #   Returns `true` if `self` is a {RDF::Statement}.
     #
-    # @return [Boolean]
-    def statement?
-      false
+    #   @return [Boolean]
+    # @overload statement?(statement)
+    #   Returns `true` if `self` contains the given {RDF::Statement}.
+    #
+    #   @param  [RDF::Statement] statement
+    #   @return [Boolean]
+    def statement?(*args)
+      case args.length
+      when 0, 1 then false
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##
@@ -64,11 +72,20 @@ module RDF
     end
 
     ##
-    # Is this a {RDF::Term}?
+    # @overload term?
+    #   Returns `true` if `self` is a {RDF::Term}.
     #
-    # @return [Boolean]
-    def term?
-      false
+    #   @return [Boolean]
+    # @overload term?(name)
+    #   Returns `true` if `self` contains the given RDF subject term.
+    #
+    #   @param  [RDF::Resource] value
+    #   @return [Boolean]
+    def term?(*args)
+      case args.length
+      when 0, 1 then false
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##
@@ -114,12 +131,21 @@ module RDF
     end
 
     ##
-    # Is this a {RDF::Query::Variable}, or does it contain a variable?
+    # @overload variable?
+    #   Returns `true` if `self` is a {RDF::Query::Variable}, or does it contain a variable?
     #
-    # @return [Boolean]
+    #   @return [Boolean]
+    # @overload variable?(variable)
+    #   Returns `true` if `self` contains the given variable.
+    #
+    #   @param  [RDF::Resource] value
+    #   @return [Boolean]
     # @since  0.1.7
-    def variable?
-      false
+    def variable?(*args)
+      case args.length
+      when 0, 1 then false
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##

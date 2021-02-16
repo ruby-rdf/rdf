@@ -87,13 +87,27 @@ class RDF::Query
     end
 
     ##
-    # Returns `true`.
+    # @overload variable?
+    #   Returns `true` if `self` is a {RDF::Query::Variable}, or does it contain a variable?
     #
-    # @return [Boolean]
-    # @see    RDF::Term#variable?
+    #   @return [Boolean]
+    # @overload variable?(variable)
+    #   Returns `true` if `self` contains the given variable.
+    #
+    #   @param  [RDF::Resource] value
+    #   @return [Boolean]
     # @since  0.1.7
-    def variable? 
-      true
+    def variable?(*args)
+      case args.length
+      when 0 then true
+      when 1
+        case variable = args.first
+        when RDF::Query::Variable then self == variable
+        when Symbol then to_sym == variable
+        else false
+        end
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##

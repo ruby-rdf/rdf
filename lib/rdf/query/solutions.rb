@@ -78,16 +78,25 @@ module RDF; class Query
     end
 
     ##
-    # Returns `true` if this solution sequence contains bindings for any of
+    # @overload variable?
+    #   Returns `false`.
+    #
+    #   @return [Boolean]
+    # @overload variable?(variables)
+    #   Returns `true` if this solution sequence contains bindings for any of
     # the given `variables`.
     #
-    # @param  [Array<Symbol, #to_sym>] variables
-    #   an array of variables to check
-    # @return [Boolean] `true` or `false`
+    #   @param  [Array<Symbol, #to_sym>] variables
+    #   @return [Boolean]
     # @see    RDF::Query::Solution#variable?
     # @see    RDF::Query#execute
-    def variable?(variables)
-      self.any? { |solution| solution.variables?(variables) }
+    def variable?(*args)
+      case args.length
+      when 0 then false
+      when 1
+        self.any? { |solution| solution.variables?(args.first) }
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
     alias_method :variables?, :variable?
     alias_method :have_variables?, :variable?

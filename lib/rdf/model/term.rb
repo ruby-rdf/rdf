@@ -57,11 +57,21 @@ module RDF
     end
 
     ##
-    # Returns `true` if `self` is a {RDF::Term}.
+    # @overload term?
+    #   Returns `true` if `self` is a {RDF::Term}.
     #
-    # @return [Boolean]
-    def term?
-      true
+    #   @return [Boolean]
+    # @overload term?(name)
+    #   Returns `true` if `self` contains the given RDF subject term.
+    #
+    #   @param  [RDF::Resource] value
+    #   @return [Boolean]
+    def term?(*args)
+      case args.length
+      when 0 then true
+      when 1 then false
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##

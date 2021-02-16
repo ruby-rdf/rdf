@@ -443,11 +443,22 @@ module RDF
     end
 
     ##
-    # Returns `true` if any pattern contains a variable.
+    # @overload variable?
+    #   Returns `true` if any pattern contains a variable.
     #
-    # @return [Boolean]
-    def variable?
-      !variables.empty?
+    #   @return [Boolean]
+    # @overload variable?(variables)
+    #   Returns `true` if any pattern contains any of the variables.
+    #
+    #   @param  [Array<Symbol, #to_sym>] variables
+    #   @return [Boolean]
+    def variable?(*args)
+      case args.length
+      when 0 then !variables.empty?
+      when 1
+        patterns.any? {|p| p.variable?(*args)}
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
     alias_method :variables?, :variable?
     alias_method :has_variables?, :variable?

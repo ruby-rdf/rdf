@@ -136,8 +136,13 @@ module RDF
     #
     #   @param  [RDF::Statement] statement
     #   @return [Boolean]
-    def statement?(statement = nil)
-      statement && !enum_statement.find { |s| s.eql?(statement) }.nil?
+    def statement?(*args)
+      case args.length
+      when 0 then false
+      when 1
+        args.first && !enum_statement.find { |s| s.eql?(args.first) }.nil?        
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
     alias_method :has_statement?, :statement?
     alias_method :include?, :statement?
@@ -541,8 +546,12 @@ module RDF
     #   @param  [RDF::Resource] value
     #   @return [Boolean]
     #   @since 2.0
-    def term?(value = nil)
-      value && enum_term.include?(value)
+    def term?(*args)
+      case args.length
+      when 0 then super
+      when 1 then args.first && enum_term.include?(args.first)
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
     alias_method :has_term?, :term?
 

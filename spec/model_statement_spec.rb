@@ -65,6 +65,9 @@ describe RDF::Statement do
       expect { RDF::Statement.new }.not_to raise_error
     end
 
+    it {is_expected.to be_statement}
+    it {is_expected.to be_statement(subject)}
+    it {is_expected.not_to be_statement(RDF::Statement.new)}
     it {is_expected.to have_subject}
     its(:subject) {is_expected.not_to be_nil}
     it {expect(subject.predicate?).to be_truthy}

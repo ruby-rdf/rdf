@@ -136,23 +136,45 @@ module RDF
     end
 
     ##
-    # Returns `true` to indicate that this value is a statement.
+    # @overload statement?
+    #   Returns `true` if `self` is a {RDF::Statement}.
     #
-    # @return [Boolean]
-    def statement?
-      true
+    #   @return [Boolean]
+    # @overload statement?(statement)
+    #   Returns `true` if `self` contains the given {RDF::Statement}.
+    #
+    #   @param  [RDF::Statement] statement
+    #   @return [Boolean]
+    def statement?(*args)
+      case args.length
+      when 0 then true
+      when 1 then self == args.first || subject.statement?(*args) || object.statement?(*args)
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##
-    # Returns `true` if any element of the statement is not a
+    # @overload variable?
+    #   Returns `true` if any element of the statement is not a
     # URI, Node or Literal.
     #
-    # @return [Boolean]
-    def variable?
-      !(subject?    && subject.constant? &&
-        predicate?  && predicate.constant? &&
-        object?     && object.constant? &&
-        (graph?     ? graph_name.constant? : true))
+    #   @return [Boolean]
+    # @overload variable?(variables)
+    #   Returns `true` if this statement contains any of the variables.
+    #
+    #   @param  [Array<Symbol, #to_sym>] variables
+    #   @return [Boolean]
+    def variable?(*args)
+      case args.length
+      when 0
+        !(subject?    && subject.constant? &&
+          predicate?  && predicate.constant? &&
+          object?     && object.constant? &&
+          (graph?     ? graph_name.constant? : true))
+      when 1
+        to_quad.any? {|t| t.respond_to?(:variable?) && t.variable?(*args)}
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##

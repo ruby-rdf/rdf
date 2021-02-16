@@ -213,8 +213,12 @@ module RDF
     #   @see RDF::Value#statement?
     # @overload statement?(statement)
     #   @see    RDF::Enumerable#statement?
-    def statement?(statement = nil)
-      statement && read_target.has_statement?(statement)
+    def statement?(*args)
+      case args.length
+      when 0 then false
+      when 1 then read_target.statement?(*args)
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
     alias_method :has_statement?, :statement?
 

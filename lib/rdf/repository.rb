@@ -287,10 +287,22 @@ module RDF
       end
       
       ##
-      # @private
-      # @see RDF::Enumerable#graph?      
-      def graph?(graph)
-        @data.key?(graph)
+      # @overload graph?
+      #   Returns `false` to indicate that this is not a graph.
+      #
+      #   @return [Boolean]
+      # @overload graph?(name)
+      #   Returns `true` if `self` contains the given RDF graph_name.
+      #
+      #   @param  [RDF::Resource, false] graph_name
+      #     Use value `false` to query for the default graph_name
+      #   @return [Boolean]
+      def graph?(*args)
+        case args.length
+        when 0 then false
+        when 1 then @data.key?(args.first)
+        else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+        end
       end
       alias_method :has_graph?, :graph?
 
@@ -322,8 +334,12 @@ module RDF
       # @overload statement?(statement)
       #   @private
       #   @see    RDF::Enumerable#statement?
-      def statement?(statement = nil)
-        statement && statement_in?(@data, statement)
+      def statement?(*args)
+        case args.length
+        when 0 then false
+        when 1 then args.first && statement_in?(@data, args.first)
+        else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+        end
       end
       alias_method :has_statement?, :statement?
 
