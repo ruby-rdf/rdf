@@ -560,6 +560,8 @@ describe RDF::Query do
       context "?s p o" do
         subject {RDF::Query.new(RDF::Query::Pattern.new(:s, EX.p, 1))}
         it {expect(subject.execute(graph)).to have_result_set([{ s: EX.x1 }])}
+        it {is_expected.to be_variable}
+        it {is_expected.to be_variable(:s)}
         its(:variables?) {is_expected.to be_truthy}
         its(:variable_count) {is_expected.to eql 1}
         its(:variables) {is_expected.to include(:s)}
