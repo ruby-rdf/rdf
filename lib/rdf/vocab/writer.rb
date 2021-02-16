@@ -66,19 +66,6 @@ module RDF
             use: :required,
             description: "Name of created Ruby class (vocabulary format)."),
           RDF::CLI::Option.new(
-            symbol: :module_name,
-            datatype: String,
-            control: :text,
-            on: ["--module-name NAME"],
-            description: "Name of Ruby module containing class-name (vocabulary format)."),
-          RDF::CLI::Option.new(
-            symbol: :strict,
-            datatype: TrueClass,
-            control: :checkbox,
-            on: ["--strict"],
-            description: "Make strict vocabulary"
-          ) {true},
-          RDF::CLI::Option.new(
             symbol: :extra,
             datatype: String,
             control: :none,
@@ -90,6 +77,25 @@ module RDF
               m1.merge(term.to_sym => d1)
             end
           end,
+          RDF::CLI::Option.new(
+            symbol: :module_name,
+            datatype: String,
+            control: :text,
+            on: ["--module-name NAME"],
+            description: "Name of Ruby module containing class-name (vocabulary format)."),
+          RDF::CLI::Option.new(
+            symbol: :noDoc,
+            datatype: TrueClass,
+            control: :checkbox,
+            on: ["--noDoc"],
+            description: "Do not output Yard documentation."),
+          RDF::CLI::Option.new(
+            symbol: :strict,
+            datatype: TrueClass,
+            control: :checkbox,
+            on: ["--strict"],
+            description: "Make strict vocabulary"
+          ) {true},
         ]
       end
 
@@ -144,30 +150,40 @@ module RDF
           # This file generated automatically using rdf vocabulary format from #{source}
           require 'rdf'
           module #{module_name}
-            # @!parse
-            #   # Vocabulary for <#{base_uri}>
-            #   #
           ).gsub(/^          /, '')
 
-        if vocab.ontology
+          @output.print %(  # @!parse
+            #   # Vocabulary for <#{base_uri}>
+            #   #
+          ).gsub(/^          /, '') unless @options[:noDoc]
+
+        if vocab.ontology && !@options[:noDoc]
           ont_doc = []
-          [:"dc:title", :"dc11:title", :label, :comment, :"dc:description", :"dc11:description"].each do |attr|
+          %i(
+            http://purl.org/dc/terms/title
+            http://purl.org/dc/elements/1.1/title
+            label
+            comment
+            http://purl.org/dc/terms/description
+            http://purl.org/dc/elements/1.1/description
+          ).each do |attr|
             next unless vocab.ontology.attributes[attr]
             Array(vocab.ontology.attributes[attr]).each do |v|
-              ont_doc << "  #   # " + v.to_s.gsub(/\n/, ' ')
+              ont_doc << "  #   # " + v.to_s.gsub(/\s+/, ' ')
             end
           end
           @output.puts ont_doc.join("\n  #   #\n") unless ont_doc.empty?
           # Version Info
-          Array(vocab.ontology.attributes[:"owl:versionInfo"]).each do |vers|
+          # See Also
+          Array(vocab.ontology.attributes[:'http://www.w3.org/2002/07/owl#versionInfo']).each do |vers|
             @output.puts "  #   # @version #{vers}"
           end
           # See Also
-          Array(vocab.ontology.attributes[:"rdfs:seeAlso"]).each do |see|
+          Array(vocab.ontology.attributes[:'http://www.w3.org/2000/01/rdf-schema#seeAlso']).each do |see|
             @output.puts "  #   # @see #{see}"
           end
         end
-        @output.puts %(  #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary)
+        @output.puts %(  #   class #{class_name} < RDF::#{"Strict" if strict}Vocabulary) unless @options[:noDoc]
 
         # Split nodes into Class/Property/Datatype/Other
         term_nodes = {
@@ -207,16 +223,16 @@ module RDF
             # Only document terms that can be accessed like a Ruby attribute
             next unless name.to_s.match?(/^[_[:alpha:]](?:\w*)[!?=]?$/)
             @output.puts(Array(attributes[:comment]).map do |comment|
-              "  #     # #{comment.to_s.gsub(/\n/, ' ')}"
+              "  #     # #{comment.to_s.gsub(/\s+/, ' ')}"
             end.join("\n  #     #\n")) if attributes[:comment]
             @output.puts "  #     # @return [RDF::Vocabulary::Term]"
             @output.puts "  #     attr_reader :#{name}"
             @output.puts "  #"
           end
-        end
+        end unless @options[:noDoc]
 
         # End of yard preamble
-        @output.puts "  #   end"
+        @output.puts "  #   end" unless @options[:noDoc]
         @output.puts %(  #{class_name} = Class.new(RDF::#{"Strict" if strict}Vocabulary("#{base_uri}")) do)
 
         # Output term definitions
@@ -265,7 +281,7 @@ module RDF
         if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
           "#{value.to_s.inspect}.freeze"
         elsif value.is_a?(RDF::URI)
-          "#{value.pname.inspect}.freeze"
+          "#{value.to_s.inspect}.freeze"
         elsif value.is_a?(RDF::Vocabulary::Term)
           value.to_ruby(indent: indent + "  ")
         elsif value.is_a?(RDF::Term)
@@ -273,7 +289,7 @@ module RDF
         elsif value.is_a?(RDF::List)
           list_elements = value.map do |u|
             if u.uri?
-              "#{u.pname.inspect}.freeze"
+              "#{u.to_s.inspect}.freeze"
             elsif u.respond_to?(:to_ruby)
               u.to_ruby(indent: indent + "  ")
             else

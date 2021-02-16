@@ -10,6 +10,26 @@ This is a pure-Ruby library for working with [Resource Description Framework
 [![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf/badge.svg?branch=develop)](https://coveralls.io/github/ruby-rdf/rdf?branch=develop)
 [![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
 
+## Table of contents
+
+1. [Features](#features)
+2. [Differences between RDF 1.0 and RDF 1.1](#differences-between-rdf-1-0-and-rdf-1-1)
+3. [Tutorials](#tutorials)
+4. [Command Line](#command-line)
+5. [Examples](#examples)
+6. [Reader/Writer convenience methods](#reader/writer-convenience-methods)
+7. [RDF* (RDFStar)](#rdf*-(rdfstar))
+8. [Documentation](#documentation)
+9. [Dependencies](#dependencies)
+10. [Installation](#installation)
+11. [Download](#download)
+12. [Resources](#resources)
+13. [Mailing List](#mailing-list)
+14. [Authors](#authors)
+15. [Contributors](#contributors)
+16. [Contributing](#contributing)
+17. [License](#license)
+
 ## Features
 
 * 100% pure Ruby with minimal dependencies and no bloat.
@@ -41,7 +61,7 @@ middleware.
 
 See {RDF::Util::File} for configuring other mechanisms for retrieving resources.
 
-### Term caching and configuration.
+### Term caching and configuration
 
 RDF.rb uses a weak-reference cache for storing internalized versions of URIs and Nodes. This is particularly useful for Nodes as two nodes are equivalent only if they're the same node.
 
@@ -76,7 +96,7 @@ the 1.1 release of RDF.rb:
 * {RDF::Util::File.open\_file} now performs redirects and manages `base_uri` based on W3C recommendations:
   * `base_uri` is set to the original URI if a status 303 is provided, otherwise any other redirect will set `base_uri` to the redirected location.
   * `base_uri` is set to the content of the `Location` header if status is _success_.
-* Additionally, {RDF::Util::File.open\_file} sets the result encoding from `charset` if provided, defaulting to `UTF-8`. Other access methods include `last_modified` and `content_type`, 
+* Additionally, {RDF::Util::File.open\_file} sets the result encoding from `charset` if provided, defaulting to `UTF-8`. Other access methods include `last_modified` and `content_type`,
 * {RDF::StrictVocabulary} added with an easy way to keep vocabulary definitions up to date based on their OWL or RDFS definitions. Most vocabularies are now StrictVocabularies meaning that an attempt to resolve a particular term in that vocabulary will error if the term is not defined in the vocabulary.
 * New vocabulary definitions have been added for [ICal](http://www.w3.org/2002/12/cal/icaltzd#), [Media Annotations (MA)](http://www.w3.org/ns/ma-ont#), [Facebook OpenGraph (OG)](http://ogp.me/ns#), [PROV](http://www.w3.org/ns/prov#), [SKOS-XL (SKOSXL)](http://www.w3.org/2008/05/skos-xl#), [Data Vocabulary (V)](http://rdf.data-vocabulary.org/), [VCard](http://www.w3.org/2006/vcard/ns#), [VOID](http://rdfs.org/ns/void#http://rdfs.org/ns/void#), [Powder-S (WDRS)](http://www.w3.org/2007/05/powder-s#), and [XHV](http://www.w3.org/1999/xhtml/vocab#).
 
@@ -89,6 +109,7 @@ Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symm
 * [Getting started with RDF and SPARQL using 4store and RDF.rb](https://www.jenitennison.com/blog/node/152)
 
 ## Command Line
+
 When installed, RDF.rb includes a `rdf` shell script which acts as a wrapper to perform a number of different
 operations on RDF files using available readers and writers.
 
@@ -112,7 +133,7 @@ Different RDF gems will augment the `rdf` script with more capabilities, which m
     require 'rdf/ntriples'
     graph = RDF::Graph.new << [:hello, RDF::RDFS.label, "Hello, world!"]
     graph.dump(:ntriples)
-    
+
 or
 
     RDF::Writer.open("hello.nt") { |writer| writer << graph }
@@ -121,7 +142,7 @@ or
 
     require 'rdf/ntriples'
     graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nt")
-    
+
 or
 
     RDF::Reader.open("https://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
@@ -131,19 +152,20 @@ or
     end
 
 ### Reading RDF data in other formats
+
 {RDF::Reader.open} and {RDF::Repository.load} use a number of mechanisms to determine the appropriate reader
 to use when loading a file. The specific format to use can be forced using, e.g. `format: :ntriples`
 option where the specific format symbol is determined by the available readers. Both also use
 MimeType or file extension, where available.
 
     require 'rdf/nquads'
-    
+
     graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
 
 A specific sub-type of Reader can also be invoked directly:
 
     require 'rdf/nquads'
-    
+
     RDF::NQuads::Reader.open("https://ruby-rdf.github.com/rdf/etc/doap.nq") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
@@ -157,6 +179,7 @@ be detected from filename or other options, or that more than one format is iden
 match will be used to read the input.
 
 ### Writing RDF data using other formats
+
 {RDF::Writer.open}, {RDF::Enumerable#dump}, {RDF::Writer.dump} take similar options to {RDF::Reader.open} to determine the
 appropriate writer to use.
 
@@ -176,6 +199,7 @@ A specific sub-type of Writer can also be invoked directly:
     File.open("hello.nq", "w") {|f| f << repo.dump(:nquads)}
 
 ## Reader/Writer convenience methods
+
 {RDF::Enumerable} implements `to_{format}` for each available instance of {RDF::Reader}.
 For example, if `rdf/turtle` is loaded, this allows the following:
 
@@ -195,7 +219,7 @@ Note that no prefixes are loaded automatically, however they can be provided as 
 ### Querying RDF data using basic graph patterns (BGPs)
 
     require 'rdf/ntriples'
-    
+
     graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nt")
     query = RDF::Query.new({
       person: {
@@ -204,7 +228,7 @@ Note that no prefixes are loaded automatically, however they can be provided as 
         FOAF.mbox => :email,
       }
     }, **{})
-    
+
     query.execute(graph) do |solution|
       puts "name=#{solution.name} email=#{solution.email}"
     end
@@ -450,7 +474,6 @@ This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange develo
   explicit [public domain dedication][PDD] on record from you,
   which you will be asked to agree to on the first commit to a repo within the organization.
   Note that the agreement applies to all repos in the [Ruby RDF](https://github.com/ruby-rdf/) organization.
-
 
 ## License
 

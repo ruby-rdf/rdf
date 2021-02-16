@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'rdf/turtle'
 require 'rdf/vocab/writer'
 describe RDF::Vocabulary::Writer do
   after(:each) do
@@ -18,8 +19,8 @@ describe RDF::Vocabulary::Writer do
   [
     /module Bar/,
     /class Foo/,
-    /term :Class,\s+"rdfs:Datatype": "Class".freeze,\s+type: "rdfs:Class".freeze/m,
-    /property :prop,\s+"rdfs:Datatype": "prop".freeze,\s+type: "rdf:Property".freeze/m,
+    %r{term :Class,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "Class".freeze,\s+type: "http://www.w3.org/2000/01/rdf-schema#Class"}m.freeze,
+    %r{property :prop,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "prop".freeze,\s+type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"}m.freeze,
   ].each do |regexp,|
     it "matches #{regexp}" do
       expect(serialization).to match(regexp)
@@ -51,14 +52,14 @@ describe RDF::Vocabulary::Writer do
       /class Foo/,
       /term :af/,
       /exactMatch: \[term\(/,
-      /type: "skos:Concept".freeze/,
-      /notation: %\(af\).freeze/,
-      /inScheme: "foo:iso3166-1-alpha-2".freeze/,
-      /notation: %\(afg\).freeze/,
-      /inScheme: "foo:iso3166-1-alpha-3".freeze/,
-      /"foaf:name": "Afghanistan".freeze/,
-      /isDefinedBy: "foo:".freeze/,
-      /type: "http:\/\/sweet.jpl.nasa.gov\/2.3\/humanJurisdiction.owl\#Country".freeze/,
+      %r{type: "http://www.w3.org/2004/02/skos/core#Concept"}.freeze,
+      /notation: %\(af\)/.freeze,
+      %r{inScheme: "http://eulersharp.sourceforge.net/2003/03swap/countries#iso3166-1-alpha-2"}.freeze,
+      /notation: %\(afg\)/.freeze,
+      %r{inScheme: "http://eulersharp.sourceforge.net/2003/03swap/countries#iso3166-1-alpha-3"}.freeze,
+      %r{"http://xmlns.com/foaf/0.1/name": "Afghanistan"}.freeze,
+      %r{isDefinedBy: "http://eulersharp.sourceforge.net/2003/03swap/countries#"}.freeze,
+      %r{type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country"}.freeze,
     ].each do |regexp,|
       it "matches #{regexp}" do
         expect(serialization).to match(regexp)
@@ -81,10 +82,10 @@ describe RDF::Vocabulary::Writer do
       /module Bar/,
       /class Foo/,
       /term :ClassList/,
-      /label: "ClassList".freeze/,
+      /label: "ClassList"/.freeze,
       /subClassOf: term\(/,
-      /unionOf: list\("foo:C1".freeze, "foo:C2".freeze\)/,
-      /type: "rdfs:Class".freeze/,
+      %r{unionOf: list\("http://example.org/C1".freeze, "http://example.org/C2".freeze\)},
+      %r{type: "http://www.w3.org/2000/01/rdf-schema#Class"}.freeze,
     ].each do |regexp,|
       it "matches #{regexp}" do
         expect(serialization).to match(regexp)
