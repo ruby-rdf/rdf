@@ -29,11 +29,22 @@ module RDF
   # @see RDF::Statement
   module Value
     ##
-    # Returns `true` if `self` is a {RDF::Graph}.
+    # @overload graph?
+    #   Returns `true` if `self` is a {RDF::Graph}.
     #
-    # @return [Boolean]
-    def graph?
+    #   @return [Boolean]
+    # @overload graph?(name)
+    #   Returns `true` if `self` contains the given RDF graph_name.
+    #
+    #   @param  [RDF::Resource, false] graph_name
+    #     Use value `false` to query for the default graph_name
+    #   @return [Boolean]
+    def graph?(*args)
       false
+      case args.length
+      when 0, 1 then false
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
 
     ##

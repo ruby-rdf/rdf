@@ -215,9 +215,22 @@ module RDF
     end
 
     ##
-    # @return [Boolean]
-    def graph?
-      !!graph_name
+    # @overload graph?
+    #   Returns `true` if the statement has a graph name.
+    #
+    #   @return [Boolean]
+    # @overload graph?(name)
+    #   Returns `true` if `self` contains the given RDF graph_name.
+    #
+    #   @param  [RDF::Resource, false] graph_name
+    #     Use value `false` to query for the default graph_name
+    #   @return [Boolean]
+    def graph?(*args)
+      case args.length
+      when 0 then !!graph_name
+      when 1 then graph_name == args.first
+      else raise ArgumentError("wrong number of arguments (given #{args.length}, expected 0 or 1)")
+      end
     end
     alias_method :name?, :graph?
     alias_method :has_graph?, :graph?
