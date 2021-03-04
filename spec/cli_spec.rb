@@ -180,6 +180,15 @@ describe RDF::CLI do
           RDF::CLI.exec(["serialize", TEST_FILES[:nt]], output_format: :nquads)
         }.to write.to(:output)
       end
+
+      it "passes parsed prefixes to writer" do
+        allow_any_instance_of(RDF::NTriples::Reader).to receive(:prefixes).and_return(foo: :bar)
+
+        writer_mock = double("writer")
+        expect(RDF::Writer).to receive(:for).and_return(writer_mock)
+        expect(writer_mock).to receive(:new).with(anything, hash_including(prefixes: {foo: :bar}))
+        RDF::CLI.exec(["serialize", TEST_FILES[:nt]], output_format: :nquads)
+      end
     end
 
     it "help" do
