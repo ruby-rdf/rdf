@@ -19,15 +19,15 @@ describe RDF::Query::Solution do
     specify {expect(subject["$$e"]).to eq 5}
 
     context "with accessor overriding instance method" do
-      subject {described_class.new(then: 'foo')}
+      subject {described_class.new(tap: 'foo')}
 
       it "notes deprecation when accessor is an overriddedn instance method" do
         expect do
-          expect(subject.then).to eq 'foo'
+          expect(subject.tap).to eq 'foo'
         end.to write('[DEPRECATION]').to(:error)
 
         expect do
-          expect(subject[:then]).to eq 'foo'
+          expect(subject[:tap]).to eq 'foo'
         end.not_to write.to(:error)
       end
     end
