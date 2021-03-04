@@ -9,6 +9,30 @@ describe RDF::Query::Solution do
     end
   end
 
+  describe "accessors" do
+    specify {expect(subject.a).to eq 1}
+    specify {expect(subject[:a]).to eq 1}
+    specify {expect(subject["a"]).to eq 1}
+    specify {expect(subject["?b"]).to eq 2}
+    specify {expect(subject["??c"]).to eq 3}
+    specify {expect(subject["$d"]).to eq 4}
+    specify {expect(subject["$$e"]).to eq 5}
+
+    context "with accessor overriding instance method" do
+      subject {described_class.new(then: 'foo')}
+
+      it "notes deprecation when accessor is an overriddedn instance method" do
+        expect do
+          expect(subject.then).to eq 'foo'
+        end.to write('[DEPRECATION]').to(:error)
+
+        expect do
+          expect(subject[:then]).to eq 'foo'
+        end.not_to write.to(:error)
+      end
+    end
+  end
+
   describe "#each_binding" do
     it "returns an enumerator" do
       expect(subject.each_binding).to be_an Enumerator

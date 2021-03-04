@@ -23,10 +23,13 @@ class RDF::Query
   class Solution
     # Undefine all superfluous instance methods:
     alias_method :__send, :send
+
+    # Temporarily remember instance method for deprecation message in `method_missing`.
+    INSTANCE_METHODS = instance_methods
     undef_method(*instance_methods.
                   map(&:to_s).
                   select {|m| m.match?(/^\w+$/)}.
-                  reject {|m| %w(object_id dup instance_eval inspect to_s private_methods class should should_not pretty_print).include?(m) || m[0,2] == '__'}.
+                  reject {|m| %w(object_id dup instance_eval inspect to_s private_methods public_methods class method pretty_print).include?(m) || m[0,2] == '__'}.
                   map(&:to_sym))
 
     include Enumerable
@@ -344,6 +347,12 @@ class RDF::Query
     #   @return [RDF::Term]
     def method_missing(name, *args, &block)
       if args.empty? && @bindings.key?(name.to_sym)
+        if INSTANCE_METHODS.include?(name)
+          warn "[DEPRECATION] RDF::Query::Solution##{name} is an overridden instance method.\n" +
+               "Its use as a solution accessor is deprecated and will be removed in a future version.\n" +
+               "Use #[] for safe access.\n" +
+               "Called from #{Gem.location_of_caller.join(':')}"
+        end
         @bindings[name.to_sym]
       else
         super # raises NoMethodError
