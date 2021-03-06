@@ -256,8 +256,7 @@ module RDF
         lambda: ->(argv, opts) do
           writer_class = RDF::Writer.for(opts[:output_format]) || RDF::NTriples::Writer
           out = opts[:output]
-          opts = opts.merge(prefixes: {})
-          writer_opts = opts.merge(standard_prefixes: true)
+          writer_opts = {prefixes: {}, standard_prefixes: true}.merge(opts)
           writer_class.new(out, **writer_opts) do |writer|
             writer << repository
           end
@@ -536,6 +535,8 @@ module RDF
         count = 0
         self.parse(args, **options) do |reader|
           reader.each_statement {|st| @repository << st}
+          # Remember prefixes from reading
+          options[:prefixes] ||= reader.prefixes
         end
         secs = Time.new - start
         options[:logger].info "Parsed #{repository.count} statements with #{@readers.join(', ')} in #{secs} seconds @ #{count/secs} statements/second."
