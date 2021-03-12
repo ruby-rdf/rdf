@@ -60,6 +60,12 @@ module RDF; class Query
     end
 
     ##
+    # Create a new pattern from the quads, recursivly dupping sub-patterns.
+    def dup
+      self.class.from(self.to_quad.map {|t| t.is_a?(RDF::Query::Pattern) ? t.dup : t})
+    end
+
+    ##
     # Any additional options for this pattern.
     #
     # @return [Hash]
