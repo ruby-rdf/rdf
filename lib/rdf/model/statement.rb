@@ -301,7 +301,7 @@ module RDF
     # @see RDF::Literal#==
     # @see RDF::Query::Variable#==
     def eql?(other)
-      other.is_a?(Statement) && self == other && (self.graph_name || false) == (other.graph_name || false)
+      other.is_a?(Statement) && self.to_a.eql?(other.to_a) && (self.graph_name || false) == (other.graph_name || false)
     end
 
     ##
