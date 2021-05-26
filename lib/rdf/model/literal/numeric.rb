@@ -11,6 +11,9 @@ module RDF; class Literal
     # @return [Integer] `-1`, `0`, or `1`
     # @since  0.3.0
     def <=>(other)
+      # If lexically invalid, use regular literal testing
+      return super unless self.valid? && (!other.respond_to?(:valid?) || other.valid?)
+
       case other
         when ::Numeric
           to_d <=> other
@@ -30,11 +33,10 @@ module RDF; class Literal
     # @since  0.3.0
     def ==(other)
       # If lexically invalid, use regular literal testing
-      return super unless self.valid?
+      return super unless self.valid? && (!other.respond_to?(:valid?) || other.valid?)
 
       case other
       when Literal::Numeric
-        return super unless other.valid?
         (cmp = (self <=> other)) ? cmp.zero? : false
       when RDF::URI, RDF::Node
         # Interpreting SPARQL data-r2/expr-equal/eq-2-2, numeric can't be compared with other types

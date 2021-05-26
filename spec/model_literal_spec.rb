@@ -1454,9 +1454,9 @@ describe RDF::Literal do
         "eq-2-2(bug) 'zzz'='zzz'^^<unknown>" => [RDF::Literal("zzz"), RDF::Literal("zzz", datatype: RDF::URI("unknown"))],
         "numeric '1'=1" => [RDF::Literal("1"), RDF::Literal(1)],
         "numeric 1='1'" => [RDF::Literal(1), RDF::Literal("1")],
-        "numeric 1=<xyz>" => [RDF::Literal(1), RDF::URI("xyz")],  # From expr-equal/expr-2-2
+        "numeric 1=<xyz>" => [RDF::Literal(1), RDF::URI("http://example/xyz")],  # From expr-equal/expr-2-2
         "numeric 1=_:xyz" => [RDF::Literal(1), RDF::Node.new("xyz")],  # From expr-equal/expr-2-2
-        "numeric <xyz>=1" => [RDF::URI("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
+        "numeric <xyz>=1" => [RDF::URI("http://example/xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
         "numeric _:xyz=1" => [RDF::Node.new("xyz"), RDF::Literal(1)],  # From expr-equal/expr-2-2
         "open-eq-04 'a'^^<unknown>=1" => [RDF::Literal.new("a", datatype: RDF::URI("unknown")), RDF::Literal(1)],
         "open-eq-06 'b'^^<unknown>='a'^^<unknown>" => [RDF::Literal.new("b", datatype: RDF::URI("unknown")), RDF::Literal.new("a", datatype: RDF::URI("unknown"))],
