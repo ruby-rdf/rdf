@@ -309,6 +309,37 @@ module RDF
     alias_method :===, :==
 
     ##
+    # Compares `self` to `other` for sorting purposes (with type check).
+    #
+    # @param  [Object]  other
+    # @return [Integer] `-1`, `0`, or `1`
+    def <=>(other)
+      case other
+      when Literal
+        case
+        when self.eql?(other)
+          0
+        when self.language? && other.language?
+          # Literals with languages can compare if languages are identical
+          self.to_s <=> other.to_s
+        when self.simple? && other.simple?
+          self.to_s <=> other.to_s
+        when !self.valid?
+          type_error("#{self.inspect} is invalid") || 0
+        when !other.valid?
+          type_error("#{other.inspect} is invalid") || 0
+        when self.comperable_datatype2?(other)
+          self.object <=> other.object
+        else
+          type_error("#{self.inspect} and #{other.inspect} are not comperable") || 0
+        end
+      when String
+        self.simple? && self.value <=> other
+      else 1
+      end
+    end
+
+    ##
     # Returns `true` if this is a plain literal. A plain literal
     # may have a language, but may not have a datatype. For
     # all practical purposes, this includes xsd:string literals
@@ -396,6 +427,32 @@ module RDF
       else
         # An unknown datatype may not be used for comparison, unless it has a language? (open-eq-8)
         self.language?
+      end
+    end
+
+    ##
+    # Returns `true` if the literal has a datatype and the comparison should
+    # return false instead of raise a type error.
+    #
+    # Used for <=> operator.
+    #
+    # This behavior is intuited from SPARQL data-r2/expr-equal/eq-2-2
+    # @return [Boolean]
+    def comperable_datatype2?(other)
+      case self
+      when RDF::Literal::Numeric, RDF::Literal::Boolean
+        case other
+        when RDF::Literal::Numeric, RDF::Literal::Boolean
+          true
+        else
+          self.plain? || other.plain? ||
+          self.language? || other.language? ||
+          self.datatype == other.datatype
+        end
+      else
+        self.plain? || other.plain? ||
+        self.language? || other.language? ||
+        self.datatype == other.datatype
       end
     end
 
