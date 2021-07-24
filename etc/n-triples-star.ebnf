@@ -1,7 +1,7 @@
-[1] ntriplesDoc ::= triple? (EOL triple)* EOL?
-[2] triple      ::= subject predicate object '.'
-[3] subject     ::= IRIREF | BLANK_NODE_LABEL | embTriple
-[4] predicate   ::= IRIREF
-[5] object      ::= IRIREF | BLANK_NODE_LABEL | literal | embTriple
-[6] literal     ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANGTAG)?
-[7] embTriple   ::= '<<' subject predicate object '>>'
+[1] ntriplesDoc   ::= triple? (EOL triple)* EOL?
+[2] triple        ::= subject predicate object '.'
+[3] subject       ::= IRIREF | BLANK_NODE_LABEL | quotedTriple
+[4] predicate     ::= IRIREF
+[5] object        ::= IRIREF | BLANK_NODE_LABEL | literal | quotedTriple
+[6] literal       ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANGTAG)?
+[7] quotedTriple  ::= '<<' subject predicate object '>>'
