@@ -431,12 +431,10 @@ module RDF
     end
 
     ##
-    # Returns `true` if the literal has a datatype and the comparison should
-    # return false instead of raise a type error.
+    # Returns `true` if the literals are comperable.
     #
     # Used for <=> operator.
     #
-    # This behavior is intuited from SPARQL data-r2/expr-equal/eq-2-2
     # @return [Boolean]
     def comperable_datatype2?(other)
       case self
@@ -445,13 +443,9 @@ module RDF
         when RDF::Literal::Numeric, RDF::Literal::Boolean
           true
         else
-          self.plain? || other.plain? ||
-          self.language? || other.language? ||
-          self.datatype == other.datatype
+          false
         end
       else
-        self.plain? || other.plain? ||
-        self.language? || other.language? ||
         self.datatype == other.datatype
       end
     end
