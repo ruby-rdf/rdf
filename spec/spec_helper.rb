@@ -2,7 +2,6 @@ require "bundler/setup"
 begin
   require 'simplecov'
   require 'simplecov-lcov'
-  require 'coveralls'
 
   SimpleCov::Formatter::LcovFormatter.config do |config|
     #Coveralls is coverage by default/lcov. Send info results
