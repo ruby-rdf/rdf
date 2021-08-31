@@ -615,8 +615,8 @@ describe RDF::Literal do
       %w(-INF      -INF),
       %w(+INF      INF),
       #%w(NaN       NaN),
-      #%w(NAN        NaN),
-      %w(InF        INF),
+      #%w(NAN       NaN),
+      %w(InF       INF),
       %w(3E1       3.0E1)
     ]
     it_behaves_like 'RDF::Literal validation', RDF::XSD.double,
@@ -641,7 +641,7 @@ describe RDF::Literal do
         1.0       => ["1.0", "1.0E0"],
         0.0       => ["0.0", "0.0E0"],
         10.10     => ["10.1", "1.01E1"],
-        123.456e4 => ["1234560.0", "1.23456E6"],
+        123.456e4 => ["1234560.0", "1.23456E6"]
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
           expect(RDF::Literal::Double.new(obj).to_s).to eql str

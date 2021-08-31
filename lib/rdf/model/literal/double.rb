@@ -43,6 +43,7 @@ module RDF; class Literal
       # Can't use simple %f transformation due to special requirements from
       # N3 tests in representation
       @string = case
+        when @object.nil?      then 'NaN'
         when @object.nan?      then 'NaN'
         when @object.infinite? then @object.to_s[0...-'inity'.length].upcase
         when @object.zero?     then '0.0E0'
