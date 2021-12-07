@@ -19,8 +19,8 @@ module RDF; module Util
     # @return [Logger, #write, #<<]
     def logger(**options)
       # Guard against undefined instance variables, which may be a warning if used.
-      @logger = nil unless instance_variable_defined?(:@logger)
-      @options = nil unless instance_variable_defined?(:@options)
+      @logger = nil unless instance_variable_defined?(:@logger) || frozen?
+      @options = nil unless instance_variable_defined?(:@options) || frozen?
       logger = options.fetch(:logger, @logger)
       logger = @options[:logger] if logger.nil? && @options
       if logger.nil?
