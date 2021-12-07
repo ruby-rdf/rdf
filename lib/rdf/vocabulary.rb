@@ -574,6 +574,7 @@ module RDF
           term_defs
         end
 
+        #require 'byebug'; byebug
         # Pass over embedded_defs with anonymous references, once
         embedded_defs.each do |term, attributes|
           attributes.each do |ak, avs|
@@ -1234,16 +1235,16 @@ module RDF
           values = values.map do |value|
             if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(k.to_s)
               "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
-            # elsif value.is_a?(RDF::Vocabulary::Term)
-            #  value.to_ruby(indent: indent + "  ")
+            elsif value.node? && value.is_a?(RDF::Vocabulary::Term)
+              "#{value.to_ruby(indent: indent + "  ")}.freeze"
             elsif value.is_a?(RDF::Term)
               "#{value.to_s.inspect}.freeze"
             elsif value.is_a?(RDF::List)
               list_elements = value.map do |u|
                 if u.uri?
                   "#{u.to_s.inspect}.freeze"
-                # elsif u.respond_to?(:to_ruby)
-                #  u.to_ruby(indent: indent + "  ")
+                elsif u.node? && u.respond_to?(:to_ruby)
+                  u.to_ruby(indent: indent + "  ")
                 else
                   "#{u.to_s.inspect}.freeze"
                 end
