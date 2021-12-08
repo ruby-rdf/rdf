@@ -70,7 +70,7 @@ module RDF
       # @return [Enumerator]
       def each(&block)
         if self.equal?(Vocabulary)
-          if @vocabs
+          if instance_variable_defined?(:@vocabs) && @vocabs
             @vocabs.select(&:name).each(&block)
           else
             # This is needed since all vocabulary classes are defined using
@@ -356,7 +356,7 @@ module RDF
       def ontology(*args)
         case args.length
         when 0
-          @ontology
+          @ontology if instance_variable_defined?(:@ontology)
         else
           uri, options = args
           URI.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
@@ -507,7 +507,7 @@ module RDF
         end
 
         # Also include the ontology, if it's not also a property
-        @ontology.each_statement(&block) if @ontology && @ontology != self
+        @ontology.each_statement(&block) if self.ontology && self.ontology != self
       end
 
       ##

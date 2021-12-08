@@ -607,7 +607,7 @@ module RDF
         # @see Transaction#execute
         def execute
           raise TransactionError, 'Cannot execute a rolled back transaction. ' \
-                                  'Open a new one instead.' if @rolledback
+                                  'Open a new one instead.' if instance_variable_defined?(:@rolledback) && @rolledback
 
           raise TransactionError, 'Error merging transaction. Repository' \
                                   'has changed during transaction time.' unless 

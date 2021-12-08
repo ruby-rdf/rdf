@@ -247,7 +247,7 @@ module RDF
     # @raise [TransactionError] if the transaction can't be applied
     def execute
       raise TransactionError, 'Cannot execute a rolled back transaction. ' \
-                              'Open a new one instead.' if @rolledback
+                              'Open a new one instead.' if instance_variable_defined?(:@rolledback) && @rolledback
       @changes.apply(@repository)
     end
 

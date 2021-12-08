@@ -17,20 +17,20 @@ module RDF; module Util
     # @param [Hash{Symbol => Object}] options
     # @option options [Logger, #<<] :logger
     # @return [Logger, #write, #<<]
-    def logger(**options)
+    def logger(logger: nil, **options)
       # Guard against undefined instance variables, which may be a warning if used.
-      @logger = nil unless instance_variable_defined?(:@logger) || frozen?
-      @options = nil unless instance_variable_defined?(:@options) || frozen?
-      logger = options.fetch(:logger, @logger)
-      logger = @options[:logger] if logger.nil? && @options
+      @options = {} unless instance_variable_defined?(:@options) || frozen?
+      logger ||= @logger if instance_variable_defined?(:@logger)
+      logger = @options[:logger] if logger.nil? && instance_variable_defined?(:@options) && @options
       if logger.nil?
         # Unless otherwise specified, use $stderr
-        logger = (@options || options)[:logger] = IOWrapper.new($stderr)
+        logger = IOWrapper.new($stderr)
 
         # Reset log_statistics so that it's not inherited across different instances
         logger.log_statistics.clear if logger.respond_to?(:log_statistics)
       end
-      logger = (@options || options)[:logger] = ::Logger.new(::File.open(::File::NULL, "w"))  unless logger # Incase false was used, which is frozen
+      logger = ::Logger.new(::File.open(::File::NULL, "w"))  unless logger # Incase false was used, which is frozen
+      @options[:logger] ||= logger if instance_variable_defined?(:@options)
       logger.extend(LoggerBehavior) unless logger.is_a?(LoggerBehavior)
       logger
     end

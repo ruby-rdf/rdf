@@ -647,7 +647,7 @@ module RDF
     ##
     # @return [String]
     def readline
-      @line = @line_rest || @input.readline
+      @line = instance_variable_defined?(:@line_rest) && @line_rest || @input.readline
       @line, @line_rest = @line.split("\r", 2)
       @line = String.new if @line.nil? # not frozen
       @line.chomp!

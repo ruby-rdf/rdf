@@ -111,7 +111,7 @@ describe RDF::Node do
   end
 
   its(:to_base) {is_expected.to eq "_:foo"}
-  its(:to_unique_base) {is_expected.to match /^_:g/}
+  its(:to_unique_base) {is_expected.to match(/^_:g/)}
 
   describe "#to_unique_base" do
     it "uses the to_unique_base of original if duped" do

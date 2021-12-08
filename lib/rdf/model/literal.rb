@@ -166,12 +166,12 @@ module RDF
       @object   = value.freeze
       @string   = lexical if lexical
       @string   = value if !defined?(@string) && value.is_a?(String)
-      @string   = @string.encode(Encoding::UTF_8).freeze if @string
-      @object   = @string if @string && @object.is_a?(String)
+      @string   = @string.encode(Encoding::UTF_8).freeze if instance_variable_defined?(:@string)
+      @object   = @string if instance_variable_defined?(:@string) && @object.is_a?(String)
       @language = language.to_s.downcase.to_sym if language
       @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
-      @datatype ||= @language ? RDF.langString : RDF::URI("http://www.w3.org/2001/XMLSchema#string")
+      @datatype ||= instance_variable_defined?(:@language) && @language ? RDF.langString : RDF::URI("http://www.w3.org/2001/XMLSchema#string")
     end
 
     ##
@@ -179,7 +179,7 @@ module RDF
     #
     # @return [String]
     def value
-      @string || to_s
+      instance_variable_defined?(:@string) && @string || to_s
     end
 
     ##
