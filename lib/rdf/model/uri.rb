@@ -621,16 +621,22 @@ module RDF
     end
 
     ##
-    # Returns a qualified name (QName) for this URI based on available vocabularies, if possible.
+    # Returns a qualified name (QName) as a tuple of `[prefix, suffix]` for this URI based on available vocabularies, if possible.
     #
     # @example
     #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname       #=> [:rdfs, nil]
     #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname  #=> [:rdfs, :label]
     #   RDF::RDFS.label.qname                                         #=> [:rdfs, :label]
     #
+    # @param [Hash{Symbol => String}] prefixes
+    #   Explicit set of prefixes to look for matches, defaults to loaded vocabularies.
     # @return [Array(Symbol, Symbol)] or `nil` if no QName found
-    def qname
-      if self.to_s =~ %r([:/#]([^:/#]*)$)
+    def qname(prefixes: nil)
+      if prefixes
+        prefixes.each do |prefix, uri|
+          return [prefix, self.to_s[uri.length..-1].to_sym] if self.start_with?(uri)
+        end
+      elsif self.to_s =~ %r([:/#]([^:/#]*)$)
         local_name = $1
         vocab_uri  = local_name.empty? ? self.to_s : self.to_s[0...-(local_name.length)]
         Vocabulary.each do |vocab|
@@ -655,9 +661,11 @@ module RDF
     ##
     # Returns a string version of the QName or the full IRI
     #
+    # @param [Hash{Symbol => String}] prefixes
+    #   Explicit set of prefixes to look for matches, defaults to loaded vocabularies.
     # @return [String] or `nil`
-    def pname
-      (q = self.qname) ? q.join(":") : to_s
+    def pname(prefixes: nil)
+      (q = self.qname(prefixes: prefixes)) ? q.join(":") : to_s
     end
 
     ##

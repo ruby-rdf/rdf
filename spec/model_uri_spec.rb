@@ -962,6 +962,36 @@ describe RDF::URI do
       expect(RDF::RDFS.label.qname).to eql [:rdfs, :label]
     end
 
+    it "#qname with empty prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname(prefixes: {})).to be_nil
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname(prefixes: {})).to be_nil
+      expect(RDF::RDFS.label.qname(prefixes: {})).to be_nil
+    end
+
+    it "#qname with explicit prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :""]
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :label]
+      expect(RDF::RDFS.label.qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :label]
+    end
+
+    it "#pname" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname).to eql 'rdfs:'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname).to eql 'rdfs:label'
+      expect(RDF::RDFS.label.pname).to eql 'rdfs:label'
+    end
+
+    it "#pname with empty prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#label'
+      expect(RDF::RDFS.label.pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#label'
+    end
+
+    it "#pname with explicit prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:label'
+      expect(RDF::RDFS.label.pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:label'
+    end
+
     it "#start_with?" do
       expect(RDF::URI('http://example.org/')).to be_start_with('http')
       expect(RDF::URI('http://example.org/')).not_to be_start_with('ftp')
