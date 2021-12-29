@@ -243,17 +243,16 @@ module RDF
     #
     # @see RDF::Repository
     module Implementation
-      require 'hamster'
       DEFAULT_GRAPH = false
 
       ##
       # @private
       def self.extend_object(obj)
         obj.instance_variable_set(:@data, obj.options.delete(:data) || 
-                                          Hamster::Hash.new)
+                                          Hash.new)
         obj.instance_variable_set(:@tx_class, 
                                   obj.options.delete(:transaction_class) || 
-                                  SerializedTransaction)
+                                  DEFAULT_TX_CLASS)
         super
       end
 
@@ -263,7 +262,6 @@ module RDF
       def supports?(feature)
         case feature.to_sym
         when :graph_name       then @options[:with_graph_name]
-        when :inference        then false  # forward-chaining inference
         when :validity         then @options.fetch(:with_validity, true)
         when :literal_equality then true
         when :atomic_write     then true
@@ -381,7 +379,7 @@ module RDF
       ##
       # @see RDF::Dataset#isolation_level
       def isolation_level
-        :serializable
+        :snapshot
       end
 
       ##
@@ -471,7 +469,7 @@ module RDF
       # @private
       # @see RDF::Mutable#clear
       def clear_statements
-        @data = @data.clear
+        @data = @data.class.new
       end
 
       ##
@@ -513,14 +511,11 @@ module RDF
         unless statement_in?(data, statement)
           s, p, o, c = statement.to_quad
           c ||= DEFAULT_GRAPH
-          
-          return data.put(c) do |subs|
-            (subs || Hamster::Hash.new).put(s) do |preds|
-              (preds || Hamster::Hash.new).put(p) do |objs|
-                (objs || Hamster::Hash.new).put(o, statement.options)
-              end
-            end
-          end
+
+          data          = data.has_key?(c)       ? data.dup       : data.merge(c => {})
+          data[c]       = data[c].has_key?(s)    ? data[c].dup    : data[c].merge(s => {})
+          data[c][s]    = data[c][s].has_key?(p) ? data[c][s].dup : data[c][s].merge(p => {})
+          data[c][s][p] = data[c][s][p].merge(o => statement.options)
         end
         data
       end
@@ -529,92 +524,17 @@ module RDF
       # @private
       # @return [Hamster::Hash] a new, updated hamster hash 
       def delete_from(data, statement)
-        if statement_in?(data, statement)
+        if has_statement_in?(data, statement)
           s, p, o, g = statement.to_quad
           g = DEFAULT_GRAPH unless supports?(:graph_name)
           g ||= DEFAULT_GRAPH
 
-          os   = data[g][s][p].delete(o)
-          ps   = os.empty? ? data[g][s].delete(p) : data[g][s].put(p, os)
-          ss   = ps.empty? ? data[g].delete(s)    : data[g].put(s, ps)
-          return ss.empty? ? data.delete(g) : data.put(g, ss)
+          os   = data[g][s][p].dup.delete_if {|k,v| k == o}
+          ps   = os.empty? ? data[g][s].dup.delete_if {|k,v| k == p} : data[g][s].merge(p => os)
+          ss   = ps.empty? ? data[g].dup.delete_if    {|k,v| k == s} : data[g].merge(s => ps)
+          return ss.empty? ? data.dup.delete_if       {|k,v| k == g} : data.merge(g => ss)
         end
         data
-      end
-
-      ##
-      # A transaction for the Hamster-based `RDF::Repository::Implementation` 
-      # with full serializability.
-      # 
-      # @todo refactor me!
-      # @see RDF::Transaction
-      class SerializedTransaction < Transaction
-        ##
-        # @see Transaction#initialize
-        def initialize(*args, **options, &block)
-          super(*args, **options, &block)
-          @base_snapshot = @snapshot
-        end
-        
-        ##
-        # Inserts the statement to the transaction's working snapshot.
-        #
-        # @see Transaction#insert_statement
-        def insert_statement(statement)
-          @snapshot = @snapshot.class
-            .new(data: @snapshot.send(:insert_to, 
-                                      @snapshot.send(:data), 
-                                      process_statement(statement)))
-        end
-
-        ##
-        # Deletes the statement from the transaction's working snapshot.
-        #
-        # @see Transaction#insert_statement
-        def delete_statement(statement)
-          @snapshot = @snapshot.class
-            .new(data: @snapshot.send(:delete_from, 
-                                      @snapshot.send(:data), 
-                                      process_statement(statement)))
-        end
-
-        ##
-        # @see RDF::Dataset#isolation_level
-        def isolation_level
-          :serializable
-        end
-        
-        ##
-        # @note this is a simple object equality check.
-        # 
-        # @see RDF::Transaction#mutated?
-        def mutated?
-          !@snapshot.send(:data).equal?(repository.send(:data))
-        end
-        
-        ##
-        # Replaces repository data with the transaction's snapshot in a safely 
-        # serializable fashion.
-        # 
-        # @note this transaction uses a pessimistic merge strategy which 
-        #   fails the transaction if any data has changed in the repository
-        #   since transaction start time. However, the specific guarantee is 
-        #   softer: multiple concurrent conflicting transactions will not 
-        #   succeed. We may choose to implement a less pessimistic merge 
-        #   strategy as a non-breaking change.
-        # 
-        # @raise [TransactionError] when the transaction can't be merged.
-        # @see Transaction#execute
-        def execute
-          raise TransactionError, 'Cannot execute a rolled back transaction. ' \
-                                  'Open a new one instead.' if instance_variable_defined?(:@rolledback) && @rolledback
-
-          raise TransactionError, 'Error merging transaction. Repository' \
-                                  'has changed during transaction time.' unless 
-            repository.send(:data).equal? @base_snapshot.send(:data)
-
-          repository.send(:data=, @snapshot.send(:data))
-        end
       end
     end # Implementation
   end # Repository
