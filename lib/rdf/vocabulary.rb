@@ -70,7 +70,7 @@ module RDF
       # @return [Enumerator]
       def each(&block)
         if self.equal?(Vocabulary)
-          if @vocabs
+          if instance_variable_defined?(:@vocabs) && @vocabs
             @vocabs.select(&:name).each(&block)
           else
             # This is needed since all vocabulary classes are defined using
@@ -356,7 +356,7 @@ module RDF
       def ontology(*args)
         case args.length
         when 0
-          @ontology
+          @ontology if instance_variable_defined?(:@ontology)
         else
           uri, options = args
           URI.cache.delete(uri.to_s.to_sym)  # Clear any previous entry
@@ -507,7 +507,7 @@ module RDF
         end
 
         # Also include the ontology, if it's not also a property
-        @ontology.each_statement(&block) if @ontology && @ontology != self
+        @ontology.each_statement(&block) if self.ontology && self.ontology != self
       end
 
       ##
@@ -574,6 +574,7 @@ module RDF
           term_defs
         end
 
+        #require 'byebug'; byebug
         # Pass over embedded_defs with anonymous references, once
         embedded_defs.each do |term, attributes|
           attributes.each do |ak, avs|
@@ -1234,16 +1235,16 @@ module RDF
           values = values.map do |value|
             if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(k.to_s)
               "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
-            # elsif value.is_a?(RDF::Vocabulary::Term)
-            #  value.to_ruby(indent: indent + "  ")
+            elsif value.node? && value.is_a?(RDF::Vocabulary::Term)
+              "#{value.to_ruby(indent: indent + "  ")}.freeze"
             elsif value.is_a?(RDF::Term)
               "#{value.to_s.inspect}.freeze"
             elsif value.is_a?(RDF::List)
               list_elements = value.map do |u|
                 if u.uri?
                   "#{u.to_s.inspect}.freeze"
-                # elsif u.respond_to?(:to_ruby)
-                #  u.to_ruby(indent: indent + "  ")
+                elsif u.node? && u.respond_to?(:to_ruby)
+                  u.to_ruby(indent: indent + "  ")
                 else
                   "#{u.to_s.inspect}.freeze"
                 end

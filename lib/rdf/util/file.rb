@@ -98,7 +98,7 @@ module RDF; module Util
               headers:      response.headers
             }
 
-            remote_document = RemoteDocument.new(response.body, document_options)
+            RemoteDocument.new(response.body, document_options)
           when 300..399
             # Document base is redirected location
             # Location may be relative
@@ -215,7 +215,7 @@ module RDF; module Util
             headers:      response.headers
           }
 
-          remote_document = RemoteDocument.new(response.body, document_options)
+          RemoteDocument.new(response.body, document_options)
         else
           raise IOError, "<#{base_uri}>: #{response.status}"
         end

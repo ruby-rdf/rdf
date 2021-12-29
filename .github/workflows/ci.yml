@@ -21,17 +21,15 @@ jobs:
     if: "contains(github.event.commits[0].message, '[ci skip]') == false"
     runs-on: ubuntu-latest
     env:
-      CI: true
-      ALLOW_FAILURES: false # ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'jruby' }}
+      ALLOW_FAILURES: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'jruby' }}
     strategy:
       fail-fast: false
       matrix:
         ruby:
-          - 2.4
-          - 2.5
           - 2.6
           - 2.7
           - 3.0
+          - 3.1
           - ruby-head
           - jruby
     steps:
@@ -44,5 +42,9 @@ jobs:
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
       - name: Run tests
-        run: bundle exec rspec spec || $ALLOW_FAILURES
- 
+        run: ruby --version; bundle exec rspec spec || $ALLOW_FAILURES
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        if: "matrix.ruby == '3.0'"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
