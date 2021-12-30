@@ -252,7 +252,7 @@ module RDF
                                           Hash.new)
         obj.instance_variable_set(:@tx_class, 
                                   obj.options.delete(:transaction_class) || 
-                                  DEFAULT_TX_CLASS)
+                                  RDF::Transaction::SerializedTransaction)
         super
       end
 
