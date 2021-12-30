@@ -322,7 +322,81 @@ module RDF
     end
 
     public
-    
+
+    ##
+    # A transaction with full serializability.
+    # 
+    # @todo refactor me!
+    # @see RDF::Transaction
+    class SerializedTransaction < Transaction
+      ##
+      # @see Transaction#initialize
+      def initialize(*args, **options, &block)
+        super(*args, **options, &block)
+        @base_snapshot = @snapshot
+      end
+      
+      ##
+      # Inserts the statement to the transaction's working snapshot.
+      #
+      # @see Transaction#insert_statement
+      def insert_statement(statement)
+        @snapshot = @snapshot.class
+          .new(data: @snapshot.send(:insert_to, 
+                                    @snapshot.send(:data), 
+                                    process_statement(statement)))
+      end
+
+      ##
+      # Deletes the statement from the transaction's working snapshot.
+      #
+      # @see Transaction#insert_statement
+      def delete_statement(statement)
+        @snapshot = @snapshot.class
+          .new(data: @snapshot.send(:delete_from, 
+                                    @snapshot.send(:data), 
+                                    process_statement(statement)))
+      end
+
+      ##
+      # @see RDF::Dataset#isolation_level
+      def isolation_level
+        :serializable
+      end
+      
+      ##
+      # @note this is a simple object equality check.
+      # 
+      # @see RDF::Transaction#mutated?
+      def mutated?
+        !@snapshot.send(:data).equal?(repository.send(:data))
+      end
+      
+      ##
+      # Replaces repository data with the transaction's snapshot in a safely 
+      # serializable fashion.
+      # 
+      # @note this transaction uses a pessimistic merge strategy which 
+      #   fails the transaction if any data has changed in the repository
+      #   since transaction start time. However, the specific guarantee is 
+      #   softer: multiple concurrent conflicting transactions will not 
+      #   succeed. We may choose to implement a less pessimistic merge 
+      #   strategy as a non-breaking change.
+      # 
+      # @raise [TransactionError] when the transaction can't be merged.
+      # @see Transaction#execute
+      def execute
+        raise TransactionError, 'Cannot execute a rolled back transaction. ' \
+                                'Open a new one instead.' if instance_variable_defined?(:@rolledback) && @rolledback
+
+        raise TransactionError, 'Error merging transaction. Repository' \
+                                'has changed during transaction time.' unless 
+          repository.send(:data).equal? @base_snapshot.send(:data)
+
+        repository.send(:data=, @snapshot.send(:data))
+      end
+    end # SerializedTransaction
+
     ##
     # An error class for transaction failures.
     # 
