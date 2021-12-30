@@ -62,4 +62,20 @@ describe RDF::Repository do
     expect(subject.statements.first).to eq existing_statement
     expect(subject.statements.first).to be_inferred
   end
+
+  it "performs coherent list updates" do
+    # List updates require reading from the repository mid-transaction, which requires a SerializedTransaction
+    repo = RDF::Repository.new
+    lh = RDF::Node.new("o")
+    repo << RDF::Statement.new(RDF::URI('s'), RDF::URI('p'), lh)
+    expect(repo.count).to eq 1
+    repo.transaction(mutable: true) do |tx|
+      list = RDF::List.new(subject: lh, graph: tx, values: %w(a b c))
+      expect(tx.count).to eq 7
+      list[0, 2] = %(d)
+      expect(tx.count).to eq 5
+    end
+    expect(repo.count).to eq 5
+    
+  end
 end
