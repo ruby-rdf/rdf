@@ -244,6 +244,10 @@ module RDF
     # @see RDF::Repository
     module Implementation
       DEFAULT_GRAPH = false
+      
+      ##
+      # @deprecated moved to {RDF::Transaction::SerializedTransaction}
+      SerializedTransaction = RDF::Transaction::SerializedTransaction
 
       ##
       # @private
