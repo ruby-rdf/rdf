@@ -909,11 +909,22 @@ potential to perform intentional actions for which they can be held responsible.
   end
 
   context 'Vocabs outside of the RDF::Vocab namespace' do
-    uri = 'urn:x-bogus:test-vocab:'
-    TestVocab = Class.new RDF::Vocabulary(uri)
-    RDF::Vocabulary.register :testvocab, TestVocab
+    let(:uri) {'urn:x-bogus:test-vocab:'}
+    before(:all) {
+      TestVocab = Class.new RDF::Vocabulary('urn:x-bogus:test-vocab:')
+      RDF::Vocabulary.register :testvocab, TestVocab
+    }
+
     it 'correctly expands the pname of an arbitrary class' do
       expect(RDF::Vocabulary.expand_pname('testvocab:test')).to eq(TestVocab.test)
+    end
+
+    it 'uses custom prefix' do
+      TestVocab.__prefix__ = :tv
+      term = RDF::Vocabulary.expand_pname('tv:test')
+      expect(term).to eq(TestVocab.test)
+      expect(term.pname).to eq 'tv:test'
+      expect(RDF::Vocabulary.find_term(term.to_s)).to eq TestVocab.test
     end
   end
 end

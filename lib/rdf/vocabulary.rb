@@ -648,7 +648,26 @@ module RDF
       # @return [Symbol]
       # @since  0.3.0
       def __prefix__
-        __name__.split('::').last.downcase.to_sym
+        instance_variable_defined?(:@__prefix__) ?
+          @__prefix__ :
+          __name__.split('::').last.downcase.to_sym
+      end
+
+      ##
+      # Returns a suggested CURIE/PName prefix for this vocabulary class.
+      #
+      # @example Overriding a standard vocabulary prefix.
+      #   RDF::Vocab::DC.__prefix__ = :dcterms
+      #   RDF::Vocab::DC.title.pname #=> 'dcterms:title'
+      #
+      # @param [Symbol] prefix
+      # @return [Symbol]
+      # @since  3.2.3
+      def __prefix__=(prefix)
+        params = RDF::Vocabulary.vocab_map[__prefix__]
+        @__prefix__ = prefix.to_sym
+        RDF::Vocabulary.register(@__prefix__, self, **params)
+        @__prefix__
       end
 
     protected
