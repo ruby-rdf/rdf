@@ -627,6 +627,8 @@ module RDF
     #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname       #=> [:rdfs, nil]
     #   RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname  #=> [:rdfs, :label]
     #   RDF::RDFS.label.qname                                         #=> [:rdfs, :label]
+    #   RDF::Vocab::DC.title.qname(
+    #     prefixes: {dcterms: 'http://purl.org/dc/terms/'})           #=> [:dcterms, :title]
     #
     # @param [Hash{Symbol => String}] prefixes
     #   Explicit set of prefixes to look for matches, defaults to loaded vocabularies.
@@ -661,9 +663,15 @@ module RDF
     ##
     # Returns a string version of the QName or the full IRI
     #
+    # @example Using a custom prefix for creating a PNname.
+    #   RDF::URI('http://purl.org/dc/terms/creator').
+    #     pname(prefixes: {dcterms: 'http://purl.org/dc/terms/'})
+    #     #=> "dcterms:creator"
+    #
     # @param [Hash{Symbol => String}] prefixes
     #   Explicit set of prefixes to look for matches, defaults to loaded vocabularies.
     # @return [String] or `nil`
+    # @see #qname
     def pname(prefixes: nil)
       (q = self.qname(prefixes: prefixes)) ? q.join(":") : to_s
     end
