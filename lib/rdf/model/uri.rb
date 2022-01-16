@@ -111,6 +111,10 @@ module RDF
       tag tel turn turns tv urn javascript
     ).freeze
 
+    # Characters in a PName which must be escaped
+    PN_ESCAPE_CHARS      = /[~\.\-!\$&'\(\)\*\+,;=\/\?\#@%_]/.freeze
+    PN_ESCAPES           = /\\#{PN_ESCAPE_CHARS}/.freeze
+    
     ##
     # Cache size may be set through {RDF.config} using `uri_cache_size`.
     #
@@ -630,9 +634,11 @@ module RDF
     #   RDF::Vocab::DC.title.qname(
     #     prefixes: {dcterms: 'http://purl.org/dc/terms/'})           #=> [:dcterms, :title]
     #
+    # @note within this software, the term QName is used to describe the tuple of prefix and suffix for a given IRI, where the prefix identifies some defined vocabulary. This somewhat contrasts with the notion of a [Qualified Name](https://www.w3.org/TR/2006/REC-xml-names11-20060816/#ns-qualnames) from XML, which are a subset of Prefixed Names.
+    #
     # @param [Hash{Symbol => String}] prefixes
     #   Explicit set of prefixes to look for matches, defaults to loaded vocabularies.
-    # @return [Array(Symbol, Symbol)] or `nil` if no QName found
+    # @return [Array(Symbol, Symbol)] or `nil` if no QName found. The suffix component will not have [reserved characters](https://www.w3.org/TR/turtle/#reserved) escaped.
     def qname(prefixes: nil)
       if prefixes
         prefixes.each do |prefix, uri|
@@ -661,7 +667,7 @@ module RDF
     end
 
     ##
-    # Returns a string version of the QName or the full IRI
+    # Returns a Prefixed Name (PName) or the full IRI with any [reserved characters](https://www.w3.org/TR/turtle/#reserved) in the suffix escaped.
     #
     # @example Using a custom prefix for creating a PNname.
     #   RDF::URI('http://purl.org/dc/terms/creator').
@@ -672,8 +678,14 @@ module RDF
     #   Explicit set of prefixes to look for matches, defaults to loaded vocabularies.
     # @return [String] or `nil`
     # @see #qname
+    # @see https://www.w3.org/TR/rdf-sparql-query/#prefNames
     def pname(prefixes: nil)
-      (q = self.qname(prefixes: prefixes)) ? q.join(":") : to_s
+      q = self.qname(prefixes: prefixes)
+      return self.to_s unless q
+      prefix, suffix = q
+      suffix = suffix.to_s.gsub(PN_ESCAPE_CHARS) {|c| "\\#{c}"} if
+        suffix.to_s.match?(PN_ESCAPE_CHARS)
+      [prefix, suffix].join(":")
     end
 
     ##

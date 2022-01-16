@@ -849,6 +849,70 @@ describe RDF::URI do
     end
   end
 
+  describe "#qname" do
+    it "#qname" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname).to eql [:rdfs, nil]
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname).to eql [:rdfs, :label]
+      expect(RDF::RDFS.label.qname).to eql [:rdfs, :label]
+    end
+
+    it "#qname with empty prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname(prefixes: {})).to be_nil
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname(prefixes: {})).to be_nil
+      expect(RDF::RDFS.label.qname(prefixes: {})).to be_nil
+    end
+
+    it "#qname with explicit prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :""]
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :label]
+      expect(RDF::RDFS.label.qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :label]
+    end
+  end
+
+  describe "#pname" do
+    it "#pname" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname).to eql 'rdfs:'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname).to eql 'rdfs:label'
+      expect(RDF::RDFS.label.pname).to eql 'rdfs:label'
+    end
+
+    it "#pname with empty prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#label'
+      expect(RDF::RDFS.label.pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#label'
+    end
+
+    it "#pname with explicit prefixes" do
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:'
+      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:label'
+      expect(RDF::RDFS.label.pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:label'
+    end
+
+    context "escapes" do
+      {
+        "http://example.org/c-" => 'ex:c\-',
+        "http://example.org/c!" => 'ex:c\!',
+        "http://example.org/c$" => 'ex:c\$',
+        "http://example.org/c&" => 'ex:c\&',
+        "http://example.org/c'" => "ex:c\\'",
+        "http://example.org/c()" => 'ex:c\(\)',
+        "http://example.org/c*+" => 'ex:c\*\+',
+        "http://example.org/c;=" => 'ex:c\;\=',
+        "http://example.org/c/#" => 'ex:c\/\#',
+        "http://example.org/c@_" => 'ex:c\@\_',
+        "http://example.org/c:d?" => 'ex:c:d\?',
+        "http://example.org/c~z." => 'ex:c\~z\.',
+      }.each do |orig, result|
+        it "#{orig} => #{result}" do
+          uri = RDF::URI(orig)
+          pname = uri.pname(prefixes: {ex: "http://example.org/"})
+          expect(uri).to be_valid
+          expect(pname).to eql result
+        end
+      end
+    end
+  end
+
   context "Examples" do
     it "Creating a URI reference (1)" do
       expect(RDF::URI.new("https://rubygems.org/gems/rdf")).to be_a_uri
@@ -954,42 +1018,6 @@ describe RDF::URI do
     it "#parent" do
       expect(RDF::URI('http://example.org/').parent).to be_nil
       expect(RDF::URI('http://example.org/path/').parent).to eql RDF::URI('http://example.org/')
-    end
-
-    it "#qname" do
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname).to eql [:rdfs, nil]
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname).to eql [:rdfs, :label]
-      expect(RDF::RDFS.label.qname).to eql [:rdfs, :label]
-    end
-
-    it "#qname with empty prefixes" do
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname(prefixes: {})).to be_nil
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname(prefixes: {})).to be_nil
-      expect(RDF::RDFS.label.qname(prefixes: {})).to be_nil
-    end
-
-    it "#qname with explicit prefixes" do
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :""]
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :label]
-      expect(RDF::RDFS.label.qname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql [:rdfs, :label]
-    end
-
-    it "#pname" do
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname).to eql 'rdfs:'
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname).to eql 'rdfs:label'
-      expect(RDF::RDFS.label.pname).to eql 'rdfs:label'
-    end
-
-    it "#pname with empty prefixes" do
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#'
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#label'
-      expect(RDF::RDFS.label.pname(prefixes: {})).to eq 'http://www.w3.org/2000/01/rdf-schema#label'
-    end
-
-    it "#pname with explicit prefixes" do
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#').pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:'
-      expect(RDF::URI('http://www.w3.org/2000/01/rdf-schema#label').pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:label'
-      expect(RDF::RDFS.label.pname(prefixes: {rdfs: 'http://www.w3.org/2000/01/rdf-schema#'})).to eql 'rdfs:label'
     end
 
     it "#start_with?" do
