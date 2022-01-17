@@ -53,8 +53,7 @@ module RDF
   #       "rdfs:subClassOf" => "http://example/SuperClass"
   #   end
   #
-  # @see http://www.w3.org/TR/curie/
-  # @see http://en.wikipedia.org/wiki/QName
+  # @see https://www.w3.org/TR/rdf-sparql-query/#prefNames
   class Vocabulary
     extend ::Enumerable
 
@@ -379,15 +378,20 @@ module RDF
       alias_method :__properties__, :properties
 
       ##
-      # Attempt to expand a Compact IRI/PName/QName using loaded vocabularies
+      # Attempt to expand a Compact IRI/PName using loaded vocabularies
       #
       # @param [String, #to_s] pname
+      # The local-part of the PName will will have [reserved character escapes](https://www.w3.org/TR/turtle/#reserved) unescaped.
       # @return [Term]
-      # @raise [KeyError] if pname suffix not found in identified vocabulary
+      # @raise [KeyError] if pname suffix not found in identified vocabulary.
       # @raise [ArgumentError] if resulting URI is not valid
       def expand_pname(pname)
         return pname unless pname.is_a?(String) || pname.is_a?(Symbol)
         prefix, suffix = pname.to_s.split(":", 2)
+        # Unescape escaped PN_ESCAPE_CHARS
+        if suffix.match?(/\\#{RDF::URI::PN_ESCAPE_CHARS}/)
+          suffix = suffix.gsub(RDF::URI::PN_ESCAPES) {|matched| matched[1..-1]}
+        end
         if prefix == "rdf"
           RDF[suffix]
         elsif vocab_detail = RDF::Vocabulary.vocab_map[prefix.to_sym]
@@ -417,9 +421,10 @@ module RDF
       end
 
       ##
-      # Return the Vocabulary term associated with a  URI
+      # Return the Vocabulary term associated with a URI
       #
-      # @param [RDF::URI] uri
+      # @param [RDF::URI, String] uri
+      #   If `uri` has is a pname in a locded vocabulary, the suffix portion of the PName will have escape characters unescaped before resolving against the vocabulary.
       # @return [Vocabulary::Term]
       def find_term(uri)
         uri = RDF::URI(uri)
@@ -428,7 +433,8 @@ module RDF
           if vocab.ontology == uri
             vocab.ontology
           else
-            vocab[uri.to_s[vocab.to_uri.to_s.length..-1].to_s]
+            suffix = uri.to_s[vocab.to_uri.to_s.length..-1].to_s
+            vocab[suffix]
           end
         end
       end
@@ -574,7 +580,6 @@ module RDF
           term_defs
         end
 
-        #require 'byebug'; byebug
         # Pass over embedded_defs with anonymous references, once
         embedded_defs.each do |term, attributes|
           attributes.each do |ak, avs|
@@ -643,12 +648,31 @@ module RDF
       alias_method :__name__, :name
 
       ##
-      # Returns a suggested CURIE/PName prefix for this vocabulary class.
+      # Returns a suggested vocabulary prefix for this vocabulary class.
       #
       # @return [Symbol]
       # @since  0.3.0
       def __prefix__
-        __name__.split('::').last.downcase.to_sym
+        instance_variable_defined?(:@__prefix__) ?
+          @__prefix__ :
+          __name__.split('::').last.downcase.to_sym
+      end
+
+      ##
+      # Sets the vocabulary prefix to use for this vocabulary..
+      #
+      # @example Overriding a standard vocabulary prefix.
+      #   RDF::Vocab::DC.__prefix__ = :dcterms
+      #   RDF::Vocab::DC.title.pname #=> 'dcterms:title'
+      #
+      # @param [Symbol] prefix
+      # @return [Symbol]
+      # @since  3.2.3
+      def __prefix__=(prefix)
+        params = RDF::Vocabulary.vocab_map[__prefix__]
+        @__prefix__ = prefix.to_sym
+        RDF::Vocabulary.register(@__prefix__, self, **params)
+        @__prefix__
       end
 
     protected

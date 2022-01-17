@@ -88,6 +88,39 @@ describe RDF::Vocabulary do
     end
   end
 
+  describe ".expand_pname" do
+    {
+      "rdfs:" => RDF::RDFS.to_uri,
+      "rdfs:label" => RDF::RDFS.label,
+      RDF::Value => RDF::Value,
+    }.each do |orig, result|
+      it "#{orig} => #{result}" do
+        expect(RDF::Vocabulary.expand_pname(orig)).to eql result
+      end
+    end
+
+    context "unescapes" do
+      {
+        'xsd:c\-'    => "http://www.w3.org/2001/XMLSchema#c-",
+        'xsd:c\!'    => "http://www.w3.org/2001/XMLSchema#c!",
+        'xsd:c\$'    => "http://www.w3.org/2001/XMLSchema#c$",
+        'xsd:c\&'    => "http://www.w3.org/2001/XMLSchema#c&",
+        "xsd:c\\'"   => "http://www.w3.org/2001/XMLSchema#c'",
+        'xsd:c\(\)'  => "http://www.w3.org/2001/XMLSchema#c()",
+        'xsd:c\*\+'  => "http://www.w3.org/2001/XMLSchema#c*+",
+        'xsd:c\;\='  => "http://www.w3.org/2001/XMLSchema#c;=",
+        'xsd:c\/\#'  => "http://www.w3.org/2001/XMLSchema#c/#",
+        'xsd:c\@\_'  => "http://www.w3.org/2001/XMLSchema#c@_",
+        'xsd:c:d\?'  => "http://www.w3.org/2001/XMLSchema#c:d?",
+        'xsd:c\~z\.' => "http://www.w3.org/2001/XMLSchema#c~z.",
+      }.each do |pname, result|
+        it "#{pname} => #{result}" do
+          expect(RDF::Vocabulary.expand_pname(pname).to_s).to eql result
+        end
+      end
+    end
+  end
+
   describe ".limit_vocabs" do
     before { RDF::Vocabulary.limit_vocabs(:rdf, :rdfs)}
     after { RDF::Vocabulary.limit_vocabs()}
@@ -115,7 +148,7 @@ describe RDF::Vocabulary do
           if cls
             expect(RDF::Vocabulary.find(term)).to eql cls
           else
-            expect(RDF::Vocabulary.find_term(term)).to be_nil
+            expect(RDF::Vocabulary.find(term)).to be_nil
           end
         end
       end
@@ -274,12 +307,6 @@ potential to perform intentional actions for which they can be held responsible.
       VOCABS.map { |s| s.to_s.upcase.to_sym }.each do |vocab|
         expect { RDF.const_get(vocab) }.not_to raise_error
       end
-    end
-
-    it "should expand PName for vocabulary" do
-      expect(RDF::Vocabulary.expand_pname("rdfs:")).to eql RDF::RDFS.to_uri
-      expect(RDF::Vocabulary.expand_pname("rdfs:label")).to eql RDF::RDFS.label
-      expect(RDF::Vocabulary.expand_pname(RDF::Value)).to eql RDF::Value
     end
 
     it "should support Web Ontology Language (OWL)" do
@@ -909,11 +936,22 @@ potential to perform intentional actions for which they can be held responsible.
   end
 
   context 'Vocabs outside of the RDF::Vocab namespace' do
-    uri = 'urn:x-bogus:test-vocab:'
-    TestVocab = Class.new RDF::Vocabulary(uri)
-    RDF::Vocabulary.register :testvocab, TestVocab
+    let(:uri) {'urn:x-bogus:test-vocab:'}
+    before(:all) {
+      TestVocab = Class.new RDF::Vocabulary('urn:x-bogus:test-vocab:')
+      RDF::Vocabulary.register :testvocab, TestVocab
+    }
+
     it 'correctly expands the pname of an arbitrary class' do
       expect(RDF::Vocabulary.expand_pname('testvocab:test')).to eq(TestVocab.test)
+    end
+
+    it 'uses custom prefix' do
+      TestVocab.__prefix__ = :tv
+      term = RDF::Vocabulary.expand_pname('tv:test')
+      expect(term).to eq(TestVocab.test)
+      expect(term.pname).to eq 'tv:test'
+      expect(RDF::Vocabulary.find_term(term.to_s)).to eq TestVocab.test
     end
   end
 end
