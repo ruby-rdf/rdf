@@ -389,7 +389,7 @@ module RDF
         return pname unless pname.is_a?(String) || pname.is_a?(Symbol)
         prefix, suffix = pname.to_s.split(":", 2)
         # Unescape escaped PN_ESCAPE_CHARS
-        if suffix.match?(/\\#{RDF::URI::PN_ESCAPE_CHARS}/)
+        if suffix.match?(RDF::URI::PN_ESCAPES)
           suffix = suffix.gsub(RDF::URI::PN_ESCAPES) {|matched| matched[1..-1]}
         end
         if prefix == "rdf"
