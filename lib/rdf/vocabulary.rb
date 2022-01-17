@@ -580,7 +580,6 @@ module RDF
           term_defs
         end
 
-        #require 'byebug'; byebug
         # Pass over embedded_defs with anonymous references, once
         embedded_defs.each do |term, attributes|
           attributes.each do |ak, avs|
