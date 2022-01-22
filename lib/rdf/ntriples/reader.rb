@@ -255,7 +255,7 @@ module RDF::NTriples
         if !match(ST_END)
           log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
         end
-        RDF::Statement.new(subject, predicate, object)
+        RDF::Statement.new(subject, predicate, object, quoted: true)
       end
     end
 

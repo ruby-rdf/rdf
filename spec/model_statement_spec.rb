@@ -186,6 +186,11 @@ describe RDF::Statement do
     it {is_expected.to be_inferred}
   end
 
+  context "when marked as quoted" do
+    subject {RDF::Statement.new(RDF::Node.new, p, o, quoted: true)}
+    it {is_expected.to be_quoted}
+  end
+
   it {is_expected.to respond_to(:to_h)}
   its(:to_h) do
     is_expected.to eql({
