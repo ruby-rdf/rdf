@@ -3,53 +3,53 @@ require 'rdf/vocabulary'
 require 'cgi'
 
 module RDF
-  ##
-  # Vocabulary format specification. This can be used to generate a Ruby class definition from a loaded vocabulary.
-  #
-  # Definitions can include recursive term definitions, when the value of a property is a blank-node term. They can also include list definitions, to provide a reasonable way to represent `owl:unionOf`-type relationships.
-  #
-  # @example a simple term definition
-  #     property :comment,
-  #       comment: %(A description of the subject resource.).freeze,
-  #       domain: "rdfs:Resource".freeze,
-  #       label: "comment".freeze,
-  #       range: "rdfs:Literal".freeze,
-  #       isDefinedBy: %(rdfs:).freeze,
-  #       type: "rdf:Property".freeze
-  #
-  # @example an embedded skos:Concept
-  #     term :ad,
-  #       exactMatch: [term(
-  #           type: "skos:Concept".freeze,
-  #           inScheme: "country:iso3166-1-alpha-2".freeze,
-  #           notation: %(ad).freeze
-  #         ), term(
-  #           type: "skos:Concept".freeze,
-  #           inScheme: "country:iso3166-1-alpha-3".freeze,
-  #           notation: %(and).freeze
-  #         )],
-  #       "foaf:name": "Andorra".freeze,
-  #       isDefinedBy: "country:".freeze,
-  #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country".freeze
-  #
-  # @example owl:unionOf
-  #     property :duration,
-  #       comment: %(The duration of a track or a signal in ms).freeze,
-  #       domain: term(
-  #           "owl:unionOf": list("mo:Track".freeze, "mo:Signal".freeze),
-  #           type: "owl:Class".freeze
-  #         ),
-  #       isDefinedBy: "mo:".freeze,
-  #       "mo:level": "1".freeze,
-  #       range: "xsd:float".freeze,
-  #       type: "owl:DatatypeProperty".freeze,
-  #       "vs:term_status": "testing".freeze
   class Vocabulary
     class Format < RDF::Format
       content_encoding 'utf-8'
       writer { RDF::Vocabulary::Writer }
     end
 
+    ##
+    # Vocabulary format specification. This can be used to generate a Ruby class definition from a loaded vocabulary.
+    #
+    # Definitions can include recursive term definitions, when the value of a property is a blank-node term. They can also include list definitions, to provide a reasonable way to represent `owl:unionOf`-type relationships.
+    #
+    # @example a simple term definition
+    #     property :comment,
+    #       comment: %(A description of the subject resource.).freeze,
+    #       domain: "rdfs:Resource".freeze,
+    #       label: "comment".freeze,
+    #       range: "rdfs:Literal".freeze,
+    #       isDefinedBy: %(rdfs:).freeze,
+    #       type: "rdf:Property".freeze
+    #
+    # @example an embedded skos:Concept
+    #     term :ad,
+    #       exactMatch: [term(
+    #           type: "skos:Concept".freeze,
+    #           inScheme: "country:iso3166-1-alpha-2".freeze,
+    #           notation: %(ad).freeze
+    #         ), term(
+    #           type: "skos:Concept".freeze,
+    #           inScheme: "country:iso3166-1-alpha-3".freeze,
+    #           notation: %(and).freeze
+    #         )],
+    #       "foaf:name": "Andorra".freeze,
+    #       isDefinedBy: "country:".freeze,
+    #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country".freeze
+    #
+    # @example owl:unionOf
+    #     property :duration,
+    #       comment: %(The duration of a track or a signal in ms).freeze,
+    #       domain: term(
+    #           "owl:unionOf": list("mo:Track".freeze, "mo:Signal".freeze),
+    #           type: "owl:Class".freeze
+    #         ),
+    #       isDefinedBy: "mo:".freeze,
+    #       "mo:level": "1".freeze,
+    #       range: "xsd:float".freeze,
+    #       type: "owl:DatatypeProperty".freeze,
+    #       "vs:term_status": "testing".freeze
     class Writer < RDF::Writer
       include RDF::Util::Logger
       format RDF::Vocabulary::Format

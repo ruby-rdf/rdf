@@ -5,7 +5,14 @@ module RDF
   # A {Vocabulary} can also serve as a Domain Specific Language (DSL) for generating an RDF Graph definition for the vocabulary (see {RDF::Vocabulary#to_enum}).
   #
   # ### Defining a vocabulary using the DSL
-  # Vocabularies can be defined based on {RDF::Vocabulary} or {RDF::StrictVocabulary} using a simple Domain Specific Language (DSL). Terms of the vocabulary are specified using either `property` or `term` (alias), with the attributes of the term listed in a hash. See {property} for description of the hash.
+  # Vocabularies can be defined based on {RDF::Vocabulary} or {RDF::StrictVocabulary} using a simple Domain Specific Language (DSL).
+  #
+  # * Ontology information for the vocabulary itself can be specified using the {ontology} method.
+  # * Terms of the vocabulary are specified using either `property` or `term` (alias), with the attributes of the term listed in a hash. See {property} for description of the hash. Term attributes become properties of the associated {RDF::Vocabulary::Term} (see {RDF::Vocabulary::Term#attributes}).
+  #
+  # Note that, by default, the prefix associated with the vocabulary for forming and interpreting PNames is created from the class name of the vocabulary. See {\_\_prefix\_\_=} for overriding this at runtime.
+  #
+  # The simplest way to generate a DSL representation of a vocabulary is using {RDF::Vocabulary::Writer} given an {RDF::Graph} representation of the vocabulary.
   #
   # ### Vocabularies:
   #
@@ -31,6 +38,31 @@ module RDF
   #   foaf.knows    #=> RDF::URI("http://xmlns.com/foaf/0.1/knows")
   #   foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
   #   foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
+  #
+  # @example Defining a simple vocabulary
+  #   EX = Class.new(RDF::StrictVocabulay("http://example/ns#")) do
+  #     # Ontology definition
+  #     ontology :"http://example/ns#",
+  #       label: "The RDF Example Vocablary".freeze,
+  #       type: "http://www.w3.org/2002/07/owl#Ontology".freeze
+  #
+  #     # Class definitions
+  #     term :Class,
+  #       label: "My Class",
+  #       comment: "Good to use as an example",
+  #       type: "rdfs:Class",
+  #       subClassOf: "http://example/SuperClass",
+  #       "ex:prop": "Some annotation property not having a shortcut"
+  #
+  #     # Property definitions
+  #     property :prop,
+  #       comment: "A description of the property".freeze,
+  #       label: "property".freeze,
+  #       domain: "http://example/ns#Class".freeze,
+  #       range: "rdfs:Literal".freeze,
+  #       isDefinedBy: %(ex:).freeze,
+  #       type: "rdf:Property".freeze
+  #   end
   # 
   # @example Method calls are converted to the typical RDF camelcase convention
   #   foaf = RDF::Vocabulary.new("http://xmlns.com/foaf/0.1/")
@@ -43,15 +75,6 @@ module RDF
   # @example Generating RDF from a vocabulary definition
   #   graph = RDF::Graph.new << RDF::RDFS.to_enum
   #   graph.dump(:ntriples)
-  #
-  # @example Defining a simple vocabulary
-  #   class EX < RDF::StrictVocabulay("http://example/ns#")
-  #     term :Class,
-  #       label: "My Class",
-  #       comment: "Good to use as an example",
-  #       "rdf:type" => "rdfs:Class",
-  #       "rdfs:subClassOf" => "http://example/SuperClass"
-  #   end
   #
   # @see https://www.w3.org/TR/rdf-sparql-query/#prefNames
   class Vocabulary
@@ -176,7 +199,7 @@ module RDF
       #   @return [RDF::Vocabulary::Term]
       #
       # @overload property(name, options)
-      #   Defines a new property or class in the vocabulary.
+      #   Defines a new property or class in the vocabulary as a {RDF::Vocabulary::Term}.
       #
       #   @example A simple term definition
       #       property :domain,
@@ -1109,7 +1132,7 @@ module RDF
 
       ##
       # Enumerate attributes with values transformed into {RDF::Value} instances
-      # Uses an empty hash with a default_proc which looks up values in attributes.
+      # Uses an empty hash with a default_proc which looks up values in attributes. The prevents specific attributes from being evaluated until acessed.
       #
       # Properties are indexed by symbol. Symbols directly interpreted by a term are the accessors defined for the {RDF::Vocabulary::Term} class, also in {Term::ATTR_URIs}. Other keys are interpreted as absolute URIs or PNames for properties defined on this term.
       #
@@ -1131,7 +1154,20 @@ module RDF
       end
 
       ##
-      # Values of an attributes as {RDF::Value}
+      # Values of an attributes as {RDF::Value}.
+      #
+      # Attribute values are returned as either an {RDF::Value} or {Array<RDf::Value} if there is more than one value.
+      #
+      # Attribute values which are not already a {RDF::Value} (including strings and symbols) are converted by a heuristic loookup as follows:
+      #
+      # * An {RDF::URI} if it can be turned into a valid IRI using {RDF::Vocabulary.expand_pname}. This includes IRIs already in non-relative form.
+      # * {RDF::Literal::Date} if valud,
+      # * {RDF::Literal::DateTime} if valid, 
+      # * {RDF::Literal::Integer} if valid, 
+      # * {RDF::Literal::Decimal} if valid, 
+      # * {RDF::Literal::Double} if valid, 
+      # * {RDF::Literal::Boolean} if valid
+      # * Otherwise, {RDF::Literal} where type may be inferred by the class of the value.
       #
       # @param [Symbol] prop
       # @return [RDF::Value, Array<RDF::Value>]
@@ -1246,7 +1282,9 @@ module RDF
         rangeIncludes
       end
 
-      # Serialize back to a Ruby source initializer
+      ##
+      # Serialize back to a Ruby source initializer. This is used primarily by {RDF::Vocabulary::Writer}.
+      #
       # @param [String] indent
       # @return [String]
       def to_ruby(indent: "")
