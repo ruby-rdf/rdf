@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::RDFS
+  
+    &mdash; RDF.rb: Linked Data for Ruby
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::RDFS";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (R)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span>
+     &raquo; 
+    <span class="title">RDFS</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::RDFS
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="StrictVocabulary.html" title="RDF::StrictVocabulary (class)">StrictVocabulary</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="Vocabulary.html" title="RDF::Vocabulary (class)">Vocabulary</a></span></li>
+          
+            <li class="next"><span class='object_link'><a href="StrictVocabulary.html" title="RDF::StrictVocabulary (class)">StrictVocabulary</a></span></li>
+          
+            <li class="next">RDF::RDFS</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/vocab/rdfs.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Vocabulary for <a href="http://www.w3.org/2000/01/rdf-schema">www.w3.org/2000/01/rdf-schema</a>#</p>
+
+<p>The RDF Schema vocabulary (RDFS)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Class-instance_method" title="#Class (instance method)">#<strong>Class</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of classes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#comment-instance_method" title="#comment (instance method)">#<strong>comment</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A description of the subject resource.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Container-instance_method" title="#Container (instance method)">#<strong>Container</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of RDF containers.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ContainerMembershipProperty-instance_method" title="#ContainerMembershipProperty (instance method)">#<strong>ContainerMembershipProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of container membership properties, rdf:_1, rdf:_2, …, all of which are sub-properties of ‘member’.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Datatype-instance_method" title="#Datatype (instance method)">#<strong>Datatype</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of RDF datatypes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#domain-instance_method" title="#domain (instance method)">#<strong>domain</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A domain of the subject property.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#isDefinedBy-instance_method" title="#isDefinedBy (instance method)">#<strong>isDefinedBy</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The defininition of the subject resource.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#label-instance_method" title="#label (instance method)">#<strong>label</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A human-readable name for the subject.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Literal-instance_method" title="#Literal (instance method)">#<strong>Literal</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of literal values, eg.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#member-instance_method" title="#member (instance method)">#<strong>member</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A member of the subject resource.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#range-instance_method" title="#range (instance method)">#<strong>range</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A range of the subject property.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Resource-instance_method" title="#Resource (instance method)">#<strong>Resource</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class resource, everything.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#seeAlso-instance_method" title="#seeAlso (instance method)">#<strong>seeAlso</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Further information about the subject resource.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#subClassOf-instance_method" title="#subClassOf (instance method)">#<strong>subClassOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The subject is a subclass of a class.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#subPropertyOf-instance_method" title="#subPropertyOf (instance method)">#<strong>subPropertyOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The subject is a subproperty of a property.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  <h2>Method Summary</h2>
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="StrictVocabulary.html" title="RDF::StrictVocabulary (class)">StrictVocabulary</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="StrictVocabulary.html#[]-class_method" title="RDF::StrictVocabulary.[] (method)">[]</a></span>, <span class='object_link'><a href="StrictVocabulary.html#strict%3F-class_method" title="RDF::StrictVocabulary.strict? (method)">strict?</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Vocabulary.html" title="RDF::Vocabulary (class)">Vocabulary</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Vocabulary.html#[]-class_method" title="RDF::Vocabulary.[] (method)">[]</a></span>, <span class='object_link'><a href="Vocabulary.html#[]-instance_method" title="RDF::Vocabulary#[] (method)">#[]</a></span>, <span class='object_link'><a href="Vocabulary.html#__prefix__-class_method" title="RDF::Vocabulary.__prefix__ (method)">__prefix__</a></span>, <span class='object_link'><a href="Vocabulary.html#__prefix__=-class_method" title="RDF::Vocabulary.__prefix__= (method)">__prefix__=</a></span>, <span class='object_link'><a href="Vocabulary.html#camelize-class_method" title="RDF::Vocabulary.camelize (method)">camelize</a></span>, <span class='object_link'><a href="Vocabulary.html#each-class_method" title="RDF::Vocabulary.each (method)">each</a></span>, <span class='object_link'><a href="Vocabulary.html#each_statement-class_method" title="RDF::Vocabulary.each_statement (method)">each_statement</a></span>, <span class='object_link'><a href="Vocabulary.html#enum_for-class_method" title="RDF::Vocabulary.enum_for (method)">enum_for</a></span>, <span class='object_link'><a href="Vocabulary.html#expand_pname-class_method" title="RDF::Vocabulary.expand_pname (method)">expand_pname</a></span>, <span class='object_link'><a href="Vocabulary.html#find-class_method" title="RDF::Vocabulary.find (method)">find</a></span>, <span class='object_link'><a href="Vocabulary.html#find_term-class_method" title="RDF::Vocabulary.find_term (method)">find_term</a></span>, <span class='object_link'><a href="Vocabulary.html#from_graph-class_method" title="RDF::Vocabulary.from_graph (method)">from_graph</a></span>, <span class='object_link'><a href="Vocabulary.html#from_sym-class_method" title="RDF::Vocabulary.from_sym (method)">from_sym</a></span>, <span class='object_link'><a href="Vocabulary.html#imported_from-class_method" title="RDF::Vocabulary.imported_from (method)">imported_from</a></span>, <span class='object_link'><a href="Vocabulary.html#imports-class_method" title="RDF::Vocabulary.imports (method)">imports</a></span>, <span class='object_link'><a href="Vocabulary.html#initialize-instance_method" title="RDF::Vocabulary#initialize (method)">#initialize</a></span>, <span class='object_link'><a href="Vocabulary.html#inspect-class_method" title="RDF::Vocabulary.inspect (method)">inspect</a></span>, <span class='object_link'><a href="Vocabulary.html#inspect-instance_method" title="RDF::Vocabulary#inspect (method)">#inspect</a></span>, <span class='object_link'><a href="Vocabulary.html#limit_vocabs-class_method" title="RDF::Vocabulary.limit_vocabs (method)">limit_vocabs</a></span>, <span class='object_link'><a href="Vocabulary.html#list-class_method" title="RDF::Vocabulary.list (method)">list</a></span>, <span class='object_link'><a href="Vocabulary.html#method_missing-class_method" title="RDF::Vocabulary.method_missing (method)">method_missing</a></span>, <span class='object_link'><a href="Vocabulary.html#method_missing-instance_method" title="RDF::Vocabulary#method_missing (method)">#method_missing</a></span>, <span class='object_link'><a href="Vocabulary.html#ontology-class_method" title="RDF::Vocabulary.ontology (method)">ontology</a></span>, <span class='object_link'><a href="Vocabulary.html#properties-class_method" title="RDF::Vocabulary.properties (method)">properties</a></span>, <span class='object_link'><a href="Vocabulary.html#property-class_method" title="RDF::Vocabulary.property (method)">property</a></span>, <span class='object_link'><a href="Vocabulary.html#register-class_method" title="RDF::Vocabulary.register (method)">register</a></span>, <span class='object_link'><a href="Vocabulary.html#strict%3F-class_method" title="RDF::Vocabulary.strict? (method)">strict?</a></span>, <span class='object_link'><a href="Vocabulary.html#to_iri-class_method" title="RDF::Vocabulary.to_iri (method)">to_iri</a></span>, <span class='object_link'><a href="Vocabulary.html#to_s-class_method" title="RDF::Vocabulary.to_s (method)">to_s</a></span>, <span class='object_link'><a href="Vocabulary.html#to_s-instance_method" title="RDF::Vocabulary#to_s (method)">#to_s</a></span>, <span class='object_link'><a href="Vocabulary.html#to_uri-class_method" title="RDF::Vocabulary.to_uri (method)">to_uri</a></span>, <span class='object_link'><a href="Vocabulary.html#to_uri-instance_method" title="RDF::Vocabulary#to_uri (method)">#to_uri</a></span>, <span class='object_link'><a href="Vocabulary.html#vocab_map-class_method" title="RDF::Vocabulary.vocab_map (method)">vocab_map</a></span></p>
+
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <p class="notice">This class inherits a constructor from <span class='object_link'><a href="Vocabulary.html#initialize-instance_method" title="RDF::Vocabulary#initialize (method)">RDF::Vocabulary</a></span></p>
+  
+</div>
+<div id="method_missing_details" class="method_details_list">
+  <h2>Dynamic Method Handling</h2>
+  <p class="notice super">
+    This class handles dynamic methods through the <tt>method_missing</tt> method
+    
+      in the class <span class='object_link'><a href="Vocabulary.html#method_missing-instance_method" title="RDF::Vocabulary#method_missing (method)">RDF::Vocabulary</a></span>
+    
+  </p>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="Class-instance_method">
+  
+    #<strong>Class</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of classes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='const'>Class</span>
+  <span class='ivar'>@Class</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="comment-instance_method">
+  
+    #<strong>comment</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A description of the subject resource.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_comment'>comment</span>
+  <span class='ivar'>@comment</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Container-instance_method">
+  
+    #<strong>Container</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of RDF containers.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 11</span>
+
+<span class='kw'>def</span> <span class='const'>Container</span>
+  <span class='ivar'>@Container</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ContainerMembershipProperty-instance_method">
+  
+    #<strong>ContainerMembershipProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of container membership properties, rdf:_1, rdf:_2, …, all of which are sub-properties of ‘member’.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='const'>ContainerMembershipProperty</span>
+  <span class='ivar'>@ContainerMembershipProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Datatype-instance_method">
+  
+    #<strong>Datatype</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of RDF datatypes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='const'>Datatype</span>
+  <span class='ivar'>@Datatype</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="domain-instance_method">
+  
+    #<strong>domain</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A domain of the subject property.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 35</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_domain'>domain</span>
+  <span class='ivar'>@domain</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="isDefinedBy-instance_method">
+  
+    #<strong>isDefinedBy</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The defininition of the subject resource.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+39
+40
+41</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 39</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_isDefinedBy'>isDefinedBy</span>
+  <span class='ivar'>@isDefinedBy</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="label-instance_method">
+  
+    #<strong>label</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A human-readable name for the subject.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_label'>label</span>
+  <span class='ivar'>@label</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Literal-instance_method">
+  
+    #<strong>Literal</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of literal values, eg. textual strings and integers.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='const'>Literal</span>
+  <span class='ivar'>@Literal</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="member-instance_method">
+  
+    #<strong>member</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A member of the subject resource.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_member'>member</span>
+  <span class='ivar'>@member</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="range-instance_method">
+  
+    #<strong>range</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A range of the subject property.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_range'>range</span>
+  <span class='ivar'>@range</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Resource-instance_method">
+  
+    #<strong>Resource</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class resource, everything.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='const'>Resource</span>
+  <span class='ivar'>@Resource</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="seeAlso-instance_method">
+  
+    #<strong>seeAlso</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Further information about the subject resource.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_seeAlso'>seeAlso</span>
+  <span class='ivar'>@seeAlso</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="subClassOf-instance_method">
+  
+    #<strong>subClassOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The subject is a subclass of a class.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_subClassOf'>subClassOf</span>
+  <span class='ivar'>@subClassOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="subPropertyOf-instance_method">
+  
+    #<strong>subPropertyOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The subject is a subproperty of a property.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/rdfs.rb', line 63</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_subPropertyOf'>subPropertyOf</span>
+  <span class='ivar'>@subPropertyOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Jan 27 23:05:06 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>

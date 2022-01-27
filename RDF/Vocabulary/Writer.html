@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::Vocabulary::Writer
+  
+    &mdash; RDF.rb: Linked Data for Ruby
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::Vocabulary::Writer";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (W)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Vocabulary.html" title="RDF::Vocabulary (class)">Vocabulary</a></span></span>
+     &raquo; 
+    <span class="title">Writer</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::Vocabulary::Writer
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../Writer.html" title="RDF::Writer (class)">Writer</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../Writer.html" title="RDF::Writer (class)">Writer</a></span></li>
+          
+            <li class="next">RDF::Vocabulary::Writer</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">Util::Logger</a></span></dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/vocab/writer.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Vocabulary format specification. This can be used to generate a Ruby class definition from a loaded vocabulary.</p>
+
+<p>Definitions can include recursive term definitions, when the value of a property is a blank-node term. They can also include list definitions, to provide a reasonable way to represent <code>owl:unionOf</code>-type relationships.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>a simple term definition</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_property'>property</span> <span class='symbol'>:comment</span><span class='comma'>,</span>
+  <span class='label'>comment:</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>A description of the subject resource.</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>domain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rdfs:Resource</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>label:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>comment</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>range:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rdfs:Literal</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>isDefinedBy:</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>rdfs:</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rdf:Property</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>an embedded skos:Concept</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_term'>term</span> <span class='symbol'>:ad</span><span class='comma'>,</span>
+  <span class='label'>exactMatch:</span> <span class='lbracket'>[</span><span class='id identifier rubyid_term'>term</span><span class='lparen'>(</span>
+      <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>skos:Concept</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+      <span class='label'>inScheme:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>country:iso3166-1-alpha-2</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+      <span class='label'>notation:</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>ad</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+    <span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_term'>term</span><span class='lparen'>(</span>
+      <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>skos:Concept</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+      <span class='label'>inScheme:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>country:iso3166-1-alpha-3</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+      <span class='label'>notation:</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>and</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+    <span class='rparen'>)</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>foaf:name</span><span class='label_end'>&quot;:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Andorra</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>isDefinedBy:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>country:</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>owl:unionOf</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_property'>property</span> <span class='symbol'>:duration</span><span class='comma'>,</span>
+  <span class='label'>comment:</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>The duration of a track or a signal in ms</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>domain:</span> <span class='id identifier rubyid_term'>term</span><span class='lparen'>(</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>owl:unionOf</span><span class='label_end'>&quot;:</span> <span class='id identifier rubyid_list'>list</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mo:Track</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mo:Signal</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>owl:Class</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+    <span class='rparen'>)</span><span class='comma'>,</span>
+  <span class='label'>isDefinedBy:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mo:</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mo:level</span><span class='label_end'>&quot;:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>range:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xsd:float</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>owl:DatatypeProperty</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>vs:term_status</span><span class='label_end'>&quot;:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>testing</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></code></pre>
+    
+  </div>
+
+
+</div>
+
+
+  <h2>Constant Summary</h2>
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">Util::Logger</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Logger.html#IOWrapper-constant" title="RDF::Util::Logger::IOWrapper (constant)">Util::Logger::IOWrapper</a></span></p>
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#class_name-instance_method" title="#class_name (instance method)">#<strong>class_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute class_name.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#module_name-instance_method" title="#module_name (instance method)">#<strong>module_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute module_name.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../Writer.html" title="RDF::Writer (class)">Writer</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Writer.html#options-instance_method" title="RDF::Writer#options (method)">#options</a></span></p>
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#options-class_method" title="options (class method)">.<strong>options</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(output = $stdout, base_uri:, **options) {|writer| ... } &#x21d2; Writer </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initializes the writer.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#write_epilogue-instance_method" title="#write_epilogue (instance method)">#<strong>write_epilogue</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Generate vocabulary.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#write_triple-instance_method" title="#write_triple (instance method)">#<strong>write_triple</strong>(subject, predicate, object)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">Util::Logger</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Logger.html#log_debug-instance_method" title="RDF::Util::Logger#log_debug (method)">#log_debug</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_depth-instance_method" title="RDF::Util::Logger#log_depth (method)">#log_depth</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_error-instance_method" title="RDF::Util::Logger#log_error (method)">#log_error</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_fatal-instance_method" title="RDF::Util::Logger#log_fatal (method)">#log_fatal</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_info-instance_method" title="RDF::Util::Logger#log_info (method)">#log_info</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_recover-instance_method" title="RDF::Util::Logger#log_recover (method)">#log_recover</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_recovering%3F-instance_method" title="RDF::Util::Logger#log_recovering? (method)">#log_recovering?</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_statistics-instance_method" title="RDF::Util::Logger#log_statistics (method)">#log_statistics</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_warn-instance_method" title="RDF::Util::Logger#log_warn (method)">#log_warn</a></span>, <span class='object_link'><a href="../Util/Logger.html#logger-instance_method" title="RDF::Util::Logger#logger (method)">#logger</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../Writer.html" title="RDF::Writer (class)">Writer</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Writer.html#accept%3F-class_method" title="RDF::Writer.accept? (method)">accept?</a></span>, <span class='object_link'><a href="../Writer.html#base_uri-instance_method" title="RDF::Writer#base_uri (method)">#base_uri</a></span>, <span class='object_link'><a href="../Writer.html#buffer-class_method" title="RDF::Writer.buffer (method)">buffer</a></span>, <span class='object_link'><a href="../Writer.html#canonicalize%3F-instance_method" title="RDF::Writer#canonicalize? (method)">#canonicalize?</a></span>, <span class='object_link'><a href="../Writer.html#dump-class_method" title="RDF::Writer.dump (method)">dump</a></span>, <span class='object_link'><a href="../Writer.html#each-class_method" title="RDF::Writer.each (method)">each</a></span>, <span class='object_link'><a href="../Writer.html#encoding-instance_method" title="RDF::Writer#encoding (method)">#encoding</a></span>, <span class='object_link'><a href="../Writer.html#escaped-instance_method" title="RDF::Writer#escaped (method)">#escaped</a></span>, <span class='object_link'><a href="../Writer.html#flush-instance_method" title="RDF::Writer#flush (method)">#flush</a></span>, <span class='object_link'><a href="../Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span>, <span class='object_link'><a href="../Writer.html#format-class_method" title="RDF::Writer.format (method)">format</a></span>, <span class='object_link'><a href="../Writer.html#format_list-instance_method" title="RDF::Writer#format_list (method)">#format_list</a></span>, <span class='object_link'><a href="../Writer.html#format_literal-instance_method" title="RDF::Writer#format_literal (method)">#format_literal</a></span>, <span class='object_link'><a href="../Writer.html#format_node-instance_method" title="RDF::Writer#format_node (method)">#format_node</a></span>, <span class='object_link'><a href="../Writer.html#format_quotedTriple-instance_method" title="RDF::Writer#format_quotedTriple (method)">#format_quotedTriple</a></span>, <span class='object_link'><a href="../Writer.html#format_term-instance_method" title="RDF::Writer#format_term (method)">#format_term</a></span>, <span class='object_link'><a href="../Writer.html#format_uri-instance_method" title="RDF::Writer#format_uri (method)">#format_uri</a></span>, <span class='object_link'><a href="../Writer.html#node_id-instance_method" title="RDF::Writer#node_id (method)">#node_id</a></span>, <span class='object_link'><a href="../Writer.html#open-class_method" title="RDF::Writer.open (method)">open</a></span>, <span class='object_link'><a href="../Writer.html#prefix-instance_method" title="RDF::Writer#prefix (method)">#prefix</a></span>, <span class='object_link'><a href="../Writer.html#prefixes-instance_method" title="RDF::Writer#prefixes (method)">#prefixes</a></span>, <span class='object_link'><a href="../Writer.html#prefixes=-instance_method" title="RDF::Writer#prefixes= (method)">#prefixes=</a></span>, <span class='object_link'><a href="../Writer.html#puts-instance_method" title="RDF::Writer#puts (method)">#puts</a></span>, <span class='object_link'><a href="../Writer.html#quoted-instance_method" title="RDF::Writer#quoted (method)">#quoted</a></span>, <span class='object_link'><a href="../Writer.html#to_sym-class_method" title="RDF::Writer.to_sym (method)">to_sym</a></span>, <span class='object_link'><a href="../Writer.html#to_sym-instance_method" title="RDF::Writer#to_sym (method)">#to_sym</a></span>, <span class='object_link'><a href="../Writer.html#uri_for-instance_method" title="RDF::Writer#uri_for (method)">#uri_for</a></span>, <span class='object_link'><a href="../Writer.html#validate%3F-instance_method" title="RDF::Writer#validate? (method)">#validate?</a></span>, <span class='object_link'><a href="../Writer.html#write_comment-instance_method" title="RDF::Writer#write_comment (method)">#write_comment</a></span>, <span class='object_link'><a href="../Writer.html#write_prologue-instance_method" title="RDF::Writer#write_prologue (method)">#write_prologue</a></span>, <span class='object_link'><a href="../Writer.html#write_statement-instance_method" title="RDF::Writer#write_statement (method)">#write_statement</a></span>, <span class='object_link'><a href="../Writer.html#write_triples-instance_method" title="RDF::Writer#write_triples (method)">#write_triples</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Util/Aliasing/LateBound.html" title="RDF::Util::Aliasing::LateBound (module)">Util::Aliasing::LateBound</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Aliasing/LateBound.html#alias_method-instance_method" title="RDF::Util::Aliasing::LateBound#alias_method (method)">#alias_method</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Writable.html" title="RDF::Writable (module)">Writable</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Writable.html#<<-instance_method" title="RDF::Writable#&lt;&lt; (method)">#<<</a></span>, <span class='object_link'><a href="../Writable.html#insert-instance_method" title="RDF::Writable#insert (method)">#insert</a></span>, <span class='object_link'><a href="../Writable.html#insert_graph-instance_method" title="RDF::Writable#insert_graph (method)">#insert_graph</a></span>, <span class='object_link'><a href="../Writable.html#insert_reader-instance_method" title="RDF::Writable#insert_reader (method)">#insert_reader</a></span>, <span class='object_link'><a href="../Writable.html#insert_statement-instance_method" title="RDF::Writable#insert_statement (method)">#insert_statement</a></span>, <span class='object_link'><a href="../Writable.html#insert_statements-instance_method" title="RDF::Writable#insert_statements (method)">#insert_statements</a></span>, <span class='object_link'><a href="../Writable.html#writable%3F-instance_method" title="RDF::Writable#writable? (method)">#writable?</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Util/Coercions.html" title="RDF::Util::Coercions (module)">Util::Coercions</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Coercions.html#coerce_statements-instance_method" title="RDF::Util::Coercions#coerce_statements (method)">#coerce_statements</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(output = $stdout, base_uri:, **options) {|writer| ... } &#x21d2; <tt><span class='object_link'><a href="" title="RDF::Vocabulary::Writer (class)">Writer</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initializes the writer.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>output</span>
+      
+      
+        <span class='type'>(<tt>IO</tt>, <tt>File</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$stdout</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the output stream</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>base_uri</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>URI of this vocabulary</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>= ({}) any additional options. See <span class='object_link'><a href="../Writer.html#initialize-instance_method" title="RDF::Writer#initialize (method)">Writer#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:class_name</span>
+          <span class="type">(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Class name for this vocabulary</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:module_name</span>
+          <span class="type">(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>&quot;RDF&quot;</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Module name for this vocabulary</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">extra</span>
+          <span class="type">(<tt>Hash</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Extra properties to add to the output (programatic only)</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">patch</span>
+          <span class="type">(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>An LD Patch to run against the graph before writing</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">strict</span>
+          <span class="type">(<tt>Boolean</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>false</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Create an RDF::StrictVocabulary instead of an RDF::Vocabulary</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>writer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>self</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>writer</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Writer.html" title="RDF::Writer (class)">RDF::Writer</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>void</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+124
+125
+126
+127
+128</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/writer.rb', line 124</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='gvar'>$stdout</span><span class='comma'>,</span> <span class='label'>base_uri:</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@graph</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Repository.html" title="RDF::Repository (class)">Repository</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Repository.html#initialize-instance_method" title="RDF::Repository#initialize (method)">new</a></span></span>
+  <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='label'>base_uri:</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='rparen'>)</span>
+  <span class='kw'>super</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="class_name=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="class_name-instance_method">
+  
+    #<strong>class_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute class_name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/writer.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_class_name'>class_name</span>
+  <span class='ivar'>@class_name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="module_name=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="module_name-instance_method">
+  
+    #<strong>module_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute module_name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/writer.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_module_name'>module_name</span>
+  <span class='ivar'>@module_name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="options-class_method">
+  
+    .<strong>options</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/writer.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_options'>options</span>
+  <span class='lbracket'>[</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI.html" title="RDF::CLI (class)">CLI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI/Option.html" title="RDF::CLI::Option (class)">Option</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../CLI/Option.html#initialize-instance_method" title="RDF::CLI::Option#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+      <span class='label'>symbol:</span> <span class='symbol'>:class_name</span><span class='comma'>,</span>
+      <span class='label'>datatype:</span> <span class='const'><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></span><span class='comma'>,</span>
+      <span class='label'>control:</span> <span class='symbol'>:text</span><span class='comma'>,</span>
+      <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--class-name NAME</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>use:</span> <span class='symbol'>:required</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Name of created Ruby class (vocabulary format).</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI.html" title="RDF::CLI (class)">CLI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI/Option.html" title="RDF::CLI::Option (class)">Option</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../CLI/Option.html#initialize-instance_method" title="RDF::CLI::Option#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+      <span class='label'>symbol:</span> <span class='symbol'>:extra</span><span class='comma'>,</span>
+      <span class='label'>datatype:</span> <span class='const'><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></span><span class='comma'>,</span>
+      <span class='label'>control:</span> <span class='symbol'>:none</span><span class='comma'>,</span>
+      <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--extra URIEncodedJSON</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>URI Encoded JSON representation of extra data</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_arg'>arg</span><span class='op'>|</span>
+      <span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>CGI</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_arg'>arg</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_inject'>inject</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_m1'>m1</span><span class='comma'>,</span> <span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='id identifier rubyid_defs'>defs</span><span class='rparen'>)</span><span class='op'>|</span>
+        <span class='id identifier rubyid_d1'>d1</span> <span class='op'>=</span> <span class='id identifier rubyid_defs'>defs</span><span class='period'>.</span><span class='id identifier rubyid_inject'>inject</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span><span class='op'>|</span> <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+        <span class='id identifier rubyid_m1'>m1</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_d1'>d1</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span><span class='comma'>,</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI.html" title="RDF::CLI (class)">CLI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI/Option.html" title="RDF::CLI::Option (class)">Option</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../CLI/Option.html#initialize-instance_method" title="RDF::CLI::Option#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+      <span class='label'>symbol:</span> <span class='symbol'>:module_name</span><span class='comma'>,</span>
+      <span class='label'>datatype:</span> <span class='const'><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></span><span class='comma'>,</span>
+      <span class='label'>control:</span> <span class='symbol'>:text</span><span class='comma'>,</span>
+      <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--module-name NAME</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Name of Ruby module containing class-name (vocabulary format).</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI.html" title="RDF::CLI (class)">CLI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI/Option.html" title="RDF::CLI::Option (class)">Option</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../CLI/Option.html#initialize-instance_method" title="RDF::CLI::Option#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+      <span class='label'>symbol:</span> <span class='symbol'>:noDoc</span><span class='comma'>,</span>
+      <span class='label'>datatype:</span> <span class='const'>TrueClass</span><span class='comma'>,</span>
+      <span class='label'>control:</span> <span class='symbol'>:checkbox</span><span class='comma'>,</span>
+      <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--noDoc</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Do not output Yard documentation.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI.html" title="RDF::CLI (class)">CLI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../CLI/Option.html" title="RDF::CLI::Option (class)">Option</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../CLI/Option.html#initialize-instance_method" title="RDF::CLI::Option#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+      <span class='label'>symbol:</span> <span class='symbol'>:strict</span><span class='comma'>,</span>
+      <span class='label'>datatype:</span> <span class='const'>TrueClass</span><span class='comma'>,</span>
+      <span class='label'>control:</span> <span class='symbol'>:checkbox</span><span class='comma'>,</span>
+      <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--strict</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Make strict vocabulary</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span> <span class='lbrace'>{</span><span class='kw'>true</span><span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="write_epilogue-instance_method">
+  
+    #<strong>write_epilogue</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Generate vocabulary</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/writer.rb', line 136</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_write_epilogue'>write_epilogue</span>
+  <span class='id identifier rubyid_class_name'>class_name</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:class_name</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_module_name'>module_name</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:module_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RDF</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_source'>source</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:location</span><span class='comma'>,</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_strict'>strict</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:strict</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rparen'>)</span>
+
+  <span class='comment'># Passing a graph for the location causes it to serialize the written triples.
+</span>  <span class='id identifier rubyid_vocab'>vocab</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vocabulary.html" title="RDF::Vocabulary (class)">Vocabulary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_graph'><span class='object_link'><a href="../Vocabulary.html#from_graph-class_method" title="RDF::Vocabulary.from_graph (method)">from_graph</a></span></span><span class='lparen'>(</span><span class='ivar'>@graph</span><span class='comma'>,</span>
+                                     <span class='label'>url:</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='comma'>,</span>
+                                     <span class='label'>class_name:</span> <span class='id identifier rubyid_class_name'>class_name</span><span class='comma'>,</span>
+                                     <span class='label'>extra:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:extra</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+  <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'># -*- encoding: utf-8 -*-
+    # frozen_string_literal: true
+    # This file generated automatically using rdf vocabulary format from </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_source'>source</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+    require &#39;rdf&#39;
+    module </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_module_name'>module_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+    </span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^          </span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+
+    <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>  # @!parse
+      #   # Vocabulary for &lt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;
+      #   #
+    </span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^          </span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:noDoc</span><span class='rbracket'>]</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:noDoc</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_ont_doc'>ont_doc</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='qsymbols_beg'>%i(</span><span class='words_sep'>
+      </span><span class='tstring_content'>http://purl.org/dc/terms/title</span><span class='words_sep'>
+      </span><span class='tstring_content'>http://purl.org/dc/elements/1.1/title</span><span class='words_sep'>
+      </span><span class='tstring_content'>label</span><span class='words_sep'>
+      </span><span class='tstring_content'>comment</span><span class='words_sep'>
+      </span><span class='tstring_content'>http://purl.org/dc/terms/description</span><span class='words_sep'>
+      </span><span class='tstring_content'>http://purl.org/dc/elements/1.1/description</span><span class='words_sep'>
+    </span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_attr'>attr</span><span class='op'>|</span>
+      <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_attr'>attr</span><span class='rbracket'>]</span>
+      <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_attr'>attr</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+        <span class='id identifier rubyid_ont_doc'>ont_doc</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #   # </span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\s+</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_ont_doc'>ont_doc</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n  #   #\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_ont_doc'>ont_doc</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='comment'># Version Info
+</span>    <span class='comment'># See Also
+</span>    <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='symbol'>:&#39;http://www.w3.org/2002/07/owl#versionInfo&#39;</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_vers'>vers</span><span class='op'>|</span>
+      <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #   # @version </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_vers'>vers</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+    <span class='comment'># See Also
+</span>    <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='symbol'>:&#39;http://www.w3.org/2000/01/rdf-schema#seeAlso&#39;</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_see'>see</span><span class='op'>|</span>
+      <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #   # @see </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_see'>see</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>  #   class </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_class_name'>class_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> &lt; RDF::</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Strict</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_strict'>strict</span><span class='embexpr_end'>}</span><span class='tstring_content'>Vocabulary</span><span class='tstring_end'>)</span></span> <span class='kw'>unless</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:noDoc</span><span class='rbracket'>]</span>
+
+  <span class='comment'># Split nodes into Class/Property/Datatype/Other
+</span>  <span class='id identifier rubyid_term_nodes'>term_nodes</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='label'>ontology:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='label'>class:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='label'>property:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='label'>datatype:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='label'>other:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='rbrace'>}</span>
+
+  <span class='comment'># Generate Ontology first
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span>
+    <span class='id identifier rubyid_term_nodes'>term_nodes</span><span class='lbracket'>[</span><span class='symbol'>:ontology</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_ontology'>ontology</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_vocab'>vocab</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span>
+    <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>  <span class='comment'># Ontology serialized separately
+</span>    <span class='id identifier rubyid_kind'>kind</span> <span class='op'>=</span> <span class='kw'>begin</span>
+      <span class='kw'>case</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>Class</span><span class='regexp_end'>/</span></span>    <span class='kw'>then</span> <span class='symbol'>:class</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>Property</span><span class='regexp_end'>/</span></span> <span class='kw'>then</span> <span class='symbol'>:property</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>Datatype</span><span class='regexp_end'>/</span></span> <span class='kw'>then</span> <span class='symbol'>:datatype</span>
+      <span class='kw'>else</span>                 <span class='symbol'>:other</span>
+      <span class='kw'>end</span>
+    <span class='kw'>rescue</span> <span class='const'>KeyError</span>
+      <span class='comment'># This can try to resolve referenced terms against the previous version of this vocabulary, which may be strict, and fail if the referenced term hasn&#39;t been created yet.
+</span>      <span class='symbol'>:other</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_term_nodes'>term_nodes</span><span class='lbracket'>[</span><span class='id identifier rubyid_kind'>kind</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Yard attribute information for terms
+</span>  <span class='id identifier rubyid_term_nodes'>term_nodes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_tt'>tt</span><span class='comma'>,</span> <span class='id identifier rubyid_ttv'>ttv</span><span class='op'>|</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_tt'>tt</span> <span class='op'>==</span> <span class='symbol'>:ontology</span>
+    <span class='id identifier rubyid_ttv'>ttv</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='op'>|</span>
+      <span class='comment'># Only document terms that can be accessed like a Ruby attribute
+</span>      <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^[_[:alpha:]](?:\w*)[!?=]?$</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
+      <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='symbol'>:comment</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_comment'>comment</span><span class='op'>|</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #     # </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_comment'>comment</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\s+</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n  #     #\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='symbol'>:comment</span><span class='rbracket'>]</span>
+      <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #     # @return [RDF::Vocabulary::Term]</span><span class='tstring_end'>&quot;</span></span>
+      <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #     attr_reader :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span> <span class='kw'>unless</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:noDoc</span><span class='rbracket'>]</span>
+
+  <span class='comment'># End of yard preamble
+</span>  <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  #   end</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:noDoc</span><span class='rbracket'>]</span>
+  <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>  </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_class_name'>class_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> = Class.new(RDF::</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Strict</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_strict'>strict</span><span class='embexpr_end'>}</span><span class='tstring_content'>Vocabulary(&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='embexpr_end'>}</span><span class='tstring_content'>&quot;)) do</span><span class='tstring_end'>)</span></span>
+
+  <span class='comment'># Output term definitions
+</span>  <span class='lbrace'>{</span>
+    <span class='label'>ontology:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Ontology definition</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>class:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Class definitions</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>property:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Property definitions</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>datatype:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Datatype definitions</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>other:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Extra definitions</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_tt'>tt</span><span class='comma'>,</span> <span class='id identifier rubyid_comment'>comment</span><span class='op'>|</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_term_nodes'>term_nodes</span><span class='lbracket'>[</span><span class='id identifier rubyid_tt'>tt</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n    # </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_comment'>comment</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_term_nodes'>term_nodes</span><span class='lbracket'>[</span><span class='id identifier rubyid_tt'>tt</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='op'>|</span> <span class='id identifier rubyid_from_node'>from_node</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='comma'>,</span> <span class='id identifier rubyid_tt'>tt</span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Query the vocabulary to extract property and class definitions
+</span>  <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  end\nend</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="write_triple-instance_method">
+  
+    #<strong>write_triple</strong>(subject, predicate, object)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+130
+131
+132</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/writer.rb', line 130</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_write_triple'>write_triple</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
+  <span class='ivar'>@graph</span> <span class='op'>&lt;&lt;</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Statement.html" title="RDF::Statement (class)">Statement</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Jan 27 23:05:08 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>

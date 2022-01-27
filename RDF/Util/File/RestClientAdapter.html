@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::Util::File::RestClientAdapter
+  
+    &mdash; RDF.rb: Linked Data for Ruby
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::Util::File::RestClientAdapter";
+  relpath = '../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../_index.html">Index (R)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../RDF.html" title="RDF (module)">RDF</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Util.html" title="RDF::Util (module)">Util</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../File.html" title="RDF::Util::File (module)">File</a></span></span>
+     &raquo; 
+    <span class="title">RestClientAdapter</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::Util::File::RestClientAdapter
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="HttpAdapter.html" title="RDF::Util::File::HttpAdapter (class)">HttpAdapter</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="HttpAdapter.html" title="RDF::Util::File::HttpAdapter (class)">HttpAdapter</a></span></li>
+          
+            <li class="next">RDF::Util::File::RestClientAdapter</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/util/file.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>If the <a href="https://rubygems.org/gems/rest-client">Rest Client</a> gem is included, it will be used for retrieving resources allowing for sophisticated HTTP caching using <a href="https://rubygems.org/gems/rest-client-components">REST Client Components</a> allowing the use of <code>Rack::Cache</code> to avoid network access.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>1.2</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#open_url-class_method" title="open_url (class method)">.<strong>open_url</strong>(base_uri, proxy: nil, headers: {}, verify_none: false, **options)  &#x21d2; RemoteDocument, Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  <span class="abstract note title">abstract</span>
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A <span class='object_link'><a href="RemoteDocument.html" title="RDF::Util::File::RemoteDocument (class)">RemoteDocument</a></span>.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="HttpAdapter.html" title="RDF::Util::File::HttpAdapter (class)">HttpAdapter</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="HttpAdapter.html#default_accept_header-class_method" title="RDF::Util::File::HttpAdapter.default_accept_header (method)">default_accept_header</a></span>, <span class='object_link'><a href="HttpAdapter.html#default_user_agent-class_method" title="RDF::Util::File::HttpAdapter.default_user_agent (method)">default_user_agent</a></span>, <span class='object_link'><a href="HttpAdapter.html#headers-class_method" title="RDF::Util::File::HttpAdapter.headers (method)">headers</a></span></p>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="open_url-class_method">
+  
+    .<strong>open_url</strong>(base_uri, proxy: nil, headers: {}, verify_none: false, **options)  &#x21d2; <tt><span class='object_link'><a href="RemoteDocument.html" title="RDF::Util::File::RemoteDocument (class)">RemoteDocument</a></span></tt>, <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <div class="note abstract">
+  <strong>This method is abstract.</strong>
+  <div class='inline'></div>
+</div>
+
+<p>Returns A <span class='object_link'><a href="RemoteDocument.html" title="RDF::Util::File::RemoteDocument (class)">RDF::Util::File::RemoteDocument</a></span>. If a block is given, the result of evaluating the block is returned.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>base_uri</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to open</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>proxy</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>HTTP Proxy to use for requests.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>headers</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt><span class='object_link'><a href="../../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>({}) HTTP Request headers</p>
+
+<p>Defaults <code>Accept</code> header based on available reader content types to allow for content negotiation based on available readers.</p>
+
+<p>Defaults <code>User-Agent</code> header, unless one is specified.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>verify_none</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>(false) Don’t verify SSL certificates</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>options are ignored in this implementation. Applications are encouraged to override this implementation to provide more control over HTTP headers and redirect following.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="RemoteDocument.html" title="RDF::Util::File::RemoteDocument (class)">RemoteDocument</a></span></tt>, <tt>Object</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A <span class='object_link'><a href="RemoteDocument.html" title="RDF::Util::File::RemoteDocument (class)">RDF::Util::File::RemoteDocument</a></span>. If a block is given, the result of evaluating the block is returned.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>IOError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if not found</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>1.2</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/util/file.rb', line 83</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_open_url'>open_url</span><span class='lparen'>(</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='comma'>,</span> <span class='label'>proxy:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>headers:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>verify_none:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ssl_verify'>ssl_verify</span> <span class='op'>=</span> <span class='id identifier rubyid_verify_none'>verify_none</span> <span class='op'>?</span> <span class='const'>OpenSSL</span><span class='op'>::</span><span class='const'>SSL</span><span class='op'>::</span><span class='const'>VERIFY_NONE</span> <span class='op'>:</span> <span class='const'>OpenSSL</span><span class='op'>::</span><span class='const'>SSL</span><span class='op'>::</span><span class='const'>VERIFY_PEER</span>
+
+  <span class='comment'># If RestClient is loaded, prefer it
+</span>  <span class='const'>RestClient</span><span class='period'>.</span><span class='id identifier rubyid_proxy'>proxy</span> <span class='op'>=</span> <span class='id identifier rubyid_proxy'>proxy</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='kw'>if</span> <span class='id identifier rubyid_proxy'>proxy</span>
+  <span class='id identifier rubyid_client'>client</span> <span class='op'>=</span> <span class='const'>RestClient</span><span class='op'>::</span><span class='const'>Resource</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='comma'>,</span> <span class='label'>verify_ssl:</span> <span class='id identifier rubyid_ssl_verify'>ssl_verify</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_headers'>headers</span><span class='lparen'>(</span><span class='label'>headers:</span> <span class='id identifier rubyid_headers'>headers</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_response'>response</span><span class='comma'>,</span> <span class='id identifier rubyid_request'>request</span><span class='comma'>,</span> <span class='id identifier rubyid_res'>res</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='op'>|</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span>
+    <span class='kw'>when</span> <span class='int'>200</span><span class='op'>..</span><span class='int'>299</span>
+      <span class='comment'># found object
+</span>
+      <span class='comment'># If a Location is returned, it defines the base resource for this file, not it&#39;s actual ending location
+</span>      <span class='id identifier rubyid_document_options'>document_options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+        <span class='label'>base_uri:</span>     <span class='const'><span class='object_link'><a href="../../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:location</span><span class='comma'>,</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='comma'>,</span>
+        <span class='label'>code:</span>         <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='comma'>,</span>
+        <span class='label'>headers:</span>      <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span>
+      <span class='rbrace'>}</span>
+
+      <span class='const'><span class='object_link'><a href="RemoteDocument.html" title="RDF::Util::File::RemoteDocument (class)">RemoteDocument</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="RemoteDocument.html#initialize-instance_method" title="RDF::Util::File::RemoteDocument#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_body'>body</span><span class='comma'>,</span> <span class='id identifier rubyid_document_options'>document_options</span><span class='rparen'>)</span>
+    <span class='kw'>when</span> <span class='int'>300</span><span class='op'>..</span><span class='int'>399</span>
+      <span class='comment'># Document base is redirected location
+</span>      <span class='comment'># Location may be relative
+</span>      <span class='id identifier rubyid_base_uri'>base_uri</span> <span class='op'>=</span> <span class='op'>::</span><span class='const'>URI</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='comma'>,</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span><span class='lbracket'>[</span><span class='symbol'>:location</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+      <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_follow_redirection'>follow_redirection</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>IOError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Jan 27 23:05:02 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>

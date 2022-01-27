@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::NTriples::Reader
+  
+    &mdash; RDF.rb: Linked Data for Ruby
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::NTriples::Reader";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (R)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span>
+     &raquo; 
+    <span class="title">Reader</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::NTriples::Reader
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></li>
+          
+            <li class="next">RDF::NTriples::Reader</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">Util::Logger</a></span></dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/ntriples/reader.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>N-Triples parser.</p>
+
+<p>** RDFStar (RDF*)</p>
+
+<p>Supports statements as resources using <code>&lt;&lt;s p o&gt;&gt;</code>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Obtaining an NTriples reader class</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span>     <span class='comment'>#=&gt; RDF::NTriples::Reader
+</span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>file_name:</span>      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>file_extension:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>content_type:</span>   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application/n-triples</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Parsing RDF statements from an NTriples file</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'>Reader</span><span class='period'>.</span><span class='id identifier rubyid_open'><span class='object_link'><a href="../Reader.html#open-class_method" title="RDF::Reader.open (method)">open</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_reader'>reader</span><span class='op'>|</span>
+  <span class='id identifier rubyid_reader'>reader</span><span class='period'>.</span><span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Parsing RDF statements from an NTriples string</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'>Reader</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_reader'>reader</span><span class='op'>|</span>
+  <span class='id identifier rubyid_reader'>reader</span><span class='period'>.</span><span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></code></pre>
+    
+  </div>
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntriples" target="_parent" title="http://www.w3.org/TR/rdf-testcases/#ntriples">http://www.w3.org/TR/rdf-testcases/#ntriples</a></li>
+    
+      <li><a href="http://www.w3.org/TR/n-triples/" target="_parent" title="http://www.w3.org/TR/n-triples/">http://www.w3.org/TR/n-triples/</a></li>
+    
+  </ul>
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="../NQuads/Reader.html" title="RDF::NQuads::Reader (class)">RDF::NQuads::Reader</a></span></p>
+</div>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="ESCAPE_CHARS-constant" class="">ESCAPE_CHARS =
+          <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_strings" target="_parent" title="http://www.w3.org/TR/rdf-testcases/#ntrip_strings">http://www.w3.org/TR/rdf-testcases/#ntrip_strings</a></li>
+    
+  </ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\b</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\f</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\r</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="UCHAR4-constant" class="">UCHAR4 =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\\u([0-9A-Fa-f]{4,4})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="UCHAR8-constant" class="">UCHAR8 =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\\U([0-9A-Fa-f]{8,8})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="UCHAR-constant" class="">UCHAR =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UCHAR4-constant" title="RDF::NTriples::Reader::UCHAR4 (constant)">UCHAR4</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#UCHAR8-constant" title="RDF::NTriples::Reader::UCHAR8 (constant)">UCHAR8</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="U_CHARS1-constant" class="">U_CHARS1 =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Terminals from rdf-turtle.</p>
+
+<p>Unicode regular expressions.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/n-triples/" target="_parent" title="http://www.w3.org/TR/n-triples/">http://www.w3.org/TR/n-triples/</a></li>
+    
+      <li><a href="http://www.w3.org/TR/turtle/" target="_parent" title="http://www.w3.org/TR/turtle/">http://www.w3.org/TR/turtle/</a></li>
+    
+  </ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='heredoc_beg'>&lt;&lt;-EOS</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\s+</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='tstring_content'>  [\\u00C0-\\u00D6]|[\\u00D8-\\u00F6]|[\\u00F8-\\u02FF]|
+  [\\u0370-\\u037D]|[\\u037F-\\u1FFF]|[\\u200C-\\u200D]|
+  [\\u2070-\\u218F]|[\\u2C00-\\u2FEF]|[\\u3001-\\uD7FF]|
+  [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
+</span><span class='heredoc_end'>EOS</span></pre></dd>
+      
+        <dt id="U_CHARS2-constant" class="">U_CHARS2 =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="IRI_RANGE-constant" class="">IRI_RANGE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[[^&lt;&gt;\&quot;{}\|\^`\\\\]&amp;&amp;[^\\x00-\\x20]]</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="PN_CHARS_BASE-constant" class="">PN_CHARS_BASE =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>163s</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[A-Z]|[a-z]|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#U_CHARS1-constant" title="RDF::NTriples::Reader::U_CHARS1 (constant)">U_CHARS1</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="PN_CHARS_U-constant" class="">PN_CHARS_U =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>164s</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>_|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PN_CHARS_BASE-constant" title="RDF::NTriples::Reader::PN_CHARS_BASE (constant)">PN_CHARS_BASE</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="PN_CHARS-constant" class="">PN_CHARS =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>166s</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>-|[0-9]|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PN_CHARS_U-constant" title="RDF::NTriples::Reader::PN_CHARS_U (constant)">PN_CHARS_U</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#U_CHARS2-constant" title="RDF::NTriples::Reader::U_CHARS2 (constant)">U_CHARS2</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ECHAR-constant" class="">ECHAR =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>159s</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\\[tbnrf&quot;&#39;\\]</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="IRIREF-constant" class="">IRIREF =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>18</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>&lt;((?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IRI_RANGE-constant" title="RDF::NTriples::Reader::IRI_RANGE (constant)">IRI_RANGE</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)*)&gt;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="BLANK_NODE_LABEL-constant" class="">BLANK_NODE_LABEL =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>141s</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>_:((?:[0-9]|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PN_CHARS_U-constant" title="RDF::NTriples::Reader::PN_CHARS_U (constant)">PN_CHARS_U</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)(?:(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PN_CHARS-constant" title="RDF::NTriples::Reader::PN_CHARS (constant)">PN_CHARS</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>|\.)*</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#PN_CHARS-constant" title="RDF::NTriples::Reader::PN_CHARS (constant)">PN_CHARS</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)?)</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="LANGTAG-constant" class="">LANGTAG =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>144s</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*)</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="STRING_LITERAL_QUOTE-constant" class="">STRING_LITERAL_QUOTE =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>22</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>&quot;((?:[^\&quot;\\\n\r]|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#ECHAR-constant" title="RDF::NTriples::Reader::ECHAR (constant)">ECHAR</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>|</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)*)&quot;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ST_START-constant" class="">ST_START =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>RDF*</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^&lt;&lt;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ST_END-constant" class="">ST_END =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\s*&gt;&gt;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="COMMENT-constant" class="">COMMENT =
+          <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar">http://www.w3.org/TR/rdf-testcases/#ntrip_grammar</a></li>
+    
+  </ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^#\s*(.*)$</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="NODEID-constant" class="">NODEID =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#BLANK_NODE_LABEL-constant" title="RDF::NTriples::Reader::BLANK_NODE_LABEL (constant)">BLANK_NODE_LABEL</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="URIREF-constant" class="">URIREF =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IRIREF-constant" title="RDF::NTriples::Reader::IRIREF (constant)">IRIREF</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="LITERAL_PLAIN-constant" class="">LITERAL_PLAIN =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#STRING_LITERAL_QUOTE-constant" title="RDF::NTriples::Reader::STRING_LITERAL_QUOTE (constant)">STRING_LITERAL_QUOTE</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="LITERAL_WITH_LANGUAGE-constant" class="">LITERAL_WITH_LANGUAGE =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#STRING_LITERAL_QUOTE-constant" title="RDF::NTriples::Reader::STRING_LITERAL_QUOTE (constant)">STRING_LITERAL_QUOTE</a></span></span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#LANGTAG-constant" title="RDF::NTriples::Reader::LANGTAG (constant)">LANGTAG</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="LITERAL_WITH_DATATYPE-constant" class="">LITERAL_WITH_DATATYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#STRING_LITERAL_QUOTE-constant" title="RDF::NTriples::Reader::STRING_LITERAL_QUOTE (constant)">STRING_LITERAL_QUOTE</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>\^\^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IRIREF-constant" title="RDF::NTriples::Reader::IRIREF (constant)">IRIREF</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="DATATYPE_URI-constant" class="">DATATYPE_URI =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\^\^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IRIREF-constant" title="RDF::NTriples::Reader::IRIREF (constant)">IRIREF</a></span></span><span class='embexpr_end'>}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="LITERAL-constant" class="">LITERAL =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#LITERAL_WITH_LANGUAGE-constant" title="RDF::NTriples::Reader::LITERAL_WITH_LANGUAGE (constant)">LITERAL_WITH_LANGUAGE</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#LITERAL_WITH_DATATYPE-constant" title="RDF::NTriples::Reader::LITERAL_WITH_DATATYPE (constant)">LITERAL_WITH_DATATYPE</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#LITERAL_PLAIN-constant" title="RDF::NTriples::Reader::LITERAL_PLAIN (constant)">LITERAL_PLAIN</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="SUBJECT-constant" class="">SUBJECT =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#URIREF-constant" title="RDF::NTriples::Reader::URIREF (constant)">URIREF</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#NODEID-constant" title="RDF::NTriples::Reader::NODEID (constant)">NODEID</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="PREDICATE-constant" class="">PREDICATE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#URIREF-constant" title="RDF::NTriples::Reader::URIREF (constant)">URIREF</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="OBJECT-constant" class="">OBJECT =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#URIREF-constant" title="RDF::NTriples::Reader::URIREF (constant)">URIREF</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#NODEID-constant" title="RDF::NTriples::Reader::NODEID (constant)">NODEID</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#LITERAL-constant" title="RDF::NTriples::Reader::LITERAL (constant)">LITERAL</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="END_OF_STATEMENT-constant" class="">END_OF_STATEMENT =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\s*\.\s*(?:#.*)?$</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ESCAPE_CHARS_ESCAPED-constant" class="">ESCAPE_CHARS_ESCAPED =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>cache constants to optimize escaping the escape chars in self.unescape</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\b</span><span class='tstring_end'>&quot;</span></span>   <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\b</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\f</span><span class='tstring_end'>&quot;</span></span>   <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\f</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\t</span><span class='tstring_end'>&quot;</span></span>   <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\n</span><span class='tstring_end'>&quot;</span></span>   <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\r</span><span class='tstring_end'>&quot;</span></span>   <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\r</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\\&quot;</span><span class='tstring_end'>&quot;</span></span>  <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\&#39;</span><span class='tstring_end'>&quot;</span></span>   <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\\\</span><span class='tstring_end'>&quot;</span></span>  <span class='op'>=&gt;</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\</span><span class='tstring_end'>&quot;</span></span>
+<span class='rbrace'>}</span> <span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="ESCAPE_CHARS_ESCAPED_REGEXP-constant" class="">ESCAPE_CHARS_ESCAPED_REGEXP =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span>
+  <span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED (constant)">ESCAPE_CHARS_ESCAPED</a></span></span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+<span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+  
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">Util::Logger</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Logger.html#IOWrapper-constant" title="RDF::Util::Logger::IOWrapper (constant)">Util::Logger::IOWrapper</a></span></p>
+
+
+
+
+  <h2>Instance Attribute Summary</h2>
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Reader.html#options-instance_method" title="RDF::Reader#options (method)">#options</a></span></p>
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_literal-class_method" title="parse_literal (class method)">.<strong>parse_literal</strong>(input, **options)  &#x21d2; RDF::Term, RDF::Literal </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_node-class_method" title="parse_node (class method)">.<strong>parse_node</strong>(input, **options)  &#x21d2; RDF::Term, RDF::Node </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_object-class_method" title="parse_object (class method)">.<strong>parse_object</strong>(input, **options)  &#x21d2; RDF::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_predicate-class_method" title="parse_predicate (class method)">.<strong>parse_predicate</strong>(input, **options)  &#x21d2; RDF::Term, RDF::URI </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_subject-class_method" title="parse_subject (class method)">.<strong>parse_subject</strong>(input, **options)  &#x21d2; RDF::Term, RDF::Resource </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_uri-class_method" title="parse_uri (class method)">.<strong>parse_uri</strong>(input, intern: false, **options)  &#x21d2; RDF::Term, RDF::URI </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#unescape-class_method" title="unescape (class method)">.<strong>unescape</strong>(string)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#unserialize-class_method" title="unserialize (class method)">.<strong>unserialize</strong>(input, **options)  &#x21d2; RDF::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_comment-instance_method" title="#read_comment (instance method)">#<strong>read_comment</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_eos-instance_method" title="#read_eos (instance method)">#<strong>read_eos</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_literal-instance_method" title="#read_literal (instance method)">#<strong>read_literal</strong>  &#x21d2; RDF::Literal </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_node-instance_method" title="#read_node (instance method)">#<strong>read_node</strong>  &#x21d2; RDF::Node </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_quotedTriple-instance_method" title="#read_quotedTriple (instance method)">#<strong>read_quotedTriple</strong>  &#x21d2; RDF::Statement </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_triple-instance_method" title="#read_triple (instance method)">#<strong>read_triple</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_uriref-instance_method" title="#read_uriref (instance method)">#<strong>read_uriref</strong>(intern: false, **options)  &#x21d2; RDF::URI </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#read_value-instance_method" title="#read_value (instance method)">#<strong>read_value</strong>  &#x21d2; RDF::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">Util::Logger</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Logger.html#log_debug-instance_method" title="RDF::Util::Logger#log_debug (method)">#log_debug</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_depth-instance_method" title="RDF::Util::Logger#log_depth (method)">#log_depth</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_error-instance_method" title="RDF::Util::Logger#log_error (method)">#log_error</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_fatal-instance_method" title="RDF::Util::Logger#log_fatal (method)">#log_fatal</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_info-instance_method" title="RDF::Util::Logger#log_info (method)">#log_info</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_recover-instance_method" title="RDF::Util::Logger#log_recover (method)">#log_recover</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_recovering%3F-instance_method" title="RDF::Util::Logger#log_recovering? (method)">#log_recovering?</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_statistics-instance_method" title="RDF::Util::Logger#log_statistics (method)">#log_statistics</a></span>, <span class='object_link'><a href="../Util/Logger.html#log_warn-instance_method" title="RDF::Util::Logger#log_warn (method)">#log_warn</a></span>, <span class='object_link'><a href="../Util/Logger.html#logger-instance_method" title="RDF::Util::Logger#logger (method)">#logger</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Reader.html#base_uri-instance_method" title="RDF::Reader#base_uri (method)">#base_uri</a></span>, <span class='object_link'><a href="../Reader.html#canonicalize%3F-instance_method" title="RDF::Reader#canonicalize? (method)">#canonicalize?</a></span>, <span class='object_link'><a href="../Reader.html#close-instance_method" title="RDF::Reader#close (method)">#close</a></span>, <span class='object_link'><a href="../Reader.html#each-class_method" title="RDF::Reader.each (method)">each</a></span>, <span class='object_link'><a href="../Reader.html#each_pg_statement-instance_method" title="RDF::Reader#each_pg_statement (method)">#each_pg_statement</a></span>, <span class='object_link'><a href="../Reader.html#each_statement-instance_method" title="RDF::Reader#each_statement (method)">#each_statement</a></span>, <span class='object_link'><a href="../Reader.html#each_triple-instance_method" title="RDF::Reader#each_triple (method)">#each_triple</a></span>, <span class='object_link'><a href="../Reader.html#encoding-instance_method" title="RDF::Reader#encoding (method)">#encoding</a></span>, <span class='object_link'><a href="../Reader.html#fail_object-instance_method" title="RDF::Reader#fail_object (method)">#fail_object</a></span>, <span class='object_link'><a href="../Reader.html#fail_predicate-instance_method" title="RDF::Reader#fail_predicate (method)">#fail_predicate</a></span>, <span class='object_link'><a href="../Reader.html#fail_subject-instance_method" title="RDF::Reader#fail_subject (method)">#fail_subject</a></span>, <span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span>, <span class='object_link'><a href="../Reader.html#format-class_method" title="RDF::Reader.format (method)">format</a></span>, <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">#initialize</a></span>, <span class='object_link'><a href="../Reader.html#intern%3F-instance_method" title="RDF::Reader#intern? (method)">#intern?</a></span>, <span class='object_link'><a href="../Reader.html#lineno-instance_method" title="RDF::Reader#lineno (method)">#lineno</a></span>, <span class='object_link'><a href="../Reader.html#open-class_method" title="RDF::Reader.open (method)">open</a></span>, <span class='object_link'><a href="../Reader.html#options-class_method" title="RDF::Reader.options (method)">options</a></span>, <span class='object_link'><a href="../Reader.html#prefix-instance_method" title="RDF::Reader#prefix (method)">#prefix</a></span>, <span class='object_link'><a href="../Reader.html#prefixes-instance_method" title="RDF::Reader#prefixes (method)">#prefixes</a></span>, <span class='object_link'><a href="../Reader.html#prefixes=-instance_method" title="RDF::Reader#prefixes= (method)">#prefixes=</a></span>, <span class='object_link'><a href="../Reader.html#read_statement-instance_method" title="RDF::Reader#read_statement (method)">#read_statement</a></span>, <span class='object_link'><a href="../Reader.html#rewind-instance_method" title="RDF::Reader#rewind (method)">#rewind</a></span>, <span class='object_link'><a href="../Reader.html#to_sym-class_method" title="RDF::Reader.to_sym (method)">to_sym</a></span>, <span class='object_link'><a href="../Reader.html#to_sym-instance_method" title="RDF::Reader#to_sym (method)">#to_sym</a></span>, <span class='object_link'><a href="../Reader.html#valid%3F-instance_method" title="RDF::Reader#valid? (method)">#valid?</a></span>, <span class='object_link'><a href="../Reader.html#validate%3F-instance_method" title="RDF::Reader#validate? (method)">#validate?</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Util/Aliasing/LateBound.html" title="RDF::Util::Aliasing::LateBound (module)">Util::Aliasing::LateBound</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Util/Aliasing/LateBound.html#alias_method-instance_method" title="RDF::Util::Aliasing::LateBound#alias_method (method)">#alias_method</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Enumerable.html" title="RDF::Enumerable (module)">Enumerable</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Enumerable.html#dump-instance_method" title="RDF::Enumerable#dump (method)">#dump</a></span>, <span class='object_link'><a href="../Enumerable.html#each_graph-instance_method" title="RDF::Enumerable#each_graph (method)">#each_graph</a></span>, <span class='object_link'><a href="../Enumerable.html#each_object-instance_method" title="RDF::Enumerable#each_object (method)">#each_object</a></span>, <span class='object_link'><a href="../Enumerable.html#each_predicate-instance_method" title="RDF::Enumerable#each_predicate (method)">#each_predicate</a></span>, <span class='object_link'><a href="../Enumerable.html#each_quad-instance_method" title="RDF::Enumerable#each_quad (method)">#each_quad</a></span>, <span class='object_link'><a href="../Enumerable.html#each_statement-instance_method" title="RDF::Enumerable#each_statement (method)">#each_statement</a></span>, <span class='object_link'><a href="../Enumerable.html#each_subject-instance_method" title="RDF::Enumerable#each_subject (method)">#each_subject</a></span>, <span class='object_link'><a href="../Enumerable.html#each_term-instance_method" title="RDF::Enumerable#each_term (method)">#each_term</a></span>, <span class='object_link'><a href="../Enumerable.html#each_triple-instance_method" title="RDF::Enumerable#each_triple (method)">#each_triple</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_graph-instance_method" title="RDF::Enumerable#enum_graph (method)">#enum_graph</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_object-instance_method" title="RDF::Enumerable#enum_object (method)">#enum_object</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_predicate-instance_method" title="RDF::Enumerable#enum_predicate (method)">#enum_predicate</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_quad-instance_method" title="RDF::Enumerable#enum_quad (method)">#enum_quad</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_statement-instance_method" title="RDF::Enumerable#enum_statement (method)">#enum_statement</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_subject-instance_method" title="RDF::Enumerable#enum_subject (method)">#enum_subject</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_term-instance_method" title="RDF::Enumerable#enum_term (method)">#enum_term</a></span>, <span class='object_link'><a href="../Enumerable.html#enum_triple-instance_method" title="RDF::Enumerable#enum_triple (method)">#enum_triple</a></span>, <span class='object_link'><a href="../Enumerable.html#graph%3F-instance_method" title="RDF::Enumerable#graph? (method)">#graph?</a></span>, <span class='object_link'><a href="../Enumerable.html#graph_names-instance_method" title="RDF::Enumerable#graph_names (method)">#graph_names</a></span>, <span class='object_link'><a href="../Enumerable.html#invalid%3F-instance_method" title="RDF::Enumerable#invalid? (method)">#invalid?</a></span>, <span class='object_link'><a href="../Enumerable.html#method_missing-instance_method" title="RDF::Enumerable#method_missing (method)">#method_missing</a></span>, <span class='object_link'><a href="../Enumerable.html#object%3F-instance_method" title="RDF::Enumerable#object? (method)">#object?</a></span>, <span class='object_link'><a href="../Enumerable.html#objects-instance_method" title="RDF::Enumerable#objects (method)">#objects</a></span>, <span class='object_link'><a href="../Enumerable.html#predicate%3F-instance_method" title="RDF::Enumerable#predicate? (method)">#predicate?</a></span>, <span class='object_link'><a href="../Enumerable.html#predicates-instance_method" title="RDF::Enumerable#predicates (method)">#predicates</a></span>, <span class='object_link'><a href="../Enumerable.html#project_graph-instance_method" title="RDF::Enumerable#project_graph (method)">#project_graph</a></span>, <span class='object_link'><a href="../Enumerable.html#quad%3F-instance_method" title="RDF::Enumerable#quad? (method)">#quad?</a></span>, <span class='object_link'><a href="../Enumerable.html#quads-instance_method" title="RDF::Enumerable#quads (method)">#quads</a></span>, <span class='object_link'><a href="../Enumerable.html#respond_to_missing%3F-instance_method" title="RDF::Enumerable#respond_to_missing? (method)">#respond_to_missing?</a></span>, <span class='object_link'><a href="../Enumerable.html#statement%3F-instance_method" title="RDF::Enumerable#statement? (method)">#statement?</a></span>, <span class='object_link'><a href="../Enumerable.html#statements-instance_method" title="RDF::Enumerable#statements (method)">#statements</a></span>, <span class='object_link'><a href="../Enumerable.html#subject%3F-instance_method" title="RDF::Enumerable#subject? (method)">#subject?</a></span>, <span class='object_link'><a href="../Enumerable.html#subjects-instance_method" title="RDF::Enumerable#subjects (method)">#subjects</a></span>, <span class='object_link'><a href="../Enumerable.html#supports%3F-instance_method" title="RDF::Enumerable#supports? (method)">#supports?</a></span>, <span class='object_link'><a href="../Enumerable.html#term%3F-instance_method" title="RDF::Enumerable#term? (method)">#term?</a></span>, <span class='object_link'><a href="../Enumerable.html#terms-instance_method" title="RDF::Enumerable#terms (method)">#terms</a></span>, <span class='object_link'><a href="../Enumerable.html#to_a-instance_method" title="RDF::Enumerable#to_a (method)">#to_a</a></span>, <span class='object_link'><a href="../Enumerable.html#to_h-instance_method" title="RDF::Enumerable#to_h (method)">#to_h</a></span>, <span class='object_link'><a href="../Enumerable.html#to_set-instance_method" title="RDF::Enumerable#to_set (method)">#to_set</a></span>, <span class='object_link'><a href="../Enumerable.html#triple%3F-instance_method" title="RDF::Enumerable#triple? (method)">#triple?</a></span>, <span class='object_link'><a href="../Enumerable.html#triples-instance_method" title="RDF::Enumerable#triples (method)">#triples</a></span>, <span class='object_link'><a href="../Enumerable.html#valid%3F-instance_method" title="RDF::Enumerable#valid? (method)">#valid?</a></span>, <span class='object_link'><a href="../Enumerable.html#validate!-instance_method" title="RDF::Enumerable#validate! (method)">#validate!</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Countable.html" title="RDF::Countable (module)">Countable</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Countable.html#count-instance_method" title="RDF::Countable#count (method)">#count</a></span>, <span class='object_link'><a href="../Countable.html#empty%3F-instance_method" title="RDF::Countable#empty? (method)">#empty?</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Readable.html" title="RDF::Readable (module)">Readable</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Readable.html#readable%3F-instance_method" title="RDF::Readable#readable? (method)">#readable?</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <p class="notice">This class inherits a constructor from <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">RDF::Reader</a></span></p>
+  
+</div>
+<div id="method_missing_details" class="method_details_list">
+  <h2>Dynamic Method Handling</h2>
+  <p class="notice super">
+    This class handles dynamic methods through the <tt>method_missing</tt> method
+    
+      in the class <span class='object_link'><a href="../Enumerable.html#method_missing-instance_method" title="RDF::Enumerable#method_missing (method)">RDF::Enumerable</a></span>
+    
+  </p>
+  
+</div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="parse_literal-class_method">
+  
+    .<strong>parse_literal</strong>(input, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>, <tt><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">RDF::Literal</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">RDF::Literal</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 156</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_literal'>parse_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_input'>input</span>
+    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="#LITERAL_WITH_LANGUAGE-constant" title="RDF::NTriples::Reader::LITERAL_WITH_LANGUAGE (constant)">LITERAL_WITH_LANGUAGE</a></span></span>
+      <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='backref'>$1</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>language:</span> <span class='backref'>$4</span><span class='rparen'>)</span>
+    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="#LITERAL_WITH_DATATYPE-constant" title="RDF::NTriples::Reader::LITERAL_WITH_DATATYPE (constant)">LITERAL_WITH_DATATYPE</a></span></span>
+      <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='backref'>$1</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='backref'>$4</span><span class='rparen'>)</span>
+    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="#LITERAL_PLAIN-constant" title="RDF::NTriples::Reader::LITERAL_PLAIN (constant)">LITERAL_PLAIN</a></span></span>
+      <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='backref'>$1</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="parse_node-class_method">
+  
+    .<strong>parse_node</strong>(input, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>, <tt><span class='object_link'><a href="../Node.html" title="RDF::Node (class)">RDF::Node</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Node.html" title="RDF::Node (class)">RDF::Node</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+137
+138
+139
+140
+141</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 137</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_node'>parse_node</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_input'>input</span> <span class='op'>=~</span> <span class='const'><span class='object_link'><a href="#NODEID-constant" title="RDF::NTriples::Reader::NODEID (constant)">NODEID</a></span></span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Node.html" title="RDF::Node (class)">Node</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Resource.html#new-class_method" title="RDF::Resource.new (method)">new</a></span></span><span class='lparen'>(</span><span class='backref'>$1</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="parse_object-class_method">
+  
+    .<strong>parse_object</strong>(input, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+130
+131
+132</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 130</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_object'>parse_object</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_parse_uri'>parse_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_parse_node'>parse_node</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_parse_literal'>parse_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="parse_predicate-class_method">
+  
+    .<strong>parse_predicate</strong>(input, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>, <tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+124
+125
+126</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 124</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_predicate'>parse_predicate</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_parse_uri'>parse_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>intern:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="parse_subject-class_method">
+  
+    .<strong>parse_subject</strong>(input, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>, <tt><span class='object_link'><a href="../Resource.html" title="RDF::Resource (module)">RDF::Resource</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Resource.html" title="RDF::Resource (module)">RDF::Resource</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+117
+118
+119</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 117</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_subject'>parse_subject</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_parse_uri'>parse_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_parse_node'>parse_node</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="parse_uri-class_method">
+  
+    .<strong>parse_uri</strong>(input, intern: false, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>, <tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>intern</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>(false) Use Interned URI</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+147
+148
+149
+150
+151</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 147</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_uri'>parse_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>intern:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_input'>input</span> <span class='op'>=~</span> <span class='const'><span class='object_link'><a href="#URIREF-constant" title="RDF::NTriples::Reader::URIREF (constant)">URIREF</a></span></span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">URI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_intern'>intern</span> <span class='op'>?</span> <span class='symbol'>:intern</span> <span class='op'>:</span> <span class='symbol'>:new</span><span class='comma'>,</span> <span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='backref'>$1</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="unescape-class_method">
+  
+    .<strong>unescape</strong>(string)  &#x21d2; <tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>string</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_strings" target="_parent" title="http://www.w3.org/TR/rdf-testcases/#ntrip_strings">http://www.w3.org/TR/rdf-testcases/#ntrip_strings</a></li>
+    
+      <li><a href="http://blog.grayproductions.net/articles/understanding_m17n" target="_parent" title="http://blog.grayproductions.net/articles/understanding_m17n">http://blog.grayproductions.net/articles/understanding_m17n</a></li>
+    
+      <li><a href="http://yehudakatz.com/2010/05/17/encodings-unabridged/" target="_parent" title="http://yehudakatz.com/2010/05/17/encodings-unabridged/">http://yehudakatz.com/2010/05/17/encodings-unabridged/</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 188</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
+  <span class='comment'># Note: avoiding copying the input string when no escaping is needed
+</span>  <span class='comment'># greatly reduces the number of allocations and the processing time.
+</span>  <span class='id identifier rubyid_string'>string</span> <span class='op'>=</span> <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_force_encoding'>force_encoding</span><span class='lparen'>(</span><span class='const'>Encoding</span><span class='op'>::</span><span class='const'>UTF_8</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>==</span> <span class='const'>Encoding</span><span class='op'>::</span><span class='const'>UTF_8</span>
+  <span class='id identifier rubyid_scanner'>scanner</span> <span class='op'>=</span> <span class='const'>StringScanner</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='kw'>while</span> <span class='op'>!</span><span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_eos?'>eos?</span>
+    <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>&lt;&lt;</span> <span class='kw'>if</span> <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED_REGEXP-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED_REGEXP (constant)">ESCAPE_CHARS_ESCAPED_REGEXP</a></span></span><span class='rparen'>)</span>
+      <span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED (constant)">ESCAPE_CHARS_ESCAPED</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_matched'>matched</span><span class='rbracket'>]</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_matched'>matched</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='lbracket'>[</span><span class='lparen'>(</span><span class='backref'>$1</span> <span class='op'>||</span> <span class='backref'>$2</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_hex'>hex</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_pack'>pack</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>U*</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span>
+    <span class='kw'>else</span>
+      <span class='comment'># Scan one character
+</span>      <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_getch'>getch</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_buffer'>buffer</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="unserialize-class_method">
+  
+    .<strong>unserialize</strong>(input, **options)  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reconstructs an RDF value from its serialized N-Triples representation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>From <span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">Reader#initialize</a></span></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt><span class='object_link'><a href="../Util/Logger.html" title="RDF::Util::Logger (module)">RDF::Util::Logger</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+107
+108
+109
+110
+111
+112</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 107</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_unserialize'>unserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_input'>input</span>
+    <span class='kw'>when</span> <span class='kw'>nil</span> <span class='kw'>then</span> <span class='kw'>nil</span>
+    <span class='kw'>else</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='label'>logger:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_read_value'>read_value</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="read_comment-instance_method">
+  
+    #<strong>read_comment</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="(comment)">(comment)</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+265
+266
+267</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 265</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_comment'>read_comment</span>
+  <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#COMMENT-constant" title="RDF::NTriples::Reader::COMMENT (constant)">COMMENT</a></span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_eos-instance_method">
+  
+    #<strong>read_eos</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="(triple)">(triple)</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+318
+319
+320</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 318</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_eos'>read_eos</span>
+  <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#END_OF_STATEMENT-constant" title="RDF::NTriples::Reader::END_OF_STATEMENT (constant)">END_OF_STATEMENT</a></span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_literal-instance_method">
+  
+    #<strong>read_literal</strong>  &#x21d2; <tt><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">RDF::Literal</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">RDF::Literal</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="(literal)">(literal)</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 298</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_literal'>read_literal</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_literal_str'>literal_str</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#LITERAL_PLAIN-constant" title="RDF::NTriples::Reader::LITERAL_PLAIN (constant)">LITERAL_PLAIN</a></span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_literal_str'>literal_str</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_literal_str'>literal_str</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_literal'>literal</span> <span class='op'>=</span> <span class='kw'>case</span>
+      <span class='kw'>when</span> <span class='id identifier rubyid_language'>language</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#LANGTAG-constant" title="RDF::NTriples::Reader::LANGTAG (constant)">LANGTAG</a></span></span><span class='rparen'>)</span>
+        <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_literal_str'>literal_str</span><span class='comma'>,</span> <span class='label'>language:</span> <span class='id identifier rubyid_language'>language</span><span class='rparen'>)</span>
+      <span class='kw'>when</span> <span class='id identifier rubyid_datatype'>datatype</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^(\^\^)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span> <span class='comment'># FIXME
+</span>        <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_literal_str'>literal_str</span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_object'>fail_object</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_literal_str'>literal_str</span><span class='rparen'>)</span> <span class='comment'># plain string literal
+</span>    <span class='kw'>end</span>
+    <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_validate!'>validate!</span>     <span class='kw'>if</span> <span class='id identifier rubyid_validate?'>validate?</span>
+    <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize!'>canonicalize!</span> <span class='kw'>if</span> <span class='id identifier rubyid_canonicalize?'>canonicalize?</span>
+    <span class='id identifier rubyid_literal'>literal</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_node-instance_method">
+  
+    #<strong>read_node</strong>  &#x21d2; <tt><span class='object_link'><a href="../Node.html" title="RDF::Node (class)">RDF::Node</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Node.html" title="RDF::Node (class)">RDF::Node</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="(nodeID)">(nodeID)</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+288
+289
+290
+291
+292
+293</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 288</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_node'>read_node</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_node_id'>node_id</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#NODEID-constant" title="RDF::NTriples::Reader::NODEID (constant)">NODEID</a></span></span><span class='rparen'>)</span>
+    <span class='ivar'>@nodes</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+    <span class='ivar'>@nodes</span><span class='lbracket'>[</span><span class='id identifier rubyid_node_id'>node_id</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Node.html" title="RDF::Node (class)">Node</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Resource.html#new-class_method" title="RDF::Resource.new (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_node_id'>node_id</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_quotedTriple-instance_method">
+  
+    #<strong>read_quotedTriple</strong>  &#x21d2; <tt><span class='object_link'><a href="../Statement.html" title="RDF::Statement (class)">RDF::Statement</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Statement.html" title="RDF::Statement (class)">RDF::Statement</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 250</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
+  <span class='kw'>if</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:rdfstar</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#ST_START-constant" title="RDF::NTriples::Reader::ST_START (constant)">ST_START</a></span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_subject'>subject</span>   <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_read_node'>read_node</span> <span class='op'>||</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_subject'>fail_subject</span>
+    <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span><span class='lparen'>(</span><span class='label'>intern:</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_predicate'>fail_predicate</span>
+    <span class='id identifier rubyid_object'>object</span>    <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_read_node'>read_node</span> <span class='op'>||</span> <span class='id identifier rubyid_read_literal'>read_literal</span> <span class='op'>||</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_object'>fail_object</span>
+    <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#ST_END-constant" title="RDF::NTriples::Reader::ST_END (constant)">ST_END</a></span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_log_error'>log_error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected end of statement (found: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_current_line'>current_line</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>lineno:</span> <span class='id identifier rubyid_lineno'>lineno</span><span class='comma'>,</span> <span class='label'>exception:</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../ReaderError.html" title="RDF::ReaderError (class)">ReaderError</a></span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Statement.html" title="RDF::Statement (class)">Statement</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Resource.html#new-class_method" title="RDF::Resource.new (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='label'>quoted:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_triple-instance_method">
+  
+    #<strong>read_triple</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar">http://www.w3.org/TR/rdf-testcases/#ntrip_grammar</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 225</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_triple'>read_triple</span>
+  <span class='id identifier rubyid_loop'>loop</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_readline'>readline</span><span class='period'>.</span><span class='id identifier rubyid_strip!'>strip!</span> <span class='comment'># EOFError thrown on end of input
+</span>    <span class='id identifier rubyid_line'>line</span> <span class='op'>=</span> <span class='ivar'>@line</span>    <span class='comment'># for backtracking input in case of parse error
+</span>
+    <span class='kw'>begin</span>
+      <span class='kw'>unless</span> <span class='id identifier rubyid_blank?'>blank?</span> <span class='op'>||</span> <span class='id identifier rubyid_read_comment'>read_comment</span>
+        <span class='id identifier rubyid_subject'>subject</span>   <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_read_node'>read_node</span> <span class='op'>||</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_subject'>fail_subject</span>
+        <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span><span class='lparen'>(</span><span class='label'>intern:</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_predicate'>fail_predicate</span>
+        <span class='id identifier rubyid_object'>object</span>    <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_read_node'>read_node</span> <span class='op'>||</span> <span class='id identifier rubyid_read_literal'>read_literal</span> <span class='op'>||</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_object'>fail_object</span>
+
+        <span class='kw'>if</span> <span class='id identifier rubyid_validate?'>validate?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_read_eos'>read_eos</span>
+          <span class='id identifier rubyid_log_error'>log_error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected end of statement (found: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_current_line'>current_line</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>lineno:</span> <span class='id identifier rubyid_lineno'>lineno</span><span class='comma'>,</span> <span class='label'>exception:</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../ReaderError.html" title="RDF::ReaderError (class)">ReaderError</a></span></span><span class='rparen'>)</span>
+        <span class='kw'>end</span>
+        <span class='kw'>return</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+    <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../ReaderError.html" title="RDF::ReaderError (class)">ReaderError</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+      <span class='ivar'>@line</span> <span class='op'>=</span> <span class='id identifier rubyid_line'>line</span>  <span class='comment'># this allows #read_value to work
+</span>      <span class='id identifier rubyid_raise'>raise</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_uriref-instance_method">
+  
+    #<strong>read_uriref</strong>(intern: false, **options)  &#x21d2; <tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>intern</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>(false) Use Interned Node</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">RDF::URI</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntrip_grammar" target="_parent" title="(uriref)">(uriref)</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 273</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span><span class='lparen'>(</span><span class='label'>intern:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_uri_str'>uri_str</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#URIREF-constant" title="RDF::NTriples::Reader::URIREF (constant)">URIREF</a></span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_uri_str'>uri_str</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_uri_str'>uri_str</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_uri'>uri</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">URI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_intern?'>intern?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_intern'>intern</span> <span class='op'>?</span> <span class='symbol'>:intern</span> <span class='op'>:</span> <span class='symbol'>:new</span><span class='comma'>,</span> <span class='id identifier rubyid_uri_str'>uri_str</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_validate!'>validate!</span>     <span class='kw'>if</span> <span class='id identifier rubyid_validate?'>validate?</span>
+    <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize!'>canonicalize!</span> <span class='kw'>if</span> <span class='id identifier rubyid_canonicalize?'>canonicalize?</span>
+    <span class='id identifier rubyid_uri'>uri</span>
+  <span class='kw'>end</span>
+<span class='kw'>rescue</span> <span class='const'>ArgumentError</span>
+  <span class='id identifier rubyid_log_error'>log_error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid URI (found: \&quot;&lt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_uri_str'>uri_str</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;\&quot;)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>lineno:</span> <span class='id identifier rubyid_lineno'>lineno</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_uri_str'>uri_str</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>exception:</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../ReaderError.html" title="RDF::ReaderError (class)">ReaderError</a></span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_value-instance_method">
+  
+    #<strong>read_value</strong>  &#x21d2; <tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Term.html" title="RDF::Term (module)">RDF::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+212
+213
+214
+215
+216
+217
+218
+219
+220</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 212</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_value'>read_value</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_read_statement'>read_statement</span>
+  <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../ReaderError.html" title="RDF::ReaderError (class)">ReaderError</a></span></span>
+    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_read_node'>read_node</span> <span class='op'>||</span> <span class='id identifier rubyid_read_literal'>read_literal</span> <span class='op'>||</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
+    <span class='id identifier rubyid_log_recover'>log_recover</span>
+    <span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Jan 27 23:05:11 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>

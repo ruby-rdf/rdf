@@ -1,0 +1,6732 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::OWL
+  
+    &mdash; RDF.rb: Linked Data for Ruby
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::OWL";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (O)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span>
+     &raquo; 
+    <span class="title">OWL</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::OWL
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="StrictVocabulary.html" title="RDF::StrictVocabulary (class)">StrictVocabulary</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="Vocabulary.html" title="RDF::Vocabulary (class)">Vocabulary</a></span></li>
+          
+            <li class="next"><span class='object_link'><a href="StrictVocabulary.html" title="RDF::StrictVocabulary (class)">StrictVocabulary</a></span></li>
+          
+            <li class="next">RDF::OWL</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/vocab/owl.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Vocabulary for <a href="http://www.w3.org/2002/07/owl">www.w3.org/2002/07/owl</a>#</p>
+
+<p>This ontology partially describes the built-in classes and properties that together form the basis of the RDF/XML syntax of OWL 2. The content of this ontology is based on Tables 6.1 and 6.2 in Section 6.4 of the OWL 2 RDF-Based Semantics specification, available at <a href="http://www.w3.org/TR/owl2-rdf-based-semantics">www.w3.org/TR/owl2-rdf-based-semantics</a>/. Please note that those tables do not include the different annotations (labels, comments and rdfs:isDefinedBy links) used in this file. Also note that the descriptions provided in this ontology do not provide a complete and correct formal description of either the syntax or the semantics of the introduced terms (please see the OWL 2 recommendations for the complete and normative specifications). Furthermore, the information provided by this ontology may be misleading if not used with care. This ontology SHOULD NOT be imported into OWL ontologies. Importing this file into an OWL 2 DL ontology will cause it to become an OWL 2 Full ontology and may have other, unexpected, consequences.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#AllDifferent-instance_method" title="#AllDifferent (instance method)">#<strong>AllDifferent</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of collections of pairwise different individuals.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#AllDisjointClasses-instance_method" title="#AllDisjointClasses (instance method)">#<strong>AllDisjointClasses</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of collections of pairwise disjoint classes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#AllDisjointProperties-instance_method" title="#AllDisjointProperties (instance method)">#<strong>AllDisjointProperties</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of collections of pairwise disjoint properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#allValuesFrom-instance_method" title="#allValuesFrom (instance method)">#<strong>allValuesFrom</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the class that a universal property restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#annotatedProperty-instance_method" title="#annotatedProperty (instance method)">#<strong>annotatedProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the predicate of an annotated axiom or annotated annotation.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#annotatedSource-instance_method" title="#annotatedSource (instance method)">#<strong>annotatedSource</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the subject of an annotated axiom or annotated annotation.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#annotatedTarget-instance_method" title="#annotatedTarget (instance method)">#<strong>annotatedTarget</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the object of an annotated axiom or annotated annotation.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Annotation-instance_method" title="#Annotation (instance method)">#<strong>Annotation</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of annotated annotations for which the RDF serialization consists of an annotated subject, predicate and object.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#AnnotationProperty-instance_method" title="#AnnotationProperty (instance method)">#<strong>AnnotationProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of annotation properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#assertionProperty-instance_method" title="#assertionProperty (instance method)">#<strong>assertionProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the predicate of a negative property assertion.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#AsymmetricProperty-instance_method" title="#AsymmetricProperty (instance method)">#<strong>AsymmetricProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of asymmetric properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Axiom-instance_method" title="#Axiom (instance method)">#<strong>Axiom</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of annotated axioms for which the RDF serialization consists of an annotated subject, predicate and object.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backwardCompatibleWith-instance_method" title="#backwardCompatibleWith (instance method)">#<strong>backwardCompatibleWith</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The annotation property that indicates that a given ontology is backward compatible with another ontology.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bottomDataProperty-instance_method" title="#bottomDataProperty (instance method)">#<strong>bottomDataProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The data property that does not relate any individual to any data value.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bottomObjectProperty-instance_method" title="#bottomObjectProperty (instance method)">#<strong>bottomObjectProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The object property that does not relate any two individuals.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cardinality-instance_method" title="#cardinality (instance method)">#<strong>cardinality</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the cardinality of an exact cardinality restriction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Class-instance_method" title="#Class (instance method)">#<strong>Class</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of OWL classes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#complementOf-instance_method" title="#complementOf (instance method)">#<strong>complementOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that a given class is the complement of another class.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#DataRange-instance_method" title="#DataRange (instance method)">#<strong>DataRange</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of OWL data ranges, which are special kinds of datatypes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#datatypeComplementOf-instance_method" title="#datatypeComplementOf (instance method)">#<strong>datatypeComplementOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that a given data range is the complement of another data range with respect to the data domain.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#DatatypeProperty-instance_method" title="#DatatypeProperty (instance method)">#<strong>DatatypeProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of data properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deprecated-instance_method" title="#deprecated (instance method)">#<strong>deprecated</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The annotation property that indicates that a given entity has been deprecated.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#DeprecatedClass-instance_method" title="#DeprecatedClass (instance method)">#<strong>DeprecatedClass</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of deprecated classes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#DeprecatedProperty-instance_method" title="#DeprecatedProperty (instance method)">#<strong>DeprecatedProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of deprecated properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#differentFrom-instance_method" title="#differentFrom (instance method)">#<strong>differentFrom</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given individuals are different.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#disjointUnionOf-instance_method" title="#disjointUnionOf (instance method)">#<strong>disjointUnionOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that a given class is equivalent to the disjoint union of a collection of other classes.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#disjointWith-instance_method" title="#disjointWith (instance method)">#<strong>disjointWith</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given classes are disjoint.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#distinctMembers-instance_method" title="#distinctMembers (instance method)">#<strong>distinctMembers</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of pairwise different individuals in a owl:AllDifferent axiom.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#equivalentClass-instance_method" title="#equivalentClass (instance method)">#<strong>equivalentClass</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given classes are equivalent, and that is used to specify datatype definitions.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#equivalentProperty-instance_method" title="#equivalentProperty (instance method)">#<strong>equivalentProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given properties are equivalent.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#FunctionalProperty-instance_method" title="#FunctionalProperty (instance method)">#<strong>FunctionalProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of functional properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hasKey-instance_method" title="#hasKey (instance method)">#<strong>hasKey</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of properties that jointly build a key.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hasSelf-instance_method" title="#hasSelf (instance method)">#<strong>hasSelf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the property that a self restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hasValue-instance_method" title="#hasValue (instance method)">#<strong>hasValue</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the individual that a has-value restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#imports-instance_method" title="#imports (instance method)">#<strong>imports</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that is used for importing other ontologies into a given ontology.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#incompatibleWith-instance_method" title="#incompatibleWith (instance method)">#<strong>incompatibleWith</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The annotation property that indicates that a given ontology is incompatible with another ontology.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#intersectionOf-instance_method" title="#intersectionOf (instance method)">#<strong>intersectionOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of classes or data ranges that build an intersection.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#InverseFunctionalProperty-instance_method" title="#InverseFunctionalProperty (instance method)">#<strong>InverseFunctionalProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of inverse-functional properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inverseOf-instance_method" title="#inverseOf (instance method)">#<strong>inverseOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given properties are inverse.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#IrreflexiveProperty-instance_method" title="#IrreflexiveProperty (instance method)">#<strong>IrreflexiveProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of irreflexive properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#maxCardinality-instance_method" title="#maxCardinality (instance method)">#<strong>maxCardinality</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the cardinality of a maximum cardinality restriction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#maxQualifiedCardinality-instance_method" title="#maxQualifiedCardinality (instance method)">#<strong>maxQualifiedCardinality</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the cardinality of a maximum qualified cardinality restriction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#members-instance_method" title="#members (instance method)">#<strong>members</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of members in either a owl:AllDifferent, owl:AllDisjointClasses or owl:AllDisjointProperties axiom.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#minCardinality-instance_method" title="#minCardinality (instance method)">#<strong>minCardinality</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the cardinality of a minimum cardinality restriction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#minQualifiedCardinality-instance_method" title="#minQualifiedCardinality (instance method)">#<strong>minQualifiedCardinality</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the cardinality of a minimum qualified cardinality restriction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#NamedIndividual-instance_method" title="#NamedIndividual (instance method)">#<strong>NamedIndividual</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of named individuals.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#NegativePropertyAssertion-instance_method" title="#NegativePropertyAssertion (instance method)">#<strong>NegativePropertyAssertion</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of negative property assertions.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Nothing-instance_method" title="#Nothing (instance method)">#<strong>Nothing</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>This is the empty class.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ObjectProperty-instance_method" title="#ObjectProperty (instance method)">#<strong>ObjectProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of object properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#onClass-instance_method" title="#onClass (instance method)">#<strong>onClass</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the class that a qualified object cardinality restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#onDataRange-instance_method" title="#onDataRange (instance method)">#<strong>onDataRange</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the data range that a qualified data cardinality restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#onDatatype-instance_method" title="#onDatatype (instance method)">#<strong>onDatatype</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the datatype that a datatype restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#oneOf-instance_method" title="#oneOf (instance method)">#<strong>oneOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of individuals or data values that build an enumeration.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#onProperties-instance_method" title="#onProperties (instance method)">#<strong>onProperties</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the n-tuple of properties that a property restriction on an n-ary data range refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#onProperty-instance_method" title="#onProperty (instance method)">#<strong>onProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the property that a property restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Ontology-instance_method" title="#Ontology (instance method)">#<strong>Ontology</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of ontologies.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#OntologyProperty-instance_method" title="#OntologyProperty (instance method)">#<strong>OntologyProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of ontology properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#priorVersion-instance_method" title="#priorVersion (instance method)">#<strong>priorVersion</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The annotation property that indicates the predecessor ontology of a given ontology.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#propertyChainAxiom-instance_method" title="#propertyChainAxiom (instance method)">#<strong>propertyChainAxiom</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the n-tuple of properties that build a sub property chain of a given property.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#propertyDisjointWith-instance_method" title="#propertyDisjointWith (instance method)">#<strong>propertyDisjointWith</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given properties are disjoint.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#qualifiedCardinality-instance_method" title="#qualifiedCardinality (instance method)">#<strong>qualifiedCardinality</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the cardinality of an exact qualified cardinality restriction.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ReflexiveProperty-instance_method" title="#ReflexiveProperty (instance method)">#<strong>ReflexiveProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of reflexive properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Restriction-instance_method" title="#Restriction (instance method)">#<strong>Restriction</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of property restrictions.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sameAs-instance_method" title="#sameAs (instance method)">#<strong>sameAs</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines that two given individuals are equal.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#someValuesFrom-instance_method" title="#someValuesFrom (instance method)">#<strong>someValuesFrom</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the class that an existential property restriction refers to.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sourceIndividual-instance_method" title="#sourceIndividual (instance method)">#<strong>sourceIndividual</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the subject of a negative property assertion.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#SymmetricProperty-instance_method" title="#SymmetricProperty (instance method)">#<strong>SymmetricProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of symmetric properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#targetIndividual-instance_method" title="#targetIndividual (instance method)">#<strong>targetIndividual</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the object of a negative object property assertion.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#targetValue-instance_method" title="#targetValue (instance method)">#<strong>targetValue</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the value of a negative data property assertion.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Thing-instance_method" title="#Thing (instance method)">#<strong>Thing</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of OWL individuals.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#topDataProperty-instance_method" title="#topDataProperty (instance method)">#<strong>topDataProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The data property that relates every individual to every data value.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#topObjectProperty-instance_method" title="#topObjectProperty (instance method)">#<strong>topObjectProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The object property that relates every two individuals.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#TransitiveProperty-instance_method" title="#TransitiveProperty (instance method)">#<strong>TransitiveProperty</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The class of transitive properties.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#unionOf-instance_method" title="#unionOf (instance method)">#<strong>unionOf</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of classes or data ranges that build a union.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#versionInfo-instance_method" title="#versionInfo (instance method)">#<strong>versionInfo</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The annotation property that provides version information for an ontology or another OWL construct.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#versionIRI-instance_method" title="#versionIRI (instance method)">#<strong>versionIRI</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that identifies the version IRI of an ontology.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#withRestrictions-instance_method" title="#withRestrictions (instance method)">#<strong>withRestrictions</strong>  &#x21d2; RDF::Vocabulary::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The property that determines the collection of facet-value pairs that define a datatype restriction.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  <h2>Method Summary</h2>
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="StrictVocabulary.html" title="RDF::StrictVocabulary (class)">StrictVocabulary</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="StrictVocabulary.html#[]-class_method" title="RDF::StrictVocabulary.[] (method)">[]</a></span>, <span class='object_link'><a href="StrictVocabulary.html#strict%3F-class_method" title="RDF::StrictVocabulary.strict? (method)">strict?</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Vocabulary.html" title="RDF::Vocabulary (class)">Vocabulary</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Vocabulary.html#[]-class_method" title="RDF::Vocabulary.[] (method)">[]</a></span>, <span class='object_link'><a href="Vocabulary.html#[]-instance_method" title="RDF::Vocabulary#[] (method)">#[]</a></span>, <span class='object_link'><a href="Vocabulary.html#__prefix__-class_method" title="RDF::Vocabulary.__prefix__ (method)">__prefix__</a></span>, <span class='object_link'><a href="Vocabulary.html#__prefix__=-class_method" title="RDF::Vocabulary.__prefix__= (method)">__prefix__=</a></span>, <span class='object_link'><a href="Vocabulary.html#camelize-class_method" title="RDF::Vocabulary.camelize (method)">camelize</a></span>, <span class='object_link'><a href="Vocabulary.html#each-class_method" title="RDF::Vocabulary.each (method)">each</a></span>, <span class='object_link'><a href="Vocabulary.html#each_statement-class_method" title="RDF::Vocabulary.each_statement (method)">each_statement</a></span>, <span class='object_link'><a href="Vocabulary.html#enum_for-class_method" title="RDF::Vocabulary.enum_for (method)">enum_for</a></span>, <span class='object_link'><a href="Vocabulary.html#expand_pname-class_method" title="RDF::Vocabulary.expand_pname (method)">expand_pname</a></span>, <span class='object_link'><a href="Vocabulary.html#find-class_method" title="RDF::Vocabulary.find (method)">find</a></span>, <span class='object_link'><a href="Vocabulary.html#find_term-class_method" title="RDF::Vocabulary.find_term (method)">find_term</a></span>, <span class='object_link'><a href="Vocabulary.html#from_graph-class_method" title="RDF::Vocabulary.from_graph (method)">from_graph</a></span>, <span class='object_link'><a href="Vocabulary.html#from_sym-class_method" title="RDF::Vocabulary.from_sym (method)">from_sym</a></span>, <span class='object_link'><a href="Vocabulary.html#imported_from-class_method" title="RDF::Vocabulary.imported_from (method)">imported_from</a></span>, <span class='object_link'><a href="Vocabulary.html#imports-class_method" title="RDF::Vocabulary.imports (method)">imports</a></span>, <span class='object_link'><a href="Vocabulary.html#initialize-instance_method" title="RDF::Vocabulary#initialize (method)">#initialize</a></span>, <span class='object_link'><a href="Vocabulary.html#inspect-class_method" title="RDF::Vocabulary.inspect (method)">inspect</a></span>, <span class='object_link'><a href="Vocabulary.html#inspect-instance_method" title="RDF::Vocabulary#inspect (method)">#inspect</a></span>, <span class='object_link'><a href="Vocabulary.html#limit_vocabs-class_method" title="RDF::Vocabulary.limit_vocabs (method)">limit_vocabs</a></span>, <span class='object_link'><a href="Vocabulary.html#list-class_method" title="RDF::Vocabulary.list (method)">list</a></span>, <span class='object_link'><a href="Vocabulary.html#method_missing-class_method" title="RDF::Vocabulary.method_missing (method)">method_missing</a></span>, <span class='object_link'><a href="Vocabulary.html#method_missing-instance_method" title="RDF::Vocabulary#method_missing (method)">#method_missing</a></span>, <span class='object_link'><a href="Vocabulary.html#ontology-class_method" title="RDF::Vocabulary.ontology (method)">ontology</a></span>, <span class='object_link'><a href="Vocabulary.html#properties-class_method" title="RDF::Vocabulary.properties (method)">properties</a></span>, <span class='object_link'><a href="Vocabulary.html#property-class_method" title="RDF::Vocabulary.property (method)">property</a></span>, <span class='object_link'><a href="Vocabulary.html#register-class_method" title="RDF::Vocabulary.register (method)">register</a></span>, <span class='object_link'><a href="Vocabulary.html#strict%3F-class_method" title="RDF::Vocabulary.strict? (method)">strict?</a></span>, <span class='object_link'><a href="Vocabulary.html#to_iri-class_method" title="RDF::Vocabulary.to_iri (method)">to_iri</a></span>, <span class='object_link'><a href="Vocabulary.html#to_s-class_method" title="RDF::Vocabulary.to_s (method)">to_s</a></span>, <span class='object_link'><a href="Vocabulary.html#to_s-instance_method" title="RDF::Vocabulary#to_s (method)">#to_s</a></span>, <span class='object_link'><a href="Vocabulary.html#to_uri-class_method" title="RDF::Vocabulary.to_uri (method)">to_uri</a></span>, <span class='object_link'><a href="Vocabulary.html#to_uri-instance_method" title="RDF::Vocabulary#to_uri (method)">#to_uri</a></span>, <span class='object_link'><a href="Vocabulary.html#vocab_map-class_method" title="RDF::Vocabulary.vocab_map (method)">vocab_map</a></span></p>
+
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <p class="notice">This class inherits a constructor from <span class='object_link'><a href="Vocabulary.html#initialize-instance_method" title="RDF::Vocabulary#initialize (method)">RDF::Vocabulary</a></span></p>
+  
+</div>
+<div id="method_missing_details" class="method_details_list">
+  <h2>Dynamic Method Handling</h2>
+  <p class="notice super">
+    This class handles dynamic methods through the <tt>method_missing</tt> method
+    
+      in the class <span class='object_link'><a href="Vocabulary.html#method_missing-instance_method" title="RDF::Vocabulary#method_missing (method)">RDF::Vocabulary</a></span>
+    
+  </p>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="AllDifferent-instance_method">
+  
+    #<strong>AllDifferent</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of collections of pairwise different individuals.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='const'>AllDifferent</span>
+  <span class='ivar'>@AllDifferent</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="AllDisjointClasses-instance_method">
+  
+    #<strong>AllDisjointClasses</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of collections of pairwise disjoint classes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 11</span>
+
+<span class='kw'>def</span> <span class='const'>AllDisjointClasses</span>
+  <span class='ivar'>@AllDisjointClasses</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="AllDisjointProperties-instance_method">
+  
+    #<strong>AllDisjointProperties</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of collections of pairwise disjoint properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='const'>AllDisjointProperties</span>
+  <span class='ivar'>@AllDisjointProperties</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="allValuesFrom-instance_method">
+  
+    #<strong>allValuesFrom</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the class that a universal property restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+111
+112
+113</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 111</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_allValuesFrom'>allValuesFrom</span>
+  <span class='ivar'>@allValuesFrom</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="annotatedProperty-instance_method">
+  
+    #<strong>annotatedProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the predicate of an annotated axiom or annotated annotation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+115
+116
+117</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 115</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_annotatedProperty'>annotatedProperty</span>
+  <span class='ivar'>@annotatedProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="annotatedSource-instance_method">
+  
+    #<strong>annotatedSource</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the subject of an annotated axiom or annotated annotation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+119
+120
+121</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 119</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_annotatedSource'>annotatedSource</span>
+  <span class='ivar'>@annotatedSource</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="annotatedTarget-instance_method">
+  
+    #<strong>annotatedTarget</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the object of an annotated axiom or annotated annotation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+123
+124
+125</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 123</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_annotatedTarget'>annotatedTarget</span>
+  <span class='ivar'>@annotatedTarget</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Annotation-instance_method">
+  
+    #<strong>Annotation</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of annotated annotations for which the RDF serialization consists of an annotated subject, predicate and object.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='const'>Annotation</span>
+  <span class='ivar'>@Annotation</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="AnnotationProperty-instance_method">
+  
+    #<strong>AnnotationProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of annotation properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='const'>AnnotationProperty</span>
+  <span class='ivar'>@AnnotationProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="assertionProperty-instance_method">
+  
+    #<strong>assertionProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the predicate of a negative property assertion.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+127
+128
+129</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 127</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_assertionProperty'>assertionProperty</span>
+  <span class='ivar'>@assertionProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="AsymmetricProperty-instance_method">
+  
+    #<strong>AsymmetricProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of asymmetric properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='const'>AsymmetricProperty</span>
+  <span class='ivar'>@AsymmetricProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Axiom-instance_method">
+  
+    #<strong>Axiom</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of annotated axioms for which the RDF serialization consists of an annotated subject, predicate and object.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='const'>Axiom</span>
+  <span class='ivar'>@Axiom</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="backwardCompatibleWith-instance_method">
+  
+    #<strong>backwardCompatibleWith</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The annotation property that indicates that a given ontology is backward compatible with another ontology.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+131
+132
+133</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 131</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_backwardCompatibleWith'>backwardCompatibleWith</span>
+  <span class='ivar'>@backwardCompatibleWith</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="bottomDataProperty-instance_method">
+  
+    #<strong>bottomDataProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The data property that does not relate any individual to any data value.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+135
+136
+137</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 135</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bottomDataProperty'>bottomDataProperty</span>
+  <span class='ivar'>@bottomDataProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="bottomObjectProperty-instance_method">
+  
+    #<strong>bottomObjectProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The object property that does not relate any two individuals.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+139
+140
+141</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 139</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bottomObjectProperty'>bottomObjectProperty</span>
+  <span class='ivar'>@bottomObjectProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="cardinality-instance_method">
+  
+    #<strong>cardinality</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the cardinality of an exact cardinality restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cardinality'>cardinality</span>
+  <span class='ivar'>@cardinality</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Class-instance_method">
+  
+    #<strong>Class</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of OWL classes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 35</span>
+
+<span class='kw'>def</span> <span class='const'>Class</span>
+  <span class='ivar'>@Class</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="complementOf-instance_method">
+  
+    #<strong>complementOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that a given class is the complement of another class.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+147
+148
+149</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 147</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_complementOf'>complementOf</span>
+  <span class='ivar'>@complementOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="DataRange-instance_method">
+  
+    #<strong>DataRange</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of OWL data ranges, which are special kinds of datatypes. Note: The use of the IRI owl:DataRange has been deprecated as of OWL 2. The IRI rdfs:Datatype SHOULD be used instead.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+39
+40
+41</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 39</span>
+
+<span class='kw'>def</span> <span class='const'>DataRange</span>
+  <span class='ivar'>@DataRange</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="datatypeComplementOf-instance_method">
+  
+    #<strong>datatypeComplementOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that a given data range is the complement of another data range with respect to the data domain.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+151
+152
+153</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 151</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_datatypeComplementOf'>datatypeComplementOf</span>
+  <span class='ivar'>@datatypeComplementOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="DatatypeProperty-instance_method">
+  
+    #<strong>DatatypeProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of data properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='const'>DatatypeProperty</span>
+  <span class='ivar'>@DatatypeProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="deprecated-instance_method">
+  
+    #<strong>deprecated</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The annotation property that indicates that a given entity has been deprecated.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+155
+156
+157</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 155</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_deprecated'>deprecated</span>
+  <span class='ivar'>@deprecated</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="DeprecatedClass-instance_method">
+  
+    #<strong>DeprecatedClass</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of deprecated classes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='const'>DeprecatedClass</span>
+  <span class='ivar'>@DeprecatedClass</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="DeprecatedProperty-instance_method">
+  
+    #<strong>DeprecatedProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of deprecated properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='const'>DeprecatedProperty</span>
+  <span class='ivar'>@DeprecatedProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="differentFrom-instance_method">
+  
+    #<strong>differentFrom</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given individuals are different.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+159
+160
+161</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 159</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_differentFrom'>differentFrom</span>
+  <span class='ivar'>@differentFrom</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="disjointUnionOf-instance_method">
+  
+    #<strong>disjointUnionOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that a given class is equivalent to the disjoint union of a collection of other classes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+163
+164
+165</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 163</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_disjointUnionOf'>disjointUnionOf</span>
+  <span class='ivar'>@disjointUnionOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="disjointWith-instance_method">
+  
+    #<strong>disjointWith</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given classes are disjoint.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+167
+168
+169</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 167</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_disjointWith'>disjointWith</span>
+  <span class='ivar'>@disjointWith</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="distinctMembers-instance_method">
+  
+    #<strong>distinctMembers</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of pairwise different individuals in a owl:AllDifferent axiom.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+171
+172
+173</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 171</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_distinctMembers'>distinctMembers</span>
+  <span class='ivar'>@distinctMembers</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="equivalentClass-instance_method">
+  
+    #<strong>equivalentClass</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given classes are equivalent, and that is used to specify datatype definitions.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+175
+176
+177</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 175</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_equivalentClass'>equivalentClass</span>
+  <span class='ivar'>@equivalentClass</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="equivalentProperty-instance_method">
+  
+    #<strong>equivalentProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given properties are equivalent.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+179
+180
+181</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 179</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_equivalentProperty'>equivalentProperty</span>
+  <span class='ivar'>@equivalentProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="FunctionalProperty-instance_method">
+  
+    #<strong>FunctionalProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of functional properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='const'>FunctionalProperty</span>
+  <span class='ivar'>@FunctionalProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="hasKey-instance_method">
+  
+    #<strong>hasKey</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of properties that jointly build a key.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+183
+184
+185</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 183</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hasKey'>hasKey</span>
+  <span class='ivar'>@hasKey</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="hasSelf-instance_method">
+  
+    #<strong>hasSelf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the property that a self restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+187
+188
+189</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 187</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hasSelf'>hasSelf</span>
+  <span class='ivar'>@hasSelf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="hasValue-instance_method">
+  
+    #<strong>hasValue</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the individual that a has-value restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+191
+192
+193</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 191</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hasValue'>hasValue</span>
+  <span class='ivar'>@hasValue</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="imports-instance_method">
+  
+    #<strong>imports</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that is used for importing other ontologies into a given ontology.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+195
+196
+197</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 195</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_imports'>imports</span>
+  <span class='ivar'>@imports</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="incompatibleWith-instance_method">
+  
+    #<strong>incompatibleWith</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The annotation property that indicates that a given ontology is incompatible with another ontology.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+199
+200
+201</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 199</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_incompatibleWith'>incompatibleWith</span>
+  <span class='ivar'>@incompatibleWith</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="intersectionOf-instance_method">
+  
+    #<strong>intersectionOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of classes or data ranges that build an intersection.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+203
+204
+205</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 203</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_intersectionOf'>intersectionOf</span>
+  <span class='ivar'>@intersectionOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="InverseFunctionalProperty-instance_method">
+  
+    #<strong>InverseFunctionalProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of inverse-functional properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='const'>InverseFunctionalProperty</span>
+  <span class='ivar'>@InverseFunctionalProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="inverseOf-instance_method">
+  
+    #<strong>inverseOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given properties are inverse.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+207
+208
+209</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 207</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_inverseOf'>inverseOf</span>
+  <span class='ivar'>@inverseOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="IrreflexiveProperty-instance_method">
+  
+    #<strong>IrreflexiveProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of irreflexive properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 63</span>
+
+<span class='kw'>def</span> <span class='const'>IrreflexiveProperty</span>
+  <span class='ivar'>@IrreflexiveProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="maxCardinality-instance_method">
+  
+    #<strong>maxCardinality</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the cardinality of a maximum cardinality restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+211
+212
+213</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 211</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_maxCardinality'>maxCardinality</span>
+  <span class='ivar'>@maxCardinality</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="maxQualifiedCardinality-instance_method">
+  
+    #<strong>maxQualifiedCardinality</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the cardinality of a maximum qualified cardinality restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+215
+216
+217</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 215</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_maxQualifiedCardinality'>maxQualifiedCardinality</span>
+  <span class='ivar'>@maxQualifiedCardinality</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="members-instance_method">
+  
+    #<strong>members</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of members in either a owl:AllDifferent, owl:AllDisjointClasses or owl:AllDisjointProperties axiom.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+219
+220
+221</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 219</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_members'>members</span>
+  <span class='ivar'>@members</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="minCardinality-instance_method">
+  
+    #<strong>minCardinality</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the cardinality of a minimum cardinality restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+223
+224
+225</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 223</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_minCardinality'>minCardinality</span>
+  <span class='ivar'>@minCardinality</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="minQualifiedCardinality-instance_method">
+  
+    #<strong>minQualifiedCardinality</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the cardinality of a minimum qualified cardinality restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+227
+228
+229</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 227</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_minQualifiedCardinality'>minQualifiedCardinality</span>
+  <span class='ivar'>@minQualifiedCardinality</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="NamedIndividual-instance_method">
+  
+    #<strong>NamedIndividual</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of named individuals.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+67
+68
+69</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 67</span>
+
+<span class='kw'>def</span> <span class='const'>NamedIndividual</span>
+  <span class='ivar'>@NamedIndividual</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="NegativePropertyAssertion-instance_method">
+  
+    #<strong>NegativePropertyAssertion</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of negative property assertions.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+71
+72
+73</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 71</span>
+
+<span class='kw'>def</span> <span class='const'>NegativePropertyAssertion</span>
+  <span class='ivar'>@NegativePropertyAssertion</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Nothing-instance_method">
+  
+    #<strong>Nothing</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>This is the empty class.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+75
+76
+77</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 75</span>
+
+<span class='kw'>def</span> <span class='const'>Nothing</span>
+  <span class='ivar'>@Nothing</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ObjectProperty-instance_method">
+  
+    #<strong>ObjectProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of object properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+79
+80
+81</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 79</span>
+
+<span class='kw'>def</span> <span class='const'>ObjectProperty</span>
+  <span class='ivar'>@ObjectProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="onClass-instance_method">
+  
+    #<strong>onClass</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the class that a qualified object cardinality restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+231
+232
+233</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 231</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_onClass'>onClass</span>
+  <span class='ivar'>@onClass</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="onDataRange-instance_method">
+  
+    #<strong>onDataRange</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the data range that a qualified data cardinality restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+235
+236
+237</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 235</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_onDataRange'>onDataRange</span>
+  <span class='ivar'>@onDataRange</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="onDatatype-instance_method">
+  
+    #<strong>onDatatype</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the datatype that a datatype restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+239
+240
+241</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 239</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_onDatatype'>onDatatype</span>
+  <span class='ivar'>@onDatatype</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="oneOf-instance_method">
+  
+    #<strong>oneOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of individuals or data values that build an enumeration.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+251
+252
+253</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 251</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_oneOf'>oneOf</span>
+  <span class='ivar'>@oneOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="onProperties-instance_method">
+  
+    #<strong>onProperties</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the n-tuple of properties that a property restriction on an n-ary data range refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+243
+244
+245</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 243</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_onProperties'>onProperties</span>
+  <span class='ivar'>@onProperties</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="onProperty-instance_method">
+  
+    #<strong>onProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the property that a property restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+247
+248
+249</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 247</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_onProperty'>onProperty</span>
+  <span class='ivar'>@onProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Ontology-instance_method">
+  
+    #<strong>Ontology</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of ontologies.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+83
+84
+85</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 83</span>
+
+<span class='kw'>def</span> <span class='const'>Ontology</span>
+  <span class='ivar'>@Ontology</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="OntologyProperty-instance_method">
+  
+    #<strong>OntologyProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of ontology properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+87
+88
+89</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 87</span>
+
+<span class='kw'>def</span> <span class='const'>OntologyProperty</span>
+  <span class='ivar'>@OntologyProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="priorVersion-instance_method">
+  
+    #<strong>priorVersion</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The annotation property that indicates the predecessor ontology of a given ontology.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+255
+256
+257</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 255</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_priorVersion'>priorVersion</span>
+  <span class='ivar'>@priorVersion</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="propertyChainAxiom-instance_method">
+  
+    #<strong>propertyChainAxiom</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the n-tuple of properties that build a sub property chain of a given property.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+259
+260
+261</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 259</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_propertyChainAxiom'>propertyChainAxiom</span>
+  <span class='ivar'>@propertyChainAxiom</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="propertyDisjointWith-instance_method">
+  
+    #<strong>propertyDisjointWith</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given properties are disjoint.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+263
+264
+265</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 263</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_propertyDisjointWith'>propertyDisjointWith</span>
+  <span class='ivar'>@propertyDisjointWith</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="qualifiedCardinality-instance_method">
+  
+    #<strong>qualifiedCardinality</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the cardinality of an exact qualified cardinality restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+267
+268
+269</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 267</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_qualifiedCardinality'>qualifiedCardinality</span>
+  <span class='ivar'>@qualifiedCardinality</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ReflexiveProperty-instance_method">
+  
+    #<strong>ReflexiveProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of reflexive properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+91
+92
+93</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 91</span>
+
+<span class='kw'>def</span> <span class='const'>ReflexiveProperty</span>
+  <span class='ivar'>@ReflexiveProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Restriction-instance_method">
+  
+    #<strong>Restriction</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of property restrictions.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+95
+96
+97</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 95</span>
+
+<span class='kw'>def</span> <span class='const'>Restriction</span>
+  <span class='ivar'>@Restriction</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="sameAs-instance_method">
+  
+    #<strong>sameAs</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines that two given individuals are equal.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+271
+272
+273</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 271</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sameAs'>sameAs</span>
+  <span class='ivar'>@sameAs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="someValuesFrom-instance_method">
+  
+    #<strong>someValuesFrom</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the class that an existential property restriction refers to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+275
+276
+277</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 275</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_someValuesFrom'>someValuesFrom</span>
+  <span class='ivar'>@someValuesFrom</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="sourceIndividual-instance_method">
+  
+    #<strong>sourceIndividual</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the subject of a negative property assertion.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+279
+280
+281</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 279</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sourceIndividual'>sourceIndividual</span>
+  <span class='ivar'>@sourceIndividual</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="SymmetricProperty-instance_method">
+  
+    #<strong>SymmetricProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of symmetric properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+99
+100
+101</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 99</span>
+
+<span class='kw'>def</span> <span class='const'>SymmetricProperty</span>
+  <span class='ivar'>@SymmetricProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="targetIndividual-instance_method">
+  
+    #<strong>targetIndividual</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the object of a negative object property assertion.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+283
+284
+285</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 283</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_targetIndividual'>targetIndividual</span>
+  <span class='ivar'>@targetIndividual</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="targetValue-instance_method">
+  
+    #<strong>targetValue</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the value of a negative data property assertion.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+287
+288
+289</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 287</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_targetValue'>targetValue</span>
+  <span class='ivar'>@targetValue</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="Thing-instance_method">
+  
+    #<strong>Thing</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of OWL individuals.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+103
+104
+105</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 103</span>
+
+<span class='kw'>def</span> <span class='const'>Thing</span>
+  <span class='ivar'>@Thing</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="topDataProperty-instance_method">
+  
+    #<strong>topDataProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The data property that relates every individual to every data value.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+291
+292
+293</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 291</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_topDataProperty'>topDataProperty</span>
+  <span class='ivar'>@topDataProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="topObjectProperty-instance_method">
+  
+    #<strong>topObjectProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The object property that relates every two individuals.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+295
+296
+297</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 295</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_topObjectProperty'>topObjectProperty</span>
+  <span class='ivar'>@topObjectProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="TransitiveProperty-instance_method">
+  
+    #<strong>TransitiveProperty</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The class of transitive properties.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+107
+108
+109</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 107</span>
+
+<span class='kw'>def</span> <span class='const'>TransitiveProperty</span>
+  <span class='ivar'>@TransitiveProperty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="unionOf-instance_method">
+  
+    #<strong>unionOf</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of classes or data ranges that build a union.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+299
+300
+301</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 299</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_unionOf'>unionOf</span>
+  <span class='ivar'>@unionOf</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="versionInfo-instance_method">
+  
+    #<strong>versionInfo</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The annotation property that provides version information for an ontology or another OWL construct.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+307
+308
+309</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 307</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_versionInfo'>versionInfo</span>
+  <span class='ivar'>@versionInfo</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="versionIRI-instance_method">
+  
+    #<strong>versionIRI</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that identifies the version IRI of an ontology.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+303
+304
+305</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 303</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_versionIRI'>versionIRI</span>
+  <span class='ivar'>@versionIRI</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="withRestrictions-instance_method">
+  
+    #<strong>withRestrictions</strong>  &#x21d2; <tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The property that determines the collection of facet-value pairs that define a datatype restriction.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">RDF::Vocabulary::Term</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+311
+312
+313</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 311</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_withRestrictions'>withRestrictions</span>
+  <span class='ivar'>@withRestrictions</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Jan 27 23:05:03 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>

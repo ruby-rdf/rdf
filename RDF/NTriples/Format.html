@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::NTriples::Format
+  
+    &mdash; RDF.rb: Linked Data for Ruby
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::NTriples::Format";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (F)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span>
+     &raquo; 
+    <span class="title">Format</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::NTriples::Format
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></li>
+          
+            <li class="next">RDF::NTriples::Format</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/ntriples/format.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>N-Triples format specification.</p>
+
+<p>Note: Latest standards activities treat N-Triples as a subset of Turtle. This includes application/n-triples mime type and a new default encoding of utf-8.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Obtaining an NTriples format class</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Format.html#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span>     <span class='comment'>#=&gt; RDF::NTriples::Format
+</span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Format.html#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Format.html#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>file_name:</span>      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Format.html#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>file_extension:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Format.html#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>content_type:</span>   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application/n-triples</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
+    
+  </div>
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/rdf-testcases/#ntriples" target="_parent" title="http://www.w3.org/TR/rdf-testcases/#ntriples">http://www.w3.org/TR/rdf-testcases/#ntriples</a></li>
+    
+      <li><a href="http://www.w3.org/TR/n-triples/" target="_parent" title="http://www.w3.org/TR/n-triples/">http://www.w3.org/TR/n-triples/</a></li>
+    
+  </ul>
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#detect-class_method" title="detect (class method)">.<strong>detect</strong>(sample)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Sample detection to see if it matches N-Triples.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#name-class_method" title="name (class method)">.<strong>name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Human readable name for this format.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../Format.html" title="RDF::Format (class)">Format</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Format.html#accept_type-class_method" title="RDF::Format.accept_type (method)">accept_type</a></span>, <span class='object_link'><a href="../Format.html#accept_types-class_method" title="RDF::Format.accept_types (method)">accept_types</a></span>, <span class='object_link'><a href="../Format.html#cli_commands-class_method" title="RDF::Format.cli_commands (method)">cli_commands</a></span>, <span class='object_link'><a href="../Format.html#content_encoding-class_method" title="RDF::Format.content_encoding (method)">content_encoding</a></span>, <span class='object_link'><a href="../Format.html#content_type-class_method" title="RDF::Format.content_type (method)">content_type</a></span>, <span class='object_link'><a href="../Format.html#content_types-class_method" title="RDF::Format.content_types (method)">content_types</a></span>, <span class='object_link'><a href="../Format.html#each-class_method" title="RDF::Format.each (method)">each</a></span>, <span class='object_link'><a href="../Format.html#file_extension-class_method" title="RDF::Format.file_extension (method)">file_extension</a></span>, <span class='object_link'><a href="../Format.html#file_extensions-class_method" title="RDF::Format.file_extensions (method)">file_extensions</a></span>, <span class='object_link'><a href="../Format.html#for-class_method" title="RDF::Format.for (method)">for</a></span>, <span class='object_link'><a href="../Format.html#reader-class_method" title="RDF::Format.reader (method)">reader</a></span>, <span class='object_link'><a href="../Format.html#reader_symbols-class_method" title="RDF::Format.reader_symbols (method)">reader_symbols</a></span>, <span class='object_link'><a href="../Format.html#reader_types-class_method" title="RDF::Format.reader_types (method)">reader_types</a></span>, <span class='object_link'><a href="../Format.html#require-class_method" title="RDF::Format.require (method)">require</a></span>, <span class='object_link'><a href="../Format.html#symbols-class_method" title="RDF::Format.symbols (method)">symbols</a></span>, <span class='object_link'><a href="../Format.html#to_sym-class_method" title="RDF::Format.to_sym (method)">to_sym</a></span>, <span class='object_link'><a href="../Format.html#writer-class_method" title="RDF::Format.writer (method)">writer</a></span>, <span class='object_link'><a href="../Format.html#writer_symbols-class_method" title="RDF::Format.writer_symbols (method)">writer_symbols</a></span>, <span class='object_link'><a href="../Format.html#writer_types-class_method" title="RDF::Format.writer_types (method)">writer_types</a></span></p>
+
+  
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="detect-class_method">
+  
+    .<strong>detect</strong>(sample)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sample detection to see if it matches N-Triples</p>
+
+<p>Use a text sample to detect the format of an input file. Sub-classes implement a matcher sufficient to detect probably format matches, including disambiguating between other similar formats.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>sample</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Beginning several bytes (about 1K) of input.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/format.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_detect'>detect</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r(</span><span class='tstring_content'>
+    (?:(?:&lt;[^&gt;]*&gt;) | (?:_:\w+))                             # Subject
+    \s*
+    (?:&lt;[^&gt;]*&gt;)                                             # Predicate
+    \s*
+    (?:(?:&lt;[^&gt;]*&gt;) | (?:_:\w+) | (?:&quot;[^&quot;\n]*&quot;(?:^^|@\S+)?)) # Object
+    \s*\.
+  </span><span class='regexp_end'>)x</span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='lparen'>(</span>
+    <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r(</span><span class='tstring_content'>@(base|prefix|keywords)|\{</span><span class='regexp_end'>)</span></span><span class='rparen'>)</span> <span class='op'>||</span>         <span class='comment'># Not Turtle/N3/TriG
+</span>    <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r(</span><span class='tstring_content'>&lt;(html|rdf)</span><span class='regexp_end'>)i</span></span><span class='rparen'>)</span>                          <span class='comment'># Not HTML or XML
+</span>  <span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../NQuads.html" title="RDF::NQuads (module)">NQuads</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../NQuads/Format.html" title="RDF::NQuads::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_detect'><span class='object_link'><a href="../NQuads/Format.html#detect-class_method" title="RDF::NQuads::Format.detect (method)">detect</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="name-class_method">
+  
+    .<strong>name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Human readable name for this format</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/format.rb', line 49</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='semicolon'>;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>N-Triples</span><span class='tstring_end'>&quot;</span></span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Jan 27 23:05:11 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>
