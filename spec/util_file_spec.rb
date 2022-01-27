@@ -83,7 +83,7 @@ describe RDF::Util::File do
   end
 
   describe ".open_file" do
-    let(:uri) {"http://ruby-rdf.github.com/rdf/etc/doap.nt"}
+    let(:uri) {"https://ruby-rdf.github.io/rdf/etc/doap.nt"}
     let(:opened) {double("opened")}
     before(:each) do
       expect(opened).to receive(:opened)

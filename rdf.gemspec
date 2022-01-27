@@ -11,9 +11,9 @@ Gem::Specification.new do |gem|
   gem.summary            = 'A Ruby library for working with Resource Description Framework (RDF) data.'
   gem.description        = 'RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data.'
   gem.metadata           = {
-    "documentation_uri" => "https://rubydoc.info/github/ruby-rdf/rdf",
+    "documentation_uri" => "https://ruby-rdf.github.io/rdf",
     "bug_tracker_uri"   => "https://github.com/ruby-rdf/rdf/issues",
-    "homepage_uri"      => "https://ruby-rdf.github.io/rdf",
+    "homepage_uri"      => "https://github.com/ruby-rdf/rdf",
     "mailing_list_uri"  => "https://lists.w3.org/Archives/Public/public-rdf-ruby/",
     "source_code_uri"   => "https://github.com/ruby-rdf/rdf",
   }

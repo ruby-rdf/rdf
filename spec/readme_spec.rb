@@ -52,7 +52,7 @@ describe 'README' do
     {
       example0: lambda {
         require 'rdf/ntriples'
-        RDF::NTriples::Reader.open("http://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
+        RDF::NTriples::Reader.open("https://ruby-rdf.github.io/rdf/etc/doap.nt") do |reader|
           reader.each_statement do |statement|
             puts statement.inspect
           end
@@ -72,7 +72,7 @@ describe 'README' do
         subject {
           if example == :example0
             expect(RDF::Util::File).to receive(:open_file).
-              with("http://ruby-rdf.github.com/rdf/etc/doap.nt", hash_including(:headers)).
+              with("https://ruby-rdf.github.io/rdf/etc/doap.nt", hash_including(:headers)).
               at_least(1).
               and_yield(Kernel.open(File.expand_path("../../etc/doap.nt", __FILE__)))
           end
@@ -90,7 +90,7 @@ describe 'README' do
       example0: lambda {
         require 'rdf/nquads'
 
-        graph = RDF::Graph.load("http://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
+        graph = RDF::Graph.load("https://ruby-rdf.github.io/rdf/etc/doap.nq", format: :nquads)
         graph.each_statement do |statement|
           puts statement.inspect
         end
@@ -109,7 +109,7 @@ describe 'README' do
         subject {
           if example == :example0
             expect(RDF::Util::File).to receive(:open_file).
-              with("http://ruby-rdf.github.com/rdf/etc/doap.nq", hash_including(:headers, base_uri: "http://ruby-rdf.github.com/rdf/etc/doap.nq")).
+              with("https://ruby-rdf.github.io/rdf/etc/doap.nq", hash_including(:headers, base_uri: "https://ruby-rdf.github.io/rdf/etc/doap.nq")).
               at_least(1).
               and_yield(Kernel.open(File.expand_path("../../etc/doap.nq", __FILE__)))
           end

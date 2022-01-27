@@ -3,7 +3,7 @@
 This is a pure-Ruby library for working with [Resource Description Framework
 (RDF)][RDF] data.
 
-* <https://ruby-rdf.github.com/rdf>
+* <https://ruby-rdf.github.io/rdf>
 
 [![Gem Version](https://badge.fury.io/rb/rdf.png)](https://badge.fury.io/rb/rdf)
 [![Build Status](https://github.com/ruby-rdf/rdf/workflows/CI/badge.svg?branch=develop)](https://github.com/ruby-rdf/rdf/actions?query=workflow%3ACI)
@@ -141,11 +141,11 @@ or
 ### Reading RDF data in the [N-Triples][] format
 
     require 'rdf/ntriples'
-    graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nt")
+    graph = RDF::Graph.load("https://ruby-rdf.github.io/rdf/etc/doap.nt")
 
 or
 
-    RDF::Reader.open("https://ruby-rdf.github.com/rdf/etc/doap.nt") do |reader|
+    RDF::Reader.open("https://ruby-rdf.github.io/rdf/etc/doap.nt") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -160,13 +160,13 @@ MimeType or file extension, where available.
 
     require 'rdf/nquads'
 
-    graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nq", format: :nquads)
+    graph = RDF::Graph.load("https://ruby-rdf.github.io/rdf/etc/doap.nq", format: :nquads)
 
 A specific sub-type of Reader can also be invoked directly:
 
     require 'rdf/nquads'
 
-    RDF::NQuads::Reader.open("https://ruby-rdf.github.com/rdf/etc/doap.nq") do |reader|
+    RDF::NQuads::Reader.open("https://ruby-rdf.github.io/rdf/etc/doap.nq") do |reader|
       reader.each_statement do |statement|
         puts statement.inspect
       end
@@ -220,7 +220,7 @@ Note that no prefixes are loaded automatically, however they can be provided as 
 
     require 'rdf/ntriples'
 
-    graph = RDF::Graph.load("https://ruby-rdf.github.com/rdf/etc/doap.nt")
+    graph = RDF::Graph.load("https://ruby-rdf.github.io/rdf/etc/doap.nt")
     query = RDF::Query.new({
       person: {
         RDF.type  => FOAF.Person,
@@ -295,7 +295,7 @@ Readers support a boolean valued `rdfstar` option.
 
 ## Documentation
 
-<https://rubydoc.info/github/ruby-rdf/rdf>
+<https://ruby-rdf.github.io/rdf>
 
 ### RDF Object Model
 
@@ -309,7 +309,7 @@ Readers support a boolean valued `rdfstar` option.
       * {RDF::Literal::Double}
       * {RDF::Literal::Integer}
       * {RDF::Literal::Time}
-      * [RDF::XSD](https://rubydoc.info/github/gkellogg/rdf-xsd) (extension)
+      * [RDF::XSD](https://ruby-rdf.github.io/rdf-xsd) (extension)
     * {RDF::Resource}
       * {RDF::Node}
       * {RDF::URI}
@@ -371,10 +371,10 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Mutable}
   * {RDF::Durable}
 * {RDF::Transaction}
-* [RDF::AllegroGraph](https://rubydoc.info/github/ruby-rdf/rdf-agraph) (extension)
-* [RDF::Mongo](https://rubydoc.info/github/ruby-rdf/rdf-mongo) (extension)
-* [RDF::DataObjects](https://rubydoc.info/github/ruby-rdf/rdf-do) (extension)
-* [RDF::Sesame](https://rubydoc.info/github/ruby-rdf/rdf-sesame) (extension)
+* [RDF::AllegroGraph](https://ruby-rdf.github.io/rdf-agraph) (extension)
+* [RDF::Mongo](https://ruby-rdf.github.io/rdf-mongo) (extension)
+* [RDF::DataObjects](https://ruby-rdf.github.io/rdf-do) (extension)
+* [RDF::Sesame](https://ruby-rdf.github.io/rdf-sesame) (extension)
 
 ### RDF Querying
 
@@ -384,7 +384,7 @@ from BNode identity (i.e., they each entail the other)
   * {RDF::Query::Solution}
   * {RDF::Query::Solutions}
   * {RDF::Query::Variable}
-* [SPARQL](https://rubydoc.info/github/ruby-rdf/sparql) (extension)
+* [SPARQL](https://ruby-rdf.github.io/sparql) (extension)
 
 
 ### RDF Vocabularies
@@ -422,7 +422,7 @@ follows:
 
 ## Resources
 
-* <https://rubydoc.info/github/ruby-rdf/rdf>
+* <https://ruby-rdf.github.io/rdf>
 * <https://github.com/ruby-rdf/rdf>
 * <https://rubygems.org/gems/rdf>
 * <https://www.ohloh.net/p/rdf>
@@ -486,33 +486,33 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD]:             https://yardoc.org/
 [YARD-GS]:          https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              https://unlicense.org/#unlicensing-contributions
-[JSONLD doc]:       https://rubydoc.info/github/ruby-rdf/json-ld
-[LinkedData doc]:   https://rubydoc.info/github/ruby-rdf/linkeddata
-[Microdata doc]:    https://rubydoc.info/github/ruby-rdf/rdf-microdata
-[N3 doc]:           https://rubydoc.info/github/ruby-rdf/rdf-n3
-[RDFa doc]:         https://rubydoc.info/github/ruby-rdf/rdf-rdfa
-[RDFXML doc]:       https://rubydoc.info/github/ruby-rdf/rdf-rdfxml
-[Turtle doc]:       https://rubydoc.info/github/ruby-rdf/rdf-turtle
-[SPARQL doc]:       https://rubydoc.info/github/ruby-rdf/sparql
+[JSONLD doc]:       https://ruby-rdf.github.io/json-ld
+[LinkedData doc]:   https://ruby-rdf.github.io/linkeddata
+[Microdata doc]:    https://ruby-rdf.github.io/rdf-microdata
+[N3 doc]:           https://ruby-rdf.github.io/rdf-n3
+[RDFa doc]:         https://ruby-rdf.github.io/rdf-rdfa
+[RDFXML doc]:       https://ruby-rdf.github.io/rdf-rdfxml
+[Turtle doc]:       https://ruby-rdf.github.io/rdf-turtle
+[SPARQL doc]:       https://ruby-rdf.github.io/sparql
 [RDF 1.0]:          https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
 [RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
 [SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
-[RDF.rb]:           https://ruby-rdf.github.com/
-[RDF::DO]:          https://ruby-rdf.github.com/rdf-do
-[RDF::Mongo]:       https://ruby-rdf.github.com/rdf-mongo
-[RDF::Sesame]:      https://ruby-rdf.github.com/rdf-sesame
-[RDF::JSON]:        https://ruby-rdf.github.com/rdf-json
-[RDF::Microdata]:   https://ruby-rdf.github.com/rdf-microdata
-[RDF::N3]:          https://ruby-rdf.github.com/rdf-n3
-[RDF::RDFa]:        https://ruby-rdf.github.com/rdf-rdfa
-[RDF::RDFXML]:      https://ruby-rdf.github.com/rdf-rdfxml
-[RDF::TriG]:        https://ruby-rdf.github.com/rdf-trig
-[RDF::TriX]:        https://ruby-rdf.github.com/rdf-trix
-[RDF::Turtle]:      https://ruby-rdf.github.com/rdf-turtle
-[RDF::Raptor]:      https://ruby-rdf.github.com/rdf-raptor
+[RDF.rb]:           https://ruby-rdf.github.io/
+[RDF::DO]:          https://ruby-rdf.github.io/rdf-do
+[RDF::Mongo]:       https://ruby-rdf.github.io/rdf-mongo
+[RDF::Sesame]:      https://ruby-rdf.github.io/rdf-sesame
+[RDF::JSON]:        https://ruby-rdf.github.io/rdf-json
+[RDF::Microdata]:   https://ruby-rdf.github.io/rdf-microdata
+[RDF::N3]:          https://ruby-rdf.github.io/rdf-n3
+[RDF::RDFa]:        https://ruby-rdf.github.io/rdf-rdfa
+[RDF::RDFXML]:      https://ruby-rdf.github.io/rdf-rdfxml
+[RDF::TriG]:        https://ruby-rdf.github.io/rdf-trig
+[RDF::TriX]:        https://ruby-rdf.github.io/rdf-trix
+[RDF::Turtle]:      https://ruby-rdf.github.io/rdf-turtle
+[RDF::Raptor]:      https://ruby-rdf.github.io/rdf-raptor
 [RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
-[LinkedData]:       https://ruby-rdf.github.com/linkeddata
-[JSON::LD]:         https://ruby-rdf.github.com/json-ld
+[LinkedData]:       https://ruby-rdf.github.io/linkeddata
+[JSON::LD]:         https://ruby-rdf.github.io/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client
 [RestClient Components]: https://rubygems.org/gems/rest-client-components
 [Rack::Cache]:      https://rtomayko.github.io/rack-cache/
