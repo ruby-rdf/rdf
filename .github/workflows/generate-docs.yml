@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Update gh-pages with docs
     steps:
-      - name: Checkout this repo
+      - name: Clone repository
         uses: actions/checkout@v2
       - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
       - name: Install required gem dependencies
