@@ -84,7 +84,7 @@ describe RDF::Vocabulary::Writer do
       /term :ClassList/,
       /label: "ClassList"/.freeze,
       /subClassOf: term\(/,
-      %r{unionOf: list\("http://example.org/C1".freeze, "http://example.org/C2".freeze\)},
+      %r{unionOf: list\("http://example.org/C1", "http://example.org/C2"\)},
       %r{type: "http://www.w3.org/2000/01/rdf-schema#Class"}.freeze,
     ].each do |regexp,|
       it "matches #{regexp}" do

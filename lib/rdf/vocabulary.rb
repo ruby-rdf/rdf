@@ -43,8 +43,8 @@ module RDF
   #   EX = Class.new(RDF::StrictVocabulay("http://example/ns#")) do
   #     # Ontology definition
   #     ontology :"http://example/ns#",
-  #       label: "The RDF Example Vocablary".freeze,
-  #       type: "http://www.w3.org/2002/07/owl#Ontology".freeze
+  #       label: "The RDF Example Vocablary",
+  #       type: "http://www.w3.org/2002/07/owl#Ontology"
   #
   #     # Class definitions
   #     term :Class,
@@ -56,12 +56,12 @@ module RDF
   #
   #     # Property definitions
   #     property :prop,
-  #       comment: "A description of the property".freeze,
-  #       label: "property".freeze,
-  #       domain: "http://example/ns#Class".freeze,
-  #       range: "rdfs:Literal".freeze,
-  #       isDefinedBy: %(ex:).freeze,
-  #       type: "rdf:Property".freeze
+  #       comment: "A description of the property",
+  #       label: "property",
+  #       domain: "http://example/ns#Class",
+  #       range: "rdfs:Literal",
+  #       isDefinedBy: %(ex:),
+  #       type: "rdf:Property"
   #   end
   # 
   # @example Method calls are converted to the typical RDF camelcase convention
@@ -203,12 +203,24 @@ module RDF
       #
       #   @example A simple term definition
       #       property :domain,
-      #         comment: %(A domain of the subject property.).freeze,
-      #         domain: "rdf:Property".freeze,
-      #         label: "domain".freeze,
-      #         range: "rdfs:Class".freeze,
-      #         isDefinedBy: %(rdfs:).freeze,
-      #         type: "rdf:Property".freeze
+      #         comment: %(A domain of the subject property.),
+      #         domain: "rdf:Property",
+      #         label: "domain",
+      #         range: "rdfs:Class",
+      #         isDefinedBy: %(rdfs:),
+      #         type: "rdf:Property"
+      #
+      #   @example A term definition with tagged values
+      #       property :actor,
+      #       comment: {en: "Subproperty of as:attributedTo that identifies the primary actor"},
+      #       domain: "https://www.w3.org/ns/activitystreams#Activity",
+      #       label: {en: "actor"},
+      #       range: term(
+      #           type: "http://www.w3.org/2002/07/owl#Class",
+      #           unionOf: list("https://www.w3.org/ns/activitystreams#Object", "https://www.w3.org/ns/activitystreams#Link")
+      #         ),
+      #       subPropertyOf: "https://www.w3.org/ns/activitystreams#attributedTo",
+      #       type: "http://www.w3.org/2002/07/owl#ObjectProperty"
       #
       #   @example A SKOS term with anonymous values
       #         term: :af,
@@ -227,76 +239,8 @@ module RDF
       #           "foaf:name": "Aland Islands"
       #
       #   @param [String, #to_s] name
-      #   @param [Hash{Symbol=>String,Array<String,Term>}] options
-      #     Any other values are expected to expands to a {URI} using built-in vocabulary prefixes. The value is a `String`, `Array<String>` or `Array<Term>` which is interpreted according to the `range` of the associated property.
-      #   @option options [String, Array<String,Term>] :type
-      #     Shortcut for `rdf:type`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :comment
-      #     Shortcut for `rdfs:comment`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :domain
-      #     Shortcut for `rdfs:domain`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :isDefinedBy
-      #     Shortcut for `rdfs:isDefinedBy`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :label
-      #     Shortcut for `rdfs:label`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :range
-      #     Shortcut for `rdfs:range`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :subClassOf
-      #     Shortcut for `rdfs:subClassOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :subPropertyOf
-      #     Shortcut for `rdfs:subPropertyOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :allValuesFrom
-      #     Shortcut for `owl:allValuesFrom`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :cardinality
-      #     Shortcut for `owl:cardinality`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :equivalentClass
-      #     Shortcut for `owl:equivalentClass`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :equivalentProperty
-      #     Shortcut for `owl:equivalentProperty`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :intersectionOf
-      #     Shortcut for `owl:intersectionOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :inverseOf
-      #     Shortcut for `owl:inverseOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :maxCardinality
-      #     Shortcut for `owl:maxCardinality`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :minCardinality
-      #     Shortcut for `owl:minCardinality`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :onProperty
-      #     Shortcut for `owl:onProperty`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :someValuesFrom
-      #     Shortcut for `owl:someValuesFrom`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :unionOf
-      #     Shortcut for `owl:unionOf`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :domainIncludes
-      #     Shortcut for `schema:domainIncludes`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :rangeIncludes
-      #     Shortcut for `schema:rangeIncludes`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :altLabel
-      #     Shortcut for `skos:altLabel`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :broader
-      #     Shortcut for `skos:broader`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :definition
-      #     Shortcut for `skos:definition`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :editorialNote
-      #     Shortcut for `skos:editorialNote`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :exactMatch
-      #     Shortcut for `skos:exactMatch`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :hasTopConcept
-      #     Shortcut for `skos:hasTopConcept`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :inScheme
-      #     Shortcut for `skos:inScheme`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :member
-      #     Shortcut for `skos:member`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String,Term>] :narrower
-      #     Shortcut for `skos:narrower`, values are interpreted as a {Term}.
-      #   @option options [String, Array<String>] :notation
-      #     Shortcut for `skos:notation`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :note
-      #     Shortcut for `skos:note`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String>] :prefLabel
-      #     Shortcut for `skos:prefLabel`, values are interpreted as a {Literal}.
-      #   @option options [String, Array<String,Term>] :related
-      #     Shortcut for `skos:related`, values are interpreted as a {Term}.
+      #   @param [Hash{Symbol=>String,Array<String>}] options
+      #     Any other values are expected to expands to a {URI} using built-in vocabulary prefixes. The value is a `String`, 'Hash{Symbol=>String,Array<String>}' or `Array<String,Hash{Symbol=>Array<String>}>` which is interpreted according to the `range` of the associated property and by heuristically determining the value datatype. See `attributes` argument to {Term#initialize}.
       #   @return [RDF::Vocabulary::Term]
       def property(*args)
         case args.length
@@ -308,15 +252,6 @@ module RDF
           if name
             uri_str = [to_s, name.to_s].join('')
             URI.cache.delete(uri_str.to_sym)  # Clear any previous entry
-
-            # Transform attribute keys that are PNames with a warning
-            # FIXME: add back later
-            #if !@is_deprecated && options.is_a?(Hash) &&
-            #   options.keys.map(&:to_s).any? {|k| k.include?(':') && !k.match?(/^https?:/)}
-            #
-            #  @is_deprecated = true
-            #  warn "[DEPRECATION] Vocabulary #{to_uri} includes pname attribute keys, regenerate"
-            #end
 
             # Term attributes passed in a block for lazy evaluation. This helps to avoid load-time circular dependencies
             prop = Term.intern(uri_str, vocab: self, attributes: options || {})
@@ -985,6 +920,10 @@ module RDF
       #
       # Symbols which are accessors may also be looked up by their associated URI.
       #
+      # Values may be Strings, Hash (Map), or Terms, or an Array including a combination of these. A Hash (Map) is used to create a datatype/language map to one or more string values which represent either datatyped literals, or language-tagged literals as interpreted by {#attribute_value}.
+      #
+      # In general, this accessor is used internally. The {#properties} method interprets these values as {RDF::Value}.
+      #
       # @note lookup by PName is DEPRECATED and will be removed in a future version.
       #
       # @example looking up term label
@@ -993,23 +932,23 @@ module RDF
       #   RDF::RDFS.Literal.attributes[RDF::RDFS.label] #=> "Literal"
       #   RDF::RDFS.Literal.attributes["http://www.w3.org/2000/01/rdf-schema#label"] #=> "Literal"
       #   RDF::RDFS.Literal.attributes[:"http://www.w3.org/2000/01/rdf-schema#label"] #=> "Literal"
-      # @return [Hash{Symbol,Resource => Term, #to_s}]
+      # @return [Hash{Symbol => String, Term, Hash{Symbol => String}, Array<String, Term, Hash{Symbol => String}>}]
+      # @see #properties
       attr_reader :attributes
 
       ##
-      # @overload new(uri, attributes:, **options)
+      # @overload new(uri, attributes:, vocab:, **options)
       #   @param  [URI, String, #to_s]    uri
       #   @param [Vocabulary] vocab Vocabulary of this term.
-      #   @param [Hash{Symbol => Symbol,Array<String,Term>}] attributes ({})
+      #   @param [Hash{Symbol => String,Term,Hash{Symbol=>String,Array<String>},Array<String>}] attributes ({})
       #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF. See {#attributes} and {#properties} for other ways to access.
       #   @param  [Hash{Symbol => Object}] options
       #     Options from {URI#initialize}
       #
-      # @overload new(attributes:, **options)
-      #   @param  [Hash{Symbol => Object}] options
+      # @overload new(attributes:, vocab:, **options)
       #   @param [Vocabulary] vocab Vocabulary of this term.
-      #   @param [Hash{Symbol => Symbol,Array<String,Term>}] attributes ({})
-      #     Attributes of this vocabulary term, used for finding `label` and `comment` and to serialize the term back to RDF. See {#attributes} and {#properties} for other ways to access.
+      #   @param [Hash{Symbol => String,Term,Hash{Symbol=>String,Array<String>},Array<String>}] attributes ({})
+      #     Attributes of this vocabulary term, used for finding `label`,  `comment` and other term properties, and to serialize the term back to RDF. See {#attributes} and {#properties} for other ways to access.
       #   @param  [Hash{Symbol => Object}] options
       #     Options from {URI#initialize}
       def self.new(*args, vocab: nil, attributes: {}, **options)
@@ -1149,6 +1088,7 @@ module RDF
       #   RDF::RDFS.Literal.properties[:"http://www.w3.org/2000/01/rdf-schema#label"] #=> RDF::Literal("Literal")
       #
       # @return [Hash{Symbol => Array<RDF::Value>}]
+      # @see #attribute_value
       def properties
         Hash.new {|hash, key| attribute_value(key)}
       end
@@ -1161,7 +1101,8 @@ module RDF
       # Attribute values which are not already a {RDF::Value} (including strings and symbols) are converted by a heuristic loookup as follows:
       #
       # * An {RDF::URI} if it can be turned into a valid IRI using {RDF::Vocabulary.expand_pname}. This includes IRIs already in non-relative form.
-      # * {RDF::Literal::Date} if valud,
+      # * A {Hash{Symbol=>String,Array<String>}} is interpreted as a datatype/language map. If the key contains a ':', it is treated as a PName or IRI datatype applied to the values. Otherwise, it is treated as a language-tag applied to the values.
+      # * {RDF::Literal::Date} if valid,
       # * {RDF::Literal::DateTime} if valid, 
       # * {RDF::Literal::Integer} if valid, 
       # * {RDF::Literal::Decimal} if valid, 
@@ -1179,9 +1120,22 @@ module RDF
           v = value.is_a?(Symbol) ? value.to_s : value
           value = (RDF::Vocabulary.expand_pname(v) rescue nil) if v.is_a?(String) && v.include?(':')
           value = value.to_uri if value.respond_to?(:to_uri)
-          unless value.is_a?(RDF::Value) && value.valid?
+          value = if value.is_a?(RDF::Value) && value.valid?
+            value
+          elsif value.is_a?(Hash)
+            # type/language map
+            value.inject([]) do |memo, (k,v)|
+              vv = [v] unless v.is_a?(Array)
+              memo << if k.to_s.include?(':')
+                dt = RDF::Vocabulary.expand_pname(v) rescue nil
+                vv.map {|val| RDF::Literal(val, datatype: dt)}
+              else
+                vv.map {|val| RDF::Literal(val, language: k)}
+              end
+            end.flatten.compact.select(&:valid?)
+          else
             # Use as most appropriate literal
-            value = [
+            [
               RDF::Literal::Date,
               RDF::Literal::DateTime,
               RDF::Literal::Integer,
@@ -1196,9 +1150,7 @@ module RDF
               end
             end
           end
-
-          value
-        end
+        end.flatten
 
         prop_values.length <= 1 ? prop_values.first : prop_values
       end
@@ -1296,24 +1248,24 @@ module RDF
           values = [values].compact unless values.is_a?(Array)
           values = values.map do |value|
             if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(k.to_s)
-              "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')}).freeze"
+              "%(#{value.to_s.gsub('(', '\(').gsub(')', '\)')})"
             elsif value.node? && value.is_a?(RDF::Vocabulary::Term)
-              "#{value.to_ruby(indent: indent + "  ")}.freeze"
+              "#{value.to_ruby(indent: indent + "  ")}"
             elsif value.is_a?(RDF::Term)
-              "#{value.to_s.inspect}.freeze"
+              "#{value.to_s.inspect}"
             elsif value.is_a?(RDF::List)
               list_elements = value.map do |u|
                 if u.uri?
-                  "#{u.to_s.inspect}.freeze"
+                  "#{u.to_s.inspect}"
                 elsif u.node? && u.respond_to?(:to_ruby)
                   u.to_ruby(indent: indent + "  ")
                 else
-                  "#{u.to_s.inspect}.freeze"
+                  "#{u.to_s.inspect}"
                 end
               end
               "list(#{list_elements.join(', ')})"
             else
-              "#{value.inspect}.freeze"
+              "#{value.inspect}"
             end
           end
           "#{k.to_s.include?(':') ? k.to_s.inspect : k}: " +
