@@ -19,8 +19,8 @@ describe RDF::Vocabulary::Writer do
   [
     /module Bar/,
     /class Foo/,
-    %r{term :Class,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "Class".freeze,\s+type: "http://www.w3.org/2000/01/rdf-schema#Class"}m.freeze,
-    %r{property :prop,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "prop".freeze,\s+type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"}m.freeze,
+    %r{term :Class,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "Class",\s+type: "http://www.w3.org/2000/01/rdf-schema#Class"}m.freeze,
+    %r{property :prop,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "prop",\s+type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"}m.freeze,
   ].each do |regexp,|
     it "matches #{regexp}" do
       expect(serialization).to match(regexp)

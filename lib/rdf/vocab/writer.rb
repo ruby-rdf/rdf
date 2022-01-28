@@ -16,40 +16,40 @@ module RDF
     #
     # @example a simple term definition
     #     property :comment,
-    #       comment: %(A description of the subject resource.).freeze,
-    #       domain: "rdfs:Resource".freeze,
-    #       label: "comment".freeze,
-    #       range: "rdfs:Literal".freeze,
-    #       isDefinedBy: %(rdfs:).freeze,
-    #       type: "rdf:Property".freeze
+    #       comment: %(A description of the subject resource.),
+    #       domain: "rdfs:Resource",
+    #       label: "comment",
+    #       range: "rdfs:Literal",
+    #       isDefinedBy: %(rdfs:),
+    #       type: "rdf:Property"
     #
     # @example an embedded skos:Concept
     #     term :ad,
     #       exactMatch: [term(
-    #           type: "skos:Concept".freeze,
-    #           inScheme: "country:iso3166-1-alpha-2".freeze,
-    #           notation: %(ad).freeze
+    #           type: "skos:Concept",
+    #           inScheme: "country:iso3166-1-alpha-2",
+    #           notation: %(ad)
     #         ), term(
-    #           type: "skos:Concept".freeze,
-    #           inScheme: "country:iso3166-1-alpha-3".freeze,
-    #           notation: %(and).freeze
+    #           type: "skos:Concept",
+    #           inScheme: "country:iso3166-1-alpha-3",
+    #           notation: %(and)
     #         )],
-    #       "foaf:name": "Andorra".freeze,
-    #       isDefinedBy: "country:".freeze,
-    #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country".freeze
+    #       "foaf:name": "Andorra",
+    #       isDefinedBy: "country:",
+    #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country"
     #
     # @example owl:unionOf
     #     property :duration,
-    #       comment: %(The duration of a track or a signal in ms).freeze,
+    #       comment: %(The duration of a track or a signal in ms),
     #       domain: term(
-    #           "owl:unionOf": list("mo:Track".freeze, "mo:Signal".freeze),
-    #           type: "owl:Class".freeze
+    #           "owl:unionOf": list("mo:Track", "mo:Signal"),
+    #           type: "owl:Class"
     #         ),
-    #       isDefinedBy: "mo:".freeze,
-    #       "mo:level": "1".freeze,
-    #       range: "xsd:float".freeze,
-    #       type: "owl:DatatypeProperty".freeze,
-    #       "vs:term_status": "testing".freeze
+    #       isDefinedBy: "mo:",
+    #       "mo:level": "1",
+    #       range: "xsd:float",
+    #       type: "owl:DatatypeProperty",
+    #       "vs:term_status": "testing"
     class Writer < RDF::Writer
       include RDF::Util::Logger
       format RDF::Vocabulary::Format
@@ -152,10 +152,16 @@ module RDF
           module #{module_name}
           ).gsub(/^          /, '')
 
+        if @options[:noDoc]
+          @output.print %(  # Vocabulary for <#{base_uri}>
+            # @!visibility private
+          ).gsub(/^          /, '')
+        else
           @output.print %(  # @!parse
             #   # Vocabulary for <#{base_uri}>
             #   #
-          ).gsub(/^          /, '') unless @options[:noDoc]
+          ).gsub(/^          /, '')
+        end
 
         if vocab.ontology && !@options[:noDoc]
           ont_doc = []
@@ -279,26 +285,26 @@ module RDF
 
       def serialize_value(value, key, indent: "")
         if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
-          "#{value.to_s.inspect}.freeze"
+          "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::URI)
-          "#{value.to_s.inspect}.freeze"
+          "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::Vocabulary::Term)
           value.to_ruby(indent: indent + "  ")
         elsif value.is_a?(RDF::Term)
-          "#{value.to_s.inspect}.freeze"
+          "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::List)
           list_elements = value.map do |u|
             if u.uri?
-              "#{u.to_s.inspect}.freeze"
+              "#{u.to_s.inspect}"
             elsif u.respond_to?(:to_ruby)
               u.to_ruby(indent: indent + "  ")
             else
-              "#{u.to_s.inspect}.freeze"
+              "#{u.to_s.inspect}"
             end
           end
           "list(#{list_elements.join(', ')})"
         else
-          "#{value.inspect}.freeze"
+          "#{value.inspect}"
         end
       end
     end
