@@ -61,14 +61,14 @@ describe RDF::URI do
     end
 
     it "with hash arg" do
-      expect(described_class).to receive(:new).with(scheme: "http",
+      expect(described_class).to receive(:new).with({scheme: "http",
         user: "user",
         password: "password",
         host: "example.com",
         port: 8080,
         path: "/path",
         query: "query=value",
-        fragment: "fragment")
+        fragment: "fragment"})
       RDF::URI.new({
         scheme: "http",
         user: "user",
@@ -77,8 +77,7 @@ describe RDF::URI do
         port: 8080,
         path: "/path",
         query: "query=value",
-        fragment: "fragment"
-      })
+        fragment: "fragment"})
     end
   end
 
