@@ -50,6 +50,19 @@ module RDF
     #       range: "xsd:float",
     #       type: "owl:DatatypeProperty",
     #       "vs:term_status": "testing"
+    #
+    # @example term definition with language-tagged strings
+    #   @example A term definition with tagged values
+    #       property :actor,
+    #       comment: {en: "Subproperty of as:attributedTo that identifies the primary actor"},
+    #       domain: "https://www.w3.org/ns/activitystreams#Activity",
+    #       label: {en: "actor"},
+    #       range: term(
+    #           type: "http://www.w3.org/2002/07/owl#Class",
+    #           unionOf: list("https://www.w3.org/ns/activitystreams#Object", "https://www.w3.org/ns/activitystreams#Link")
+    #         ),
+    #       subPropertyOf: "https://www.w3.org/ns/activitystreams#attributedTo",
+    #       type: "http://www.w3.org/2002/07/owl#ObjectProperty"
     class Writer < RDF::Writer
       include RDF::Util::Logger
       format RDF::Vocabulary::Format
@@ -272,9 +285,17 @@ module RDF
         attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|
           value = Array(attributes[key])
           component = key.inspect.start_with?(':"') ? "#{key.to_s.inspect}: " : "#{key}: "
-          value = value.first if value.length == 1
+          value = value.first if value.length == 1 && value.none? {|v| v.is_a?(RDF::Literal) && v.language?}
           component << if value.is_a?(Array)
-            '[' + value.map {|v| serialize_value(v, key, indent: "      ")}.sort.join(", ") + "]"
+            # Represent language-tagged literals as a hash
+            lang_vals, vals = value.partition {|v| v.literal? && v.language?}
+            hash_val = lang_vals.inject({}) {|memo, obj| memo.merge(obj.language => obj.to_s)}
+            vals << hash_val unless hash_val.empty?
+            if vals.length > 1
+              '[' + vals.map {|v| serialize_value(v, key, indent: "      ")}.sort.join(", ") + "]"
+            else
+              serialize_value(vals.first, key, indent: "      ")
+            end
           else
             serialize_value(value, key, indent: "      ")
           end
@@ -284,7 +305,14 @@ module RDF
       end
 
       def serialize_value(value, key, indent: "")
-        if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
+        if value.is_a?(Hash)
+          # Favor English
+          keys = value.keys
+          keys = keys.include?(:en) ? (keys - [:en]).sort.unshift(:en) : keys.sort
+          '{' + keys.map do |k|
+            "#{k.inspect[1..-1]}: #{value[k].inspect}"
+          end.join(', ') + '}'
+        elsif value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
           "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::URI)
           "#{value.to_s.inspect}"

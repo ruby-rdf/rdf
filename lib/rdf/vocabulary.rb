@@ -521,10 +521,6 @@ module RDF
             statement.predicate.to_s.to_sym
           end
 
-          # Skip literals other than plain or english
-          # This is because the ruby representation does not preserve language
-          next if statement.object.literal? && (statement.object.language || :en).to_s !~ /^en-?/
-
           (term[key] ||= []) << statement.object
         end
 
