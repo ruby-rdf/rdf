@@ -57,10 +57,22 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Enumerable
-    autoload :Enumerator, 'rdf/mixin/enumerator'
     extend  RDF::Util::Aliasing::LateBound
     include ::Enumerable
     include RDF::Countable # NOTE: must come after ::Enumerable
+
+    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
+    class Enumerator < ::Enumerator
+      include RDF::Queryable
+      include RDF::Enumerable
+
+      ##
+      # @return [Array]
+      # @note Make sure returned arrays are also queryable
+      def to_a
+        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
+      end
+    end
 
     ##
     # Returns `true` if this enumerable supports the given `feature`.
