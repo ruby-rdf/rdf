@@ -52,17 +52,16 @@ module RDF
     #       "vs:term_status": "testing"
     #
     # @example term definition with language-tagged strings
-    #   @example A term definition with tagged values
-    #       property :actor,
-    #       comment: {en: "Subproperty of as:attributedTo that identifies the primary actor"},
-    #       domain: "https://www.w3.org/ns/activitystreams#Activity",
-    #       label: {en: "actor"},
-    #       range: term(
-    #           type: "http://www.w3.org/2002/07/owl#Class",
-    #           unionOf: list("https://www.w3.org/ns/activitystreams#Object", "https://www.w3.org/ns/activitystreams#Link")
-    #         ),
-    #       subPropertyOf: "https://www.w3.org/ns/activitystreams#attributedTo",
-    #       type: "http://www.w3.org/2002/07/owl#ObjectProperty"
+    #   property :actor,
+    #     comment: {en: "Subproperty of as:attributedTo that identifies the primary actor"},
+    #     domain: "https://www.w3.org/ns/activitystreams#Activity",
+    #     label: {en: "actor"},
+    #     range: term(
+    #         type: "http://www.w3.org/2002/07/owl#Class",
+    #         unionOf: list("https://www.w3.org/ns/activitystreams#Object", "https://www.w3.org/ns/activitystreams#Link")
+    #       ),
+    #     subPropertyOf: "https://www.w3.org/ns/activitystreams#attributedTo",
+    #     type: "http://www.w3.org/2002/07/owl#ObjectProperty"
     class Writer < RDF::Writer
       include RDF::Util::Logger
       format RDF::Vocabulary::Format

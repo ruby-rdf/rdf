@@ -55,7 +55,7 @@ Release 2.0.0
 
 * Enumerables vs. Enumerators
 
-  - `RDF::Queryable#query` and `RDF::Query#execute` not return an enumerable, which may be an enumerator. Most internal uses return an Array now, which aides performance for small result sets, but potentially causes problems for large result sets. Implementations may still return an Enumerator, and Enumerators may be passed as arguments.
+  - `RDF::Queryable#query` and `RDF::Query#execute` did not return an enumerable, which may be an enumerator. Most internal uses return an Array now, which aides performance for small result sets, but potentially causes problems for large result sets. Implementations may still return an Enumerator, and Enumerators may be passed as arguments.
   - `RDF::Enumerable#statements`, `#quads`, `#triples`, `#subjects`, `#predicates`, `#objects`, and `#contexts` now return an array rather than an Enumerator.
 
 * The following vocabularies are deprecated and have been moved to the rdf-vocab gem.

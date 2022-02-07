@@ -1325,7 +1325,7 @@ module RDF
       def [](name)
         props.fetch(name.to_sym)
       rescue KeyError
-        raise KeyError, "#{name} not found in vocabulary #{self.__name__}"
+        raise KeyError, "#{name.inspect} not found in vocabulary #{self.__name__}"
       end
     end
   end # StrictVocabulary
