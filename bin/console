@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "rdf"
+
+require "irb"
+require 'amazing_print'
+IRB.start(__FILE__)
