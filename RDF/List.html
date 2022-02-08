@@ -4076,8 +4076,8 @@ g.count # =&gt; l.count</code></pre>
       <pre class="code"><span class="info file"># File 'lib/rdf/model/list.rb', line 478</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='comment'># TODO: optimize this
-</span><span class='kw'>end</span></pre>
+  <span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -7049,7 +7049,7 @@ g.count # =&gt; l.count</code></pre>
 </div>
 
       <div id="footer">
-  Generated on Thu Jan 27 23:05:05 2022 by
+  Generated on Tue Feb  8 19:17:37 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.1.0).
 </div>

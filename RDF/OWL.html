@@ -108,6 +108,8 @@
     
 <p>Vocabulary for <a href="http://www.w3.org/2002/07/owl">www.w3.org/2002/07/owl</a>#</p>
 
+<p>The OWL 2 Schema vocabulary (OWL 2)</p>
+
 <p>This ontology partially describes the built-in classes and properties that together form the basis of the RDF/XML syntax of OWL 2. The content of this ontology is based on Tables 6.1 and 6.2 in Section 6.4 of the OWL 2 RDF-Based Semantics specification, available at <a href="http://www.w3.org/TR/owl2-rdf-based-semantics">www.w3.org/TR/owl2-rdf-based-semantics</a>/. Please note that those tables do not include the different annotations (labels, comments and rdfs:isDefinedBy links) used in this file. Also note that the descriptions provided in this ontology do not provide a complete and correct formal description of either the syntax or the semantics of the introduced terms (please see the OWL 2 recommendations for the complete and normative specifications). Furthermore, the information provided by this ontology may be misleading if not used with care. This ontology SHOULD NOT be imported into OWL ontologies. Importing this file into an OWL 2 DL ontology will cause it to become an OWL 2 Full ontology and may have other, unexpected, consequences.</p>
 
 
@@ -115,6 +117,31 @@
 </div>
 <div class="tags">
   
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-classes" target="_parent" title="http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-classes">http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-classes</a></li>
+    
+      <li><a href="http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-properties" target="_parent" title="http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-properties">http://www.w3.org/TR/owl2-rdf-based-semantics/#table-axiomatic-properties</a></li>
+    
+  </ul>
+<p class="tag_title">Version:</p>
+<ul class="version">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>$Date: 2009/11/15 10:54:12 $</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div>
 
@@ -2445,12 +2472,12 @@
       <pre class="lines">
 
 
-7
-8
-9</pre>
+12
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 7</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 12</span>
 
 <span class='kw'>def</span> <span class='const'>AllDifferent</span>
   <span class='ivar'>@AllDifferent</span>
@@ -2501,12 +2528,12 @@
       <pre class="lines">
 
 
-11
-12
-13</pre>
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='const'>AllDisjointClasses</span>
   <span class='ivar'>@AllDisjointClasses</span>
@@ -2557,12 +2584,12 @@
       <pre class="lines">
 
 
-15
-16
-17</pre>
+20
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='const'>AllDisjointProperties</span>
   <span class='ivar'>@AllDisjointProperties</span>
@@ -2613,12 +2640,12 @@
       <pre class="lines">
 
 
-111
-112
-113</pre>
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_allValuesFrom'>allValuesFrom</span>
   <span class='ivar'>@allValuesFrom</span>
@@ -2669,12 +2696,12 @@
       <pre class="lines">
 
 
-115
-116
-117</pre>
+120
+121
+122</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 115</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_annotatedProperty'>annotatedProperty</span>
   <span class='ivar'>@annotatedProperty</span>
@@ -2725,12 +2752,12 @@
       <pre class="lines">
 
 
-119
-120
-121</pre>
+124
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 119</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_annotatedSource'>annotatedSource</span>
   <span class='ivar'>@annotatedSource</span>
@@ -2781,12 +2808,12 @@
       <pre class="lines">
 
 
-123
-124
-125</pre>
+128
+129
+130</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 123</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_annotatedTarget'>annotatedTarget</span>
   <span class='ivar'>@annotatedTarget</span>
@@ -2837,12 +2864,12 @@
       <pre class="lines">
 
 
-19
-20
-21</pre>
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='const'>Annotation</span>
   <span class='ivar'>@Annotation</span>
@@ -2893,12 +2920,12 @@
       <pre class="lines">
 
 
-23
-24
-25</pre>
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='const'>AnnotationProperty</span>
   <span class='ivar'>@AnnotationProperty</span>
@@ -2949,12 +2976,12 @@
       <pre class="lines">
 
 
-127
-128
-129</pre>
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assertionProperty'>assertionProperty</span>
   <span class='ivar'>@assertionProperty</span>
@@ -3005,12 +3032,12 @@
       <pre class="lines">
 
 
-27
-28
-29</pre>
+32
+33
+34</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 32</span>
 
 <span class='kw'>def</span> <span class='const'>AsymmetricProperty</span>
   <span class='ivar'>@AsymmetricProperty</span>
@@ -3061,12 +3088,12 @@
       <pre class="lines">
 
 
-31
-32
-33</pre>
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 31</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='const'>Axiom</span>
   <span class='ivar'>@Axiom</span>
@@ -3117,12 +3144,12 @@
       <pre class="lines">
 
 
-131
-132
-133</pre>
+136
+137
+138</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 131</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 136</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_backwardCompatibleWith'>backwardCompatibleWith</span>
   <span class='ivar'>@backwardCompatibleWith</span>
@@ -3173,12 +3200,12 @@
       <pre class="lines">
 
 
-135
-136
-137</pre>
+140
+141
+142</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 135</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 140</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bottomDataProperty'>bottomDataProperty</span>
   <span class='ivar'>@bottomDataProperty</span>
@@ -3229,12 +3256,12 @@
       <pre class="lines">
 
 
-139
-140
-141</pre>
+144
+145
+146</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 144</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bottomObjectProperty'>bottomObjectProperty</span>
   <span class='ivar'>@bottomObjectProperty</span>
@@ -3285,12 +3312,12 @@
       <pre class="lines">
 
 
-143
-144
-145</pre>
+148
+149
+150</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 148</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cardinality'>cardinality</span>
   <span class='ivar'>@cardinality</span>
@@ -3341,12 +3368,12 @@
       <pre class="lines">
 
 
-35
-36
-37</pre>
+40
+41
+42</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='const'>Class</span>
   <span class='ivar'>@Class</span>
@@ -3397,12 +3424,12 @@
       <pre class="lines">
 
 
-147
-148
-149</pre>
+152
+153
+154</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 152</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_complementOf'>complementOf</span>
   <span class='ivar'>@complementOf</span>
@@ -3453,12 +3480,12 @@
       <pre class="lines">
 
 
-39
-40
-41</pre>
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 44</span>
 
 <span class='kw'>def</span> <span class='const'>DataRange</span>
   <span class='ivar'>@DataRange</span>
@@ -3509,12 +3536,12 @@
       <pre class="lines">
 
 
-151
-152
-153</pre>
+156
+157
+158</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 151</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 156</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_datatypeComplementOf'>datatypeComplementOf</span>
   <span class='ivar'>@datatypeComplementOf</span>
@@ -3565,12 +3592,12 @@
       <pre class="lines">
 
 
-43
-44
-45</pre>
+48
+49
+50</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 48</span>
 
 <span class='kw'>def</span> <span class='const'>DatatypeProperty</span>
   <span class='ivar'>@DatatypeProperty</span>
@@ -3621,12 +3648,12 @@
       <pre class="lines">
 
 
-155
-156
-157</pre>
+160
+161
+162</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 155</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 160</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_deprecated'>deprecated</span>
   <span class='ivar'>@deprecated</span>
@@ -3677,12 +3704,12 @@
       <pre class="lines">
 
 
-47
-48
-49</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='const'>DeprecatedClass</span>
   <span class='ivar'>@DeprecatedClass</span>
@@ -3733,12 +3760,12 @@
       <pre class="lines">
 
 
-51
-52
-53</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='const'>DeprecatedProperty</span>
   <span class='ivar'>@DeprecatedProperty</span>
@@ -3789,12 +3816,12 @@
       <pre class="lines">
 
 
-159
-160
-161</pre>
+164
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 159</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_differentFrom'>differentFrom</span>
   <span class='ivar'>@differentFrom</span>
@@ -3845,12 +3872,12 @@
       <pre class="lines">
 
 
-163
-164
-165</pre>
+168
+169
+170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 163</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 168</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_disjointUnionOf'>disjointUnionOf</span>
   <span class='ivar'>@disjointUnionOf</span>
@@ -3901,12 +3928,12 @@
       <pre class="lines">
 
 
-167
-168
-169</pre>
+172
+173
+174</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 167</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 172</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_disjointWith'>disjointWith</span>
   <span class='ivar'>@disjointWith</span>
@@ -3957,12 +3984,12 @@
       <pre class="lines">
 
 
-171
-172
-173</pre>
+176
+177
+178</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 171</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 176</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_distinctMembers'>distinctMembers</span>
   <span class='ivar'>@distinctMembers</span>
@@ -4013,12 +4040,12 @@
       <pre class="lines">
 
 
-175
-176
-177</pre>
+180
+181
+182</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 175</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 180</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_equivalentClass'>equivalentClass</span>
   <span class='ivar'>@equivalentClass</span>
@@ -4069,12 +4096,12 @@
       <pre class="lines">
 
 
-179
-180
-181</pre>
+184
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 179</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 184</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_equivalentProperty'>equivalentProperty</span>
   <span class='ivar'>@equivalentProperty</span>
@@ -4125,12 +4152,12 @@
       <pre class="lines">
 
 
-55
-56
-57</pre>
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='const'>FunctionalProperty</span>
   <span class='ivar'>@FunctionalProperty</span>
@@ -4181,12 +4208,12 @@
       <pre class="lines">
 
 
-183
-184
-185</pre>
+188
+189
+190</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 188</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hasKey'>hasKey</span>
   <span class='ivar'>@hasKey</span>
@@ -4237,12 +4264,12 @@
       <pre class="lines">
 
 
-187
-188
-189</pre>
+192
+193
+194</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 187</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 192</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hasSelf'>hasSelf</span>
   <span class='ivar'>@hasSelf</span>
@@ -4293,12 +4320,12 @@
       <pre class="lines">
 
 
-191
-192
-193</pre>
+196
+197
+198</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 191</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 196</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hasValue'>hasValue</span>
   <span class='ivar'>@hasValue</span>
@@ -4349,12 +4376,12 @@
       <pre class="lines">
 
 
-195
-196
-197</pre>
+200
+201
+202</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 195</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_imports'>imports</span>
   <span class='ivar'>@imports</span>
@@ -4405,12 +4432,12 @@
       <pre class="lines">
 
 
-199
-200
-201</pre>
+204
+205
+206</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 199</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 204</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_incompatibleWith'>incompatibleWith</span>
   <span class='ivar'>@incompatibleWith</span>
@@ -4461,12 +4488,12 @@
       <pre class="lines">
 
 
-203
-204
-205</pre>
+208
+209
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 203</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_intersectionOf'>intersectionOf</span>
   <span class='ivar'>@intersectionOf</span>
@@ -4517,12 +4544,12 @@
       <pre class="lines">
 
 
-59
-60
-61</pre>
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='const'>InverseFunctionalProperty</span>
   <span class='ivar'>@InverseFunctionalProperty</span>
@@ -4573,12 +4600,12 @@
       <pre class="lines">
 
 
-207
-208
-209</pre>
+212
+213
+214</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 207</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 212</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inverseOf'>inverseOf</span>
   <span class='ivar'>@inverseOf</span>
@@ -4629,12 +4656,12 @@
       <pre class="lines">
 
 
-63
-64
-65</pre>
+68
+69
+70</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='const'>IrreflexiveProperty</span>
   <span class='ivar'>@IrreflexiveProperty</span>
@@ -4685,12 +4712,12 @@
       <pre class="lines">
 
 
-211
-212
-213</pre>
+216
+217
+218</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 211</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 216</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_maxCardinality'>maxCardinality</span>
   <span class='ivar'>@maxCardinality</span>
@@ -4741,12 +4768,12 @@
       <pre class="lines">
 
 
-215
-216
-217</pre>
+220
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 215</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 220</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_maxQualifiedCardinality'>maxQualifiedCardinality</span>
   <span class='ivar'>@maxQualifiedCardinality</span>
@@ -4797,12 +4824,12 @@
       <pre class="lines">
 
 
-219
-220
-221</pre>
+224
+225
+226</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 219</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_members'>members</span>
   <span class='ivar'>@members</span>
@@ -4853,12 +4880,12 @@
       <pre class="lines">
 
 
-223
-224
-225</pre>
+228
+229
+230</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 223</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 228</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_minCardinality'>minCardinality</span>
   <span class='ivar'>@minCardinality</span>
@@ -4909,12 +4936,12 @@
       <pre class="lines">
 
 
-227
-228
-229</pre>
+232
+233
+234</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 227</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 232</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_minQualifiedCardinality'>minQualifiedCardinality</span>
   <span class='ivar'>@minQualifiedCardinality</span>
@@ -4965,12 +4992,12 @@
       <pre class="lines">
 
 
-67
-68
-69</pre>
+72
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 67</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='const'>NamedIndividual</span>
   <span class='ivar'>@NamedIndividual</span>
@@ -5021,12 +5048,12 @@
       <pre class="lines">
 
 
-71
-72
-73</pre>
+76
+77
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 71</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 76</span>
 
 <span class='kw'>def</span> <span class='const'>NegativePropertyAssertion</span>
   <span class='ivar'>@NegativePropertyAssertion</span>
@@ -5077,12 +5104,12 @@
       <pre class="lines">
 
 
-75
-76
-77</pre>
+80
+81
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 75</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='const'>Nothing</span>
   <span class='ivar'>@Nothing</span>
@@ -5133,12 +5160,12 @@
       <pre class="lines">
 
 
-79
-80
-81</pre>
+84
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 84</span>
 
 <span class='kw'>def</span> <span class='const'>ObjectProperty</span>
   <span class='ivar'>@ObjectProperty</span>
@@ -5189,12 +5216,12 @@
       <pre class="lines">
 
 
-231
-232
-233</pre>
+236
+237
+238</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 231</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_onClass'>onClass</span>
   <span class='ivar'>@onClass</span>
@@ -5245,12 +5272,12 @@
       <pre class="lines">
 
 
-235
-236
-237</pre>
+240
+241
+242</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 235</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 240</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_onDataRange'>onDataRange</span>
   <span class='ivar'>@onDataRange</span>
@@ -5301,12 +5328,12 @@
       <pre class="lines">
 
 
-239
-240
-241</pre>
+244
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 239</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 244</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_onDatatype'>onDatatype</span>
   <span class='ivar'>@onDatatype</span>
@@ -5357,12 +5384,12 @@
       <pre class="lines">
 
 
-251
-252
-253</pre>
+256
+257
+258</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 251</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 256</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_oneOf'>oneOf</span>
   <span class='ivar'>@oneOf</span>
@@ -5413,12 +5440,12 @@
       <pre class="lines">
 
 
-243
-244
-245</pre>
+248
+249
+250</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 243</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 248</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_onProperties'>onProperties</span>
   <span class='ivar'>@onProperties</span>
@@ -5469,12 +5496,12 @@
       <pre class="lines">
 
 
-247
-248
-249</pre>
+252
+253
+254</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 247</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 252</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_onProperty'>onProperty</span>
   <span class='ivar'>@onProperty</span>
@@ -5525,12 +5552,12 @@
       <pre class="lines">
 
 
-83
-84
-85</pre>
+88
+89
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 83</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='const'>Ontology</span>
   <span class='ivar'>@Ontology</span>
@@ -5581,12 +5608,12 @@
       <pre class="lines">
 
 
-87
-88
-89</pre>
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='const'>OntologyProperty</span>
   <span class='ivar'>@OntologyProperty</span>
@@ -5637,12 +5664,12 @@
       <pre class="lines">
 
 
-255
-256
-257</pre>
+260
+261
+262</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 255</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 260</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_priorVersion'>priorVersion</span>
   <span class='ivar'>@priorVersion</span>
@@ -5693,12 +5720,12 @@
       <pre class="lines">
 
 
-259
-260
-261</pre>
+264
+265
+266</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 259</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 264</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_propertyChainAxiom'>propertyChainAxiom</span>
   <span class='ivar'>@propertyChainAxiom</span>
@@ -5749,12 +5776,12 @@
       <pre class="lines">
 
 
-263
-264
-265</pre>
+268
+269
+270</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 263</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 268</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_propertyDisjointWith'>propertyDisjointWith</span>
   <span class='ivar'>@propertyDisjointWith</span>
@@ -5805,12 +5832,12 @@
       <pre class="lines">
 
 
-267
-268
-269</pre>
+272
+273
+274</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 267</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 272</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_qualifiedCardinality'>qualifiedCardinality</span>
   <span class='ivar'>@qualifiedCardinality</span>
@@ -5861,12 +5888,12 @@
       <pre class="lines">
 
 
-91
-92
-93</pre>
+96
+97
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 91</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='const'>ReflexiveProperty</span>
   <span class='ivar'>@ReflexiveProperty</span>
@@ -5917,12 +5944,12 @@
       <pre class="lines">
 
 
-95
-96
-97</pre>
+100
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 95</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 100</span>
 
 <span class='kw'>def</span> <span class='const'>Restriction</span>
   <span class='ivar'>@Restriction</span>
@@ -5973,12 +6000,12 @@
       <pre class="lines">
 
 
-271
-272
-273</pre>
+276
+277
+278</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 271</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 276</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sameAs'>sameAs</span>
   <span class='ivar'>@sameAs</span>
@@ -6029,12 +6056,12 @@
       <pre class="lines">
 
 
-275
-276
-277</pre>
+280
+281
+282</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 275</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 280</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_someValuesFrom'>someValuesFrom</span>
   <span class='ivar'>@someValuesFrom</span>
@@ -6085,12 +6112,12 @@
       <pre class="lines">
 
 
-279
-280
-281</pre>
+284
+285
+286</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 279</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 284</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sourceIndividual'>sourceIndividual</span>
   <span class='ivar'>@sourceIndividual</span>
@@ -6141,12 +6168,12 @@
       <pre class="lines">
 
 
-99
-100
-101</pre>
+104
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 99</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 104</span>
 
 <span class='kw'>def</span> <span class='const'>SymmetricProperty</span>
   <span class='ivar'>@SymmetricProperty</span>
@@ -6197,12 +6224,12 @@
       <pre class="lines">
 
 
-283
-284
-285</pre>
+288
+289
+290</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 283</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 288</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_targetIndividual'>targetIndividual</span>
   <span class='ivar'>@targetIndividual</span>
@@ -6253,12 +6280,12 @@
       <pre class="lines">
 
 
-287
-288
-289</pre>
+292
+293
+294</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 287</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 292</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_targetValue'>targetValue</span>
   <span class='ivar'>@targetValue</span>
@@ -6309,12 +6336,12 @@
       <pre class="lines">
 
 
-103
-104
-105</pre>
+108
+109
+110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 103</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 108</span>
 
 <span class='kw'>def</span> <span class='const'>Thing</span>
   <span class='ivar'>@Thing</span>
@@ -6365,12 +6392,12 @@
       <pre class="lines">
 
 
-291
-292
-293</pre>
+296
+297
+298</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 291</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 296</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_topDataProperty'>topDataProperty</span>
   <span class='ivar'>@topDataProperty</span>
@@ -6421,12 +6448,12 @@
       <pre class="lines">
 
 
-295
-296
-297</pre>
+300
+301
+302</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 295</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 300</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_topObjectProperty'>topObjectProperty</span>
   <span class='ivar'>@topObjectProperty</span>
@@ -6477,12 +6504,12 @@
       <pre class="lines">
 
 
-107
-108
-109</pre>
+112
+113
+114</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 107</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 112</span>
 
 <span class='kw'>def</span> <span class='const'>TransitiveProperty</span>
   <span class='ivar'>@TransitiveProperty</span>
@@ -6533,12 +6560,12 @@
       <pre class="lines">
 
 
-299
-300
-301</pre>
+304
+305
+306</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 299</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 304</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unionOf'>unionOf</span>
   <span class='ivar'>@unionOf</span>
@@ -6589,12 +6616,12 @@
       <pre class="lines">
 
 
-307
-308
-309</pre>
+312
+313
+314</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 307</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 312</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_versionInfo'>versionInfo</span>
   <span class='ivar'>@versionInfo</span>
@@ -6645,12 +6672,12 @@
       <pre class="lines">
 
 
-303
-304
-305</pre>
+308
+309
+310</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 303</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 308</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_versionIRI'>versionIRI</span>
   <span class='ivar'>@versionIRI</span>
@@ -6701,12 +6728,12 @@
       <pre class="lines">
 
 
-311
-312
-313</pre>
+316
+317
+318</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 311</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocab/owl.rb', line 316</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_withRestrictions'>withRestrictions</span>
   <span class='ivar'>@withRestrictions</span>
@@ -6722,7 +6749,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Jan 27 23:05:03 2022 by
+  Generated on Tue Feb  8 19:17:35 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.1.0).
 </div>

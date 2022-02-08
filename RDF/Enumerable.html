@@ -93,9 +93,7 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/rdf/mixin/enumerable.rb<span class="defines">,<br />
-  lib/rdf/mixin/enumerator.rb</span>
-</dd>
+    <dd>lib/rdf/mixin/enumerable.rb</dd>
   </dl>
   
 </div>
@@ -103,13 +101,118 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>Enumerators for different mixins. These are defined in a separate module, so that they are bound when used, allowing other mixins inheriting behavior to be included.</p>
+<p>An RDF statement enumeration mixin.</p>
+
+<p>Classes that include this module must implement an <code>#each</code> method that yields <span class='object_link'><a href="Statement.html" title="RDF::Statement (class)">RDF statements</a></span>.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Checking whether any statements exist</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Checking how many statements exist</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Checking whether a specific statement exists</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_statement?'>statement?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Statement.html" title="RDF::Statement (class)">Statement</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_triple?'>triple?</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_quad?'>quad?</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbracket'>]</span><span class='rparen'>)</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Checking whether a specific value exists</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_subject?'>subject?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://rubygems.org/gems/rdf</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_predicate?'>predicate?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDFS.html" title="RDF::RDFS (class)">RDFS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_label'><span class='object_link'><a href="RDFS.html#label-instance_method" title="RDF::RDFS#label (method)">label</a></span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_object?'>object?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A Ruby library for working with Resource Description Framework (RDF) data.</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>language:</span> <span class='symbol'>:en</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_graph?'>graph?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://ar.to/#self</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Enumerating all statements</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+<span class='kw'>end</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Enumerating all statements in the form of triples</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_triple'>each_triple</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='op'>|</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+<span class='kw'>end</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Enumerating all statements in the form of quads</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_quad'>each_quad</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='op'>|</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+<span class='kw'>end</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Enumerating all terms</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_subject'>each_subject</span>   <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_predicate'>each_predicate</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_object'>each_object</span>    <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span>
+<span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_term'>each_term</span>      <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Obtaining all statements</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_statements'>statements</span>  <span class='comment'>#=&gt; [RDF::Statement(subject1, predicate1, object1), ...]
+</span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_triples'>triples</span>     <span class='comment'>#=&gt; [[subject1, predicate1, object1], ...]
+</span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_quads'>quads</span>       <span class='comment'>#=&gt; [[subject1, predicate1, object1, graph_name1], ...]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Obtaining all unique values</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_subjects'>subjects</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>    <span class='comment'>#=&gt; [subject1, subject2, subject3, ...]
+</span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_predicates'>predicates</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>  <span class='comment'>#=&gt; [predicate1, predicate2, predicate3, ...]
+</span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_objects'>objects</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>     <span class='comment'>#=&gt; [object1, object2, object3, ...]
+</span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_graph_names'>graph_names</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='comment'>#=&gt; [graph_name1, graph_name2, graph_name3, ...]</span></code></pre>
+    
+  </div>
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="Graph.html" title="RDF::Graph (class)">Graph</a></span></li>
+    
+      <li><span class='object_link'><a href="Repository.html" title="RDF::Repository (class)">Repository</a></span></li>
+    
+  </ul>
 
 </div><h2>Defined Under Namespace</h2>
 <p class="children">
@@ -1286,17 +1389,17 @@
       <pre class="lines">
 
 
-784
-785
-786
-787
-788
-789
-790
-791</pre>
+796
+797
+798
+799
+800
+801
+802
+803</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 784</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 796</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_meth'>meth</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_writer'>writer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Writer.html" title="RDF::Writer (class)">Writer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_meth'>meth</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='int'>3</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_meth'>meth</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>3</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>to_</span><span class='tstring_end'>&quot;</span></span>
@@ -1433,14 +1536,14 @@
       <pre class="lines">
 
 
-769
-770
-771
-772
-773</pre>
+781
+782
+783
+784
+785</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 769</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 781</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_writer'>writer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Writer.html" title="RDF::Writer (class)">Writer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span></span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
@@ -1608,21 +1711,21 @@
       <pre class="lines">
 
 
-687
-688
-689
-690
-691
-692
-693
-694
-695
-696
-697
-698</pre>
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 687</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 699</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_graph'>each_graph</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1781,22 +1884,22 @@
       <pre class="lines">
 
 
-492
-493
-494
-495
-496
-497
-498
-499
-500
-501
-502
-503
-504</pre>
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 492</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 504</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_object'>each_object</span> <span class='comment'># FIXME: deduplication
 </span>  <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1956,22 +2059,22 @@
       <pre class="lines">
 
 
-425
-426
-427
-428
-429
-430
-431
-432
-433
-434
-435
-436
-437</pre>
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 425</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 437</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_predicate'>each_predicate</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2164,17 +2267,17 @@
       <pre class="lines">
 
 
-296
-297
-298
-299
-300
-301
-302
-303</pre>
+308
+309
+310
+311
+312
+313
+314
+315</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 296</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 308</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_quad'>each_quad</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2329,16 +2432,16 @@
       <pre class="lines">
 
 
-168
-169
-170
-171
-172
-173
-174</pre>
+180
+181
+182
+183
+184
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 168</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 180</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_statement'>each_statement</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2492,22 +2595,22 @@
       <pre class="lines">
 
 
-359
-360
-361
-362
-363
-364
-365
-366
-367
-368
-369
-370
-371</pre>
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 359</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 371</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_subject'>each_subject</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2683,23 +2786,23 @@
       <pre class="lines">
 
 
-576
-577
-578
-579
-580
-581
-582
-583
-584
-585
-586
-587
 588
-589</pre>
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 576</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 588</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_term'>each_term</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2882,17 +2985,17 @@
       <pre class="lines">
 
 
-233
-234
-235
-236
-237
-238
-239
-240</pre>
+245
+246
+247
+248
+249
+250
+251
+252</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 233</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 245</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each_triple'>each_triple</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2973,12 +3076,12 @@
       <pre class="lines">
 
 
-706
-707
-708</pre>
+718
+719
+720</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 706</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 718</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_graph'>enum_graph</span>
   <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_graph</span><span class='rparen'>)</span>
@@ -3038,12 +3141,12 @@
       <pre class="lines">
 
 
-511
-512
-513</pre>
+523
+524
+525</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 511</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 523</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_object'>enum_object</span>
   <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_object</span><span class='rparen'>)</span>
@@ -3103,12 +3206,12 @@
       <pre class="lines">
 
 
-444
-445
-446</pre>
+456
+457
+458</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 444</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 456</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_predicate'>enum_predicate</span>
   <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_predicate</span><span class='rparen'>)</span>
@@ -3168,14 +3271,14 @@
       <pre class="lines">
 
 
-310
-311
-312
-313
-314</pre>
+322
+323
+324
+325
+326</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 310</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 322</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_quad'>enum_quad</span>
   <span class='const'><span class='object_link'><a href="Countable.html" title="RDF::Countable (module)">Countable</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Countable/Enumerator.html" title="RDF::Countable::Enumerator (class)">Enumerator</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_yielder'>yielder</span><span class='op'>|</span>
@@ -3237,16 +3340,16 @@
       <pre class="lines">
 
 
-183
-184
-185
-186
-187
-188
-189</pre>
+195
+196
+197
+198
+199
+200
+201</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 195</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_statement'>enum_statement</span>
   <span class='comment'># Ensure that statements are queryable, countable and enumerable
@@ -3310,12 +3413,12 @@
       <pre class="lines">
 
 
-378
-379
-380</pre>
+390
+391
+392</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 378</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 390</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_subject'>enum_subject</span>
   <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_subject</span><span class='rparen'>)</span>
@@ -3391,12 +3494,12 @@
       <pre class="lines">
 
 
-597
-598
-599</pre>
+609
+610
+611</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 597</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 609</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_term'>enum_term</span>
   <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_term</span><span class='rparen'>)</span>
@@ -3456,14 +3559,14 @@
       <pre class="lines">
 
 
-247
-248
-249
-250
-251</pre>
+259
+260
+261
+262
+263</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 247</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 259</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enum_triple'>enum_triple</span>
   <span class='const'><span class='object_link'><a href="Countable.html" title="RDF::Countable (module)">Countable</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Countable/Enumerator.html" title="RDF::Countable::Enumerator (class)">Enumerator</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_yielder'>yielder</span><span class='op'>|</span>
@@ -3538,12 +3641,12 @@
       <pre class="lines">
 
 
-624
-625
-626</pre>
+636
+637
+638</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 624</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 636</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_graph?'>graph?</span><span class='lparen'>(</span><span class='id identifier rubyid_graph_name'>graph_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_statement'>enum_statement</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_graph_name'>graph_name</span> <span class='op'>==</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbrace'>}</span>
@@ -3634,16 +3737,16 @@
       <pre class="lines">
 
 
-610
-611
-612
-613
-614
-615
-616</pre>
+622
+623
+624
+625
+626
+627
+628</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 610</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 622</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_graph_names'>graph_names</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_unique'>unique</span>
@@ -3735,12 +3838,12 @@
       <pre class="lines">
 
 
-103
-104
-105</pre>
+115
+116
+117</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 103</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 115</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_invalid?'>invalid?</span>
   <span class='op'>!</span><span class='id identifier rubyid_valid?'>valid?</span>
@@ -3808,12 +3911,12 @@
       <pre class="lines">
 
 
-469
-470
-471</pre>
+481
+482
+483</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 469</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 481</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_object?'>object?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_object'>enum_object</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -3888,16 +3991,16 @@
       <pre class="lines">
 
 
-456
-457
-458
-459
-460
-461
-462</pre>
+468
+469
+470
+471
+472
+473
+474</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 456</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 468</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_objects'>objects</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_unique'>unique</span>
@@ -3969,12 +4072,12 @@
       <pre class="lines">
 
 
-403
-404
-405</pre>
+415
+416
+417</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 403</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 415</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_predicate?'>predicate?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_predicate'>enum_predicate</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -4049,16 +4152,16 @@
       <pre class="lines">
 
 
-390
-391
-392
-393
-394
-395
-396</pre>
+402
+403
+404
+405
+406
+407
+408</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 390</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 402</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_predicates'>predicates</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_unique'>unique</span>
@@ -4268,22 +4371,22 @@
       <pre class="lines">
 
 
-654
-655
-656
-657
-658
-659
-660
-661
-662
-663
-664
-665
-666</pre>
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 654</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 666</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_project_graph'>project_graph</span><span class='lparen'>(</span><span class='id identifier rubyid_graph_name'>graph_name</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -4361,12 +4464,12 @@
       <pre class="lines">
 
 
-270
-271
-272</pre>
+282
+283
+284</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 270</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 282</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quad?'>quad?</span><span class='lparen'>(</span><span class='id identifier rubyid_quad'>quad</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_quads'>quads</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_quad'>quad</span><span class='rparen'>)</span>
@@ -4439,12 +4542,12 @@
       <pre class="lines">
 
 
-261
-262
-263</pre>
+273
+274
+275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 261</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 273</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quads'>quads</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_statement'>enum_statement</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_quad</span><span class='rparen'>)</span> <span class='comment'># TODO: optimize
@@ -4499,13 +4602,13 @@
       <pre class="lines">
 
 
-797
-798
-799
-800</pre>
+809
+810
+811
+812</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 797</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 809</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_respond_to_missing?'>respond_to_missing?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_include_private'>include_private</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Writer.html" title="RDF::Writer (class)">Writer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='int'>3</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>3</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>to_</span><span class='tstring_end'>&#39;</span></span>
@@ -4635,17 +4738,17 @@
       <pre class="lines">
 
 
-139
-140
-141
-142
-143
-144
-145
-146</pre>
+151
+152
+153
+154
+155
+156
+157
+158</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_statement?'>statement?</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -4723,12 +4826,12 @@
       <pre class="lines">
 
 
-125
-126
-127</pre>
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 125</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 137</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_statements'>statements</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_statement'>enum_statement</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
@@ -4796,12 +4899,12 @@
       <pre class="lines">
 
 
-337
-338
-339</pre>
+349
+350
+351</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 337</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 349</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subject?'>subject?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_subject'>enum_subject</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -4876,16 +4979,16 @@
       <pre class="lines">
 
 
-324
-325
-326
-327
-328
-329
-330</pre>
+336
+337
+338
+339
+340
+341
+342</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 324</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 336</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subjects'>subjects</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_unique'>unique</span>
@@ -4971,12 +5074,12 @@
       <pre class="lines">
 
 
-79
-80
-81</pre>
+91
+92
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 91</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports?'>supports?</span><span class='lparen'>(</span><span class='id identifier rubyid_feature'>feature</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_feature'>feature</span> <span class='op'>==</span> <span class='symbol'>:validity</span> <span class='op'>||</span> <span class='id identifier rubyid_feature'>feature</span> <span class='op'>==</span> <span class='symbol'>:literal_equality</span>
@@ -5121,16 +5224,16 @@
       <pre class="lines">
 
 
-549
-550
-551
-552
-553
-554
-555</pre>
+561
+562
+563
+564
+565
+566
+567</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 549</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 561</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_term?'>term?</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -5237,19 +5340,19 @@
       <pre class="lines">
 
 
-527
-528
-529
-530
-531
-532
-533
-534
-535
-536</pre>
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 527</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 539</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_terms'>terms</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_unique'>unique</span>
@@ -5323,12 +5426,12 @@
       <pre class="lines">
 
 
-718
-719
-720</pre>
+730
+731
+732</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 718</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 730</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
   <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Enumerable (module)">Enumerable</a></span></span><span class='rparen'>)</span>
@@ -5379,18 +5482,18 @@
       <pre class="lines">
 
 
-742
-743
-744
-745
-746
-747
-748
-749
-750</pre>
+754
+755
+756
+757
+758
+759
+760
+761
+762</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 742</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 754</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
   <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -5463,13 +5566,13 @@
       <pre class="lines">
 
 
-729
-730
-731
-732</pre>
+741
+742
+743
+744</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 729</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 741</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_set'>to_set</span>
   <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>set</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>unless</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Set</span><span class='rparen'>)</span>
@@ -5538,12 +5641,12 @@
       <pre class="lines">
 
 
-208
-209
-210</pre>
+220
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 208</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 220</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_triple?'>triple?</span><span class='lparen'>(</span><span class='id identifier rubyid_triple'>triple</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_triples'>triples</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_triple'>triple</span><span class='rparen'>)</span>
@@ -5616,12 +5719,12 @@
       <pre class="lines">
 
 
-199
-200
-201</pre>
+211
+212
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 199</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 211</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_triples'>triples</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_statement'>enum_statement</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_triple</span><span class='rparen'>)</span> <span class='comment'># TODO: optimize
@@ -5709,16 +5812,16 @@
       <pre class="lines">
 
 
-89
-90
-91
-92
-93
-94
-95</pre>
+101
+102
+103
+104
+105
+106
+107</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 101</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_valid?'>valid?</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'> does not support validation</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_supports?'>supports?</span><span class='lparen'>(</span><span class='symbol'>:validity</span><span class='rparen'>)</span>
@@ -5814,13 +5917,13 @@
       <pre class="lines">
 
 
-112
-113
-114
-115</pre>
+124
+125
+126
+127</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 112</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerable.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_validate!'>validate!</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span> <span class='kw'>if</span> <span class='id identifier rubyid_supports?'>supports?</span><span class='lparen'>(</span><span class='symbol'>:validity</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_invalid?'>invalid?</span>
@@ -5836,7 +5939,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Jan 27 23:04:57 2022 by
+  Generated on Tue Feb  8 19:17:29 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.1.0).
 </div>

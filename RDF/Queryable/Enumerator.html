@@ -101,7 +101,7 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/rdf/mixin/enumerator.rb</dd>
+    <dd>lib/rdf/mixin/queryable.rb</dd>
   </dl>
   
 </div>
@@ -265,12 +265,12 @@
       <pre class="lines">
 
 
-35
-36
-37</pre>
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/enumerator.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
   <span class='kw'>return</span> <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queryable.html" title="RDF::Queryable (module)">Queryable</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Enumerable.html" title="RDF::Enumerable (module)">Enumerable</a></span></span><span class='rparen'>)</span>
@@ -285,7 +285,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Jan 27 23:05:12 2022 by
+  Generated on Tue Feb  8 19:17:41 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.1.0).
 </div>

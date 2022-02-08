@@ -1114,15 +1114,15 @@
       <pre class="lines">
 
 
+673
+674
+675
+676
 677
-678
-679
-680
-681
-682</pre>
+678</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 677</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 673</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='rparen'>)</span>
   <span class='ivar'>@uri</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id identifier rubyid_uri'>uri</span>
@@ -1158,19 +1158,19 @@
       <pre class="lines">
 
 
+723
+724
+725
+726
 727
 728
 729
 730
 731
-732
-733
-734
-735
-736</pre>
+732</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 727</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 723</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_property'>property</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_camelize'>camelize</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1326,14 +1326,14 @@
       <pre class="lines">
 
 
-613
-614
-615
-616
-617</pre>
+609
+610
+611
+612
+613</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 613</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 609</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid___prefix__'>__prefix__</span>
   <span class='id identifier rubyid_instance_variable_defined?'>instance_variable_defined?</span><span class='lparen'>(</span><span class='symbol'>:@__prefix__</span><span class='rparen'>)</span> <span class='op'>?</span>
@@ -1428,15 +1428,15 @@
       <pre class="lines">
 
 
+625
+626
+627
+628
 629
-630
-631
-632
-633
-634</pre>
+630</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 629</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 625</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid___prefix__='>__prefix__=</span><span class='lparen'>(</span><span class='id identifier rubyid_prefix'>prefix</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_params'>params</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Vocabulary (class)">Vocabulary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vocab_map'><span class='object_link'><a href="#vocab_map-class_method" title="RDF::Vocabulary.vocab_map (method)">vocab_map</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid___prefix__'>__prefix__</span><span class='rbracket'>]</span>
@@ -1464,14 +1464,14 @@
       <pre class="lines">
 
 
-738
-739
-740
-741
-742</pre>
+734
+735
+736
+737
+738</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 738</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 734</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_camelize'>camelize</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_str'>str</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_inject'>inject</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_buffer'>buffer</span><span class='comma'>,</span> <span class='id identifier rubyid_e'>e</span><span class='op'>|</span> 
@@ -2255,11 +2255,7 @@
 583
 584
 585
-586
-587
-588
-589
-590</pre>
+586</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 495</span>
@@ -2292,10 +2288,6 @@
     <span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">Term</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vocabulary/Term.html#URI_ATTRs-constant" title="RDF::Vocabulary::Term::URI_ATTRs (constant)">URI_ATTRs</a></span></span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_predicate'>predicate</span><span class='rparen'>)</span> <span class='kw'>do</span>
       <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_predicate'>predicate</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
     <span class='kw'>end</span>
-
-    <span class='comment'># Skip literals other than plain or english
-</span>    <span class='comment'># This is because the ruby representation does not preserve language
-</span>    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_literal?'>literal?</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_language'>language</span> <span class='op'>||</span> <span class='symbol'>:en</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>!~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^en-?</span><span class='regexp_end'>/</span></span>
 
     <span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span>
   <span class='kw'>end</span>
@@ -2607,16 +2599,16 @@
       <pre class="lines">
 
 
+592
+593
+594
+595
 596
 597
-598
-599
-600
-601
-602</pre>
+598</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 596</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 592</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='kw'>if</span> <span class='kw'>self</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="" title="RDF::Vocabulary (class)">Vocabulary</a></span></span>
@@ -2804,12 +2796,12 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
       <pre class="lines">
 
 
-660
-661
-662</pre>
+656
+657
+658</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 660</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 656</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_list'>list</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="List.html" title="RDF::List (class)">List</a></span></span><span class='lbracket'>[</span><span class='op'>*</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_expand_pname'>expand_pname</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='rbracket'>]</span>
@@ -2834,17 +2826,17 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
       <pre class="lines">
 
 
+643
+644
+645
+646
 647
 648
 649
-650
-651
-652
-653
-654</pre>
+650</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 647</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 643</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_property'>property</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Vocabulary (class)">Vocabulary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_camelize'><span class='object_link'><a href="#camelize-class_method" title="RDF::Vocabulary.camelize (method)">camelize</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -3969,12 +3961,12 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
       <pre class="lines">
 
 
-689
-690
-691</pre>
+685
+686
+687</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 689</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 685</span>
 
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Vocabulary/Term.html" title="RDF::Vocabulary::Term (module)">Term</a></span></span><span class='period'>.</span><span class='id identifier rubyid_intern'><span class='object_link'><a href="Vocabulary/Term.html#intern-class_method" title="RDF::Vocabulary::Term.intern (method)">intern</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_property'>property</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>vocab:</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='label'>attributes:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
@@ -4023,12 +4015,12 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
       <pre class="lines">
 
 
-716
-717
-718</pre>
+712
+713
+714</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 716</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 712</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#&lt;%s:%#0x(%s)&gt;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid___id__'>__id__</span><span class='comma'>,</span> <span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -4077,12 +4069,12 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
       <pre class="lines">
 
 
-708
-709
-710</pre>
+704
+705
+706</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 708</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 704</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='ivar'>@uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -4135,12 +4127,12 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
       <pre class="lines">
 
 
-697
-698
-699</pre>
+693
+694
+695</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 697</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/vocabulary.rb', line 693</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_uri'>to_uri</span>
   <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_intern'><span class='object_link'><a href="URI.html#intern-class_method" title="RDF::URI.intern (method)">intern</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -4155,7 +4147,7 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
 </div>
 
       <div id="footer">
-  Generated on Thu Jan 27 23:05:07 2022 by
+  Generated on Tue Feb  8 19:17:38 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.1.0).
 </div>
