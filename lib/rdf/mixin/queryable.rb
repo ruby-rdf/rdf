@@ -9,8 +9,20 @@ module RDF
   # @see RDF::Graph
   # @see RDF::Repository
   module Queryable
-    autoload :Enumerator, 'rdf/mixin/enumerator'
     include ::Enumerable
+
+    # Extends Enumerator with {Queryable} and {Enumerable}, which is used by {Enumerable#each_statement} and {Queryable#enum_for}
+    class Enumerator < ::Enumerator
+      include RDF::Queryable
+      include RDF::Enumerable
+
+      ##
+      # @return [Array]
+      # @note Make sure returned arrays are also queryable
+      def to_a
+        return super.to_a.extend(RDF::Queryable, RDF::Enumerable)
+      end
+    end
 
     ##
     # Queries `self` for RDF statements matching the given `pattern`.

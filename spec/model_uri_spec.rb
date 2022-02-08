@@ -61,14 +61,14 @@ describe RDF::URI do
     end
 
     it "with hash arg" do
-      expect(described_class).to receive(:new).with(scheme: "http",
+      expect(described_class).to receive(:new).with({scheme: "http",
         user: "user",
         password: "password",
         host: "example.com",
         port: 8080,
         path: "/path",
         query: "query=value",
-        fragment: "fragment")
+        fragment: "fragment"})
       RDF::URI.new({
         scheme: "http",
         user: "user",
@@ -77,8 +77,7 @@ describe RDF::URI do
         port: 8080,
         path: "/path",
         query: "query=value",
-        fragment: "fragment"
-      })
+        fragment: "fragment"})
     end
   end
 
@@ -890,7 +889,6 @@ describe RDF::URI do
 
     context "escapes" do
       {
-        "http://example.org/c-" => 'ex:c\-',
         "http://example.org/c!" => 'ex:c\!',
         "http://example.org/c$" => 'ex:c\$',
         "http://example.org/c&" => 'ex:c\&',
@@ -899,7 +897,7 @@ describe RDF::URI do
         "http://example.org/c*+" => 'ex:c\*\+',
         "http://example.org/c;=" => 'ex:c\;\=',
         "http://example.org/c/#" => 'ex:c\/\#',
-        "http://example.org/c@_" => 'ex:c\@\_',
+        "http://example.org/c@" => 'ex:c\@',
         "http://example.org/c:d?" => 'ex:c:d\?',
         "http://example.org/c~z." => 'ex:c\~z\.',
       }.each do |orig, result|
@@ -908,6 +906,18 @@ describe RDF::URI do
           pname = uri.pname(prefixes: {ex: "http://example.org/"})
           expect(uri).to be_valid
           expect(pname).to eql result
+        end
+      end
+
+      {
+        "http://example.org/c-" => 'ex:c\-',
+        "http://example.org/c_" => 'ex:c\_',
+      }.each do |orig, result|
+        it "does not #{orig} => #{result}" do
+          uri = RDF::URI(orig)
+          pname = uri.pname(prefixes: {ex: "http://example.org/"})
+          expect(uri).to be_valid
+          expect(pname).not_to eql result
         end
       end
     end

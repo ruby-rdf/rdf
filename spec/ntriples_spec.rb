@@ -428,21 +428,37 @@ describe RDF::NTriples::Reader do
       end
     end
 
-    statements.each do |name, st|
-      context name do
-        let(:graph) {parse(st, rdfstar: true)}
+    context "with rdfstar option" do
+      statements.each do |name, st|
+        context name do
+          let(:graph) {parse(st, rdfstar: true)}
 
-        it "creates two statements" do
-          expect(graph.count).to eql(1)
-        end
+          it "creates two unquoted statements" do
+            expect(graph.count).to eql(1)
+            graph.statements.each do |stmt|
+              expect(stmt).not_to be_quoted
+            end
+          end
 
-        it "has a statement whose subject or object is a statement" do
-          referencing = graph.statements.first
-          expect(referencing).to be_a_statement
-          if referencing.subject.statement?
-            expect(referencing.subject).to be_a_statement
-          else
-            expect(referencing.object).to be_a_statement
+          it "has a statement whose subject or object is a statement" do
+            referencing = graph.statements.first
+            expect(referencing).to be_a_statement
+            if referencing.subject.statement?
+              expect(referencing.subject).to be_a_statement
+            else
+              expect(referencing.object).to be_a_statement
+            end
+          end
+
+          it "statements which are subject or object of another statement are quoted" do
+            referencing = graph.statements.first
+            expect(referencing).to be_a_statement
+            if referencing.subject.statement?
+              expect(referencing.subject).to be_a_statement
+              expect(referencing.subject).to be_quoted
+            else
+              expect(referencing.object).to be_a_statement
+            end
           end
         end
       end

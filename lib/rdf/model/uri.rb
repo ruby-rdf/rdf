@@ -112,8 +112,9 @@ module RDF
     ).freeze
 
     # Characters in a PName which must be escaped
-    PN_ESCAPE_CHARS      = /[~\.\-!\$&'\(\)\*\+,;=\/\?\#@%_]/.freeze
-    PN_ESCAPES           = /\\#{PN_ESCAPE_CHARS}/.freeze
+    # Note: not all reserved characters need to be escaped in SPARQL/Turtle, but they must be unescaped when encountered
+    PN_ESCAPE_CHARS      = /[~\.!\$&'\(\)\*\+,;=\/\?\#@%]/.freeze
+    PN_ESCAPES           = /\\#{Regexp.union(PN_ESCAPE_CHARS, /[\-_]/)}/.freeze
     
     ##
     # Cache size may be set through {RDF.config} using `uri_cache_size`.

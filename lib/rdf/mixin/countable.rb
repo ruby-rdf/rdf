@@ -2,8 +2,12 @@ module RDF
   ##
   # @since 0.2.0
   module Countable
-    autoload :Enumerator, 'rdf/mixin/enumerator'
     extend RDF::Util::Aliasing::LateBound
+
+    # Extends Enumerator with {Countable}, which is used by {Countable#enum_for}
+    class Enumerator < ::Enumerator
+      include RDF::Countable
+    end
 
     ##
     # Returns `true` if `self` contains no RDF statements.

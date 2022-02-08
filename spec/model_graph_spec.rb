@@ -16,13 +16,13 @@ describe RDF::Graph do
 
   context "as method" do
     it "with keyword arg" do
-      expect(described_class).to receive(:new).with(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
-      RDF::Graph(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt")
+      expect(described_class).to receive(:new).with(graph_name: "https://ruby-rdf.github.io/rdf/etc/doap.nt")
+      RDF::Graph(graph_name: "https://ruby-rdf.github.io/rdf/etc/doap.nt")
     end
 
     it "with positional arg (removed)" do
       expect {
-        RDF::Graph("http://ruby-rdf.github.com/rdf/etc/doap.nt")
+        RDF::Graph("https://ruby-rdf.github.io/rdf/etc/doap.nt")
       }.to raise_error(ArgumentError)
     end
   end
@@ -47,7 +47,7 @@ describe RDF::Graph do
 
   context "named graphs" do
     subject {
-      described_class.new(graph_name: "http://ruby-rdf.github.com/rdf/etc/doap.nt", data: RDF::Repository.new)
+      described_class.new(graph_name: "https://ruby-rdf.github.io/rdf/etc/doap.nt", data: RDF::Repository.new)
     }
     it "should be instantiable" do
       expect { subject }.to_not raise_error
@@ -55,7 +55,7 @@ describe RDF::Graph do
 
     it "should not be instantiable with positional arg" do
       expect {
-        described_class.new("http://ruby-rdf.github.com/rdf/etc/doap.nt", data: RDF::Repository.new)
+        described_class.new("https://ruby-rdf.github.io/rdf/etc/doap.nt", data: RDF::Repository.new)
       }.to raise_error(ArgumentError)
     end
 

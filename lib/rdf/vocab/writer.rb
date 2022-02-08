@@ -3,53 +3,65 @@ require 'rdf/vocabulary'
 require 'cgi'
 
 module RDF
-  ##
-  # Vocabulary format specification. This can be used to generate a Ruby class definition from a loaded vocabulary.
-  #
-  # Definitions can include recursive term definitions, when the value of a property is a blank-node term. They can also include list definitions, to provide a reasonable way to represent `owl:unionOf`-type relationships.
-  #
-  # @example a simple term definition
-  #     property :comment,
-  #       comment: %(A description of the subject resource.).freeze,
-  #       domain: "rdfs:Resource".freeze,
-  #       label: "comment".freeze,
-  #       range: "rdfs:Literal".freeze,
-  #       isDefinedBy: %(rdfs:).freeze,
-  #       type: "rdf:Property".freeze
-  #
-  # @example an embedded skos:Concept
-  #     term :ad,
-  #       exactMatch: [term(
-  #           type: "skos:Concept".freeze,
-  #           inScheme: "country:iso3166-1-alpha-2".freeze,
-  #           notation: %(ad).freeze
-  #         ), term(
-  #           type: "skos:Concept".freeze,
-  #           inScheme: "country:iso3166-1-alpha-3".freeze,
-  #           notation: %(and).freeze
-  #         )],
-  #       "foaf:name": "Andorra".freeze,
-  #       isDefinedBy: "country:".freeze,
-  #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country".freeze
-  #
-  # @example owl:unionOf
-  #     property :duration,
-  #       comment: %(The duration of a track or a signal in ms).freeze,
-  #       domain: term(
-  #           "owl:unionOf": list("mo:Track".freeze, "mo:Signal".freeze),
-  #           type: "owl:Class".freeze
-  #         ),
-  #       isDefinedBy: "mo:".freeze,
-  #       "mo:level": "1".freeze,
-  #       range: "xsd:float".freeze,
-  #       type: "owl:DatatypeProperty".freeze,
-  #       "vs:term_status": "testing".freeze
   class Vocabulary
     class Format < RDF::Format
       content_encoding 'utf-8'
       writer { RDF::Vocabulary::Writer }
     end
 
+    ##
+    # Vocabulary format specification. This can be used to generate a Ruby class definition from a loaded vocabulary.
+    #
+    # Definitions can include recursive term definitions, when the value of a property is a blank-node term. They can also include list definitions, to provide a reasonable way to represent `owl:unionOf`-type relationships.
+    #
+    # @example a simple term definition
+    #     property :comment,
+    #       comment: %(A description of the subject resource.),
+    #       domain: "rdfs:Resource",
+    #       label: "comment",
+    #       range: "rdfs:Literal",
+    #       isDefinedBy: %(rdfs:),
+    #       type: "rdf:Property"
+    #
+    # @example an embedded skos:Concept
+    #     term :ad,
+    #       exactMatch: [term(
+    #           type: "skos:Concept",
+    #           inScheme: "country:iso3166-1-alpha-2",
+    #           notation: %(ad)
+    #         ), term(
+    #           type: "skos:Concept",
+    #           inScheme: "country:iso3166-1-alpha-3",
+    #           notation: %(and)
+    #         )],
+    #       "foaf:name": "Andorra",
+    #       isDefinedBy: "country:",
+    #       type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country"
+    #
+    # @example owl:unionOf
+    #     property :duration,
+    #       comment: %(The duration of a track or a signal in ms),
+    #       domain: term(
+    #           "owl:unionOf": list("mo:Track", "mo:Signal"),
+    #           type: "owl:Class"
+    #         ),
+    #       isDefinedBy: "mo:",
+    #       "mo:level": "1",
+    #       range: "xsd:float",
+    #       type: "owl:DatatypeProperty",
+    #       "vs:term_status": "testing"
+    #
+    # @example term definition with language-tagged strings
+    #   property :actor,
+    #     comment: {en: "Subproperty of as:attributedTo that identifies the primary actor"},
+    #     domain: "https://www.w3.org/ns/activitystreams#Activity",
+    #     label: {en: "actor"},
+    #     range: term(
+    #         type: "http://www.w3.org/2002/07/owl#Class",
+    #         unionOf: list("https://www.w3.org/ns/activitystreams#Object", "https://www.w3.org/ns/activitystreams#Link")
+    #       ),
+    #     subPropertyOf: "https://www.w3.org/ns/activitystreams#attributedTo",
+    #     type: "http://www.w3.org/2002/07/owl#ObjectProperty"
     class Writer < RDF::Writer
       include RDF::Util::Logger
       format RDF::Vocabulary::Format
@@ -152,10 +164,16 @@ module RDF
           module #{module_name}
           ).gsub(/^          /, '')
 
+        if @options[:noDoc]
+          @output.print %(  # Vocabulary for <#{base_uri}>
+            # @!visibility private
+          ).gsub(/^          /, '')
+        else
           @output.print %(  # @!parse
             #   # Vocabulary for <#{base_uri}>
             #   #
-          ).gsub(/^          /, '') unless @options[:noDoc]
+          ).gsub(/^          /, '')
+        end
 
         if vocab.ontology && !@options[:noDoc]
           ont_doc = []
@@ -266,9 +284,17 @@ module RDF
         attributes.keys.sort_by(&:to_s).map(&:to_sym).each do |key|
           value = Array(attributes[key])
           component = key.inspect.start_with?(':"') ? "#{key.to_s.inspect}: " : "#{key}: "
-          value = value.first if value.length == 1
+          value = value.first if value.length == 1 && value.none? {|v| v.is_a?(RDF::Literal) && v.language?}
           component << if value.is_a?(Array)
-            '[' + value.map {|v| serialize_value(v, key, indent: "      ")}.sort.join(", ") + "]"
+            # Represent language-tagged literals as a hash
+            lang_vals, vals = value.partition {|v| v.literal? && v.language?}
+            hash_val = lang_vals.inject({}) {|memo, obj| memo.merge(obj.language => obj.to_s)}
+            vals << hash_val unless hash_val.empty?
+            if vals.length > 1
+              '[' + vals.map {|v| serialize_value(v, key, indent: "      ")}.sort.join(", ") + "]"
+            else
+              serialize_value(vals.first, key, indent: "      ")
+            end
           else
             serialize_value(value, key, indent: "      ")
           end
@@ -278,27 +304,34 @@ module RDF
       end
 
       def serialize_value(value, key, indent: "")
-        if value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
-          "#{value.to_s.inspect}.freeze"
+        if value.is_a?(Hash)
+          # Favor English
+          keys = value.keys
+          keys = keys.include?(:en) ? (keys - [:en]).sort.unshift(:en) : keys.sort
+          '{' + keys.map do |k|
+            "#{k.inspect[1..-1]}: #{value[k].inspect}"
+          end.join(', ') + '}'
+        elsif value.is_a?(Literal) && %w(: comment definition notation note editorialNote).include?(key.to_s)
+          "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::URI)
-          "#{value.to_s.inspect}.freeze"
+          "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::Vocabulary::Term)
           value.to_ruby(indent: indent + "  ")
         elsif value.is_a?(RDF::Term)
-          "#{value.to_s.inspect}.freeze"
+          "#{value.to_s.inspect}"
         elsif value.is_a?(RDF::List)
           list_elements = value.map do |u|
             if u.uri?
-              "#{u.to_s.inspect}.freeze"
+              "#{u.to_s.inspect}"
             elsif u.respond_to?(:to_ruby)
               u.to_ruby(indent: indent + "  ")
             else
-              "#{u.to_s.inspect}.freeze"
+              "#{u.to_s.inspect}"
             end
           end
           "list(#{list_elements.join(', ')})"
         else
-          "#{value.inspect}.freeze"
+          "#{value.inspect}"
         end
       end
     end

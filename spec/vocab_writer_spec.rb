@@ -10,6 +10,9 @@ describe RDF::Vocabulary::Writer do
     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     <http://example.org/Class> a rdfs:Class ; rdfs:Datatype "Class" .
     <http://example.org/prop> a rdf:Property ; rdfs:Datatype "prop" .
+    <http://example.org/lang_prop> a rdf:Property ; rdfs:label "prop"@en .
+    <http://example.org/lang_props> a rdf:Property ; rdfs:label "eigen"@de, "prop"@en .
+    <http://example.org/mixed_props> a rdf:Property ; rdfs:label "prop"@en, "eigen"@de, "none" .
   }}
   let!(:graph) {
     RDF::Graph.new << RDF::Turtle::Reader.new(ttl)
@@ -19,8 +22,11 @@ describe RDF::Vocabulary::Writer do
   [
     /module Bar/,
     /class Foo/,
-    %r{term :Class,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "Class".freeze,\s+type: "http://www.w3.org/2000/01/rdf-schema#Class"}m.freeze,
-    %r{property :prop,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "prop".freeze,\s+type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"}m.freeze,
+    %r{term :Class,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "Class",\s+type: "http://www.w3.org/2000/01/rdf-schema#Class"}m.freeze,
+    %r{property :prop,\s+"http://www.w3.org/2000/01/rdf-schema#Datatype": "prop",\s+type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"}m.freeze,
+    %r{property :lang_prop,\s+label: {en: "prop"}}m.freeze,
+    %r{property :lang_props,\s+label: {en: "prop", de: "eigen"}}m.freeze,
+    %r{property :mixed_props,\s+label: \["none", {en: "prop", de: "eigen"}\]}m.freeze,
   ].each do |regexp,|
     it "matches #{regexp}" do
       expect(serialization).to match(regexp)
@@ -57,7 +63,7 @@ describe RDF::Vocabulary::Writer do
       %r{inScheme: "http://eulersharp.sourceforge.net/2003/03swap/countries#iso3166-1-alpha-2"}.freeze,
       /notation: %\(afg\)/.freeze,
       %r{inScheme: "http://eulersharp.sourceforge.net/2003/03swap/countries#iso3166-1-alpha-3"}.freeze,
-      %r{"http://xmlns.com/foaf/0.1/name": "Afghanistan"}.freeze,
+      %r{"http://xmlns.com/foaf/0.1/name": {en: "Afghanistan"}}.freeze,
       %r{isDefinedBy: "http://eulersharp.sourceforge.net/2003/03swap/countries#"}.freeze,
       %r{type: "http://sweet.jpl.nasa.gov/2.3/humanJurisdiction.owl#Country"}.freeze,
     ].each do |regexp,|
@@ -84,7 +90,7 @@ describe RDF::Vocabulary::Writer do
       /term :ClassList/,
       /label: "ClassList"/.freeze,
       /subClassOf: term\(/,
-      %r{unionOf: list\("http://example.org/C1".freeze, "http://example.org/C2".freeze\)},
+      %r{unionOf: list\("http://example.org/C1", "http://example.org/C2"\)},
       %r{type: "http://www.w3.org/2000/01/rdf-schema#Class"}.freeze,
     ].each do |regexp,|
       it "matches #{regexp}" do

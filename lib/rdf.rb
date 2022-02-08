@@ -7,9 +7,6 @@ require "ostruct"
 require 'rdf/version'
 require 'rdf/extensions'
 
-# When loading, issue deprecation warning on forthcoming unsupported versions of Ruby
-warn "[DEPRECATION] Ruby 2.4+ required in next version 3.1 of RDF.rb" if RUBY_VERSION < "2.4"
-
 module RDF
   # RDF mixins
   autoload :Countable,         'rdf/mixin/countable'

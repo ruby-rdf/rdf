@@ -213,6 +213,13 @@ potential to perform intentional actions for which they can be held responsible.
 potential to perform intentional actions for which they can be held responsible.).freeze
     end
 
+    it "defines a property with a language map" do
+      subject.property :lang, definition: {en: "English Definition"}
+      expect(subject.lang.definition).to be_a_literal
+      expect(subject.lang.definition.language).to eq :en
+      expect(subject.lang.definition.value).to eq "English Definition"
+    end
+
     it "defines a property with equivalentClass using anonymous term" do
       subject.property :foo, equivalentClass: subject.term(
         type: "owl:Restriction",
@@ -671,16 +678,16 @@ potential to perform intentional actions for which they can be held responsible.
       its(:vocab) {is_expected.to eql RDF::XSD}
     end
 
-    context ".new" do
+    describe ".new" do
       subject {
         RDF::Vocabulary::Term.new(:foo,
-                                  attributes: {
-                                    label: "foo",
-                                    domain: RDF::RDFS.Resource,
-                                    range: [RDF::RDFS.Resource, RDF::RDFS.Class],
-                                    domainIncludes: RDF::RDFS.Resource,
-                                    rangeIncludes: [RDF::RDFS.Resource, RDF::RDFS.Class],
-                                  })
+          attributes: {
+            label: "foo",
+            domain: RDF::RDFS.Resource,
+            range: [RDF::RDFS.Resource, RDF::RDFS.Class],
+            domainIncludes: RDF::RDFS.Resource,
+            rangeIncludes: [RDF::RDFS.Resource, RDF::RDFS.Class],
+          })
       }
       it {is_expected.to be_a(RDF::URI)}
       it {is_expected.to be_a(RDF::Vocabulary::Term)}
@@ -697,16 +704,56 @@ potential to perform intentional actions for which they can be held responsible.
       end
     end
 
+    context "with attribute value combinations" do
+      subject {
+        RDF::Vocabulary::Term.new(:prop,
+          attributes: {
+            str: "foo",
+            strary: ["foo", "bar"],
+            map: {en: "foo", "xsd:string": "bar"},
+            arystrmap: ["baz", {en: "foo", "xsd:string": "bar"}],
+            date: "2021-01-26",
+            datetime: "2021-01-26T17:21:00Z",
+            integer: "10",
+            decimal: "10.1",
+            double: "10.1e10",
+            boolean: "true"
+          })
+      }
+
+      it(:str) {expect(subject.attribute_value(:str)).to eq "foo"}
+      it(:strary) {expect(subject.attribute_value(:strary)).to eq %w(foo bar)}
+      it(:map) do
+        expect(subject.attribute_value(:map)).to eq [
+          RDF::Literal("foo", language: :en),
+          RDF::Literal("bar", datatype: RDF::XSD.string),
+        ]
+      end
+      it(:arystrmap) do
+        expect(subject.attribute_value(:arystrmap)).to eq [
+          RDF::Literal("baz"),
+          RDF::Literal("foo", language: :en),
+          RDF::Literal("bar", datatype: RDF::XSD.string),
+        ]
+      end
+      it(:date) {expect(subject.attribute_value(:date)).to eq RDF::Literal::Date.new("2021-01-26")}
+      it(:datetime) {expect(subject.attribute_value(:datetime)).to eq RDF::Literal::DateTime.new("2021-01-26T17:21:00Z")}
+      it(:integer) {expect(subject.attribute_value(:integer)).to eq RDF::Literal(10)}
+      it(:decimal) {expect(subject.attribute_value(:decimal)).to eq RDF::Literal::Decimal.new("10.1")}
+      it(:double) {expect(subject.attribute_value(:double)).to eq RDF::Literal(10.1e10)}
+      it(:boolean) {expect(subject.attribute_value(:boolean)).to eq RDF::Literal(true)}
+    end
+
     context "with a BNode Label" do
       subject {
         RDF::Vocabulary::Term.new(:"_:foo",
-                                  attributes: {
-                                    label: "foo",
-                                    domain: RDF::RDFS.Resource,
-                                    range: [RDF::RDFS.Resource, RDF::RDFS.Class],
-                                    domainIncludes: RDF::RDFS.Resource,
-                                    rangeIncludes: [RDF::RDFS.Resource, RDF::RDFS.Class],
-                                  })
+          attributes: {
+            label: "foo",
+            domain: RDF::RDFS.Resource,
+            range: [RDF::RDFS.Resource, RDF::RDFS.Class],
+            domainIncludes: RDF::RDFS.Resource,
+            rangeIncludes: [RDF::RDFS.Resource, RDF::RDFS.Class],
+          })
       }
       it {is_expected.to be_a(RDF::Node)}
       it {is_expected.to be_a(RDF::Vocabulary::Term)}

@@ -71,6 +71,7 @@ module RDF
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
+    #   @option options [Boolean] :quoted used as a marker to record that this statement quoted and appears as the subject or object of another RDF::Statement.
     #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, **options)
@@ -83,6 +84,7 @@ module RDF
     #   @option options [RDF::Term]  :graph_name   (nil)
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
+    #   @option options [Boolean] :quoted used as a marker to record that this statement quoted and appears as the subject or object of another RDF::Statement.
     #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       if subject.is_a?(Hash)
@@ -209,7 +211,7 @@ module RDF
     ##
     # @return [Boolean]
     def quoted?
-      false
+      !!@options[:quoted]
     end
 
     ##
