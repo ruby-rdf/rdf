@@ -7,19 +7,44 @@ module RDF; class Literal
   class Date < Literal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#date")
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2})((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+
+    # Matches either -10:00 or -P1H0M forms
+    ZONE_GRAMMAR  = %r(\A
+       (?:(?<si>[+-])(?<hr>\d{2}):(?:(?<mi>\d{2}))?)
+      |(?:(?<si>-)?PT(?<hr>\d{1,2})H(?:(?<mi>\d{1,2})M)?)
+    \z)x.freeze
     FORMAT   = '%Y-%m-%d'.freeze
 
     ##
-    # @param  [String, Date, #to_date] value
+    # Internally, a `Date` is represented using a native `::DateTime` object at noon. If initialized from a `::Date`, there is no timezone component, If initialized from a `::DateTime`, the timezone is taken from that native object, otherwise, a timezone (or no timezone) is taken from the string representation having a matching `zzzzzz` component.
+    #
+    # @note If initialized using the `#to_datetime` method, time component is unchanged. Otherewise, it is set to 00:00 (midnight).
+    #
+    # @param  [String, Date, #to_datetime] value
     # @param  (see Literal#initialize)
     def initialize(value, datatype: nil, lexical: nil, **options)
       @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
       @string   = lexical || (value if value.is_a?(String))
       @object   = case
-        when value.is_a?(::Date)         then value
-        when value.respond_to?(:to_date) then value.to_date
-        else ::Date.parse(value.to_s)
-      end rescue ::Date.new
+        when value.class == ::Date
+          @zone = nil
+          # Use noon as midpoint of the interval
+          ::DateTime.parse(value.strftime('%FT00:00:00'))
+        when value.respond_to?(:to_datetime)
+          dt = value.to_datetime
+          @zone = dt.zone
+          dt
+        else
+          md = value.to_s.match(GRAMMAR)
+          _, dt, tz = Array(md)
+          if tz
+            @zone = tz == 'Z' ? '+00:00' : tz
+          else
+            @zone = nil # No timezone
+          end
+          # Use noon as midpoint of the interval
+          ::DateTime.parse("#{dt}T00:00:00#{@zone}")
+      end rescue ::DateTime.new
     end
 
     ##
@@ -30,7 +55,11 @@ module RDF; class Literal
     # @return [RDF::Literal] `self`
     # @see    http://www.w3.org/TR/xmlschema11-2/#date
     def canonicalize!
-      @string = @object.strftime(FORMAT) + self.tz.to_s if self.valid?
+       if self.valid? && @zone && @zone != '+00:00'
+         adjust_to_timezone!
+       else
+         @string = nil
+       end
       self
     end
 
@@ -47,24 +76,11 @@ module RDF; class Literal
     end
 
     ##
-    # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
-    #
-    # @return [Boolean]
-    # @since 1.1.6
-    def timezone?
-      md = self.to_s.match(GRAMMAR)
-      md && !!md[2]
-    end
-    alias_method :tz?, :timezone?
-    alias_method :has_tz?, :timezone?
-    alias_method :has_timezone?, :timezone?
-
-    ##
     # Returns the value as a string.
     #
     # @return [String]
     def to_s
-      @string || @object.strftime(FORMAT)
+      @string || (@object.strftime(FORMAT) + self.tz)
     end
 
     ##
@@ -75,13 +91,89 @@ module RDF; class Literal
     def humanize(lang = :en)
       d = object.strftime("%A, %d %B %Y")
       if timezone?
-        d += if self.tz == 'Z'
+        d += if @zone == '+00:00'
           " UTC"
         else
-          " #{self.tz}"
+          " #{@zone}"
         end
       end
       d
+    end
+
+    ##
+    # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
+    #
+    # @return [Boolean]
+    # @since 1.1.6
+    def timezone?
+      !@zone.nil?
+    end
+    alias_method :tz?, :timezone?
+    alias_method :has_tz?, :timezone?
+    alias_method :has_timezone?, :timezone?
+
+    ##
+    # Adjust the timezone.
+    #
+    # From [fn:adjust-date-to-timezone](https://www.w3.org/TR/xpath-functions/#func-adjust-date-to-timezone)
+    #
+    # @overload adjust_to_timezone!
+    #   Adjusts the timezone to UTC.
+    #
+    #   @return [Date] `self`
+    #   @raise [RangeError] if `zone < -14*60` or `zone > 14*60`
+    # @overload adjust_to_timezone!(zone)
+    #   If `zone` is nil, then the timzeone component is removed.
+    #
+    #   Otherwise, the timezone is set based on the difference between the current timezone offset (if any) and `zone`.
+    #
+    #   @param [String] zone (nil) In the form of {ZONE_FORMAT}
+    #   @return [Date] `self`
+    #   @raise [RangeError] if `zone < -14*60` or `zone > 14*60`
+    # @see https://www.w3.org/TR/xpath-functions/#func-adjust-date-to-timezone
+    def adjust_to_timezone!(*args)
+      zone = args.first
+      md = zone.match(ZONE_GRAMMAR) if zone
+      raise ArgumentError,
+            "expected #{zone.inspect} to be a xsd:dayTimeDuration or +/-HH:MM" if
+            zone && !md
+      if args.empty?
+        @object = ::DateTime.parse(@object.strftime('%F'))
+        @zone = '+00:00'
+      elsif zone.nil?
+        # Remove timezone component
+        @object = ::DateTime.parse(@object.strftime('%F'))
+        @zone = nil
+      else
+        # Adjust to
+        si, hr, mi = md[:si], md[:hr], md[:mi]
+        si ||= '+'
+        offset = hr.to_i * 60 + mi.to_i
+        raise ArgumentError,
+              "Zone adjustment of #{zone} out of range" if
+              md.nil? || offset > 14*60
+
+        new_zone = "%s%.2d:%.2d" % [si, hr.to_i, mi.to_i]
+        dt = @zone.nil? ? @object : @object.new_offset(new_zone)
+        @object = ::DateTime.parse(dt.strftime("%FT00:00:00#{new_zone}"))
+        @zone = new_zone
+      end
+      @string = nil
+      self
+    end
+
+    ##
+    # Functional version of `#adjust_to_timezone!`.
+    #
+    # @overload adjust_to_timezone
+    #   @param (see #adjust_to_timezone!)
+    #   @return [Date]
+    #   @raise (see #adjust_to_timezone!)
+    # @overload adjust_to_timezone(zone) (see #adjust_to_timezone!)
+    #   @return [Date]
+    #   @raise (see #adjust_to_timezone!)
+    def adjust_to_timezone(*args)
+      self.dup.adjust_to_timezone!(*args)
     end
 
     ##
@@ -90,17 +182,40 @@ module RDF; class Literal
     # @return [RDF::Literal]
     # @since 1.1.6
     def tz
-      md = self.to_s.match(GRAMMAR)
-      zone =  md[2].to_s
-      zone = "Z" if zone == "+00:00"
-      RDF::Literal(zone)
+      RDF::Literal(@zone == "+00:00" ? 'Z' : @zone)
     end
 
     ##
+    # Returns the timezone part of arg as an xsd:dayTimeDuration, or `nil`
+    # if lexical form of literal does not include a timezone.
+    #
+    # From [fn:timezone-from-dateTime](https://www.w3.org/TR/xpath-functions/#func-timezone-from-dateTime).
+    #
+    # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-timezone-from-dateTime
+    def timezone
+      if @zone
+        md = @zone.match(ZONE_GRAMMAR)
+        si, hr, mi = md[:si], md[:hr].to_i, md[:mi].to_i
+        si = nil unless si == "-"
+        res = "#{si}PT#{hr}H#{"#{mi}M" if mi > 0}"
+        RDF::Literal(res, datatype: RDF::URI("http://www.w3.org/2001/XMLSchema#dayTimeDuration"))
+      end
+    end
+
+    ##
+    # Updates the date to a new timezone, or no timezone.
+    ##
     # Equal compares as Date objects
+    #
+    # From the XQuery function [op:date-equal](https://www.w3.org/TR/xpath-functions/#func-date-equal).
+    #
+    # @param [Date, Literal] other
+    # @return [Boolean]
+    # @see https://www.w3.org/TR/xpath-functions/#func-date-equal
     def ==(other)
       # If lexically invalid, use regular literal testing
-      return super unless self.valid?
+      return super unless self.valid? && (!other.respond_to?(:valid?) || other.valid?)
 
       case other
       when Literal::Date
@@ -112,5 +227,41 @@ module RDF; class Literal
         super
       end
     end
+
+    ##
+    # Compares `self` to `other` for sorting purposes (with type check).
+    #
+    # @param  [Object]  other
+    # @return [Integer] `-1`, `0`, or `1`
+    def <=>(other)
+      # If lexically invalid, use regular literal testing
+      return super unless self.valid? && (!other.respond_to?(:valid?) || other.valid?)
+      return super unless other.is_a?(Date)
+      @object <=> other.object
+    end
+
+    # Years
+    #
+    # From the XQuery function [fn:year-from-date](https://www.w3.org/TR/xpath-functions/#func-year-from-date).
+    #
+    # @return [Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-year-from-date
+    def year; Integer.new(object.year); end
+
+    # Months
+    #
+    # From the XQuery function [fn:month-from-date](https://www.w3.org/TR/xpath-functions/#func-month-from-date).
+    #
+    # @return [Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-month-from-date
+    def month; Integer.new(object.month); end
+
+    # Days
+    #
+    # From the XQuery function [fn:day-from-date](https://www.w3.org/TR/xpath-functions/#func-day-from-date).
+    #
+    # @return [Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-day-from-date
+    def day; Integer.new(object.day); end
   end # Date
 end; end # RDF::Literal

@@ -295,7 +295,7 @@ module RDF
         when self.simple? && other.simple?
           self.value_hash == other.value_hash && self.value == other.value
         when other.comperable_datatype?(self) || self.comperable_datatype?(other)
-          # Comoparing plain with undefined datatypes does not generate an error, but returns false
+          # Comparing plain with undefined datatypes does not generate an error, but returns false
           # From data-r2/expr-equal/eq-2-2.
           false
         else
