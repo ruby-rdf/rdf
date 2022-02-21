@@ -7,16 +7,10 @@ module RDF; class Literal
   class Date < Literal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#date")
     GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2})((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-
-    # Matches either -10:00 or -P1H0M forms
-    ZONE_GRAMMAR  = %r(\A
-       (?:(?<si>[+-])(?<hr>\d{2}):(?:(?<mi>\d{2}))?)
-      |(?:(?<si>-)?PT(?<hr>\d{1,2})H(?:(?<mi>\d{1,2})M)?)
-    \z)x.freeze
     FORMAT   = '%Y-%m-%d'.freeze
 
     ##
-    # Internally, a `Date` is represented using a native `::DateTime` object at noon. If initialized from a `::Date`, there is no timezone component, If initialized from a `::DateTime`, the timezone is taken from that native object, otherwise, a timezone (or no timezone) is taken from the string representation having a matching `zzzzzz` component.
+    # Internally, a `Date` is represented using a native `::DateTime` object at midnight. If initialized from a `::Date`, there is no timezone component, If initialized from a `::DateTime`, the timezone is taken from that native object, otherwise, a timezone (or no timezone) is taken from the string representation having a matching `zzzzzz` component.
     #
     # @note If initialized using the `#to_datetime` method, time component is unchanged. Otherewise, it is set to 00:00 (midnight).
     #
@@ -28,7 +22,7 @@ module RDF; class Literal
       @object   = case
         when value.class == ::Date
           @zone = nil
-          # Use noon as midpoint of the interval
+          # Use midnight as midpoint of the interval
           ::DateTime.parse(value.strftime('%FT00:00:00'))
         when value.respond_to?(:to_datetime)
           dt = value.to_datetime
@@ -42,7 +36,7 @@ module RDF; class Literal
           else
             @zone = nil # No timezone
           end
-          # Use noon as midpoint of the interval
+          # Use midnight as midpoint of the interval
           ::DateTime.parse("#{dt}T00:00:00#{@zone}")
       end rescue ::DateTime.new
     end
@@ -132,20 +126,16 @@ module RDF; class Literal
     #   @raise [RangeError] if `zone < -14*60` or `zone > 14*60`
     # @see https://www.w3.org/TR/xpath-functions/#func-adjust-date-to-timezone
     def adjust_to_timezone!(*args)
-      zone = args.first
-      md = zone.match(ZONE_GRAMMAR) if zone
-      raise ArgumentError,
-            "expected #{zone.inspect} to be a xsd:dayTimeDuration or +/-HH:MM" if
-            zone && !md
-      if args.empty?
-        @object = ::DateTime.parse(@object.strftime('%F'))
-        @zone = '+00:00'
-      elsif zone.nil?
+      zone = args.empty? ? '+00:00' : args.first
+      if zone.nil?
         # Remove timezone component
         @object = ::DateTime.parse(@object.strftime('%F'))
         @zone = nil
       else
-        # Adjust to
+        md = zone.match(Literal::DateTime::ZONE_GRAMMAR) if zone
+        raise ArgumentError,
+              "expected #{zone.inspect} to be a xsd:dayTimeDuration or +/-HH:MM" unless md
+        # Adjust to zone
         si, hr, mi = md[:si], md[:hr], md[:mi]
         si ||= '+'
         offset = hr.to_i * 60 + mi.to_i
@@ -195,7 +185,7 @@ module RDF; class Literal
     # @see https://www.w3.org/TR/xpath-functions/#func-timezone-from-dateTime
     def timezone
       if @zone
-        md = @zone.match(ZONE_GRAMMAR)
+        md = @zone.match(Literal::DateTime::ZONE_GRAMMAR)
         si, hr, mi = md[:si], md[:hr].to_i, md[:mi].to_i
         si = nil unless si == "-"
         res = "#{si}PT#{hr}H#{"#{mi}M" if mi > 0}"
