@@ -473,21 +473,21 @@ describe RDF::Literal do
 
     describe "#**", skip: (RUBY_ENGINE == "jruby") do
       {
-        "2^3": [2, 3, 8],
-        "-2^3": [-2, 3, -8],
-        "2^-3": [2, -3, 0.125e0],
-        "-2^-3": [-2, -3, -0.125e0],
-        "2^0": [2, 0, 1],
-        "0^0": [0, 0, 1],
-        "0^4": [0, 4, 0],
-        "0^-4": [0, -4, RDF::Literal::Double.new('INF')],
-        "16^0.5e0": [16, 0.5e0, 4.0e0],
-        "16^0.25e0": [16, 0.25e0, 2.0e0],
-        "-1^INF": [-1, RDF::Literal::Double.new('INF'), 1.0e0],
-        "-1^-INF": [-1, RDF::Literal::Double.new('-INF'), 1.0e0],
-        "1^INF": [1, RDF::Literal::Double.new('INF'), 1.0e0],
-        "1^-INF": [1, RDF::Literal::Double.new('-INF'), 1.0e0],
-        "1^-NaN": [1, RDF::Literal::Double.new('NaN'), 1.0e0],
+        "2^3":        [2, 3, 8],
+        "-2^3":       [-2, 3, -8],
+        "2^-3":       [2, -3, 0.125e0],
+        "-2^-3":      [-2, -3, -0.125e0],
+        "2^0":        [2, 0, 1],
+        "0^0":        [0, 0, 1],
+        "0^4":        [0, 4, 0],
+        "0^-4":       [0, -4, RDF::Literal::Double.new('INF')],
+        "16^0.5e0":   [16, 0.5e0, 4.0e0],
+        "16^0.25e0":  [16, 0.25e0, 2.0e0],
+        "-1^INF":     [-1, RDF::Literal::Double.new('INF'), 1.0e0],
+        "-1^-INF":    [-1, RDF::Literal::Double.new('-INF'), 1.0e0],
+        "1^INF":      [1, RDF::Literal::Double.new('INF'), 1.0e0],
+        "1^-INF":     [1, RDF::Literal::Double.new('-INF'), 1.0e0],
+        "1^-NaN":     [1, RDF::Literal::Double.new('NaN'), 1.0e0],
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
@@ -754,17 +754,17 @@ describe RDF::Literal do
 
     describe "#**" do
       {
-        "INF^0": [described_class.new('INF'), 0, 1.0e0],
-        "NaN^0": [described_class.new('NaN'), 0, 1.0e0],
-        "0e0^3": [0e0, 3, 0.0e0],
-        "0e0^4": [0e0, 4, 0.0e0],
-        "-0e0^3": [-0e0, 3, -0.0e0],
-        "0e0^-3": [0e0, -3, described_class.new('INF')],
-        "0e0^-4": [0e0, -4, described_class.new('INF')],
-        "-0e0^-3": [-0e0, -3, described_class.new('-INF')],
-        "-0e0^-3.0e0": [-0e0, -3.0e0, described_class.new('-INF')],
-        "0e0^-3.1e0": [0e0, -3.1e0, described_class.new('INF')],
-        "-0e0^-3.1e0": [-0e0, -3.1e0, described_class.new('INF')],
+        "INF^0":        [described_class.new('INF'), 0, 1.0e0],
+        "NaN^0":        [described_class.new('NaN'), 0, 1.0e0],
+        "0e0^3":        [0e0, 3, 0.0e0],
+        "0e0^4":        [0e0, 4, 0.0e0],
+        "-0e0^3":       [-0e0, 3, -0.0e0],
+        "0e0^-3":       [0e0, -3, described_class.new('INF')],
+        "0e0^-4":       [0e0, -4, described_class.new('INF')],
+        "-0e0^-3":      [-0e0, -3, described_class.new('-INF')],
+        "-0e0^-3.0e0":  [-0e0, -3.0e0, described_class.new('-INF')],
+        "0e0^-3.1e0":   [0e0, -3.1e0, described_class.new('INF')],
+        "-0e0^-3.1e0":  [-0e0, -3.1e0, described_class.new('INF')],
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
@@ -832,11 +832,11 @@ describe RDF::Literal do
 
     context "object values" do
       {
-        DateTime.parse("2010-01-01T00:00:00Z")      => ["2010-01-01T00:00:00Z", "2010-01-01T00:00:00Z"],
-        DateTime.parse("2010-02-01T00:00:00")       => ["2010-02-01T00:00:00Z", "2010-02-01T00:00:00Z"],
-        DateTime.parse("2010-03-01T04:00:00+01:00") => ["2010-03-01T04:00:00+01:00", "2010-03-01T03:00:00Z"],
-        DateTime.parse("2009-12-31T04:00:00-01:00") => ["2009-12-31T04:00:00-01:00", "2009-12-31T05:00:00Z"],
-        DateTime.parse("-2010-01-01T00:00:00Z")     => ["-2010-01-01T00:00:00Z","-2010-01-01T00:00:00Z"],
+        DateTime.parse("2010-01-01T00:00:00Z")      => ["2010-01-01T00:00:00Z",       "2010-01-01T00:00:00Z"],
+        DateTime.parse("2010-02-01T00:00:00")       => ["2010-02-01T00:00:00Z",       "2010-02-01T00:00:00Z"],
+        DateTime.parse("2010-03-01T04:00:00+01:00") => ["2010-03-01T04:00:00+01:00",  "2010-03-01T03:00:00Z"],
+        DateTime.parse("2009-12-31T04:00:00-01:00") => ["2009-12-31T04:00:00-01:00",  "2009-12-31T05:00:00Z"],
+        DateTime.parse("-2010-01-01T00:00:00Z")     => ["-2010-01-01T00:00:00Z",      "-2010-01-01T00:00:00Z"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
           expect(described_class.new(obj).to_s).to eql str
@@ -863,10 +863,10 @@ describe RDF::Literal do
 
     describe "#timezone" do
       {
-        "2010-06-21T11:28:01Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
+        "2010-06-21T11:28:01Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
         "2010-12-21T15:38:02-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
         "2010-12-21T15:38:02+08:00" => RDF::Literal("PT8H", datatype: RDF::XSD.dayTimeDuration),
-        "2008-06-20T23:59:00Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
+        "2008-06-20T23:59:00Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
         "2011-02-01T01:02:03"       => nil,
       }.each do |l, r|
         it "#{l} => #{r.inspect}" do
@@ -878,14 +878,14 @@ describe RDF::Literal do
     describe "#adjust_to_timezone" do
       {
         # Spec examples
-        ["2002-03-07T10:00:00"] => "2002-03-07T10:00:00Z",
-        ["2002-03-07T10:00:00-07:00"] => "2002-03-07T17:00:00Z",
-        ["2002-03-07T10:00:00", "-PT10H"] => "2002-03-07T10:00:00-10:00",
-        ["2002-03-07T10:00:00-07:00", "-PT10H"] => "2002-03-07T07:00:00-10:00",
-        ["2002-03-07T10:00:00-07:00", "PT10H"] => "2002-03-08T03:00:00+10:00",
-        ["2002-03-07T00:00:00+01:00", "-PT8H"] => "2002-03-06T15:00:00-08:00",
-        ["2002-03-07T10:00:00", nil] => "2002-03-07T10:00:00",
-        ["2002-03-07T10:00:00-07:00", nil] => "2002-03-07T10:00:00",
+        ["2002-03-07T10:00:00"]                   => "2002-03-07T10:00:00Z",
+        ["2002-03-07T10:00:00-07:00"]             => "2002-03-07T17:00:00Z",
+        ["2002-03-07T10:00:00", "-PT10H"]         => "2002-03-07T10:00:00-10:00",
+        ["2002-03-07T10:00:00-07:00", "-PT10H"]   => "2002-03-07T07:00:00-10:00",
+        ["2002-03-07T10:00:00-07:00", "PT10H"]    => "2002-03-08T03:00:00+10:00",
+        ["2002-03-07T00:00:00+01:00", "-PT8H"]    => "2002-03-06T15:00:00-08:00",
+        ["2002-03-07T10:00:00", nil]              => "2002-03-07T10:00:00",
+        ["2002-03-07T10:00:00-07:00", nil]        => "2002-03-07T10:00:00",
       }.each do |args, r|
         if r == ArgumentError
           it "#{args.inspect} raises ArgumentError" do
@@ -902,22 +902,22 @@ describe RDF::Literal do
       end
 
       {
-        # Test Suite https://github.com/w3c/qt3tests/blob/master/fn/adjust-date-to-timezone.xml
-        "fn-adjust-dateTime-to-timezone1args-1": ["1970-01-01T00:00:00Z", "-PT10H", "1969-12-31T14:00:00-10:00"],
-        "fn-adjust-dateTime-to-timezone1args-2": ["1996-04-07T01:40:52Z", "-PT10H", "1996-04-06T15:40:52-10:00"],
-        "fn-adjust-dateTime-to-timezone1args-3": ["2030-12-31T23:59:59Z", "-PT10H", "2030-12-31T13:59:59-10:00"],
-        "fn-adjust-dateTime-to-timezone-1": ["2002-03-07T10:00:00-05:00", "-PT5H0M", "2002-03-07T10:00:00-05:00"],
-        "fn-adjust-dateTime-to-timezone-2": ["2002-03-07T10:00:00-07:00", "-PT5H0M", "2002-03-07T12:00:00-05:00"],
-        "fn-adjust-dateTime-to-timezone-3": ["2002-03-07T10:00:00", "-PT10H", "2002-03-07T10:00:00-10:00"],
-        "fn-adjust-dateTime-to-timezone-4": ["2002-03-07T10:00:00-07:00", "-PT10H", "2002-03-07T07:00:00-10:00"],
-        "fn-adjust-dateTime-to-timezone-5": ["2002-03-07T10:00:00-07:00", "PT10H", "2002-03-08T03:00:00+10:00"],
-        "fn-adjust-dateTime-to-timezone-6": ["2002-03-07T00:00:00+01:00", "-PT8H", "2002-03-06T15:00:00-08:00"],
-        "fn-adjust-dateTime-to-timezone-7": ["2002-03-07T10:00:00", "2002-03-07T10:00:00"],
-        "fn-adjust-dateTime-to-timezone-8": ["2002-03-07T10:00:00-07:00", nil, "2002-03-07T10:00:00"],
-        "fn-adjust-dateTime-to-timezone-11": ["2002-03-07T10:00:00-04:00", nil, "2002-03-07T10:00:00"],
-        "K-AdjDateTimeToTimezoneFunc-7": ["2001-02-03T08:02:00", "PT14H1M", ArgumentError],
-        "K-AdjDateTimeToTimezoneFunc-7": ["2001-02-03T08:02:00", "-PT14H1M", ArgumentError],
-        "K-AdjDateTimeToTimezoneFunc-8": ["2001-02-03T08:02:00", "PT14H0M0.001S", ArgumentError],
+        # Test Suite https://github.com/w3c/qt3tests/blob/master/fn/adjust-dateTime-to-timezone.xml
+        "fn-adjust-dateTime-to-timezone1args-1": ["1970-01-01T00:00:00Z",       "-PT10H",   "1969-12-31T14:00:00-10:00"],
+        "fn-adjust-dateTime-to-timezone1args-2": ["1996-04-07T01:40:52Z",       "-PT10H",   "1996-04-06T15:40:52-10:00"],
+        "fn-adjust-dateTime-to-timezone1args-3": ["2030-12-31T23:59:59Z",       "-PT10H",   "2030-12-31T13:59:59-10:00"],
+        "fn-adjust-dateTime-to-timezone-1":      ["2002-03-07T10:00:00-05:00",  "-PT5H0M",  "2002-03-07T10:00:00-05:00"],
+        "fn-adjust-dateTime-to-timezone-2":      ["2002-03-07T10:00:00-07:00",  "-PT5H0M",  "2002-03-07T12:00:00-05:00"],
+        "fn-adjust-dateTime-to-timezone-3":      ["2002-03-07T10:00:00",        "-PT10H",   "2002-03-07T10:00:00-10:00"],
+        "fn-adjust-dateTime-to-timezone-4":      ["2002-03-07T10:00:00-07:00",  "-PT10H",   "2002-03-07T07:00:00-10:00"],
+        "fn-adjust-dateTime-to-timezone-5":      ["2002-03-07T10:00:00-07:00",  "PT10H",    "2002-03-08T03:00:00+10:00"],
+        "fn-adjust-dateTime-to-timezone-6":      ["2002-03-07T00:00:00+01:00",  "-PT8H",    "2002-03-06T15:00:00-08:00"],
+        "fn-adjust-dateTime-to-timezone-7":      ["2002-03-07T10:00:00",                    "2002-03-07T10:00:00"],
+        "fn-adjust-dateTime-to-timezone-8":      ["2002-03-07T10:00:00-07:00",  nil,        "2002-03-07T10:00:00"],
+        "fn-adjust-dateTime-to-timezone-11":     ["2002-03-07T10:00:00-04:00",  nil,        "2002-03-07T10:00:00"],
+        "K-AdjDateTimeToTimezoneFunc-7":         ["2001-02-03T08:02:00",        "PT14H1M",  ArgumentError],
+        "K-AdjDateTimeToTimezoneFunc-8":         ["2001-02-03T08:02:00",        "-PT14H1M", ArgumentError],
+        "K-AdjDateTimeToTimezoneFunc-9":         ["2001-02-03T08:02:00",        "PT14H0M0.001S", ArgumentError],
       }.each do |title, (*args, r)|
         it title do
           source = described_class.new(args.shift)
@@ -934,12 +934,12 @@ describe RDF::Literal do
     describe "#==" do
       {
         ["2002-04-02T12:00:00-01:00", "2002-04-02T17:00:00+04:00"] => true,
-        ["2002-04-02T12:00:00", "2002-04-02T23:00:00+06:00"] => false,
-        ["2002-04-02T12:00:00", "2002-04-02T17:00:00"] => false,
-        ["2002-04-02T12:00:00", "2002-04-02T12:00:00"] => true,
+        ["2002-04-02T12:00:00",       "2002-04-02T23:00:00+06:00"] => false,
+        ["2002-04-02T12:00:00",       "2002-04-02T17:00:00"] => false,
+        ["2002-04-02T12:00:00",       "2002-04-02T12:00:00"] => true,
         ["2002-04-02T23:00:00-04:00", "2002-04-03T02:00:00-01:00"] => true,
-        ["1999-12-31T24:00:00", "2000-01-01T00:00:00"] => true,
-        ["2005-04-04T24:00:00", "2005-04-04T00:00:00"] => false,
+        ["1999-12-31T24:00:00",       "2000-01-01T00:00:00"] => true,
+        ["2005-04-04T24:00:00",       "2005-04-04T00:00:00"] => false,
       }.each do |(a, b), res|
         if res
           it "#{a} == #{b}" do
@@ -1032,8 +1032,8 @@ describe RDF::Literal do
 
     context "object values" do
       {
-        ::Date.parse("2010-02-01")      => ["2010-02-01", "2010-02-01"],
-        ::Date.parse("-2010-01-01")     => ["-2010-01-01","-2010-01-01"],
+        ::Date.parse("2010-02-01")  => ["2010-02-01", "2010-02-01"],
+        ::Date.parse("-2010-01-01") => ["-2010-01-01","-2010-01-01"],
         ::DateTime.parse("2014-09-01T00:00:00-08:00") => ["2014-09-01-08:00", "2014-09-01Z"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
@@ -1076,11 +1076,11 @@ describe RDF::Literal do
     describe "#adjust_to_timezone" do
       {
         # Spec examples
-        ["2002-03-07"] => "2002-03-07Z",
-        ["2002-03-07-07:00"] => "2002-03-07Z",
-        ["2002-03-07", "-PT10H"] => "2002-03-07-10:00",
+        ["2002-03-07"]            => "2002-03-07Z",
+        ["2002-03-07-07:00"]      => "2002-03-07Z",
+        ["2002-03-07", "-PT10H"]  => "2002-03-07-10:00",
         ["2002-03-07-07:00", "-PT10H"] => "2002-03-06-10:00",
-        ["2002-03-07", nil] => "2002-03-07",
+        ["2002-03-07", nil]       => "2002-03-07",
         ["2002-03-07-07:00", nil] => "2002-03-07",
       }.each do |args, r|
         if r == ArgumentError
@@ -1102,15 +1102,15 @@ describe RDF::Literal do
         "fn-adjust-date-to-timezone1args-1": ["1970-01-01Z", "-PT10H", "1969-12-31-10:00"],
         "fn-adjust-date-to-timezone1args-2": ["1983-11-17Z", "-PT10H", "1983-11-16-10:00"],
         "fn-adjust-date-to-timezone1args-3": ["2030-12-31Z", "-PT10H", "2030-12-30-10:00"],
-        "fn-adjust-date-to-timezone-1": ["2002-03-07-05:00", "-PT5H0M", "2002-03-07-05:00"],
-        "fn-adjust-date-to-timezone-2": ["2002-03-07-07:00", "-PT5H0M", "2002-03-07-05:00"],
-        "fn-adjust-date-to-timezone-3": ["2002-03-07", "-PT10H", "2002-03-07-10:00"],
-        "fn-adjust-date-to-timezone-4": ["2002-03-07-07:00", "-PT10H", "2002-03-06-10:00"],
-        "fn-adjust-date-to-timezone-5": ["2002-03-07", nil, "2002-03-07"],
-        "fn-adjust-date-to-timezone-6": ["2002-03-07-07:00", nil, "2002-03-07"],
-        "K-AdjDateToTimezoneFunc-6": ["2001-02-03", "PT14H1M", ArgumentError],
-        "K-AdjDateToTimezoneFunc-7": ["2001-02-03", "-PT14H1M", ArgumentError],
-        "K-AdjDateToTimezoneFunc-8": ["2001-02-03", "PT14H0M0.001S", ArgumentError],
+        "fn-adjust-date-to-timezone-1":      ["2002-03-07-05:00", "-PT5H0M", "2002-03-07-05:00"],
+        "fn-adjust-date-to-timezone-2":      ["2002-03-07-07:00", "-PT5H0M", "2002-03-07-05:00"],
+        "fn-adjust-date-to-timezone-3":      ["2002-03-07", "-PT10H", "2002-03-07-10:00"],
+        "fn-adjust-date-to-timezone-4":      ["2002-03-07-07:00", "-PT10H", "2002-03-06-10:00"],
+        "fn-adjust-date-to-timezone-5":      ["2002-03-07", nil, "2002-03-07"],
+        "fn-adjust-date-to-timezone-6":      ["2002-03-07-07:00", nil, "2002-03-07"],
+        "K-AdjDateToTimezoneFunc-6":         ["2001-02-03", "PT14H1M", ArgumentError],
+        "K-AdjDateToTimezoneFunc-7":         ["2001-02-03", "-PT14H1M", ArgumentError],
+        "K-AdjDateToTimezoneFunc-8":         ["2001-02-03", "PT14H0M0.001S", ArgumentError],
       }.each do |title, (*args, r)|
         it title do
           source = described_class.new(args.shift)
@@ -1147,9 +1147,9 @@ describe RDF::Literal do
 
     describe "#<" do
       {
-        ["2010-06-21Z", "2010-06-20Z"] => false,
-        ["2010-06-21Z", "2010-06-21Z"] => false,
-        ["2010-06-21Z", "2010-06-22Z"] => true,
+        ["2010-06-21Z", "2010-06-20Z"]      => false,
+        ["2010-06-21Z", "2010-06-21Z"]      => false,
+        ["2010-06-21Z", "2010-06-22Z"]      => true,
         ["2010-06-21Z", "2010-06-21-08:00"] => true,
         ["2010-06-21Z", "2010-06-21+08:00"] => false,
       }.each do |(a, b), res|
@@ -1169,9 +1169,9 @@ describe RDF::Literal do
 
     describe "#>" do
       {
-        ["2010-06-21Z", "2010-06-20Z"] => true,
-        ["2010-06-21Z", "2010-06-21Z"] => false,
-        ["2010-06-21Z", "2010-06-22Z"] => false,
+        ["2010-06-21Z", "2010-06-20Z"]      => true,
+        ["2010-06-21Z", "2010-06-21Z"]      => false,
+        ["2010-06-21Z", "2010-06-22Z"]      => false,
         ["2010-06-21Z", "2010-06-21-08:00"] => false,
         ["2010-06-21Z", "2010-06-21+08:00"] => true,
       }.each do |(a, b), res|
@@ -1192,7 +1192,7 @@ describe RDF::Literal do
 
   describe RDF::Literal::Time do
     it_behaves_like 'RDF::Literal with datatype and grammar', "00:00:00Z", RDF::XSD.time
-    it_behaves_like 'RDF::Literal equality', "00:00:00Z", DateTime.parse("00:00:00Z")
+    it_behaves_like 'RDF::Literal equality', "00:00:00Z", DateTime.parse("1972-12-31T00:00:00Z")
     it_behaves_like 'RDF::Literal lexical values', "00:00:00Z"
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.time, [
       ["00:00:00Z",      "00:00:00Z", "12:00:00 AM UTC"],
@@ -1226,12 +1226,12 @@ describe RDF::Literal do
 
     context "object values" do
       {
-        DateTime.parse("00:00:00Z")      => ["00:00:00Z", "00:00:00Z"],
-        DateTime.parse("01:00:00.0000Z") => ["01:00:00Z","01:00:00Z"],
-        DateTime.parse("02:00:00")       => ["02:00:00Z", "02:00:00Z"],
-        DateTime.parse("03:00:00+00:00") => ["03:00:00Z", "03:00:00Z"],
-        DateTime.parse("05:00:00+01:00") => ["05:00:00+01:00", "04:00:00Z"],
-        DateTime.parse("07:00:00-01:00") => ["07:00:00-01:00", "08:00:00Z"],
+        DateTime.parse("00:00:00Z")      => ["00:00:00Z",       "00:00:00Z"],
+        DateTime.parse("01:00:00.0000Z") => ["01:00:00Z",       "01:00:00Z"],
+        DateTime.parse("02:00:00")       => ["02:00:00Z",       "02:00:00Z"],
+        DateTime.parse("03:00:00+00:00") => ["03:00:00Z",       "03:00:00Z"],
+        DateTime.parse("05:00:00+01:00") => ["05:00:00+01:00",  "04:00:00Z"],
+        DateTime.parse("07:00:00-01:00") => ["07:00:00-01:00",  "08:00:00Z"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
           expect(described_class.new(obj).to_s).to eql str
@@ -1243,14 +1243,6 @@ describe RDF::Literal do
       end
     end
 
-    subject {double("time", to_s: "05:50:00")}
-
-    it "parses as string if #to_datetime raises an error" do
-      expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)
-      expect {described_class.new(subject)}.not_to raise_error
-      expect(described_class.new(subject).object).to eq ::DateTime.parse(subject.to_s)
-    end
-
     describe "#tz" do
       {
         "11:28:01Z"      => "Z",
@@ -1260,6 +1252,140 @@ describe RDF::Literal do
       }.each do |l, r|
         it "#{l} => #{r}" do
           expect(described_class.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
+    end
+
+    describe "#timezone" do
+      {
+        "11:28:01Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
+        "15:38:02-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
+        "23:59:00Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
+        "01:02:03"       => nil,
+      }.each do |l, r|
+        it "#{l} => #{r.inspect}" do
+          expect(described_class.new(l).timezone).to eq r
+        end
+      end
+    end
+
+    describe "#adjust_to_timezone" do
+      {
+        # Spec examples
+        ["01:02:03"]                  => "01:02:03Z",
+        ["01:02:03-07:00"]            => "08:02:03Z",
+        ["01:02:03", "-PT10H"]        => "01:02:03-10:00",
+        ["01:02:03-07:00", "-PT10H"]  => "22:02:03-10:00",
+        ["01:02:03", nil]             => "01:02:03",
+        ["01:02:03-07:00", nil]       => "01:02:03",
+      }.each do |args, r|
+        if r == ArgumentError
+          it "#{args.inspect} raises ArgumentError" do
+            source = described_class.new(args.shift)
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          end
+        else
+          it "#{args.inspect} => #{r.inspect}" do
+            source = described_class.new(args.shift)
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+
+      {
+        # Test Suite https://github.com/w3c/qt3tests/blob/master/fn/adjust-time-to-timezone.xml
+        "fn-adjust-time-to-timezone1args-1": ["00:00:00Z",      "-PT10H",   "14:00:00-10:00"],
+        "fn-adjust-time-to-timezone1args-2": ["08:03:35Z",      "-PT10H",   "22:03:35-10:00"],
+        "fn-adjust-time-to-timezone1args-3": ["23:59:59Z",      "-PT10H",   "13:59:59-10:00"],
+        "fn-adjust-time-to-timezone-1":      ["10:00:00-05:00", "-PT5H0M",  "10:00:00-05:00"],
+        "fn-adjust-time-to-timezone-2":      ["10:00:00-07:00", "-PT5H0M",  "12:00:00-05:00"],
+        "fn-adjust-time-to-timezone-3":      ["10:00:00",       "-PT10H",   "10:00:00-10:00"],
+        "fn-adjust-time-to-timezone-4":      ["10:00:00-07:00", "-PT10H",   "07:00:00-10:00"],
+        "fn-adjust-time-to-timezone-5":      ["10:00:00-05:00", nil,        "10:00:00"],
+        "fn-adjust-time-to-timezone-6":      ["10:00:00-07:00", nil,        "10:00:00"],
+        "fn-adjust-time-to-timezone-7":      ["10:00:00-07:00", "PT10H",    "03:00:00+10:00"],
+        "K-AdjTimeToTimezoneFunc-6":         ["08:02:00",       "PT14H1M",  ArgumentError],
+        "K-AdjTimeToTimezoneFunc-7":         ["08:02:00",       "-PT14H1M", ArgumentError],
+        "K-AdjTimeToTimezoneFunc-8":         ["08:02:00",       "PT14H0M0.001S", ArgumentError],
+      }.each do |title, (*args, r)|
+        it title do
+          source = described_class.new(args.shift)
+          if r == ArgumentError
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          else
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+    end
+
+    describe "#==" do
+      {
+        ["01:02:03Z", "01:02:03+07:00"] => false,
+        ["01:02:03-12:00", "01:02:03-12:00"] => true,
+        ["01:02:03Z", RDF::Literal::DateTime.new("2004-12-26T01:02:03Z")] => false,
+        ["01:02:03Z", RDF::Literal::Date.new("2004-12-26")] => false,
+        ["08:00:00+09:00", "17:00:00-06:00"] => false,
+        ["21:30:00+10:30", "06:00:00-05:00"] => true,
+        ["24:00:00+01:00", "00:00:00+01:00"] => true,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} == #{b}" do
+            res = b.is_a?(String) ? described_class.new(b) : b
+            expect(described_class.new(a)).to eq res
+          end
+        else
+          it "#{a} != #{b}" do
+            res = b.is_a?(String) ? described_class.new(b) : b
+            expect(described_class.new(a)).not_to eq res
+          end
+        end
+      end
+    end
+
+    describe "#<" do
+      {
+        ["11:28:01Z", "11:28:01Z"] => false,
+        ["11:28:01Z", "11:28:02Z"] => true,
+        ["11:28:01Z", "11:28:00Z"] => false,
+        ["02:28:00Z", "11:28:00-08:00"] => true,
+        ["12:00:00-05:00", "23:00:00+06:00"] => false,
+        ["11:00:00-05:00", "17:00:00Z"] => true,
+        ["23:59:59-05:00", "24:00:00-05:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} < #{b}" do
+            expect(described_class.new(a)).to be < described_class.new(b)
+            expect(described_class.new(a)).not_to be >= described_class.new(b)
+          end
+        else
+          it "#{a} !< #{b}" do
+            expect(described_class.new(a)).not_to be < described_class.new(b)
+            expect(described_class.new(a)).to be >= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#>" do
+      {
+        ["11:28:01Z", "11:28:01Z"]      => false,
+        ["11:28:01Z", "11:28:02Z"]      => false,
+        ["11:28:01Z", "11:28:00Z"]      => true,
+        ["08:00:00+09:00", "17:00:00-06:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} > #{b}" do
+            expect(described_class.new(a)).to be > described_class.new(b)
+            expect(described_class.new(a)).not_to be <= described_class.new(b)
+          end
+        else
+          it "#{a} !> #{b}" do
+            expect(described_class.new(a)).not_to be > described_class.new(b)
+            expect(described_class.new(a)).to be <= described_class.new(b)
+          end
         end
       end
     end

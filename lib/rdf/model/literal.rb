@@ -77,6 +77,7 @@ module RDF
     require 'rdf/model/literal/decimal'
     require 'rdf/model/literal/integer'
     require 'rdf/model/literal/double'
+    require 'rdf/model/literal/temporal'
     require 'rdf/model/literal/date'
     require 'rdf/model/literal/datetime'
     require 'rdf/model/literal/time'

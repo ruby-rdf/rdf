@@ -67,10 +67,9 @@ module RDF; class Literal
     ##
     # Returns the sum of `self` plus `other`.
     #
-    # For xs:float or xs:double values, if one of the operands is a zero or a finite number
-    # and the other is INF or -INF, INF or -INF is returned. If both operands are INF, INF is returned.
-    # If both operands are -INF, -INF is returned. If one of the operands is INF
-    # and the other is -INF, NaN is returned.
+    # From the XQuery function [op:numeric-add](https://www.w3.org/TR/xpath-functions/#func-numeric-add).
+    #
+    # @note For `xs:float` or `xs:double` values, if one of the operands is a zero or a finite number and the other is `INF` or `-INF`, `INF` or `-INF` is returned. If both operands are `INF`, `INF` is returned. If both operands are `-INF`, `-INF` is returned. If one of the operands is `INF` and the other is `-INF`, `NaN` is returned.
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
@@ -90,6 +89,8 @@ module RDF; class Literal
     ##
     # Returns the difference of `self` minus `other`.
     #
+    # From the XQuery function [op:numeric-subtract](https://www.w3.org/TR/xpath-functions/#func-numeric-subtract).
+    #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
@@ -108,6 +109,8 @@ module RDF; class Literal
 
     ##
     # Returns the product of `self` times `other`.
+    #
+    # From the XQuery function [op:numeric-multiply](https://www.w3.org/TR/xpath-functions/#func-numeric-multiply).
     #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
@@ -130,6 +133,8 @@ module RDF; class Literal
     #
     # Promotes values, as necessary, with the result type depending on the input values.
     #
+    # From the XQuery function [math:pow](https://www.w3.org/TR/xpath-functions/#func-numeric-pow).
+    #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
@@ -142,6 +147,8 @@ module RDF; class Literal
 
     ##
     # Exponent − Performs remainder of `self` divided by `other`.
+    #
+    # From the XQuery function [math:mod](https://www.w3.org/TR/xpath-functions/#func-numeric-mod).
     #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal]
@@ -165,6 +172,8 @@ module RDF; class Literal
     # As a special case, if the types of both $arg1 and $arg2 are xsd:integer,
     # then the return type is xsd:decimal.
     #
+    # From the XQuery function [op:numeric-divide](https://www.w3.org/TR/xpath-functions/#func-numeric-divide).
+    #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @raise  [ZeroDivisionError] if divided by zero
@@ -183,8 +192,11 @@ module RDF; class Literal
     ##
     # Returns the absolute value of `self`.
     #
+    # From the XQuery function [fn:abs](https://www.w3.org/TR/xpath-functions/#func-abs).
+    #
     # @return [RDF::Literal]
     # @raise  [NotImplementedError] unless implemented in subclass
+    # @see https://www.w3.org/TR/xpath-functions/#func-abs
     def abs
       raise NotImplementedError
     end
@@ -192,8 +204,11 @@ module RDF; class Literal
     ##
     # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
     #
+    # From the XQuery function [fn:round](https://www.w3.org/TR/xpath-functions/#func-round).
+    #
     # @return [RDF::Literal]
     # @raise  [NotImplementedError] unless implemented in subclass
+    # @see https://www.w3.org/TR/xpath-functions/#func-round
     def round
       raise NotImplementedError
     end
@@ -201,10 +216,13 @@ module RDF; class Literal
     ##
     # Returns the smallest integer greater than or equal to `self`.
     #
+    # From the XQuery function [fn:ceil](https://www.w3.org/TR/xpath-functions/#func-ceil).
+    #
     # @example
     #   RDF::Literal(1).ceil            #=> RDF::Literal(1)
     #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-ceil
     def ceil
       self
     end
@@ -212,10 +230,13 @@ module RDF; class Literal
     ##
     # Returns the largest integer less than or equal to `self`.
     #
+    # From the XQuery function [fn:floor](https://www.w3.org/TR/xpath-functions/#func-floor).
+    #
     # @example
     #   RDF::Literal(1).floor            #=> RDF::Literal(1)
     #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-floor
     def floor
       self
     end
