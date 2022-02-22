@@ -702,6 +702,10 @@ describe RDF::Literal do
       end
     end
 
+    describe RDF::Literal::Double::PI do
+      specify {expect(RDF::Literal::Double::PI.to_f).to eq Math::PI}
+    end
+
     # Multiplication
     {
       -1 => described_class.new("-INF"),
@@ -754,21 +758,59 @@ describe RDF::Literal do
 
     describe "#**" do
       {
-        "INF^0":        [described_class.new('INF'), 0, 1.0e0],
-        "NaN^0":        [described_class.new('NaN'), 0, 1.0e0],
-        "0e0^3":        [0e0, 3, 0.0e0],
-        "0e0^4":        [0e0, 4, 0.0e0],
-        "-0e0^3":       [-0e0, 3, -0.0e0],
-        "0e0^-3":       [0e0, -3, described_class.new('INF')],
-        "0e0^-4":       [0e0, -4, described_class.new('INF')],
         "-0e0^-3":      [-0e0, -3, described_class.new('-INF')],
         "-0e0^-3.0e0":  [-0e0, -3.0e0, described_class.new('-INF')],
-        "0e0^-3.1e0":   [0e0, -3.1e0, described_class.new('INF')],
         "-0e0^-3.1e0":  [-0e0, -3.1e0, described_class.new('INF')],
+        "-0e0^3":       [-0e0, 3, -0.0e0],
+        "-0e0^3.1e0":   [-0e0, 3.1e0, 0.0e0],
+        "-1^-INF":      [-1, described_class.new("-INF"), 1.0e0],
+        "-1^INF":       [-1, described_class.new("INF"), 1.0e0],
+        "-2.5e0^2.0e0": [-2.5e0, 2.0e0, 6.25e0],
+        "-2^3":         [-2, 3, -8],
+        "0e0^-3":       [0e0, -3, described_class.new('INF')],
+        "0e0^-3.1e0":   [0e0, -3.1e0, described_class.new('INF')],
+        "0e0^-4":       [0e0, -4, described_class.new('INF')],
+        "0e0^3":        [0e0, 3, 0.0e0],
+        "0e0^3.1e0":    [0e0, 3.1e0, 0.0e0],
+        "0e0^4":        [0e0, 4, 0.0e0],
+        "0^0":          [0, 0, 1],
+        "0^4":          [0, 4, 0],
+        "16^0.25e0":    [16, 0.25e0, 2.0e0],
+        "16^0.5e0":     [16, 0.5e0, 4.0e0],
+        "1^-INF":       [1, described_class.new('-INF'), 1.0e0],
+        "1^INF":        [1, described_class.new('INF'), 1.0e0],
+        "1^NaN":        [1, described_class.new('NaN'), 1.0e0],
+        "2^-3":         [2, -3, 0.125e0],
+        "2^0":          [2, 0, 1],
+        "2^3":          [2, 3, 8],
+        "INF^0":        [described_class.new('INF'), 0, 1.0e0],
+        "NaN^0":        [described_class.new('NaN'), 0, 1.0e0],
+        "PI^0":         [described_class.const_get('PI'), 0, 1.0e0],
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
           expect((RDF::Literal(n) ** RDF::Literal(e)).datatype).to eq RDF::Literal(result).datatype
+        end
+      end
+
+      context '#infinite?' do
+        {
+          "0e0^-3": [0e0, -3],
+          "0e0^-4": [0e0, -4],
+          "-0e0^-3": [-0e0, -3],
+          "0e0^-3.0e0": [0e0, -3.0e0],
+          "-0e0^-3.0e0": [-0e0, -3.0e0],
+          "0^-4": [0, -4],
+        }.each do |name, (n, e)|
+          specify(name) {expect((RDF::Literal(n) ** RDF::Literal(e)).infinite?).to be_truthy}
+        end
+      end
+
+      context '#nan?' do
+        {
+          #"-2.5e0^2.00000001e0": [-2.5e0, 2.00000001e0]
+        }.each do |name, (n, e)|
+          specify(name) {expect((RDF::Literal(n) ** RDF::Literal(e)).nan?).to be_truthy}
         end
       end
     end
@@ -1808,6 +1850,272 @@ describe RDF::Literal do
           it test do
             expect(l / r).to eql v
           end
+        end
+      end
+    end
+
+    describe "#exp" do
+      {
+        0                => 1.0e0,
+        1                => 2.7182818284590455e0,
+        2                => 7.38905609893065e0,
+        -1               => 0.36787944117144233e0,
+        Math::PI         => 23.140692632779267e0,
+        -Float::INFINITY => 0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).exp).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#exp10" do
+      {
+        0                => 1.0e0,
+        1                => 1.0e1,
+        0.5              => 3.1622776601683795e0,
+        -1               => 1.0e-1,
+        -Float::INFINITY => 0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).exp10).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp10.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp10.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#log" do
+      {
+        Math.exp(1)      => 1.0e0,
+        1.0e-3           => -6.907755278982137e0,
+        2                => 0.6931471805599453e0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).log).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [-1, Float::NAN, -Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [0, Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#log10" do
+      {
+        1.0e3            => 3,
+        1.0e-3           => -3,
+        2                => 0.3010299956639812e0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).log10).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [-1, Float::NAN, -Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log10.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [0, Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log10.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#sqrt" do
+      {
+        0.0e0  => 0.0e0,
+        -0.0e0 => -0.0e0,
+        1.0e6  => 1.0e3,
+        2.0e0  => 1.4142135623730951e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).sqrt).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#infinite?' do
+        [Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).sqrt).infinite?).to be_truthy}
+        end
+      end
+
+      context '#nan?' do
+        [-2.0e0, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).sqrt).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#sin" do
+      {
+        0           => 0.0e0,
+        Math::PI/2  => 1.0e0,
+        -Math::PI/2 => -1.0e0,
+        Math::PI    => 0.0e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).sin).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).sin).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#cos" do
+      {
+        0           => 1.0e0,
+        -0.0e0      => 1.0e0,
+        Math::PI/2  => 0.0e0,
+        -Math::PI/2 => 0.0e0,
+        Math::PI    => -1.0e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).cos).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).cos).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#tan" do
+      {
+        0           => 0.0e0,
+        -0.0e0      => -0.0e0,
+        Math::PI/4  => 1.0e0,
+        -Math::PI/4 => -1.0e0,
+        #Math::PI/2  => 0.0e0,
+        #-Math::PI/2 => -0.0e0,
+        Math::PI    => 0.0e0,
+        -Math::PI   => -0.0e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).tan).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).tan).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#asin" do
+      {
+        0           => 0.0e0,
+        -0.0e0      => -0.0e0,
+        1.0e0       => 1.5707963267948966e0,
+        -1.0e0      => -1.5707963267948966e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).asin).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [2.0e0, Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).asin).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#acos" do
+      {
+        0           => 1.5707963267948966e0,
+        -0.0e0      => 1.5707963267948966e0,
+        1.0e0       => 0.0e0,
+        -1.0e0      => 3.141592653589793e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).acos).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [2.0e0, Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).acos).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#atan" do
+      {
+        0                => 0.0e0,
+        -0.0e0           => -0.0e0,
+        1.0e0            => 0.7853981633974483e0,
+        -1.0e0           => -0.7853981633974483e0,
+        Float::INFINITY  => 1.5707963267948966e0,
+        -Float::INFINITY => -1.5707963267948966e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).atan).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).atan).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#atan2" do
+      {
+        "+0.0e0, 0.0e0":  [+0.0e0, 0.0e0, 0.0e0],
+        "-0.0e0, 0.0e0":  [-0.0e0, 0.0e0, -0.0e0],
+        "+0.0e0, -0.0e0": [+0.0e0, -0.0e0, 3.141592653589793e0],
+        "-0.0e0, -0.0e0": [-0.0e0, -0.0e0, -3.141592653589793e0],
+        "-1, 0.0e0":      [-1, 0.0e0, -1.5707963267948966e0],
+        "+1, 0.0e0":      [+1, 0.0e0, 1.5707963267948966e0],
+        "-0.0e0, -1":     [-0.0e0, -1, -3.141592653589793e0],
+        "+0.0e0, -1":     [+0.0e0, -1, 3.141592653589793e0],
+        "-0.0e0, +1":     [-0.0e0, +1, 0.0e0],
+        "+0.0e0, +1":     [+0.0e0, +1, 0.0e0],
+      }.each do |name, (a, b, result)|
+        it name do
+          expect(RDF::Literal(a).atan2 RDF::Literal(b)).to eq RDF::Literal(result)
         end
       end
     end

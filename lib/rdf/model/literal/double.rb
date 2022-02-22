@@ -34,6 +34,14 @@ module RDF; class Literal
       end
     end
 
+    # Approximation of the mathematical constant π
+    #
+    # From the XQuery function [math:pi](https://www.w3.org/TR/xpath-functions/#func-math-pi).
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-pi
+    PI = Double.new(Math::PI)
+
     ##
     # Converts this literal into its canonical lexical representation.
     #

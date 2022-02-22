@@ -242,6 +242,135 @@ module RDF; class Literal
     end
 
     ##
+    # Returns the value of `e`<sup>`x`</sup>.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-exp
+    def exp
+      Double.new(Math.exp(self.to_f))
+    end
+
+    ##
+    # Returns the value of `10`<sup>`x`</sup>.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-exp10
+    def exp10
+      Double.new(10**self.to_f)
+    end
+
+    ##
+    # Returns the natural logarithm of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-log
+    def log
+      Double.new(Math.log(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the base-ten logarithm of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-log10
+    def log10
+      Double.new(Math.log10(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the non-negative square root of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-sqrt
+    def sqrt
+      Double.new(Math.sqrt(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the sine of the argument. The argument is an angle in radians.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-sin
+    def sin
+      Double.new(Math.sin(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the cosine of the argument. The argument is an angle in radians.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-cos
+    def cos
+      Double.new(Math.cos(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the tangent of the argument. The argument is an angle in radians.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-tan
+    def tan
+      Double.new(Math.tan(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the arc sine of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-asin
+    def asin
+      Double.new(Math.asin(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the arc cosine of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-acos
+    def acos
+      Double.new(Math.acos(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the arc tangent of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-atan
+    def atan
+      Double.new(Math.atan(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the angle in radians subtended at the origin by the point on a plane with coordinates (x, y) and the positive x-axis.
+    #
+    # @param [#to_f] arg
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-atan2
+    def atan2(arg)
+      Double.new(Math.atan2(self.to_f, arg.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
     # Returns the value as an integer.
     #
     # @return [Integer]
