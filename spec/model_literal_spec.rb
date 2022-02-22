@@ -994,8 +994,88 @@ describe RDF::Literal do
         end
       end
     end
-  end
 
+    describe "#+" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["2000-10-30T11:12:00", "P3DT1H15M"] => "2000-11-02T12:27:00",
+          ["2000-10-30T11:12:00Z", "P3DT1H15M"] => "2000-11-02T12:27:00Z",
+          ["2000-10-30T11:12:00-08:00", "P3DT1H15M"] => "2000-11-02T12:27:00-08:00",
+          ["2000-10-30T11:12:00", "-P3D"] => "2000-10-27T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:yearMonthDuration" do
+        {
+          ["2000-10-30T11:12:00", "P1Y2M"] => "2001-12-30T11:12:00",
+          ["2000-10-30T11:12:00Z", "P1Y2M"] => "2001-12-30T11:12:00Z",
+          ["2000-10-30T11:12:00-08:00", "P1Y2M"] => "2001-12-30T11:12:00-08:00",
+          ["2000-10-30T11:12:00", "-P1Y2M"] => "1999-08-30T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+    end
+
+    describe "#-" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["2000-10-30T11:12:00", "P3DT1H15M"] => "2000-10-27T09:57:00",
+          ["2000-10-30T11:12:00Z", "P3DT1H15M"] => "2000-10-27T09:57:00Z",
+          ["2000-10-30T11:12:00-08:00", "P3DT1H15M"] => "2000-10-27T09:57:00-08:00",
+          ["2000-10-30T11:12:00", "-P3D"] => "2000-11-02T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} - #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:yearMonthDuration" do
+        {
+          ["2000-10-30T11:12:00", "P1Y2M"] => "1999-08-30T11:12:00",
+          ["2000-10-30T11:12:00Z", "P1Y2M"] => "1999-08-30T11:12:00Z",
+          ["2000-10-30T11:12:00-08:00", "P1Y2M"] => "1999-08-30T11:12:00-08:00",
+          ["2000-10-30T11:12:00", "-P1Y2M"] => "2001-12-30T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} - #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+            expect(t1 - dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:dateTime" do
+        {
+          ["2000-10-30T11:12:00", "2000-08-30T11:12:00"] => "P61D",
+          ["2000-10-30T11:12:00Z", "2000-08-30T11:12:00Z"] => "P61D",
+          ["2000-10-30T11:12:00-08:00", "2000-08-30T11:12:00-08:00"] => "P61D",
+          ["2000-10-30T11:12:00", "2000-12-30T11:12:00"] => "-P61D",
+          ["2000-10-30T06:12:00-05:00", "1999-11-28T09:00:00Z"] => "P337DT2H12M",
+        }.each do |(t1, t2), res|
+          it "#{t1} - #{t2} == #{res}" do
+            t1 = described_class.new(t1)
+            t2 = described_class.new(t2)
+            res = RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - t2).to eq res
+          end
+        end
+      end
+    end
+  end
 
   describe RDF::Literal::Date do
     it_behaves_like 'RDF::Literal with datatype and grammar', "2010-01-01T00:00:00Z", RDF::XSD.date
@@ -1184,6 +1264,87 @@ describe RDF::Literal do
           it "#{a} !> #{b}" do
             expect(described_class.new(a)).not_to be > described_class.new(b)
             expect(described_class.new(a)).to be <= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#+" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["2000-10-30", "P3DT1H15M"] => "2000-11-02",
+          ["2000-10-30Z", "P3DT1H15M"] => "2000-11-02Z",
+          ["2000-10-30-08:00", "P3DT1H15M"] => "2000-11-02-08:00",
+          ["2000-10-30", "-P3D"] => "2000-10-27",
+          ["2004-10-30Z", "P2DT2H30M0S"] => "2004-11-01Z",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:yearMonthDuration" do
+        {
+          ["2000-10-30", "P1Y2M"] => "2001-12-30",
+          ["2000-10-30Z", "P1Y2M"] => "2001-12-30Z",
+          ["2000-10-30-08:00", "P1Y2M"] => "2001-12-30-08:00",
+          ["2000-10-30", "-P1Y2M"] => "1999-08-30",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      describe "#-" do
+        context "xsd:dayTimeDuration" do
+          {
+            ["2000-10-30", "P3DT1H15M"] => "2000-10-26",
+            ["2000-10-30Z", "P3DT1H15M"] => "2000-10-26Z",
+            ["2000-10-30-08:00", "P3DT1H15M"] => "2000-10-26-08:00",
+          }.each do |(t, d), res|
+            it "#{t} - #{d} == #{res}" do
+              t1 = described_class.new(t)
+              dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+              expect(t1 - dur).to eq described_class.new(res)
+            end
+          end
+        end
+
+        context "xsd:yearMonthDuration" do
+          {
+            ["2000-10-30", "P1Y2M"] => "1999-08-30",
+            ["2000-02-29Z", "P1Y"] => "1999-02-28Z",
+            ["2000-10-31-05:00", "P1Y1M"] => "1999-09-30-05:00",
+            ["2000-10-30", "-P1Y2M"] => "2001-12-30",
+          }.each do |(t, d), res|
+            it "#{t} - #{d} == #{res}" do
+              t1 = described_class.new(t)
+              dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+              expect(t1 - dur).to eq described_class.new(res)
+            end
+          end
+        end
+
+        context "xsd:date" do
+          {
+            ["2000-10-30", "2000-08-30"] => "P61D",
+            ["2000-10-30Z", "2000-08-30Z"] => "P61D",
+            ["2000-10-30-08:00", "2000-08-30-08:00"] => "P61D",
+            ["2000-10-30", "2000-12-30"] => "-P61D",
+            ["2000-10-30-05:00", "1999-11-28Z"] => "P337DT5H",
+          }.each do |(t1, t2), res|
+            it "#{t1} - #{t2} == #{res}" do
+              t1 = described_class.new(t1)
+              t2 = described_class.new(t2)
+              res = RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+              expect(t1 - t2).to eq res
+            end
           end
         end
       end
@@ -1385,6 +1546,59 @@ describe RDF::Literal do
           it "#{a} !> #{b}" do
             expect(described_class.new(a)).not_to be > described_class.new(b)
             expect(described_class.new(a)).to be <= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#+" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["11:12:00", "P3DT1H15M"] => "12:27:00",
+          ["11:12:00Z", "P3DT1H15M"] => "12:27:00Z",
+          ["11:12:00-08:00", "P3DT1H15M"] => "12:27:00-08:00",
+          ["11:12:00", "-P3D"] => "11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+    end
+
+    describe "#-" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["11:12:00", "P3DT1H15M"] => "09:57:00",
+          ["11:12:00Z", "P3DT1H15M"] => "09:57:00Z",
+          ["11:12:00-08:00", "P3DT1H15M"] => "09:57:00-08:00",
+          ["11:12:00", "-PT3H"] => "14:12:00",
+          ["08:20:00-05:00", "P23DT10H10M"] => "22:10:00-05:00",
+        }.each do |(t, d), res|
+          it "#{t} - #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:time" do
+        {
+          ["11:12:00", "09:57:00"] => "PT1H15M",
+          ["11:12:00Z", "04:00:00-05:00"] => "PT2H12M",
+          ["11:00:00-05:00", "21:30:00+05:30"] => "PT0S",
+          ["17:00:00-06:00", "08:00:00+09:00"] => "P1D",
+          ["24:00:00", "23:59:59"] => "-PT23H59M59S",
+          ["11:12:00", "14:12:00"] => "-PT3H",
+        }.each do |(t1, t2), res|
+          it "#{t1} - #{t2} == #{res}" do
+            t1 = described_class.new(t1)
+            t2 = described_class.new(t2)
+            res = RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - t2).to eq res
           end
         end
       end

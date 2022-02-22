@@ -146,7 +146,7 @@ module RDF; class Literal
     #
     #   Otherwise, the timezone is set based on the difference between the current timezone offset (if any) and `zone`.
     #
-    #   @param [String] zone (nil) In the form of {ZONE_FORMAT}
+    #   @param [String] zone (nil) In the form of {ZONE_GRAMMAR}.
     #   @return [Temporal] `self`
     #   @raise [RangeError] if `zone < -14*60` or `zone > 14*60`
     # @see https://www.w3.org/TR/xpath-functions/#func-adjust-dateTime-to-timezone
@@ -190,6 +190,73 @@ module RDF; class Literal
     #   @raise (see #adjust_to_timezone!)
     def adjust_to_timezone(*args)
       self.dup.adjust_to_timezone!(*args)
+    end
+
+    ##
+    # Add a Duration to a Temporal.
+    #
+    # For YearMonthDuration, turns duration into months and adds to internal DateTime object.
+    #
+    # For DayTimeDuration, turns duration into rational days, and adds to internal DateTime object.
+    #
+    # @note This depends on the parameter responding to `#to_i` or `#to_r`, which for Duration types, is implemented in the rdf-xsd gem.
+    #
+    # @param [YearMonthDuration, DayTimeDuration] other
+    # @return [Temporal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-add-yearMonthDuration-to-dateTime
+    # @see https://www.w3.org/TR/xpath-functions/#func-add-dayTimeDuration-to-dateTime
+    def +(other)
+      new_dt = case other
+      when YearMonthDuration
+        @object >> other.to_i
+      when DayTimeDuration
+        @object + other.to_r
+      else
+        return super
+      end
+
+      dt = new_dt.strftime(self.class.const_get(:FORMAT)) + tz
+      self.class.new(dt)
+    rescue NoMethodError => e
+      raise "Consider including the rdf-xsd class for method implementaions: #{e.message}"
+    end
+
+    ##
+    # Subtract times or durations from a temporal.
+    #
+    # @overload +(other)
+    #   For YearMonthDuration, turns duration into months and subtracts from internal DateTime object resulting in a new {Temporal} object.
+    #
+    #   For DayTimeDuration, turns duration into rational days, and subtracts from internal DateTime object resulting in a new {Temporal} object.
+    #
+    #   For Temporal, subtracts the two moments resulting in a `xsd:dayTimeDuration`.
+    #
+    #   @param [YearMonthDuration, DayTimeDurationm, Temporal] other
+    #   @return [Temporal, DayTimeDuration]
+    #   @note This depends on the parameter responding to `#to_i` or `#to_r`, which for Duration types, is implemented in the rdf-xsd gem.
+    #   @see https://www.w3.org/TR/xpath-functions/#func-subtract-yearMonthDuration-from-dateTime
+    #   @see https://www.w3.org/TR/xpath-functions/#func-subtract-dayTimeDuration-from-dateTime
+    #   @see https://www.w3.org/TR/xpath-functions/#func-subtract-dateTimes
+    def -(other)
+      new_dt = case other
+      when YearMonthDuration
+        @object << other.to_i
+      when DayTimeDuration
+        @object - other.to_r
+      when Temporal
+        @object - other.object
+      else
+        return super
+      end
+
+      if new_dt.is_a?(Rational)
+        RDF::Literal(new_dt, datatype: RDF::XSD.dayTimeDuration)
+      else
+        dt = new_dt.strftime(self.class.const_get(:FORMAT)) + tz
+        self.class.new(dt)
+      end
+    rescue NoMethodError => e
+      raise "Consider including the rdf-xsd class for method implementaions: #{e.message}"
     end
 
     # Years
