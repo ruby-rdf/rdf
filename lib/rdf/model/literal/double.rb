@@ -34,6 +34,14 @@ module RDF; class Literal
       end
     end
 
+    # Approximation of the mathematical constant π
+    #
+    # From the XQuery function [math:pi](https://www.w3.org/TR/xpath-functions/#func-math-pi).
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-pi
+    PI = Double.new(Math::PI)
+
     ##
     # Converts this literal into its canonical lexical representation.
     #
@@ -145,6 +153,8 @@ module RDF; class Literal
     ##
     # Returns the smallest integer greater than or equal to `self`.
     #
+    # From the XQuery function [fn:ceil](https://www.w3.org/TR/xpath-functions/#func-ceil).
+    #
     # @example
     #   RDF::Literal(1.2).ceil            #=> RDF::Literal(2)
     #   RDF::Literal(-1.2).ceil           #=> RDF::Literal(-1)
@@ -152,6 +162,7 @@ module RDF; class Literal
     #   RDF::Literal(-2.0).ceil           #=> RDF::Literal(-2)
     #
     # @return [RDF::Literal::Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-ceil
     # @since  0.2.3
     def ceil
       RDF::Literal::Integer.new(to_f.ceil)
@@ -160,6 +171,8 @@ module RDF; class Literal
     ##
     # Returns the largest integer less than or equal to `self`.
     #
+    # From the XQuery function [fn:floor](https://www.w3.org/TR/xpath-functions/#func-floor).
+    #
     # @example
     #   RDF::Literal(1.2).floor           #=> RDF::Literal(1)
     #   RDF::Literal(-1.2).floor          #=> RDF::Literal(-2)
@@ -167,6 +180,7 @@ module RDF; class Literal
     #   RDF::Literal(-2.0).floor          #=> RDF::Literal(-2)
     #
     # @return [RDF::Literal::Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-floor
     # @since  0.2.3
     def floor
       RDF::Literal::Integer.new(to_f.floor)
@@ -175,7 +189,10 @@ module RDF; class Literal
     ##
     # Returns the absolute value of `self`.
     #
+    # From the XQuery function [fn:abs](https://www.w3.org/TR/xpath-functions/#func-abs).
+    #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-abs
     # @since  0.2.3
     def abs
       (f = to_f) && f > 0 ? self : self.class.new(f.abs)
@@ -184,7 +201,10 @@ module RDF; class Literal
     ##
     # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
     #
+    # From the XQuery function [fn:round](https://www.w3.org/TR/xpath-functions/#func-round).
+    #
     # @return [RDF::Literal::Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-round
     def round
       self.class.new(to_d.round(half: (to_d < 0 ? :down : :up)))
     end

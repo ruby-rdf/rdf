@@ -9,91 +9,41 @@ module RDF; class Literal
   #
   # @see   http://www.w3.org/TR/xmlschema11-2/#time
   # @since 0.2.1
-  class Time < Literal
+  class Time < Temporal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#time")
     GRAMMAR  = %r(\A(\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
-    FORMAT   = '%H:%M:%S.%L%:z'.freeze
+    FORMAT   = '%H:%M:%S.%L'.freeze
 
     ##
+    # Internally, a `DateTime` is represented using a native `::DateTime`. If initialized from a `::DateTime`, the timezone is taken from that native object, otherwise, a timezone (or no timezone) is taken from the string representation having a matching `zzzzzz` component.
+    #
     # @param  [String, DateTime, #to_datetime] value
     # @param  (see Literal#initialize)
     def initialize(value, datatype: nil, lexical: nil, **options)
       @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
       @string   = lexical || (value if value.is_a?(String))
       @object   = case
-        when value.is_a?(::DateTime)         then value
-        when value.respond_to?(:to_datetime) then value.to_datetime rescue ::DateTime.parse(value.to_s)
-        else ::DateTime.parse(value.to_s)
-      end rescue ::DateTime.new
-    end
-
-    ##
-    # Converts this literal into its canonical lexical representation.
-    #
-    # §3.2.8.2 Canonical representation
-    #
-    # The canonical representation for time is defined by prohibiting
-    # certain options from the Lexical representation (§3.2.8.1).
-    # Specifically, either the time zone must be omitted or, if present, the
-    # time zone must be Coordinated Universal Time (UTC) indicated by a "Z".
-    # Additionally, the canonical representation for midnight is 00:00:00.
-    #
-    # @return [RDF::Literal] `self`
-    # @see    http://www.w3.org/TR/xmlschema11-2/#time
-    def canonicalize!
-      if self.valid?
-        @string = if timezone?
-          @object.new_offset.new_offset.strftime(FORMAT[0..-4] + 'Z').sub('.000', '')
+        when value.respond_to?(:to_datetime)
+          dt = value.to_datetime
+          @zone = dt.zone
+          # Normalize to 1972-12-31 dateTime base
+          hms = dt.strftime(FORMAT)
+          ::DateTime.parse("1972-12-31T#{hms}#{@zone}")
         else
-          @object.strftime(FORMAT[0..-4]).sub('.000', '')
-        end
-      end
-      self
-    end
-
-    ##
-    # Returns the timezone part of arg as a simple literal. Returns the empty string if there is no timezone.
-    #
-    # @return [RDF::Literal]
-    # @see http://www.w3.org/TR/sparql11-query/#func-tz
-    def tz
-      zone =  timezone? ? object.zone : ""
-      zone = "Z" if zone == "+00:00"
-      RDF::Literal(zone)
-    end
-
-    ##
-    # Returns `true` if the value adheres to the defined grammar of the
-    # datatype.
-    #
-    # Special case for date and dateTime, for which '0000' is not a valid year
-    #
-    # @return [Boolean]
-    # @since  0.2.1
-    def valid?
-      super && !object.nil?
-    end
-
-    ##
-    # Does the literal representation include a timezone? Note that this is only possible if initialized using a string, or `:lexical` option.
-    #
-    # @return [Boolean]
-    # @since 1.1.6
-    def timezone?
-      md = self.to_s.match(GRAMMAR)
-      md && !!md[2]
-    end
-    alias_method :tz?, :timezone?
-    alias_method :has_tz?, :timezone?
-    alias_method :has_timezone?, :timezone?
-
-    ##
-    # Returns the value as a string.
-    # Does not normalize timezone
-    #
-    # @return [String]
-    def to_s
-      @string || @object.strftime(FORMAT).sub("+00:00", 'Z').sub('.000', '')
+          md = value.to_s.match(GRAMMAR)
+          _, tm, tz = Array(md)
+          if tz
+            @zone = tz == 'Z' ? '+00:00' : tz
+          else
+            @zone = nil # No timezone
+          end
+          # Normalize 24:00:00 to 00:00:00
+          hr, mi, se = tm.split(':')
+          hr = "%.2i" % (hr.to_i % 24) if hr.to_i > 23
+          value = "#{hr}:#{mi}:#{se}"
+          # Normalize to 1972-12-31 dateTime base
+          ::DateTime.parse("1972-12-31T#{hr}:#{mi}:#{se}#{@zone}")
+      end rescue ::DateTime.new
     end
 
     ##
@@ -104,32 +54,10 @@ module RDF; class Literal
     def humanize(lang = :en)
       t = object.strftime("%r")
       if timezone?
-        t += if self.tz == 'Z'
-          " UTC"
-        else
-          " #{self.tz}"
-        end
+        z = @zone == '+00:00' ? "UTC" : @zone
+        t += " #{z}"
       end
       t
-    end
-
-    ##
-    # Equal compares as Time objects
-    def ==(other)
-      # If lexically invalid, use regular literal testing
-      return super unless self.valid?
-
-      case other
-      when Literal::Time
-        return super unless other.valid?
-        # Compare as strings, as time includes a date portion, and adjusting for UTC
-        # can create a mismatch in the date portion.
-        self.object.new_offset.strftime('%H%M%S.%L') == other.object.new_offset.strftime('%H%M%S.%L')
-      when Literal::DateTime, Literal::Date
-        false
-      else
-        super
-      end
     end
   end # Time
 end; end # RDF::Literal

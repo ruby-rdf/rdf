@@ -78,7 +78,10 @@ module RDF; class Literal
     ##
     # Returns the absolute value of `self`.
     #
+    # From the XQuery function [fn:abs](https://www.w3.org/TR/xpath-functions/#func-abs).
+    #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-abs
     # @since  0.2.3
     def abs
       (n = to_i) && n > 0 ? self : self.class.new(n.abs)
@@ -87,7 +90,10 @@ module RDF; class Literal
     ##
     # Returns `self`.
     #
+    # From the XQuery function [fn:round](https://www.w3.org/TR/xpath-functions/#func-round).
+    #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-round
     def round
       self
     end

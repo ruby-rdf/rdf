@@ -54,7 +54,10 @@ module RDF; class Literal
     ##
     # Returns the absolute value of `self`.
     #
+    # From the XQuery function [fn:abs](https://www.w3.org/TR/xpath-functions/#func-abs).
+    #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-abs
     # @since  0.2.3
     def abs
       (d = to_d) && d > 0 ? self : RDF::Literal(d.abs)
@@ -63,7 +66,10 @@ module RDF; class Literal
     ##
     # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
     #
+    # From the XQuery function [fn:round](https://www.w3.org/TR/xpath-functions/#func-round).
+    #
     # @return [RDF::Literal::Decimal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-round
     def round
       rounded = to_d.round(half: (to_d < 0 ? :down : :up))
       if rounded == -0.0
@@ -77,10 +83,13 @@ module RDF; class Literal
     ##
     # Returns the smallest integer greater than or equal to `self`.
     #
+    # From the XQuery function [fn:ceil](https://www.w3.org/TR/xpath-functions/#func-ceil).
+    #
     # @example
     #   RDF::Literal(1).ceil            #=> RDF::Literal(1)
     #
     # @return [RDF::Literal::Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-ceil
     def ceil
       RDF::Literal::Integer.new(to_d.ceil)
     end
@@ -88,10 +97,13 @@ module RDF; class Literal
     ##
     # Returns the largest integer less than or equal to `self`.
     #
+    # From the XQuery function [fn:floor](https://www.w3.org/TR/xpath-functions/#func-floor).
+    #
     # @example
     #   RDF::Literal(1).floor            #=> RDF::Literal(1)
     #
     # @return [RDF::Literal::Integer]
+    # @see https://www.w3.org/TR/xpath-functions/#func-floor
     def floor
       RDF::Literal::Integer.new(to_d.floor)
     end

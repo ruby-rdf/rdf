@@ -67,10 +67,9 @@ module RDF; class Literal
     ##
     # Returns the sum of `self` plus `other`.
     #
-    # For xs:float or xs:double values, if one of the operands is a zero or a finite number
-    # and the other is INF or -INF, INF or -INF is returned. If both operands are INF, INF is returned.
-    # If both operands are -INF, -INF is returned. If one of the operands is INF
-    # and the other is -INF, NaN is returned.
+    # From the XQuery function [op:numeric-add](https://www.w3.org/TR/xpath-functions/#func-numeric-add).
+    #
+    # @note For `xs:float` or `xs:double` values, if one of the operands is a zero or a finite number and the other is `INF` or `-INF`, `INF` or `-INF` is returned. If both operands are `INF`, `INF` is returned. If both operands are `-INF`, `-INF` is returned. If one of the operands is `INF` and the other is `-INF`, `NaN` is returned.
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
@@ -90,6 +89,8 @@ module RDF; class Literal
     ##
     # Returns the difference of `self` minus `other`.
     #
+    # From the XQuery function [op:numeric-subtract](https://www.w3.org/TR/xpath-functions/#func-numeric-subtract).
+    #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
@@ -108,6 +109,8 @@ module RDF; class Literal
 
     ##
     # Returns the product of `self` times `other`.
+    #
+    # From the XQuery function [op:numeric-multiply](https://www.w3.org/TR/xpath-functions/#func-numeric-multiply).
     #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
@@ -130,6 +133,8 @@ module RDF; class Literal
     #
     # Promotes values, as necessary, with the result type depending on the input values.
     #
+    # From the XQuery function [math:pow](https://www.w3.org/TR/xpath-functions/#func-numeric-pow).
+    #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @since  0.2.3
@@ -142,6 +147,8 @@ module RDF; class Literal
 
     ##
     # Exponent − Performs remainder of `self` divided by `other`.
+    #
+    # From the XQuery function [math:mod](https://www.w3.org/TR/xpath-functions/#func-numeric-mod).
     #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal]
@@ -165,6 +172,8 @@ module RDF; class Literal
     # As a special case, if the types of both $arg1 and $arg2 are xsd:integer,
     # then the return type is xsd:decimal.
     #
+    # From the XQuery function [op:numeric-divide](https://www.w3.org/TR/xpath-functions/#func-numeric-divide).
+    #
     # @param  [Literal::Numeric, #to_i, #to_f, #to_d] other
     # @return [RDF::Literal::Numeric]
     # @raise  [ZeroDivisionError] if divided by zero
@@ -183,8 +192,11 @@ module RDF; class Literal
     ##
     # Returns the absolute value of `self`.
     #
+    # From the XQuery function [fn:abs](https://www.w3.org/TR/xpath-functions/#func-abs).
+    #
     # @return [RDF::Literal]
     # @raise  [NotImplementedError] unless implemented in subclass
+    # @see https://www.w3.org/TR/xpath-functions/#func-abs
     def abs
       raise NotImplementedError
     end
@@ -192,8 +204,11 @@ module RDF; class Literal
     ##
     # Returns the number with no fractional part that is closest to the argument. If there are two such numbers, then the one that is closest to positive infinity is returned. An error is raised if arg is not a numeric value.
     #
+    # From the XQuery function [fn:round](https://www.w3.org/TR/xpath-functions/#func-round).
+    #
     # @return [RDF::Literal]
     # @raise  [NotImplementedError] unless implemented in subclass
+    # @see https://www.w3.org/TR/xpath-functions/#func-round
     def round
       raise NotImplementedError
     end
@@ -201,10 +216,13 @@ module RDF; class Literal
     ##
     # Returns the smallest integer greater than or equal to `self`.
     #
+    # From the XQuery function [fn:ceil](https://www.w3.org/TR/xpath-functions/#func-ceil).
+    #
     # @example
     #   RDF::Literal(1).ceil            #=> RDF::Literal(1)
     #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-ceil
     def ceil
       self
     end
@@ -212,12 +230,144 @@ module RDF; class Literal
     ##
     # Returns the largest integer less than or equal to `self`.
     #
+    # From the XQuery function [fn:floor](https://www.w3.org/TR/xpath-functions/#func-floor).
+    #
     # @example
     #   RDF::Literal(1).floor            #=> RDF::Literal(1)
     #
     # @return [RDF::Literal]
+    # @see https://www.w3.org/TR/xpath-functions/#func-floor
     def floor
       self
+    end
+
+    ##
+    # Returns the value of `e`<sup>`x`</sup>.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-exp
+    def exp
+      Double.new(Math.exp(self.to_f))
+    end
+
+    ##
+    # Returns the value of `10`<sup>`x`</sup>.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-exp10
+    def exp10
+      Double.new(10**self.to_f)
+    end
+
+    ##
+    # Returns the natural logarithm of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-log
+    def log
+      Double.new(Math.log(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the base-ten logarithm of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-log10
+    def log10
+      Double.new(Math.log10(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the non-negative square root of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-sqrt
+    def sqrt
+      Double.new(Math.sqrt(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the sine of the argument. The argument is an angle in radians.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-sin
+    def sin
+      Double.new(Math.sin(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the cosine of the argument. The argument is an angle in radians.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-cos
+    def cos
+      Double.new(Math.cos(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the tangent of the argument. The argument is an angle in radians.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-tan
+    def tan
+      Double.new(Math.tan(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the arc sine of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-asin
+    def asin
+      Double.new(Math.asin(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the arc cosine of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-acos
+    def acos
+      Double.new(Math.acos(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the arc tangent of the argument.
+    #
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-atan
+    def atan
+      Double.new(Math.atan(self.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
+    end
+
+    ##
+    # Returns the angle in radians subtended at the origin by the point on a plane with coordinates (x, y) and the positive x-axis.
+    #
+    # @param [#to_f] arg
+    # @return [Double]
+    # @see https://www.w3.org/TR/xpath-functions/#func-math-atan2
+    def atan2(arg)
+      Double.new(Math.atan2(self.to_f, arg.to_f))
+    rescue Math::DomainError
+      Double.new(::Float::NAN)
     end
 
     ##

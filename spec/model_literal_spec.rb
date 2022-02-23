@@ -285,7 +285,7 @@ describe RDF::Literal do
       literal(:false)    => false,
       literal(:long)     => 9223372036854775807,
       literal(:double)   => 3.1415,
-      literal(:date)     => ::Date.new(2010),
+      literal(:date)     => ::DateTime.new(2010),
       literal(:datetime) => ::DateTime.new(2011),
       # This is problematic when date changes between local testing location and UTC
       #literal(:time)     => ::DateTime.parse('01:02:03Z')
@@ -431,11 +431,11 @@ describe RDF::Literal do
         false => ["false", "false"]
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::Boolean.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::Boolean.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
     end
@@ -462,32 +462,32 @@ describe RDF::Literal do
         0 => ["0", "0"]
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::Integer.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::Integer.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
     end
 
     describe "#**", skip: (RUBY_ENGINE == "jruby") do
       {
-        "2^3": [2, 3, 8],
-        "-2^3": [-2, 3, -8],
-        "2^-3": [2, -3, 0.125e0],
-        "-2^-3": [-2, -3, -0.125e0],
-        "2^0": [2, 0, 1],
-        "0^0": [0, 0, 1],
-        "0^4": [0, 4, 0],
-        "0^-4": [0, -4, RDF::Literal::Double.new('INF')],
-        "16^0.5e0": [16, 0.5e0, 4.0e0],
-        "16^0.25e0": [16, 0.25e0, 2.0e0],
-        "-1^INF": [-1, RDF::Literal::Double.new('INF'), 1.0e0],
-        "-1^-INF": [-1, RDF::Literal::Double.new('-INF'), 1.0e0],
-        "1^INF": [1, RDF::Literal::Double.new('INF'), 1.0e0],
-        "1^-INF": [1, RDF::Literal::Double.new('-INF'), 1.0e0],
-        "1^-NaN": [1, RDF::Literal::Double.new('NaN'), 1.0e0],
+        "2^3":        [2, 3, 8],
+        "-2^3":       [-2, 3, -8],
+        "2^-3":       [2, -3, 0.125e0],
+        "-2^-3":      [-2, -3, -0.125e0],
+        "2^0":        [2, 0, 1],
+        "0^0":        [0, 0, 1],
+        "0^4":        [0, 4, 0],
+        "0^-4":       [0, -4, RDF::Literal::Double.new('INF')],
+        "16^0.5e0":   [16, 0.5e0, 4.0e0],
+        "16^0.25e0":  [16, 0.25e0, 2.0e0],
+        "-1^INF":     [-1, RDF::Literal::Double.new('INF'), 1.0e0],
+        "-1^-INF":    [-1, RDF::Literal::Double.new('-INF'), 1.0e0],
+        "1^INF":      [1, RDF::Literal::Double.new('INF'), 1.0e0],
+        "1^-INF":     [1, RDF::Literal::Double.new('-INF'), 1.0e0],
+        "1^-NaN":     [1, RDF::Literal::Double.new('NaN'), 1.0e0],
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
@@ -560,11 +560,11 @@ describe RDF::Literal do
         1.1                 => ["1.1", "1.1"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::Decimal.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::Decimal.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
     end
@@ -644,17 +644,17 @@ describe RDF::Literal do
         123.456e4 => ["1234560.0", "1.23456E6"]
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::Double.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::Double.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
     end
 
-    let(:nan) {RDF::Literal::Double.new("NaN")}
-    let(:inf) {RDF::Literal::Double.new("INF")}
+    let(:nan) {described_class.new("NaN")}
+    let(:inf) {described_class.new("INF")}
 
     it "recognizes INF" do
       expect(inf).to be_infinite
@@ -674,10 +674,10 @@ describe RDF::Literal do
       expect {nan.canonicalize}.not_to raise_error
     end
 
-    [-1, 0, 1].map {|n| RDF::Literal::Double.new(n)}.each do |n|
+    [-1, 0, 1].map {|n| described_class.new(n)}.each do |n|
       {
-        :"+" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF")],
-        :"-" => [RDF::Literal::Double.new("INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("-INF"), RDF::Literal::Double.new("INF")],
+        :"+" => [described_class.new("INF"), described_class.new("INF"), described_class.new("-INF"), described_class.new("-INF")],
+        :"-" => [described_class.new("INF"), described_class.new("-INF"), described_class.new("-INF"), described_class.new("INF")],
       }.each do |op, (lp, rp, lm, rm)|
         it "returns #{lp} for INF #{op} #{n}" do
           expect(inf.send(op, n)).to eq lp
@@ -702,25 +702,29 @@ describe RDF::Literal do
       end
     end
 
+    describe RDF::Literal::Double::PI do
+      specify {expect(RDF::Literal::Double::PI.to_f).to eq Math::PI}
+    end
+
     # Multiplication
     {
-      -1 => RDF::Literal::Double.new("-INF"),
+      -1 => described_class.new("-INF"),
       0  => :nan,
-      1  => RDF::Literal::Double.new("INF"),
+      1  => described_class.new("INF"),
     }.each do |n, p|
       it "returns #{p} for #{n} * INF" do
         if p == :nan
-          expect(RDF::Literal::Double.new(n) * inf).to be_nan
+          expect(described_class.new(n) * inf).to be_nan
         else
-          expect(RDF::Literal::Double.new(n) * inf).to eq p
+          expect(described_class.new(n) * inf).to eq p
         end
       end
 
       it "returns #{p} for INF * #{n}" do
         if p == :nan
-          expect(inf * RDF::Literal::Double.new(n)).to be_nan
+          expect(inf * described_class.new(n)).to be_nan
         else
-          expect(inf * RDF::Literal::Double.new(n)).to eq p
+          expect(inf * described_class.new(n)).to eq p
         end
       end
     end
@@ -736,7 +740,7 @@ describe RDF::Literal do
       "0 > -inf" => [:>, "0", "-INF", true],
     }.each do |n, (op, l, r, result)|
       it "returns #{result} for #{l} #{op} #{r}" do
-        expect(RDF::Literal::Double.new(l).send(op, RDF::Literal::Double.new(r))).to eql result
+        expect(described_class.new(l).send(op, described_class.new(r))).to eql result
       end
     end
 
@@ -754,21 +758,59 @@ describe RDF::Literal do
 
     describe "#**" do
       {
-        "INF^0": [RDF::Literal::Double.new('INF'), 0, 1.0e0],
-        "NaN^0": [RDF::Literal::Double.new('NaN'), 0, 1.0e0],
-        "0e0^3": [0e0, 3, 0.0e0],
-        "0e0^4": [0e0, 4, 0.0e0],
-        "-0e0^3": [-0e0, 3, -0.0e0],
-        "0e0^-3": [0e0, -3, RDF::Literal::Double.new('INF')],
-        "0e0^-4": [0e0, -4, RDF::Literal::Double.new('INF')],
-        "-0e0^-3": [-0e0, -3, RDF::Literal::Double.new('-INF')],
-        "-0e0^-3.0e0": [-0e0, -3.0e0, RDF::Literal::Double.new('-INF')],
-        "0e0^-3.1e0": [0e0, -3.1e0, RDF::Literal::Double.new('INF')],
-        "-0e0^-3.1e0": [-0e0, -3.1e0, RDF::Literal::Double.new('INF')],
+        "-0e0^-3":      [-0e0, -3, described_class.new('-INF')],
+        "-0e0^-3.0e0":  [-0e0, -3.0e0, described_class.new('-INF')],
+        "-0e0^-3.1e0":  [-0e0, -3.1e0, described_class.new('INF')],
+        "-0e0^3":       [-0e0, 3, -0.0e0],
+        "-0e0^3.1e0":   [-0e0, 3.1e0, 0.0e0],
+        "-1^-INF":      [-1, described_class.new("-INF"), 1.0e0],
+        "-1^INF":       [-1, described_class.new("INF"), 1.0e0],
+        "-2.5e0^2.0e0": [-2.5e0, 2.0e0, 6.25e0],
+        "-2^3":         [-2, 3, -8],
+        "0e0^-3":       [0e0, -3, described_class.new('INF')],
+        "0e0^-3.1e0":   [0e0, -3.1e0, described_class.new('INF')],
+        "0e0^-4":       [0e0, -4, described_class.new('INF')],
+        "0e0^3":        [0e0, 3, 0.0e0],
+        "0e0^3.1e0":    [0e0, 3.1e0, 0.0e0],
+        "0e0^4":        [0e0, 4, 0.0e0],
+        "0^0":          [0, 0, 1],
+        "0^4":          [0, 4, 0],
+        "16^0.25e0":    [16, 0.25e0, 2.0e0],
+        "16^0.5e0":     [16, 0.5e0, 4.0e0],
+        "1^-INF":       [1, described_class.new('-INF'), 1.0e0],
+        "1^INF":        [1, described_class.new('INF'), 1.0e0],
+        "1^NaN":        [1, described_class.new('NaN'), 1.0e0],
+        "2^-3":         [2, -3, 0.125e0],
+        "2^0":          [2, 0, 1],
+        "2^3":          [2, 3, 8],
+        "INF^0":        [described_class.new('INF'), 0, 1.0e0],
+        "NaN^0":        [described_class.new('NaN'), 0, 1.0e0],
+        "PI^0":         [described_class.const_get('PI'), 0, 1.0e0],
       }.each do |name, (n, e, result)|
         it name do
           expect(RDF::Literal(n) ** RDF::Literal(e)).to eq RDF::Literal(result)
           expect((RDF::Literal(n) ** RDF::Literal(e)).datatype).to eq RDF::Literal(result).datatype
+        end
+      end
+
+      context '#infinite?' do
+        {
+          "0e0^-3": [0e0, -3],
+          "0e0^-4": [0e0, -4],
+          "-0e0^-3": [-0e0, -3],
+          "0e0^-3.0e0": [0e0, -3.0e0],
+          "-0e0^-3.0e0": [-0e0, -3.0e0],
+          "0^-4": [0, -4],
+        }.each do |name, (n, e)|
+          specify(name) {expect((RDF::Literal(n) ** RDF::Literal(e)).infinite?).to be_truthy}
+        end
+      end
+
+      context '#nan?' do
+        {
+          #"-2.5e0^2.00000001e0": [-2.5e0, 2.00000001e0]
+        }.each do |name, (n, e)|
+          specify(name) {expect((RDF::Literal(n) ** RDF::Literal(e)).nan?).to be_truthy}
         end
       end
     end
@@ -832,18 +874,18 @@ describe RDF::Literal do
 
     context "object values" do
       {
-        DateTime.parse("2010-01-01T00:00:00Z")      => ["2010-01-01T00:00:00Z", "2010-01-01T00:00:00Z"],
-        DateTime.parse("2010-02-01T00:00:00")       => ["2010-02-01T00:00:00Z", "2010-02-01T00:00:00Z"],
-        DateTime.parse("2010-03-01T04:00:00+01:00") => ["2010-03-01T04:00:00+01:00", "2010-03-01T03:00:00Z"],
-        DateTime.parse("2009-12-31T04:00:00-01:00") => ["2009-12-31T04:00:00-01:00", "2009-12-31T05:00:00Z"],
-        DateTime.parse("-2010-01-01T00:00:00Z")     => ["-2010-01-01T00:00:00Z","-2010-01-01T00:00:00Z"],
+        DateTime.parse("2010-01-01T00:00:00Z")      => ["2010-01-01T00:00:00Z",       "2010-01-01T00:00:00Z"],
+        DateTime.parse("2010-02-01T00:00:00")       => ["2010-02-01T00:00:00Z",       "2010-02-01T00:00:00Z"],
+        DateTime.parse("2010-03-01T04:00:00+01:00") => ["2010-03-01T04:00:00+01:00",  "2010-03-01T03:00:00Z"],
+        DateTime.parse("2009-12-31T04:00:00-01:00") => ["2009-12-31T04:00:00-01:00",  "2009-12-31T05:00:00Z"],
+        DateTime.parse("-2010-01-01T00:00:00Z")     => ["-2010-01-01T00:00:00Z",      "-2010-01-01T00:00:00Z"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::DateTime.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::DateTime.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
     end
@@ -856,38 +898,239 @@ describe RDF::Literal do
         "2011-02-01T01:02:03"       => "",
       }.each do |l, r|
         it "#{l} => #{r}" do
-          expect(RDF::Literal::DateTime.new(l).tz).to eq RDF::Literal(r)
+          expect(described_class.new(l).tz).to eq RDF::Literal(r)
         end
       end
     end
 
     describe "#timezone" do
       {
-        "2010-06-21T11:28:01Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
+        "2010-06-21T11:28:01Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
         "2010-12-21T15:38:02-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
-        "2008-06-20T23:59:00Z"      => RDF::Literal("PT0S", datatype: RDF::XSD.dayTimeDuration),
+        "2010-12-21T15:38:02+08:00" => RDF::Literal("PT8H", datatype: RDF::XSD.dayTimeDuration),
+        "2008-06-20T23:59:00Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
         "2011-02-01T01:02:03"       => nil,
       }.each do |l, r|
         it "#{l} => #{r.inspect}" do
-          expect(RDF::Literal::DateTime.new(l).timezone).to eq r
+          expect(described_class.new(l).timezone).to eq r
+        end
+      end
+    end
+
+    describe "#adjust_to_timezone" do
+      {
+        # Spec examples
+        ["2002-03-07T10:00:00"]                   => "2002-03-07T10:00:00Z",
+        ["2002-03-07T10:00:00-07:00"]             => "2002-03-07T17:00:00Z",
+        ["2002-03-07T10:00:00", "-PT10H"]         => "2002-03-07T10:00:00-10:00",
+        ["2002-03-07T10:00:00-07:00", "-PT10H"]   => "2002-03-07T07:00:00-10:00",
+        ["2002-03-07T10:00:00-07:00", "PT10H"]    => "2002-03-08T03:00:00+10:00",
+        ["2002-03-07T00:00:00+01:00", "-PT8H"]    => "2002-03-06T15:00:00-08:00",
+        ["2002-03-07T10:00:00", nil]              => "2002-03-07T10:00:00",
+        ["2002-03-07T10:00:00-07:00", nil]        => "2002-03-07T10:00:00",
+      }.each do |args, r|
+        if r == ArgumentError
+          it "#{args.inspect} raises ArgumentError" do
+            source = described_class.new(args.shift)
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          end
+        else
+          it "#{args.inspect} => #{r.inspect}" do
+            source = described_class.new(args.shift)
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+
+      {
+        # Test Suite https://github.com/w3c/qt3tests/blob/master/fn/adjust-dateTime-to-timezone.xml
+        "fn-adjust-dateTime-to-timezone1args-1": ["1970-01-01T00:00:00Z",       "-PT10H",   "1969-12-31T14:00:00-10:00"],
+        "fn-adjust-dateTime-to-timezone1args-2": ["1996-04-07T01:40:52Z",       "-PT10H",   "1996-04-06T15:40:52-10:00"],
+        "fn-adjust-dateTime-to-timezone1args-3": ["2030-12-31T23:59:59Z",       "-PT10H",   "2030-12-31T13:59:59-10:00"],
+        "fn-adjust-dateTime-to-timezone-1":      ["2002-03-07T10:00:00-05:00",  "-PT5H0M",  "2002-03-07T10:00:00-05:00"],
+        "fn-adjust-dateTime-to-timezone-2":      ["2002-03-07T10:00:00-07:00",  "-PT5H0M",  "2002-03-07T12:00:00-05:00"],
+        "fn-adjust-dateTime-to-timezone-3":      ["2002-03-07T10:00:00",        "-PT10H",   "2002-03-07T10:00:00-10:00"],
+        "fn-adjust-dateTime-to-timezone-4":      ["2002-03-07T10:00:00-07:00",  "-PT10H",   "2002-03-07T07:00:00-10:00"],
+        "fn-adjust-dateTime-to-timezone-5":      ["2002-03-07T10:00:00-07:00",  "PT10H",    "2002-03-08T03:00:00+10:00"],
+        "fn-adjust-dateTime-to-timezone-6":      ["2002-03-07T00:00:00+01:00",  "-PT8H",    "2002-03-06T15:00:00-08:00"],
+        "fn-adjust-dateTime-to-timezone-7":      ["2002-03-07T10:00:00",                    "2002-03-07T10:00:00"],
+        "fn-adjust-dateTime-to-timezone-8":      ["2002-03-07T10:00:00-07:00",  nil,        "2002-03-07T10:00:00"],
+        "fn-adjust-dateTime-to-timezone-11":     ["2002-03-07T10:00:00-04:00",  nil,        "2002-03-07T10:00:00"],
+        "K-AdjDateTimeToTimezoneFunc-7":         ["2001-02-03T08:02:00",        "PT14H1M",  ArgumentError],
+        "K-AdjDateTimeToTimezoneFunc-8":         ["2001-02-03T08:02:00",        "-PT14H1M", ArgumentError],
+        "K-AdjDateTimeToTimezoneFunc-9":         ["2001-02-03T08:02:00",        "PT14H0M0.001S", ArgumentError],
+      }.each do |title, (*args, r)|
+        it title do
+          source = described_class.new(args.shift)
+          if r == ArgumentError
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          else
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+    end
+
+    describe "#==" do
+      {
+        ["2002-04-02T12:00:00-01:00", "2002-04-02T17:00:00+04:00"] => true,
+        ["2002-04-02T12:00:00",       "2002-04-02T23:00:00+06:00"] => false,
+        ["2002-04-02T12:00:00",       "2002-04-02T17:00:00"] => false,
+        ["2002-04-02T12:00:00",       "2002-04-02T12:00:00"] => true,
+        ["2002-04-02T23:00:00-04:00", "2002-04-03T02:00:00-01:00"] => true,
+        ["1999-12-31T24:00:00",       "2000-01-01T00:00:00"] => true,
+        ["2005-04-04T24:00:00",       "2005-04-04T00:00:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} == #{b}" do
+            expect(described_class.new(a)).to eq described_class.new(b)
+          end
+        else
+          it "#{a} != #{b}" do
+            expect(described_class.new(a)).not_to eq described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#<" do
+      {
+        ["2010-06-21T11:28:01Z", "2010-06-21T11:28:01Z"] => false,
+        ["2010-06-21T11:28:01Z", "2010-06-21T11:28:02Z"] => true,
+        ["2010-06-21T11:28:01Z", "2010-06-21T11:28:00Z"] => false,
+        ["2010-06-21T02:28:00Z", "2010-06-21T11:28:00-08:00"] => true,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} < #{b}" do
+            expect(described_class.new(a)).to be < described_class.new(b)
+            expect(described_class.new(a)).not_to be >= described_class.new(b)
+          end
+        else
+          it "#{a} !< #{b}" do
+            expect(described_class.new(a)).not_to be < described_class.new(b)
+            expect(described_class.new(a)).to be >= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#>" do
+      {
+        ["2010-06-21T11:28:01Z", "2010-06-21T11:28:01Z"] => false,
+        ["2010-06-21T11:28:01Z", "2010-06-21T11:28:02Z"] => false,
+        ["2010-06-21T11:28:01Z", "2010-06-21T11:28:00Z"] => true,
+        ["2010-06-21T02:28:00Z", "2010-06-21T11:28:00-08:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} > #{b}" do
+            expect(described_class.new(a)).to be > described_class.new(b)
+            expect(described_class.new(a)).not_to be <= described_class.new(b)
+          end
+        else
+          it "#{a} !> #{b}" do
+            expect(described_class.new(a)).not_to be > described_class.new(b)
+            expect(described_class.new(a)).to be <= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#+" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["2000-10-30T11:12:00", "P3DT1H15M"] => "2000-11-02T12:27:00",
+          ["2000-10-30T11:12:00Z", "P3DT1H15M"] => "2000-11-02T12:27:00Z",
+          ["2000-10-30T11:12:00-08:00", "P3DT1H15M"] => "2000-11-02T12:27:00-08:00",
+          ["2000-10-30T11:12:00", "-P3D"] => "2000-10-27T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:yearMonthDuration" do
+        {
+          ["2000-10-30T11:12:00", "P1Y2M"] => "2001-12-30T11:12:00",
+          ["2000-10-30T11:12:00Z", "P1Y2M"] => "2001-12-30T11:12:00Z",
+          ["2000-10-30T11:12:00-08:00", "P1Y2M"] => "2001-12-30T11:12:00-08:00",
+          ["2000-10-30T11:12:00", "-P1Y2M"] => "1999-08-30T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+    end
+
+    describe "#-" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["2000-10-30T11:12:00", "P3DT1H15M"] => "2000-10-27T09:57:00",
+          ["2000-10-30T11:12:00Z", "P3DT1H15M"] => "2000-10-27T09:57:00Z",
+          ["2000-10-30T11:12:00-08:00", "P3DT1H15M"] => "2000-10-27T09:57:00-08:00",
+          ["2000-10-30T11:12:00", "-P3D"] => "2000-11-02T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} - #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:yearMonthDuration" do
+        {
+          ["2000-10-30T11:12:00", "P1Y2M"] => "1999-08-30T11:12:00",
+          ["2000-10-30T11:12:00Z", "P1Y2M"] => "1999-08-30T11:12:00Z",
+          ["2000-10-30T11:12:00-08:00", "P1Y2M"] => "1999-08-30T11:12:00-08:00",
+          ["2000-10-30T11:12:00", "-P1Y2M"] => "2001-12-30T11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} - #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+            expect(t1 - dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:dateTime" do
+        {
+          ["2000-10-30T11:12:00", "2000-08-30T11:12:00"] => "P61D",
+          ["2000-10-30T11:12:00Z", "2000-08-30T11:12:00Z"] => "P61D",
+          ["2000-10-30T11:12:00-08:00", "2000-08-30T11:12:00-08:00"] => "P61D",
+          ["2000-10-30T11:12:00", "2000-12-30T11:12:00"] => "-P61D",
+          ["2000-10-30T06:12:00-05:00", "1999-11-28T09:00:00Z"] => "P337DT2H12M",
+        }.each do |(t1, t2), res|
+          it "#{t1} - #{t2} == #{res}" do
+            t1 = described_class.new(t1)
+            t2 = described_class.new(t2)
+            res = RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - t2).to eq res
+          end
         end
       end
     end
   end
 
-
   describe RDF::Literal::Date do
     it_behaves_like 'RDF::Literal with datatype and grammar', "2010-01-01T00:00:00Z", RDF::XSD.date
-    it_behaves_like 'RDF::Literal equality', "2010-01-01T00:00:00Z", DateTime.parse("2010-01-01T00:00:00Z")
-    it_behaves_like 'RDF::Literal lexical values', "2010-01-01T00:00:00Z"
+    it_behaves_like 'RDF::Literal equality', "2010-01-01Z", DateTime.parse("2010-01-01T00:00:00+00:00")
+    it_behaves_like 'RDF::Literal lexical values', "2010-01-01Z"
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.date, [
       ["2010-01-01Z",     "2010-01-01Z",      "Friday, 01 January 2010 UTC"],
       ["2010-01-01",      "2010-01-01",       "Friday, 01 January 2010"],
       ["2010-01-01+00:00","2010-01-01Z",      "Friday, 01 January 2010 UTC"],
-      ["2010-01-01+01:00","2010-01-01+01:00", "Friday, 01 January 2010 +01:00"],
-      ["2009-12-31-01:00","2009-12-31-01:00", "Thursday, 31 December 2009 -01:00"],
+      ["2010-01-01+01:00","2009-12-31Z",      "Friday, 01 January 2010 +01:00"],
+      ["2009-12-31-01:00","2009-12-31Z",      "Thursday, 31 December 2009 -01:00"],
       ["-2010-01-01Z",    "-2010-01-01Z",     "Friday, 01 January -2010 UTC"],
-      ["2014-09-01-08:00","2014-09-01-08:00", "Monday, 01 September 2014 -08:00"],
+      ["2014-09-01-08:00","2014-09-01Z",      "Monday, 01 September 2014 -08:00"],
     ]
     it_behaves_like 'RDF::Literal validation', RDF::XSD.date,
       %w(
@@ -911,15 +1154,16 @@ describe RDF::Literal do
 
     context "object values" do
       {
-        Date.parse("2010-02-01")      => ["2010-02-01", "2010-02-01"],
-        Date.parse("-2010-01-01")     => ["-2010-01-01","-2010-01-01"],
+        ::Date.parse("2010-02-01")  => ["2010-02-01", "2010-02-01"],
+        ::Date.parse("-2010-01-01") => ["-2010-01-01","-2010-01-01"],
+        ::DateTime.parse("2014-09-01T00:00:00-08:00") => ["2014-09-01-08:00", "2014-09-01Z"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::Date.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::Date.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
     end
@@ -932,7 +1176,218 @@ describe RDF::Literal do
         "2011-02-01"       => "",
       }.each do |l, r|
         it "#{l} => #{r}" do
-          expect(RDF::Literal::Date.new(l).tz).to eq RDF::Literal(r)
+          expect(described_class.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
+    end
+
+    describe "#timezone" do
+      {
+        "2010-06-21Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
+        "2010-12-21-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
+        "2010-12-21+08:00" => RDF::Literal("PT8H", datatype: RDF::XSD.dayTimeDuration),
+        "2008-06-20Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
+        "2011-02-01"       => nil,
+      }.each do |l, r|
+        it "#{l} => #{r.inspect}" do
+          expect(described_class.new(l).timezone).to eq r
+        end
+      end
+    end
+
+    describe "#adjust_to_timezone" do
+      {
+        # Spec examples
+        ["2002-03-07"]            => "2002-03-07Z",
+        ["2002-03-07-07:00"]      => "2002-03-07Z",
+        ["2002-03-07", "-PT10H"]  => "2002-03-07-10:00",
+        ["2002-03-07-07:00", "-PT10H"] => "2002-03-06-10:00",
+        ["2002-03-07", nil]       => "2002-03-07",
+        ["2002-03-07-07:00", nil] => "2002-03-07",
+      }.each do |args, r|
+        if r == ArgumentError
+          it "#{args.inspect} raises ArgumentError" do
+            source = described_class.new(args.shift)
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          end
+        else
+          it "#{args.inspect} => #{r.inspect}" do
+            source = described_class.new(args.shift)
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+
+      {
+        # Test Suite https://github.com/w3c/qt3tests/blob/master/fn/adjust-date-to-timezone.xml
+        "fn-adjust-date-to-timezone1args-1": ["1970-01-01Z", "-PT10H", "1969-12-31-10:00"],
+        "fn-adjust-date-to-timezone1args-2": ["1983-11-17Z", "-PT10H", "1983-11-16-10:00"],
+        "fn-adjust-date-to-timezone1args-3": ["2030-12-31Z", "-PT10H", "2030-12-30-10:00"],
+        "fn-adjust-date-to-timezone-1":      ["2002-03-07-05:00", "-PT5H0M", "2002-03-07-05:00"],
+        "fn-adjust-date-to-timezone-2":      ["2002-03-07-07:00", "-PT5H0M", "2002-03-07-05:00"],
+        "fn-adjust-date-to-timezone-3":      ["2002-03-07", "-PT10H", "2002-03-07-10:00"],
+        "fn-adjust-date-to-timezone-4":      ["2002-03-07-07:00", "-PT10H", "2002-03-06-10:00"],
+        "fn-adjust-date-to-timezone-5":      ["2002-03-07", nil, "2002-03-07"],
+        "fn-adjust-date-to-timezone-6":      ["2002-03-07-07:00", nil, "2002-03-07"],
+        "K-AdjDateToTimezoneFunc-6":         ["2001-02-03", "PT14H1M", ArgumentError],
+        "K-AdjDateToTimezoneFunc-7":         ["2001-02-03", "-PT14H1M", ArgumentError],
+        "K-AdjDateToTimezoneFunc-8":         ["2001-02-03", "PT14H0M0.001S", ArgumentError],
+      }.each do |title, (*args, r)|
+        it title do
+          source = described_class.new(args.shift)
+          if r == ArgumentError
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          else
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+    end
+
+    describe "#==" do
+      {
+        ["2004-12-25Z", "2004-12-25+07:00"] => false,
+        ["2004-12-25-12:00", "2004-12-26+12:00"] => true,
+        ["2004-12-25Z", RDF::Literal::DateTime.new("2004-12-25Z")] => false,
+        ["2004-12-25Z", RDF::Literal::Time.new("00:00:00")] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} == #{b}" do
+            res = b.is_a?(String) ? described_class.new(b) : b
+            expect(described_class.new(a)).to eq res
+          end
+        else
+          it "#{a} != #{b}" do
+            res = b.is_a?(String) ? described_class.new(b) : b
+            expect(described_class.new(a)).not_to eq res
+          end
+        end
+      end
+    end
+
+    describe "#<" do
+      {
+        ["2010-06-21Z", "2010-06-20Z"]      => false,
+        ["2010-06-21Z", "2010-06-21Z"]      => false,
+        ["2010-06-21Z", "2010-06-22Z"]      => true,
+        ["2010-06-21Z", "2010-06-21-08:00"] => true,
+        ["2010-06-21Z", "2010-06-21+08:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} < #{b}" do
+            expect(described_class.new(a)).to be < described_class.new(b)
+            expect(described_class.new(a)).not_to be >= described_class.new(b)
+          end
+        else
+          it "#{a} !< #{b}" do
+            expect(described_class.new(a)).not_to be < described_class.new(b)
+            expect(described_class.new(a)).to be >= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#>" do
+      {
+        ["2010-06-21Z", "2010-06-20Z"]      => true,
+        ["2010-06-21Z", "2010-06-21Z"]      => false,
+        ["2010-06-21Z", "2010-06-22Z"]      => false,
+        ["2010-06-21Z", "2010-06-21-08:00"] => false,
+        ["2010-06-21Z", "2010-06-21+08:00"] => true,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} > #{b}" do
+            expect(described_class.new(a)).to be > described_class.new(b)
+            expect(described_class.new(a)).not_to be <= described_class.new(b)
+          end
+        else
+          it "#{a} !> #{b}" do
+            expect(described_class.new(a)).not_to be > described_class.new(b)
+            expect(described_class.new(a)).to be <= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#+" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["2000-10-30", "P3DT1H15M"] => "2000-11-02",
+          ["2000-10-30Z", "P3DT1H15M"] => "2000-11-02Z",
+          ["2000-10-30-08:00", "P3DT1H15M"] => "2000-11-02-08:00",
+          ["2000-10-30", "-P3D"] => "2000-10-27",
+          ["2004-10-30Z", "P2DT2H30M0S"] => "2004-11-01Z",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:yearMonthDuration" do
+        {
+          ["2000-10-30", "P1Y2M"] => "2001-12-30",
+          ["2000-10-30Z", "P1Y2M"] => "2001-12-30Z",
+          ["2000-10-30-08:00", "P1Y2M"] => "2001-12-30-08:00",
+          ["2000-10-30", "-P1Y2M"] => "1999-08-30",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      describe "#-" do
+        context "xsd:dayTimeDuration" do
+          {
+            ["2000-10-30", "P3DT1H15M"] => "2000-10-26",
+            ["2000-10-30Z", "P3DT1H15M"] => "2000-10-26Z",
+            ["2000-10-30-08:00", "P3DT1H15M"] => "2000-10-26-08:00",
+          }.each do |(t, d), res|
+            it "#{t} - #{d} == #{res}" do
+              t1 = described_class.new(t)
+              dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+              expect(t1 - dur).to eq described_class.new(res)
+            end
+          end
+        end
+
+        context "xsd:yearMonthDuration" do
+          {
+            ["2000-10-30", "P1Y2M"] => "1999-08-30",
+            ["2000-02-29Z", "P1Y"] => "1999-02-28Z",
+            ["2000-10-31-05:00", "P1Y1M"] => "1999-09-30-05:00",
+            ["2000-10-30", "-P1Y2M"] => "2001-12-30",
+          }.each do |(t, d), res|
+            it "#{t} - #{d} == #{res}" do
+              t1 = described_class.new(t)
+              dur = RDF::Literal(d, datatype: RDF::XSD.yearMonthDuration)
+              expect(t1 - dur).to eq described_class.new(res)
+            end
+          end
+        end
+
+        context "xsd:date" do
+          {
+            ["2000-10-30", "2000-08-30"] => "P61D",
+            ["2000-10-30Z", "2000-08-30Z"] => "P61D",
+            ["2000-10-30-08:00", "2000-08-30-08:00"] => "P61D",
+            ["2000-10-30", "2000-12-30"] => "-P61D",
+            ["2000-10-30-05:00", "1999-11-28Z"] => "P337DT5H",
+          }.each do |(t1, t2), res|
+            it "#{t1} - #{t2} == #{res}" do
+              t1 = described_class.new(t1)
+              t2 = described_class.new(t2)
+              res = RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+              expect(t1 - t2).to eq res
+            end
+          end
         end
       end
     end
@@ -940,7 +1395,7 @@ describe RDF::Literal do
 
   describe RDF::Literal::Time do
     it_behaves_like 'RDF::Literal with datatype and grammar', "00:00:00Z", RDF::XSD.time
-    it_behaves_like 'RDF::Literal equality', "00:00:00Z", DateTime.parse("00:00:00Z")
+    it_behaves_like 'RDF::Literal equality', "00:00:00Z", DateTime.parse("1972-12-31T00:00:00Z")
     it_behaves_like 'RDF::Literal lexical values', "00:00:00Z"
     it_behaves_like 'RDF::Literal canonicalization', RDF::XSD.time, [
       ["00:00:00Z",      "00:00:00Z", "12:00:00 AM UTC"],
@@ -974,29 +1429,21 @@ describe RDF::Literal do
 
     context "object values" do
       {
-        DateTime.parse("00:00:00Z")      => ["00:00:00Z", "00:00:00Z"],
-        DateTime.parse("01:00:00.0000Z") => ["01:00:00Z","01:00:00Z"],
-        DateTime.parse("02:00:00")       => ["02:00:00Z", "02:00:00Z"],
-        DateTime.parse("03:00:00+00:00") => ["03:00:00Z", "03:00:00Z"],
-        DateTime.parse("05:00:00+01:00") => ["05:00:00+01:00", "04:00:00Z"],
-        DateTime.parse("07:00:00-01:00") => ["07:00:00-01:00", "08:00:00Z"],
+        DateTime.parse("00:00:00Z")      => ["00:00:00Z",       "00:00:00Z"],
+        DateTime.parse("01:00:00.0000Z") => ["01:00:00Z",       "01:00:00Z"],
+        DateTime.parse("02:00:00")       => ["02:00:00Z",       "02:00:00Z"],
+        DateTime.parse("03:00:00+00:00") => ["03:00:00Z",       "03:00:00Z"],
+        DateTime.parse("05:00:00+01:00") => ["05:00:00+01:00",  "04:00:00Z"],
+        DateTime.parse("07:00:00-01:00") => ["07:00:00-01:00",  "08:00:00Z"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
-          expect(RDF::Literal::Time.new(obj).to_s).to eql str
+          expect(described_class.new(obj).to_s).to eql str
         end
 
         it "canonicalizes #{obj} to #{canon.inspect}" do
-          expect(RDF::Literal::Time.new(obj, canonicalize: true).to_s).to eql canon
+          expect(described_class.new(obj, canonicalize: true).to_s).to eql canon
         end
       end
-    end
-
-    subject {double("time", to_s: "05:50:00")}
-
-    it "parses as string if #to_datetime raises an error" do
-      expect(subject).to receive(:to_datetime).at_least(:once).and_raise(StandardError)
-      expect {RDF::Literal::Time.new(subject)}.not_to raise_error
-      expect(RDF::Literal::Time.new(subject).object).to eq ::DateTime.parse(subject.to_s)
     end
 
     describe "#tz" do
@@ -1007,7 +1454,194 @@ describe RDF::Literal do
         "01:02:03"       => "",
       }.each do |l, r|
         it "#{l} => #{r}" do
-          expect(RDF::Literal::Time.new(l).tz).to eq RDF::Literal(r)
+          expect(described_class.new(l).tz).to eq RDF::Literal(r)
+        end
+      end
+    end
+
+    describe "#timezone" do
+      {
+        "11:28:01Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
+        "15:38:02-08:00" => RDF::Literal("-PT8H", datatype: RDF::XSD.dayTimeDuration),
+        "23:59:00Z"      => RDF::Literal("PT0H", datatype: RDF::XSD.dayTimeDuration),
+        "01:02:03"       => nil,
+      }.each do |l, r|
+        it "#{l} => #{r.inspect}" do
+          expect(described_class.new(l).timezone).to eq r
+        end
+      end
+    end
+
+    describe "#adjust_to_timezone" do
+      {
+        # Spec examples
+        ["01:02:03"]                  => "01:02:03Z",
+        ["01:02:03-07:00"]            => "08:02:03Z",
+        ["01:02:03", "-PT10H"]        => "01:02:03-10:00",
+        ["01:02:03-07:00", "-PT10H"]  => "22:02:03-10:00",
+        ["01:02:03", nil]             => "01:02:03",
+        ["01:02:03-07:00", nil]       => "01:02:03",
+      }.each do |args, r|
+        if r == ArgumentError
+          it "#{args.inspect} raises ArgumentError" do
+            source = described_class.new(args.shift)
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          end
+        else
+          it "#{args.inspect} => #{r.inspect}" do
+            source = described_class.new(args.shift)
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+
+      {
+        # Test Suite https://github.com/w3c/qt3tests/blob/master/fn/adjust-time-to-timezone.xml
+        "fn-adjust-time-to-timezone1args-1": ["00:00:00Z",      "-PT10H",   "14:00:00-10:00"],
+        "fn-adjust-time-to-timezone1args-2": ["08:03:35Z",      "-PT10H",   "22:03:35-10:00"],
+        "fn-adjust-time-to-timezone1args-3": ["23:59:59Z",      "-PT10H",   "13:59:59-10:00"],
+        "fn-adjust-time-to-timezone-1":      ["10:00:00-05:00", "-PT5H0M",  "10:00:00-05:00"],
+        "fn-adjust-time-to-timezone-2":      ["10:00:00-07:00", "-PT5H0M",  "12:00:00-05:00"],
+        "fn-adjust-time-to-timezone-3":      ["10:00:00",       "-PT10H",   "10:00:00-10:00"],
+        "fn-adjust-time-to-timezone-4":      ["10:00:00-07:00", "-PT10H",   "07:00:00-10:00"],
+        "fn-adjust-time-to-timezone-5":      ["10:00:00-05:00", nil,        "10:00:00"],
+        "fn-adjust-time-to-timezone-6":      ["10:00:00-07:00", nil,        "10:00:00"],
+        "fn-adjust-time-to-timezone-7":      ["10:00:00-07:00", "PT10H",    "03:00:00+10:00"],
+        "K-AdjTimeToTimezoneFunc-6":         ["08:02:00",       "PT14H1M",  ArgumentError],
+        "K-AdjTimeToTimezoneFunc-7":         ["08:02:00",       "-PT14H1M", ArgumentError],
+        "K-AdjTimeToTimezoneFunc-8":         ["08:02:00",       "PT14H0M0.001S", ArgumentError],
+      }.each do |title, (*args, r)|
+        it title do
+          source = described_class.new(args.shift)
+          if r == ArgumentError
+            expect {source.adjust_to_timezone(*args)}.to raise_error(ArgumentError)
+          else
+            result = described_class.new(r)
+            expect(source.adjust_to_timezone(*args)).to eq result
+          end
+        end
+      end
+    end
+
+    describe "#==" do
+      {
+        ["01:02:03Z", "01:02:03+07:00"] => false,
+        ["01:02:03-12:00", "01:02:03-12:00"] => true,
+        ["01:02:03Z", RDF::Literal::DateTime.new("2004-12-26T01:02:03Z")] => false,
+        ["01:02:03Z", RDF::Literal::Date.new("2004-12-26")] => false,
+        ["08:00:00+09:00", "17:00:00-06:00"] => false,
+        ["21:30:00+10:30", "06:00:00-05:00"] => true,
+        ["24:00:00+01:00", "00:00:00+01:00"] => true,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} == #{b}" do
+            res = b.is_a?(String) ? described_class.new(b) : b
+            expect(described_class.new(a)).to eq res
+          end
+        else
+          it "#{a} != #{b}" do
+            res = b.is_a?(String) ? described_class.new(b) : b
+            expect(described_class.new(a)).not_to eq res
+          end
+        end
+      end
+    end
+
+    describe "#<" do
+      {
+        ["11:28:01Z", "11:28:01Z"] => false,
+        ["11:28:01Z", "11:28:02Z"] => true,
+        ["11:28:01Z", "11:28:00Z"] => false,
+        ["02:28:00Z", "11:28:00-08:00"] => true,
+        ["12:00:00-05:00", "23:00:00+06:00"] => false,
+        ["11:00:00-05:00", "17:00:00Z"] => true,
+        ["23:59:59-05:00", "24:00:00-05:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} < #{b}" do
+            expect(described_class.new(a)).to be < described_class.new(b)
+            expect(described_class.new(a)).not_to be >= described_class.new(b)
+          end
+        else
+          it "#{a} !< #{b}" do
+            expect(described_class.new(a)).not_to be < described_class.new(b)
+            expect(described_class.new(a)).to be >= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#>" do
+      {
+        ["11:28:01Z", "11:28:01Z"]      => false,
+        ["11:28:01Z", "11:28:02Z"]      => false,
+        ["11:28:01Z", "11:28:00Z"]      => true,
+        ["08:00:00+09:00", "17:00:00-06:00"] => false,
+      }.each do |(a, b), res|
+        if res
+          it "#{a} > #{b}" do
+            expect(described_class.new(a)).to be > described_class.new(b)
+            expect(described_class.new(a)).not_to be <= described_class.new(b)
+          end
+        else
+          it "#{a} !> #{b}" do
+            expect(described_class.new(a)).not_to be > described_class.new(b)
+            expect(described_class.new(a)).to be <= described_class.new(b)
+          end
+        end
+      end
+    end
+
+    describe "#+" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["11:12:00", "P3DT1H15M"] => "12:27:00",
+          ["11:12:00Z", "P3DT1H15M"] => "12:27:00Z",
+          ["11:12:00-08:00", "P3DT1H15M"] => "12:27:00-08:00",
+          ["11:12:00", "-P3D"] => "11:12:00",
+        }.each do |(t, d), res|
+          it "#{t} + #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 + dur).to eq described_class.new(res)
+          end
+        end
+      end
+    end
+
+    describe "#-" do
+      context "xsd:dayTimeDuration" do
+        {
+          ["11:12:00", "P3DT1H15M"] => "09:57:00",
+          ["11:12:00Z", "P3DT1H15M"] => "09:57:00Z",
+          ["11:12:00-08:00", "P3DT1H15M"] => "09:57:00-08:00",
+          ["11:12:00", "-PT3H"] => "14:12:00",
+          ["08:20:00-05:00", "P23DT10H10M"] => "22:10:00-05:00",
+        }.each do |(t, d), res|
+          it "#{t} - #{d} == #{res}" do
+            t1 = described_class.new(t)
+            dur = RDF::Literal(d, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - dur).to eq described_class.new(res)
+          end
+        end
+      end
+
+      context "xsd:time" do
+        {
+          ["11:12:00", "09:57:00"] => "PT1H15M",
+          ["11:12:00Z", "04:00:00-05:00"] => "PT2H12M",
+          ["11:00:00-05:00", "21:30:00+05:30"] => "PT0S",
+          ["17:00:00-06:00", "08:00:00+09:00"] => "P1D",
+          ["24:00:00", "23:59:59"] => "-PT23H59M59S",
+          ["11:12:00", "14:12:00"] => "-PT3H",
+        }.each do |(t1, t2), res|
+          it "#{t1} - #{t2} == #{res}" do
+            t1 = described_class.new(t1)
+            t2 = described_class.new(t2)
+            res = RDF::Literal(res, datatype: RDF::XSD.dayTimeDuration)
+            expect(t1 - t2).to eq res
+          end
         end
       end
     end
@@ -1034,7 +1668,7 @@ describe RDF::Literal do
       end
 
       it "Numeric does not implement #abs" do
-        expect {RDF::Literal::Numeric.new(-1).abs}.to raise_error(NotImplementedError)
+        expect {described_class.new(-1).abs}.to raise_error(NotImplementedError)
       end
     end
 
@@ -1064,7 +1698,7 @@ describe RDF::Literal do
       end
 
       it "Numeric does not implement #round" do
-        expect {RDF::Literal::Numeric.new(-1).round}.to raise_error(NotImplementedError)
+        expect {described_class.new(-1).round}.to raise_error(NotImplementedError)
       end
     end
 
@@ -1090,7 +1724,7 @@ describe RDF::Literal do
       end
 
       it "Numeric returns self" do
-        expect(RDF::Literal::Numeric.new(-1).ceil).to eql RDF::Literal::Numeric.new(-1)
+        expect(described_class.new(-1).ceil).to eql described_class.new(-1)
       end
     end
 
@@ -1116,7 +1750,7 @@ describe RDF::Literal do
       end
 
       it "Numeric returns self" do
-        expect(RDF::Literal::Numeric.new(-1).floor).to eql RDF::Literal::Numeric.new(-1)
+        expect(described_class.new(-1).floor).to eql described_class.new(-1)
       end
     end
 
@@ -1144,7 +1778,7 @@ describe RDF::Literal do
       end
 
       it "returns self for unary +" do
-        expect(+RDF::Literal::Numeric.new(1)).to eql RDF::Literal::Numeric.new(1)
+        expect(+described_class.new(1)).to eql described_class.new(1)
       end
     end
 
@@ -1216,6 +1850,272 @@ describe RDF::Literal do
           it test do
             expect(l / r).to eql v
           end
+        end
+      end
+    end
+
+    describe "#exp" do
+      {
+        0                => 1.0e0,
+        1                => 2.7182818284590455e0,
+        2                => 7.38905609893065e0,
+        -1               => 0.36787944117144233e0,
+        Math::PI         => 23.140692632779267e0,
+        -Float::INFINITY => 0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).exp).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#exp10" do
+      {
+        0                => 1.0e0,
+        1                => 1.0e1,
+        0.5              => 3.1622776601683795e0,
+        -1               => 1.0e-1,
+        -Float::INFINITY => 0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).exp10).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp10.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).exp10.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#log" do
+      {
+        Math.exp(1)      => 1.0e0,
+        1.0e-3           => -6.907755278982137e0,
+        2                => 0.6931471805599453e0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).log).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [-1, Float::NAN, -Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [0, Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#log10" do
+      {
+        1.0e3            => 3,
+        1.0e-3           => -3,
+        2                => 0.3010299956639812e0,
+      }.each do |a, res|
+        it "#{a} => #{res}" do
+          expect(described_class.new(a).log10).to be_within(0.000001).of(described_class.new(res))
+        end
+      end
+
+      context '#nan?' do
+        [-1, Float::NAN, -Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log10.nan?).to be_truthy}
+        end
+      end
+
+      context '#infinite?' do
+        [0, Float::INFINITY].each do |v|
+          specify("#{v}") {expect(described_class.new(v).log10.infinite?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#sqrt" do
+      {
+        0.0e0  => 0.0e0,
+        -0.0e0 => -0.0e0,
+        1.0e6  => 1.0e3,
+        2.0e0  => 1.4142135623730951e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).sqrt).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#infinite?' do
+        [Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).sqrt).infinite?).to be_truthy}
+        end
+      end
+
+      context '#nan?' do
+        [-2.0e0, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).sqrt).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#sin" do
+      {
+        0           => 0.0e0,
+        Math::PI/2  => 1.0e0,
+        -Math::PI/2 => -1.0e0,
+        Math::PI    => 0.0e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).sin).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).sin).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#cos" do
+      {
+        0           => 1.0e0,
+        -0.0e0      => 1.0e0,
+        Math::PI/2  => 0.0e0,
+        -Math::PI/2 => 0.0e0,
+        Math::PI    => -1.0e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).cos).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).cos).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#tan" do
+      {
+        0           => 0.0e0,
+        -0.0e0      => -0.0e0,
+        Math::PI/4  => 1.0e0,
+        -Math::PI/4 => -1.0e0,
+        #Math::PI/2  => 0.0e0,
+        #-Math::PI/2 => -0.0e0,
+        Math::PI    => 0.0e0,
+        -Math::PI   => -0.0e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).tan).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).tan).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#asin" do
+      {
+        0           => 0.0e0,
+        -0.0e0      => -0.0e0,
+        1.0e0       => 1.5707963267948966e0,
+        -1.0e0      => -1.5707963267948966e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).asin).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [2.0e0, Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).asin).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#acos" do
+      {
+        0           => 1.5707963267948966e0,
+        -0.0e0      => 1.5707963267948966e0,
+        1.0e0       => 0.0e0,
+        -1.0e0      => 3.141592653589793e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).acos).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [2.0e0, Float::NAN, Float::INFINITY, -Float::INFINITY].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).acos).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#atan" do
+      {
+        0                => 0.0e0,
+        -0.0e0           => -0.0e0,
+        1.0e0            => 0.7853981633974483e0,
+        -1.0e0           => -0.7853981633974483e0,
+        Float::INFINITY  => 1.5707963267948966e0,
+        -Float::INFINITY => -1.5707963267948966e0,
+      }.each do |n, result|
+        it "#{n}" do
+          expect(RDF::Literal(n).atan).to be_within(0.000001).of(RDF::Literal(result))
+        end
+      end
+
+      context '#nan?' do
+        [Float::NAN].each do |n|
+          specify("#{n}") {expect((RDF::Literal(n).atan).nan?).to be_truthy}
+        end
+      end
+    end
+
+    describe "#atan2" do
+      {
+        "+0.0e0, 0.0e0":  [+0.0e0, 0.0e0, 0.0e0],
+        "-0.0e0, 0.0e0":  [-0.0e0, 0.0e0, -0.0e0],
+        "+0.0e0, -0.0e0": [+0.0e0, -0.0e0, 3.141592653589793e0],
+        "-0.0e0, -0.0e0": [-0.0e0, -0.0e0, -3.141592653589793e0],
+        "-1, 0.0e0":      [-1, 0.0e0, -1.5707963267948966e0],
+        "+1, 0.0e0":      [+1, 0.0e0, 1.5707963267948966e0],
+        "-0.0e0, -1":     [-0.0e0, -1, -3.141592653589793e0],
+        "+0.0e0, -1":     [+0.0e0, -1, 3.141592653589793e0],
+        "-0.0e0, +1":     [-0.0e0, +1, 0.0e0],
+        "+0.0e0, +1":     [+0.0e0, +1, 0.0e0],
+      }.each do |name, (a, b, result)|
+        it name do
+          expect(RDF::Literal(a).atan2 RDF::Literal(b)).to eq RDF::Literal(result)
         end
       end
     end
