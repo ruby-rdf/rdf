@@ -128,7 +128,7 @@ module RDF; class Literal
     #
     # @return [String]
     def to_s
-      @string || (@object.strftime(self.class.const_get(:FORMAT)).sub('.000', '') + self.tz)
+      @string ||= (@object.strftime(self.class.const_get(:FORMAT)).sub('.000', '') + self.tz)
     end
 
     ##
