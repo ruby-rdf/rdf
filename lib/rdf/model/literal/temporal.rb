@@ -146,18 +146,18 @@ module RDF; class Literal
     #
     #   Otherwise, the timezone is set based on the difference between the current timezone offset (if any) and `zone`.
     #
-    #   @param [String] zone (nil) In the form of {ZONE_GRAMMAR}.
+    #   @param [DayTimeDuration, String] zone (nil) In the form of {ZONE_GRAMMAR}.
     #   @return [Temporal] `self`
     #   @raise [RangeError] if `zone < -14*60` or `zone > 14*60`
     # @see https://www.w3.org/TR/xpath-functions/#func-adjust-dateTime-to-timezone
     def adjust_to_timezone!(*args)
       zone = args.empty? ? '+00:00' : args.first
-      if zone.nil?
+      if zone.to_s.empty?
         # Remove timezone component
         @object = self.class.new(@object.strftime(self.class.const_get(:FORMAT))).object
         @zone = nil
       else
-        md = zone.match(ZONE_GRAMMAR)
+        md = zone.to_s.match(ZONE_GRAMMAR)
         raise ArgumentError,
               "expected #{zone.inspect} to be a xsd:dayTimeDuration or +/-HH:MM" unless md
 
