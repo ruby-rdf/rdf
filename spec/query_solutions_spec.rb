@@ -305,6 +305,20 @@ describe RDF::Query::Solutions do
     specify {is_expected.to include(:author, :age, :name, :description, :updated, :created, :title, :price, :date)}
   end
 
+  describe "#variable_names=" do
+    it "can set variable names from constants" do
+      solutions.variable_names = %i{author age foo}
+      expect(solutions.variable_names).to include(:author, :age, :foo)
+      expect(solutions.variable_names).not_to include(:name)
+    end
+
+    it "can set variable names from variables" do
+      solutions.variable_names = %w{author age foo}.map {|n| RDF::Query::Variable.new(n)}
+      expect(solutions.variable_names).to include(:author, :age, :foo)
+      expect(solutions.variable_names).not_to include(:name)
+    end
+  end
+
   describe "#count" do
     its(:count) {is_expected.to eq 2}
     it "Counting the number of matching solutions" do
@@ -315,6 +329,40 @@ describe RDF::Query::Solutions do
   describe "#each" do
     it "Iterating over all found solutions" do
       expect {|b| solutions.each(&b)}.to yield_successive_args(uri, lit)
+    end
+  end
+
+  describe "#eql?" do
+    it "is true for equivalent solutions" do
+      expect(solutions).to eql solutions.dup
+    end
+
+    it "is false for different solutions" do
+      solns2 = RDF::Query::Solutions(uri)
+      expect(solutions).not_to eql solns2
+    end
+
+    it "is false for the same solution with different variable_names" do
+      solns2 = solutions.dup
+      solns2.variable_names = %i{foo bar}
+      expect(solutions).not_to eql solns2
+    end
+  end
+
+  describe "#==" do
+    it "is true for equivalent solutions" do
+      expect(solutions).to eq solutions.dup
+    end
+
+    it "is false for different solutions" do
+      solns2 = RDF::Query::Solutions(uri)
+      expect(solutions).not_to eq solns2
+    end
+
+    it "is false for the same solution with different variable_names" do
+      solns2 = solutions.dup
+      solns2.variable_names = %i{foo bar}
+      expect(solutions).not_to eq solns2
     end
   end
 
