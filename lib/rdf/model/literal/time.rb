@@ -39,7 +39,10 @@ module RDF; class Literal
           end
           # Normalize 24:00:00 to 00:00:00
           hr, mi, se = tm.split(':')
-          hr = "%.2i" % (hr.to_i % 24) if hr.to_i > 23
+          if hr.to_i > 23
+            hr = "%.2i" % (hr.to_i % 24)
+            @string = nil
+          end
           value = "#{hr}:#{mi}:#{se}"
           # Normalize to 1972-12-31 dateTime base
           ::DateTime.parse("1972-12-31T#{hr}:#{mi}:#{se}#{@zone}")

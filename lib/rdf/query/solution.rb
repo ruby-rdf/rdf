@@ -317,13 +317,12 @@ class RDF::Query
     def hash
       @bindings.hash
     end
-    
+
     ##
     # Equivalence of solution
     def eql?(other)
       other.is_a?(Solution) && @bindings.eql?(other.bindings)
     end
-    alias_method :==, :eql?
 
     ##
     # Equals of solution

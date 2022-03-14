@@ -78,6 +78,15 @@ module RDF; class Query
     end
 
     ##
+    # Sets variable names used in these solutions. If not set, the default is determined by the variables used in each solution.
+    #
+    # @param [Array<Symbol, RDF::Query::Variable>] vars
+    # @return [Array<Symbol>]
+    def variable_names=(vars)
+      @variable_names = vars.map(&:to_sym)
+    end
+
+    ##
     # @overload variable?
     #   Returns `false`.
     #
@@ -294,5 +303,17 @@ module RDF; class Query
       self
     end
     alias_method :limit!, :limit
+
+    ##
+    # Equivalence of solution
+    def eql?(other)
+      super && (!other.respond_to?(:variable_names) || variable_names.eql?(other.variable_names))
+    end
+
+    ##
+    # Equals of solution
+    def ==(other)
+      super && (!other.respond_to?(:variable_names) || variable_names.eql?(other.variable_names))
+    end
   end # Solutions
 end; end # RDF::Query
