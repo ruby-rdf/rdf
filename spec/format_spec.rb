@@ -5,7 +5,8 @@ require 'rdf/nquads'
 
 class RDF::Format::FooFormat < RDF::Format
   content_type     'application/test;q=1',
-                   extension: :test
+                   extension: :test,
+                   uri: "http://example.com/ns/formats/Foo"
   reader { RDF::NTriples::Reader }
   def self.detect(sample)
     sample == "foo"
@@ -16,7 +17,8 @@ end
 class RDF::Format::BarFormat < RDF::Format
   content_type     'application/test',
                    extension: :test,
-                   alias: 'application/x-test;q=0.1'
+                   alias: 'application/x-test;q=0.1',
+                   uri: "http://example.com/ns/formats/Bar"
   reader { RDF::NTriples::Reader }
   def self.detect(sample)
     sample == "bar"
@@ -129,6 +131,16 @@ describe RDF::Format do
     end
   end
 
+  describe ".uris" do
+    it "returns accept-types of available readers with quality" do
+      expect(RDF::Format.accept_types).to include(*%w(
+        application/n-triples text/plain;q=0.2
+        application/n-quads text/x-nquads;q=0.2
+        application/test application/x-test;q=0.1
+      ))
+    end
+  end
+
   describe ".writer_symbols" do
     it "returns symbols of available writers" do
       %i(ntriples nquads).each do |sym|
@@ -152,6 +164,15 @@ describe RDF::Format do
     end
   end
 
+  describe ".uris" do
+    it "matches format classes to URIs" do
+      RDF::Format.uris.each do |u, c|
+        expect(u).to be_a(RDF::URI)
+        expect(c).to respond_to(:content_type)
+      end
+    end
+  end
+
   RDF::Format.each do |format|
     context format.name do
       subject {format}
@@ -163,6 +184,20 @@ describe RDF::Format do
       }
       its(:content_type) {is_expected.to match content_types}
       its(:file_extension) {is_expected.to match file_extensions}
+    end
+  end
+
+  describe RDF::NTriples::Format do
+    it "has a format URI" do
+      expect(described_class.uri).to eql RDF::URI('http://www.w3.org/ns/formats/N-Triples')
+      expect(described_class.to_uri).to eql RDF::URI('http://www.w3.org/ns/formats/N-Triples')
+    end
+  end
+
+  describe RDF::NQuads::Format do
+    it "has a format URI" do
+      expect(described_class.uri).to eql RDF::URI('http://www.w3.org/ns/formats/N-Quads')
+      expect(described_class.to_uri).to eql RDF::URI('http://www.w3.org/ns/formats/N-Quads')
     end
   end
 
