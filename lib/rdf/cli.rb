@@ -572,7 +572,8 @@ module RDF
     #   @param [Hash{Symbol => Object}] options already set
     #   @return [Array<String>] list of executable commands
     # @overload commands(format: :json, **options)
-    #   @param [:json] format (:json)
+    #   Returns commands as JSON, for API usage.
+    #   @param [:json] format
     #   @param [Hash{Symbol => Object}] options already set
     #   @return [Array{Object}]
     #     Returns an array of commands including the command symbol
@@ -593,7 +594,7 @@ module RDF
         # Subset commands based on filter options
         cmds = COMMANDS.reject do |k, c|
           c.fetch(:filter, {}).any? do |opt, val|
-            options[opt].to_s != val.to_s
+            options.merge(format: format)[opt].to_s != val.to_s
           end
         end
 
