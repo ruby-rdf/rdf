@@ -76,6 +76,7 @@ module RDF
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
 
     # Split an IRI into it's component parts
+    # scheme, authority, path, query, fragment
     IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/.freeze
 
     # Remove dot expressions regular expressions
@@ -872,6 +873,12 @@ module RDF
       parts = {}
       if matchdata = IRI_PARTS.match(value)
         scheme, authority, path, query, fragment = matchdata[1..-1]
+
+        if Gem.win_platform? && scheme.match?(/^[a-zA-Z]$/) && authority.to_s.empty?
+          # A drive letter, not a scheme
+          scheme, path = nil, "#{scheme}:#{path}"
+        end
+
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)
