@@ -874,7 +874,7 @@ module RDF
       if matchdata = IRI_PARTS.match(value)
         scheme, authority, path, query, fragment = matchdata[1..-1]
 
-        if Gem.win_platform? && scheme.match?(/^[a-zA-Z]$/) && authority.to_s.empty?
+        if Gem.win_platform? && scheme && !authority && scheme.match?(/^[a-zA-Z]$/)
           # A drive letter, not a scheme
           scheme, path = nil, "#{scheme}:#{path}"
         end
