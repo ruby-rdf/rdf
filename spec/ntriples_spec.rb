@@ -630,7 +630,7 @@ describe RDF::NTriples::Writer do
       expect(output.string).to eq "#{stmt_string}\n"
     end
 
-    it "should dump statements to a file" do
+    it "should dump statements to a file", skip: ('not windows' if Gem.win_platform?) do
       require 'tmpdir' # for Dir.tmpdir
       writer.dump(graph, filename = File.join(Dir.tmpdir, "test.nt"))
       expect(File.read(filename)).to eq "#{stmt_string}\n"
