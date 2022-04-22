@@ -620,7 +620,7 @@ describe RDF::URI do
       %w(http://foo/bar# /a) => "<http://foo/a>",
       %w(http://foo/bar# #a) => "<http://foo/bar#a>",
 
-      %w(http://a/bb/ccc/.. g:h) => "<g:h>",
+      %w(http://a/bb/ccc/.. gg:h) => "<gg:h>",
       %w(http://a/bb/ccc/.. g) => "<http://a/bb/ccc/g>",
       %w(http://a/bb/ccc/.. ./g) => "<http://a/bb/ccc/g>",
       %w(http://a/bb/ccc/.. g/) => "<http://a/bb/ccc/g/>",

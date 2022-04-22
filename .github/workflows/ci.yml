@@ -48,3 +48,31 @@ jobs:
         if: "matrix.ruby == '3.0'"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+  wintests:
+    name: Win64 Ruby ${{ matrix.ruby }}
+    if: "contains(github.event.commits[0].message, '[ci skip]') == false"
+    runs-on: windows-latest
+    env:
+      CI: true
+      ALLOW_FAILURES: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'jruby' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - 3.1
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+      - name: Run tests
+        run: ruby --version; bundle exec rspec spec || $ALLOW_FAILURES
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        if: "matrix.ruby == '3.0'"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

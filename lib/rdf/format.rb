@@ -23,7 +23,9 @@ module RDF
   #
   # @example Defining a new RDF serialization format class
   #   class RDF::NTriples::Format < RDF::Format
-  #     content_type     'application/n-triples', extension: :nt
+  #     content_type     'application/n-triples',
+  #                      extension: :nt,
+  #                      uri: RDF::URI("http://www.w3.org/ns/formats/N-Triples")
   #     content_encoding 'utf-8'
   #     
   #     reader RDF::NTriples::Reader
@@ -220,6 +222,19 @@ module RDF
     # @return [Hash{Symbol => Array<Class>}]
     def self.file_extensions
       @@file_extensions
+    end
+
+    ##
+    # Returns the unique URI for the format.
+    #
+    # @example retrieving a list of supported file format URIs
+    #
+    #     RDF::Format.uris.keys
+    #
+    # @see https://www.w3.org/ns/formats/
+    # @return [Hash{Symbol => URI}]
+    def self.uris
+      @@uris
     end
 
     ##
@@ -465,6 +480,7 @@ module RDF
     #   @option options [Array<String>]  :aliases (nil)
     #   @option options [Symbol]         :extension  (nil)
     #   @option options [Array<Symbol>]  :extensions (nil)
+    #   @option options [URI]            :uri   (nil)
     #   @return [void]
     #
     # @overload content_type
@@ -504,6 +520,10 @@ module RDF
             @@content_types[aa] << self unless @@content_types[aa].include?(self)
           end
         end
+        # URI identifying this format
+        if uri = options[:uri]
+          @@uris[RDF::URI(uri)] = self
+        end
       end
     end
 
@@ -517,7 +537,7 @@ module RDF
     end
 
     ##
-    # Retrieves or defines file extensions for this RDF serialization format.
+    # Retrieves file extensions for this RDF serialization format.
     #
     # The return is an array where the first element is the cannonical
     # file extension for the format and following elements are alias file extensions.
@@ -525,6 +545,17 @@ module RDF
     # @return [Array<String>]
     def self.file_extension
       @@file_extensions.map {|ext, formats| ext if formats.include?(self)}.compact
+    end
+
+    ##
+    # Retrieves any format URI defined for this format..
+    #
+    # @return [URI]
+    def self.uri
+      @@uris.invert[self]
+    end
+    class << self
+      alias_method :to_uri, :uri
     end
 
   protected
@@ -568,6 +599,7 @@ module RDF
     @@readers          = {} # @private
     @@writers          = {} # @private
     @@subclasses       = [] # @private
+    @@uris             = {} # @private
 
     ##
     # @private

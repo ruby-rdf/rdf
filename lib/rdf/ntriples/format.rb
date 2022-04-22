@@ -16,7 +16,10 @@ module RDF::NTriples
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
   class Format < RDF::Format
-    content_type     'application/n-triples', extension: :nt, alias: 'text/plain;q=0.2'
+    content_type     'application/n-triples',
+                     extension: :nt,
+                     alias: 'text/plain;q=0.2',
+                     uri: RDF::URI("http://www.w3.org/ns/formats/N-Triples")
     content_encoding 'utf-8'
 
     reader { RDF::NTriples::Reader }
