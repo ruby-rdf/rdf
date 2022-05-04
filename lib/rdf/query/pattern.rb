@@ -160,7 +160,7 @@ module RDF; class Query
     #
     # @param  [RDF::Queryable] queryable
     #   the graph or repository to query
-    # @param  [Hash{Symbol => RDF::Term}] bindings
+    # @param  [Hash{Symbol => RDF::Term}, RDF::Query::Solution] bindings
     #   optional variable bindings to use
     # @yield  [statement]
     #   each matching statement
@@ -171,6 +171,7 @@ module RDF; class Query
     # @see    RDF::Queryable#query
     # @since  0.3.0
     def execute(queryable, bindings = {}, &block)
+      bindings = bindings.to_h if bindings.is_a?(Solution)
       query = {
         subject:    subject.is_a?(Variable)     && bindings[subject.to_sym]     ? bindings[subject.to_sym]    : subject,
         predicate:  predicate.is_a?(Variable)   && bindings[predicate.to_sym]   ? bindings[predicate.to_sym]  : predicate,

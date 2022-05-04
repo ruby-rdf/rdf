@@ -294,7 +294,7 @@ module RDF
     #   Alias for `:graph_name`.
     # @param  [Hash{Symbol => Object}] options
     #   any additional keyword options
-    # @option options [Hash{Symbol => RDF::Term}] bindings
+    # @option options [Hash{Symbol => RDF::Term}, RDF::Query::Solution] bindings
     #   optional variable bindings to use
     # @option options [Boolean] :optimize
     #   Optimize query before execution.
@@ -313,6 +313,7 @@ module RDF
       # Otherwise, a quick empty solution simplifies the logic below; no special case for
       # the first pattern
       @solutions = Query::Solutions(solutions)
+      bindings = bindings.to_h if bindings.is_a?(Solution)
 
       # If there are no patterns, just return the empty solution
       if empty?
@@ -341,7 +342,7 @@ module RDF
         bindings.each_key do |variable|
           if pattern.variables.include?(variable)
             unbound_solutions, old_solutions = old_solutions, Query::Solutions()
-            bindings[variable].each do |binding|
+            Array(bindings[variable]).each do |binding|
               unbound_solutions.each do |solution|
                 old_solutions << solution.merge(variable => binding)
               end
