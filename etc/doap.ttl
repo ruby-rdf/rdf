@@ -1,0 +1,75 @@
+@base         <https://rubygems.org/gems/rdf> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+
+<> a doap:Project ;
+  doap:name          "RDF.rb" ;
+  doap:homepage      <https://rubygems.org/gems/rdf> ;
+  doap:license       <https://unlicense.org/1.0/> ;
+  doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
+  doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
+  doap:created       "2007-10-23" ;
+  doap:programming-language "Ruby" ;
+  doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
+                     <http://dbpedia.org/resource/Ruby_(programming_language)> ;
+  doap:implements    <http://www.w3.org/TR/rdf11-concepts/>,
+                     <http://www.w3.org/TR/n-quads/>,
+                     <http://www.w3.org/TR/n-triples/> ;
+  doap:download-page <https://rubygems.org/gems/rdf/> ;
+  doap:bug-database  <https://github.com/ruby-rdf/rdf/issues> ;
+  doap:blog          <https://ar.to/>, <https://greggkellogg.net/> ;
+  doap:developer     <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
+  doap:maintainer    <https://greggkellogg.net/foaf#me> ;
+  doap:documenter    <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Călin Ardelean" ;
+                      foaf:mbox_sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Danny Gagne" ;
+                      foaf:mbox_sha1sum "6de43e9cf7de53427fea9765706703e4d957c17b"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Joey Geiger" ;
+                      foaf:mbox_sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Fumihiro Kato" ;
+                      foaf:mbox_sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Naoki Kawamukai" ;
+                      foaf:mbox_sha1sum "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Hellekin O. Wolf" ;
+                      foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "John Fieber" ;
+                      foaf:mbox_sha1sum "f7653fc1ac0e82ebb32f092389bd5fc728eaae12"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Keita Urashima" ;
+                      foaf:mbox_sha1sum "2b4247b6fd5bb4a1383378f325784318680d5ff9"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Pius Uzamere" ;
+                      foaf:mbox_sha1sum "bedbbf2451e5beb38d59687c0460032aff92cd3c"] ;
+  foaf:maker         <https://ar.to/#self> ;
+  dc:creator         <https://ar.to/#self> .
+
+<https://ar.to/#self> a foaf:Person ;
+  foaf:name          "Arto Bendiken" ;
+  foaf:mbox          <mailto:arto@bendiken.net> ;
+  foaf:mbox_sha1sum  "a033f652c84a4d73b8c26d318c2395699dd2bdfb" ;
+  foaf:homepage      <https://ar.to/> ;
+  foaf:made          <>  .
+
+<https://bhuga.net/#ben> a foaf:Person ;
+  foaf:name          "Ben Lavender" ;
+  foaf:mbox          <mailto:blavender@gmail.com> ;
+  foaf:mbox_sha1sum  "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" ;
+  foaf:homepage      <https://bhuga.net/> .
+
+<https://greggkellogg.net/foaf#me> a foaf:Person ;
+  foaf:name          "Gregg Kellogg" ;
+  foaf:mbox          <mailto:gregg@greggkellogg.net> ;
+  foaf:mbox_sha1sum  "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
+  foaf:homepage      <https://greggkellogg.net/>;
+  rdfs:isDefinedBy   <https://greggkellogg.net/foaf> .

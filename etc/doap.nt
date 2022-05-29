@@ -1,0 +1,79 @@
+_:g6720 <http://xmlns.com/foaf/0.1/name> "Hellekin O. Wolf" .
+_:g6720 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "c69f3255ff0639543cc5edfd8116eac8df16fab8" .
+_:g6720 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6680 <http://xmlns.com/foaf/0.1/name> "Fumihiro Kato" .
+_:g6680 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930" .
+_:g6680 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<https://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/homepage> <https://bhuga.net/> .
+<https://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/name> "Ben Lavender" .
+<https://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox> <mailto:blavender@gmail.com> .
+<https://bhuga.net/#ben> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" .
+<https://bhuga.net/#ben> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6660 <http://xmlns.com/foaf/0.1/name> "Joey Geiger" .
+_:g6660 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f412d743150d7b27b8468d56e69ca147917ea6fc" .
+_:g6660 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6740 <http://xmlns.com/foaf/0.1/name> "John Fieber" .
+_:g6740 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "f7653fc1ac0e82ebb32f092389bd5fc728eaae12" .
+_:g6740 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6640 <http://xmlns.com/foaf/0.1/name> "Danny Gagne" .
+_:g6640 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "6de43e9cf7de53427fea9765706703e4d957c17b" .
+_:g6640 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6780 <http://xmlns.com/foaf/0.1/name> "Pius Uzamere" .
+_:g6780 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "bedbbf2451e5beb38d59687c0460032aff92cd3c" .
+_:g6780 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6700 <http://xmlns.com/foaf/0.1/name> "Naoki Kawamukai" .
+_:g6700 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d" .
+_:g6700 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#homepage> <https://rubygems.org/gems/rdf> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#description> "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#implements> <http://www.w3.org/TR/n-quads/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#implements> <http://www.w3.org/TR/rdf11-concepts/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#implements> <http://www.w3.org/TR/n-triples/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <https://bhuga.net/#ben> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <https://greggkellogg.net/foaf#me> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#documenter> <https://ar.to/#self> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#download-page> <https://rubygems.org/gems/rdf/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <https://bhuga.net/#ben> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <https://greggkellogg.net/foaf#me> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#developer> <https://ar.to/#self> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#created> "2007-10-23" .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#shortdesc> "A Ruby library for working with Resource Description Framework (RDF) data."@en .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <https://ar.to/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#blog> <https://greggkellogg.net/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#license> <https://unlicense.org/1.0/> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Ruby_(programming_language)> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Resource_Description_Framework> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#name> "RDF.rb" .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#programming-language> "Ruby" .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6720 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6680 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6660 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6740 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6640 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6780 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6700 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6560 .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#helper> _:g6760 .
+<https://rubygems.org/gems/rdf> <http://xmlns.com/foaf/0.1/maker> <https://ar.to/#self> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#maintainer> <https://greggkellogg.net/foaf#me> .
+<https://rubygems.org/gems/rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
+<https://rubygems.org/gems/rdf> <http://usefulinc.com/ns/doap#bug-database> <https://github.com/ruby-rdf/rdf/issues> .
+<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <https://ar.to/#self> .
+<https://greggkellogg.net/foaf#me> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://greggkellogg.net/foaf> .
+<https://greggkellogg.net/foaf#me> <http://xmlns.com/foaf/0.1/homepage> <https://greggkellogg.net/> .
+<https://greggkellogg.net/foaf#me> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .
+<https://greggkellogg.net/foaf#me> <http://xmlns.com/foaf/0.1/mbox> <mailto:gregg@greggkellogg.net> .
+<https://greggkellogg.net/foaf#me> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" .
+<https://greggkellogg.net/foaf#me> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<https://ar.to/#self> <http://xmlns.com/foaf/0.1/homepage> <https://ar.to/> .
+<https://ar.to/#self> <http://xmlns.com/foaf/0.1/name> "Arto Bendiken" .
+<https://ar.to/#self> <http://xmlns.com/foaf/0.1/mbox> <mailto:arto@bendiken.net> .
+<https://ar.to/#self> <http://xmlns.com/foaf/0.1/mbox_sha1sum> "a033f652c84a4d73b8c26d318c2395699dd2bdfb" .
+<https://ar.to/#self> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<https://ar.to/#self> <http://xmlns.com/foaf/0.1/made> <https://rubygems.org/gems/rdf> .
+_:g6760 <http://xmlns.com/foaf/0.1/name> "Keita Urashima" .
+_:g6760 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "2b4247b6fd5bb4a1383378f325784318680d5ff9" .
+_:g6760 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:g6560 <http://xmlns.com/foaf/0.1/name> "Călin Ardelean" .
+_:g6560 <http://xmlns.com/foaf/0.1/mbox_sha1sum> "274bd18402fc773ffc0606996aa1fb90b603aa29" .
+_:g6560 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
