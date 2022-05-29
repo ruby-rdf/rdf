@@ -599,9 +599,19 @@ describe RDF::Query::Pattern do
     let!(:statement) {repo.detect {|s| s.to_a.none?(&:node?)}}
     let(:pattern) {described_class.new(:s, :p, :o)}
     subject {pattern}
+
     describe "#execute" do
       it "executes query against repo" do
         expect(subject.execute(repo).to_a.size).to eql repo.count
+      end
+
+      it "executes query with hash bindings" do
+        expect(subject.execute(repo, {subject: statement.subject}).to_a.size).to be > 0
+      end
+
+      it "executes query with solution bindings" do
+        soln = RDF::Query::Solution.new(subject: statement.subject)
+        expect(subject.execute(repo, soln).to_a.size).to be > 0
       end
     end
 

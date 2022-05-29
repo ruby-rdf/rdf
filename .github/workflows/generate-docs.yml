@@ -19,6 +19,8 @@ jobs:
         run: gem install yard --no-document
       - name: Build YARD Ruby Documentation
         run: yardoc
+      - name: Copy etc files
+        run: mkdir -p ./doc/yard/etc && cp ./etc/doap.* ./doc/yard/etc/
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
