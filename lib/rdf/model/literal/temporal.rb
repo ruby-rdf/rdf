@@ -10,6 +10,15 @@ module RDF; class Literal
       |(?:(?<si>-)?PT(?<hr>\d{1,2})H(?:(?<mi>\d{1,2})M)?)
     \z)x.freeze
 
+    YEARFRAG = %r(-?(?:(?:[1-9]\d{3,})|(?:0\d{3})))
+    MONTHFRAG = %r((?:(?:0[1-9])|(?:1[0-2])))
+    DAYFRAG = %r((?:(?:0[1-9])|(?:[12]\d)|(?:3[01])))
+    HOURFRAG = %r((?:[01]\d)|(?:2[0-3]))
+    MINUTEFRAG = %r([0-5]\d)
+    SECONDFRAG = %r([0-5]\d(?:\.\d+)?)
+    EODFRAG = %r(24:00:00(?:\.0+)?)
+    TZFRAG = %r((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)
+
     ##
     # Compares this literal to `other` for sorting purposes.
     #

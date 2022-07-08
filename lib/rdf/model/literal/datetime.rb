@@ -3,10 +3,22 @@ module RDF; class Literal
   # A date/time literal.
   #
   # @see   http://www.w3.org/TR/xmlschema11-2/#dateTime
+  # @see   https://www.w3.org/TR/xmlschema11-2/#rf-lexicalMappings-datetime
   # @since 0.2.1
   class DateTime < Temporal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#dateTime")
-    GRAMMAR  = %r(\A(-?(?:\d{4}|[1-9]\d{4,})-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    GRAMMAR  = %r(\A
+      (#{YEARFRAG}
+      -#{MONTHFRAG}
+      -#{DAYFRAG}
+      T
+      (?:
+       (?:
+        #{HOURFRAG}
+       :#{MINUTEFRAG}
+       :#{SECONDFRAG})
+      | #{EODFRAG}))
+     (#{TZFRAG})?\z)x.freeze
     FORMAT   = '%Y-%m-%dT%H:%M:%S.%L'.freeze
 
     ##

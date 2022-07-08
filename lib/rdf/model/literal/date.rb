@@ -3,10 +3,11 @@ module RDF; class Literal
   # A date literal.
   #
   # @see   http://www.w3.org/TR/xmlschema11-2/#date
+  # @see   https://www.w3.org/TR/xmlschema11-2/#rf-lexicalMappings-datetime
   # @since 0.2.1
   class Date < Temporal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#date")
-    GRAMMAR  = %r(\A(-?\d{4}-\d{2}-\d{2})((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    GRAMMAR  = %r(\A(#{YEARFRAG}-#{MONTHFRAG}-#{DAYFRAG})(#{TZFRAG})?\z).freeze
     FORMAT   = '%Y-%m-%d'.freeze
 
     ##
