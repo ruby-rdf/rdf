@@ -119,6 +119,8 @@
     
       <li><a href="http://www.w3.org/TR/xmlschema11-2/#date" target="_parent" title="http://www.w3.org/TR/xmlschema11-2/#date">http://www.w3.org/TR/xmlschema11-2/#date</a></li>
     
+      <li><a href="https://www.w3.org/TR/xmlschema11-2/#rf-lexicalMappings-datetime" target="_parent" title="https://www.w3.org/TR/xmlschema11-2/#rf-lexicalMappings-datetime">https://www.w3.org/TR/xmlschema11-2/#rf-lexicalMappings-datetime</a></li>
+    
   </ul>
 <p class="tag_title">Since:</p>
 <ul class="since">
@@ -204,7 +206,7 @@
 
 </div>
         </dt>
-        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>%r(</span><span class='tstring_content'>\A(-?\d{4}-\d{2}-\d{2})((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z</span><span class='regexp_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>%r(</span><span class='tstring_content'>\A(</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="Temporal.html#YEARFRAG-constant" title="RDF::Literal::Temporal::YEARFRAG (constant)">YEARFRAG</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="Temporal.html#MONTHFRAG-constant" title="RDF::Literal::Temporal::MONTHFRAG (constant)">MONTHFRAG</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="Temporal.html#DAYFRAG-constant" title="RDF::Literal::Temporal::DAYFRAG (constant)">DAYFRAG</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)(</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="Temporal.html#TZFRAG-constant" title="RDF::Literal::Temporal::TZFRAG (constant)">TZFRAG</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)?\z</span><span class='regexp_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="FORMAT-constant" class="">FORMAT =
           <div class="docstring">
@@ -245,7 +247,7 @@
   
   <h3 class="inherited">Constants inherited
      from <span class='object_link'><a href="Temporal.html" title="RDF::Literal::Temporal (class)">Temporal</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Temporal.html#ZONE_GRAMMAR-constant" title="RDF::Literal::Temporal::ZONE_GRAMMAR (constant)">Temporal::ZONE_GRAMMAR</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Temporal.html#DAYFRAG-constant" title="RDF::Literal::Temporal::DAYFRAG (constant)">Temporal::DAYFRAG</a></span>, <span class='object_link'><a href="Temporal.html#EODFRAG-constant" title="RDF::Literal::Temporal::EODFRAG (constant)">Temporal::EODFRAG</a></span>, <span class='object_link'><a href="Temporal.html#HOURFRAG-constant" title="RDF::Literal::Temporal::HOURFRAG (constant)">Temporal::HOURFRAG</a></span>, <span class='object_link'><a href="Temporal.html#MINUTEFRAG-constant" title="RDF::Literal::Temporal::MINUTEFRAG (constant)">Temporal::MINUTEFRAG</a></span>, <span class='object_link'><a href="Temporal.html#MONTHFRAG-constant" title="RDF::Literal::Temporal::MONTHFRAG (constant)">Temporal::MONTHFRAG</a></span>, <span class='object_link'><a href="Temporal.html#SECONDFRAG-constant" title="RDF::Literal::Temporal::SECONDFRAG (constant)">Temporal::SECONDFRAG</a></span>, <span class='object_link'><a href="Temporal.html#TZFRAG-constant" title="RDF::Literal::Temporal::TZFRAG (constant)">Temporal::TZFRAG</a></span>, <span class='object_link'><a href="Temporal.html#YEARFRAG-constant" title="RDF::Literal::Temporal::YEARFRAG (constant)">Temporal::YEARFRAG</a></span>, <span class='object_link'><a href="Temporal.html#ZONE_GRAMMAR-constant" title="RDF::Literal::Temporal::ZONE_GRAMMAR (constant)">Temporal::ZONE_GRAMMAR</a></span></p>
 
   
   
@@ -531,7 +533,6 @@
       <pre class="lines">
 
 
-19
 20
 21
 22
@@ -554,10 +555,11 @@
 39
 40
 41
-42</pre>
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/literal/date.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/literal/date.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>lexical:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='ivar'>@datatype</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datatype'>datatype</span> <span class='op'>||</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_const_get'>const_get</span><span class='lparen'>(</span><span class='symbol'>:DATATYPE</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -660,7 +662,6 @@
       <pre class="lines">
 
 
-49
 50
 51
 52
@@ -670,10 +671,11 @@
 56
 57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/literal/date.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/literal/date.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_humanize'>humanize</span><span class='lparen'>(</span><span class='id identifier rubyid_lang'>lang</span> <span class='op'>=</span> <span class='symbol'>:en</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_strftime'>strftime</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%A, %d %B %Y</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -696,9 +698,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sun May 29 00:30:09 2022 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.27 (ruby-3.1.2).
+  Generated on Sun Aug  7 22:10:57 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>
