@@ -248,13 +248,37 @@ describe RDF::CLI do
       end
     end
 
-    it "complains if filtered command is attempted" do
-      RDF::CLI.add_command(:filtered, filter: {output_format: :nquads})
-      expect do
-        expect do
-          RDF::CLI.exec(["filtered"], output_format: :ntriples)
-        end.to raise_error(ArgumentError)
-      end.to write(%(Command "filtered" requires output_format: nquads, not ntriples)).to(:output)
+    describe "filter" do
+      context "complains if filtered command is attempted" do
+        before(:each) {RDF::CLI::COMMANDS.delete(:filtered)}
+
+        it "single value" do
+          RDF::CLI.add_command(:filtered, filter: {output_format: :nquads})
+          expect do
+            expect do
+              RDF::CLI.exec(["filtered"], output_format: :ntriples)
+            end.to raise_error(ArgumentError)
+          end.to write(%(Command "filtered" requires compatible value for output_format, not ntriples)).to(:output)
+        end
+
+        it "Array of values" do
+          RDF::CLI.add_command(:filtered, filter: {output_format: %i{nquads turtle}})
+          expect do
+            expect do
+              RDF::CLI.exec(["filtered"], output_format: :ntriples)
+            end.to raise_error(ArgumentError)
+          end.to write(%(Command "filtered" requires output_format in ["nquads", "turtle"], not ntriples)).to(:output)
+        end
+
+        it "Proc" do
+          RDF::CLI.add_command(:filtered, filter: {output_format: ->(v) {v == :nquads}})
+          expect do
+            expect do
+              RDF::CLI.exec(["filtered"], output_format: :ntriples)
+            end.to raise_error(ArgumentError)
+          end.to write(%(Command "filtered" output_format inconsistent with ntriples)).to(:output)
+        end
+      end
     end
 
     it "uses repository specified in command" do

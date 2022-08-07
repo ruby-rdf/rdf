@@ -8,10 +8,11 @@ module RDF; class Literal
   # following time zone indicator.
   #
   # @see   http://www.w3.org/TR/xmlschema11-2/#time
+  # @see   https://www.w3.org/TR/xmlschema11-2/#rf-lexicalMappings-datetime
   # @since 0.2.1
   class Time < Temporal
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#time")
-    GRAMMAR  = %r(\A(\d{2}:\d{2}:\d{2}(?:\.\d+)?)((?:[\+\-]\d{2}:\d{2})|UTC|GMT|Z)?\Z).freeze
+    GRAMMAR  = %r(\A((?:#{HOURFRAG}:#{MINUTEFRAG}:#{SECONDFRAG})|#{EODFRAG})(#{TZFRAG})?\z).freeze
     FORMAT   = '%H:%M:%S.%L'.freeze
 
     ##

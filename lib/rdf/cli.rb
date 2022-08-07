@@ -25,6 +25,7 @@ rescue LoadError
      rdf/xsd
      shacl
      shex
+     yaml_ld
   ).each do |ser|
     begin
       require ser
@@ -177,7 +178,10 @@ module RDF
     # * `parse` Boolean value to determine if input files should automatically be parsed into `repository`.
     # * `help` used for the CLI help output.
     # * `lambda` code run to execute command.
-    # * `filter` Option values that must match for command to be used
+    # * `filter` value is a Hash whose keys are matched against selected command options. All specified `key/value` pairs are compared against the equivalent key in the current invocation.
+    #            If an Array, option value (as a string) must match any value of the array (as a string)
+    #            If a Proc, it is passed the option value and must return `true`.
+    #            Otherwise, the option value (as a string) must equal the  `value` (as a string).
     # * `control` Used to indicate how (if) command is displayed
     # * `repository` Use this repository, if set
     # * `options` an optional array of `RDF::CLI::Option` describing command-specific options.
@@ -505,9 +509,22 @@ module RDF
       # Make sure any selected command isn't filtered out
       cmds.each do |c|
         COMMANDS[c.to_sym].fetch(:filter, {}).each do |opt, val|
-          if options[opt].to_s != val.to_s
-            usage(option_parser, banner: "Command #{c.inspect} requires #{opt}: #{val}, not #{options.fetch(opt, 'null')}")
-            raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
+          case val
+          when Array
+            unless val.map(&:to_s).include?(options[opt].to_s)
+              usage(option_parser, banner: "Command #{c.inspect} requires #{opt} in #{val.map(&:to_s).inspect}, not #{options.fetch(opt, 'null')}")
+              raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
+            end
+          when Proc
+            unless val.call(options[opt])
+              usage(option_parser, banner: "Command #{c.inspect} #{opt} inconsistent with #{options.fetch(opt, 'null')}")
+              raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
+            end
+          else
+            unless val.to_s == options[opt].to_s
+              usage(option_parser, banner: "Command #{c.inspect} requires compatible value for #{opt}, not #{options.fetch(opt, 'null')}")
+              raise ArgumentError, "Incompatible command #{c} used with option #{opt}=#{options[opt]}"
+            end
           end
         end
 
@@ -594,7 +611,14 @@ module RDF
         # Subset commands based on filter options
         cmds = COMMANDS.reject do |k, c|
           c.fetch(:filter, {}).any? do |opt, val|
-            options.merge(format: format)[opt].to_s != val.to_s
+            case val
+            when Array
+              !val.map(&:to_s).include?(options[opt].to_s)
+            when Proc
+              !val.call(options[opt])
+            else
+              val.to_s != options[opt].to_s
+            end
           end
         end
 
