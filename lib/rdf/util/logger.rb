@@ -181,10 +181,10 @@ module RDF; module Util
     end
 
     ##
-    # @overload log_depth(options, &block)
+    # @overload log_depth(depth: 1, **options, &block)
     #   Increase depth around a method invocation
+    #   @param [Integer] :depth Additional recursion depth
     #   @param [Hash{Symbol}] options (@options || {})
-    #   @option options [Integer] :depth Additional recursion depth
     #   @option options [Logger, #<<] :logger
     #   @yield
     #     Yields with no arguments
@@ -194,8 +194,8 @@ module RDF; module Util
     # @overload log_depth
     #   # Return the current log depth
     #   @return [Integer]
-    def log_depth(**options, &block)
-      self.logger(**options).log_depth(&block)
+    def log_depth(depth: 1, **options, &block)
+      self.logger(**options).log_depth(depth: depth, &block)
     end
 
   private
@@ -244,7 +244,7 @@ module RDF; module Util
       end
 
       ##
-      # @overload log_depth(options, &block)
+      # @overload log_depth(depth: 1, **options, &block)
       #   Increase depth around a method invocation
       #   @param [Integer] depth (1) recursion depth
       #   @param [Hash{Symbol}] options (@options || {})
