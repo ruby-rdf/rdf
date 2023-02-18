@@ -462,8 +462,7 @@ potential to perform intentional actions for which they can be held responsible.
 
   describe ".imports" do
     {
-      RDF::Vocab::FOAF => [],
-      RDF::Vocab::WOT => [RDF::RDFS, RDF::OWL]
+      RDF::Vocab::FOAF => []
     }.each do |v, r|
       context v.to_uri do
         subject {v}
@@ -476,8 +475,7 @@ potential to perform intentional actions for which they can be held responsible.
 
   describe ".imported_from" do
     {
-      RDF::RDFS => [RDF::OWL, RDF::Vocab::WOT],
-      RDF::OWL => [RDF::Vocab::WOT]
+      RDF::RDFS => [RDF::OWL],
     }.each do |v, r|
       context v.to_uri do
         subject {v}
