@@ -848,17 +848,17 @@ describe RDF::NTriples::Writer do
       # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       it "should correctly escape ASCII characters (#x0-#x7F)" do
         (0x00..0x07).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x08.chr, encoding)).to eq "\b"
-        expect(writer.escape(0x09.chr, encoding)).to eq "\t"
+        expect(writer.escape(0x08.chr, encoding)).to eq "\\b"
+        expect(writer.escape(0x09.chr, encoding)).to eq "\\t"
         expect(writer.escape(0x0A.chr, encoding)).to eq "\\n"
-        expect(writer.escape(0x0B.chr, encoding)).to eq "\v"
-        expect(writer.escape(0x0C.chr, encoding)).to eq "\f"
+        expect(writer.escape(0x0B.chr, encoding)).to eq "\\u000B"
+        expect(writer.escape(0x0C.chr, encoding)).to eq "\\f"
         expect(writer.escape(0x0D.chr, encoding)).to eq "\\r"
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
         (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
-        expect(writer.escape(0x27.chr, encoding)).to eq "'"
+        expect(writer.escape(0x27.chr, encoding)).to eq "\\'"
         (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
@@ -910,17 +910,17 @@ describe RDF::NTriples::Writer do
       # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       it "should correctly escape ASCII characters (#x0-#x7F)" do
         (0x00..0x07).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x08.chr, encoding)).to eq "\b"
-        expect(writer.escape(0x09.chr, encoding)).to eq "\t"
+        expect(writer.escape(0x08.chr, encoding)).to eq "\\b"
+        expect(writer.escape(0x09.chr, encoding)).to eq "\\t"
         expect(writer.escape(0x0A.chr, encoding)).to eq "\\n"
-        expect(writer.escape(0x0B.chr, encoding)).to eq "\v"
-        expect(writer.escape(0x0C.chr, encoding)).to eq "\f"
+        expect(writer.escape(0x0B.chr, encoding)).to eq "\\u000B"
+        expect(writer.escape(0x0C.chr, encoding)).to eq "\\f"
         expect(writer.escape(0x0D.chr, encoding)).to eq "\\r"
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
         (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
-        expect(writer.escape(0x27.chr, encoding)).to eq "'"
+        expect(writer.escape(0x27.chr, encoding)).to eq "\\'"
         (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
