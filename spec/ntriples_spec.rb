@@ -573,7 +573,7 @@ describe RDF::NTriples::Writer do
     end
   end
 
-  context "Writing a Statements" do
+  context "Writing Statements" do
     let(:statements) {[
       RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')),
       RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'))
@@ -598,6 +598,10 @@ describe RDF::NTriples::Writer do
 
     it "should correctly format plain literals" do
       expect(writer.new.format_literal(RDF::Literal.new('Hello, world!'))).to eq '"Hello, world!"'
+    end
+
+    it "should correctly format string literals" do
+      expect(writer.new.format_literal(RDF::Literal.new('Hello, world!', datatype: RDF::XSD.string))).to eq '"Hello, world!"'
     end
 
     it "should correctly format language-tagged literals" do
@@ -858,7 +862,7 @@ describe RDF::NTriples::Writer do
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
         (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
-        expect(writer.escape(0x27.chr, encoding)).to eq "\\'"
+        expect(writer.escape(0x27.chr, encoding)).to eq "'"
         (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
@@ -920,7 +924,7 @@ describe RDF::NTriples::Writer do
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x22.chr, encoding)).to eq "\\\""
         (0x23..0x26).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
-        expect(writer.escape(0x27.chr, encoding)).to eq "\\'"
+        expect(writer.escape(0x27.chr, encoding)).to eq "'"
         (0x28..0x5B).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
         expect(writer.escape(0x5C.chr, encoding)).to eq "\\\\"
         (0x5D..0x7E).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
