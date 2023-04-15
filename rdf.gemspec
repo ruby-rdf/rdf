@@ -35,11 +35,11 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-vocab',   '~> 3.2'
   gem.add_development_dependency 'rdf-xsd',     '~> 3.2', '>= 3.2.1'
   gem.add_development_dependency 'rest-client', '~> 2.1'
-  gem.add_development_dependency 'rspec',       '~> 3.10'
+  gem.add_development_dependency 'rspec',       '~> 3.12'
   gem.add_development_dependency 'rspec-its',   '~> 1.3'
-  gem.add_development_dependency 'webmock',     '~> 3.14'
+  gem.add_development_dependency 'webmock',     '~> 3.18'
   gem.add_development_dependency 'yard',        '~> 0.9'
-  gem.add_development_dependency 'faraday',     '~> 1.8'
+  gem.add_development_dependency 'faraday',     '~> 1.10'
   gem.add_development_dependency 'faraday_middleware', '~> 1.2'
 
   gem.post_install_message       = nil
