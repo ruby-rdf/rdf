@@ -573,7 +573,7 @@ describe RDF::NTriples::Writer do
     end
   end
 
-  context "Writing a Statements" do
+  context "Writing Statements" do
     let(:statements) {[
       RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')),
       RDF::Statement(RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'))
@@ -598,6 +598,10 @@ describe RDF::NTriples::Writer do
 
     it "should correctly format plain literals" do
       expect(writer.new.format_literal(RDF::Literal.new('Hello, world!'))).to eq '"Hello, world!"'
+    end
+
+    it "should correctly format string literals" do
+      expect(writer.new.format_literal(RDF::Literal.new('Hello, world!', datatype: RDF::XSD.string))).to eq '"Hello, world!"'
     end
 
     it "should correctly format language-tagged literals" do
@@ -848,11 +852,11 @@ describe RDF::NTriples::Writer do
       # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       it "should correctly escape ASCII characters (#x0-#x7F)" do
         (0x00..0x07).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x08.chr, encoding)).to eq "\b"
-        expect(writer.escape(0x09.chr, encoding)).to eq "\t"
+        expect(writer.escape(0x08.chr, encoding)).to eq "\\b"
+        expect(writer.escape(0x09.chr, encoding)).to eq "\\t"
         expect(writer.escape(0x0A.chr, encoding)).to eq "\\n"
-        expect(writer.escape(0x0B.chr, encoding)).to eq "\v"
-        expect(writer.escape(0x0C.chr, encoding)).to eq "\f"
+        expect(writer.escape(0x0B.chr, encoding)).to eq "\\u000B"
+        expect(writer.escape(0x0C.chr, encoding)).to eq "\\f"
         expect(writer.escape(0x0D.chr, encoding)).to eq "\\r"
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }
@@ -910,11 +914,11 @@ describe RDF::NTriples::Writer do
       # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
       it "should correctly escape ASCII characters (#x0-#x7F)" do
         (0x00..0x07).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
-        expect(writer.escape(0x08.chr, encoding)).to eq "\b"
-        expect(writer.escape(0x09.chr, encoding)).to eq "\t"
+        expect(writer.escape(0x08.chr, encoding)).to eq "\\b"
+        expect(writer.escape(0x09.chr, encoding)).to eq "\\t"
         expect(writer.escape(0x0A.chr, encoding)).to eq "\\n"
-        expect(writer.escape(0x0B.chr, encoding)).to eq "\v"
-        expect(writer.escape(0x0C.chr, encoding)).to eq "\f"
+        expect(writer.escape(0x0B.chr, encoding)).to eq "\\u000B"
+        expect(writer.escape(0x0C.chr, encoding)).to eq "\\f"
         expect(writer.escape(0x0D.chr, encoding)).to eq "\\r"
         (0x0E..0x1F).each { |u| expect(writer.escape(u.chr, encoding)).to eq "\\u#{u.to_s(16).upcase.rjust(4, '0')}" }
         (0x20..0x21).each { |u| expect(writer.escape(u.chr, encoding)).to eq u.chr }

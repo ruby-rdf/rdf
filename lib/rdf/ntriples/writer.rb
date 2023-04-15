@@ -125,16 +125,18 @@ module RDF::NTriples
     # @see    http://www.w3.org/TR/n-triples/
     def self.escape_ascii(u, encoding)
       case (u = u.ord)
-        when (0x00..0x07) then escape_utf16(u)
-        when (0x0A)       then "\\n"
-        when (0x0D)       then "\\r"
-        when (0x0E..0x1F) then escape_utf16(u)
-        when (0x22)       then "\\\""
-        when (0x5C)       then "\\\\"
-        when (0x7F)       then escape_utf16(u)
-        when (0x00..0x7F) then u.chr
-        else
-          raise ArgumentError.new("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}")
+      when (0x08)       then "\\b"
+      when (0x09)       then "\\t"
+      when (0x0A)       then "\\n"
+      when (0x0C)       then "\\f"
+      when (0x0D)       then "\\r"
+      when (0x22)       then "\\\""
+      when (0x5C)       then "\\\\"
+      when (0x00..0x1F) then escape_utf16(u)
+      when (0x7F)       then escape_utf16(u)
+      when (0x20..0x7E) then u.chr
+      else
+        raise ArgumentError.new("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}")
       end
     end
 

@@ -85,7 +85,7 @@ module RDF; module Util
           id = value.__id__
           @cache[key] = id
           @index[id] = key
-          ObjectSpace.define_finalizer(value, proc {|id| @cache.delete(@index.delete(id))})
+          ObjectSpace.define_finalizer(value, finalizer_proc)
         end
         value
       end
@@ -99,6 +99,12 @@ module RDF; module Util
         id = @cache[key]
         @cache.delete(key)
         @index.delete(id) if id
+      end
+
+      private
+
+      def finalizer_proc
+        proc { |id| @cache.delete(@index.delete(id)) }
       end
     end # ObjectSpaceCache
 
