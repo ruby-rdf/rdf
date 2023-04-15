@@ -325,13 +325,13 @@
       <pre class="lines">
 
 
-113
-114
-115
-116</pre>
+119
+120
+121
+122</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 119</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_capacity'>capacity</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>weakref</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>unless</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>WeakRef</span><span class='rparen'>)</span>
@@ -417,19 +417,19 @@
       <pre class="lines">
 
 
-121
-122
-123
-124
-125
-126
 127
 128
 129
-130</pre>
+130
+131
+132
+133
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 121</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 127</span>
 
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_ref'>ref</span> <span class='op'>=</span> <span class='ivar'>@cache</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -525,15 +525,15 @@
       <pre class="lines">
 
 
-136
-137
-138
-139
-140
-141</pre>
+142
+143
+144
+145
+146
+147</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 136</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 142</span>
 
 <span class='kw'>def</span> <span class='op'>[]=</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_capacity?'>capacity?</span>
@@ -621,13 +621,13 @@
       <pre class="lines">
 
 
-148
-149
-150
-151</pre>
+154
+155
+156
+157</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 148</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/util/cache.rb', line 154</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ref'>ref</span> <span class='op'>=</span> <span class='ivar'>@cache</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
@@ -643,9 +643,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sun Aug  7 22:10:52 2022 by
+  Generated on Sat Apr 15 20:45:50 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.1.2).
+  0.9.34 (ruby-3.1.4).
 </div>
 
     </div>
