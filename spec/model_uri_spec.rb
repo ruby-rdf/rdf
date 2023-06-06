@@ -317,64 +317,64 @@ describe RDF::URI do
         %W(\U00000053 Dürst AZazÀÖØöø˿Ͱͽ΄῾‌‍⁰↉Ⰰ⿕、ퟻ﨎ﷇﷰ￯𐀀𪘀)
       }
       {
-        ""  => "%s",
-        "and query" => "%s?%s",
-        "and fragment" => "%s#%s",
-        "and query and fragment" => "%s?%s#%s",
+        ""  => "%{p1}",
+        "and query" => "%{p1}?%{p2}",
+        "and fragment" => "%{p1}#%{p2}",
+        "and query and fragment" => "%{p1}?%{p2}#%{p3}",
       }.each do |mod, fmt|
         it "validates IRI with authority and ipath-abempty #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("scheme://auth/#{fmt}" % ["", c, c])).to be_valid
-            expect(RDF::URI("scheme://auth/#{fmt}" % [c, c, c])).to be_valid
-            expect(RDF::URI("scheme://auth/#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
+            expect(RDF::URI("scheme://auth/#{fmt}" % {p1: "", p2: c, p3: c})).to be_valid
+            expect(RDF::URI("scheme://auth/#{fmt}" % {p1: c, p2: c, p3: c})).to be_valid
+            expect(RDF::URI("scheme://auth/#{fmt}" % {p1: "#{c}/#{c}", p2: c, p3: c})).to be_valid
           end
         end
         it "validates IRI with path-absolute #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("scheme:/#{fmt}" % ["", c, c])).to be_valid
-            expect(RDF::URI("scheme:/#{fmt}" % [c, c, c])).to be_valid
-            expect(RDF::URI("scheme:/#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
+            expect(RDF::URI("scheme:/#{fmt}" % {p1: "", p2: c, p3: c})).to be_valid
+            expect(RDF::URI("scheme:/#{fmt}" % {p1: c, p2: c, p3: c})).to be_valid
+            expect(RDF::URI("scheme:/#{fmt}" % {p1: "#{c}/#{c}", p2: c, p3: c})).to be_valid
           end
         end
         it "validates IRI with ipath-rootless #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("scheme:#{fmt}" % [c, c, c])).to be_valid
-            expect(RDF::URI("scheme:#{fmt}" % ["#{c}/#{c}", c, c])).to be_valid
+            expect(RDF::URI("scheme:#{fmt}" % {p1: c, p2: c, p3: c})).to be_valid
+            expect(RDF::URI("scheme:#{fmt}" % {p1: "#{c}/#{c}", p2: c, p3: c})).to be_valid
           end
         end
         it "validates IRI with ipath-empty #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("scheme:#{fmt}" % ["", c, c])).to be_valid
+            expect(RDF::URI("scheme:#{fmt}" % {p1: "", p2: c, p3: c})).to be_valid
           end
         end
 
         it "invalidates irelative-ref with authority #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("//auth/#{fmt}" % [c, c, c])).not_to be_valid
+            expect(RDF::URI("//auth/#{fmt}" % {p1: c, p2: c, p3: c})).not_to be_valid
           end
         end
         it "invalidates irelative-ref with authority and port #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("//auth:123/#{fmt}" % [c, c, c])).not_to be_valid
+            expect(RDF::URI("//auth:123/#{fmt}" % {p1: c, p2: c, p3: c})).not_to be_valid
           end
         end
         it "invalidates irelative-ref with ipath-absolute #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("/#{fmt}" % [c, c, c])).not_to be_valid
-            expect(RDF::URI("/#{fmt}" % ["#{c}/", c, c])).not_to be_valid
-            expect(RDF::URI("/#{fmt}" % ["#{c}/#{c}", c, c])).not_to be_valid
+            expect(RDF::URI("/#{fmt}" % {p1: c, p2: c, p3: c})).not_to be_valid
+            expect(RDF::URI("/#{fmt}" % {p1: "#{c}/", p2: c, p3: c})).not_to be_valid
+            expect(RDF::URI("/#{fmt}" % {p1: "#{c}/#{c}", p2: c, p3: c})).not_to be_valid
           end
         end
         it "invalidates irelative-ref with ipath-noscheme #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("#{fmt}" % [c, c, c])).not_to be_valid
-            expect(RDF::URI("#{fmt}" % ["#{c}/", c, c])).not_to be_valid
-            expect(RDF::URI("#{fmt}" % ["#{c}/#{c}", c, c])).not_to be_valid
+            expect(RDF::URI("#{fmt}" % {p1: c, p2: c, p3: c})).not_to be_valid
+            expect(RDF::URI("#{fmt}" % {p1: "#{c}/", p2: c, p3: c})).not_to be_valid
+            expect(RDF::URI("#{fmt}" % {p1: "#{c}/#{c}", p2: c, p3: c})).not_to be_valid
           end
         end
         it "invalidates irelative-ref with ipath-empty #{mod}" do
           refs.each do |c|
-            expect(RDF::URI("#{fmt}" % ["", c, c])).not_to be_valid
+            expect(RDF::URI("#{fmt}" % {p1: "", p2: c, p3: c})).not_to be_valid
           end
         end
       end
@@ -384,6 +384,25 @@ describe RDF::URI do
       [" ", "<", ">", "'" '"'].each do |c|
         it "does not validate <http://example/#{c}>" do
           expect(RDF::URI("http://example/#{c}")).not_to be_valid
+        end
+      end
+
+      [
+        'file:///path/to/file with spaces.txt',
+        'scheme://auth/\u0000',
+        'scheme://auth/\u005C',
+        'scheme://auth/\u005E',
+        'scheme://auth/\u0060',
+        'scheme://auth/\\u0000',
+        'scheme://auth/\\u005C',
+        'scheme://auth/\\u005E',
+        'scheme://auth/\\u0060',
+        'scheme://auth/^',
+        'scheme://auth/`',
+        'scheme://auth/\\',
+      ].each do |u|
+        it "does not validate <#{u}>" do
+          expect(RDF::URI(u)).not_to be_valid
         end
       end
     end

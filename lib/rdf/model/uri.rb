@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 require 'cgi'
 
 module RDF
@@ -116,7 +117,17 @@ module RDF
     # Note: not all reserved characters need to be escaped in SPARQL/Turtle, but they must be unescaped when encountered
     PN_ESCAPE_CHARS      = /[~\.!\$&'\(\)\*\+,;=\/\?\#@%]/.freeze
     PN_ESCAPES           = /\\#{Regexp.union(PN_ESCAPE_CHARS, /[\-_]/)}/.freeze
-    
+
+    # For URI encoding
+    ENCODE_USER = Regexp.compile("[^#{IUNRESERVED}#{SUB_DELIMS}]").freeze
+    ENCODE_PASSWORD = Regexp.compile("[^#{IUNRESERVED}#{SUB_DELIMS}]").freeze
+    ENCODE_ISEGMENT = Regexp.compile("[^#{IPCHAR}]").freeze
+    ENCODE_ISEGMENT_NC = Regexp.compile("[^#{IUNRESERVED}|#{PCT_ENCODED}|[#{SUB_DELIMS}]|@]").freeze
+    ENCODE_IQUERY = Regexp.compile("[^#{IQUERY}]").freeze
+    ENCODE_IFRAGMENT = Regexp.compile("[^#{IFRAGMENT}]").freeze
+    ENCODE_PORT = Regexp.compile('[^\d]').freeze
+    ENCODE_IHOST = Regexp.compile("(?:#{IP_literal})|(?:#{IREG_NAME})").freeze
+
     ##
     # Cache size may be set through {RDF.config} using `uri_cache_size`.
     #
@@ -170,7 +181,7 @@ module RDF
     # @return [String] normalized path
     # @see http://tools.ietf.org/html/rfc3986#section-5.2.4
     def self.normalize_path(path)
-      output, input = "", path.to_s
+      output, input = String.new, path.to_s
       if input.encoding != Encoding::ASCII_8BIT
         input = input.dup.force_encoding(Encoding::ASCII_8BIT)
       end
@@ -353,7 +364,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since 0.3.9
     def valid?
-      RDF::URI::IRI.match(to_s) || false
+      RDF::URI::IRI.match?(to_s) || false
     end
 
     ##
@@ -920,7 +931,7 @@ module RDF
     # Return normalized version of scheme, if any
     # @return [String]
     def normalized_scheme
-      normalize_segment(scheme.strip, SCHEME, true) if scheme
+      scheme.strip.downcase if scheme
     end
 
     ##
@@ -946,7 +957,7 @@ module RDF
     # Normalized version of user
     # @return [String]
     def normalized_user
-      URI.encode(CGI.unescape(user), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/).force_encoding(Encoding::UTF_8) if user
+      URI.encode(CGI.unescape(user), ENCODE_USER).force_encoding(Encoding::UTF_8) if user
     end
 
     ##
@@ -972,7 +983,7 @@ module RDF
     # Normalized version of password
     # @return [String]
     def normalized_password
-      URI.encode(CGI.unescape(password), /[^#{IUNRESERVED}|#{SUB_DELIMS}]/).force_encoding(Encoding::UTF_8) if password
+      URI.encode(CGI.unescape(password), ENCODE_PASSWORD).force_encoding(Encoding::UTF_8) if password
     end
 
     HOST_FROM_AUTHORITY_RE = /(?:[^@]+@)?([^:]+)(?::.*)?$/.freeze
@@ -1000,7 +1011,7 @@ module RDF
     # @return [String]
     def normalized_host
       # Remove trailing '.' characters
-      normalize_segment(host, IHOST, true).chomp('.') if host
+      host.sub(/\.*$/, '').downcase if host
     end
 
     PORT_FROM_AUTHORITY_RE = /:(\d+)$/.freeze
@@ -1028,12 +1039,8 @@ module RDF
     # @return [String]
     def normalized_port
       if port
-        np = normalize_segment(port.to_s, PORT)
-        if PORT_MAPPING[normalized_scheme] == np.to_i
-          nil
-        else
-          np.to_i
-        end
+        np = port.to_i
+        PORT_MAPPING[normalized_scheme] != np ? np : nil
       end
     end
 
@@ -1069,25 +1076,25 @@ module RDF
       norm_segs = case
       when authority
         # ipath-abempty
-        segments.map {|s| normalize_segment(s, ISEGMENT)}
+        segments.map {|s| normalize_segment(s, ENCODE_ISEGMENT)}
       when segments[0].nil?
         # ipath-absolute
         res = [nil]
-        res << normalize_segment(segments[1], ISEGMENT_NZ) if segments.length > 1
-        res += segments[2..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 2
+        res << normalize_segment(segments[1], ENCODE_ISEGMENT) if segments.length > 1
+        res += segments[2..-1].map {|s| normalize_segment(s, ENCODE_ISEGMENT)} if segments.length > 2
         res
       when segments[0].to_s.index(':')
         # ipath-noscheme
         res = []
-        res << normalize_segment(segments[0], ISEGMENT_NZ_NC)
-        res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
+        res << normalize_segment(segments[0], ENCODE_ISEGMENT_NC)
+        res += segments[1..-1].map {|s| normalize_segment(s, ENCODE_ISEGMENT)} if segments.length > 1
         res
       when segments[0]
         # ipath-rootless
         # ipath-noscheme
         res = []
-        res << normalize_segment(segments[0], ISEGMENT_NZ)
-        res += segments[1..-1].map {|s| normalize_segment(s, ISEGMENT)} if segments.length > 1
+        res << normalize_segment(segments[0], ENCODE_ISEGMENT)
+        res += segments[1..-1].map {|s| normalize_segment(s, ENCODE_ISEGMENT)} if segments.length > 1
         res
       else
         # Should be empty
@@ -1096,7 +1103,7 @@ module RDF
 
       res = self.class.normalize_path(norm_segs.join("/"))
       # Special rules for specific protocols having empty paths
-      normalize_segment(res.empty? ? (%w(http https ftp tftp).include?(normalized_scheme) ? '/' : "") : res, IHIER_PART)
+      res = (res.empty? && %w(http https ftp tftp).include?(normalized_scheme)) ? '/' : res
     end
 
     ##
@@ -1120,7 +1127,7 @@ module RDF
     # Normalized version of query
     # @return [String]
     def normalized_query
-      normalize_segment(query, IQUERY) if query
+      normalize_segment(query, ENCODE_IQUERY) if query
     end
 
     ##
@@ -1144,7 +1151,7 @@ module RDF
     # Normalized version of fragment
     # @return [String]
     def normalized_fragment
-      normalize_segment(fragment, IFRAGMENT) if fragment
+      normalize_segment(fragment, ENCODE_IFRAGMENT) if fragment
     end
 
     ##
@@ -1274,7 +1281,7 @@ module RDF
       self.query = case value
       when Array, Hash
         value.map do |(k,v)|
-          k = normalize_segment(k.to_s, UNRESERVED)
+          k = normalize_segment(k.to_s, /[^A-Za-z0-9\._~-]/)
           if v.nil?
             k
           else
@@ -1282,7 +1289,7 @@ module RDF
               if vv === TrueClass
                 k
               else
-                "#{k}=#{normalize_segment(vv.to_s, UNRESERVED)}"
+                "#{k}=#{normalize_segment(vv.to_s, /[^A-Za-z0-9\._~-]/)}"
               end
             end.join("&")
           end
@@ -1331,7 +1338,7 @@ module RDF
     # Normalize a segment using a character range
     #
     # @param [String] value
-    # @param [Regexp] expr
+    # @param [Regexp] expr matches characters to be encoded
     # @param [Boolean] downcase
     # @return [String]
     def normalize_segment(value, expr, downcase = false)
@@ -1339,7 +1346,7 @@ module RDF
         value = value.dup.force_encoding(Encoding::UTF_8)
         decoded = CGI.unescape(value)
         decoded.downcase! if downcase
-        URI.encode(decoded, /[^(?:#{expr})]/).force_encoding(Encoding::UTF_8)
+        URI.encode(decoded, expr).force_encoding(Encoding::UTF_8)
       end
     end
 
@@ -1364,7 +1371,7 @@ module RDF
     def self.encode(str, expr)
       str.gsub(expr) do
         us = $&
-        tmp = ''
+        tmp = String.new
         us.each_byte do |uc|
           tmp << sprintf('%%%02X', uc)
         end
