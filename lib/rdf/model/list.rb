@@ -281,19 +281,6 @@ module RDF
     end
 
     ##
-    # Returns the element at `index`.
-    #
-    # @example
-    #   RDF::List[1, 2, 3][0]                   #=> RDF::Literal(1)
-    #
-    # @param  [Integer] index
-    # @return [RDF::Term]
-    # @see    http://ruby-doc.org/core-2.2.2/Array.html#method-i-5B-5D
-    def [](index)
-      at(index)
-    end
-
-    ##
     # Element Assignment — Sets the element at `index`, or replaces a subarray from the `start` index for `length` elements, or replaces a subarray specified by the `range` of indices.
     #
     # If indices are greater than the current capacity of the array, the array grows automatically. Elements are inserted into the array at `start` if length is zero.
