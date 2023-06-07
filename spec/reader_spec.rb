@@ -59,7 +59,6 @@ describe RDF::Reader do
 
     it "uses content type in preference to file extension" do
       uri = "http://example/foo.nq"
-      accept = (RDF::Format.accept_types + %w(*/*;q=0.1)).join(", ")
       reader_mock = double("reader")
       expect(reader_mock).to receive(:got_here)
       WebMock.
@@ -74,7 +73,6 @@ describe RDF::Reader do
 
     it "ignores content type 'text/plain'" do
       uri = "http://example/foo.ttl"
-      accept = (RDF::Format.accept_types + %w(*/*;q=0.1)).join(", ")
       reader_mock = double("reader")
       expect(reader_mock).to receive(:got_here)
       WebMock.
