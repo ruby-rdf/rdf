@@ -29,27 +29,27 @@ module RDF
     include RDF::Resource
 
     # IRI components
-    UCSCHAR = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
-      [\\u00A0-\\uD7FF]|[\\uF900-\\uFDCF]|[\\uFDF0-\\uFFEF]|
-      [\\u{10000}-\\u{1FFFD}]|[\\u{20000}-\\u{2FFFD}]|[\\u{30000}-\\u{3FFFD}]|
-      [\\u{40000}-\\u{4FFFD}]|[\\u{50000}-\\u{5FFFD}]|[\\u{60000}-\\u{6FFFD}]|
-      [\\u{70000}-\\u{7FFFD}]|[\\u{80000}-\\u{8FFFD}]|[\\u{90000}-\\u{9FFFD}]|
-      [\\u{A0000}-\\u{AFFFD}]|[\\u{B0000}-\\u{BFFFD}]|[\\u{C0000}-\\u{CFFFD}]|
-      [\\u{D0000}-\\u{DFFFD}]|[\\u{E1000}-\\u{EFFFD}]
-    EOS
-    IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF]|[\\u{F0000}-\\u{FFFFD}]|[\\u100000-\\u10FFFD]").freeze
+    UCSCHAR = %(
+      \\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF
+      \\u{10000}-\\u{1FFFD}\\u{20000}-\\u{2FFFD}\\u{30000}-\\u{3FFFD}
+      \\u{40000}-\\u{4FFFD}\\u{50000}-\\u{5FFFD}\\u{60000}-\\u{6FFFD}
+      \\u{70000}-\\u{7FFFD}\\u{80000}-\\u{8FFFD}\\u{90000}-\\u{9FFFD}
+      \\u{A0000}-\\u{AFFFD}\\u{B0000}-\\u{BFFFD}\\u{C0000}-\\u{CFFFD}
+      \\u{D0000}-\\u{DFFFD}\\u{E1000}-\\u{EFFFD}
+    ).gsub(/\s+/, '')
+    IPRIVATE = Regexp.compile("[\\uE000-\\uF8FF\\u{F0000}-\\u{FFFFD}\\u{100000}-\\u{10FFFD}]").freeze
     SCHEME = Regexp.compile("[A-Za-z](?:[A-Za-z0-9+-\.])*").freeze
     PORT = Regexp.compile("[0-9]*").freeze
     IP_literal = Regexp.compile("\\[[0-9A-Fa-f:\\.]*\\]").freeze  # Simplified, no IPvFuture
     PCT_ENCODED = Regexp.compile("%[0-9A-Fa-f][0-9A-Fa-f]").freeze
-    GEN_DELIMS = Regexp.compile("[:/\\?\\#\\[\\]@]").freeze
-    SUB_DELIMS = Regexp.compile("[!\\$&'\\(\\)\\*\\+,;=]").freeze
-    RESERVED = Regexp.compile("(?:#{GEN_DELIMS}|#{SUB_DELIMS})").freeze
+    GEN_DELIMS = Regexp.compile(%q{[:/\?\#\[\]@]}).freeze
+    SUB_DELIMS = Regexp.compile(%q{[!\$&'\(\)\*\+,;=]}).freeze
+    RESERVED = Regexp.union(GEN_DELIMS, SUB_DELIMS).freeze
     UNRESERVED = Regexp.compile("[A-Za-z0-9\._~-]").freeze
 
-    IUNRESERVED = Regexp.compile("[A-Za-z0-9\._~-]|#{UCSCHAR}").freeze
+    IUNRESERVED = Regexp.union(UNRESERVED, Regexp.compile("[#{UCSCHAR}]")).freeze
 
-    IPCHAR = Regexp.compile("(?:#{IUNRESERVED}|#{PCT_ENCODED}|#{SUB_DELIMS}|:|@)").freeze
+    IPCHAR = Regexp.union(IUNRESERVED, PCT_ENCODED, SUB_DELIMS, /[:|@]/).freeze
 
     IQUERY = Regexp.compile("(?:#{IPCHAR}|#{IPRIVATE}|/|\\?)*").freeze
 
@@ -66,7 +66,7 @@ module RDF
     IPATH_EMPTY = Regexp.compile("").freeze
 
     IREG_NAME   = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS}))*").freeze
-    IHOST = Regexp.compile("(?:#{IP_literal})|(?:#{IREG_NAME})").freeze
+    IHOST = Regexp.union(IP_literal, IREG_NAME).freeze
     IUSERINFO = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|:)*").freeze
     IAUTHORITY = Regexp.compile("(?:#{IUSERINFO}@)?#{IHOST}(?::#{PORT})?").freeze
     
@@ -119,14 +119,18 @@ module RDF
     PN_ESCAPES           = /\\#{Regexp.union(PN_ESCAPE_CHARS, /[\-_]/)}/.freeze
 
     # For URI encoding
-    ENCODE_USER = Regexp.compile("[^#{IUNRESERVED}#{SUB_DELIMS}]").freeze
-    ENCODE_PASSWORD = Regexp.compile("[^#{IUNRESERVED}#{SUB_DELIMS}]").freeze
-    ENCODE_ISEGMENT = Regexp.compile("[^#{IPCHAR}]").freeze
-    ENCODE_ISEGMENT_NC = Regexp.compile("[^#{IUNRESERVED}|#{PCT_ENCODED}|[#{SUB_DELIMS}]|@]").freeze
-    ENCODE_IQUERY = Regexp.compile("[^#{IQUERY}]").freeze
-    ENCODE_IFRAGMENT = Regexp.compile("[^#{IFRAGMENT}]").freeze
-    ENCODE_PORT = Regexp.compile('[^\d]').freeze
-    ENCODE_IHOST = Regexp.compile("(?:#{IP_literal})|(?:#{IREG_NAME})").freeze
+    # iuserinfo = *( iunreserved / pct-encoded / sub-delims / ":" )
+    ENCODE_USER = 
+    ENCODE_PASSWORD = Regexp.compile("[^A-Za-z0-9\._~#{UCSCHAR}!$&'\(\)\*\+,;=:-]").freeze
+    # isegment = *ipchar
+    # ipchar = iunreserved / pct-encoded / sub-delims / ":" / "@"
+    ENCODE_ISEGMENT = Regexp.compile("[^A-Za-z0-9\._~#{UCSCHAR}!$&'\(\)\*\+,;=:-]").freeze
+    # isegment-nz-nc = 1*( iunreserved / pct-encoded / sub-delims / "@" )
+    ENCODE_ISEGMENT_NC = Regexp.compile("[^A-Za-z0-9\._~#{UCSCHAR}!$&'\(\)\*\+,;=-]").freeze
+    # iquery         = *( ipchar / iprivate / "/" / "?" )
+    ENCODE_IQUERY = Regexp.compile("[^A-Za-z0-9\._~#{UCSCHAR}\\uE000-\\uF8FF\\u{F0000}-\\u{FFFFD}\\u{100000}-\\u{10FFFD}/?=]").freeze
+    # ifragment      = *( ipchar / "/" / "?" )
+    ENCODE_IFRAGMENT = Regexp.compile("[^A-Za-z0-9\._~#{UCSCHAR}/?]").freeze
 
     ##
     # Cache size may be set through {RDF.config} using `uri_cache_size`.
@@ -1071,6 +1075,12 @@ module RDF
     # Normalized version of path
     # @return [String]
     def normalized_path
+      if normalized_scheme == "urn"
+        # Special-case URI. Normalize the NID component only
+        nid, p = path.to_s.split(':', 2)
+        return "#{nid.downcase}:#{p}"
+      end
+
       segments = path.to_s.split('/', -1) # preserve null segments
 
       norm_segs = case
@@ -1103,7 +1113,7 @@ module RDF
 
       res = self.class.normalize_path(norm_segs.join("/"))
       # Special rules for specific protocols having empty paths
-      res = (res.empty? && %w(http https ftp tftp).include?(normalized_scheme)) ? '/' : res
+      (res.empty? && %w(http https ftp tftp).include?(normalized_scheme)) ? '/' : res
     end
 
     ##
