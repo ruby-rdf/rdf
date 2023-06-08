@@ -434,7 +434,7 @@
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_ref'>ref</span> <span class='op'>=</span> <span class='ivar'>@cache</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_ref'>ref</span><span class='period'>.</span><span class='id identifier rubyid_weakref_alive?'>weakref_alive?</span>
-      <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_ref'>ref</span><span class='period'>.</span><span class='id identifier rubyid___getobj__'>__getobj__</span> <span class='kw'>rescue</span> <span class='kw'>nil</span>
+      <span class='id identifier rubyid_ref'>ref</span><span class='period'>.</span><span class='id identifier rubyid___getobj__'>__getobj__</span> <span class='kw'>rescue</span> <span class='kw'>nil</span>
     <span class='kw'>else</span>
       <span class='ivar'>@cache</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
       <span class='kw'>nil</span>
@@ -643,7 +643,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Apr 15 20:45:50 2023 by
+  Generated on Thu Jun  8 00:47:02 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.1.4).
 </div>

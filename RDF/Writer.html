@@ -1235,7 +1235,7 @@
       
         <li>
           <span class="name">:encoding</span>
-          <span class="type">(<tt>Encoding</tt>, <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>Symbol</tt>)</span>
+          <span class="type">(<tt>Encoding</tt>, <tt>String</tt>, <tt>Symbol</tt>)</span>
           <span class="default">
             
           </span>
@@ -1328,7 +1328,7 @@
       
         <li>
           <span class="name">:accept_params</span>
-          <span class="type">(<tt>Hash{Symbol =&gt; <span class='object_link'><a href="../String.html" title="String (class)">String</a></span>}</tt>)</span>
+          <span class="type">(<tt>Hash{Symbol =&gt; String}</tt>)</span>
           <span class="default">
             
           </span>
@@ -1553,7 +1553,7 @@
         <span class='name'>accept_params</span>
       
       
-        <span class='type'>(<tt>Hash{Symbol =&gt; <span class='object_link'><a href="../String.html" title="String (class)">String</a></span>}</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol =&gt; String}</tt>)</span>
       
       
       
@@ -1587,7 +1587,7 @@
         <span class='name'>accept_params</span>
       
       
-        <span class='type'>(<tt>Hash{Symbol =&gt; <span class='object_link'><a href="../String.html" title="String (class)">String</a></span>}</tt>)</span>
+        <span class='type'>(<tt>Hash{Symbol =&gt; String}</tt>)</span>
       
       
       
@@ -1639,7 +1639,7 @@
       <div class="method_details ">
   <h3 class="signature " id="buffer-class_method">
   
-    .<strong>buffer</strong>(*args, **options) {|writer| ... } &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    .<strong>buffer</strong>(*args, **options) {|writer| ... } &#x21d2; <tt>String</tt> 
   
 
   
@@ -1722,7 +1722,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -1825,7 +1825,7 @@
         <span class='name'>io</span>
       
       
-        <span class='type'>(<tt>IO</tt>, <tt>File</tt>, <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>IO</tt>, <tt>File</tt>, <tt>String</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
@@ -1887,7 +1887,7 @@
       <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 186</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_io'>io</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_io'>io</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_io'>io</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>w</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_io'>io</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_io'>io</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_io'>io</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>w</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_io'>io</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>String</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_method'>method</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:each_statement</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='symbol'>:each_statement</span> <span class='op'>:</span> <span class='symbol'>:each</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_io'>io</span>
     <span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_io'>io</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_writer'>writer</span><span class='op'>|</span>
@@ -2103,7 +2103,7 @@
         <span class='name'>filename</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -2166,7 +2166,7 @@
       
         <li>
           <span class="name">:file_name</span>
-          <span class="type">(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+          <span class="type">(<tt>String</tt>, <tt>#to_s</tt>)</span>
           <span class="default">
             
               &mdash; default:
@@ -2190,7 +2190,7 @@
       
         <li>
           <span class="name">:content_type</span>
-          <span class="type">(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+          <span class="type">(<tt>String</tt>, <tt>#to_s</tt>)</span>
           <span class="default">
             
               &mdash; default:
@@ -2373,7 +2373,7 @@
         <span class='name'>filename</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+        <span class='type'>(<tt>String</tt>, <tt>#to_s</tt>)</span>
       
       
       
@@ -2848,7 +2848,7 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_encoding'>encoding</span>
   <span class='kw'>case</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:encoding</span><span class='rbracket'>]</span>
-  <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></span><span class='comma'>,</span> <span class='const'>Symbol</span>
+  <span class='kw'>when</span> <span class='const'>String</span><span class='comma'>,</span> <span class='const'>Symbol</span>
     <span class='const'>Encoding</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:encoding</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
   <span class='kw'>when</span> <span class='const'>Encoding</span>
     <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:encoding</span><span class='rbracket'>]</span>
@@ -2864,7 +2864,7 @@
       <div class="method_details ">
   <h3 class="signature " id="escaped-instance_method">
   
-    #<strong>escaped</strong>(string)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>  <span class="extras">(protected)</span>
+    #<strong>escaped</strong>(string)  &#x21d2; <tt>String</tt>  <span class="extras">(protected)</span>
   
 
   
@@ -2885,7 +2885,7 @@
         <span class='name'>string</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -2899,7 +2899,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3003,7 +3003,7 @@
       <div class="method_details ">
   <h3 class="signature " id="format_list-instance_method">
   
-    #<strong>format_list</strong>(value, **options)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    #<strong>format_list</strong>(value, **options)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -3058,7 +3058,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3106,7 +3106,7 @@
       <div class="method_details ">
   <h3 class="signature " id="format_literal-instance_method">
   
-    #<strong>format_literal</strong>(value, **options)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    #<strong>format_literal</strong>(value, **options)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -3131,7 +3131,7 @@
         <span class='name'>value</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">RDF::Literal</a></span></tt>, <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">RDF::Literal</a></span></tt>, <tt>String</tt>, <tt>#to_s</tt>)</span>
       
       
       
@@ -3161,7 +3161,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3211,7 +3211,7 @@
       <div class="method_details ">
   <h3 class="signature " id="format_node-instance_method">
   
-    #<strong>format_node</strong>(value, **options)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    #<strong>format_node</strong>(value, **options)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -3293,7 +3293,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3343,7 +3343,7 @@
       <div class="method_details ">
   <h3 class="signature " id="format_quotedTriple-instance_method">
   
-    #<strong>format_quotedTriple</strong>(value, **options)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    #<strong>format_quotedTriple</strong>(value, **options)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -3408,7 +3408,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3458,7 +3458,7 @@
       <div class="method_details ">
   <h3 class="signature " id="format_term-instance_method">
   
-    #<strong>format_term</strong>(term, **options)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    #<strong>format_term</strong>(term, **options)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -3493,7 +3493,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3540,7 +3540,7 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_term'>term</span>
-    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></span>         <span class='kw'>then</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+    <span class='kw'>when</span> <span class='const'>String</span>         <span class='kw'>then</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="List.html" title="RDF::List (class)">List</a></span></span>      <span class='kw'>then</span> <span class='id identifier rubyid_format_list'>format_list</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">Literal</a></span></span>   <span class='kw'>then</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span>       <span class='kw'>then</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -3557,7 +3557,7 @@
       <div class="method_details ">
   <h3 class="signature " id="format_uri-instance_method">
   
-    #<strong>format_uri</strong>(value, **options)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt> 
+    #<strong>format_uri</strong>(value, **options)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -3612,7 +3612,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -3662,7 +3662,7 @@
       <div class="method_details ">
   <h3 class="signature " id="node_id-instance_method">
   
-    #<strong>node_id</strong>  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>  <span class="extras">(protected)</span>
+    #<strong>node_id</strong>  &#x21d2; <tt>String</tt>  <span class="extras">(protected)</span>
   
 
   
@@ -3682,7 +3682,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -4085,7 +4085,7 @@
       <div class="method_details ">
   <h3 class="signature " id="quoted-instance_method">
   
-    #<strong>quoted</strong>(string)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>  <span class="extras">(protected)</span>
+    #<strong>quoted</strong>(string)  &#x21d2; <tt>String</tt>  <span class="extras">(protected)</span>
   
 
   
@@ -4106,7 +4106,7 @@
         <span class='name'>string</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -4120,7 +4120,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -4206,7 +4206,7 @@
       <div class="method_details ">
   <h3 class="signature " id="uri_for-instance_method">
   
-    #<strong>uri_for</strong>(term)  &#x21d2; <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>  <span class="extras">(protected)</span>
+    #<strong>uri_for</strong>(term)  &#x21d2; <tt>String</tt>  <span class="extras">(protected)</span>
   
 
   
@@ -4241,7 +4241,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -4387,7 +4387,7 @@
         <span class='name'>text</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -4920,7 +4920,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Apr 15 20:45:45 2023 by
+  Generated on Thu Jun  8 00:46:56 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.1.4).
 </div>

@@ -1312,7 +1312,7 @@
       <span class='id identifier rubyid_results'>results</span> <span class='op'>=</span> <span class='id identifier rubyid_criteria'>criteria</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
         <span class='kw'>case</span> <span class='id identifier rubyid_value'>value</span>
         <span class='kw'>when</span> <span class='const'>Array</span> <span class='kw'>then</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_solution'>solution</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_v'>v</span><span class='rbrace'>}</span>
-        <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../../Regexp.html" title="Regexp (class)">Regexp</a></span></span> <span class='kw'>then</span> <span class='id identifier rubyid_solution'>solution</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+        <span class='kw'>when</span> <span class='const'>Regexp</span> <span class='kw'>then</span> <span class='id identifier rubyid_solution'>solution</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
         <span class='kw'>else</span> <span class='id identifier rubyid_solution'>solution</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_value'>value</span>
         <span class='kw'>end</span>
       <span class='kw'>end</span>
@@ -2369,7 +2369,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Apr 15 20:45:56 2023 by
+  Generated on Thu Jun  8 00:47:09 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.1.4).
 </div>

@@ -1032,7 +1032,7 @@
         <span class='name'>input</span>
       
       
-        <span class='type'>(<tt>IO</tt>, <tt>File</tt>, <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>IO</tt>, <tt>File</tt>, <tt>String</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>$stdin</tt>)</em>
@@ -1308,7 +1308,7 @@
   <span class='rbrace'>}</span><span class='rparen'>)</span>
 
   <span class='ivar'>@input</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id identifier rubyid_input'>input</span>
-    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></span> <span class='kw'>then</span> <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
+    <span class='kw'>when</span> <span class='const'>String</span> <span class='kw'>then</span> <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='rparen'>)</span>
     <span class='kw'>else</span> <span class='id identifier rubyid_input'>input</span>
   <span class='kw'>end</span>
 
@@ -1595,7 +1595,7 @@
         <span class='name'>filename</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -1658,7 +1658,7 @@
       
         <li>
           <span class="name">:file_name</span>
-          <span class="type">(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+          <span class="type">(<tt>String</tt>, <tt>#to_s</tt>)</span>
           <span class="default">
             
               &mdash; default:
@@ -1682,7 +1682,7 @@
       
         <li>
           <span class="name">:content_type</span>
-          <span class="type">(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+          <span class="type">(<tt>String</tt>, <tt>#to_s</tt>)</span>
           <span class="default">
             
               &mdash; default:
@@ -1694,7 +1694,7 @@
       
         <li>
           <span class="name">:sample</span>
-          <span class="type">(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+          <span class="type">(<tt>String</tt>)</span>
           <span class="default">
             
               &mdash; default:
@@ -1717,7 +1717,7 @@
     <li>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
       
@@ -1932,7 +1932,7 @@
         <span class='name'>filename</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>, <tt>#to_s</tt>)</span>
+        <span class='type'>(<tt>String</tt>, <tt>#to_s</tt>)</span>
       
       
       
@@ -3103,7 +3103,7 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_encoding'>encoding</span>
   <span class='kw'>case</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:encoding</span><span class='rbracket'>]</span>
-  <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></span><span class='comma'>,</span> <span class='const'>Symbol</span>
+  <span class='kw'>when</span> <span class='const'>String</span><span class='comma'>,</span> <span class='const'>Symbol</span>
     <span class='const'>Encoding</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:encoding</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
   <span class='kw'>when</span> <span class='const'>Encoding</span>
     <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:encoding</span><span class='rbracket'>]</span>
@@ -4192,7 +4192,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Apr 15 20:45:44 2023 by
+  Generated on Thu Jun  8 00:46:55 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.1.4).
 </div>
