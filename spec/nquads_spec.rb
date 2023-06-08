@@ -14,7 +14,7 @@ describe RDF::NQuads::Format do
   subject { described_class }
 
   describe ".for" do
-    formats = [
+    [
       :nquads,
       'etc/doap.nq',
       {file_name:      'etc/doap.nq'},
@@ -99,7 +99,7 @@ describe RDF::NQuads::Reader do
   end
 
   describe ".for" do
-    formats = [
+    [
       :nquads,
       'etc/doap.nq',
       {file_name:      'etc/doap.nq'},
@@ -236,7 +236,7 @@ describe RDF::NQuads::Writer do
   subject { RDF::NQuads::Writer.new }
 
   describe ".for" do
-    formats = [
+    [
       :nquads,
       'etc/doap.nq',
       {file_name:      'etc/doap.nq'},

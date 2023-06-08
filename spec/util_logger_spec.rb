@@ -48,7 +48,7 @@ describe RDF::Util::Logger do
 
       it "adds locaton to log message" do
         expect {subject.log_fatal("foo")}.to raise_error(StandardError)
-        expect(subject.logger.to_s).to match /Called from #{File.expand_path("", __FILE__)}:#{__LINE__-1}/
+        expect(subject.logger.to_s).to match(/Called from #{File.expand_path("", __FILE__)}:#{__LINE__-1}/)
       end
 
       it "logs to $stderr if logger not configured" do

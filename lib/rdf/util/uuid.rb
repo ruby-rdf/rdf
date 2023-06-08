@@ -22,11 +22,11 @@ module RDF; module Util
       begin
         require 'uuid'
         ::UUID.generate(format)
-      rescue LoadError => e
+      rescue LoadError
         begin
           require 'uuidtools'
           ::UUIDTools::UUID.random_create.hexdigest
-        rescue LoadError => e
+        rescue LoadError
           raise LoadError.new("no such file to load -- uuid or uuidtools")
         end
       end

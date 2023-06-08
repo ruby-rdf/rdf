@@ -127,7 +127,7 @@ module RDF; module Util
       def [](key)
         if (ref = @cache[key])
           if ref.weakref_alive?
-            value = ref.__getobj__ rescue nil
+            ref.__getobj__ rescue nil
           else
             @cache.delete(key)
             nil

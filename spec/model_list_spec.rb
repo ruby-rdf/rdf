@@ -163,14 +163,13 @@ describe RDF::List do
       context :with_transaction do
         it "uses a transaction for the graph" do
           n = RDF::Node.new
-          l = RDF::List.new(subject: n, graph: graph, wrap_transaction: true) do |list|
+          RDF::List.new(subject: n, graph: graph, wrap_transaction: true) do |list|
             expect(list.graph).to be_a(RDF::Transaction)
             expect(list.graph).not_to equal graph
           end
         end
 
         it "adds values in a transaction" do
-          n = RDF::Node.new
           l = RDF::List.new(graph: graph, wrap_transaction: true) do |list|
             list << RDF::Literal(1)
             expect(graph.first_object(subject: list.subject, predicate: RDF.first)).to be_nil
@@ -180,7 +179,6 @@ describe RDF::List do
         end
 
         it "rollback added values in a transaction" do
-          n = RDF::Node.new
           l = RDF::List.new(graph: graph, wrap_transaction: true) do |list|
             list << RDF::Literal(1)
             expect(graph.first_object(subject: list.subject, predicate: RDF.first)).to be_nil

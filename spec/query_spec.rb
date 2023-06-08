@@ -968,7 +968,7 @@ describe RDF::Query do
   context "Examples" do
     let!(:graph) {RDF::Graph.new.insert(RDF::Spec.triples.extend(RDF::Enumerable))}
     subject {
-      query = RDF::Query.new do
+      RDF::Query.new do
         pattern [:person, RDF.type,  FOAF.Person]
         pattern [:person, FOAF.name, :name]
         pattern [:person, FOAF.mbox, :email]

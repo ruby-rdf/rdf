@@ -5,7 +5,6 @@ require 'time'
 require "ostruct"
 
 require 'rdf/version'
-require 'rdf/extensions'
 
 module RDF
   # RDF mixins
