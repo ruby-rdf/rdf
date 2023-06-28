@@ -312,6 +312,7 @@ module RDF::NTriples
           # Note, escaping here is more robust than in Term
           text = quoted(escaped(literal.value))
           text << "@#{literal.language}" if literal.language?
+          text << "--#{literal.direction}" if literal.direction?
           text << "^^<#{uri_for(literal.datatype)}>" if literal.datatype?
           text
         else

@@ -60,24 +60,16 @@ module RDF::NTriples
     U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]").freeze
     IRI_RANGE        = Regexp.compile("[[^<>\"{}\|\^`\\\\]&&[^\\x00-\\x20]]").freeze
 
-    # 163s
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/.freeze
-    # 164s
     PN_CHARS_U           = /_|#{PN_CHARS_BASE}/.freeze
-    # 166s
     PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/.freeze
-    # 159s
     ECHAR                = /\\[tbnrf"'\\]/.freeze
-    # 18
+
     IRIREF               = /<((?:#{IRI_RANGE}|#{UCHAR})*)>/.freeze
-    # 141s
     BLANK_NODE_LABEL     = /_:((?:[0-9]|#{PN_CHARS_U})(?:(?:#{PN_CHARS}|\.)*#{PN_CHARS})?)/.freeze
-    # 144s
-    LANGTAG              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*)/.freeze
-    # 22
+    LANGTAG              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z0-9]+)?)/.freeze
     STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*)"/.freeze
 
-    # RDF*
     ST_START              = /^<</.freeze
     ST_END                = /^\s*>>/.freeze
 
@@ -299,8 +291,9 @@ module RDF::NTriples
       if literal_str = match(LITERAL_PLAIN)
         literal_str = self.class.unescape(literal_str)
         literal = case
-          when language = match(LANGTAG)
-            RDF::Literal.new(literal_str, language: language)
+          when lang_dir = match(LANGTAG)
+            language, direction = lang_dir.split('--')
+            RDF::Literal.new(literal_str, language: language, direction: direction)
           when datatype = match(/^(\^\^)/) # FIXME
             RDF::Literal.new(literal_str, datatype: read_uriref || fail_object)
           else
@@ -310,6 +303,10 @@ module RDF::NTriples
         literal.canonicalize! if canonicalize?
         literal
       end
+    rescue ArgumentError
+      v = literal_str
+      v += "@#{lang_dir}" if lang_dir
+      log_error("Invalid Literal (found: \"#{v}\")", lineno: lineno, token: "#v", exception: RDF::ReaderError)
     end
 
     ##

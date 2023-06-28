@@ -92,6 +92,10 @@ module RDF
   #     # @return [RDF::Vocabulary::Term]
   #     # @attr_reader :langString
   #
+  #     # The datatype of directional language-tagged string values.
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :dirLangString
+  #
   #     # RDF/XML node element.
   #     # @return [RDF::Vocabulary::Term]
   #     # @attr_reader :Description
@@ -279,6 +283,13 @@ module RDF
     term :langString,
       comment: %(The datatype of language-tagged string values).freeze,
       label: "langString".freeze,
+      isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
+      "http://www.w3.org/2000/01/rdf-schema#seeAlso": %(http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal).freeze,
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Literal".freeze,
+      type: "http://www.w3.org/2000/01/rdf-schema#Datatype".freeze
+    term :dirLangString,
+      comment: %(The datatype of directional language-tagged string values).freeze,
+      label: "dirLangString".freeze,
       isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
       "http://www.w3.org/2000/01/rdf-schema#seeAlso": %(http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal).freeze,
       subClassOf: "http://www.w3.org/2000/01/rdf-schema#Literal".freeze,

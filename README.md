@@ -102,6 +102,9 @@ the 1.1 release of RDF.rb:
 
 Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symmetric; this allows an implementation of {RDF::Queryable} to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
 
+## Differences between RDF 1.1 and RDF 1.2
+* {RDF::Literal} has an optional `direction` property for directional language-tagged strings.
+
 ## Tutorials
 
 * [Getting data from the Semantic Web using Ruby and RDF.rb](https://semanticweb.org/wiki/Getting_data_from_the_Semantic_Web_%28Ruby%29)
@@ -400,6 +403,7 @@ from BNode identity (i.e., they each entail the other)
 
 * [Ruby](https://ruby-lang.org/) (>= 2.6)
 * [LinkHeader][] (>= 0.0.8)
+* [bcp47_spec][] ( ~> 0.2)
 * Soft dependency on [RestClient][] (>= 2.1)
 
 ## Installation
@@ -481,8 +485,10 @@ This is free and unencumbered public domain software. For more information,
 see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
 [RDF]:              https://www.w3.org/RDF/
-[N-Triples]:        https://www.w3.org/TR/n-triples/
-[N-Quads]:          https://www.w3.org/TR/n-quads/
+[LinkHeader]:     https://github.com/asplake/link_header
+[bcp47_spec]:   https://github.com/dadah89/bcp47_spec
+[N-Triples]:        https://www.w3.org/TR/rdf-n-triples/
+[N-Quads]:          https://www.w3.org/TR/rdf-n-quads/
 [YARD]:             https://yardoc.org/
 [YARD-GS]:          https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              https://unlicense.org/#unlicensing-contributions
@@ -496,6 +502,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [SPARQL doc]:       https://ruby-rdf.github.io/sparql
 [RDF 1.0]:          https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
 [RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
+[RDF 1.1]:          https://www.w3.org/TR/rdf12-concepts/
 [SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
 [RDF.rb]:           https://ruby-rdf.github.io/
 [RDF::DO]:          https://ruby-rdf.github.io/rdf-do
