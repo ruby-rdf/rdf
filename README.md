@@ -14,26 +14,28 @@ This is a pure-Ruby library for working with [Resource Description Framework
 
 1. [Features](#features)
 2. [Differences between RDF 1.0 and RDF 1.1](#differences-between-rdf-1-0-and-rdf-1-1)
-3. [Tutorials](#tutorials)
-4. [Command Line](#command-line)
-5. [Examples](#examples)
-6. [Reader/Writer convenience methods](#reader/writer-convenience-methods)
-7. [RDF* (RDFStar)](#rdf*-(rdfstar))
-8. [Documentation](#documentation)
-9. [Dependencies](#dependencies)
-10. [Installation](#installation)
-11. [Download](#download)
-12. [Resources](#resources)
-13. [Mailing List](#mailing-list)
-14. [Authors](#authors)
-15. [Contributors](#contributors)
-16. [Contributing](#contributing)
-17. [License](#license)
+3. [Differences between RDF 1.1 and RDF 1.2](#differences-between-rdf-1-1-and-rdf-1-2)
+4. [Tutorials](#tutorials)
+5. [Command Line](#command-line)
+6. [Examples](#examples)
+7. [Reader/Writer convenience methods](#reader/writer-convenience-methods)
+8. [RDF 1.2](#rdf\_12)
+9. [Documentation](#documentation)
+10. [Dependencies](#dependencies)
+11. [Installation](#installation)
+12. [Download](#download)
+13. [Resources](#resources)
+14. [Mailing List](#mailing-list)
+15. [Authors](#authors)
+16. [Contributors](#contributors)
+17. [Contributing](#contributing)
+18. [License](#license)
 
 ## Features
 
 * 100% pure Ruby with minimal dependencies and no bloat.
 * Fully compatible with [RDF 1.1][] specifications.
+* Provisional support for [RDF 1.2][] specifications.
 * 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
@@ -49,7 +51,6 @@ This is a pure-Ruby library for working with [Resource Description Framework
   * Note, changes in mapping hashes to keyword arguments for Ruby 2.7+ may require that arguments be passed more explicitly, especially when the first argument is a Hash and there are optional keyword arguments. In this case, Hash argument may need to be explicitly included within `{}` and the optional keyword arguments may need to be specified using `**{}` if there are no keyword arguments.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
-* Provisional support for [RDF*][].
 
 ### HTTP requests
 
@@ -263,15 +264,16 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
-## RDF* (RDFStar)
+## RDF 1.2
 
-[RDF.rb][] includes provisional support for [RDF*][] with an N-Triples/N-Quads syntax extension that uses inline statements in the _subject_ or _object_ position.
+[RDF.rb][] includes provisional support for [RDF 1.2][] with an N-Triples/N-Quads syntax for quoted triples in the _subject_ or _object_ position.
+[RDF.rb][] includes provisional support for [RDF 1.2][] directional language-tagged strings, which are literals of type `rdf:dirLangString` having both a `language` and `direction`.
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
 **Note: This feature is subject to change or elimination as the standards process progresses.**
 
-### Serializing a Graph containing embedded statements
+### Serializing a Graph containing quoted triples
 
     require 'rdf/ntriples'
     statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
@@ -279,7 +281,7 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
     graph.dump(:ntriples, validate: false)
     # => '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
 
-### Reading a Graph containing embedded statements
+### Reading a Graph containing quoted triples
 
 By default, the N-Triples reader will reject a document containing a subject resource.
 
@@ -288,13 +290,6 @@ By default, the N-Triples reader will reject a document containing a subject res
       RDF::NTriples::Reader.new(nt) {|reader| graph << reader}
     end
     # => RDF::ReaderError
-
-Readers support a boolean valued `rdfstar` option.
-
-    graph = RDF::Graph.new do |graph|
-      RDF::NTriples::Reader.new(nt, rdfstar: true) {|reader| graph << reader}
-    end
-    graph.count #=> 1
 
 ## Documentation
 
@@ -517,7 +512,6 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.io/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.io/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.io/rdf-raptor
-[RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [LinkedData]:       https://ruby-rdf.github.io/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.io/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client

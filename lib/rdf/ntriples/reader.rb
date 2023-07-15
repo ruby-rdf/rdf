@@ -67,7 +67,7 @@ module RDF::NTriples
 
     IRIREF               = /<((?:#{IRI_RANGE}|#{UCHAR})*)>/.freeze
     BLANK_NODE_LABEL     = /_:((?:[0-9]|#{PN_CHARS_U})(?:(?:#{PN_CHARS}|\.)*#{PN_CHARS})?)/.freeze
-    LANGTAG              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z0-9]+)?)/.freeze
+    LANGDIR              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z0-9]+)?)/.freeze
     STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*)"/.freeze
 
     ST_START              = /^<</.freeze
@@ -78,7 +78,7 @@ module RDF::NTriples
     NODEID                = /^#{BLANK_NODE_LABEL}/.freeze
     URIREF                = /^#{IRIREF}/.freeze
     LITERAL_PLAIN         = /^#{STRING_LITERAL_QUOTE}/.freeze
-    LITERAL_WITH_LANGUAGE = /^#{STRING_LITERAL_QUOTE}#{LANGTAG}/.freeze
+    LITERAL_WITH_LANGUAGE = /^#{STRING_LITERAL_QUOTE}#{LANGDIR}/.freeze
     LITERAL_WITH_DATATYPE = /^#{STRING_LITERAL_QUOTE}\^\^#{IRIREF}/.freeze
     DATATYPE_URI          = /^\^\^#{IRIREF}/.freeze
     LITERAL               = Regexp.union(LITERAL_WITH_LANGUAGE, LITERAL_WITH_DATATYPE, LITERAL_PLAIN).freeze
@@ -86,6 +86,9 @@ module RDF::NTriples
     PREDICATE             = Regexp.union(URIREF).freeze
     OBJECT                = Regexp.union(URIREF, NODEID, LITERAL).freeze
     END_OF_STATEMENT      = /^\s*\.\s*(?:#.*)?$/.freeze
+
+    # LANGTAG is deprecated
+    LANGTAG               = LANGDIR
 
     ##
     # Reconstructs an RDF value from its serialized N-Triples
@@ -291,7 +294,7 @@ module RDF::NTriples
       if literal_str = match(LITERAL_PLAIN)
         literal_str = self.class.unescape(literal_str)
         literal = case
-          when lang_dir = match(LANGTAG)
+          when lang_dir = match(LANGDIR)
             language, direction = lang_dir.split('--')
             RDF::Literal.new(literal_str, language: language, direction: direction)
           when datatype = match(/^(\^\^)/) # FIXME

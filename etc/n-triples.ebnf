@@ -3,14 +3,14 @@ triple            ::= subject predicate object '.'
 subject           ::= IRIREF | BLANK_NODE_LABEL | quotedTriple
 predicate         ::= IRIREF
 object            ::= IRIREF | BLANK_NODE_LABEL | literal | quotedTriple
-literal           ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANGTAG )?
+literal           ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANGDIR )?
 quotedTriple      ::= '<<' subject predicate object '>>'
 
 @terminals
 
 IRIREF            ::=  '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
 BLANK_NODE_LABEL  ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-LANGTAG           ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' ('ltr'|'rtl'))?`
+LANGDIR           ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' ('ltr'|'rtl'))?`
 STRING_LITERAL_QUOTE ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'
 UCHAR             ::= ( "\u" HEX HEX HEX HEX )
                     | ( "\U" HEX HEX HEX HEX HEX HEX HEX HEX )
