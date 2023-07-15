@@ -10,7 +10,7 @@ quotedTriple      ::= '<<' subject predicate object '>>'
 
 IRIREF            ::=  '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
 BLANK_NODE_LABEL  ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-LANGDIR           ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' ('ltr'|'rtl'))?`
+LANGDIR           ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' [a-zA-Z]+)?`
 STRING_LITERAL_QUOTE ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'
 UCHAR             ::= ( "\u" HEX HEX HEX HEX )
                     | ( "\U" HEX HEX HEX HEX HEX HEX HEX HEX )

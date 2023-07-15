@@ -67,7 +67,7 @@ module RDF::NTriples
 
     IRIREF               = /<((?:#{IRI_RANGE}|#{UCHAR})*)>/.freeze
     BLANK_NODE_LABEL     = /_:((?:[0-9]|#{PN_CHARS_U})(?:(?:#{PN_CHARS}|\.)*#{PN_CHARS})?)/.freeze
-    LANGDIR              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z0-9]+)?)/.freeze
+    LANGDIR              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z]+)?)/.freeze
     STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*)"/.freeze
 
     ST_START              = /^<</.freeze
