@@ -497,7 +497,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [SPARQL doc]:       https://ruby-rdf.github.io/sparql
 [RDF 1.0]:          https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
 [RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
-[RDF 1.1]:          https://www.w3.org/TR/rdf12-concepts/
+[RDF 1.2]:          https://www.w3.org/TR/rdf12-concepts/
 [SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
 [RDF.rb]:           https://ruby-rdf.github.io/
 [RDF::DO]:          https://ruby-rdf.github.io/rdf-do
