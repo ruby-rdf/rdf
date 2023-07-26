@@ -182,7 +182,7 @@ module RDF
       when :validity         then @options.fetch(:with_validity, true)
       when :literal_equality then true
       when :atomic_write     then false
-      when :rdfstar          then false
+      when :quoted_triples   then false
       when :snapshots        then false
       else false
       end
@@ -269,7 +269,7 @@ module RDF
         when :validity         then @options.fetch(:with_validity, true)
         when :literal_equality then true
         when :atomic_write     then true
-        when :rdfstar          then true
+        when :quoted_triples   then true
         when :snapshots        then true
         else false
         end

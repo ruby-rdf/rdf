@@ -296,7 +296,7 @@ describe RDF::Statement do
     end
   end
 
-  context "RDF*" do
+  context "RDF-star" do
     it "is not embedded for plain statements" do
       expect(RDF::Statement(:s, :p, :o)).not_to be_embedded
     end

@@ -163,7 +163,7 @@ module RDF
           datatype: TrueClass,
           control: :checkbox,
           on: ["--rdfstar"],
-          description: "Parse RDF*."),
+          description: "Parse RDF-star for preliminary RDF 1.2 support."),
         RDF::CLI::Option.new(
           symbol: :validate,
           datatype: TrueClass,
@@ -277,7 +277,7 @@ module RDF
     # @param [Boolean]  intern       (true)
     #   whether to intern all parsed URIs
     # @param [Boolean] rdfstar      (false)
-    #   support parsing RDF* statement resources.
+    #   Preliminary support for RDF 1.2.
     # @param [Hash]     prefixes     (Hash.new)
     #   the prefix mappings to use (not supported by all readers)
     # @param  [Hash{Symbol => Object}] options

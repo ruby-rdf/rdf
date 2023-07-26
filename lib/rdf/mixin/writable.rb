@@ -127,8 +127,8 @@ module RDF
     def insert_statements(statements)
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
-        if statement.embedded? && respond_to?(:supports?) && !supports?(:rdfstar)
-          raise ArgumentError, "Wriable does not support embedded statements"
+        if statement.embedded? && respond_to?(:supports?) && !supports?(:quoted_triples)
+          raise ArgumentError, "Wriable does not support quoted triples"
         end
         insert_statement(statement)
       end

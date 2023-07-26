@@ -420,7 +420,7 @@ describe RDF::NTriples::Reader do
     end
   end
 
-  context "RDF*" do
+  context "quoted triples" do
     statements = {
       "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
       "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
@@ -746,7 +746,7 @@ describe RDF::NTriples::Writer do
     end
   end
 
-  context "RDF*" do
+  context "quoted triples" do
     {
       "subject-iii": {
         input: RDF::Statement(

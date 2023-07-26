@@ -224,7 +224,7 @@ module RDF::NTriples
     end
 
     ##
-    # Returns the N-Triples representation of an RDF* reified statement.
+    # Returns the N-Triples representation of an RDF-star quoted triple.
     #
     # @param  [RDF::Statement] statement
     # @param  [Hash{Symbol => Object}] options ({})

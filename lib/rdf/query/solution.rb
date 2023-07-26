@@ -209,7 +209,7 @@ class RDF::Query
     # Merges the bindings from the given `other` query solution into this
     # one, overwriting any existing ones having the same name.
     #
-    # ## RDFStar (RDF*)
+    # ## RDF-star
     #
     # If merging a binding for a statement to a pattern,
     # merge their embedded solutions.

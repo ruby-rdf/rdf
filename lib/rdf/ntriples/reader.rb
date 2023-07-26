@@ -28,7 +28,7 @@ module RDF::NTriples
   #     end
   #   end
   #
-  # ** RDFStar (RDF*)
+  # ** RDF=star
   #
   # Supports statements as resources using `<<s p o>>`.
   #

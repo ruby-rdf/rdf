@@ -182,6 +182,7 @@ module RDF
     ##
     # Returns `true` if any element of the statement is, itself, a statement.
     #
+    # Note: Nomenclature is evolving, alternatives could include `#complex?` and `#nested?`
     # @return [Boolean]
     def embedded?
       subject && subject.statement? || object && object.statement?
