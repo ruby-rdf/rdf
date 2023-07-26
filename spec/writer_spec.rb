@@ -10,7 +10,6 @@ describe RDF::Writer do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Writer.for(arg)).to eq RDF::NTriples::Writer

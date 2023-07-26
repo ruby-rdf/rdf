@@ -22,7 +22,6 @@ module RDF
     class Format < RDF::Format
       content_type     'application/n-quads',
                        extension: :nq,
-                       alias: 'text/x-nquads;q=0.2',
                        uri: RDF::URI("http://www.w3.org/ns/formats/N-Quads")
       content_encoding 'utf-8'
 

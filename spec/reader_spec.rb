@@ -23,7 +23,6 @@ describe RDF::Reader do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Reader.for(arg)).to eq RDF::NTriples::Reader

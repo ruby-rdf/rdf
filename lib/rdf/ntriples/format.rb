@@ -18,7 +18,6 @@ module RDF::NTriples
   class Format < RDF::Format
     content_type     'application/n-triples',
                      extension: :nt,
-                     alias: 'text/plain;q=0.2',
                      uri: RDF::URI("http://www.w3.org/ns/formats/N-Triples")
     content_encoding 'utf-8'
 

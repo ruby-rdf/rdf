@@ -8,7 +8,7 @@ module RDF
   # [Turtle](http://www.w3.org/TeamSubmission/turtle/) and
   # [Notation3](http://www.w3.org/TeamSubmission/n3/) (N3).
   #
-  # The MIME content type for N-Triples files is `text/plain` and the
+  # The MIME content type for N-Triples files is `application/n-triples` and the
   # recommended file extension is `.nt`.
   #
   # An example of an RDF statement in N-Triples format:

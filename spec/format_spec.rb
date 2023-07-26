@@ -114,8 +114,8 @@ describe RDF::Format do
   describe ".reader_types" do
     it "returns content-types of available readers" do
       expect(RDF::Format.reader_types).to include(*%w(
-        application/n-triples text/plain
-        application/n-quads text/x-nquads
+        application/n-triples
+        application/n-quads
         application/test application/x-test
       ))
     end
@@ -124,8 +124,8 @@ describe RDF::Format do
   describe ".accept_types" do
     it "returns accept-types of available readers with quality" do
       expect(RDF::Format.accept_types).to include(*%w(
-        application/n-triples text/plain;q=0.2
-        application/n-quads text/x-nquads;q=0.2
+        application/n-triples
+        application/n-quads
         application/test application/x-test;q=0.1
       ))
     end
@@ -134,8 +134,8 @@ describe RDF::Format do
   describe ".uris" do
     it "returns accept-types of available readers with quality" do
       expect(RDF::Format.accept_types).to include(*%w(
-        application/n-triples text/plain;q=0.2
-        application/n-quads text/x-nquads;q=0.2
+        application/n-triples
+        application/n-quads
         application/test application/x-test;q=0.1
       ))
     end
@@ -155,8 +155,8 @@ describe RDF::Format do
   describe ".writer_types" do
     it "returns content-types of available writers" do
       %w(
-        application/n-triples text/plain
-        application/n-quads text/x-nquads
+        application/n-triples
+        application/n-quads
       ).each do |ct|
         expect(RDF::Format.writer_types).to include(ct)
       end

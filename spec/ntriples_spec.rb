@@ -27,7 +27,6 @@ describe RDF::NTriples::Format do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
      ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Format.for(arg)).to eq subject
@@ -103,15 +102,15 @@ describe RDF::NTriples::Reader do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Reader.for(arg)).to eq described_class
       end
     end
 
-    context "content_type text/plain with non-N-Triples content" do
+    context "content_type text/plain" do
       {
+        :ntriples      => "<a> <b> <c> . ",
         :nquads        => "<a> <b> <c> <d> . ",
         :nq_literal    => '<a> <b> "literal" <d> .',
         :nq_multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
@@ -567,7 +566,6 @@ describe RDF::NTriples::Writer do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Writer.for(arg)).to eq RDF::NTriples::Writer

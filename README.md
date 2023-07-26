@@ -105,6 +105,7 @@ Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symm
 
 ## Differences between RDF 1.1 and RDF 1.2
 * {RDF::Literal} has an optional `direction` property for directional language-tagged strings.
+* Removes support for legacy `text/plain` (as an alias for `application/n-triples`) and `text/x-nquads` (as an alias for `application/n-quads`)
 
 ## Tutorials
 
