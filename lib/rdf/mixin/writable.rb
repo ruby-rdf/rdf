@@ -128,7 +128,10 @@ module RDF
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
         if statement.embedded? && respond_to?(:supports?) && !supports?(:quoted_triples)
-          raise ArgumentError, "Wriable does not support quoted triples"
+          raise ArgumentError, "Writable does not support quoted triples"
+        end
+        if statement.object && statement.object.literal? && statement.object.direction? && !supports?(:base_direction)
+          raise ArgumentError, "Writable does not support directional languaged-tagged strings"
         end
         insert_statement(statement)
       end

@@ -183,6 +183,7 @@ module RDF
       when :literal_equality then true
       when :atomic_write     then false
       when :quoted_triples   then false
+      when :base_direction   then false
       when :snapshots        then false
       else false
       end
@@ -270,6 +271,7 @@ module RDF
         when :literal_equality then true
         when :atomic_write     then true
         when :quoted_triples   then true
+        when :base_direction   then true
         when :snapshots        then true
         else false
         end
