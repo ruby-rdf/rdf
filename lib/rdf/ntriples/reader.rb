@@ -296,6 +296,7 @@ module RDF::NTriples
         literal = case
           when lang_dir = match(LANG_DIR)
             language, direction = lang_dir.split('--')
+            raise ArgumentError if direction && !@options[:rdfstar]
             RDF::Literal.new(literal_str, language: language, direction: direction)
           when datatype = match(/^(\^\^)/) # FIXME
             RDF::Literal.new(literal_str, datatype: read_uriref || fail_object)

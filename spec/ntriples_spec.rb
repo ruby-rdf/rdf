@@ -309,17 +309,27 @@ describe RDF::NTriples::Reader do
       end
     end
 
-    context 'parse language/direction' do
-      {
-        "language" => '<http://subj> <http://pred>  "Hello"@en .',
-        "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
-      }.each_pair do |name, triple|
-        specify "test #{name}" do
-          stmt = reader.new(triple).first
-          if name.include?('dir')
-            expect(stmt.object.datatype).to eql RDF.dirLangString
-          else
-            expect(stmt.object.datatype).to eql RDF.langString
+    context "base direction" do
+      context "without rdfstar option" do
+        it "Raises an error" do
+          expect do
+            expect {parse('<http://subj> <http://pred>  "Hello"@en--ltr .')}.to raise_error(RDF::ReaderError)
+          end.to write(:something).to(:error)
+        end
+      end
+
+      context 'parse language/direction' do
+        {
+          "language" => '<http://subj> <http://pred>  "Hello"@en .',
+          "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
+        }.each_pair do |name, triple|
+          specify "test #{name}" do
+            stmt = reader.new(triple, rdfstar: true).first
+            if name.include?('dir')
+              expect(stmt.object.datatype).to eql RDF.dirLangString
+            else
+              expect(stmt.object.datatype).to eql RDF.langString
+            end
           end
         end
       end
@@ -370,6 +380,7 @@ describe RDF::NTriples::Reader do
 
       "Literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
       "Literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
+      # FIXME: once rdfstar option is no longer used
       #"Literals with language and direction" => '<http://example.org/resource31> <http://example.org/property> "chat"@en--ltr .',
       "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
       "Plain lieral with embedded quote" => %q(<http://example.org/resource33> <http://example.org/property> "From \\"Voyage dans l’intérieur de l’Amérique du Nord, executé pendant les années 1832, 1833 et 1834, par le prince Maximilien de Wied-Neuwied\\" (Paris & Coblenz, 1839-1843)" .),
