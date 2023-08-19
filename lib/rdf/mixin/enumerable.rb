@@ -722,12 +722,32 @@ module RDF
     alias_method :enum_graphs, :enum_graph
 
     ##
+    # Enumerates each statement using its canonical representation.
+    #
+    # @note This is updated by `RDF::Normalize` to also canonicalize blank nodes.
+    #
+    # @return [RDF::Enumerable]
+    def canonicalize
+      this = self
+      Enumerable::Enumerator.new do |yielder|
+        this.send(:each_statement) {|y| yielder << y.canonicalize}
+      end
+    end
+
+    ##
+    # Mutating canonicalization not supported
+    #
+    # @raise NotImplementedError
+    def canonicalize!
+      raise NotImplementedError, "Canonicalizing enumerables not supported"
+    end
+
+    ##
     # Returns all RDF statements in `self` as an array.
     #
     # Mixes in `RDF::Enumerable` into the returned object.
     #
     # @return [Array]
-    # @since  0.2.0
     def to_a
       super.extend(RDF::Enumerable)
     end

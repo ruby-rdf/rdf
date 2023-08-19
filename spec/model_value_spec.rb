@@ -135,9 +135,10 @@ describe RDF::Value do
   end
 
   it "#canonicalize!" do
-    [statement, uri, node, literal, graph, statement, variable, list].each do |v|
+    [statement, uri, node, literal, statement, variable, list].each do |v|
       expect(v.canonicalize!).to equal v
     end
+    expect {graph.canonicalize!}.to raise_error(NotImplementedError)
   end
 
   it "#to_rdf" do
