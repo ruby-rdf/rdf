@@ -79,6 +79,18 @@ describe RDF::Statement do
     it {is_expected.to be_statement}
     it {is_expected.not_to be_inferred}
     its(:terms) {is_expected.to include(s, p, o)}
+
+    describe "#dup" do
+      its(:dup) {is_expected.to eql(subject)}
+      its(:dup) {is_expected.not_to equal(subject)}
+
+      [:subject, :predicate, :object].each do |c|
+        it "#{c} duplicated as appropriate" do
+          expect(subject.dup.send(c)).to eql(subject.send(c))
+          expect(subject.dup.send(c)).not_to equal(subject.send(c)) unless subject.send(c).is_a?(RDF::Node)
+        end
+      end
+    end
   end
 
   context "when created with a blank node subject" do
@@ -103,6 +115,18 @@ describe RDF::Statement do
     its(:graph_name) {is_expected.not_to be_nil}
     it {is_expected.to eq stmt}
     it {is_expected.not_to eql stmt}
+
+    describe "#dup" do
+      its(:dup) {is_expected.to eql(subject)}
+      its(:dup) {is_expected.not_to equal(subject)}
+
+      [:subject, :predicate, :object, :graph_name].each do |c|
+        it "#{c} duplicated as appropriate" do
+          expect(subject.dup.send(c)).to eql(subject.send(c))
+          expect(subject.dup.send(c)).not_to equal(subject.send(c)) unless subject.send(c).is_a?(RDF::Node)
+        end
+      end
+    end
   end
 
   context "when created with a default graph" do

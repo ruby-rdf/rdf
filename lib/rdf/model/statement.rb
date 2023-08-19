@@ -437,6 +437,18 @@ module RDF
       nil
     end
 
+    # New statement with duplicated components (other than blank nodes)
+    #
+    # @return [RDF::Statement]
+    def dup
+      options = Hash[@options]
+      options[:subject] = subject.is_a?(RDF::Node) ? subject : subject.dup
+      options[:predicate] = predicate.dup
+      options[:object] = object.is_a?(RDF::Node) ? object : object.dup
+      options[:graph_name] = graph_name.is_a?(RDF::Node) ? graph_name : graph_name.dup if graph_name
+      RDF::Statement.new(options)
+    end
+
     ##
     # Returns the terms of this statement as a `Hash`.
     #
