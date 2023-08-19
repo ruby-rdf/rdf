@@ -411,7 +411,7 @@ module RDF
     end
 
     ##
-    # Canonicalizes each unfrozen term in the statement
+    # Canonicalizes each unfrozen term in the statement.
     #
     # @return [RDF::Statement] `self`
     # @since  1.0.8

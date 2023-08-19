@@ -392,7 +392,9 @@ module RDF
     end
 
     ##
-    # Returns `true` if terms should be canonicalized.
+    # Returns `true` if terms should be in canonical form.
+    #
+    # @note This is for term canonicalization, for graph/dataset canonicalization use `RDF::Normalize`.
     #
     # @return [Boolean] `true` or `false`
     # @since  1.0.8
