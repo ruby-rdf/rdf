@@ -397,7 +397,7 @@ from BNode identity (i.e., they each entail the other)
 
 ## Dependencies
 
-* [Ruby](https://ruby-lang.org/) (>= 2.6)
+* [Ruby](https://ruby-lang.org/) (>= 3.0)
 * [LinkHeader][] (>= 0.0.8)
 * [bcp47_spec][] ( ~> 0.2)
 * Soft dependency on [RestClient][] (>= 2.1)
@@ -407,7 +407,7 @@ from BNode identity (i.e., they each entail the other)
 The recommended installation method is via [RubyGems](https://rubygems.org/).
 To install the latest official release of RDF.rb, do:
 
-    % [sudo] gem install rdf             # Ruby 2.6+
+    % [sudo] gem install rdf             # Ruby 3+
 
 ## Download
 
