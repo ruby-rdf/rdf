@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 require_relative 'spec_helper'
 require 'rdf/spec/literal'
 require 'rdf/xsd'
@@ -8,15 +9,19 @@ describe RDF::Literal do
 
   def self.literal(selector)
     case selector
-    when :empty       then [''.freeze]
-    when :plain       then ['Hello'.freeze]
-    when :empty_lang  then [''.freeze, {language: :en}]
-    when :plain_lang  then ['Hello'.freeze, {language: :en}]
+    when :empty       then ['']
+    when :plain       then ['Hello']
+    when :empty_lang  then ['', {language: :en}]
+    when :plain_lang  then ['Hello', {language: :en}]
     # langString language: must not contain spaces
-    when :wrong_lang  then ['WrongLang'.freeze, {language: "en f"}]
+    when :wrong_lang  then ['WrongLang', {language: "en f"}]
     # langString language: must be non-empty valid language
-    when :unset_lang  then ['NoLanguage'.freeze, {datatype: RDF::langString}]
-    when :string      then ['String'.freeze, {datatype: RDF::XSD.string}]
+    when :unset_lang  then ['NoLanguage', {datatype: RDF.langString}]
+    when :lang_dir    then ['Hello', {language: :en, direction: :ltr}]
+    when :wrong_dir    then ['Hello', {language: :en, direction: "center-out"}]
+    when :dir_no_lang then ['Hello', {direction: :ltr}]
+    when :unset_dir   then ['NoDir', {language: :en, datatype: RDF.dirLangString}]
+    when :string      then ['String', {datatype: RDF::XSD.string}]
     when :false       then [false]
     when :true        then [true]
     when :int         then [123]
@@ -35,9 +40,9 @@ describe RDF::Literal do
     selector.inject([]) do |ary, sel|
       ary += case sel
       when :all_simple        then %i(empty plain string).map {|s| literal(s)}
-      when :all_plain_lang    then %i(empty_lang plain_lang).map {|s| literal(s)}
+      when :all_plain_lang    then %i(empty_lang plain_lang lang_dir).map {|s| literal(s)}
       when :all_native        then %i(false true int long decimal double time date datetime).map {|s| literal(s)}
-      when :all_invalid_lang  then %i(wrong_lang unset_lang).map {|s| literal(s)}
+      when :all_invalid_lang  then %i(wrong_lang unset_lang wrong_dir).map {|s| literal(s)}
       when :all_plain         then literals(:all_simple, :all_plain_lang)
       else                         literals(:all_plain, :all_native)
       end
@@ -2327,6 +2332,7 @@ describe RDF::Literal do
       {
         "language with xsd:string" => {value: "foo", language: "en", datatype: RDF::XSD.string},
         "language with xsd:date" => {value: "foo", language: "en", datatype: RDF::XSD.date},
+        "direction without language" => {value: "foo", direction: "ltr"}
       }.each do |name, opts|
         it "raises error for #{name}" do
           expect {RDF::Literal.new(opts.delete(:value), **opts)}.to raise_error(ArgumentError)

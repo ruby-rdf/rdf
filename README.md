@@ -14,26 +14,28 @@ This is a pure-Ruby library for working with [Resource Description Framework
 
 1. [Features](#features)
 2. [Differences between RDF 1.0 and RDF 1.1](#differences-between-rdf-1-0-and-rdf-1-1)
-3. [Tutorials](#tutorials)
-4. [Command Line](#command-line)
-5. [Examples](#examples)
-6. [Reader/Writer convenience methods](#reader/writer-convenience-methods)
-7. [RDF* (RDFStar)](#rdf*-(rdfstar))
-8. [Documentation](#documentation)
-9. [Dependencies](#dependencies)
-10. [Installation](#installation)
-11. [Download](#download)
-12. [Resources](#resources)
-13. [Mailing List](#mailing-list)
-14. [Authors](#authors)
-15. [Contributors](#contributors)
-16. [Contributing](#contributing)
-17. [License](#license)
+3. [Differences between RDF 1.1 and RDF 1.2](#differences-between-rdf-1-1-and-rdf-1-2)
+4. [Tutorials](#tutorials)
+5. [Command Line](#command-line)
+6. [Examples](#examples)
+7. [Reader/Writer convenience methods](#reader/writer-convenience-methods)
+8. [RDF 1.2](#rdf\_12)
+9. [Documentation](#documentation)
+10. [Dependencies](#dependencies)
+11. [Installation](#installation)
+12. [Download](#download)
+13. [Resources](#resources)
+14. [Mailing List](#mailing-list)
+15. [Authors](#authors)
+16. [Contributors](#contributors)
+17. [Contributing](#contributing)
+18. [License](#license)
 
 ## Features
 
 * 100% pure Ruby with minimal dependencies and no bloat.
 * Fully compatible with [RDF 1.1][] specifications.
+* Provisional support for [RDF 1.2][] specifications.
 * 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Provides a clean, well-designed RDF object model and related APIs.
 * Supports parsing and serializing [N-Triples][] and [N-Quads][] out of the box, with more
@@ -45,11 +47,10 @@ This is a pure-Ruby library for working with [Resource Description Framework
   not modify any of Ruby's core classes or standard library.
 * Based entirely on Ruby's autoloading, meaning that you can generally make
   use of any one part of the library without needing to load up the rest.
-* Compatible with Ruby Ruby >= 2.4, Rubinius and JRuby 9.0+.
-  * Note, changes in mapping hashes to keyword arguments for Ruby 2.7+ may require that arguments be passed more explicitly, especially when the first argument is a Hash and there are optional keyword arguments. In this case, Hash argument may need to be explicitly included within `{}` and the optional keyword arguments may need to be specified using `**{}` if there are no keyword arguments.
+* Compatible with Ruby Ruby >= 3.0, Rubinius and JRuby 9.0+.
+  * Note, changes in mapping hashes to keyword arguments for Ruby 3+ may require that arguments be passed more explicitly, especially when the first argument is a Hash and there are optional keyword arguments. In this case, Hash argument may need to be explicitly included within `{}` and the optional keyword arguments may need to be specified using `**{}` if there are no keyword arguments.
 * Performs auto-detection of input to select appropriate Reader class if one
   cannot be determined from file characteristics.
-* Provisional support for [RDF*][].
 
 ### HTTP requests
 
@@ -101,6 +102,10 @@ the 1.1 release of RDF.rb:
 * New vocabulary definitions have been added for [ICal](http://www.w3.org/2002/12/cal/icaltzd#), [Media Annotations (MA)](http://www.w3.org/ns/ma-ont#), [Facebook OpenGraph (OG)](http://ogp.me/ns#), [PROV](http://www.w3.org/ns/prov#), [SKOS-XL (SKOSXL)](http://www.w3.org/2008/05/skos-xl#), [Data Vocabulary (V)](http://rdf.data-vocabulary.org/), [VCard](http://www.w3.org/2006/vcard/ns#), [VOID](http://rdfs.org/ns/void#http://rdfs.org/ns/void#), [Powder-S (WDRS)](http://www.w3.org/2007/05/powder-s#), and [XHV](http://www.w3.org/1999/xhtml/vocab#).
 
 Notably, {RDF::Queryable#query} and {RDF::Query#execute} are now completely symmetric; this allows an implementation of {RDF::Queryable} to optimize queries using implementation-specific logic, allowing for substantial performance improvements when executing BGP queries.
+
+## Differences between RDF 1.1 and RDF 1.2
+* {RDF::Literal} has an optional `direction` property for directional language-tagged strings.
+* Removes support for legacy `text/plain` (as an alias for `application/n-triples`) and `text/x-nquads` (as an alias for `application/n-quads`)
 
 ## Tutorials
 
@@ -260,15 +265,16 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
-## RDF* (RDFStar)
+## RDF 1.2
 
-[RDF.rb][] includes provisional support for [RDF*][] with an N-Triples/N-Quads syntax extension that uses inline statements in the _subject_ or _object_ position.
+[RDF.rb][] includes provisional support for [RDF 1.2][] with an N-Triples/N-Quads syntax for quoted triples in the _subject_ or _object_ position.
+[RDF.rb][] includes provisional support for [RDF 1.2][] directional language-tagged strings, which are literals of type `rdf:dirLangString` having both a `language` and `direction`.
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
 **Note: This feature is subject to change or elimination as the standards process progresses.**
 
-### Serializing a Graph containing embedded statements
+### Serializing a Graph containing quoted triples
 
     require 'rdf/ntriples'
     statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
@@ -276,7 +282,7 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
     graph.dump(:ntriples, validate: false)
     # => '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
 
-### Reading a Graph containing embedded statements
+### Reading a Graph containing quoted triples
 
 By default, the N-Triples reader will reject a document containing a subject resource.
 
@@ -285,13 +291,6 @@ By default, the N-Triples reader will reject a document containing a subject res
       RDF::NTriples::Reader.new(nt) {|reader| graph << reader}
     end
     # => RDF::ReaderError
-
-Readers support a boolean valued `rdfstar` option.
-
-    graph = RDF::Graph.new do |graph|
-      RDF::NTriples::Reader.new(nt, rdfstar: true) {|reader| graph << reader}
-    end
-    graph.count #=> 1
 
 ## Documentation
 
@@ -398,8 +397,9 @@ from BNode identity (i.e., they each entail the other)
 
 ## Dependencies
 
-* [Ruby](https://ruby-lang.org/) (>= 2.6)
+* [Ruby](https://ruby-lang.org/) (>= 3.0)
 * [LinkHeader][] (>= 0.0.8)
+* [bcp47_spec][] ( ~> 0.2)
 * Soft dependency on [RestClient][] (>= 2.1)
 
 ## Installation
@@ -407,7 +407,7 @@ from BNode identity (i.e., they each entail the other)
 The recommended installation method is via [RubyGems](https://rubygems.org/).
 To install the latest official release of RDF.rb, do:
 
-    % [sudo] gem install rdf             # Ruby 2.6+
+    % [sudo] gem install rdf             # Ruby 3+
 
 ## Download
 
@@ -481,8 +481,10 @@ This is free and unencumbered public domain software. For more information,
 see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
 [RDF]:              https://www.w3.org/RDF/
-[N-Triples]:        https://www.w3.org/TR/n-triples/
-[N-Quads]:          https://www.w3.org/TR/n-quads/
+[LinkHeader]:     https://github.com/asplake/link_header
+[bcp47_spec]:   https://github.com/dadah89/bcp47_spec
+[N-Triples]:        https://www.w3.org/TR/rdf-n-triples/
+[N-Quads]:          https://www.w3.org/TR/rdf-n-quads/
 [YARD]:             https://yardoc.org/
 [YARD-GS]:          https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              https://unlicense.org/#unlicensing-contributions
@@ -496,6 +498,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [SPARQL doc]:       https://ruby-rdf.github.io/sparql
 [RDF 1.0]:          https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
 [RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
+[RDF 1.2]:          https://www.w3.org/TR/rdf12-concepts/
 [SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
 [RDF.rb]:           https://ruby-rdf.github.io/
 [RDF::DO]:          https://ruby-rdf.github.io/rdf-do
@@ -510,7 +513,6 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF::TriX]:        https://ruby-rdf.github.io/rdf-trix
 [RDF::Turtle]:      https://ruby-rdf.github.io/rdf-turtle
 [RDF::Raptor]:      https://ruby-rdf.github.io/rdf-raptor
-[RDF*]:             https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [LinkedData]:       https://ruby-rdf.github.io/linkeddata
 [JSON::LD]:         https://ruby-rdf.github.io/json-ld
 [RestClient]:       https://rubygems.org/gems/rest-client

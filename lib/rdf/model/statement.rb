@@ -182,6 +182,7 @@ module RDF
     ##
     # Returns `true` if any element of the statement is, itself, a statement.
     #
+    # Note: Nomenclature is evolving, alternatives could include `#complex?` and `#nested?`
     # @return [Boolean]
     def embedded?
       subject && subject.statement? || object && object.statement?
@@ -410,7 +411,7 @@ module RDF
     end
 
     ##
-    # Canonicalizes each unfrozen term in the statement
+    # Canonicalizes each unfrozen term in the statement.
     #
     # @return [RDF::Statement] `self`
     # @since  1.0.8
@@ -434,6 +435,18 @@ module RDF
       self.dup.canonicalize!
     rescue ArgumentError
       nil
+    end
+
+    # New statement with duplicated components (other than blank nodes)
+    #
+    # @return [RDF::Statement]
+    def dup
+      options = Hash[@options]
+      options[:subject] = subject.is_a?(RDF::Node) ? subject : subject.dup
+      options[:predicate] = predicate.dup
+      options[:object] = object.is_a?(RDF::Node) ? object : object.dup
+      options[:graph_name] = graph_name.is_a?(RDF::Node) ? graph_name : graph_name.dup if graph_name
+      RDF::Statement.new(options)
     end
 
     ##

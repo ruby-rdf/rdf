@@ -110,7 +110,7 @@ module RDF; module Util
 
     ##
     # This implementation uses the `WeakRef` class from Ruby's standard
-    # library, and provides adequate performance on JRuby and on Ruby 2.x.
+    # library, and provides adequate performance on JRuby and on Ruby 3.x.
     #
     # @see http://ruby-doc.org/stdlib-2.2.0/libdoc/weakref/rdoc/WeakRef.html
     class WeakRefCache < Cache

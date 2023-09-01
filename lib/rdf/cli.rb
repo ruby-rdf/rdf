@@ -60,7 +60,7 @@ module RDF
   #         RDF::CLI::Option.new(
   #           symbol: :canonicalize,
   #           on: ["--canonicalize"],
-  #           description: "Canonicalize input/output.") {true},
+  #           description: "Canonicalize URI/literal forms.") {true},
   #         RDF::CLI::Option.new(
   #           symbol: :uri,
   #           on: ["--uri STRING"],

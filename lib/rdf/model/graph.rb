@@ -305,8 +305,11 @@ module RDF
     # @private
     # @see RDF::Mutable#insert
     def insert_statement(statement)
-      if statement.embedded? && !@data.supports?(:rdfstar)
-        raise ArgumentError, "Graph does not support embedded statements"
+      if statement.embedded? && !@data.supports?(:quoted_triples)
+        raise ArgumentError, "Graph does not support quoted triples"
+      end
+      if statement.object && statement.object.literal? && statement.object.direction? &&  !@data.supports?(:base_direction)
+        raise ArgumentError, "Graph does not support directional languaged-tagged strings"
       end
       statement = statement.dup
       statement.graph_name = graph_name

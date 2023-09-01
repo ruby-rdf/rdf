@@ -27,7 +27,6 @@ describe RDF::NTriples::Format do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
      ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Format.for(arg)).to eq subject
@@ -103,15 +102,15 @@ describe RDF::NTriples::Reader do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Reader.for(arg)).to eq described_class
       end
     end
 
-    context "content_type text/plain with non-N-Triples content" do
+    context "content_type text/plain" do
       {
+        :ntriples      => "<a> <b> <c> . ",
         :nquads        => "<a> <b> <c> <d> . ",
         :nq_literal    => '<a> <b> "literal" <d> .',
         :nq_multi_line => %(<a>\n  <b>\n  "literal"\n <d>\n .),
@@ -310,6 +309,32 @@ describe RDF::NTriples::Reader do
       end
     end
 
+    context "base direction" do
+      context "without rdfstar option" do
+        it "Raises an error" do
+          expect do
+            expect {parse('<http://subj> <http://pred>  "Hello"@en--ltr .')}.to raise_error(RDF::ReaderError)
+          end.to write(:something).to(:error)
+        end
+      end
+
+      context 'parse language/direction' do
+        {
+          "language" => '<http://subj> <http://pred>  "Hello"@en .',
+          "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
+        }.each_pair do |name, triple|
+          specify "test #{name}" do
+            stmt = reader.new(triple, rdfstar: true).first
+            if name.include?('dir')
+              expect(stmt.object.datatype).to eql RDF.dirLangString
+            else
+              expect(stmt.object.datatype).to eql RDF.langString
+            end
+          end
+        end
+      end
+    end
+
     context 'should parse a value that was written without passing through the writer encoding' do
       [
         %(<http://subj> <http://pred> "Procreation Metaphors in S\xC3\xA9an \xC3\x93 R\xC3\xADord\xC3\xA1in's Poetry" .),
@@ -353,8 +378,10 @@ describe RDF::NTriples::Reader do
       "XML Literals as Datatyped Literals (8)" => '<http://example.org/resource26> <http://example.org/property> "a\n<b></b>\nc"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
       "XML Literals as Datatyped Literals (9)" => '<http://example.org/resource27> <http://example.org/property> "chat"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
 
-      "Plain literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
-      "Plain literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
+      "Literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
+      "Literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
+      # FIXME: once rdfstar option is no longer used
+      #"Literals with language and direction" => '<http://example.org/resource31> <http://example.org/property> "chat"@en--ltr .',
       "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
       "Plain lieral with embedded quote" => %q(<http://example.org/resource33> <http://example.org/property> "From \\"Voyage dans l’intérieur de l’Amérique du Nord, executé pendant les années 1832, 1833 et 1834, par le prince Maximilien de Wied-Neuwied\\" (Paris & Coblenz, 1839-1843)" .),
     }.each_pair do |name, nt|
@@ -404,7 +431,7 @@ describe RDF::NTriples::Reader do
     end
   end
 
-  context "RDF*" do
+  context "quoted triples" do
     statements = {
       "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
       "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
@@ -479,6 +506,18 @@ describe RDF::NTriples::Reader do
         %q(<http://example/s> <http://example/p> "string"@1 .),
         %r(Expected end of statement \(found: "@1 \."\))
       ],
+      "xx bad lang 2" => [
+        %q(<http://example/s> <http://example/p> "string"@cantbethislong .),
+        %r(Invalid Literal)
+      ],
+      "xx bad dir 1" => [
+        %q(<http://example/s> <http://example/p> "string"@en--UTD .),
+        %r(Invalid Literal)
+      ],
+      "xx bad dir 2" => [
+        %q(<http://example/s> <http://example/p> "string"@--ltr .),
+        %r(Expected end of statement)
+      ],
       "nt-syntax-bad-string-05" => [
         %q(<http://example/s> <http://example/p> """abc""" .),
         %r(Expected end of statement \(found: .* \."\))
@@ -538,7 +577,6 @@ describe RDF::NTriples::Writer do
       {file_name:      'etc/doap.nt'},
       {file_extension: 'nt'},
       {content_type:   'application/n-triples'},
-      {content_type:   'text/plain'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Writer.for(arg)).to eq RDF::NTriples::Writer
@@ -606,6 +644,10 @@ describe RDF::NTriples::Writer do
 
     it "should correctly format language-tagged literals" do
       expect(writer.new.format_literal(RDF::Literal.new('Hello, world!', language: :en))).to eq '"Hello, world!"@en'
+    end
+
+    it "should correctly format directional language-tagged literals" do
+      expect(writer.new.format_literal(RDF::Literal.new('Hello, world!', language: :en, direction: :ltr))).to eq '"Hello, world!"@en--ltr'
     end
 
     it "should correctly format datatyped literals" do
@@ -715,7 +757,7 @@ describe RDF::NTriples::Writer do
     end
   end
 
-  context "RDF*" do
+  context "quoted triples" do
     {
       "subject-iii": {
         input: RDF::Statement(

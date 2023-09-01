@@ -26,7 +26,7 @@ module RDF; class Literal
         when value.is_a?(::Numeric)    then BigDecimal(value)
         else
           value = value.to_s
-          value += "0" if value.end_with?(".")  # Normalization required in Ruby 2.4
+          value += "0" if value.end_with?(".")
           BigDecimal(value) rescue BigDecimal(0)
       end
     end

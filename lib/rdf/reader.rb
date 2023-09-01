@@ -133,7 +133,7 @@ module RDF
           on: ["--canonicalize"],
           control: :checkbox,
           default: false,
-          description: "Canonicalize input/output.") {true},
+          description: "Canonicalize URI/literal forms") {true},
         RDF::CLI::Option.new(
           symbol: :encoding,
           datatype: Encoding,
@@ -163,7 +163,7 @@ module RDF
           datatype: TrueClass,
           control: :checkbox,
           on: ["--rdfstar"],
-          description: "Parse RDF*."),
+          description: "Parse RDF-star for preliminary RDF 1.2 support."),
         RDF::CLI::Option.new(
           symbol: :validate,
           datatype: TrueClass,
@@ -271,13 +271,13 @@ module RDF
     #   the base URI to use when resolving relative URIs (not supported by
     #   all readers)
     # @param [Boolean]  canonicalize (false)
-    #   whether to canonicalize parsed literals
+    #   whether to canonicalize parsed URIs and Literals.
     # @param [Encoding] encoding     (Encoding::UTF_8)
     #   the encoding of the input stream
     # @param [Boolean]  intern       (true)
     #   whether to intern all parsed URIs
     # @param [Boolean] rdfstar      (false)
-    #   support parsing RDF* statement resources.
+    #   Preliminary support for RDF 1.2.
     # @param [Hash]     prefixes     (Hash.new)
     #   the prefix mappings to use (not supported by all readers)
     # @param  [Hash{Symbol => Object}] options
@@ -608,7 +608,9 @@ module RDF
     end
 
     ##
-    # Returns `true` if parsed values should be canonicalized.
+    # Returns `true` if parsed values should be in canonical form.
+    #
+    # @note This is for term canonicalization, for graph/dataset canonicalization use `RDF::Normalize`.
     #
     # @return [Boolean] `true` or `false`
     # @since  0.3.0

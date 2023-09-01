@@ -1,6 +1,40 @@
-[1] ntriplesDoc ::= triple? (EOL triple)* EOL?
-[2] triple      ::= subject predicate object '.'
-[3] subject     ::= IRIREF | BLANK_NODE_LABEL
-[4] predicate   ::= IRIREF
-[5] object      ::= IRIREF | BLANK_NODE_LABEL | literal
-[6] literal     ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANGTAG)?
+ntriplesDoc       ::= triple? (EOL triple)* EOL?
+triple            ::= subject predicate object '.'
+subject           ::= IRIREF | BLANK_NODE_LABEL | quotedTriple
+predicate         ::= IRIREF
+object            ::= IRIREF | BLANK_NODE_LABEL | literal | quotedTriple
+literal           ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANG_DIR )?
+quotedTriple      ::= '<<' subject predicate object '>>'
+
+@terminals
+
+IRIREF            ::=  '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
+BLANK_NODE_LABEL  ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
+LANG_DIR          ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' [a-zA-Z]+)?`
+STRING_LITERAL_QUOTE ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'
+UCHAR             ::= ( "\u" HEX HEX HEX HEX )
+                    | ( "\U" HEX HEX HEX HEX HEX HEX HEX HEX )
+ECHAR             ::= ("\" [tbnrf"'])
+PN_CHARS_BASE     ::= ([A-Z]
+                    | [a-z]
+                    | [#x00C0-#x00D6]
+                    | [#x00D8-#x00F6]
+                    | [#x00F8-#x02FF]
+                    | [#x0370-#x037D]
+                    | [#x037F-#x1FFF]
+                    | [#x200C-#x200D]
+                    | [#x2070-#x218F]
+                    | [#x2C00-#x2FEF]
+                    | [#x3001-#xD7FF]
+                    | [#xF900-#xFDCF]
+                    | [#xFDF0-#xFFFD]
+                    | [#x10000-#xEFFFF])
+PN_CHARS_U        ::=  PN_CHARS_BASE | '_'
+PN_CHARS          ::= (PN_CHARS_U
+                    | "-"
+                    | [0-9]
+                    | #x00B7
+                    | [#x0300-#x036F]
+                    | [#x203F-#x2040])
+HEX               ::= ([0-9] | [A-F] | [a-f])
+EOL               ::= [#xD#xA]+

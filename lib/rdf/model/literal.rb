@@ -1,4 +1,7 @@
 # -*- encoding: utf-8 -*-
+
+require 'bcp47_spec'
+
 module RDF
   ##
   # An RDF literal.
@@ -9,7 +12,9 @@ module RDF
   #
   # Specific typed literals may have behavior different from the default implementation. See the following defined sub-classes for specific documentation. Additional sub-classes may be defined, and will interoperate by defining `DATATYPE` and `GRAMMAR` constants, in addition other required overrides of RDF::Literal behavior.
   #
-  # In RDF 1.1, all literals are typed, including plain literals and language tagged literals. Internally, plain literals are given the `xsd:string` datatype and language tagged literals are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language tagged literals. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged literals.
+  # In RDF 1.1, all literals are typed, including plain literals and language-tagged strings. Internally, plain literals are given the `xsd:string` datatype and language-tagged strings are given the `rdf:langString` datatype. Creating a plain literal, without a datatype or language, will automatically provide the `xsd:string` datatype; similar for language-tagged strings. Note that most serialization formats will remove this datatype. Code which depends on a literal having the `xsd:string` datatype being different from a plain literal (formally, without a datatype) may break. However note that the `#has\_datatype?` will continue to return `false` for plain or language-tagged strings.
+  #
+  # RDF 1.2 adds **directional language-tagged strings** which are effectively a subclass of **language-tagged strings** contining an additional **direction** component with value either **ltr** or **rtl** for Left-to-Right or Right-to-Left. This determines the general direction of a string when presented in n a user agent, where it might be in conflict with the inherent direction of the leading Unicode code points. Directional language-tagged strings are given the `rdf:langString` datatype.
   #
   # * {RDF::Literal::Boolean}
   # * {RDF::Literal::Date}
@@ -23,15 +28,22 @@ module RDF
   #   value = RDF::Literal.new("Hello, world!")
   #   value.plain?                                   #=> true`
   #
-  # @example Creating a language-tagged literal (1)
+  # @example Creating a language-tagged string (1)
   #   value = RDF::Literal.new("Hello!", language: :en)
   #   value.language?                                #=> true
   #   value.language                                 #=> :en
   #
-  # @example Creating a language-tagged literal (2)
+  # @example Creating a language-tagged string (2)
   #   RDF::Literal.new("Wazup?", language: :"en-US")
   #   RDF::Literal.new("Hej!",   language: :sv)
   #   RDF::Literal.new("¡Hola!", language: :es)
+  #
+  # @example Creating a directional language-tagged string
+  #   value = RDF::Literal.new("Hello!", language: :en, direction: :ltr)
+  #   value.language?                                #=> true
+  #   value.language                                 #=> :en
+  #   value.direction?                               #=> true
+  #   value.direction                                #=> :ltr
   #
   # @example Creating an explicitly datatyped literal
   #   value = RDF::Literal.new("2009-12-31", datatype: RDF::XSD.date)
@@ -105,8 +117,14 @@ module RDF
 
     ##
     # @private
-    def self.new(value, language: nil, datatype: nil, lexical: nil, validate: false, canonicalize: false, **options)
-      raise ArgumentError, "datatype with language must be rdf:langString" if language && (datatype || RDF.langString).to_s != RDF.langString.to_s
+    def self.new(value, language: nil, datatype: nil, direction: nil, lexical: nil, validate: false, canonicalize: false, **options)
+      if language && direction
+        raise ArgumentError, "datatype with language and direction must be rdf:dirLangString" if (datatype || RDF.dirLangString).to_s != RDF.dirLangString.to_s
+      elsif language
+        raise ArgumentError, "datatype with language must be rdf:langString" if (datatype || RDF.langString).to_s != RDF.langString.to_s
+      else
+        raise ArgumentError, "datatype not compatible with language or direction" if language || direction
+      end
 
       klass = case
         when !self.equal?(RDF::Literal)
@@ -128,7 +146,7 @@ module RDF
         end
       end
       literal = klass.allocate
-      literal.send(:initialize, value, language: language, datatype: datatype, **options)
+      literal.send(:initialize, value, language: language, datatype: datatype, direction: direction, **options)
       literal.validate!     if validate
       literal.canonicalize! if canonicalize
       literal
@@ -137,18 +155,24 @@ module RDF
     TRUE  = RDF::Literal.new(true)
     FALSE = RDF::Literal.new(false)
     ZERO  = RDF::Literal.new(0)
+    XSD_STRING = RDF::URI("http://www.w3.org/2001/XMLSchema#string")
 
-    # @return [Symbol] The language tag (optional).
+    # @return [Symbol] The language-tag (optional). Implies `datatype` is `rdf:langString`.
     attr_accessor :language
+
+    # @return [Symbol] The base direction (optional). Implies `datatype` is `rdf:dirLangString`.
+    attr_accessor :direction
 
     # @return [URI] The XML Schema datatype URI (optional).
     attr_accessor :datatype
 
     ##
-    # Literals without a datatype are given either xsd:string or rdf:langString
-    # depending on if there is language
+    # Literals without a datatype are given either `xsd:string`, `rdf:langString`, or `rdf:dirLangString`,
+    # depending on if there is `language` and/or `direction`.
     #
     # @param  [Object] value
+    # @param  [Symbol]  direction (nil)
+    #   Initial text direction.
     # @param  [Symbol]  language (nil)
     #   Language is downcased to ensure proper matching
     # @param [String]  lexical (nil)
@@ -163,16 +187,24 @@ module RDF
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
     # @see http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
     # @see #to_s
-    def initialize(value, language: nil, datatype: nil, lexical: nil, validate: false, canonicalize: false, **options)
+    def initialize(value, language: nil, datatype: nil, direction: nil, lexical: nil, validate: false, canonicalize: false, **options)
       @object   = value.freeze
       @string   = lexical if lexical
       @string   = value if !defined?(@string) && value.is_a?(String)
       @string   = @string.encode(Encoding::UTF_8).freeze if instance_variable_defined?(:@string)
       @object   = @string if instance_variable_defined?(:@string) && @object.is_a?(String)
       @language = language.to_s.downcase.to_sym if language
+      @direction = direction.to_s.downcase.to_sym if direction
       @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
-      @datatype ||= instance_variable_defined?(:@language) && @language ? RDF.langString : RDF::URI("http://www.w3.org/2001/XMLSchema#string")
+      @datatype ||= if instance_variable_defined?(:@language) && @language &&
+                       instance_variable_defined?(:@direction) && @direction
+        RDF.dirLangString
+      elsif instance_variable_defined?(:@language) && @language
+        RDF.langString
+      else
+        XSD_STRING
+      end
     end
 
     ##
@@ -202,8 +234,8 @@ module RDF
     #
     # Compatibility of two arguments is defined as:
     # * The arguments are simple literals or literals typed as xsd:string
-    # * The arguments are plain literals with identical language tags
-    # * The first argument is a plain literal with language tag and the second argument is a simple literal or literal typed as xsd:string
+    # * The arguments are plain literals with identical language-tags and directions
+    # * The first argument is a plain literal with language-tag and the second argument is a simple literal or literal typed as xsd:string
     #
     # @example
     #     compatible?("abc"	"b")                         #=> true
@@ -224,11 +256,11 @@ module RDF
       return false unless other.literal? && plain? && other.plain?
 
       # * The arguments are simple literals or literals typed as xsd:string
-      # * The arguments are plain literals with identical language tags
-      # * The first argument is a plain literal with language tag and the second argument is a simple literal or literal typed as xsd:string
-      language? ?
-        (language == other.language || other.datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")) :
-        other.datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
+      # * The arguments are plain literals with identical language-tags
+      # * The first argument is a plain literal with language-tag and the second argument is a simple literal or literal typed as xsd:string
+      language? || direction? ?
+        (language == other.language && direction == other.direction || other.datatype == XSD_STRING) :
+        other.datatype == XSD_STRING
     end
 
     ##
@@ -236,7 +268,7 @@ module RDF
     #
     # @return [Integer]
     def hash
-      @hash ||= [to_s, datatype, language].hash
+      @hash ||= [to_s, datatype, language, direction].compact.hash
     end
 
 
@@ -270,6 +302,7 @@ module RDF
          self.value_hash == other.value_hash &&
          self.value.eql?(other.value) &&
          self.language.to_s.eql?(other.language.to_s) &&
+         self.direction.to_s.eql?(other.direction.to_s) &&
          self.datatype.eql?(other.datatype))
     end
 
@@ -290,7 +323,10 @@ module RDF
         case
         when self.eql?(other)
           true
-        when self.language? && self.language.to_s == other.language.to_s
+        when self.direction? && self.direction == other.direction
+          # Literals with directions can compare if languages and directions are identical
+          self.value_hash == other.value_hash && self.value == other.value
+        when self.language? && self.language == other.language
           # Literals with languages can compare if languages are identical
           self.value_hash == other.value_hash && self.value == other.value
         when self.simple? && other.simple?
@@ -342,14 +378,18 @@ module RDF
 
     ##
     # Returns `true` if this is a plain literal. A plain literal
-    # may have a language, but may not have a datatype. For
+    # may have a language and direction, but may not have a datatype. For
     # all practical purposes, this includes xsd:string literals
     # too.
     #
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
     def plain?
-      [RDF.langString, RDF::URI("http://www.w3.org/2001/XMLSchema#string")].include?(datatype)
+      [
+        RDF.langString,
+        RDF.dirLangString,
+        XSD_STRING
+      ].include?(datatype)
     end
 
     ##
@@ -359,18 +399,27 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/sparql11-query/#simple_literal
     def simple?
-      datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
+      datatype == XSD_STRING
     end
 
     ##
-    # Returns `true` if this is a language-tagged literal.
+    # Returns `true` if this is a language-tagged string.
     #
     # @return [Boolean] `true` or `false`
-    # @see http://www.w3.org/TR/rdf-concepts/#dfn-plain-literal
+    # @see https://www.w3.org/TR/rdf-concepts/#dfn-language-tagged-string
     def language?
-      datatype == RDF.langString
+      [RDF.langString, RDF.dirLangString].include?(datatype)
     end
     alias_method :has_language?, :language?
+
+    ##
+    # Returns `true` if this is a directional language-tagged string.
+    #
+    # @return [Boolean] `true` or `false`
+    # @see https://www.w3.org/TR/rdf-concepts/#dfn-dir-lang-string
+    def direction?
+      datatype == RDF.dirLangString
+    end
 
     ##
     # Returns `true` if this is a datatyped literal.
@@ -380,7 +429,7 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @see http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
     def datatype?
-      !plain? && !language?
+      !plain? && !language? && !direction?
     end
     alias_method :has_datatype?,  :datatype?
     alias_method :typed?,         :datatype?
@@ -393,10 +442,13 @@ module RDF
     # @return [Boolean] `true` or `false`
     # @since  0.2.1
     def valid?
-      return false if language? && language.to_s !~ /^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$/
+      BCP47.parse(language.to_s) if language?
+      return false if direction? && !%i{ltr rtl}.include?(direction)
       return false if datatype? && datatype.invalid?
       grammar = self.class.const_get(:GRAMMAR) rescue nil
       grammar.nil? || value.match?(grammar)
+    rescue BCP47::InvalidLanguageTag
+      false
     end
 
     ##
@@ -536,12 +588,12 @@ module RDF
 
     ##
     # @overload #to_str
-    #   This method is implemented when the datatype is `xsd:string` or `rdf:langString`
+    #   This method is implemented when the datatype is `xsd:string`, `rdf:langString`, or `rdf:dirLangString`
     #   @return [String]
     def method_missing(name, *args)
       case name
       when :to_str
-        return to_s if @datatype == RDF.langString || @datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
+        return to_s if [RDF.langString, RDF.dirLangString, XSD_STRING].include?(@datatype)
       end
       super
     end
@@ -549,7 +601,7 @@ module RDF
     def respond_to_missing?(name, include_private = false)
       case name
       when :to_str
-        return true if @datatype == RDF.langString || @datatype == RDF::URI("http://www.w3.org/2001/XMLSchema#string")
+        return true if [RDF.langString, RDF.dirLangString, XSD_STRING].include?(@datatype)
       end
       super
     end

@@ -224,7 +224,7 @@ module RDF::NTriples
     end
 
     ##
-    # Returns the N-Triples representation of an RDF* reified statement.
+    # Returns the N-Triples representation of an RDF-star quoted triple.
     #
     # @param  [RDF::Statement] statement
     # @param  [Hash{Symbol => Object}] options ({})
@@ -312,6 +312,7 @@ module RDF::NTriples
           # Note, escaping here is more robust than in Term
           text = quoted(escaped(literal.value))
           text << "@#{literal.language}" if literal.language?
+          text << "--#{literal.direction}" if literal.direction?
           text << "^^<#{uri_for(literal.datatype)}>" if literal.datatype?
           text
         else

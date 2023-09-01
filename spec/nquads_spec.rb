@@ -20,7 +20,6 @@ describe RDF::NQuads::Format do
       {file_name:      'etc/doap.nq'},
       {file_extension: 'nq'},
       {content_type:   'application/n-quads'},
-      {content_type:   'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Format.for(arg)).to eq subject
@@ -105,7 +104,6 @@ describe RDF::NQuads::Reader do
       {file_name:      'etc/doap.nq'},
       {file_extension: 'nq'},
       {content_type:   'application/n-quads'},
-      {content_type:   'text/x-nquads'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Reader.for(arg)).to eq RDF::NQuads::Reader
@@ -182,7 +180,7 @@ describe RDF::NQuads::Reader do
     end
   end
 
-  context "RDF*" do
+  context "RDF-star" do
     statements = {
       "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
       "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
@@ -242,7 +240,6 @@ describe RDF::NQuads::Writer do
       {file_name:      'etc/doap.nq'},
       {file_extension: 'nq'},
       {content_type:   'application/n-quads'},
-     {content_type:   'text/x-nquads'},
      ].each do |arg|
       it "discovers with #{arg.inspect}" do
         expect(RDF::Writer.for(arg)).to eq RDF::NQuads::Writer

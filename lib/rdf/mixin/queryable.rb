@@ -140,7 +140,7 @@ module RDF
     # method in order to provide for storage-specific optimized triple
     # pattern matching.
     #
-    # ## RDFStar (RDF*)
+    # ## RDF-star
     #
     # Statements may have embedded statements as either a subject or object, recursively.
     #
