@@ -533,7 +533,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns <code>true</code> if terms should be canonicalized.</p>
+<p>Returns <code>true</code> if terms should be in canonical form.</p>
 </div></span>
   
 </li>
@@ -2730,7 +2730,15 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns <code>true</code> if terms should be canonicalized.</p>
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>This is for term canonicalization, for graph/dataset canonicalization use <code>RDF::Normalize</code>.</p>
+</div>
+  </div>
+
+
+<p>Returns <code>true</code> if terms should be in canonical form.</p>
 
 
   </div>
@@ -2778,12 +2786,12 @@
       <pre class="lines">
 
 
-399
-400
-401</pre>
+401
+402
+403</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 399</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 401</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_canonicalize?'>canonicalize?</span>
   <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:canonicalize</span><span class='rbracket'>]</span>
@@ -2913,18 +2921,18 @@
       <pre class="lines">
 
 
-612
-613
 614
 615
 616
 617
 618
 619
-620</pre>
+620
+621
+622</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 612</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 614</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_escaped'>escaped</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>\\</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>\\\\\\\\</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span>
@@ -2983,13 +2991,13 @@
       <pre class="lines">
 
 
-407
-408
 409
-410</pre>
+410
+411
+412</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 407</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 409</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_flush'>flush</span>
   <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_flush'>flush</span> <span class='kw'>if</span> <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:flush</span><span class='rparen'>)</span>
@@ -3088,12 +3096,12 @@
       <pre class="lines">
 
 
-562
-563
-564</pre>
+564
+565
+566</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 562</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 564</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_list'>format_list</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -3193,12 +3201,12 @@
       <pre class="lines">
 
 
-552
-553
-554</pre>
+554
+555
+556</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 552</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 554</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_literal</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3325,12 +3333,12 @@
       <pre class="lines">
 
 
-532
-533
-534</pre>
+534
+535
+536</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 532</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 534</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_node'>format_node</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_node</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3440,12 +3448,12 @@
       <pre class="lines">
 
 
-577
-578
-579</pre>
+579
+580
+581</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 577</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 579</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_statement</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3523,8 +3531,6 @@
       <pre class="lines">
 
 
-512
-513
 514
 515
 516
@@ -3533,10 +3539,12 @@
 519
 520
 521
-522</pre>
+522
+523
+524</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 512</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 514</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_term'>term</span>
@@ -3644,12 +3652,12 @@
       <pre class="lines">
 
 
-542
-543
-544</pre>
+544
+545
+546</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 542</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 544</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_uri</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3696,12 +3704,12 @@
       <pre class="lines">
 
 
-605
-606
-607</pre>
+607
+608
+609</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 605</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 607</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_node_id'>node_id</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_:n</span><span class='embexpr_beg'>#{</span><span class='ivar'>@node_id</span> <span class='op'>+=</span> <span class='int'>1</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -4067,12 +4075,12 @@
       <pre class="lines">
 
 
-585
-586
-587</pre>
+587
+588
+589</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 585</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 587</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='lparen'>(</span><span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='rparen'>)</span>
@@ -4134,12 +4142,12 @@
       <pre class="lines">
 
 
-625
-626
-627</pre>
+627
+628
+629</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 625</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 627</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quoted'>quoted</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_string'>string</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;</span><span class='tstring_end'>&quot;</span></span>
@@ -4255,8 +4263,6 @@
       <pre class="lines">
 
 
-592
-593
 594
 595
 596
@@ -4264,10 +4270,12 @@
 598
 599
 600
-601</pre>
+601
+602
+603</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 592</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 594</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_uri_for'>uri_for</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='rparen'>)</span>
   <span class='kw'>case</span>
@@ -4415,12 +4423,12 @@
       <pre class="lines">
 
 
-436
-437
-438</pre>
+438
+439
+440</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 436</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 438</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_comment'>write_comment</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='kw'>self</span>
@@ -4489,15 +4497,15 @@
       <pre class="lines">
 
 
-425
-426
 427
 428
 429
-430</pre>
+430
+431
+432</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 425</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 427</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_epilogue'>write_epilogue</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_log_statistics'>log_statistics</span><span class='lbracket'>[</span><span class='symbol'>:error</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>&gt;</span> <span class='ivar'>@logged_errors_at_prolog</span>
@@ -4551,13 +4559,13 @@
       <pre class="lines">
 
 
-416
-417
 418
-419</pre>
+419
+420
+421</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 416</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 418</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_prologue'>write_prologue</span>
   <span class='ivar'>@logged_errors_at_prolog</span> <span class='op'>=</span> <span class='id identifier rubyid_log_statistics'>log_statistics</span><span class='lbracket'>[</span><span class='symbol'>:error</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -4636,8 +4644,6 @@
       <pre class="lines">
 
 
-448
-449
 450
 451
 452
@@ -4672,10 +4678,12 @@
 481
 482
 483
-484</pre>
+484
+485
+486</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 448</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 450</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_statement'>write_statement</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_statement'>statement</span> <span class='op'>=</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize!'>canonicalize!</span> <span class='kw'>if</span> <span class='id identifier rubyid_canonicalize?'>canonicalize?</span>
@@ -4823,12 +4831,12 @@
       <pre class="lines">
 
 
-504
-505
-506</pre>
+506
+507
+508</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 504</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 506</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_triple'>write_triple</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#write_triple</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -4898,13 +4906,13 @@
       <pre class="lines">
 
 
-491
-492
 493
-494</pre>
+494
+495
+496</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 491</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 493</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_triples'>write_triples</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_triples'>triples</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_triples'>triples</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_triple'>triple</span><span class='op'>|</span> <span class='id identifier rubyid_write_triple'>write_triple</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_triple'>triple</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -4920,7 +4928,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Jun  8 00:46:56 2023 by
+  Generated on Fri Sep  1 19:51:48 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.1.4).
 </div>

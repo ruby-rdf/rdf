@@ -526,6 +526,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#dup-instance_method" title="#dup (instance method)">#<strong>dup</strong>  &#x21d2; RDF::Statement </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>New statement with duplicated components (other than blank nodes).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#embedded%3F-instance_method" title="#embedded? (instance method)">#<strong>embedded?</strong>  &#x21d2; Boolean </a>
     
 
@@ -1817,13 +1841,13 @@
       <pre class="lines">
 
 
-325
 326
 327
-328</pre>
+328
+329</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 325</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 326</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>==</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span>
@@ -1921,16 +1945,16 @@
       <pre class="lines">
 
 
-357
 358
 359
 360
 361
 362
-363</pre>
+363
+364</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 357</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 358</span>
 
 <span class='kw'>def</span> <span class='op'>===</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_object?'>object?</span>    <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
@@ -1996,7 +2020,6 @@
       <pre class="lines">
 
 
-368
 369
 370
 371
@@ -2004,10 +2027,11 @@
 373
 374
 375
-376</pre>
+376
+377</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 368</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 369</span>
 
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_index'>index</span>
@@ -2086,7 +2110,6 @@
       <pre class="lines">
 
 
-382
 383
 384
 385
@@ -2094,10 +2117,11 @@
 387
 388
 389
-390</pre>
+390
+391</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 382</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 383</span>
 
 <span class='kw'>def</span> <span class='op'>[]=</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_index'>index</span>
@@ -2150,12 +2174,12 @@
       <pre class="lines">
 
 
-207
 208
-209</pre>
+209
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 207</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_asserted?'>asserted?</span>
   <span class='op'>!</span><span class='id identifier rubyid_quoted?'>quoted?</span>
@@ -2225,14 +2249,14 @@
       <pre class="lines">
 
 
-433
 434
 435
 436
-437</pre>
+437
+438</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 433</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 434</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_canonicalize'>canonicalize</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize!'>canonicalize!</span>
@@ -2256,7 +2280,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Canonicalizes each unfrozen term in the statement</p>
+<p>Canonicalizes each unfrozen term in the statement.</p>
 
 
   </div>
@@ -2322,7 +2346,6 @@
       <pre class="lines">
 
 
-418
 419
 420
 421
@@ -2330,10 +2353,11 @@
 423
 424
 425
-426</pre>
+426
+427</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 418</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 419</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_canonicalize!'>canonicalize!</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize!'>canonicalize!</span>    <span class='kw'>if</span> <span class='id identifier rubyid_subject?'>subject?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_frozen?'>frozen?</span>
@@ -2404,15 +2428,79 @@
       <pre class="lines">
 
 
-237
 238
-239</pre>
+239
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 237</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 238</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_complete?'>complete?</span>
   <span class='op'>!</span><span class='id identifier rubyid_incomplete?'>incomplete?</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="dup-instance_method">
+  
+    #<strong>dup</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="RDF::Statement (class)">RDF::Statement</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>New statement with duplicated components (other than blank nodes)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="RDF::Statement (class)">RDF::Statement</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+443
+444
+445
+446
+447
+448
+449
+450</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 443</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_dup'>dup</span>
+  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='lbracket'>[</span><span class='ivar'>@options</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:subject</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Node.html" title="RDF::Node (class)">Node</a></span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_subject'>subject</span> <span class='op'>:</span> <span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:predicate</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:object</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Node.html" title="RDF::Node (class)">Node</a></span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_object'>object</span> <span class='op'>:</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:graph_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Node.html" title="RDF::Node (class)">Node</a></span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_graph_name'>graph_name</span> <span class='op'>:</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='kw'>if</span> <span class='id identifier rubyid_graph_name'>graph_name</span>
+  <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Statement (class)">Statement</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Resource.html#new-class_method" title="RDF::Resource.new (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2432,6 +2520,8 @@
   <div class="discussion">
     
 <p>Returns <code>true</code> if any element of the statement is, itself, a statement.</p>
+
+<p>Note: Nomenclature is evolving, alternatives could include <code>#complex?</code> and <code>#nested?</code></p>
 
 
   </div>
@@ -2458,12 +2548,12 @@
       <pre class="lines">
 
 
-186
 187
-188</pre>
+188
+189</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 186</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 187</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_embedded?'>embedded?</span>
   <span class='id identifier rubyid_subject'>subject</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_statement?'>statement?</span> <span class='op'>||</span> <span class='id identifier rubyid_object'>object</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_statement?'>statement?</span>
@@ -2540,12 +2630,12 @@
       <pre class="lines">
 
 
-305
 306
-307</pre>
+307
+308</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 305</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 306</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RDF::Statement (class)">Statement</a></span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_graph_name'>graph_name</span> <span class='op'>||</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_graph_name'>graph_name</span> <span class='op'>||</span> <span class='kw'>false</span><span class='rparen'>)</span>
@@ -2672,16 +2762,16 @@
       <pre class="lines">
 
 
-252
 253
 254
 255
 256
 257
-258</pre>
+258
+259</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 252</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 253</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_graph?'>graph?</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -2721,12 +2811,12 @@
       <pre class="lines">
 
 
-311
 312
-313</pre>
+313
+314</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 311</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 312</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash'>hash</span>
   <span class='ivar'>@hash</span> <span class='op'>||=</span> <span class='id identifier rubyid_to_quad'>to_quad</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span>
@@ -2791,12 +2881,12 @@
       <pre class="lines">
 
 
-228
 229
-230</pre>
+230
+231</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 228</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 229</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_incomplete?'>incomplete?</span>
   <span class='id identifier rubyid_to_triple'>to_triple</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:nil?</span><span class='rparen'>)</span>
@@ -2843,12 +2933,12 @@
       <pre class="lines">
 
 
-219
 220
-221</pre>
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 219</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 220</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inferred?'>inferred?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:inferred</span><span class='rbracket'>]</span>
@@ -2895,12 +2985,12 @@
       <pre class="lines">
 
 
-192
 193
-194</pre>
+194
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 192</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 193</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_invalid?'>invalid?</span>
   <span class='op'>!</span><span class='id identifier rubyid_valid?'>valid?</span>
@@ -2969,12 +3059,12 @@
       <pre class="lines">
 
 
-290
 291
-292</pre>
+292
+293</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 290</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 291</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_node?'>node?</span>
   <span class='id identifier rubyid_to_quad'>to_quad</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:node?</span><span class='rparen'>)</span>
@@ -3025,12 +3115,12 @@
       <pre class="lines">
 
 
-279
 280
-281</pre>
+281
+282</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 279</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 280</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_object?'>object?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='id identifier rubyid_object'>object</span>
@@ -3081,12 +3171,12 @@
       <pre class="lines">
 
 
-272
 273
-274</pre>
+274
+275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 272</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 273</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_predicate?'>predicate?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='id identifier rubyid_predicate'>predicate</span>
@@ -3133,12 +3223,12 @@
       <pre class="lines">
 
 
-213
 214
-215</pre>
+215
+216</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 213</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 214</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quoted?'>quoted?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:quoted</span><span class='rbracket'>]</span>
@@ -3252,18 +3342,18 @@
       <pre class="lines">
 
 
-477
-478
-479
-480
-481
-482
-483
-484
-485</pre>
+490
+491
+492
+493
+494
+495
+496
+497
+498</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 477</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 490</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_reified'>reified</span><span class='lparen'>(</span><span class='label'>subject:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>graph_name:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Graph.html" title="RDF::Graph (class)">Graph</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Graph.html#initialize-instance_method" title="RDF::Graph#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>graph_name:</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_graph'>graph</span><span class='op'>|</span>
@@ -3451,12 +3541,12 @@
       <pre class="lines">
 
 
-265
 266
-267</pre>
+267
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 265</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subject?'>subject?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='id identifier rubyid_subject'>subject</span>
@@ -3505,12 +3595,12 @@
       <pre class="lines">
 
 
-408
 409
-410</pre>
+410
+411</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 408</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 409</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_terms'>terms</span>
   <span class='id identifier rubyid_to_quad'>to_quad</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span> <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:terms</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_terms'>terms</span> <span class='op'>:</span> <span class='id identifier rubyid_t'>t</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
@@ -3602,12 +3692,12 @@
       <pre class="lines">
 
 
-446
-447
-448</pre>
+459
+460
+461</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 446</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 459</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span><span class='lparen'>(</span><span class='id identifier rubyid_subject_key'>subject_key</span> <span class='op'>=</span> <span class='symbol'>:subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate_key'>predicate_key</span> <span class='op'>=</span> <span class='symbol'>:predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object_key'>object_key</span> <span class='op'>=</span> <span class='symbol'>:object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_key'>graph_key</span> <span class='op'>=</span> <span class='symbol'>:graph_name</span><span class='rparen'>)</span>
   <span class='lbrace'>{</span><span class='id identifier rubyid_subject_key'>subject_key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate_key'>predicate_key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object_key'>object_key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_key'>graph_key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbrace'>}</span>
@@ -3654,12 +3744,12 @@
       <pre class="lines">
 
 
-394
 395
-396</pre>
+396
+397</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 394</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 395</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_quad'>to_quad</span>
   <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbracket'>]</span>
@@ -3708,20 +3798,20 @@
       <pre class="lines">
 
 
-454
-455
-456
-457
-458
-459
-460
-461
-462
-463
-464</pre>
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 454</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 467</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='lparen'>(</span><span class='id identifier rubyid_graph_name'>graph_name</span> <span class='op'>?</span> <span class='id identifier rubyid_to_quad'>to_quad</span> <span class='op'>:</span> <span class='id identifier rubyid_to_triple'>to_triple</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span>
@@ -3780,12 +3870,12 @@
       <pre class="lines">
 
 
-400
 401
-402</pre>
+402
+403</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 400</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 401</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_triple'>to_triple</span>
   <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span>
@@ -3832,15 +3922,15 @@
       <pre class="lines">
 
 
-198
 199
 200
 201
 202
-203</pre>
+203
+204</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 198</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/statement.rb', line 199</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_valid?'>valid?</span>
   <span class='id identifier rubyid_subject?'>subject?</span>    <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_resource?'>resource?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_subject'>subject</span><span class='period'>.</span><span class='id identifier rubyid_valid?'>valid?</span> <span class='op'>&amp;&amp;</span>
@@ -3990,7 +4080,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Jun  8 00:47:08 2023 by
+  Generated on Fri Sep  1 19:52:00 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.1.4).
 </div>
