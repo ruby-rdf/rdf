@@ -41,7 +41,7 @@ module RDF
     def load(url, graph_name: nil, **options)
       raise TypeError.new("#{self} is immutable") if immutable?
 
-      Reader.open(url, **options.merge(base_uri: url)) do |reader|
+      Reader.open(url, base_uri: url, **options) do |reader|
         if graph_name
           statements = []
           reader.each_statement do |statement|
