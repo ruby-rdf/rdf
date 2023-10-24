@@ -322,6 +322,7 @@ describe RDF::NTriples::Reader do
         {
           "language" => '<http://subj> <http://pred>  "Hello"@en .',
           "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
+          "direction2" => '<http://subj> <http://pred>  "Hello"@en--rtl .',
         }.each_pair do |name, triple|
           specify "test #{name}" do
             stmt = reader.new(triple, rdfstar: true).first
@@ -517,6 +518,10 @@ describe RDF::NTriples::Reader do
       "xx bad dir 2" => [
         %q(<http://example/s> <http://example/p> "string"@--ltr .),
         %r(Expected end of statement)
+      ],
+      "xx bad dir 3" => [
+        %q(<http://example/s> <http://example/p> "string"@en--LTR .),
+        %r(Invalid Literal)
       ],
       "nt-syntax-bad-string-05" => [
         %q(<http://example/s> <http://example/p> """abc""" .),

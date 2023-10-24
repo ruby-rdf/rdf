@@ -194,7 +194,7 @@ module RDF
       @string   = @string.encode(Encoding::UTF_8).freeze if instance_variable_defined?(:@string)
       @object   = @string if instance_variable_defined?(:@string) && @object.is_a?(String)
       @language = language.to_s.downcase.to_sym if language
-      @direction = direction.to_s.downcase.to_sym if direction
+      @direction = direction.to_s.to_sym if direction
       @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= if instance_variable_defined?(:@language) && @language &&
