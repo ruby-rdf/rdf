@@ -130,7 +130,7 @@ module RDF
         if statement.embedded? && respond_to?(:supports?) && !supports?(:quoted_triples)
           raise ArgumentError, "Writable does not support quoted triples"
         end
-        if statement.object && statement.object.literal? && statement.object.direction? && !supports?(:base_direction)
+        if statement.object && statement.object.literal? && statement.object.direction? && respond_to?(:supports?) && !supports?(:base_direction)
           raise ArgumentError, "Writable does not support directional languaged-tagged strings"
         end
         insert_statement(statement)
