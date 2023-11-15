@@ -233,6 +233,8 @@ class RDF::Query
     # Returns `true` if this variable is equivalent to a given `other`
     # variable. Or, to another Term if bound, or to any other Term
     #
+    # @note when comparing against the default graph in an {RDF::Dataset}, `other` will be `false` and not be equal to an unbound variable.
+    #
     # @param  [Object] other
     # @return [Boolean] `true` or `false`
     # @since  0.3.0

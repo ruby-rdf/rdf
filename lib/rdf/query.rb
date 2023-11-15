@@ -151,10 +151,9 @@ module RDF
     #   @option options [RDF::Query::Solutions] :solutions (Solutions.new)
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :graph_name (nil)
     #     Default graph name for matching against queryable.
-    #     Named queries either match against a specifically named
+    #     Queries with a graph name match against a specifically named
     #     graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
-    #     Names that are against unbound variables match either default
-    #     or named graphs.
+    #     Queries using an unbound variable as a graph name only match against named graphs, and will not match the default graph.
     #     The name of `false` will only match against the default graph.
     #   @option options [RDF::Resource, RDF::Query::Variable, false] :name (nil)
     #     Alias for `:graph_name`.
@@ -168,10 +167,9 @@ module RDF
     #   @param [RDF::Query::Solutions] solutions (Solutions.new)
     #   @param [RDF::Resource, RDF::Query::Variable, false] graph_name (false)
     #     Default graph name for matching against queryable.
-    #     Named queries either match against a specifically named
+    #     Queries with a graph name match against a specifically named
     #     graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
-    #     Names that are against unbound variables match either default
-    #     or named graphs.
+    #     Queries using an unbound variable as a graph name only match against named graphs, and will not match the default graph.
     #     The name of `false` will only match against the default graph.
     #   @param [RDF::Resource, RDF::Query::Variable, false] name (false)
     #     Alias for `:graph_name`.
@@ -285,10 +283,9 @@ module RDF
     # @param [RDF::Query::Solutions] solutions (Solutions.new)
     # @param [RDF::Resource, RDF::Query::Variable, false] graph_name (nil)
     #   Default graph name for matching against queryable.
-    #   Named queries either match against a specifically named
+    #   Queries with a graph name match against a specifically named
     #   graphs if the name is an {RDF::Resource} or bound {RDF::Query::Variable}.
-    #   Names that are against unbound variables match either default
-    #   or named graphs.
+    #   Queries using an unbound variable as a graph name only match against named graphs, and will not match the default graph.
     #   The name of `false` will only match against the default graph.
     # @param [RDF::Resource, RDF::Query::Variable, false] name (nil)
     #   Alias for `:graph_name`.

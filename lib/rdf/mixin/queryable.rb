@@ -146,6 +146,8 @@ module RDF
     #
     # Patterns may also have embedded patterns as either a subject or object, recursively.
     #
+    # Patterns with a variable `graph_name` do not match the default graph.
+    #
     # When matching, match an embedded pattern against embedded statements, recursively. (see {RDF::Query::Pattern#eql?})
     #
     # @param  [RDF::Query::Pattern] pattern

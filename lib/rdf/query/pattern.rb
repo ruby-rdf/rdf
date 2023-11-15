@@ -23,7 +23,7 @@ module RDF; class Query
     #   @option options [Variable, URI, Symbol, nil]      :predicate (nil)
     #   @option options [Variable, Term, Symbol, nil]     :object    (nil)
     #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
-    #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
+    #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph. (See {RDF::Query#initialize})
     #   @option options [Boolean]            :optional  (false)
     #
     # @overload initialize(subject, predicate, object, options = {})
@@ -32,7 +32,7 @@ module RDF; class Query
     #   @param  [Variable, Termm, Symbol, nil]            object
     #   @param  [Hash{Symbol => Object}]          options
     #   @option options [Variable, Resource, Symbol, nil, false] :graph_name   (nil)
-    #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph.
+    #     A graph_name of nil matches any graph, a graph_name of false, matches only the default graph. (See {RDF::Query#initialize})
     #   @option options [Boolean]                 :optional  (false)
     #
     # @note {Statement} treats symbols as interned {Node} instances, in a {Pattern}, they are treated as {Variable}.

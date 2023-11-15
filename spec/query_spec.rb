@@ -965,6 +965,43 @@ describe RDF::Query do
     end
   end
 
+  context "Issues" do
+    it "issue #442" do
+      repository = RDF::Repository.new do |r|
+        # Adding a statement in the default graph
+        r << RDF::Statement.new(
+          RDF::URI('http://www.example.com#alice'),
+          RDF::URI('http://www.example.com#knows'),
+          RDF::URI('http://www.example.com#bob')
+        )
+
+        # Adding a statement in a named graph
+        r << RDF::Statement.new(
+          RDF::URI('http://www.example.com#alice'),
+          RDF::URI('http://www.example.com#knows'),
+          RDF::URI('http://www.example.com#charlie'),
+          graph_name: RDF::URI('http://www.example.com#named_graph')
+        )
+      end
+      
+      query = RDF::Query.new(
+        {
+          RDF::URI('http://www.example.com#alice') => {
+            RDF::URI('http://www.example.com#knows') => :friend
+          }
+        },
+        graph_name: RDF::Query::Variable.new(:graph)
+      )
+
+      solutions = query.execute(repository)
+      expect(solutions.count).to eql(1)
+      expect(solutions.first).to eql(RDF::Query::Solution.new(
+        friend: RDF::URI('http://www.example.com#charlie'),
+        graph: RDF::URI('http://www.example.com#named_graph')
+      ))
+    end
+  end
+
   context "Examples" do
     let!(:graph) {RDF::Graph.new.insert(RDF::Spec.triples.extend(RDF::Enumerable))}
     subject {
