@@ -394,6 +394,9 @@ from BNode identity (i.e., they each entail the other)
 * {RDF::RDFV}   - RDF Vocabulary (RDFV)
 * {RDF::XSD}    - XML Schema (XSD)
 
+## Change Log
+
+See [Release Notes on GitHub](https://github.com/ruby-rdf/rdf/releases)
 
 ## Dependencies
 
