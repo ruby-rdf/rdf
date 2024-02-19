@@ -265,9 +265,15 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
+## RDF-star CG
+
+[RDF.rb][] includes provisional support for [RDF-star][] with an N-Triples/N-Quads syntax for quoted triples in the _subject_ or _object_ position.
+
+Support for RDF-star quoted triples is now deprecated, use RDF 1.2 triple terms instead.
+
 ## RDF 1.2
 
-[RDF.rb][] includes provisional support for [RDF 1.2][] with an N-Triples/N-Quads syntax for quoted triples in the _subject_ or _object_ position.
+[RDF.rb][] includes provisional support for [RDF 1.2][] with an N-Triples/N-Quads syntax for triple terms in the _object_ position.
 [RDF.rb][] includes provisional support for [RDF 1.2][] directional language-tagged strings, which are literals of type `rdf:dirLangString` having both a `language` and `direction`.
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
@@ -501,6 +507,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [SPARQL doc]:       https://ruby-rdf.github.io/sparql
 [RDF 1.0]:          https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/
 [RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
+[RDF-star]:         https://www.w3.org/2021/12/rdf-star.html
 [RDF 1.2]:          https://www.w3.org/TR/rdf12-concepts/
 [SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
 [RDF.rb]:           https://ruby-rdf.github.io/

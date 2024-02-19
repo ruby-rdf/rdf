@@ -432,6 +432,78 @@ describe RDF::NTriples::Reader do
     end
   end
 
+  context "triple terms" do
+    ill_statements = {
+      "subject-iii": '<<(<http://example/s1> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
+      "subject-iib": '<<(<http://example/s1> <http://example/p1> _:o1)>> <http://example/p> <http://example/o> .',
+      "subject-iil": '<<(<http://example/s1> <http://example/p1> "o1")>> <http://example/p> <http://example/o> .',
+      "subject-bii": '<<(_:s1 <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
+      "subject-bib": '<<(_:s1 <http://example/p1> _:o1)>> <http://example/p> <http://example/o> .',
+      "subject-bil": '<<(_:s1 <http://example/p1> "o")>> <http://example/p> <http://example/o> .',
+      "subject-ws":  '<<( <http://example/s1> <http://example/p1> <http://example/o1> )>> <http://example/p> <http://example/o> .',
+      "recursive-subject": '<<(<<(<http://example/s2> <http://example/p2> <http://example/o2>)>> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
+    }
+
+    statements = {
+      "object-iii":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .',
+      "object-iib":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> _:o1)>> .',
+      "object-iil":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> "o1")>> .',
+      "object-bii":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> <http://example/o1>)>> .',
+      "object-bib":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> _:o1)>> .',
+      "object-bil":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> "o1")>> .',
+      "object-ws":   '<http://example/s> <http://example/p> <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> .',
+
+      "recursive-object": '<http://example/s> <http://example/p> <<(<http:/example/s1> <http://example/p1> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>>)>> .',
+    }
+
+    context "without rdfstar option" do
+      it "Raises an error" do
+        expect do
+          expect {parse(statements.values.first)}.to raise_error(RDF::ReaderError)
+        end.to write(:something).to(:error)
+      end
+    end
+
+    context "with rdfstar option" do
+      ill_statements.each do |name, st|
+        context name do
+          it "Raises an error" do
+            expect do
+              expect {parse(st)}.to raise_error(RDF::ReaderError)
+            end.to write(:something).to(:error)
+          end
+        end
+      end
+
+      statements.each do |name, st|
+        context name do
+          let(:graph) {parse(st, rdfstar: true)}
+
+          it "creates two unquoted statements" do
+            expect(graph.count).to eql(1)
+            graph.statements.each do |stmt|
+              expect(stmt).not_to be_quoted
+            end
+          end
+
+          it "has a statement whose object is a statement" do
+            referencing = graph.statements.first
+            expect(referencing).to be_a_statement
+            expect(referencing.object).to be_a_statement
+          end
+
+          it "statements which are object of another statement are triple terms" do
+            referencing = graph.statements.first
+            expect(referencing).to be_a_statement
+            expect(referencing.object).to be_a_statement
+            expect(referencing.object).to be_tripleTerm
+          end
+        end
+      end
+    end
+  end
+
+  # FIXME: quoted triples are deprecated
   context "quoted triples" do
     statements = {
       "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
@@ -459,7 +531,7 @@ describe RDF::NTriples::Reader do
     context "with rdfstar option" do
       statements.each do |name, st|
         context name do
-          let(:graph) {parse(st, rdfstar: true)}
+          let(:graph) {parse(st, rdfstar: true, deprecated: true)}
 
           it "creates two unquoted statements" do
             expect(graph.count).to eql(1)
@@ -1205,10 +1277,19 @@ def parse(input, **options)
   options = {
     validate: false,
     canonicalize: false,
+    deprecated: false,
   }.merge(options)
   graph = options[:graph] || RDF::Graph.new
-  RDF::NTriples::Reader.new(input, **options).each do |statement|
-    graph << statement
+  if options[:deprecated]
+    expect do
+      RDF::NTriples::Reader.new(input, **options).each do |statement|
+        graph << statement
+      end
+    end.to write('[DEPRECATION]').to(:error)
+  else
+    RDF::NTriples::Reader.new(input, **options).each do |statement|
+      graph << statement
+    end
   end
   graph
 end

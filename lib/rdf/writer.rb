@@ -518,7 +518,8 @@ module RDF
         when RDF::Literal   then format_literal(term, **options)
         when RDF::URI       then format_uri(term, **options)
         when RDF::Node      then format_node(term, **options)
-        when RDF::Statement then format_quotedTriple(term, **options)
+        # FIXME: quoted triples are now deprecated
+        when RDF::Statement then term.tripleTerm? ? format_tripleTerm(term, **options) : format_quotedTriple(term, **options)
         else nil
       end
     end
@@ -566,7 +567,7 @@ module RDF
     end
 
     ##
-    # Formats a referenced triple.
+    # Formats a referenced triple term.
     #
     # @example
     #     <<<s> <p> <o>>> <p> <o> .
@@ -576,8 +577,24 @@ module RDF
     # @return [String]
     # @raise  [NotImplementedError] unless implemented in subclass
     # @abstract
+    def format_tripleTerm(value, **options)
+      raise NotImplementedError.new("#{self.class}#format_tripleTerm") # override in subclasses
+    end
+
+    ##
+    # Formats a referenced quoted triple.
+    #
+    # @example
+    #     <<<s> <p> <o>>> <p> <o> .
+    #
+    # @param  [RDF::Statement] value
+    # @param  [Hash{Symbol => Object}] options = ({})
+    # @return [String]
+    # @raise  [NotImplementedError] unless implemented in subclass
+    # @abstract
+    # @deprecated Quoted Triples are now deprecated in favor of Triple Terms
     def format_quotedTriple(value, **options)
-      raise NotImplementedError.new("#{self.class}#format_statement") # override in subclasses
+      raise NotImplementedError.new("#{self.class}#format_quotedTriple") # override in subclasses
     end
 
   protected

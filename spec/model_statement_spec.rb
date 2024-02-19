@@ -75,7 +75,8 @@ describe RDF::Statement do
     it {is_expected.to have_object}
     its(:object) {is_expected.not_to be_nil}
     it {is_expected.to be_asserted}
-    it {is_expected.not_to be_quoted}
+    it {is_expected.not_to be_tripleTerm}
+    it {is_expected.not_to be_quoted} # FIXME: quoted triples are deprecated
     it {is_expected.to be_statement}
     it {is_expected.not_to be_inferred}
     its(:terms) {is_expected.to include(s, p, o)}
@@ -210,6 +211,12 @@ describe RDF::Statement do
     it {is_expected.to be_inferred}
   end
 
+  context "when marked as tripleTerm" do
+    subject {RDF::Statement.new(RDF::Node.new, p, o, tripleTerm: true)}
+    it {is_expected.to be_tripleTerm}
+  end
+
+  # FIXME: quoted triples are deprecated
   context "when marked as quoted" do
     subject {RDF::Statement.new(RDF::Node.new, p, o, quoted: true)}
     it {is_expected.to be_quoted}
