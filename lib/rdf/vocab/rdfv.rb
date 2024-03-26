@@ -72,6 +72,10 @@ module RDF
   #     # @return [RDF::Vocabulary::Term]
   #     # @attr_reader :value
   #
+  #     # Reification predicate
+  #     # @return [RDF::Vocabulary::Term]
+  #     # @attr_reader :reifies
+  #
   #     # The datatype of RDF literals storing fragments of HTML content.
   #     # @return [RDF::Vocabulary::Term]
   #     # @attr_reader :HTML
@@ -251,6 +255,12 @@ module RDF
       domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
       label: "value".freeze,
       range: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
+      type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
+    property :reifies,
+      comment: %(Property relating to a Triple Term.).freeze,
+      domain: "http://www.w3.org/2000/01/rdf-schema#Resource".freeze,
+      label: "reifies".freeze,
       isDefinedBy: %(http://www.w3.org/1999/02/22-rdf-syntax-ns#).freeze,
       type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property".freeze
 
