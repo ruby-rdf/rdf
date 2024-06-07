@@ -452,6 +452,16 @@ module RDF
     end
 
     ##
+    # Returns `true` if this is a language-tagged literal in the English
+    # language.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  3.3.2
+    def english?
+      /\Aen(?:-[A-Za-z]{2})?\z/ === language.to_s
+    end
+
+    ##
     # Validates the value using {RDF::Value#valid?}, raising an error if the value is
     # invalid.
     #
