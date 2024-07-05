@@ -749,6 +749,7 @@ describe RDF::URI do
       "?one.two.three=four" => {"one.two.three" => "four"},
       "?one[two][three]=four&one[two][five]=six" => {"one[two][three]" => "four", "one[two][five]" => "six"},
       "?one=two&one=three&one=four" => {'one' => ['two', 'three', 'four']},
+      "?&a" => {'a' => nil},
     }.each do |uri, result|
       it uri do
         if result

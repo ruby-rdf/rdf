@@ -133,6 +133,22 @@ describe RDF::Literal do
     end
   end
 
+  describe "#english?" do
+    literals(:all).each do |args|
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      lit = RDF::Literal.new(*args, **options)
+      if lit.language? && lit.language.to_s.downcase.start_with?('en')
+        it "returns true for #{lit.inspect}" do
+          expect(lit).to be_english
+        end
+      else
+        it "returns false for #{lit.inspect}" do
+          expect(lit).not_to be_english
+        end
+      end
+    end
+  end
+
   describe "#datatype" do
     literals(:all_simple).each do |args|
       it "returns xsd:string for #{args.inspect}" do
@@ -179,6 +195,7 @@ describe RDF::Literal do
   it "#start_with?" do
     expect(RDF::Literal('foo')).to be_start_with('foo')
     expect(RDF::Literal('bar')).not_to be_start_with('foo')
+    expect(RDF::Literal('foo')).to be_start_with('foo', 'nope')
   end
 
   describe "#==" do

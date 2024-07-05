@@ -51,14 +51,14 @@ module RDF::NTriples
     # @see http://www.w3.org/TR/turtle/
     ##
     # Unicode regular expressions.
-    U_CHARS1         = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
-                         [\\u00C0-\\u00D6]|[\\u00D8-\\u00F6]|[\\u00F8-\\u02FF]|
-                         [\\u0370-\\u037D]|[\\u037F-\\u1FFF]|[\\u200C-\\u200D]|
-                         [\\u2070-\\u218F]|[\\u2C00-\\u2FEF]|[\\u3001-\\uD7FF]|
-                         [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
-                       EOS
-    U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]").freeze
-    IRI_RANGE        = Regexp.compile("[[^<>\"{}\|\^`\\\\]&&[^\\x00-\\x20]]").freeze
+    U_CHARS1             = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
+                             [\\u00C0-\\u00D6]|[\\u00D8-\\u00F6]|[\\u00F8-\\u02FF]|
+                             [\\u0370-\\u037D]|[\\u037F-\\u1FFF]|[\\u200C-\\u200D]|
+                             [\\u2070-\\u218F]|[\\u2C00-\\u2FEF]|[\\u3001-\\uD7FF]|
+                             [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
+                           EOS
+    U_CHARS2             = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]").freeze
+    IRI_RANGE            = Regexp.compile("[[^<>\"{}\|\^`\\\\]&&[^\\x00-\\x20]]").freeze
 
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/.freeze
     PN_CHARS_U           = /_|#{PN_CHARS_BASE}/.freeze
@@ -70,8 +70,11 @@ module RDF::NTriples
     LANG_DIR             = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z]+)?)/.freeze
     STRING_LITERAL_QUOTE = /"((?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*)"/.freeze
 
-    ST_START              = /^<</.freeze
-    ST_END                = /^\s*>>/.freeze
+    TT_START              = /^<<\(/.freeze
+    TT_END                = /^\s*\)>>/.freeze
+
+    QT_START              = /^<</.freeze
+    QT_END                = /^\s*>>/.freeze
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     COMMENT               = /^#\s*(.*)$/.freeze
@@ -208,7 +211,7 @@ module RDF::NTriples
       begin
         read_statement
       rescue RDF::ReaderError
-        value = read_uriref || read_node || read_literal || read_quotedTriple
+        value = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple
         log_recover
         value
       end
@@ -226,7 +229,7 @@ module RDF::NTriples
           unless blank? || read_comment
             subject   = read_uriref || read_node || read_quotedTriple || fail_subject
             predicate = read_uriref(intern: true) || fail_predicate
-            object    = read_uriref || read_node || read_literal || read_quotedTriple || fail_object
+            object    = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple || fail_object
 
             if validate? && !read_eos
               log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
@@ -242,12 +245,29 @@ module RDF::NTriples
 
     ##
     # @return [RDF::Statement]
+    def read_tripleTerm
+      if @options[:rdfstar] && match(TT_START)
+        subject   = read_uriref || read_node || fail_subject
+        predicate = read_uriref(intern: true) || fail_predicate
+        object    = read_uriref || read_node || read_literal || read_tripleTerm || fail_object
+        if !match(TT_END)
+          log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
+        end
+        RDF::Statement.new(subject, predicate, object, tripleTerm: true)
+      end
+    end
+
+    ##
+    # @return [RDF::Statement]
+    # @deprecated Quoted triples are now deprecated
     def read_quotedTriple
-      if @options[:rdfstar] && match(ST_START)
+      if @options[:rdfstar] && !match(TT_START) && match(QT_START)
+        warn "[DEPRECATION] RDF-star quoted triples are deprecated and will be removed in a future version.\n" +
+             "Called from #{Gem.location_of_caller.join(':')}"
         subject   = read_uriref || read_node || read_quotedTriple || fail_subject
         predicate = read_uriref(intern: true) || fail_predicate
         object    = read_uriref || read_node || read_literal || read_quotedTriple || fail_object
-        if !match(ST_END)
+        if !match(QT_END)
           log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
         end
         RDF::Statement.new(subject, predicate, object, quoted: true)

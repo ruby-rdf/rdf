@@ -224,14 +224,27 @@ module RDF::NTriples
     end
 
     ##
+    # Returns the N-Triples representation of an RDF 1.2 triple term.
+    #
+    # @param  [RDF::Statement] statement
+    # @param  [Hash{Symbol => Object}] options ({})
+    # @return [String]
+    def format_tripleTerm(statement, **options)
+      "<<(%s %s %s)>>" % statement.to_a.map { |value| format_term(value, **options) }
+    end
+
+    ##
     # Returns the N-Triples representation of an RDF-star quoted triple.
     #
     # @param  [RDF::Statement] statement
     # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
+    # @deprecated Quoted triples are now deprecated
     def format_quotedTriple(statement, **options)
+      # FIXME: quoted triples are now deprecated
       "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
     end
+
     ##
     # Returns the N-Triples representation of a triple.
     #

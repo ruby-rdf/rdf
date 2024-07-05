@@ -70,10 +70,10 @@ module RDF
     IUSERINFO = Regexp.compile("(?:(?:#{IUNRESERVED})|(?:#{PCT_ENCODED})|(?:#{SUB_DELIMS})|:)*").freeze
     IAUTHORITY = Regexp.compile("(?:#{IUSERINFO}@)?#{IHOST}(?::#{PORT})?").freeze
     
-    IRELATIVE_PART = Regexp.compile("(?:(?://#{IAUTHORITY}(?:#{IPATH_ABEMPTY}))|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_NOSCHEME})|(?:#{IPATH_EMPTY}))").freeze
-    IRELATIVE_REF = Regexp.compile("^#{IRELATIVE_PART}(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
+    IRELATIVE_PART = Regexp.compile("//#{IAUTHORITY}(?:#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_NOSCHEME})|(?:#{IPATH_EMPTY})").freeze
+    IRELATIVE_REF = Regexp.compile("^(?:#{IRELATIVE_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
 
-    IHIER_PART = Regexp.compile("(?:(?://#{IAUTHORITY}#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY}))").freeze
+    IHIER_PART = Regexp.compile("//#{IAUTHORITY}(?:#{IPATH_ABEMPTY})|(?:#{IPATH_ABSOLUTE})|(?:#{IPATH_ROOTLESS})|(?:#{IPATH_EMPTY})").freeze
     IRI = Regexp.compile("^#{SCHEME}:(?:#{IHIER_PART})(?:\\?#{IQUERY})?(?:\\##{IFRAGMENT})?$").freeze
 
     # Split an IRI into it's component parts
@@ -1240,17 +1240,18 @@ module RDF
       query.to_s.split('&').
         inject(return_type == Hash ? {} : []) do |memo,kv|
           k,v = kv.to_s.split('=', 2)
-          next if k.to_s.empty?
-          k = CGI.unescape(k)
-          v = CGI.unescape(v) if v
-          if return_type == Hash
-            case memo[k]
-            when nil then memo[k] = v
-            when Array then memo[k] << v
-            else memo[k] = [memo[k], v]
+          unless k.to_s.empty?
+            k = CGI.unescape(k)
+            v = CGI.unescape(v) if v
+            if return_type == Hash
+              case memo[k]
+              when nil then memo[k] = v
+              when Array then memo[k] << v
+              else memo[k] = [memo[k], v]
+              end
+            else
+              memo << [k, v].compact
             end
-          else
-            memo << [k, v].compact
           end
           memo
         end

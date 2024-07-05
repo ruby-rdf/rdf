@@ -2,8 +2,9 @@ ntriplesDoc       ::= triple? (EOL triple)* EOL?
 triple            ::= subject predicate object '.'
 subject           ::= IRIREF | BLANK_NODE_LABEL | quotedTriple
 predicate         ::= IRIREF
-object            ::= IRIREF | BLANK_NODE_LABEL | literal | quotedTriple
+object            ::= IRIREF | BLANK_NODE_LABEL | literal | tripleTerm | quotedTriple
 literal           ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANG_DIR )?
+tripleTerm        ::= '<<' subject predicate object '>>'
 quotedTriple      ::= '<<' subject predicate object '>>'
 
 @terminals

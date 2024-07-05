@@ -282,7 +282,7 @@ describe RDF::Query::Pattern do
     end
   end
 
-  context "quoted triples" do
+  context "triple terms" do
     let(:s) {RDF::Query::Variable.new(:s)}
     let(:p) {RDF::Query::Variable.new(:p)}
     let(:o) {RDF::Query::Variable.new(:o)}

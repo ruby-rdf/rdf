@@ -180,7 +180,8 @@ describe RDF::NQuads::Reader do
     end
   end
 
-  context "RDF-star" do
+  # FIXME: quoted triples are deprecated
+  context "quoted triples" do
     statements = {
       "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
       "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
@@ -205,7 +206,13 @@ describe RDF::NQuads::Reader do
 
     statements.each do |name, st|
       context name do
-        let(:graph) {RDF::Graph.new << RDF::NQuads::Reader.new(st, rdfstar: true)}
+        let(:graph) do
+          g = RDF::Graph.new
+          expect do
+            g << RDF::NQuads::Reader.new(st, rdfstar: true)
+          end.to write('[DEPRECATION]').to(:error)
+          g
+        end
 
         it "creates two statements" do
           expect(graph.count).to eql(1)

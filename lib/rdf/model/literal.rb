@@ -194,7 +194,7 @@ module RDF
       @string   = @string.encode(Encoding::UTF_8).freeze if instance_variable_defined?(:@string)
       @object   = @string if instance_variable_defined?(:@string) && @object.is_a?(String)
       @language = language.to_s.downcase.to_sym if language
-      @direction = direction.to_s.downcase.to_sym if direction
+      @direction = direction.to_s.to_sym if direction
       @datatype = RDF::URI(datatype).freeze if datatype
       @datatype ||= self.class.const_get(:DATATYPE) if self.class.const_defined?(:DATATYPE)
       @datatype ||= if instance_variable_defined?(:@language) && @language &&
@@ -449,6 +449,16 @@ module RDF
       grammar.nil? || value.match?(grammar)
     rescue BCP47::InvalidLanguageTag
       false
+    end
+
+    ##
+    # Returns `true` if this is a language-tagged literal in the English
+    # language.
+    #
+    # @return [Boolean] `true` or `false`
+    # @since  3.3.2
+    def english?
+      /\Aen(?:-[A-Za-z]{2})?\z/ === language.to_s
     end
 
     ##

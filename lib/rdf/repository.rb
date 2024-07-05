@@ -182,6 +182,8 @@ module RDF
       when :validity         then @options.fetch(:with_validity, true)
       when :literal_equality then true
       when :atomic_write     then false
+      when :rdf_full         then false
+      # FIXME: quoted triples are now deprecated
       when :quoted_triples   then false
       when :base_direction   then false
       when :snapshots        then false
@@ -270,6 +272,7 @@ module RDF
         when :validity         then @options.fetch(:with_validity, true)
         when :literal_equality then true
         when :atomic_write     then true
+        when :rdf_full         then true
         when :quoted_triples   then true
         when :base_direction   then true
         when :snapshots        then true
