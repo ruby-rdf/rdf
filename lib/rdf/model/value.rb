@@ -197,19 +197,20 @@ module RDF
     alias_method :validate, :validate!
 
     ##
-    # Returns `true` if this Value starts with the given `string`.
+    # Returns `true` if this Value starts with any of the given strings.
     #
     # @example
     #   RDF::URI('http://example.org/').start_with?('http')     #=> true
     #   RDF::Node('_:foo').start_with?('_:bar')                 #=> false
     #   RDF::Litera('Apple').start_with?('Orange')              #=> false
+    #   RDF::Litera('Apple').start_with?('Orange', 'Apple')     #=> true
     #
-    # @param  [String, #to_s] string
+    # @param  [Array<#to_s>] *args Any number of strings to check against.
     # @return [Boolean] `true` or `false`
     # @see    String#start_with?
     # @since  0.3.0
-    def start_with?(string)
-      to_s.start_with?(string.to_s)
+    def start_with?(*args)
+      to_s.start_with?(*args.map(&:to_s))
     end
     alias_method :starts_with?, :start_with?
 
