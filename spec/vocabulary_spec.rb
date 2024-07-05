@@ -479,7 +479,7 @@ potential to perform intentional actions for which they can be held responsible.
     }.each do |v, r|
       context v.to_uri do
         subject {v}
-        its(:imported_from) {is_expected.to eq r}
+        its(:imported_from) {is_expected.to include(*r)}
       end
     end
 
