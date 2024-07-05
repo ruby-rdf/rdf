@@ -195,6 +195,7 @@ describe RDF::Literal do
   it "#start_with?" do
     expect(RDF::Literal('foo')).to be_start_with('foo')
     expect(RDF::Literal('bar')).not_to be_start_with('foo')
+    expect(RDF::Literal('foo')).to be_start_with('foo', 'nope')
   end
 
   describe "#==" do
