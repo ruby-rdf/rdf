@@ -441,7 +441,7 @@
 </li>
 
       
-        <li class="public ">
+        <li class="public deprecated">
   <span class="summary_signature">
     
       <a href="#format_quotedTriple-instance_method" title="#format_quotedTriple (instance method)">#<strong>format_quotedTriple</strong>(statement, **options)  &#x21d2; String </a>
@@ -454,12 +454,12 @@
   
   
   
-  
+  <span class="deprecated note title">deprecated</span>
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the N-Triples representation of an RDF-star quoted triple.</p>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
+<p>Quoted triples are now deprecated</p>
 </div></span>
   
 </li>
@@ -508,6 +508,30 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Returns the N-Triples representation of a triple.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format_tripleTerm-instance_method" title="#format_tripleTerm (instance method)">#<strong>format_tripleTerm</strong>(statement, **options)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the N-Triples representation of an RDF 1.2 triple term.</p>
 </div></span>
   
 </li>
@@ -1552,22 +1576,22 @@
       <pre class="lines">
 
 
-309
-310
-311
-312
-313
-314
-315
-316
-317
-318
-319
-320
-321</pre>
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 309</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 322</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_literal'>literal</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_literal'>literal</span>
@@ -1675,12 +1699,12 @@
       <pre class="lines">
 
 
-255
-256
-257</pre>
+268
+269
+270</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 255</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 268</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_node'>format_node</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='comma'>,</span> <span class='label'>unique_bnodes:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_unique_bnodes'>unique_bnodes</span> <span class='op'>?</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_to_unique_base'>to_unique_base</span> <span class='op'>:</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1701,7 +1725,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+<p>Quoted triples are now deprecated</p>
+</div></div>
+
 <p>Returns the N-Triples representation of an RDF-star quoted triple.</p>
 
 
@@ -1760,15 +1787,17 @@
       <pre class="lines">
 
 
-232
-233
-234</pre>
+243
+244
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 232</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 243</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&lt;%s %s %s&gt;&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='comment'># FIXME: quoted triples are now deprecated
+</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&lt;%s %s %s&gt;&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1952,15 +1981,100 @@
       <pre class="lines">
 
 
-243
-244
-245</pre>
+256
+257
+258</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 243</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 256</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_triple'>format_triple</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%s %s %s .</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="format_tripleTerm-instance_method">
+  
+    #<strong>format_tripleTerm</strong>(statement, **options)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the N-Triples representation of an RDF 1.2 triple term.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>statement</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Statement.html" title="RDF::Statement (class)">RDF::Statement</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>({})</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+232
+233
+234</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 232</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_format_tripleTerm'>format_tripleTerm</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&lt;(%s %s %s)&gt;&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2037,19 +2151,6 @@
       <pre class="lines">
 
 
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275
-276
-277
 278
 279
 280
@@ -2073,10 +2174,23 @@
 298
 299
 300
-301</pre>
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 265</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 278</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_string'>string</span> <span class='op'>=</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -2259,9 +2373,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:04:08 2023 by
+  Generated on Fri Jul  5 23:42:57 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

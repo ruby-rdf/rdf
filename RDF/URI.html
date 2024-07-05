@@ -335,17 +335,17 @@
         <dt id="IRELATIVE_PART-constant" class="">IRELATIVE_PART =
           
         </dt>
-        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(?:(?://</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IAUTHORITY-constant" title="RDF::URI::IAUTHORITY (constant)">IAUTHORITY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABEMPTY-constant" title="RDF::URI::IPATH_ABEMPTY (constant)">IPATH_ABEMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>))|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABSOLUTE-constant" title="RDF::URI::IPATH_ABSOLUTE (constant)">IPATH_ABSOLUTE</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_NOSCHEME-constant" title="RDF::URI::IPATH_NOSCHEME (constant)">IPATH_NOSCHEME</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_EMPTY-constant" title="RDF::URI::IPATH_EMPTY (constant)">IPATH_EMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>))</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>//</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IAUTHORITY-constant" title="RDF::URI::IAUTHORITY (constant)">IAUTHORITY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABEMPTY-constant" title="RDF::URI::IPATH_ABEMPTY (constant)">IPATH_ABEMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABSOLUTE-constant" title="RDF::URI::IPATH_ABSOLUTE (constant)">IPATH_ABSOLUTE</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_NOSCHEME-constant" title="RDF::URI::IPATH_NOSCHEME (constant)">IPATH_NOSCHEME</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_EMPTY-constant" title="RDF::URI::IPATH_EMPTY (constant)">IPATH_EMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="IRELATIVE_REF-constant" class="">IRELATIVE_REF =
           
         </dt>
-        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>^</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IRELATIVE_PART-constant" title="RDF::URI::IRELATIVE_PART (constant)">IRELATIVE_PART</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>(?:\\?</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IQUERY-constant" title="RDF::URI::IQUERY (constant)">IQUERY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)?(?:\\#</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IFRAGMENT-constant" title="RDF::URI::IFRAGMENT (constant)">IFRAGMENT</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)?$</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>^(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IRELATIVE_PART-constant" title="RDF::URI::IRELATIVE_PART (constant)">IRELATIVE_PART</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)(?:\\?</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IQUERY-constant" title="RDF::URI::IQUERY (constant)">IQUERY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)?(?:\\#</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IFRAGMENT-constant" title="RDF::URI::IFRAGMENT (constant)">IFRAGMENT</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)?$</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="IHIER_PART-constant" class="">IHIER_PART =
           
         </dt>
-        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(?:(?://</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IAUTHORITY-constant" title="RDF::URI::IAUTHORITY (constant)">IAUTHORITY</a></span></span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABEMPTY-constant" title="RDF::URI::IPATH_ABEMPTY (constant)">IPATH_ABEMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABSOLUTE-constant" title="RDF::URI::IPATH_ABSOLUTE (constant)">IPATH_ABSOLUTE</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ROOTLESS-constant" title="RDF::URI::IPATH_ROOTLESS (constant)">IPATH_ROOTLESS</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_EMPTY-constant" title="RDF::URI::IPATH_EMPTY (constant)">IPATH_EMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>))</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_compile'>compile</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>//</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IAUTHORITY-constant" title="RDF::URI::IAUTHORITY (constant)">IAUTHORITY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABEMPTY-constant" title="RDF::URI::IPATH_ABEMPTY (constant)">IPATH_ABEMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ABSOLUTE-constant" title="RDF::URI::IPATH_ABSOLUTE (constant)">IPATH_ABSOLUTE</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_ROOTLESS-constant" title="RDF::URI::IPATH_ROOTLESS (constant)">IPATH_ROOTLESS</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)|(?:</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#IPATH_EMPTY-constant" title="RDF::URI::IPATH_EMPTY (constant)">IPATH_EMPTY</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="IRI-constant" class="">IRI =
           
@@ -2656,12 +2656,12 @@
       <pre class="lines">
 
 
-1341
 1342
-1343</pre>
+1343
+1344</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1341</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1342</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid__load'>_load</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
@@ -3666,12 +3666,12 @@
       <pre class="lines">
 
 
-1331
 1332
-1333</pre>
+1333
+1334</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1331</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1332</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid__dump'>_dump</span><span class='lparen'>(</span><span class='id identifier rubyid_level'>level</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span>
@@ -6905,7 +6905,8 @@
 1254
 1255
 1256
-1257</pre>
+1257
+1258</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1237</span>
@@ -6916,17 +6917,18 @@
   <span class='id identifier rubyid_query'>query</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&amp;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span>
     <span class='id identifier rubyid_inject'>inject</span><span class='lparen'>(</span><span class='id identifier rubyid_return_type'>return_type</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>?</span> <span class='lbrace'>{</span><span class='rbrace'>}</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_memo'>memo</span><span class='comma'>,</span><span class='id identifier rubyid_kv'>kv</span><span class='op'>|</span>
       <span class='id identifier rubyid_k'>k</span><span class='comma'>,</span><span class='id identifier rubyid_v'>v</span> <span class='op'>=</span> <span class='id identifier rubyid_kv'>kv</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>=</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='int'>2</span><span class='rparen'>)</span>
-      <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_k'>k</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-      <span class='id identifier rubyid_k'>k</span> <span class='op'>=</span> <span class='const'>CGI</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_v'>v</span> <span class='op'>=</span> <span class='const'>CGI</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_v'>v</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_return_type'>return_type</span> <span class='op'>==</span> <span class='const'>Hash</span>
-        <span class='kw'>case</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span>
-        <span class='kw'>when</span> <span class='kw'>nil</span> <span class='kw'>then</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_v'>v</span>
-        <span class='kw'>when</span> <span class='const'>Array</span> <span class='kw'>then</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_v'>v</span>
-        <span class='kw'>else</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='rbracket'>]</span>
+      <span class='kw'>unless</span> <span class='id identifier rubyid_k'>k</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+        <span class='id identifier rubyid_k'>k</span> <span class='op'>=</span> <span class='const'>CGI</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_v'>v</span> <span class='op'>=</span> <span class='const'>CGI</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_v'>v</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_return_type'>return_type</span> <span class='op'>==</span> <span class='const'>Hash</span>
+          <span class='kw'>case</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span>
+          <span class='kw'>when</span> <span class='kw'>nil</span> <span class='kw'>then</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_v'>v</span>
+          <span class='kw'>when</span> <span class='const'>Array</span> <span class='kw'>then</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_v'>v</span>
+          <span class='kw'>else</span> <span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_memo'>memo</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='rbracket'>]</span>
+          <span class='kw'>end</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_memo'>memo</span> <span class='op'>&lt;&lt;</span> <span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
         <span class='kw'>end</span>
-      <span class='kw'>else</span>
-        <span class='id identifier rubyid_memo'>memo</span> <span class='op'>&lt;&lt;</span> <span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
       <span class='kw'>end</span>
       <span class='id identifier rubyid_memo'>memo</span>
     <span class='kw'>end</span>
@@ -7023,7 +7025,6 @@
       <pre class="lines">
 
 
-1284
 1285
 1286
 1287
@@ -7050,10 +7051,11 @@
 1308
 1309
 1310
-1311</pre>
+1311
+1312</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1284</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1285</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_query_values='>query_values=</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -7286,15 +7288,15 @@
       <pre class="lines">
 
 
-1318
 1319
 1320
 1321
 1322
-1323</pre>
+1323
+1324</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1318</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/model/uri.rb', line 1319</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_request_uri'>request_uri</span>
   <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_absolute?'>absolute?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_scheme'>scheme</span> <span class='op'>!~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^https?$</span><span class='regexp_end'>/</span></span>
@@ -8462,9 +8464,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:03:56 2023 by
+  Generated on Fri Jul  5 23:42:50 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

@@ -1221,17 +1221,17 @@
       <pre class="lines">
 
 
-198
-199
 200
 201
 202
 203
 204
-205</pre>
+205
+206
+207</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 198</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete_insert'>delete_insert</span><span class='lparen'>(</span><span class='id identifier rubyid_deletes'>deletes</span><span class='comma'>,</span> <span class='id identifier rubyid_inserts'>inserts</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>super</span> <span class='kw'>unless</span> <span class='id identifier rubyid_supports?'>supports?</span><span class='lparen'>(</span><span class='symbol'>:atomic_write</span><span class='rparen'>)</span>
@@ -1277,12 +1277,12 @@
       <pre class="lines">
 
 
-218
-219
-220</pre>
+220
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 218</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 220</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_isolation_level'>isolation_level</span>
   <span class='id identifier rubyid_supports?'>supports?</span><span class='lparen'>(</span><span class='symbol'>:snapshots</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='symbol'>:repeatable_read</span> <span class='op'>:</span> <span class='kw'>super</span>
@@ -1349,12 +1349,12 @@
       <pre class="lines">
 
 
-227
-228
-229</pre>
+229
+230
+231</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 227</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 229</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_snapshot'>snapshot</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#snapshot</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -1424,7 +1424,9 @@
 187
 188
 189
-190</pre>
+190
+191
+192</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 178</span>
@@ -1436,7 +1438,9 @@
 </span>  <span class='kw'>when</span> <span class='symbol'>:validity</span>         <span class='kw'>then</span> <span class='ivar'>@options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:with_validity</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='kw'>when</span> <span class='symbol'>:literal_equality</span> <span class='kw'>then</span> <span class='kw'>true</span>
   <span class='kw'>when</span> <span class='symbol'>:atomic_write</span>     <span class='kw'>then</span> <span class='kw'>false</span>
-  <span class='kw'>when</span> <span class='symbol'>:quoted_triples</span>   <span class='kw'>then</span> <span class='kw'>false</span>
+  <span class='kw'>when</span> <span class='symbol'>:rdf_full</span>         <span class='kw'>then</span> <span class='kw'>false</span>
+  <span class='comment'># FIXME: quoted triples are now deprecated
+</span>  <span class='kw'>when</span> <span class='symbol'>:quoted_triples</span>   <span class='kw'>then</span> <span class='kw'>false</span>
   <span class='kw'>when</span> <span class='symbol'>:base_direction</span>   <span class='kw'>then</span> <span class='kw'>false</span>
   <span class='kw'>when</span> <span class='symbol'>:snapshots</span>        <span class='kw'>then</span> <span class='kw'>false</span>
   <span class='kw'>else</span> <span class='kw'>false</span>
@@ -1452,9 +1456,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:04:01 2023 by
+  Generated on Fri Jul  5 23:42:53 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

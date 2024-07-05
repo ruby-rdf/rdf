@@ -503,8 +503,6 @@
       <pre class="lines">
 
 
-186
-187
 188
 189
 190
@@ -516,10 +514,12 @@
 196
 197
 198
-199</pre>
+199
+200
+201</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 186</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 188</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first'>first</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_pattern'>pattern</span>
@@ -677,15 +677,15 @@
       <pre class="lines">
 
 
-277
-278
 279
 280
 281
-282</pre>
+282
+283
+284</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 277</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 279</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_literal'>first_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid___send__'>__send__</span><span class='lparen'>(</span><span class='op'>*</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='symbol'>:query</span><span class='comma'>,</span> <span class='id identifier rubyid_pattern'>pattern</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='symbol'>:each</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
@@ -822,15 +822,15 @@
       <pre class="lines">
 
 
-254
-255
 256
 257
 258
-259</pre>
+259
+260
+261</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 254</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 256</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_object'>first_object</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid___send__'>__send__</span><span class='lparen'>(</span><span class='op'>*</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='symbol'>:query</span><span class='comma'>,</span> <span class='id identifier rubyid_pattern'>pattern</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='symbol'>:each</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
@@ -967,15 +967,15 @@
       <pre class="lines">
 
 
-234
-235
 236
 237
 238
-239</pre>
+239
+240
+241</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 234</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_predicate'>first_predicate</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid___send__'>__send__</span><span class='lparen'>(</span><span class='op'>*</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='symbol'>:query</span><span class='comma'>,</span> <span class='id identifier rubyid_pattern'>pattern</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='symbol'>:each</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
@@ -1112,15 +1112,15 @@
       <pre class="lines">
 
 
-214
-215
 216
 217
 218
-219</pre>
+219
+220
+221</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 214</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 216</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_subject'>first_subject</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid___send__'>__send__</span><span class='lparen'>(</span><span class='op'>*</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='symbol'>:query</span><span class='comma'>,</span> <span class='id identifier rubyid_pattern'>pattern</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='symbol'>:each</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
@@ -1257,12 +1257,12 @@
       <pre class="lines">
 
 
-298
-299
-300</pre>
+300
+301
+302</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 298</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 300</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_value'>first_value</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='lparen'>(</span><span class='id identifier rubyid_literal'>literal</span> <span class='op'>=</span> <span class='id identifier rubyid_first_literal'>first_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>:</span> <span class='kw'>nil</span>
@@ -1747,6 +1747,8 @@
 
 <p>Patterns may also have embedded patterns as either a subject or object, recursively.</p>
 
+<p>Patterns with a variable <code>graph_name</code> do not match the default graph.</p>
+
 <p>When matching, match an embedded pattern against embedded statements, recursively. (see <span class='object_link'><a href="Query/Pattern.html#eql%3F-instance_method" title="RDF::Query::Pattern#eql? (method)">RDF::Query::Pattern#eql?</a></span>)</p>
 
 
@@ -1868,16 +1870,16 @@
       <pre class="lines">
 
 
-162
-163
 164
 165
 166
 167
-168</pre>
+168
+169
+170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 162</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/mixin/queryable.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_query_pattern'>query_pattern</span><span class='lparen'>(</span><span class='id identifier rubyid_pattern'>pattern</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='comment'># By default, we let Ruby&#39;s built-in `Enumerable#grep` handle the
@@ -1896,9 +1898,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:03:49 2023 by
+  Generated on Fri Jul  5 23:42:45 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

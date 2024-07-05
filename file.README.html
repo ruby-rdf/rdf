@@ -375,9 +375,15 @@
 </span><span class='id identifier rubyid_foaf'>foaf</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>mbox</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>  <span class='comment'>#=&gt; RDF::URI(&quot;http://xmlns.com/foaf/0.1/mbox&quot;)
 </span></code></pre>
 
+<h2 id="label-RDF-star+CG">RDF-star CG</h2>
+
+<p><a href="https://ruby-rdf.github.io/">RDF.rb</a> includes provisional support for <a href="https://www.w3.org/2021/12/rdf-star.html">RDF-star</a> with an N-Triples/N-Quads syntax for quoted triples in the <em>subject</em> or <em>object</em> position.</p>
+
+<p>Support for RDF-star quoted triples is now deprecated, use RDF 1.2 triple terms instead.</p>
+
 <h2 id="label-RDF+1.2">RDF 1.2</h2>
 
-<p><a href="https://ruby-rdf.github.io/">RDF.rb</a> includes provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a> with an N-Triples/N-Quads syntax for quoted triples in the <em>subject</em> or <em>object</em> position. <a href="https://ruby-rdf.github.io/">RDF.rb</a> includes provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a> directional language-tagged strings, which are literals of type <code>rdf:dirLangString</code> having both a <code>language</code> and <code>direction</code>.</p>
+<p><a href="https://ruby-rdf.github.io/">RDF.rb</a> includes provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a> with an N-Triples/N-Quads syntax for triple terms in the <em>object</em> position. <a href="https://ruby-rdf.github.io/">RDF.rb</a> includes provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a> directional language-tagged strings, which are literals of type <code>rdf:dirLangString</code> having both a <code>language</code> and <code>direction</code>.</p>
 
 <p>Internally, an <code>RDF::Statement</code> is treated as another resource, along with <code>RDF::URI</code> and <code>RDF::Node</code>, which allows an <code>RDF::Statement</code> to have a <code>#subject</code> or <code>#object</code> which is also an <code>RDF::Statement</code>.</p>
 
@@ -558,6 +564,10 @@
 <p><span class='object_link'><a href="RDF/XSD.html" title="RDF::XSD (class)">RDF::XSD</a></span> - XML Schema (XSD)</p>
 </li></ul>
 
+<h2 id="label-Change+Log">Change Log</h2>
+
+<p>See <a href="https://github.com/ruby-rdf/rdf/releases">Release Notes on GitHub</a></p>
+
 <h2 id="label-Dependencies">Dependencies</h2>
 <ul><li>
 <p><a href="https://ruby-lang.org/">Ruby</a> (&gt;= 3.0)</p>
@@ -669,9 +679,9 @@
 </div></div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:03:45 2023 by
+  Generated on Fri Jul  5 23:42:43 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

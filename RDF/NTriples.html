@@ -93,18 +93,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p><strong><code>RDF::NTriples</code></strong> provides support for the N-Triples serialization format.</p>
-
-<p>N-Triples is a line-based plain-text format for encoding an RDF graph. It is a very restricted, explicit and well-defined subset of both <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> and <a href="http://www.w3.org/TeamSubmission/n3/">Notation3</a> (N3).</p>
-
-<p>The MIME content type for N-Triples files is <code>application/n-triples</code> and the recommended file extension is <code>.nt</code>.</p>
-
-<p>An example of an RDF statement in N-Triples format:</p>
-
-<pre class="code ruby"><code class="ruby">&lt;https://rubygems.org/gems/rdf&gt; &lt;http://purl.org/dc/terms/title&gt; &quot;rdf&quot; .
-</code></pre>
-
-<h2 id="label-Quoted+Triples">Quoted Triples</h2>
+<h2 id="label-Quoted+Triples+-28Deprecated-29">Quoted Triples (Deprecated)</h2>
 
 <p>Supports statements as resources using <code>&lt;&lt;s p o&gt;&gt;</code>.</p>
 
@@ -365,12 +354,12 @@
       <pre class="lines">
 
 
-84
-85
-86</pre>
+88
+89
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 84</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_escape'>escape</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="NTriples/Writer.html" title="RDF::NTriples::Writer (class)">Writer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_escape'><span class='object_link'><a href="NTriples/Writer.html#escape-class_method" title="RDF::NTriples::Writer.escape (method)">escape</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
@@ -457,12 +446,12 @@
       <pre class="lines">
 
 
-66
-67
-68</pre>
+70
+71
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 66</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="NTriples/Writer.html" title="RDF::NTriples::Writer (class)">Writer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span></span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -547,12 +536,12 @@
       <pre class="lines">
 
 
-75
-76
-77</pre>
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 75</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_unescape'>unescape</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="NTriples/Reader.html" title="RDF::NTriples::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_unescape'><span class='object_link'><a href="NTriples/Reader.html#unescape-class_method" title="RDF::NTriples::Reader.unescape (method)">unescape</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
@@ -639,12 +628,12 @@
       <pre class="lines">
 
 
-54
-55
-56</pre>
+58
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 54</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_unserialize'>unserialize</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="NTriples/Reader.html" title="RDF::NTriples::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_unserialize'><span class='object_link'><a href="NTriples/Reader.html#unserialize-class_method" title="RDF::NTriples::Reader.unserialize (method)">unserialize</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
@@ -659,9 +648,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:03:46 2023 by
+  Generated on Fri Jul  5 23:42:44 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

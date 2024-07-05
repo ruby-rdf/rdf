@@ -677,7 +677,7 @@
 </li>
 
       
-        <li class="public ">
+        <li class="public deprecated">
   <span class="summary_signature">
     
       <a href="#format_quotedTriple-instance_method" title="#format_quotedTriple (instance method)">#<strong>format_quotedTriple</strong>(value, **options)  &#x21d2; String </a>
@@ -690,12 +690,12 @@
   
   
   <span class="abstract note title">abstract</span>
-  
+  <span class="deprecated note title">deprecated</span>
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Formats a referenced triple.</p>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
+<p>Quoted Triples are now deprecated in favor of Triple Terms</p>
 </div></span>
   
 </li>
@@ -719,6 +719,30 @@
 
   
     <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format_tripleTerm-instance_method" title="#format_tripleTerm (instance method)">#<strong>format_tripleTerm</strong>(value, **options)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  <span class="abstract note title">abstract</span>
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Formats a referenced triple term.</p>
+</div></span>
   
 </li>
 
@@ -2921,18 +2945,18 @@
       <pre class="lines">
 
 
-614
-615
-616
-617
-618
-619
-620
-621
-622</pre>
+631
+632
+633
+634
+635
+636
+637
+638
+639</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 614</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 631</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_escaped'>escaped</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>\\</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>\\\\\\\\</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span>
@@ -3096,12 +3120,12 @@
       <pre class="lines">
 
 
-564
 565
-566</pre>
+566
+567</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 564</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 565</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_list'>format_list</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -3201,12 +3225,12 @@
       <pre class="lines">
 
 
-554
 555
-556</pre>
+556
+557</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 554</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 555</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_literal</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3333,12 +3357,12 @@
       <pre class="lines">
 
 
-534
 535
-536</pre>
+536
+537</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 534</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 535</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_node'>format_node</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_node</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3359,12 +3383,15 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <div class="note abstract">
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+<p>Quoted Triples are now deprecated in favor of Triple Terms</p>
+</div></div>
+<div class="note abstract">
   <strong>This method is abstract.</strong>
   <div class='inline'></div>
 </div>
 
-<p>Formats a referenced triple.</p>
+<p>Formats a referenced quoted triple.</p>
 
 
   </div>
@@ -3448,15 +3475,15 @@
       <pre class="lines">
 
 
-579
-580
-581</pre>
+596
+597
+598</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 579</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 596</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_statement</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_quotedTriple</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
 </span><span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -3541,7 +3568,8 @@
 521
 522
 523
-524</pre>
+524
+525</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 514</span>
@@ -3553,10 +3581,126 @@
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Literal.html" title="RDF::Literal (class)">Literal</a></span></span>   <span class='kw'>then</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span>       <span class='kw'>then</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Node.html" title="RDF::Node (class)">Node</a></span></span>      <span class='kw'>then</span> <span class='id identifier rubyid_format_node'>format_node</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Statement.html" title="RDF::Statement (class)">Statement</a></span></span> <span class='kw'>then</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+    <span class='comment'># FIXME: quoted triples are now deprecated
+</span>    <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Statement.html" title="RDF::Statement (class)">Statement</a></span></span> <span class='kw'>then</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_tripleTerm?'>tripleTerm?</span> <span class='op'>?</span> <span class='id identifier rubyid_format_tripleTerm'>format_tripleTerm</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
     <span class='kw'>else</span> <span class='kw'>nil</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="format_tripleTerm-instance_method">
+  
+    #<strong>format_tripleTerm</strong>(value, **options)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <div class="note abstract">
+  <strong>This method is abstract.</strong>
+  <div class='inline'></div>
+</div>
+
+<p>Formats a referenced triple term.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>&lt;&lt;&lt;s&gt; &lt;p&gt; &lt;o&gt;&gt;&gt; &lt;p&gt; &lt;o&gt; .</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Statement.html" title="RDF::Statement (class)">RDF::Statement</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>= ({})</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>NotImplementedError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>unless implemented in subclass</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+580
+581
+582</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 580</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_format_tripleTerm'>format_tripleTerm</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_tripleTerm</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
+</span><span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -3652,12 +3796,12 @@
       <pre class="lines">
 
 
-544
 545
-546</pre>
+546
+547</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 544</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 545</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>#format_uri</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># override in subclasses
@@ -3704,12 +3848,12 @@
       <pre class="lines">
 
 
-607
-608
-609</pre>
+624
+625
+626</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 607</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 624</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_node_id'>node_id</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_:n</span><span class='embexpr_beg'>#{</span><span class='ivar'>@node_id</span> <span class='op'>+=</span> <span class='int'>1</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -4075,12 +4219,12 @@
       <pre class="lines">
 
 
-587
-588
-589</pre>
+604
+605
+606</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 587</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 604</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='lparen'>(</span><span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='rparen'>)</span>
@@ -4142,12 +4286,12 @@
       <pre class="lines">
 
 
-627
-628
-629</pre>
+644
+645
+646</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 627</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 644</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quoted'>quoted</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_string'>string</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;</span><span class='tstring_end'>&quot;</span></span>
@@ -4263,19 +4407,19 @@
       <pre class="lines">
 
 
-594
-595
-596
-597
-598
-599
-600
-601
-602
-603</pre>
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 594</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/writer.rb', line 611</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_uri_for'>uri_for</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='rparen'>)</span>
   <span class='kw'>case</span>
@@ -4928,9 +5072,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:03:54 2023 by
+  Generated on Fri Jul  5 23:42:49 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>

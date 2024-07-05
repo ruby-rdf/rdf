@@ -305,9 +305,6 @@
       <pre class="lines">
 
 
-371
-372
-373
 374
 375
 376
@@ -317,10 +314,13 @@
 380
 381
 382
-383</pre>
+383
+384
+385
+386</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 371</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 374</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_apply_changeset'>apply_changeset</span><span class='lparen'>(</span><span class='id identifier rubyid_changeset'>changeset</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='ivar'>@data</span>
@@ -457,16 +457,16 @@
       <pre class="lines">
 
 
-304
-305
-306
 307
 308
 309
-310</pre>
+310
+311
+312
+313</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 304</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 307</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_graph?'>graph?</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -511,12 +511,12 @@
       <pre class="lines">
 
 
-387
-388
-389</pre>
+390
+391
+392</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 387</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 390</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_isolation_level'>isolation_level</span>
   <span class='symbol'>:snapshot</span>
@@ -577,12 +577,12 @@
       <pre class="lines">
 
 
-398
-399
-400</pre>
+401
+402
+403</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 398</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 401</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_snapshot'>snapshot</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>data:</span> <span class='ivar'>@data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
@@ -688,16 +688,16 @@
       <pre class="lines">
 
 
-341
-342
-343
 344
 345
 346
-347</pre>
+347
+348
+349
+350</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 341</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/repository.rb', line 344</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_statement?'>statement?</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -716,9 +716,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 11 21:03:47 2023 by
+  Generated on Fri Jul  5 23:42:44 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.6).
 </div>
 
     </div>
