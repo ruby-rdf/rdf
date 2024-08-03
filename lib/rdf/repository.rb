@@ -273,7 +273,7 @@ module RDF
         when :literal_equality then true
         when :atomic_write     then true
         when :rdf_full         then true
-        when :quoted_triples   then true
+        when :quoted_triples   then true  # DEPRECATED
         when :base_direction   then true
         when :snapshots        then true
         else false

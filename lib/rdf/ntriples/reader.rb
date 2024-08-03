@@ -259,9 +259,9 @@ module RDF::NTriples
 
     ##
     # @return [RDF::Statement]
-    # @deprecated Quoted triples are now deprecated
+    # @deprecated Quoted triples are now deprecated (not supported when validating)
     def read_quotedTriple
-      if @options[:rdfstar] && !match(TT_START) && match(QT_START)
+      if @options[:rdfstar] && !match(TT_START) && match(QT_START) && !validate?
         warn "[DEPRECATION] RDF-star quoted triples are deprecated and will be removed in a future version.\n" +
              "Called from #{Gem.location_of_caller.join(':')}"
         subject   = read_uriref || read_node || read_quotedTriple || fail_subject
