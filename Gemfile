@@ -11,7 +11,7 @@ group :develop do
   #gem "rdf-xsd",        git: "https://github.com/ruby-rdf/rdf-xsd",         branch: "develop"
 
   #gem "ebnf",           git: "https://github.com/dryruby/ebnf",             branch: "develop"
-  gem "sxp",            git: "https://github.com/dryruby/sxp",              branch: "develop"
+  #gem "sxp",            git: "https://github.com/dryruby/sxp",              branch: "develop"
 
   gem 'rest-client-components'
   gem 'benchmark-ips'
