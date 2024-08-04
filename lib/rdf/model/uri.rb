@@ -716,8 +716,8 @@ module RDF
     ##
     # @private
     def freeze
-      unless frozen?
-        @mutex.synchronize do
+      @mutex.synchronize do
+        unless frozen?
           # Create derived components
           authority; userinfo; user; password; host; port
           @value  = value.freeze
