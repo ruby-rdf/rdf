@@ -280,19 +280,24 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
 
 **Note: This feature is subject to change or elimination as the standards process progresses.**
 
-### Serializing a Graph containing quoted triples
+### Serializing a Graph containing triple terms
 
     require 'rdf/ntriples'
     statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
-    graph = RDF::Graph.new << [statement, RDF::URI("ex:certainty"), RDF::Literal(0.9)]
+    reifier = RDF::Node.new
+    graph = RDF::Graph.new do |g|
+      g << [reifier, RDF.reifies, statement]
+      g << [reifier, RDF::URI("ex:certainty"), RDF::Literal(0.9)]
+    end
     graph.dump(:ntriples, validate: false)
-    # => '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
+    # ==> '_:bn <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>)>> .
+           _:bn <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
 
-### Reading a Graph containing quoted triples
+### Reading a Graph containing triple terms
 
 By default, the N-Triples reader will reject a document containing a subject resource.
 
-    nt = '<<<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
+    nt = '<<(<bob> <http://xmlns.com/foaf/0.1/age> "23"^^<http://www.w3.org/2001/XMLSchema#integer>)>> <ex:certainty> "0.9"^^<http://www.w3.org/2001/XMLSchema#double> .'
     graph = RDF::Graph.new do |graph|
       RDF::NTriples::Reader.new(nt) {|reader| graph << reader}
     end

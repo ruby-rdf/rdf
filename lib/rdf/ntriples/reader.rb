@@ -30,7 +30,7 @@ module RDF::NTriples
   #
   # ** RDF=star
   #
-  # Supports statements as resources using `<<s p o>>`.
+  # Supports statements as resources using `<<(s p o)>>`.
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
@@ -73,8 +73,8 @@ module RDF::NTriples
     TT_START              = /^<<\(/.freeze
     TT_END                = /^\s*\)>>/.freeze
 
-    QT_START              = /^<</.freeze
-    QT_END                = /^\s*>>/.freeze
+    QT_START              = /^<</.freeze      # DEPRECATED
+    QT_END                = /^\s*>>/.freeze   # DEPRECATED
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     COMMENT               = /^#\s*(.*)$/.freeze

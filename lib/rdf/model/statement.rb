@@ -476,7 +476,7 @@ module RDF
     def to_s
       (graph_name ? to_quad : to_triple).map do |term|
         if term.is_a?(Statement)
-          "<<#{term.to_s[0..-3]}>>"
+          "<<(#{term.to_s[0..-3]})>>"
         elsif term.respond_to?(:to_base)
           term.to_base
         else
