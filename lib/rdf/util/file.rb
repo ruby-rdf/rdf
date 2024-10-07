@@ -320,9 +320,9 @@ module RDF; module Util
           url_no_frag_or_query.fragment = nil
           options[:encoding] ||= Encoding::UTF_8
 
-          # Normalize a file scheme further
+          # Just use path if there's a file scheme. This leaves out a potential host, which isn't supported anyway.
           if url_no_frag_or_query.scheme == 'file'
-            url_no_frag_or_query = "file:///#{url_no_frag_or_query.path}"
+            url_no_frag_or_query = url_no_frag_or_query.path
           end
 
           Kernel.open(url_no_frag_or_query, "r", **options) do |file|
