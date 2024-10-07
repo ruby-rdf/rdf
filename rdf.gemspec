@@ -35,6 +35,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency     'logger',             '~> 1.5'
   gem.add_runtime_dependency     'ostruct',            '~> 0.6'
   gem.add_development_dependency 'base64',             '~> 0.2'
+  gem.add_development_dependency 'fiddle',             '~> 1.1'
   gem.add_development_dependency 'rdf-spec',           '~> 3.3'
   gem.add_development_dependency 'rdf-turtle',         '~> 3.3'
   gem.add_development_dependency 'rdf-vocab',          '~> 3.3'

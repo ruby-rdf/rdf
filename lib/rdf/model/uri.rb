@@ -80,6 +80,10 @@ module RDF
     # scheme, authority, path, query, fragment
     IRI_PARTS = /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(\?[^#]*)?(#.*)?$/.freeze
 
+    # Special version for file-scheme on Windows (path SHOULD begin with /, but may not)
+    # scheme, authority, path, query, fragment
+    FILE_PARTS = /^file:(?:\/\/(#{IHOST}))?(\/?[^?#]*)(\?[^#]*)?(#.*)?$/.freeze
+    
     # Remove dot expressions regular expressions
     RDS_2A = /^\.?\.\/(.*)$/.freeze
     RDS_2B1 = /^\/\.$/.freeze
@@ -851,8 +855,7 @@ module RDF
     # lexical representation of URI, either absolute or relative
     # @return [String] 
     def value
-      return @value if @value
-      @value = [
+      @value ||= [
         ("#{scheme}:" if absolute?),
         ("//#{authority}" if authority),
         path,
@@ -883,17 +886,35 @@ module RDF
     #
     # @param [String, to_s] value
     # @return [Object{Symbol => String}]
+    # @see https://datatracker.ietf.org/doc/html/rfc8089
     def parse(value)
-      value = value.to_s.dup.force_encoding(Encoding::ASCII_8BIT)
+      value = value.to_s.dup.force_encoding(Encoding::UTF_8) unless value && value.encoding == Encoding::UTF_8
       parts = {}
-      if matchdata = IRI_PARTS.match(value)
-        scheme, authority, path, query, fragment = matchdata[1..-1]
-
-        if Gem.win_platform? && scheme && !authority && scheme.match?(/^[a-zA-Z]$/)
-          # A drive letter, not a scheme
-          scheme, path = nil, "#{scheme}:#{path}"
+      if matchdata = FILE_PARTS.match(value)
+        # A file-based URI is always in the folloring form:
+        # * file:/path  - absolute path, no host name
+        # * file:///path - absolute path, empty host name
+        # * file://hostname/path - absolute path with authority.
+        # * file://path – is invalid, but treated as file:///path
+        scheme = 'file'
+        authority, path, query, fragment = matchdata[1..-1]
+        if authority && authority.match?(/^[A-Za-z]$/) && Gem.win_platform?
+          # In this case, if the authority is a drive letter and part of the path
+          authority, path = nil, "#{authority}#{path}"
         end
+        # We accept paths that aren't absolute, but coerce them to be absolute
+        path = "/#{path}" unless path.start_with?('/')
+      elsif matchdata = IRI_PARTS.match(value)
+        scheme, authority, path, query, fragment = matchdata[1..-1]
+        authority = nil if authority && authority.empty?
 
+        if scheme && scheme.match?(/^[A-Za-z]$/) && Gem.win_platform?
+          # On Windows treat D:/foo/bar as a path, not a scheme
+          scheme, authority, path = 'file', nil, "/#{scheme}:#{path}"
+        end
+      end
+
+      if matchdata
         userinfo, hostport = authority.to_s.split('@', 2)
         hostport, userinfo = userinfo, nil unless hostport
         user, password = userinfo.to_s.split(':', 2)
