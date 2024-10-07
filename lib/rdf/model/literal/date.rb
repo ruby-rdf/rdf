@@ -26,9 +26,7 @@ module RDF; class Literal
           # Use midnight as midpoint of the interval
           ::DateTime.parse(value.strftime('%FT00:00:00'))
         when value.respond_to?(:to_datetime)
-          dt = value.to_datetime
-          @zone = dt.zone
-          dt
+          value.to_datetime
         else
           md = value.to_s.match(GRAMMAR)
           _, dt, tz = Array(md)

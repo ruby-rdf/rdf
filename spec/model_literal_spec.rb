@@ -1178,7 +1178,7 @@ describe RDF::Literal do
       {
         ::Date.parse("2010-02-01")  => ["2010-02-01", "2010-02-01"],
         ::Date.parse("-2010-01-01") => ["-2010-01-01","-2010-01-01"],
-        ::DateTime.parse("2014-09-01T00:00:00-08:00") => ["2014-09-01-08:00", "2014-09-01Z"],
+        ::DateTime.parse("2014-09-01T00:00:00-08:00") => ["2014-09-01", "2014-09-01"],
       }.each do |obj, (str, canon)|
         it "to_str #{obj} to #{str.inspect}" do
           expect(described_class.new(obj).to_s).to eql str
