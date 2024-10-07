@@ -319,6 +319,12 @@ module RDF; module Util
           url_no_frag_or_query.query = nil
           url_no_frag_or_query.fragment = nil
           options[:encoding] ||= Encoding::UTF_8
+
+          # Normalize a file scheme further
+          if url_no_frag_or_query.scheme == 'file'
+            url_no_frag_or_query = "file:///#{url_no_frag_or_query.path}"
+          end
+
           Kernel.open(url_no_frag_or_query, "r", **options) do |file|
             document_options = {
               base_uri:     filename_or_url.to_s,
