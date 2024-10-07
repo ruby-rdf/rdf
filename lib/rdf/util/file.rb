@@ -323,6 +323,10 @@ module RDF; module Util
           # Just use path if there's a file scheme. This leaves out a potential host, which isn't supported anyway.
           if url_no_frag_or_query.scheme == 'file'
             url_no_frag_or_query = url_no_frag_or_query.path
+            if url_no_frag_or_query.match?(/^\/[A-Za-z]:/) && Gem.win_platform?
+              # Turns "/D:foo" into "D:foo"
+              url_no_frag_or_query = url_no_frag_or_query[1..-1]
+            end
           end
 
           Kernel.open(url_no_frag_or_query, "r", **options) do |file|
