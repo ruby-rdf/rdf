@@ -98,6 +98,17 @@ describe RDF::Util::File do
       expect(r).to be_a(RDF::Reader)
     end
 
+    it "yields a file scheme" do
+      path = fixture_path("test.nt")
+      path = Gem.win_platform? ? "file:/#{path}" : "file:#{path}"
+      r = RDF::Util::File.open_file(path) do |f|
+        expect(f).to respond_to(:read)
+        opened.opened
+        RDF::Reader.new
+      end
+      expect(r).to be_a(RDF::Reader)
+    end
+
     it "raises IOError on missing local file" do
       expect {RDF::Util::File.open_file(fixture_path("not-here"))}.to raise_error IOError
       opened.opened

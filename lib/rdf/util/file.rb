@@ -297,7 +297,6 @@ module RDF; module Util
     # @yieldreturn [Object] returned from open_file
     # @raise [IOError] if not found
     def self.open_file(filename_or_url, proxy: nil, headers: {}, verify_none: false, **options, &block)
-      filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       remote_document = nil
 
       if filename_or_url.to_s.match?(/^https?/)
