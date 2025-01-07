@@ -351,6 +351,7 @@ other gems:
 * [RDF::TriG][] (extension)
 * [RDF::TriX][] (extension)
 * [RDF::Turtle][] (extension)
+* [RDF::Borsh][] (extension)
 
 The meta-gem [LinkedData][LinkedData doc] includes many of these gems.
 
@@ -516,6 +517,7 @@ see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF 1.2]:          https://www.w3.org/TR/rdf12-concepts/
 [SPARQL 1.1]:       https://www.w3.org/TR/sparql11-query/
 [RDF.rb]:           https://ruby-rdf.github.io/
+[RDF::Borsh]:       https://ruby-rdf.github.io/rdf-borsh
 [RDF::DO]:          https://ruby-rdf.github.io/rdf-do
 [RDF::Mongo]:       https://ruby-rdf.github.io/rdf-mongo
 [RDF::Sesame]:      https://ruby-rdf.github.io/rdf-sesame
