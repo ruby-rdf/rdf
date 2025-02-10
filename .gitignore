@@ -1,4 +1,5 @@
 .DS_Store
+.env
 .tmp
 .yardoc
 pkg
@@ -9,6 +10,7 @@ tmp
 Gemfile.lock
 .bundle/
 *.sw?
+*~
 benchmark/
 /.byebug_history
 /coverage/
