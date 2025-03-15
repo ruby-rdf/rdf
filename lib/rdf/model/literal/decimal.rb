@@ -15,7 +15,7 @@ module RDF; class Literal
     GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
 
     ##
-    # @param  [String, BidDecimal, Numeric] value
+    # @param  [String, BigDecimal, Numeric] value
     # @param  (see Literal#initialize)
     def initialize(value, datatype: nil, lexical: nil, **options)
       @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))
