@@ -20,7 +20,7 @@ module RDF
   #
   # @example Loading graph data from a URL
   #   require 'rdf/rdfxml'  # for RDF/XML support
-  #   
+  #
   #   graph = RDF::Graph.load("http://www.bbc.co.uk/programmes/b0081dq5.rdf")
   #
   # @example Accessing a specific named graph within a {RDF::Repository}
@@ -249,6 +249,36 @@ module RDF
       end
     end
     alias_method :has_statement?, :statement?
+
+    ##
+    # Returns `true` if `self` contains the given RDF subject term.
+    #
+    # @param  [RDF::Resource] value
+    # @return [Boolean]
+    def subject? value
+      !@data.query({ subject: value, graph_name: graph_name || false }).empty?
+    end
+    alias_method :has_subject?, :subject?
+
+    ##
+    # Returns `true` if `self` contains the given RDF predicate term.
+    #
+    # @param  [RDF::URI] value
+    # @return [Boolean]
+    def predicate? value
+      !@data.query({ predicate: value, graph_name: graph_name || false }).empty?
+    end
+    alias_method :has_predicate?, :predicate?
+
+    ##
+    # Returns `true` if `self` contains the given RDF object term.
+    #
+    # @param  [RDF::Term] value
+    # @return [Boolean]
+    def object? value
+      !@data.query({ object: value, graph_name: graph_name || false }).empty?
+    end
+    alias_method :has_object?, :object?
 
     ##
     # Enumerates each RDF statement in this graph.
