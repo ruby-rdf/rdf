@@ -40,8 +40,8 @@ module RDF::NTriples
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     ESCAPE_CHARS    = ["\b", "\f", "\t", "\n", "\r", "\"", "'", "\\"].freeze
-    UCHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
-    UCHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
+    UCHAR4          = /(?<!\\)\\(?!\\)u([0-9A-Fa-f]{4,4})/.freeze
+    UCHAR8          = /(?<!\\)\\(?!\\)U([0-9A-Fa-f]{8,8})/.freeze
     UCHAR           = Regexp.union(UCHAR4, UCHAR8).freeze
 
 
@@ -187,22 +187,12 @@ module RDF::NTriples
       # Note: avoiding copying the input string when no escaping is needed
       # greatly reduces the number of allocations and the processing time.
       string = string.dup.force_encoding(Encoding::UTF_8) unless string.encoding == Encoding::UTF_8
-      scanner = StringScanner.new(string)
 
-      buffer = ""
-
-      while !scanner.eos?
-        buffer << if scanner.scan(ESCAPE_CHARS_ESCAPED_REGEXP)
-          ESCAPE_CHARS_ESCAPED[scanner.matched]
-        elsif scanner.scan(UCHAR)
-          scanner.matched.sub(UCHAR) {[($1 || $2).hex].pack('U*')}
-        else
-          # Scan one character
-          scanner.getch
+      string
+        .gsub(UCHAR) do
+          [($1 || $2).hex].pack('U*')
         end
-      end
-
-      buffer
+        .gsub(ESCAPE_CHARS_ESCAPED_REGEXP, ESCAPE_CHARS_ESCAPED)
     end
 
     ##
