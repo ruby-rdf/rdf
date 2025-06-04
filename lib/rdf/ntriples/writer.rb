@@ -230,7 +230,7 @@ module RDF::NTriples
     # @param  [Hash{Symbol => Object}] options ({})
     # @return [String]
     def format_tripleTerm(statement, **options)
-      "<<(%s %s %s)>>" % statement.to_a.map { |value| format_term(value, **options) }
+      "<<( %s %s %s )>>" % statement.to_a.map { |value| format_term(value, **options) }
     end
 
     ##

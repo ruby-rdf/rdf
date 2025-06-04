@@ -333,7 +333,7 @@ module RDF
     # Returns the base URI determined by this reader.
     #
     # @example
-    #   reader.prefixes[:dc]  #=> RDF::URI('http://purl.org/dc/terms/')
+    #   reader.base_uri  #=> RDF::URI('http://example.com/')
     #
     # @return [RDF::URI]
     # @since  0.3.0
