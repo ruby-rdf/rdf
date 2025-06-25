@@ -111,35 +111,35 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Checking whether any statements exist</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Checking how many statements exist</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Checking whether a specific statement exists</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_statement?'>statement?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Statement.html" title="RDF::Statement (class)">Statement</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_triple?'>triple?</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_quad?'>quad?</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbracket'>]</span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Checking whether a specific value exists</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_subject?'>subject?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://rubygems.org/gems/rdf</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_predicate?'>predicate?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDFS.html" title="RDF::RDFS (class)">RDFS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_label'><span class='object_link'><a href="RDFS.html#label-instance_method" title="RDF::RDFS#label (method)">label</a></span></span><span class='rparen'>)</span>
@@ -147,36 +147,36 @@
 <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_graph?'>graph?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://ar.to/#self</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Enumerating all statements</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
 <span class='kw'>end</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Enumerating all statements in the form of triples</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_triple'>each_triple</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='op'>|</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
 <span class='kw'>end</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Enumerating all statements in the form of quads</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_quad'>each_quad</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='op'>|</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_graph_name'>graph_name</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
 <span class='kw'>end</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Enumerating all terms</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_subject'>each_subject</span>   <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span>
 <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_predicate'>each_predicate</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span>
@@ -184,18 +184,18 @@
 <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_each_term'>each_term</span>      <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_term'>term</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Obtaining all statements</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_statements'>statements</span>  <span class='comment'>#=&gt; [RDF::Statement(subject1, predicate1, object1), ...]
 </span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_triples'>triples</span>     <span class='comment'>#=&gt; [[subject1, predicate1, object1], ...]
 </span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_quads'>quads</span>       <span class='comment'>#=&gt; [[subject1, predicate1, object1, graph_name1], ...]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Obtaining all unique values</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_subjects'>subjects</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>    <span class='comment'>#=&gt; [subject1, subject2, subject3, ...]
 </span><span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_predicates'>predicates</span><span class='lparen'>(</span><span class='label'>unique:</span> <span class='kw'>true</span><span class='rparen'>)</span>  <span class='comment'>#=&gt; [predicate1, predicate2, predicate3, ...]
@@ -1618,12 +1618,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Serializing into N-Triples format</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rdf/ntriples</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_ntriples'>ntriples</span> <span class='op'>=</span> <span class='id identifier rubyid_enumerable'>enumerable</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span></code></pre>
@@ -5191,7 +5191,7 @@
     
 <p>Returns <code>true</code> if this enumerable supports the given <code>feature</code>.</p>
 
-<p>Supported features include:  * <code>:graph_name</code> supports statements with a graph_name, allowing multiple named graphs  * <code>:inference</code> supports RDFS inferrence of queryable contents.  * <code>:literal_equality&#39; preserves [term-equality](https://www.w3.org/TR/rdf11-concepts/#dfn-literal-term-equality) for literals. Literals are equal only if their lexical values and datatypes are equal, character by character. Literals may be &quot;inlined&quot; to value-space for efficiency only if</code>:literal_equality<code>is</code>false<code>.   *</code>:validity<code>allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.   *</code>:skolemize<code>supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an</code>Enumerable<code>. Implementations supporting this feature must implement a</code>#skolemize<code>method, taking a base URI used for minting URIs for BNodes as stable identifiers and a</code>#deskolemize<code>method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.   *</code>:rdf_full<code>supports RDF 1.2 Full profile, including support for embedded Triple Terms.   *</code>:quoted_triples<code>supports RDF-star quoted triples.   *</code>:base_direction` supports RDF 1.2 directional language-tagged strings.</p>
+<p>Supported features include:  * <code>:graph_name</code> supports statements with a graph_name, allowing multiple named graphs  * <code>:inference</code> supports RDFS inferrence of queryable contents.  * <code>:literal_equality&#39; preserves [term-equality](https://www.w3.org/TR/rdf11-concepts/#dfn-literal-term-equality) for literals. Literals are equal only if their lexical values and datatypes are equal, character by character. Literals may be &quot;inlined&quot; to value-space for efficiency only if</code>:literal_equality<code>is</code>false<code>.   *</code>:validity<code>allows a concrete Enumerable implementation to indicate that it does or does not support valididty checking. By default implementations are assumed to support validity checking.   *</code>:skolemize<code>supports [Skolemization](https://www.w3.org/wiki/BnodeSkolemization) of an</code>Enumerable<code>. Implementations supporting this feature must implement a</code>#skolemize<code>method, taking a base URI used for minting URIs for BNodes as stable identifiers and a</code>#deskolemize<code>method, also taking a base URI used for turning URIs having that prefix back into the same BNodes which were originally skolemized.   *</code>:rdf_full<code>supports RDF 1.2 Full profile, including support for embedded Triple Terms.   *</code>:quoted_triples<code>supports RDF-star quoted triples. (DEPRECATED)   *</code>:base_direction` supports RDF 1.2 directional language-tagged strings.</p>
 
 
   </div>
@@ -5442,12 +5442,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>finding all Blank Nodes used within an enumerable</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_enumberable'>enumberable</span><span class='period'>.</span><span class='id identifier rubyid_terms'>terms</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:node?</span><span class='rparen'>)</span></code></pre>
     
@@ -6098,9 +6098,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:46 2024 by
+  Generated on Wed Jun 25 01:31:33 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>

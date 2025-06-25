@@ -147,12 +147,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Using pre-defined RDF vocabularies</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_include'>include</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span>
 
@@ -162,9 +162,9 @@
 </span><span class='const'><span class='object_link'><a href="XSD.html" title="RDF::XSD (class)">XSD</a></span></span><span class='period'>.</span><span class='id identifier rubyid_dateTime'><span class='object_link'><a href="XSD.html#dateTime-instance_method" title="RDF::XSD#dateTime (method)">dateTime</a></span></span>  <span class='comment'>#=&gt; RDF::URI(&quot;http://www.w3.org/2001/XMLSchema#dateTime&quot;)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Using ad-hoc RDF vocabularies</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_foaf'>foaf</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Vocabulary</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="RDF::Vocabulary#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://xmlns.com/foaf/0.1/</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='id identifier rubyid_foaf'>foaf</span><span class='period'>.</span><span class='id identifier rubyid_knows'>knows</span>    <span class='comment'>#=&gt; RDF::URI(&quot;http://xmlns.com/foaf/0.1/knows&quot;)
@@ -172,9 +172,9 @@
 </span><span class='id identifier rubyid_foaf'>foaf</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>mbox</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>  <span class='comment'>#=&gt; RDF::URI(&quot;http://xmlns.com/foaf/0.1/mbox&quot;)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Defining a simple vocabulary</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'>EX</span> <span class='op'>=</span> <span class='const'>Class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>StrictVocabulay</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://example/ns#</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span>
   <span class='comment'># Ontology definition
@@ -201,9 +201,9 @@
 <span class='kw'>end</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Method calls are converted to the typical RDF camelcase convention</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_foaf'>foaf</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Vocabulary</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="RDF::Vocabulary#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://xmlns.com/foaf/0.1/</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='id identifier rubyid_foaf'>foaf</span><span class='period'>.</span><span class='id identifier rubyid_family_name'>family_name</span>    <span class='comment'>#=&gt; RDF::URI(&quot;http://xmlns.com/foaf/0.1/familyName&quot;)
@@ -213,9 +213,9 @@
 </span><span class='id identifier rubyid_foaf'>foaf</span><span class='lbracket'>[</span><span class='symbol'>:family_name</span><span class='rbracket'>]</span>  <span class='comment'>#=&gt; RDF::URI(&quot;http://xmlns.com/foaf/0.1/family_name&quot;)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Generating RDF from a vocabulary definition</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_graph'>graph</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Graph.html" title="RDF::Graph (class)">Graph</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Graph.html#initialize-instance_method" title="RDF::Graph#initialize (method)">new</a></span></span> <span class='op'>&lt;&lt;</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDFS.html" title="RDF::RDFS (class)">RDFS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_to_enum'>to_enum</span>
 <span class='id identifier rubyid_graph'>graph</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span></code></pre>
@@ -1365,12 +1365,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Overriding a standard vocabulary prefix.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Vocab</span><span class='op'>::</span><span class='const'>DC</span><span class='period'>.</span><span class='id identifier rubyid___prefix__'>__prefix__</span> <span class='op'>=</span> <span class='symbol'>:dcterms</span>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Vocab</span><span class='op'>::</span><span class='const'>DC</span><span class='period'>.</span><span class='id identifier rubyid_title'>title</span><span class='period'>.</span><span class='id identifier rubyid_pname'>pname</span> <span class='comment'>#=&gt; &#39;dcterms:title&#39;</span></code></pre>
@@ -2642,21 +2642,21 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>limit to set of vocabularies by symbol</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>RDF::Vocabulary.limit_vocabs(:rdf, :rdfs
 RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39;).pname
 # =&gt; &#39;rdfs:Resource&#39;</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>limit to set of vocabularies by class name</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Vocabulary (class)">Vocabulary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_limit_vocabs'>limit_vocabs</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDFV.html" title="RDF::RDFV (class)">RDFV</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDFS.html" title="RDF::RDFS (class)">RDFS</a></span></span><span class='rparen'>)</span>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Vocabulary (class)">Vocabulary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_term'><span class='object_link'><a href="#find_term-class_method" title="RDF::Vocabulary.find_term (method)">find_term</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>http://www.w3.org/2000/01/rdf-schema#Resource</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_pname'>pname</span>
@@ -3294,12 +3294,12 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>A simple term definition</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_property'>property</span> <span class='symbol'>:domain</span><span class='comma'>,</span>
   <span class='label'>comment:</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>A domain of the subject property.</span><span class='tstring_end'>)</span></span><span class='comma'>,</span>
@@ -3310,9 +3310,9 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
   <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rdf:Property</span><span class='tstring_end'>&quot;</span></span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>A term definition with tagged values</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_property'>property</span> <span class='symbol'>:actor</span><span class='comma'>,</span>
 <span class='label'>comment:</span> <span class='lbrace'>{</span><span class='label'>en:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Subproperty of as:attributedTo that identifies the primary actor</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='comma'>,</span>
@@ -3326,9 +3326,9 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
 <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://www.w3.org/2002/07/owl#ObjectProperty</span><span class='tstring_end'>&quot;</span></span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>A SKOS term with anonymous values</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>term: :af,
   type: &quot;jur:Country&quot;,
@@ -4147,9 +4147,9 @@ RDF::Vocabulary.find_term(&#39;http://www.w3.org/2000/01/rdf-schema#Resource&#39
 </div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:54 2024 by
+  Generated on Wed Jun 25 01:31:41 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>

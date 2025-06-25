@@ -142,38 +142,38 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating a plain literal</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hello, world!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_plain?'>plain?</span>                                   <span class='comment'>#=&gt; true`</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating a language-tagged string (1)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hello!</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>language:</span> <span class='symbol'>:en</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_language?'>language?</span>                                <span class='comment'>#=&gt; true
 </span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_language'>language</span>                                 <span class='comment'>#=&gt; :en</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating a language-tagged string (2)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Wazup?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>language:</span> <span class='symbol'>:&quot;en-US&quot;</span><span class='rparen'>)</span>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hej!</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>   <span class='label'>language:</span> <span class='symbol'>:sv</span><span class='rparen'>)</span>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>¡Hola!</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>language:</span> <span class='symbol'>:es</span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating a directional language-tagged string</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hello!</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>language:</span> <span class='symbol'>:en</span><span class='comma'>,</span> <span class='label'>direction:</span> <span class='symbol'>:ltr</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_language?'>language?</span>                                <span class='comment'>#=&gt; true
@@ -182,27 +182,27 @@
 </span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_direction'>direction</span>                                <span class='comment'>#=&gt; :ltr</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating an explicitly datatyped literal</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>2009-12-31</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="XSD.html" title="RDF::XSD (class)">XSD</a></span></span><span class='period'>.</span><span class='id identifier rubyid_date'><span class='object_link'><a href="XSD.html#date-instance_method" title="RDF::XSD#date (method)">date</a></span></span><span class='rparen'>)</span>
 <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_datatype?'>datatype?</span>                                <span class='comment'>#=&gt; true
 </span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_datatype'>datatype</span>                                 <span class='comment'>#=&gt; RDF::XSD.date</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating an implicitly datatyped literal</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="Literal/Date.html" title="RDF::Literal::Date (class)">Date</a></span></span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_datatype?'>datatype?</span>                                <span class='comment'>#=&gt; true
 </span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_datatype'>datatype</span>                                 <span class='comment'>#=&gt; RDF::XSD.date</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Creating implicitly datatyped literals</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>false</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_datatype'>datatype</span>               <span class='comment'>#=&gt; XSD.boolean
 </span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_datatype'>datatype</span>                <span class='comment'>#=&gt; XSD.boolean
@@ -1743,7 +1743,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span>     <span class='comment'>#=&gt; true</span></code></pre>
@@ -1959,7 +1959,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>compatible?(&quot;abc&quot;	&quot;b&quot;)                         #=&gt; true
@@ -2433,7 +2433,7 @@ compatible?(&quot;abc&quot;^^xsd:string	&quot;b&quot;@en)          #=&gt; false<
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span><span class='rparen'>)</span>  <span class='comment'>#=&gt; false</span></code></pre>
@@ -3657,9 +3657,9 @@ compatible?(&quot;abc&quot;^^xsd:string	&quot;b&quot;@en)          #=&gt; false<
 </div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:55 2024 by
+  Generated on Wed Jun 25 01:31:42 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>

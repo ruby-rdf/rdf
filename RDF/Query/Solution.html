@@ -115,43 +115,43 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Iterating over every binding in the solution</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_each_binding'>each_binding</span>  <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span>
 <span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_each_variable'>each_variable</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_variable'>variable</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_variable'>variable</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Iterating over every value in the solution</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_each_value'>each_value</span>    <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='rbrace'>}</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Checking whether a variable is bound or unbound</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_bound?'>bound?</span><span class='lparen'>(</span><span class='symbol'>:title</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_unbound?'>unbound?</span><span class='lparen'>(</span><span class='symbol'>:mbox</span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Retrieving the value of a bound variable</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solution'>solution</span><span class='lbracket'>[</span><span class='symbol'>:mbox</span><span class='rbracket'>]</span>
 <span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_mbox'>mbox</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Retrieving all bindings in the solution as a <code>Hash</code></p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solution'>solution</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>       <span class='comment'>#=&gt; {mbox: &quot;jrhacker@example.org&quot;, ...}</span></code></pre>
     
@@ -3461,9 +3461,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:56 2024 by
+  Generated on Wed Jun 25 01:31:43 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>

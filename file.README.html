@@ -389,20 +389,25 @@
 
 <p><strong>Note: This feature is subject to change or elimination as the standards process progresses.</strong></p>
 
-<h3 id="label-Serializing+a+Graph+containing+quoted+triples">Serializing a Graph containing quoted triples</h3>
+<h3 id="label-Serializing+a+Graph+containing+triple+terms">Serializing a Graph containing triple terms</h3>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rdf/ntriples</span><span class='tstring_end'>&#39;</span></span>
-<span class='id identifier rubyid_statement'>statement</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/Statement.html" title="RDF::Statement (class)">Statement</a></span></span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bob</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Vocab</span><span class='op'>::</span><span class='const'>FOAF</span><span class='period'>.</span><span class='id identifier rubyid_age'>age</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='int'>23</span><span class='rparen'>)</span><span class='rparen'>)</span>
-<span class='id identifier rubyid_graph'>graph</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/Graph.html" title="RDF::Graph (class)">Graph</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="RDF/Graph.html#initialize-instance_method" title="RDF::Graph#initialize (method)">new</a></span></span> <span class='op'>&lt;&lt;</span> <span class='lbracket'>[</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/URI.html" title="RDF::URI (class)">URI</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ex:certainty</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/Literal.html" title="RDF::Literal (class)">Literal</a></span></span><span class='lparen'>(</span><span class='float'>0.9</span><span class='rparen'>)</span><span class='rbracket'>]</span>
-<span class='id identifier rubyid_graph'>graph</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='comma'>,</span> <span class='label'>validate:</span> <span class='kw'>false</span><span class='rparen'>)</span>
-<span class='comment'># =&gt; &#39;&lt;&lt;&lt;bob&gt; &lt;http://xmlns.com/foaf/0.1/age&gt; &quot;23&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;&gt;&gt; &lt;ex:certainty&gt; &quot;0.9&quot;^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; .&#39;
-</span></code></pre>
+<pre class="code ruby"><code class="ruby">require &#39;rdf/ntriples&#39;
+statement = RDF::Statement(RDF::URI(&#39;bob&#39;), RDF::Vocab::FOAF.age, RDF::Literal(23))
+reifier = RDF::Node.new
+graph = RDF::Graph.new do |g|
+  g &lt;&lt; [reifier, RDF.reifies, statement]
+  g &lt;&lt; [reifier, RDF::URI(&quot;ex:certainty&quot;), RDF::Literal(0.9)]
+end
+graph.dump(:ntriples, validate: false)
+# ==&gt; &#39;_:bn &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies&gt; &lt;&lt;(&lt;bob&gt; &lt;http://xmlns.com/foaf/0.1/age&gt; &quot;23&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;)&gt;&gt; .
+       _:bn &lt;ex:certainty&gt; &quot;0.9&quot;^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; .&#39;
+</code></pre>
 
-<h3 id="label-Reading+a+Graph+containing+quoted+triples">Reading a Graph containing quoted triples</h3>
+<h3 id="label-Reading+a+Graph+containing+triple+terms">Reading a Graph containing triple terms</h3>
 
 <p>By default, the N-Triples reader will reject a document containing a subject resource.</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nt'>nt</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&lt;&lt;&lt;bob&gt; &lt;http://xmlns.com/foaf/0.1/age&gt; &quot;23&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;&gt;&gt; &lt;ex:certainty&gt; &quot;0.9&quot;^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; .</span><span class='tstring_end'>&#39;</span></span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nt'>nt</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&lt;&lt;(&lt;bob&gt; &lt;http://xmlns.com/foaf/0.1/age&gt; &quot;23&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;)&gt;&gt; &lt;ex:certainty&gt; &quot;0.9&quot;^^&lt;http://www.w3.org/2001/XMLSchema#double&gt; .</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_graph'>graph</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/Graph.html" title="RDF::Graph (class)">Graph</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="RDF/Graph.html#initialize-instance_method" title="RDF::Graph#initialize (method)">new</a></span></span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_graph'>graph</span><span class='op'>|</span>
   <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RDF/NTriples/Reader.html" title="RDF::NTriples::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="RDF/Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_nt'>nt</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_reader'>reader</span><span class='op'>|</span> <span class='id identifier rubyid_graph'>graph</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_reader'>reader</span><span class='rbrace'>}</span>
 <span class='kw'>end</span>
@@ -489,6 +494,8 @@
 <p><a href="https://ruby-rdf.github.io/rdf-trix">RDF::TriX</a> (extension)</p>
 </li><li>
 <p><a href="https://ruby-rdf.github.io/rdf-turtle">RDF::Turtle</a> (extension)</p>
+</li><li>
+<p><a href="https://ruby-rdf.github.io/rdf-borsh">RDF::Borsh</a> (extension)</p>
 </li></ul>
 
 <p>The meta-gem <a href="https://ruby-rdf.github.io/linkeddata">LinkedData</a> includes many of these gems.</p>
@@ -679,9 +686,9 @@
 </div></div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:43 2024 by
+  Generated on Wed Jun 25 01:31:31 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>

@@ -113,7 +113,7 @@
 
 <p>** RDF=star</p>
 
-<p>Supports statements as resources using <code>&lt;&lt;s p o&gt;&gt;</code>.</p>
+<p>Supports statements as resources using <code>&lt;&lt;(s p o)&gt;&gt;</code>.</p>
 
 
   </div>
@@ -121,12 +121,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Obtaining an NTriples reader class</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span>     <span class='comment'>#=&gt; RDF::NTriples::Reader
 </span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -135,9 +135,9 @@
 <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Reader.html" title="RDF::Reader (class)">Reader</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="../Reader.html#for-class_method" title="RDF::Reader.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>content_type:</span>   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application/n-triples</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Parsing RDF statements from an NTriples file</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'>Reader</span><span class='period'>.</span><span class='id identifier rubyid_open'><span class='object_link'><a href="../Reader.html#open-class_method" title="RDF::Reader.open (method)">open</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_reader'>reader</span><span class='op'>|</span>
   <span class='id identifier rubyid_reader'>reader</span><span class='period'>.</span><span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
@@ -146,9 +146,9 @@
 <span class='kw'>end</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Parsing RDF statements from an NTriples string</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'>Reader</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Reader.html#initialize-instance_method" title="RDF::Reader#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_reader'>reader</span><span class='op'>|</span>
@@ -206,12 +206,12 @@
         <dt id="UCHAR4-constant" class="">UCHAR4 =
           
         </dt>
-        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\\u([0-9A-Fa-f]{4,4})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(?&lt;!\\)\\(?!\\)u([0-9A-Fa-f]{4,4})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="UCHAR8-constant" class="">UCHAR8 =
           
         </dt>
-        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\\U([0-9A-Fa-f]{8,8})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(?&lt;!\\)\\(?!\\)U([0-9A-Fa-f]{8,8})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="UCHAR-constant" class="">UCHAR =
           
@@ -311,12 +311,34 @@
         <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\s*\)&gt;&gt;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="QT_START-constant" class="">QT_START =
-          
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>DEPRECATED</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
         </dt>
         <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^&lt;&lt;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
         <dt id="QT_END-constant" class="">QT_END =
-          
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>DEPRECATED</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
         </dt>
         <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\s*&gt;&gt;</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
@@ -777,7 +799,7 @@
 
   
     <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
-<p>Quoted triples are now deprecated</p>
+<p>Quoted triples are now deprecated (not supported when validating)</p>
 </div></span>
   
 </li>
@@ -1772,17 +1794,7 @@
 193
 194
 195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206</pre>
+196</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 186</span>
@@ -1791,22 +1803,12 @@
   <span class='comment'># Note: avoiding copying the input string when no escaping is needed
 </span>  <span class='comment'># greatly reduces the number of allocations and the processing time.
 </span>  <span class='id identifier rubyid_string'>string</span> <span class='op'>=</span> <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_force_encoding'>force_encoding</span><span class='lparen'>(</span><span class='const'>Encoding</span><span class='op'>::</span><span class='const'>UTF_8</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>==</span> <span class='const'>Encoding</span><span class='op'>::</span><span class='const'>UTF_8</span>
-  <span class='id identifier rubyid_scanner'>scanner</span> <span class='op'>=</span> <span class='const'>StringScanner</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
-
-  <span class='kw'>while</span> <span class='op'>!</span><span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_eos?'>eos?</span>
-    <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>&lt;&lt;</span> <span class='kw'>if</span> <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED_REGEXP-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED_REGEXP (constant)">ESCAPE_CHARS_ESCAPED_REGEXP</a></span></span><span class='rparen'>)</span>
-      <span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED (constant)">ESCAPE_CHARS_ESCAPED</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_matched'>matched</span><span class='rbracket'>]</span>
-    <span class='kw'>elsif</span> <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_matched'>matched</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='lbracket'>[</span><span class='lparen'>(</span><span class='backref'>$1</span> <span class='op'>||</span> <span class='backref'>$2</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_hex'>hex</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_pack'>pack</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>U*</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span>
-    <span class='kw'>else</span>
-      <span class='comment'># Scan one character
-</span>      <span class='id identifier rubyid_scanner'>scanner</span><span class='period'>.</span><span class='id identifier rubyid_getch'>getch</span>
+  <span class='id identifier rubyid_string'>string</span>
+    <span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UCHAR-constant" title="RDF::NTriples::Reader::UCHAR (constant)">UCHAR</a></span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='lbracket'>[</span><span class='lparen'>(</span><span class='backref'>$1</span> <span class='op'>||</span> <span class='backref'>$2</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_hex'>hex</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_pack'>pack</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>U*</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
     <span class='kw'>end</span>
-  <span class='kw'>end</span>
-
-  <span class='id identifier rubyid_buffer'>buffer</span>
+    <span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED_REGEXP-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED_REGEXP (constant)">ESCAPE_CHARS_ESCAPED_REGEXP</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#ESCAPE_CHARS_ESCAPED-constant" title="RDF::NTriples::Reader::ESCAPE_CHARS_ESCAPED (constant)">ESCAPE_CHARS_ESCAPED</a></span></span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1977,12 +1979,12 @@
       <pre class="lines">
 
 
-280
-281
-282</pre>
+270
+271
+272</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 280</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 270</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_comment'>read_comment</span>
   <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#COMMENT-constant" title="RDF::NTriples::Reader::COMMENT (constant)">COMMENT</a></span></span><span class='rparen'>)</span>
@@ -2036,12 +2038,12 @@
       <pre class="lines">
 
 
-339
-340
-341</pre>
+329
+330
+331</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 339</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 329</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_eos'>read_eos</span>
   <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#END_OF_STATEMENT-constant" title="RDF::NTriples::Reader::END_OF_STATEMENT (constant)">END_OF_STATEMENT</a></span></span><span class='rparen'>)</span>
@@ -2095,6 +2097,16 @@
       <pre class="lines">
 
 
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
 313
 314
 315
@@ -2106,20 +2118,10 @@
 321
 322
 323
-324
-325
-326
-327
-328
-329
-330
-331
-332
-333
-334</pre>
+324</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 313</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 303</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_literal'>read_literal</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_literal_str'>literal_str</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#LITERAL_PLAIN-constant" title="RDF::NTriples::Reader::LITERAL_PLAIN (constant)">LITERAL_PLAIN</a></span></span><span class='rparen'>)</span>
@@ -2192,15 +2194,15 @@
       <pre class="lines">
 
 
-303
-304
-305
-306
-307
-308</pre>
+293
+294
+295
+296
+297
+298</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 303</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 293</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_node'>read_node</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_node_id'>node_id</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#NODEID-constant" title="RDF::NTriples::Reader::NODEID (constant)">NODEID</a></span></span><span class='rparen'>)</span>
@@ -2225,7 +2227,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
-<p>Quoted triples are now deprecated</p>
+<p>Quoted triples are now deprecated (not supported when validating)</p>
 </div></div>
 
 
@@ -2253,25 +2255,25 @@
       <pre class="lines">
 
 
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
 263
 264
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275</pre>
+265</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 263</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 253</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
-  <span class='kw'>if</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:rdfstar</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#TT_START-constant" title="RDF::NTriples::Reader::TT_START (constant)">TT_START</a></span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#QT_START-constant" title="RDF::NTriples::Reader::QT_START (constant)">QT_START</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:rdfstar</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#TT_START-constant" title="RDF::NTriples::Reader::TT_START (constant)">TT_START</a></span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#QT_START-constant" title="RDF::NTriples::Reader::QT_START (constant)">QT_START</a></span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_validate?'>validate?</span>
     <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[DEPRECATION] RDF-star quoted triples are deprecated and will be removed in a future version.\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Called from </span><span class='embexpr_beg'>#{</span><span class='const'>Gem</span><span class='period'>.</span><span class='id identifier rubyid_location_of_caller'>location_of_caller</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_subject'>subject</span>   <span class='op'>=</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span> <span class='op'>||</span> <span class='id identifier rubyid_read_node'>read_node</span> <span class='op'>||</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span> <span class='id identifier rubyid_fail_subject'>fail_subject</span>
@@ -2332,6 +2334,16 @@
       <pre class="lines">
 
 
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
 223
 224
 225
@@ -2343,20 +2355,10 @@
 231
 232
 233
-234
-235
-236
-237
-238
-239
-240
-241
-242
-243
-244</pre>
+234</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 223</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 213</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_triple'>read_triple</span>
   <span class='id identifier rubyid_loop'>loop</span> <span class='kw'>do</span>
@@ -2422,20 +2424,20 @@
       <pre class="lines">
 
 
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258</pre>
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 248</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 238</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_tripleTerm'>read_tripleTerm</span>
   <span class='kw'>if</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:rdfstar</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#TT_START-constant" title="RDF::NTriples::Reader::TT_START (constant)">TT_START</a></span></span><span class='rparen'>)</span>
@@ -2519,20 +2521,20 @@
       <pre class="lines">
 
 
-288
-289
-290
-291
-292
-293
-294
-295
-296
-297
-298</pre>
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 288</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 278</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_uriref'>read_uriref</span><span class='lparen'>(</span><span class='label'>intern:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_uri_str'>uri_str</span> <span class='op'>=</span> <span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#URIREF-constant" title="RDF::NTriples::Reader::URIREF (constant)">URIREF</a></span></span><span class='rparen'>)</span>
@@ -2587,18 +2589,18 @@
       <pre class="lines">
 
 
-210
-211
-212
-213
-214
-215
-216
-217
-218</pre>
+200
+201
+202
+203
+204
+205
+206
+207
+208</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 210</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/reader.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_value'>read_value</span>
   <span class='kw'>begin</span>
@@ -2619,9 +2621,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:57 2024 by
+  Generated on Wed Jun 25 01:31:44 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>

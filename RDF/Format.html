@@ -119,26 +119,26 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Loading an RDF serialization format implementation</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rdf/ntriples</span><span class='tstring_end'>&#39;</span></span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Iterating over known RDF serialization formats</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span><span class='period'>.</span><span class='id identifier rubyid_each'><span class='object_link'><a href="#each-class_method" title="RDF::Format.each (method)">each</a></span></span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_klass'>klass</span><span class='op'>|</span> <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Getting a serialization format class</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='symbol'>:ntriples</span><span class='rparen'>)</span>     <span class='comment'>#=&gt; RDF::NTriples::Format
 </span><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>etc/doap.nt</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -147,23 +147,23 @@
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='label'>content_type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application/n-triples</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Obtaining serialization format MIME types</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span><span class='period'>.</span><span class='id identifier rubyid_content_types'><span class='object_link'><a href="#content_types-class_method" title="RDF::Format.content_types (method)">content_types</a></span></span>      <span class='comment'>#=&gt; {&quot;application/n-triples&quot; =&gt; [RDF::NTriples::Format]}</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Obtaining serialization format file extension mappings</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span><span class='period'>.</span><span class='id identifier rubyid_file_extensions'><span class='object_link'><a href="#file_extensions-class_method" title="RDF::Format.file_extensions (method)">file_extensions</a></span></span>    <span class='comment'>#=&gt; {nt: [RDF::NTriples::Format]}</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Defining a new RDF serialization format class</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='kw'>class</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="NTriples/Format.html" title="RDF::NTriples::Format (class)">Format</a></span></span> <span class='op'>&lt;</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Format</span>
   <span class='id identifier rubyid_content_type'>content_type</span>     <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>application/n-triples</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
@@ -176,17 +176,17 @@
 <span class='kw'>end</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Instantiating an RDF reader or writer class (1)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>RDF::Format.for(:ntriples).reader.new($stdin)  { |reader| ... }
 RDF::Format.for(:ntriples).writer.new($stdout) { |writer| ... }</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Instantiating an RDF reader or writer class (2)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>RDF::Reader.for(:ntriples).new($stdin)  { |reader| ... }
 RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
@@ -866,7 +866,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>
@@ -1317,12 +1317,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>retrieving a list of supported Mime types</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_content_types'>content_types</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span></code></pre>
@@ -1386,7 +1386,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="NTriples.html" title="RDF::NTriples (module)">NTriples</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="NTriples/Format.html" title="RDF::NTriples::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_detect'><span class='object_link'><a href="NTriples/Format.html#detect-class_method" title="RDF::NTriples::Format.detect (method)">detect</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a&gt; &lt;b&gt; &lt;c&gt; .</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; true</span></code></pre>
@@ -1470,12 +1470,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>finding all formats that have a writer supporting text/html</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='label'>content_type:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>text/html</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>has_writer:</span> <span class='kw'>true</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
   <span class='comment'>#=&gt; RDF::RDFa::Format</span></code></pre>
@@ -1863,12 +1863,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>retrieving a list of supported file extensions</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_file_extensions'>file_extensions</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span></code></pre>
@@ -2308,7 +2308,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>
@@ -2565,7 +2565,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>
@@ -2629,7 +2629,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>
@@ -2962,12 +2962,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>retrieving a list of supported file format URIs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_uris'>uris</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span></code></pre>
@@ -3224,7 +3224,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>
@@ -3288,7 +3288,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>
@@ -3337,9 +3337,9 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 </div>
 
       <div id="footer">
-  Generated on Fri Jul  5 23:42:47 2024 by
+  Generated on Wed Jun 25 01:31:35 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.1.6).
+  0.9.37 (ruby-3.1.7).
 </div>
 
     </div>
