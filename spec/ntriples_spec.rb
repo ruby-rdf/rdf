@@ -479,17 +479,11 @@ describe RDF::NTriples::Reader do
         context name do
           let(:graph) {parse(st, rdfstar: true)}
 
-          it "creates two unquoted statements" do
+          it "creates an unquoted statement" do
             expect(graph.count).to eql(1)
             graph.statements.each do |stmt|
               expect(stmt).not_to be_quoted
             end
-          end
-
-          it "has a statement whose object is a statement" do
-            referencing = graph.statements.first
-            expect(referencing).to be_a_statement
-            expect(referencing.object).to be_a_statement
           end
 
           it "statements which are object of another statement are triple terms" do

@@ -524,6 +524,44 @@ describe RDF::URI do
         expect(u1.canonicalize.hash).to eq u2.hash
       end
     end
+
+    context "Windows specific canonicalization", skip: ('only windows' unless Gem.win_platform?) do
+      {
+        "no scheme, relative path starting with drive letter" => [
+          "D:a/b",
+          "file:/D:a/b"
+        ],
+        "no authority and relative path" => [
+          "file:D:a/b",
+          "file:/D:a/b"
+        ],
+        "no authority and absolute path" => [
+          "file:/D:a/b",
+          "file:/D:a/b"
+        ],
+        "scheme with //, no authority and absolute path" => [
+          "file://D:a/b",
+          "file:/D:a/b"
+        ],
+        "empty authority and absolute path" => [
+          "file:///D:a/b",
+          "file:///D:a/b"
+        ],
+        "authority and absolute path" => [
+          "file://host/D:a/b",
+          "file://host/D:a/b"
+        ],
+      }.each do |name, (input, output)|
+        it name do
+          u1 = RDF::URI(input)
+          u2 = RDF::URI(output)
+          expect(u1.canonicalize.to_s).to eq u2.to_s
+          expect(u1.canonicalize).to eq u1.canonicalize
+          expect(u1.canonicalize.hash).to eq u2.hash
+        end
+      end
+    end
+
     it "#canonicalize! alters resource" do
       u1 = RDF::URI("eXAMPLE:example.com/foo")
       u2 = RDF::URI("example:example.com/foo")

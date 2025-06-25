@@ -12,7 +12,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Double < Numeric
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#double")
-    GRAMMAR  = /^(?:NaN|\-?INF|[+\-]?(?:\d+(:?\.\d*)?|\.\d+)(?:[eE][\+\-]?\d+)?)$/.freeze
+    GRAMMAR  = /^(?:NaN|[+\-]?INF|[+\-]?(?:\d+(:?\.\d*)?|\.\d+)(?:[eE][\+\-]?\d+)?)$/.freeze
 
     ##
     # @param  [String, Float, #to_f] value
@@ -26,7 +26,7 @@ module RDF; class Literal
           when 'INF'  then 1/0.0
           when '-INF' then -1/0.0
           when 'NAN'  then 0/0.0
-          else Float(value.sub(/\.[eE]/, '.0E')) rescue nil
+          else Float(value.sub(/\.[eE]/, '.0E').sub(/\.$/, '.0')) rescue nil
         end
         when value.is_a?(::Float)     then value
         when value.respond_to?(:to_f) then value.to_f

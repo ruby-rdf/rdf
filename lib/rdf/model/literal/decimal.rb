@@ -12,10 +12,10 @@ module RDF; class Literal
   # @since 0.2.1
   class Decimal < Numeric
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#decimal")
-    GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
+    GRAMMAR  = /^[\+\-]?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))$/.freeze
 
     ##
-    # @param  [String, BidDecimal, Numeric] value
+    # @param  [String, BigDecimal, Numeric] value
     # @param  (see Literal#initialize)
     def initialize(value, datatype: nil, lexical: nil, **options)
       @datatype = RDF::URI(datatype || self.class.const_get(:DATATYPE))

@@ -30,7 +30,7 @@ module RDF::NTriples
   #
   # ** RDF=star
   #
-  # Supports statements as resources using `<<s p o>>`.
+  # Supports statements as resources using `<<(s p o)>>`.
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   # @see http://www.w3.org/TR/n-triples/
@@ -40,8 +40,8 @@ module RDF::NTriples
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     ESCAPE_CHARS    = ["\b", "\f", "\t", "\n", "\r", "\"", "'", "\\"].freeze
-    UCHAR4          = /\\u([0-9A-Fa-f]{4,4})/.freeze
-    UCHAR8          = /\\U([0-9A-Fa-f]{8,8})/.freeze
+    UCHAR4          = /(?<!\\)\\(?!\\)u([0-9A-Fa-f]{4,4})/.freeze
+    UCHAR8          = /(?<!\\)\\(?!\\)U([0-9A-Fa-f]{8,8})/.freeze
     UCHAR           = Regexp.union(UCHAR4, UCHAR8).freeze
 
 
@@ -73,8 +73,8 @@ module RDF::NTriples
     TT_START              = /^<<\(/.freeze
     TT_END                = /^\s*\)>>/.freeze
 
-    QT_START              = /^<</.freeze
-    QT_END                = /^\s*>>/.freeze
+    QT_START              = /^<</.freeze      # DEPRECATED
+    QT_END                = /^\s*>>/.freeze   # DEPRECATED
 
     # @see http://www.w3.org/TR/rdf-testcases/#ntrip_grammar
     COMMENT               = /^#\s*(.*)$/.freeze
@@ -187,22 +187,12 @@ module RDF::NTriples
       # Note: avoiding copying the input string when no escaping is needed
       # greatly reduces the number of allocations and the processing time.
       string = string.dup.force_encoding(Encoding::UTF_8) unless string.encoding == Encoding::UTF_8
-      scanner = StringScanner.new(string)
 
-      buffer = ""
-
-      while !scanner.eos?
-        buffer << if scanner.scan(ESCAPE_CHARS_ESCAPED_REGEXP)
-          ESCAPE_CHARS_ESCAPED[scanner.matched]
-        elsif scanner.scan(UCHAR)
-          scanner.matched.sub(UCHAR) {[($1 || $2).hex].pack('U*')}
-        else
-          # Scan one character
-          scanner.getch
+      string
+        .gsub(UCHAR) do
+          [($1 || $2).hex].pack('U*')
         end
-      end
-
-      buffer
+        .gsub(ESCAPE_CHARS_ESCAPED_REGEXP, ESCAPE_CHARS_ESCAPED)
     end
 
     ##
@@ -259,9 +249,9 @@ module RDF::NTriples
 
     ##
     # @return [RDF::Statement]
-    # @deprecated Quoted triples are now deprecated
+    # @deprecated Quoted triples are now deprecated (not supported when validating)
     def read_quotedTriple
-      if @options[:rdfstar] && !match(TT_START) && match(QT_START)
+      if @options[:rdfstar] && !match(TT_START) && match(QT_START) && !validate?
         warn "[DEPRECATION] RDF-star quoted triples are deprecated and will be removed in a future version.\n" +
              "Called from #{Gem.location_of_caller.join(':')}"
         subject   = read_uriref || read_node || read_quotedTriple || fail_subject

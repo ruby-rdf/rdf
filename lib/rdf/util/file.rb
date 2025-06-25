@@ -297,7 +297,6 @@ module RDF; module Util
     # @yieldreturn [Object] returned from open_file
     # @raise [IOError] if not found
     def self.open_file(filename_or_url, proxy: nil, headers: {}, verify_none: false, **options, &block)
-      filename_or_url = $1 if filename_or_url.to_s.match(/^file:(.*)$/)
       remote_document = nil
 
       if filename_or_url.to_s.match?(/^https?/)
@@ -319,6 +318,16 @@ module RDF; module Util
           url_no_frag_or_query.query = nil
           url_no_frag_or_query.fragment = nil
           options[:encoding] ||= Encoding::UTF_8
+
+          # Just use path if there's a file scheme. This leaves out a potential host, which isn't supported anyway.
+          if url_no_frag_or_query.scheme == 'file'
+            url_no_frag_or_query = url_no_frag_or_query.path
+            if url_no_frag_or_query.match?(/^\/[A-Za-z]:/) && Gem.win_platform?
+              # Turns "/D:foo" into "D:foo"
+              url_no_frag_or_query = url_no_frag_or_query[1..-1]
+            end
+          end
+
           Kernel.open(url_no_frag_or_query, "r", **options) do |file|
             document_options = {
               base_uri:     filename_or_url.to_s,
