@@ -12,7 +12,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Double < Numeric
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#double")
-    GRAMMAR  = /^(?:NaN|\-?INF|[+\-]?(?:\d+(:?\.\d*)?|\.\d+)(?:[eE][\+\-]?\d+)?)$/.freeze
+    GRAMMAR  = /^(?:NaN|[+\-]?INF|[+\-]?(?:\d+(:?\.\d*)?|\.\d+)(?:[eE][\+\-]?\d+)?)$/.freeze
 
     ##
     # @param  [String, Float, #to_f] value

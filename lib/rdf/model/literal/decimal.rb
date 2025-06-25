@@ -12,7 +12,7 @@ module RDF; class Literal
   # @since 0.2.1
   class Decimal < Numeric
     DATATYPE = RDF::URI("http://www.w3.org/2001/XMLSchema#decimal")
-    GRAMMAR  = /^[\+\-]?\d+(\.\d*)?$/.freeze
+    GRAMMAR  = /^[\+\-]?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))$/.freeze
 
     ##
     # @param  [String, BigDecimal, Numeric] value
