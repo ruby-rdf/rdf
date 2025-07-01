@@ -44,14 +44,6 @@ describe RDF::NTriples::Format do
     end
   end
 
-  describe "#to_sym" do
-    specify {expect(subject.to_sym).to eq :ntriples}
-  end
-
-  describe "#name" do
-    specify {expect(subject.name).to eq "N-Triples"}
-  end
-
   describe ".detect" do
     {
       ntriples: "<a> <b> <c> .",
@@ -76,6 +68,14 @@ describe RDF::NTriples::Format do
         expect(subject.detect(str)).to be_falsey
       end
     end
+  end
+
+  describe "#to_sym" do
+    specify {expect(subject.to_sym).to eq :ntriples}
+  end
+
+  describe "#name" do
+    specify {expect(subject.name).to eq "N-Triples"}
   end
 end
 
@@ -164,463 +164,696 @@ describe RDF::NTriples::Reader do
     end
   end
 
-  context "when decoding text" do
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape ASCII characters (#x0-#x7F)" do
-      (0x00..0x7F).each do |u|
-        expect(reader.unescape(writer.escape(u.chr))).to eq u.chr
+  describe ".unserialize" do
+    it "parses a bnode" do
+      bnode = reader.unserialize('_:foobar')
+      expect(bnode).not_to be_nil
+      expect(bnode).to be_a_node
+      expect(bnode.id).to eq 'foobar'
+    end
+
+    it "parses an IRI" do
+      uri = reader.unserialize('<http://ar.to/#self>'.freeze)
+      expect(uri).not_to be_nil
+      expect(uri).to be_a_uri
+      expect(uri.to_s).to eq 'http://ar.to/#self'
+    end
+
+    it "parses a plain literal" do
+      hello = reader.unserialize('"Hello"')
+      expect(hello).not_to be_nil
+      expect(hello).to be_a_literal
+      expect(hello.value).to eq 'Hello'
+    end
+
+    it "parses a triple" do
+      stmt = reader.unserialize("<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .".freeze)
+      expect(stmt).not_to be_nil
+      expect(stmt).to be_a_statement
+    end
+  end
+
+  describe ".parse_subject" do
+    it "parses an IRI" do
+      iri = reader.parse_subject("<https://rubygems.org/gems/rdf>")
+      expect(iri).not_to be_nil
+      expect(iri).to be_a_uri
+      expect(iri.to_s).to eq 'https://rubygems.org/gems/rdf'
+    end
+
+    it "parses an BNode" do
+      bn = reader.parse_subject("_:blank")
+      expect(bn).not_to be_nil
+      expect(bn).to be_a_node
+      expect(bn.id).to eq 'blank'
+    end
+
+    it "does not parse a literal" do
+      lit = reader.parse_subject("hello")
+      expect(lit).to be_nil
+    end
+
+    it "does not parse a triple term" do
+      tt = reader.parse_subject("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+  end
+
+  describe ".parse_predicate" do
+    it "parses an IRI" do
+      iri = reader.parse_predicate("<https://rubygems.org/gems/rdf>")
+      expect(iri).not_to be_nil
+      expect(iri).to be_a_uri
+      expect(iri.to_s).to eq 'https://rubygems.org/gems/rdf'
+    end
+
+    it "does not parse an BNode" do
+      bn = reader.parse_predicate("_:blank")
+      expect(bn).to be_nil
+    end
+
+    it "does not parse a literal" do
+      lit = reader.parse_predicate("hello")
+      expect(lit).to be_nil
+    end
+
+    it "does not parse a triple term" do
+      tt = reader.parse_predicate("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+  end
+
+  describe ".parse_object" do
+    it "parses an IRI" do
+      iri = reader.parse_object("<https://rubygems.org/gems/rdf>")
+      expect(iri).not_to be_nil
+      expect(iri).to be_a_uri
+      expect(iri.to_s).to eq 'https://rubygems.org/gems/rdf'
+    end
+
+    it "parses an BNode" do
+      bn = reader.parse_object("_:blank")
+      expect(bn).not_to be_nil
+      expect(bn).to be_a_node
+      expect(bn.id).to eq 'blank'
+    end
+
+    it "parses a literal" do
+      lit = reader.parse_object(%("hello"))
+      expect(lit).not_to be_nil
+      expect(lit).to be_a_literal
+      expect(lit.to_s).to eq "hello"
+    end
+
+    it "does not parse a parse_object term" do
+      tt = reader.parse_predicate("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+  end
+
+  describe ".parse_object" do
+    it "parses an IRI" do
+      iri = reader.parse_object("<https://rubygems.org/gems/rdf>")
+      expect(iri).not_to be_nil
+      expect(iri).to be_a_uri
+      expect(iri.to_s).to eq 'https://rubygems.org/gems/rdf'
+    end
+
+    it "parses an BNode" do
+      bn = reader.parse_object("_:blank")
+      expect(bn).not_to be_nil
+      expect(bn).to be_a_node
+      expect(bn.id).to eq 'blank'
+    end
+
+    it "parses a literal" do
+      lit = reader.parse_object(%("hello"))
+      expect(lit).not_to be_nil
+      expect(lit).to be_a_literal
+      expect(lit.to_s).to eq "hello"
+    end
+
+    it "does not parse a parse_object term" do
+      tt = reader.parse_predicate("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+  end
+
+  describe ".parse_node" do
+    it "does not parse an IRI" do
+      iri = reader.parse_node("<https://rubygems.org/gems/rdf>")
+      expect(iri).to be_nil
+    end
+
+    it "parses an BNode" do
+      bn = reader.parse_node("_:blank")
+      expect(bn).not_to be_nil
+      expect(bn).to be_a_node
+      expect(bn.id).to eq 'blank'
+    end
+
+    it "does not parse a literal" do
+      lit = reader.parse_node(%("hello"))
+      expect(lit).to be_nil
+    end
+
+    it "does not parse a parse_object term" do
+      tt = reader.parse_node("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+  end
+
+  describe ".parse_uri" do
+    it "does not parse an IRI" do
+      iri = reader.parse_uri("<https://rubygems.org/gems/rdf>")
+      expect(iri).not_to be_nil
+      expect(iri).to be_a_uri
+      expect(iri.to_s).to eq 'https://rubygems.org/gems/rdf'
+    end
+
+    it "parses an BNode" do
+      bn = reader.parse_uri("_:blank")
+      expect(bn).to be_nil
+    end
+
+    it "does not parse a literal" do
+      lit = reader.parse_uri(%("hello"))
+      expect(lit).to be_nil
+    end
+
+    it "does not parse a parse_object term" do
+      tt = reader.parse_uri("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+  end
+
+  describe ".parse_literal" do
+    it "does not parse an IRI" do
+      iri = reader.parse_literal("<https://rubygems.org/gems/rdf>")
+      expect(iri).to be_nil
+    end
+
+    it "parses an BNode" do
+      bn = reader.parse_literal("_:blank")
+      expect(bn).to be_nil
+    end
+
+    it "does not parse a literal" do
+      lit = reader.parse_literal(%("hello"))
+      expect(lit).not_to be_nil
+      expect(lit).to be_a_literal
+      expect(lit.to_s).to eq "hello"
+    end
+
+    it "does not parse a parse_object term" do
+      tt = reader.parse_literal("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
+      expect(tt).to be_nil
+    end
+
+    describe "literal encodings" do
+      {
+        'Dürst'          => '"D\u00FCrst" .',
+        'simple literal' => '"simple literal" .',
+        'backslash:\\'   => '"backslash:\\\\" .',
+        'squote:\''      => '"squote:\'" .',
+        'dquote:"'       => '"dquote:\"" .',
+        "newline:\n"     => '"newline:\n" .',
+        "return\r"       => '"return\r" .',
+        "tab:\t"         => '"tab:\t" .',
+        "form feed:\f"   => '"form feed:\u000C" .',
+        "backspace:\b"   => '"backspace:\u0008" .',
+        "é"              => '"\u00E9" .',
+        "€"              => '"\u20AC" .',
+      }.each_pair do |contents, literal|
+        specify "test #{contents}" do
+          lit = reader.parse_literal(literal)
+          expect(lit).not_to be_nil
+          expect(lit.value).to eq contents
+        end
+      end
+
+      context "base direction" do
+        {
+          "language" => '"Hello"@en .',
+          "direction" => '"Hello"@en--ltr .',
+          "direction2" => '"Hello"@en--rtl .',
+        }.each_pair do |name, literal|
+          specify "test #{name}" do
+            lit = reader.parse_literal(literal)
+            expect(lit).not_to be_nil
+            expect(lit.value).to eq "Hello"
+
+            if name.include?('dir')
+              expect(lit.datatype).to eql RDF.dirLangString
+              expect(lit.direction).not_to be_nil
+            else
+              expect(lit.datatype).to eql RDF.langString
+              expect(lit.direction).to be_nil
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe "Grammar" do
+    context "when decoding text" do
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+      it "should correctly unescape ASCII characters (#x0-#x7F)" do
+        (0x00..0x7F).each do |u|
+          expect(reader.unescape(writer.escape(u.chr))).to eq u.chr
+        end
+      end
+
+      # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+      it "should correctly unescape Unicode characters (#x80-#x10FFFF)" do
+        (0x7F..0xFFFF).to_a.sample(100).each do |u|
+          begin
+            next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+            expect(reader.unescape(writer.escape(c))).to eq c
+          rescue RangeError
+          end
+        end
+        (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
+          begin
+            next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
+            expect(reader.unescape(writer.escape(c))).to eq c
+          rescue RangeError
+          end
+        end
+      end
+
+      context "unescape Unicode strings" do
+        strings = {
+          "\u677E\u672C \u540E\u5B50" => "松本 后子",
+          "D\u00FCrst"                => "Dürst",
+          "\\U00015678another"        => "\u{15678}another",
+        }
+        strings.each do |string, unescaped|
+          specify string do
+            unescaped = unescaped.encode(Encoding::UTF_8)
+            expect(reader.unescape(string)).to eq unescaped
+          end
+        end
+      end
+
+      context "unescape escaped Unicode strings" do
+        strings = {
+          # U+221E, infinity symbol
+          "_\\u221E_"                    => "_\xE2\x88\x9E_",
+          # U+6C34, 'water' in Chinese
+          "_\\u6C34_"                    => "_\xE6\xB0\xB4_",
+          "\\u677E\\u672C \\u540E\\u5B50"=> "松本 后子",
+          "D\\u00FCrst"                  => "Dürst",
+          "\\u0039"                      => "9",
+          "\\\\u0039"                    => "\\u0039",
+        }
+        strings.each do |string, unescaped|
+          specify string do
+            unescaped = unescaped.encode(Encoding::UTF_8)
+            expect(reader.unescape(string.freeze)).to eq unescaped
+          end
+        end
       end
     end
 
-    # @see http://www.w3.org/TR/rdf-testcases/#ntrip_strings
-    it "should correctly unescape Unicode characters (#x80-#x10FFFF)" do
-      (0x7F..0xFFFF).to_a.sample(100).each do |u|
-        begin
-          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          expect(reader.unescape(writer.escape(c))).to eq c
-        rescue RangeError
-        end
-      end
-      (0x10000..0x2FFFF).to_a.sample(100).each do |u| # NB: there's nothing much beyond U+2FFFF
-        begin
-          next unless (c = u.chr(::Encoding::UTF_8)).valid_encoding?
-          expect(reader.unescape(writer.escape(c))).to eq c
-        rescue RangeError
+    context "comments" do
+      {
+        %(\n) => %(),
+        %(\r\n) => %(),
+        %(\r) => %q(),
+        %(#\n) => %q(),
+        %(# \n) => %q(),
+        %(# <http://example/a> <http://example/b> <http://example/c> .\n) => %q(),
+        %(\t#\n) => %q(),
+        %( #\n) => %q(),
+        %(<http://example/a> <http://example/b> <http://example/c> . # comment\n) =>
+          %q(<http://example/a> <http://example/b> <http://example/c> .)
+      }.each_pair do |input, output|
+        it "for #{input.inspect}" do
+          expect(parse(input, validate: true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
         end
       end
     end
 
-    context "unescape Unicode strings" do
-      strings = {
-        "\u677E\u672C \u540E\u5B50" => "松本 后子",
-        "D\u00FCrst"                => "Dürst",
-        "\\U00015678another"        => "\u{15678}another",
+    it "W3C's test data" do
+      gn = RDF::Graph.new {|g| reader.new(File.open(testfile)) {|r| g << r}}
+      gt = RDF::Graph.new {|g| RDF::Turtle::Reader.new(File.open(testfile)) {|r| g << r}}
+      expect(gn).to be_equivalent_graph(gt)
+      expect(gn.to_a.size).to eq 31
+    end
+
+    describe "BNodes" do
+      it "should read two named nodes as the same node" do
+        stmt = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
+        expect(stmt.subject).to eq stmt.object
+        expect(stmt.subject).to be_eql(stmt.object)
+      end
+
+      it "should read two named nodes in different instances as different nodes" do
+        stmt1 = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
+        stmt2 = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
+        expect(stmt1.subject).to eq stmt2.subject
+        expect(stmt1.subject).not_to be_eql(stmt2.subject)
+      end
+    end
+
+    describe "literal encodings" do
+      {
+        'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',
+        'simple literal' => '<http://subj> <http://pred>  "simple literal" .',
+        'backslash:\\'   => '<http://subj> <http://pred> "backslash:\\\\" .',
+        'squote:\''      => '<http://subj> <http://pred> "squote:\'" .',
+        'dquote:"'       => '<http://subj> <http://pred> "dquote:\"" .',
+        "newline:\n"     => '<http://subj> <http://pred> "newline:\n" .',
+        "return\r"       => '<http://subj> <http://pred> "return\r" .',
+        "tab:\t"         => '<http://subj> <http://pred> "tab:\t" .',
+        "form feed:\f"   => '<http://subj> <http://pred> "form feed:\u000C" .',
+        "backspace:\b"   => '<http://subj> <http://pred> "backspace:\u0008" .',
+        "é"              => '<http://subj> <http://pred> "\u00E9" .',
+        "€"              => '<http://subj> <http://pred> "\u20AC" .',
+      }.each_pair do |contents, triple|
+        specify "test #{contents}" do
+          stmt = reader.new(triple).first
+          expect(stmt.object.value).to eq contents
+          ttl = RDF::Turtle::Reader.new(triple).first
+          expect(stmt).to eq ttl
+        end
+      end
+
+      context "base direction" do
+        context "without rdfstar option" do
+          it "Raises an error" do
+            expect do
+              expect {parse('<http://subj> <http://pred>  "Hello"@en--ltr .')}.to raise_error(RDF::ReaderError)
+            end.to write(:something).to(:error)
+          end
+        end
+
+        context 'parse language/direction' do
+          {
+            "language" => '<http://subj> <http://pred>  "Hello"@en .',
+            "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
+            "direction2" => '<http://subj> <http://pred>  "Hello"@en--rtl .',
+          }.each_pair do |name, triple|
+            specify "test #{name}" do
+              stmt = reader.new(triple, rdfstar: true).first
+              if name.include?('dir')
+                expect(stmt.object.datatype).to eql RDF.dirLangString
+              else
+                expect(stmt.object.datatype).to eql RDF.langString
+              end
+            end
+          end
+        end
+      end
+
+      context 'should parse a value that was written without passing through the writer encoding' do
+        [
+          %(<http://subj> <http://pred> "Procreation Metaphors in S\xC3\xA9an \xC3\x93 R\xC3\xADord\xC3\xA1in's Poetry" .),
+          %q(<http://example.org/resource33> <http://example.org/property> "From \\"Voyage dans l’intérieur de l’Amérique du Nord, executé pendant les années 1832, 1833 et 1834, par le prince Maximilien de Wied-Neuwied\\" (Paris & Coblenz, 1839-1843)" .),
+        ].map {|s| s.force_encoding("ASCII-8BIT")}.each do |nt|
+          it nt do
+            statement = reader.new(nt).first
+            ttl = RDF::Turtle::Reader.new(nt).first
+            expect(statement).to eq(ttl)
+          end
+        end
+      end
+
+      it "literal with escape" do
+        nt = %(<http://subj> <http://pred> "\\U00015678another" .)
+          statement = reader.new(nt).first
+          ttl = RDF::Turtle::Reader.new(nt).first
+          expect(statement).to eq(ttl)
+      end
+
+      {
+        "three uris"  => "<http://example.org/resource1> <http://example.org/property> <http://example.org/resource2> .",
+        "spaces and tabs throughout" => " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
+        "line ending with CR NL" => "<http://example.org/resource4> <http://example.org/property> <http://example.org/resource2> .\r\n",
+        "literal escapes (1)" => '<http://example.org/resource7> <http://example.org/property> "simple literal" .',
+        "literal escapes (2)" => '<http://example.org/resource8> <http://example.org/property> "backslash:\\\\" .',
+        "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "squote:\'" .',
+        "literal escapes (4)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
+        "literal escapes (5)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
+        "literal escapes (6)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
+        "literal escapes (7)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
+        "Space is optional before final . (2)" => ['<http://example.org/resource14> <http://example.org/property> "x".', '<http://example.org/resource14> <http://example.org/property> "x" .'],
+
+        "XML Literals as Datatyped Literals (1)" => '<http://example.org/resource21> <http://example.org/property> ""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (2)" => '<http://example.org/resource22> <http://example.org/property> " "^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (3)" => '<http://example.org/resource23> <http://example.org/property> "x"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (4)" => '<http://example.org/resource23> <http://example.org/property> "\""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (5)" => '<http://example.org/resource24> <http://example.org/property> "<a></a>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (6)" => '<http://example.org/resource25> <http://example.org/property> "a <b></b>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (7)" => '<http://example.org/resource26> <http://example.org/property> "a <b></b> c"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (8)" => '<http://example.org/resource26> <http://example.org/property> "a\n<b></b>\nc"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+        "XML Literals as Datatyped Literals (9)" => '<http://example.org/resource27> <http://example.org/property> "chat"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
+
+        "Literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
+        "Literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
+        # FIXME: once rdfstar option is no longer used
+        #"Literals with language and direction" => '<http://example.org/resource31> <http://example.org/property> "chat"@en--ltr .',
+        "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
+        "Plain lieral with embedded quote" => %q(<http://example.org/resource33> <http://example.org/property> "From \\"Voyage dans l’intérieur de l’Amérique du Nord, executé pendant les années 1832, 1833 et 1834, par le prince Maximilien de Wied-Neuwied\\" (Paris & Coblenz, 1839-1843)" .),
+      }.each_pair do |name, nt|
+        specify "test #{name}" do
+          Array(nt).each do |s|
+            r = reader.new(s)
+            statement = r.first
+            ttl = RDF::Turtle::Reader.new(s).first
+            expect(statement).to eq(ttl)
+          end
+        end
+      end
+    end
+
+    describe "i18n URIs" do
+      {
+        %(<http://a/b#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8".) => %(<http://a/b#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
+        %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
+      }.each_pair do |src, res|
+        specify src do
+          stmt1 = reader.new(src, validate: false).first
+          stmt2 = reader.new(res, validate: true).first
+          expect(stmt1).to eq stmt2
+          ttl1 = RDF::Turtle::Reader.new(src).first
+          ttl2 = RDF::Turtle::Reader.new(res).first
+          expect(stmt1).to eq ttl1
+          expect(stmt2).to eq ttl2
+        end
+      end
+    end
+
+    context "ASCII-8BIT input" do
+      {
+        "uris"                    => %q(<http://example/> <http://example/> <http://example/> .),
+        "bnode subject"           => %q(_:s <http://example/> <http://example/> .),
+        "bnode object"            => %q(<http://example/> <http://example/> _:o .),
+        "simple literal"          => %q(<http://example/> <http://example/> "o" .),
+        "language tagged literal" => %q(<http://example/> <http://example/> "o"@en .),
+        "datatyped literal"       => %q(<http://example/> <http://example/> "o"^^<http://example/> .),
+      }.each do |name, src|
+        specify name do
+          g = parse(src.encode("ASCII-8BIT"))
+          expect {g.dump(:ntriples)}.not_to raise_error
+          ttl = RDF::Turtle::Reader.new(src.encode("ASCII-8BIT")).first
+          expect(g.first).to eq(ttl)
+        end
+      end
+    end
+
+    context "triple terms" do
+      ill_statements = {
+        "subject-iii": '<<(<http://example/s1> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
+        "subject-iib": '<<(<http://example/s1> <http://example/p1> _:o1)>> <http://example/p> <http://example/o> .',
+        "subject-iil": '<<(<http://example/s1> <http://example/p1> "o1")>> <http://example/p> <http://example/o> .',
+        "subject-bii": '<<(_:s1 <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
+        "subject-bib": '<<(_:s1 <http://example/p1> _:o1)>> <http://example/p> <http://example/o> .',
+        "subject-bil": '<<(_:s1 <http://example/p1> "o")>> <http://example/p> <http://example/o> .',
+        "subject-ws":  '<<( <http://example/s1> <http://example/p1> <http://example/o1> )>> <http://example/p> <http://example/o> .',
+        "recursive-subject": '<<(<<(<http://example/s2> <http://example/p2> <http://example/o2>)>> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
       }
-      strings.each do |string, unescaped|
-        specify string do
-          unescaped = unescaped.encode(Encoding::UTF_8)
-          expect(reader.unescape(string)).to eq unescaped
-        end
-      end
-    end
 
-    context "unescape escaped Unicode strings" do
-      strings = {
-        # U+221E, infinity symbol
-        "_\\u221E_"                    => "_\xE2\x88\x9E_",
-        # U+6C34, 'water' in Chinese
-        "_\\u6C34_"                    => "_\xE6\xB0\xB4_",
-        "\\u677E\\u672C \\u540E\\u5B50"=> "松本 后子",
-        "D\\u00FCrst"                  => "Dürst",
-        "\\u0039"                      => "9",
-        "\\\\u0039"                    => "\\u0039",
+      statements = {
+        "object-iii":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .',
+        "object-iib":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> _:o1)>> .',
+        "object-iil":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> "o1")>> .',
+        "object-bii":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> <http://example/o1>)>> .',
+        "object-bib":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> _:o1)>> .',
+        "object-bil":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> "o1")>> .',
+        "object-ws":   '<http://example/s> <http://example/p> <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> .',
+
+        "recursive-object": '<http://example/s> <http://example/p> <<(<http:/example/s1> <http://example/p1> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>>)>> .',
       }
-      strings.each do |string, unescaped|
-        specify string do
-          unescaped = unescaped.encode(Encoding::UTF_8)
-          expect(reader.unescape(string.freeze)).to eq unescaped
-        end
-      end
-    end
-  end
 
-  context "comments" do
-    {
-      %(\n) => %(),
-      %(\r\n) => %(),
-      %(\r) => %q(),
-      %(#\n) => %q(),
-      %(# \n) => %q(),
-      %(# <http://example/a> <http://example/b> <http://example/c> .\n) => %q(),
-      %(\t#\n) => %q(),
-      %( #\n) => %q(),
-      %(<http://example/a> <http://example/b> <http://example/c> . # comment\n) =>
-        %q(<http://example/a> <http://example/b> <http://example/c> .)
-    }.each_pair do |input, output|
-      it "for #{input.inspect}" do
-        expect(parse(input, validate: true).dump(:ntriples)).to eq parse(output).dump(:ntriples)
-      end
-    end
-  end
-
-  it "should parse W3C's test data" do
-    gn = RDF::Graph.new {|g| reader.new(File.open(testfile)) {|r| g << r}}
-    gt = RDF::Graph.new {|g| RDF::Turtle::Reader.new(File.open(testfile)) {|r| g << r}}
-    expect(gn).to be_equivalent_graph(gt)
-    expect(gn.to_a.size).to eq 31
-  end
-
-  it "should parse terms" do
-    bnode = reader.unserialize('_:foobar')
-    expect(bnode).not_to be_nil
-    expect(bnode).to be_a_node
-    expect(bnode.id).to eq 'foobar'
-
-    uri = reader.unserialize('<http://ar.to/#self>'.freeze)
-    expect(uri).not_to be_nil
-    expect(uri).to be_a_uri
-    expect(uri.to_s).to eq 'http://ar.to/#self'
-
-    hello = reader.unserialize('"Hello"')
-    expect(hello).not_to be_nil
-    expect(hello).to be_a_literal
-    expect(hello.value).to eq 'Hello'
-
-    stmt = reader.unserialize("<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .".freeze)
-    expect(stmt).not_to be_nil
-    expect(stmt).to be_a_statement
-  end
-
-  describe "BNodes" do
-    it "should read two named nodes as the same node" do
-      stmt = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
-      expect(stmt.subject).to eq stmt.object
-      expect(stmt.subject).to be_eql(stmt.object)
-    end
-
-    it "should read two named nodes in different instances as different nodes" do
-      stmt1 = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
-      stmt2 = reader.new("_:a <http://www.w3.org/2002/07/owl#sameAs> _:a .".freeze).first
-      expect(stmt1.subject).to eq stmt2.subject
-      expect(stmt1.subject).not_to be_eql(stmt2.subject)
-    end
-  end
-
-  describe "literal encodings" do
-    {
-      'Dürst'          => '_:a <http://pred> "D\u00FCrst" .',
-      'simple literal' => '<http://subj> <http://pred>  "simple literal" .',
-      'backslash:\\'   => '<http://subj> <http://pred> "backslash:\\\\" .',
-      'squote:\''      => '<http://subj> <http://pred> "squote:\'" .',
-      'dquote:"'       => '<http://subj> <http://pred> "dquote:\"" .',
-      "newline:\n"     => '<http://subj> <http://pred> "newline:\n" .',
-      "return\r"       => '<http://subj> <http://pred> "return\r" .',
-      "tab:\t"         => '<http://subj> <http://pred> "tab:\t" .',
-      "form feed:\f"   => '<http://subj> <http://pred> "form feed:\u000C" .',
-      "backspace:\b"   => '<http://subj> <http://pred> "backspace:\u0008" .',
-      "é"              => '<http://subj> <http://pred> "\u00E9" .',
-      "€"              => '<http://subj> <http://pred> "\u20AC" .',
-    }.each_pair do |contents, triple|
-      specify "test #{contents}" do
-        stmt = reader.new(triple).first
-        expect(stmt.object.value).to eq contents
-        ttl = RDF::Turtle::Reader.new(triple).first
-        expect(stmt).to eq ttl
-      end
-    end
-
-    context "base direction" do
       context "without rdfstar option" do
         it "Raises an error" do
           expect do
-            expect {parse('<http://subj> <http://pred>  "Hello"@en--ltr .')}.to raise_error(RDF::ReaderError)
+            expect {parse(statements.values.first)}.to raise_error(RDF::ReaderError)
           end.to write(:something).to(:error)
         end
       end
 
-      context 'parse language/direction' do
-        {
-          "language" => '<http://subj> <http://pred>  "Hello"@en .',
-          "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
-          "direction2" => '<http://subj> <http://pred>  "Hello"@en--rtl .',
-        }.each_pair do |name, triple|
-          specify "test #{name}" do
-            stmt = reader.new(triple, rdfstar: true).first
-            if name.include?('dir')
-              expect(stmt.object.datatype).to eql RDF.dirLangString
-            else
-              expect(stmt.object.datatype).to eql RDF.langString
+      context "with rdfstar option" do
+        ill_statements.each do |name, st|
+          context name do
+            it "Raises an error" do
+              expect do
+                expect {parse(st)}.to raise_error(RDF::ReaderError)
+              end.to write(:something).to(:error)
             end
           end
         end
-      end
-    end
 
-    context 'should parse a value that was written without passing through the writer encoding' do
-      [
-        %(<http://subj> <http://pred> "Procreation Metaphors in S\xC3\xA9an \xC3\x93 R\xC3\xADord\xC3\xA1in's Poetry" .),
-        %q(<http://example.org/resource33> <http://example.org/property> "From \\"Voyage dans l’intérieur de l’Amérique du Nord, executé pendant les années 1832, 1833 et 1834, par le prince Maximilien de Wied-Neuwied\\" (Paris & Coblenz, 1839-1843)" .),
-      ].map {|s| s.force_encoding("ASCII-8BIT")}.each do |nt|
-        it nt do
-          statement = reader.new(nt).first
-          ttl = RDF::Turtle::Reader.new(nt).first
-          expect(statement).to eq(ttl)
-        end
-      end
-    end
+        statements.each do |name, st|
+          context name do
+            let(:graph) {parse(st, rdfstar: true)}
 
-    it "should parse long literal with escape" do
-      nt = %(<http://subj> <http://pred> "\\U00015678another" .)
-        statement = reader.new(nt).first
-        ttl = RDF::Turtle::Reader.new(nt).first
-        expect(statement).to eq(ttl)
-    end
-
-    {
-      "three uris"  => "<http://example.org/resource1> <http://example.org/property> <http://example.org/resource2> .",
-      "spaces and tabs throughout" => " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
-      "line ending with CR NL" => "<http://example.org/resource4> <http://example.org/property> <http://example.org/resource2> .\r\n",
-      "literal escapes (1)" => '<http://example.org/resource7> <http://example.org/property> "simple literal" .',
-      "literal escapes (2)" => '<http://example.org/resource8> <http://example.org/property> "backslash:\\\\" .',
-      "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "squote:\'" .',
-      "literal escapes (4)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
-      "literal escapes (5)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
-      "literal escapes (6)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
-      "literal escapes (7)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
-      "Space is optional before final . (2)" => ['<http://example.org/resource14> <http://example.org/property> "x".', '<http://example.org/resource14> <http://example.org/property> "x" .'],
-
-      "XML Literals as Datatyped Literals (1)" => '<http://example.org/resource21> <http://example.org/property> ""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (2)" => '<http://example.org/resource22> <http://example.org/property> " "^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (3)" => '<http://example.org/resource23> <http://example.org/property> "x"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (4)" => '<http://example.org/resource23> <http://example.org/property> "\""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (5)" => '<http://example.org/resource24> <http://example.org/property> "<a></a>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (6)" => '<http://example.org/resource25> <http://example.org/property> "a <b></b>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (7)" => '<http://example.org/resource26> <http://example.org/property> "a <b></b> c"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (8)" => '<http://example.org/resource26> <http://example.org/property> "a\n<b></b>\nc"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (9)" => '<http://example.org/resource27> <http://example.org/property> "chat"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-
-      "Literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
-      "Literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
-      # FIXME: once rdfstar option is no longer used
-      #"Literals with language and direction" => '<http://example.org/resource31> <http://example.org/property> "chat"@en--ltr .',
-      "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
-      "Plain lieral with embedded quote" => %q(<http://example.org/resource33> <http://example.org/property> "From \\"Voyage dans l’intérieur de l’Amérique du Nord, executé pendant les années 1832, 1833 et 1834, par le prince Maximilien de Wied-Neuwied\\" (Paris & Coblenz, 1839-1843)" .),
-    }.each_pair do |name, nt|
-      specify "test #{name}" do
-        Array(nt).each do |s|
-          r = reader.new(s)
-          statement = r.first
-          ttl = RDF::Turtle::Reader.new(s).first
-          expect(statement).to eq(ttl)
-        end
-      end
-    end
-  end
-
-  describe "i18n URIs" do
-    {
-      %(<http://a/b#Dürst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8".) => %(<http://a/b#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
-      %(<http://a/b#a> <http://a/b#related> <http://a/b#\u3072\u3089\u304C\u306A>.) => %(<http://a/b#a> <http://a/b#related> <http://a/b#\\u3072\\u3089\\u304C\\u306A> .),
-    }.each_pair do |src, res|
-      specify src do
-        stmt1 = reader.new(src, validate: false).first
-        stmt2 = reader.new(res, validate: true).first
-        expect(stmt1).to eq stmt2
-        ttl1 = RDF::Turtle::Reader.new(src).first
-        ttl2 = RDF::Turtle::Reader.new(res).first
-        expect(stmt1).to eq ttl1
-        expect(stmt2).to eq ttl2
-      end
-    end
-  end
-
-  context "ASCII-8BIT input" do
-    {
-      "uris"                    => %q(<http://example/> <http://example/> <http://example/> .),
-      "bnode subject"           => %q(_:s <http://example/> <http://example/> .),
-      "bnode object"            => %q(<http://example/> <http://example/> _:o .),
-      "simple literal"          => %q(<http://example/> <http://example/> "o" .),
-      "language tagged literal" => %q(<http://example/> <http://example/> "o"@en .),
-      "datatyped literal"       => %q(<http://example/> <http://example/> "o"^^<http://example/> .),
-    }.each do |name, src|
-      specify name do
-        g = parse(src.encode("ASCII-8BIT"))
-        expect {g.dump(:ntriples)}.not_to raise_error
-        ttl = RDF::Turtle::Reader.new(src.encode("ASCII-8BIT")).first
-        expect(g.first).to eq(ttl)
-      end
-    end
-  end
-
-  context "triple terms" do
-    ill_statements = {
-      "subject-iii": '<<(<http://example/s1> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
-      "subject-iib": '<<(<http://example/s1> <http://example/p1> _:o1)>> <http://example/p> <http://example/o> .',
-      "subject-iil": '<<(<http://example/s1> <http://example/p1> "o1")>> <http://example/p> <http://example/o> .',
-      "subject-bii": '<<(_:s1 <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
-      "subject-bib": '<<(_:s1 <http://example/p1> _:o1)>> <http://example/p> <http://example/o> .',
-      "subject-bil": '<<(_:s1 <http://example/p1> "o")>> <http://example/p> <http://example/o> .',
-      "subject-ws":  '<<( <http://example/s1> <http://example/p1> <http://example/o1> )>> <http://example/p> <http://example/o> .',
-      "recursive-subject": '<<(<<(<http://example/s2> <http://example/p2> <http://example/o2>)>> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
-    }
-
-    statements = {
-      "object-iii":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .',
-      "object-iib":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> _:o1)>> .',
-      "object-iil":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> "o1")>> .',
-      "object-bii":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> <http://example/o1>)>> .',
-      "object-bib":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> _:o1)>> .',
-      "object-bil":  '<http://example/s> <http://example/p> <<(_:s1 <http://example/p1> "o1")>> .',
-      "object-ws":   '<http://example/s> <http://example/p> <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> .',
-
-      "recursive-object": '<http://example/s> <http://example/p> <<(<http:/example/s1> <http://example/p1> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>>)>> .',
-    }
-
-    context "without rdfstar option" do
-      it "Raises an error" do
-        expect do
-          expect {parse(statements.values.first)}.to raise_error(RDF::ReaderError)
-        end.to write(:something).to(:error)
-      end
-    end
-
-    context "with rdfstar option" do
-      ill_statements.each do |name, st|
-        context name do
-          it "Raises an error" do
-            expect do
-              expect {parse(st)}.to raise_error(RDF::ReaderError)
-            end.to write(:something).to(:error)
-          end
-        end
-      end
-
-      statements.each do |name, st|
-        context name do
-          let(:graph) {parse(st, rdfstar: true)}
-
-          it "creates an unquoted statement" do
-            expect(graph.count).to eql(1)
-            graph.statements.each do |stmt|
-              expect(stmt).not_to be_quoted
+            it "creates an unquoted statement" do
+              expect(graph.count).to eql(1)
+              graph.statements.each do |stmt|
+                expect(stmt).not_to be_quoted
+              end
             end
-          end
 
-          it "statements which are object of another statement are triple terms" do
-            referencing = graph.statements.first
-            expect(referencing).to be_a_statement
-            expect(referencing.object).to be_a_statement
-            expect(referencing.object).to be_tripleTerm
-          end
-        end
-      end
-    end
-  end
-
-  # FIXME: quoted triples are deprecated
-  context "quoted triples" do
-    statements = {
-      "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
-      "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
-      "subject-iil": '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .',
-      "subject-bii": '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
-      "subject-bib": '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
-      "subject-bil": '<<_:s1 <http://example/p1> "o">> <http://example/p> <http://example/o> .',
-      "subject-ws":  '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/p> <http://example/o> .',
-      "object-iii":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .',
-      "object-iib":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .',
-      "object-iil":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .',
-      "object-ws":   '<http://example/s> <http://example/p> << <http://example/s1> <http://example/p1> <http://example/o1> >> .',
-      "recursive-subject": '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
-    }
-
-    context "without rdfstar option" do
-      it "Raises an error" do
-        expect do
-          expect {parse(statements.values.first)}.to raise_error(RDF::ReaderError)
-        end.to write(:something).to(:error)
-      end
-    end
-
-    context "with rdfstar option" do
-      statements.each do |name, st|
-        context name do
-          let(:graph) {parse(st, rdfstar: true, deprecated: true)}
-
-          it "creates two unquoted statements" do
-            expect(graph.count).to eql(1)
-            graph.statements.each do |stmt|
-              expect(stmt).not_to be_quoted
-            end
-          end
-
-          it "has a statement whose subject or object is a statement" do
-            referencing = graph.statements.first
-            expect(referencing).to be_a_statement
-            if referencing.subject.statement?
-              expect(referencing.subject).to be_a_statement
-            else
+            it "statements which are object of another statement are triple terms" do
+              referencing = graph.statements.first
+              expect(referencing).to be_a_statement
               expect(referencing.object).to be_a_statement
-            end
-          end
-
-          it "statements which are subject or object of another statement are quoted" do
-            referencing = graph.statements.first
-            expect(referencing).to be_a_statement
-            if referencing.subject.statement?
-              expect(referencing.subject).to be_a_statement
-              expect(referencing.subject).to be_quoted
-            else
-              expect(referencing.object).to be_a_statement
+              expect(referencing.object).to be_tripleTerm
             end
           end
         end
       end
     end
-  end
 
-  context "invalid input" do
-    {
-      "nt-syntax-bad-struct-01" => [
-        %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
-        %r(Expected end of statement \(found: ", .* \."\))
-      ],
-      "nt-syntax-bad-struct-02" => [
-        %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
-        %r(Expected end of statement \(found: "; .* \."\))
-      ],
-      "nt-syntax-bad-lang-01" => [
-        %q(<http://example/s> <http://example/p> "string"@1 .),
-        %r(Expected end of statement \(found: "@1 \."\))
-      ],
-      "xx bad lang 2" => [
-        %q(<http://example/s> <http://example/p> "string"@cantbethislong .),
-        %r(Invalid Literal)
-      ],
-      "xx bad dir 1" => [
-        %q(<http://example/s> <http://example/p> "string"@en--UTD .),
-        %r(Invalid Literal)
-      ],
-      "xx bad dir 2" => [
-        %q(<http://example/s> <http://example/p> "string"@--ltr .),
-        %r(Expected end of statement)
-      ],
-      "xx bad dir 3" => [
-        %q(<http://example/s> <http://example/p> "string"@en--LTR .),
-        %r(Invalid Literal)
-      ],
-      "nt-syntax-bad-string-05" => [
-        %q(<http://example/s> <http://example/p> """abc""" .),
-        %r(Expected end of statement \(found: .* \."\))
-      ],
-      "nt-syntax-bad-num-01" => [
-        %q(<http://example/s> <http://example/p> 1 .),
-        %r(Expected object \(found: "1 \."\))
-      ],
-      "nt-syntax-bad-num-02" => [
-        %q(<http://example/s> <http://example/p> 1.0 .),
-        %r(Expected object \(found: "1\.0 \."\))
-      ],
-      "nt-syntax-bad-num-03" => [
-        %q(<http://example/s> <http://example/p> 1.0e0 .),
-        %r(Expected object \(found: "1\.0e0 \."\))
-      ],
-      "nt-syntax-bad-uri-02" => [
-        %(# Bad IRI : space.\n<http://example/ space> <http://example/p> <http://example/o> .),
-        %r(Expected subject)
-      ],
-      "nt-syntax-bad-uri-07" => [
-        %(# No relative IRIs in N-Triples\n<http://example/s> <p> <http://example/o> .),
-        %r(Invalid URI)
-      ],
-      "bnode predicate" => [
-        %q(<http://example/s> _:p <http://example/o> .),
-        %r(Expected predicate)
-      ]
-    }.each do |name, (nt, error)|
-      it name do
-        expect {reader.new(nt.freeze, validate: true, logger: logger).to_a}.to raise_error(RDF::ReaderError)
-        expect(logger.to_s).to match error
+    # FIXME: quoted triples are deprecated
+    context "quoted triples" do
+      statements = {
+        "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
+        "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
+        "subject-iil": '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .',
+        "subject-bii": '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
+        "subject-bib": '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
+        "subject-bil": '<<_:s1 <http://example/p1> "o">> <http://example/p> <http://example/o> .',
+        "subject-ws":  '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/p> <http://example/o> .',
+        "object-iii":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .',
+        "object-iib":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .',
+        "object-iil":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .',
+        "object-ws":   '<http://example/s> <http://example/p> << <http://example/s1> <http://example/p1> <http://example/o1> >> .',
+        "recursive-subject": '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
+      }
+
+      context "without rdfstar option" do
+        it "Raises an error" do
+          expect do
+            expect {parse(statements.values.first)}.to raise_error(RDF::ReaderError)
+          end.to write(:something).to(:error)
+        end
+      end
+
+      context "with rdfstar option" do
+        statements.each do |name, st|
+          context name do
+            let(:graph) {parse(st, rdfstar: true, deprecated: true)}
+
+            it "creates two unquoted statements" do
+              expect(graph.count).to eql(1)
+              graph.statements.each do |stmt|
+                expect(stmt).not_to be_quoted
+              end
+            end
+
+            it "has a statement whose subject or object is a statement" do
+              referencing = graph.statements.first
+              expect(referencing).to be_a_statement
+              if referencing.subject.statement?
+                expect(referencing.subject).to be_a_statement
+              else
+                expect(referencing.object).to be_a_statement
+              end
+            end
+
+            it "statements which are subject or object of another statement are quoted" do
+              referencing = graph.statements.first
+              expect(referencing).to be_a_statement
+              if referencing.subject.statement?
+                expect(referencing.subject).to be_a_statement
+                expect(referencing.subject).to be_quoted
+              else
+                expect(referencing.object).to be_a_statement
+              end
+            end
+          end
+        end
+      end
+    end
+
+    context "invalid input" do
+      {
+        "nt-syntax-bad-struct-01" => [
+          %q(<http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .),
+          %r(Expected end of statement \(found: ", .* \."\))
+        ],
+        "nt-syntax-bad-struct-02" => [
+          %q(<http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .),
+          %r(Expected end of statement \(found: "; .* \."\))
+        ],
+        "nt-syntax-bad-lang-01" => [
+          %q(<http://example/s> <http://example/p> "string"@1 .),
+          %r(Expected end of statement \(found: "@1 \."\))
+        ],
+        "xx bad lang 2" => [
+          %q(<http://example/s> <http://example/p> "string"@cantbethislong .),
+          %r(Invalid Literal)
+        ],
+        "xx bad dir 1" => [
+          %q(<http://example/s> <http://example/p> "string"@en--UTD .),
+          %r(Invalid Literal)
+        ],
+        "xx bad dir 2" => [
+          %q(<http://example/s> <http://example/p> "string"@--ltr .),
+          %r(Expected end of statement)
+        ],
+        "xx bad dir 3" => [
+          %q(<http://example/s> <http://example/p> "string"@en--LTR .),
+          %r(Invalid Literal)
+        ],
+        "nt-syntax-bad-string-05" => [
+          %q(<http://example/s> <http://example/p> """abc""" .),
+          %r(Expected end of statement \(found: .* \."\))
+        ],
+        "nt-syntax-bad-num-01" => [
+          %q(<http://example/s> <http://example/p> 1 .),
+          %r(Expected object \(found: "1 \."\))
+        ],
+        "nt-syntax-bad-num-02" => [
+          %q(<http://example/s> <http://example/p> 1.0 .),
+          %r(Expected object \(found: "1\.0 \."\))
+        ],
+        "nt-syntax-bad-num-03" => [
+          %q(<http://example/s> <http://example/p> 1.0e0 .),
+          %r(Expected object \(found: "1\.0e0 \."\))
+        ],
+        "nt-syntax-bad-uri-02" => [
+          %(# Bad IRI : space.\n<http://example/ space> <http://example/p> <http://example/o> .),
+          %r(Expected subject)
+        ],
+        "nt-syntax-bad-uri-07" => [
+          %(# No relative IRIs in N-Triples\n<http://example/s> <p> <http://example/o> .),
+          %r(Invalid URI)
+        ],
+        "bnode predicate" => [
+          %q(<http://example/s> _:p <http://example/o> .),
+          %r(Expected predicate)
+        ]
+      }.each do |name, (nt, error)|
+        it name do
+          expect {reader.new(nt.freeze, validate: true, logger: logger).to_a}.to raise_error(RDF::ReaderError)
+          expect(logger.to_s).to match error
+        end
       end
     end
   end
