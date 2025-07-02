@@ -1,21 +1,24 @@
-ntriplesDoc       ::= triple? (EOL triple)* EOL?
+ntriplesDoc       ::= statement? (EOL statement)* EOL?
+statement         ::= directive | triple '.'
+directive         ::= versionDirective
+versionDirective  ::= 'VERSION' versionSpecifier
+versionSpecifier  ::= STRING_LITERAL_QUOTE
 triple            ::= subject predicate object '.'
-subject           ::= IRIREF | BLANK_NODE_LABEL | quotedTriple
+subject           ::= IRIREF | BLANK_NODE_LABEL
 predicate         ::= IRIREF
-object            ::= IRIREF | BLANK_NODE_LABEL | literal | tripleTerm | quotedTriple
+object            ::= IRIREF | BLANK_NODE_LABEL | literal | tripleTerm
 literal           ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANG_DIR )?
-tripleTerm        ::= '<<' subject predicate object '>>'
-quotedTriple      ::= '<<' subject predicate object '>>'
+tripleTerm        ::= '<<(' subject predicate object ')>>'
 
 @terminals
 
 IRIREF            ::=  '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
 BLANK_NODE_LABEL  ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-LANG_DIR          ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' [a-zA-Z]+)?`
+LANG_DIR          ::= '@' [a-zA-Z]+ ( '-' [a-zA-Z0-9]+ )* ( '--' [a-zA-Z]+ )?
 STRING_LITERAL_QUOTE ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'
-UCHAR             ::= ( "\u" HEX HEX HEX HEX )
-                    | ( "\U" HEX HEX HEX HEX HEX HEX HEX HEX )
-ECHAR             ::= ("\" [tbnrf"'])
+UCHAR             ::= ( '\u' HEX HEX HEX HEX )
+                    | ( '\U' HEX HEX HEX HEX HEX HEX HEX HEX )
+ECHAR             ::= ('\' [tbnrf\"'])
 PN_CHARS_BASE     ::= ([A-Z]
                     | [a-z]
                     | [#x00C0-#x00D6]
@@ -32,7 +35,7 @@ PN_CHARS_BASE     ::= ([A-Z]
                     | [#x10000-#xEFFFF])
 PN_CHARS_U        ::=  PN_CHARS_BASE | '_'
 PN_CHARS          ::= (PN_CHARS_U
-                    | "-"
+                    | '-'
                     | [0-9]
                     | #x00B7
                     | [#x0300-#x036F]
