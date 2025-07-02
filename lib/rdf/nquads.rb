@@ -70,7 +70,11 @@ module RDF
           line = @line    # for backtracking input in case of parse error
 
           begin
-            unless blank? || read_comment
+            if blank? || read_comment
+              # No-op
+            elsif version = read_version
+              @options[:version] = version
+            else
               # FIXME: quoted triples are now deprecated
               subject   = read_uriref || read_node || read_quotedTriple || fail_subject
               predicate = read_uriref(intern: true) || fail_predicate

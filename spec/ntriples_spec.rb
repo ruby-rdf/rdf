@@ -142,19 +142,19 @@ describe RDF::NTriples::Reader do
     end
 
     it "should accept files" do
-      expect { reader.new(File.open(testfile)) }.not_to raise_error
+      expect { described_class.new(File.open(testfile)) }.not_to raise_error
     end
 
     it "should accept IO streams" do
-      expect { reader.new(StringIO.new('')) }.not_to raise_error
+      expect { described_class.new(StringIO.new('')) }.not_to raise_error
     end
 
     it "should accept strings" do
-      expect { reader.new('') }.not_to raise_error
+      expect { described_class.new('') }.not_to raise_error
     end
 
     it "sets version from reader option" do
-      expect(reader.new('', version: '1.2').version).to eql '1.2'
+      expect(described_class.new('', version: '1.2').version).to eql '1.2'
     end
   end
 
