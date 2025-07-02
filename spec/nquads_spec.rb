@@ -313,6 +313,30 @@ describe RDF::NQuads::Writer do
         .to write_each("<http://example/s> <http://example/p> <http://example/o1> .\n",
                        "<http://example/s> <http://example/p> <http://example/o2> .\n")
     end
+
+    it "writes version with :version option" do
+      expect do
+        described_class.new($stdout, version: "1.2") do |w|
+          w.insert(graph)
+        end
+      end.to write(%(VERSION "1.2"))
+    end
+
+    it "does not write version with :version and :canonicalize options" do
+      expect do
+        described_class.new($stdout, version: "1.2", canonicalize: true) do |w|
+          w.insert(graph)
+        end
+      end.not_to write(%(VERSION "1.2"))
+    end
+
+    it "writes version with :rdfstar option" do
+      expect do
+        described_class.new($stdout, rdfstar: true) do |w|
+          w.insert(graph)
+        end
+      end.to write(%(VERSION "1.2"))
+    end
   end
 
   context "Writing a Statements" do

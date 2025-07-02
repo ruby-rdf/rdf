@@ -970,14 +970,39 @@ describe RDF::NTriples::Writer do
   context "Writing a Graph" do
     let(:graph) {
       g = RDF::Graph.new
-      g << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o1')]
-      g << [RDF::URI('s'), RDF::URI('p'), RDF::URI('o2'), RDF::URI('c')]
+      g << [RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o1')]
+      g << [RDF::URI('http://example/s'), RDF::URI('http://example/p'), RDF::URI('http://example/o2'), RDF::URI('c')]
       g
     }
     it "#insert" do
       expect do
-        writer.new($stdout, validate: false).insert(graph)
-      end.to write_each("<s> <p> <o1> .\n", "<s> <p> <o2> .\n")
+        writer.new($stdout).insert(graph)
+      end.to write_each("<http://example/s> <http://example/p> <http://example/o1> .\n",
+                        "<http://example/s> <http://example/p> <http://example/o2> .\n")
+    end
+
+    it "writes version with :version option" do
+      expect do
+        writer.new($stdout, version: "1.2") do |w|
+          w.insert(graph)
+        end
+      end.to write(%(VERSION "1.2"))
+    end
+
+    it "does not write version with :version and :canonicalize options" do
+      expect do
+        writer.new($stdout, version: "1.2", canonicalize: true) do |w|
+          w.insert(graph)
+        end
+      end.not_to write(%(VERSION "1.2"))
+    end
+
+    it "writes version with :rdfstar option" do
+      expect do
+        writer.new($stdout, rdfstar: true) do |w|
+          w.insert(graph)
+        end
+      end.to write(%(VERSION "1.2"))
     end
   end
 

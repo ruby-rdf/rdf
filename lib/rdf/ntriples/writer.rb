@@ -194,6 +194,16 @@ module RDF::NTriples
     end
 
     ##
+    # Output VERSION directive, if specified and not canonicalizing
+    # @return [self]
+    # @abstract
+    def write_prologue
+      puts %(VERSION #{version.inspect}) if version && !canonicalize?
+      @logged_errors_at_prolog = log_statistics[:error].to_i
+      super
+    end
+
+    ##
     # Outputs an N-Triples comment line.
     #
     # @param  [String] text

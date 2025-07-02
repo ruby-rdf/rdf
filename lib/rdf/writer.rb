@@ -152,6 +152,12 @@ module RDF
           control: :checkbox,
           on: ["--unique-bnodes"],
           description: "Use unique Node identifiers.") {true},
+        RDF::CLI::Option.new(
+          symbol: :version,
+          control: :select,
+          datatype: RDF::Format::VERSIONS, # 1.1, 1.2, or 1.2-basic
+          on: ["--version VERSION"],
+          description: "RDF Version."),
       ]
     end
 
@@ -281,12 +287,21 @@ module RDF
     #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples::Writer#format_node}
     # @option options [Hash{Symbol => String}] :accept_params
     #   Parameters from ACCEPT header entry for the media-range matching this writer.
+    # @option options [String] :version
+    #   Parse a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
     def initialize(output = $stdout, **options, &block)
       @output, @options = output, options.dup
       @nodes, @node_id, @node_id_map  = {}, 0, {}
+
+      # The rdfstar option implies version 1.2, but can be overridden
+      @options[:version] ||= "1.2" if @options[:rdfstar]
+
+      unless self.version.nil? || RDF::Format::VERSIONS.include?(self.version)
+        log_warn("Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{self.version}")
+      end
 
       if block_given?
         write_prologue
@@ -411,6 +426,18 @@ module RDF
       self
     end
     alias_method :flush!, :flush
+
+    ##
+    # Returns the RDF version determined by this reader.
+    #
+    # @example
+    #   writer.version  #=> "1.2"
+    #
+    # @return [String]
+    # @since  3.3.4
+    def version
+      @options[:version]
+    end
 
     ##
     # @return [self]
