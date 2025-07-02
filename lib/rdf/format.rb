@@ -48,6 +48,10 @@ module RDF
     extend ::Enumerable
 
     ##
+    # RDF defines specific version strings, but does not define normative behavior
+    VERSIONS = %w{1.1 1.2-basic 1.2}.freeze
+
+    ##
     # Enumerates known RDF serialization format classes.
     #
     # Given options from {Format.for}, it returns just those formats that match the specified criteria.
