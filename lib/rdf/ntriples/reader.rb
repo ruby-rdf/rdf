@@ -92,6 +92,7 @@ module RDF::NTriples
 
     # LANGTAG is deprecated
     LANGTAG               = LANG_DIR
+    RDF_VERSION          = /VERSION/.freeze
 
     ##
     # Reconstructs an RDF value from its serialized N-Triples
@@ -154,7 +155,8 @@ module RDF::NTriples
     def self.parse_literal(input, **options)
       case input
         when LITERAL_WITH_LANGUAGE
-          RDF::Literal.new(unescape($1), language: $4)
+          language, direction = $4.split('--')
+          RDF::Literal.new(unescape($1), language: language, direction: direction)
         when LITERAL_WITH_DATATYPE
           RDF::Literal.new(unescape($1), datatype: $4)
         when LITERAL_PLAIN
@@ -216,7 +218,11 @@ module RDF::NTriples
         line = @line    # for backtracking input in case of parse error
 
         begin
-          unless blank? || read_comment
+          if blank? || read_comment
+            # No-op
+          elsif version = read_version
+            @options[:version] = version
+          else
             subject   = read_uriref || read_node || read_quotedTriple || fail_subject
             predicate = read_uriref(intern: true) || fail_predicate
             object    = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple || fail_object
@@ -237,6 +243,9 @@ module RDF::NTriples
     # @return [RDF::Statement]
     def read_tripleTerm
       if @options[:rdfstar] && match(TT_START)
+        if version && version != "1.2"
+          log_warn("Triple term used with version #{version}")
+        end
         subject   = read_uriref || read_node || fail_subject
         predicate = read_uriref(intern: true) || fail_predicate
         object    = read_uriref || read_node || read_literal || read_tripleTerm || fail_object
@@ -307,6 +316,7 @@ module RDF::NTriples
           when lang_dir = match(LANG_DIR)
             language, direction = lang_dir.split('--')
             raise ArgumentError if direction && !@options[:rdfstar]
+            log_warn("Literal base direction used with version #{version}") if version && version == "1.1"
             RDF::Literal.new(literal_str, language: language, direction: direction)
           when datatype = match(/^(\^\^)/) # FIXME
             RDF::Literal.new(literal_str, datatype: read_uriref || fail_object)
@@ -321,6 +331,18 @@ module RDF::NTriples
       v = literal_str
       v += "@#{lang_dir}" if lang_dir
       log_error("Invalid Literal (found: \"#{v}\")", lineno: lineno, token: "#v", exception: RDF::ReaderError)
+    end
+
+    ##
+    # @return [String]
+    def read_version
+      if match(RDF_VERSION)
+        ver_tok = match(LITERAL_PLAIN)
+        unless RDF::Format::VERSIONS.include?(ver_tok)
+          log_warn("Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{ver_tok}")
+        end
+        ver_tok
+      end
     end
 
     ##

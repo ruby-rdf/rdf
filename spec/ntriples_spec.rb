@@ -152,6 +152,10 @@ describe RDF::NTriples::Reader do
     it "should accept strings" do
       expect { reader.new('') }.not_to raise_error
     end
+
+    it "sets version from reader option" do
+      expect(reader.new('', version: '1.2').version).to eql '1.2'
+    end
   end
 
   describe ".open" do
@@ -566,6 +570,16 @@ describe RDF::NTriples::Reader do
             end
           end
         end
+
+        it "warns if version is not 1.2 or 1.2-basic" do
+          expect {parse('<http://subj> <http://pred>  "Hello"@en--ltr .', rdfstar: true, version: '1.1', logger: logger)}.not_to raise_error
+          expect(logger.to_s).to include("WARN")
+        end
+
+        it "warns if inline version is not 1.2 or 1.2-basic" do
+          expect {parse(%{VERSION "1.1"\n<http://subj> <http://pred>  "Hello"@en--ltr .}, rdfstar: true, logger: logger)}.not_to raise_error
+          expect(logger.to_s).to include("WARN")
+        end
       end
 
       context 'should parse a value that was written without passing through the writer encoding' do
@@ -664,6 +678,43 @@ describe RDF::NTriples::Reader do
       end
     end
 
+    context "version" do
+      {
+        'VERSION "1.2"': %(
+          VERSION "1.2"
+          <http://example/s> <http://example/p> <http://example/o>
+        ),
+        'VERSION "1.2-basic"': %(
+          VERSION "1.2-basic"
+          <http://example/s> <http://example/p> <http://example/o>
+        ),
+        'VERSION "1.1"': %(
+          VERSION "1.1"
+          <http://example/s> <http://example/p> <http://example/o>
+        ),
+      }.each do |name, input|
+        it name do
+          expect do
+            parse(input, logger: logger)
+            expect(logger.to_s).not_to include("WARN")
+          end.not_to write.to(:error)
+        end
+      end
+
+      it 'version "1.2" is an error' do
+        expect do
+          parse('version "1.2"', logger: logger)
+        end.to raise_error(RDF::ReaderError)
+      end
+
+      it 'VERSION "1.0" is a warning' do
+        expect do
+          parse('VERSION "1.0"', logger: logger)
+        end.not_to write.to(:error)
+        expect(logger.to_s).to include('WARN')
+      end
+    end
+
     context "triple terms" do
       ill_statements = {
         "subject-iii": '<<(<http://example/s1> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> .',
@@ -709,13 +760,14 @@ describe RDF::NTriples::Reader do
 
         statements.each do |name, st|
           context name do
-            let(:graph) {parse(st, rdfstar: true)}
+            let(:graph) {parse(st, rdfstar: true, logger: logger)}
 
             it "creates an unquoted statement" do
               expect(graph.count).to eql(1)
               graph.statements.each do |stmt|
                 expect(stmt).not_to be_quoted
               end
+              expect(logger.to_s).not_to include("WARN")
             end
 
             it "statements which are object of another statement are triple terms" do
@@ -723,6 +775,20 @@ describe RDF::NTriples::Reader do
               expect(referencing).to be_a_statement
               expect(referencing.object).to be_a_statement
               expect(referencing.object).to be_tripleTerm
+              expect(logger.to_s).not_to include("WARN")
+            end
+
+            it "warns if version is not 1.2" do
+              expect {parse(st, rdfstar: true, version: '1.1', logger: logger)}.not_to raise_error
+              expect(logger.to_s).to include("WARN")
+            end
+
+            it "warns if inline version is not 1.2" do
+              expect {parse(%{VERSION "1.1"\n#{st}}, rdfstar: true, logger: logger)}.not_to raise_error
+              expect(logger.to_s).to include("WARN")
+
+              expect {parse(%{VERSION "1.2-basic"\n#{st}}, rdfstar: true, logger: logger)}.not_to raise_error
+              expect(logger.to_s).to include("WARN")
             end
           end
         end
