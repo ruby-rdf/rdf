@@ -17,11 +17,7 @@ module RDF
   #
   # ## Triple terms
   #
-  # Supports statements as resources using `<<(s p o)>>`.
-
-  # ## Quoted Triples (Deprecated)
-  #
-  # Supports statements as resources using `<<s p o>>`.
+  # Supports statements as resources in the object postion using `<<(s p o)>>`.
   #
   # ## Installation
   #

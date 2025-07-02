@@ -75,10 +75,9 @@ module RDF
             elsif version = read_version
               @options[:version] = version
             else
-              # FIXME: quoted triples are now deprecated
-              subject   = read_uriref || read_node || read_quotedTriple || fail_subject
+              subject   = read_uriref || read_node || fail_subject
               predicate = read_uriref(intern: true) || fail_predicate
-              object    = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple || fail_object
+              object    = read_uriref || read_node || read_literal || read_tripleTerm || fail_object
               graph_name    = read_uriref || read_node
               if validate? && !read_eos
                 log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)

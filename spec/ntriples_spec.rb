@@ -762,14 +762,6 @@ describe RDF::NTriples::Reader do
           context name do
             let(:graph) {parse(st, rdfstar: true, logger: logger)}
 
-            it "creates an unquoted statement" do
-              expect(graph.count).to eql(1)
-              graph.statements.each do |stmt|
-                expect(stmt).not_to be_quoted
-              end
-              expect(logger.to_s).not_to include("WARN")
-            end
-
             it "statements which are object of another statement are triple terms" do
               referencing = graph.statements.first
               expect(referencing).to be_a_statement
@@ -789,68 +781,6 @@ describe RDF::NTriples::Reader do
 
               expect {parse(%{VERSION "1.2-basic"\n#{st}}, rdfstar: true, logger: logger)}.not_to raise_error
               expect(logger.to_s).to include("WARN")
-            end
-          end
-        end
-      end
-    end
-
-    # FIXME: quoted triples are deprecated
-    context "quoted triples" do
-      statements = {
-        "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
-        "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
-        "subject-iil": '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .',
-        "subject-bii": '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
-        "subject-bib": '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .',
-        "subject-bil": '<<_:s1 <http://example/p1> "o">> <http://example/p> <http://example/o> .',
-        "subject-ws":  '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/p> <http://example/o> .',
-        "object-iii":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .',
-        "object-iib":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .',
-        "object-iil":  '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .',
-        "object-ws":   '<http://example/s> <http://example/p> << <http://example/s1> <http://example/p1> <http://example/o1> >> .',
-        "recursive-subject": '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .',
-      }
-
-      context "without rdfstar option" do
-        it "Raises an error" do
-          expect do
-            expect {parse(statements.values.first)}.to raise_error(RDF::ReaderError)
-          end.to write(:something).to(:error)
-        end
-      end
-
-      context "with rdfstar option" do
-        statements.each do |name, st|
-          context name do
-            let(:graph) {parse(st, rdfstar: true, deprecated: true)}
-
-            it "creates two unquoted statements" do
-              expect(graph.count).to eql(1)
-              graph.statements.each do |stmt|
-                expect(stmt).not_to be_quoted
-              end
-            end
-
-            it "has a statement whose subject or object is a statement" do
-              referencing = graph.statements.first
-              expect(referencing).to be_a_statement
-              if referencing.subject.statement?
-                expect(referencing.subject).to be_a_statement
-              else
-                expect(referencing.object).to be_a_statement
-              end
-            end
-
-            it "statements which are subject or object of another statement are quoted" do
-              referencing = graph.statements.first
-              expect(referencing).to be_a_statement
-              if referencing.subject.statement?
-                expect(referencing.subject).to be_a_statement
-                expect(referencing.subject).to be_quoted
-              else
-                expect(referencing.object).to be_a_statement
-              end
             end
           end
         end
@@ -1148,119 +1078,6 @@ describe RDF::NTriples::Writer do
         logger = RDF::Spec.logger
         expect {parse(%(<s> <p> <#{uri}>), validate: true, logger: logger)}.to raise_error RDF::ReaderError
         expect(logger.to_s).not_to be_empty
-      end
-    end
-  end
-
-  context "quoted triples" do
-    {
-      "subject-iii": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        output: '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
-      },
-      "subject-iib": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Node.new('o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        output: '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .'
-      },
-      "subject-iil": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Literal('o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        output: '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .'
-      },
-      "subject-bii": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Node('s1'),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        output: '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
-      },
-      "subject-bib": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Node('s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Node.new('o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
-        output: '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .'
-      },
-      "subject-bil": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Node('s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Literal('o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        output: '<<_:s1 <http://example/p1> "o1">> <http://example/p> <http://example/o> .'
-      },
-      "object-iii":  {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1'))),
-        output: '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .'
-      },
-      "object-iib":  {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Node.new('o1'))),
-        output: '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .'
-      },
-      "object-iil":  {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Literal('o1'))),
-        output: '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .'
-      },
-      "recursive-subject": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Statement(
-              RDF::URI('http://example/s2'),
-              RDF::URI('http://example/p2'),
-              RDF::URI('http://example/o2')),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        output: '<<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
-      },
-    }.each do |name, params|
-      it name do
-        graph = RDF::Graph.new {|g| g << params[:input]}
-        s = writer.dump(graph)
-        expect(s).to eql(params[:output] + "\n")
       end
     end
   end

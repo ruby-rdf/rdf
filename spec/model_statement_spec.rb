@@ -76,7 +76,6 @@ describe RDF::Statement do
     its(:object) {is_expected.not_to be_nil}
     it {is_expected.to be_asserted}
     it {is_expected.not_to be_tripleTerm}
-    it {is_expected.not_to be_quoted} # FIXME: quoted triples are deprecated
     it {is_expected.to be_statement}
     it {is_expected.not_to be_inferred}
     its(:terms) {is_expected.to include(s, p, o)}
@@ -216,12 +215,6 @@ describe RDF::Statement do
     it {is_expected.to be_tripleTerm}
   end
 
-  # FIXME: quoted triples are deprecated
-  context "when marked as quoted" do
-    subject {RDF::Statement.new(RDF::Node.new, p, o, quoted: true)}
-    it {is_expected.to be_quoted}
-  end
-
   it {is_expected.to respond_to(:to_h)}
   its(:to_h) do
     is_expected.to eql({
@@ -330,10 +323,6 @@ describe RDF::Statement do
   context "RDF-star" do
     it "is not embedded for plain statements" do
       expect(RDF::Statement(:s, :p, :o)).not_to be_embedded
-    end
-
-    it "is embedded for statements having a statement subject" do
-      expect(RDF::Statement(RDF::Statement(:s1, :p1, :o1), :p, :o)).to be_embedded
     end
 
     it "is embedded for statements having a statement object" do

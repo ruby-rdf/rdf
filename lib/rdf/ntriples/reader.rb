@@ -203,7 +203,7 @@ module RDF::NTriples
       begin
         read_statement
       rescue RDF::ReaderError
-        value = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple
+        value = read_uriref || read_node || read_literal || read_tripleTerm
         log_recover
         value
       end
@@ -223,9 +223,9 @@ module RDF::NTriples
           elsif version = read_version
             @options[:version] = version
           else
-            subject   = read_uriref || read_node || read_quotedTriple || fail_subject
+            subject   = read_uriref || read_node || fail_subject
             predicate = read_uriref(intern: true) || fail_predicate
-            object    = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple || fail_object
+            object    = read_uriref || read_node || read_literal || read_tripleTerm || fail_object
 
             if validate? && !read_eos
               log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
@@ -253,23 +253,6 @@ module RDF::NTriples
           log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
         end
         RDF::Statement.new(subject, predicate, object, tripleTerm: true)
-      end
-    end
-
-    ##
-    # @return [RDF::Statement]
-    # @deprecated Quoted triples are now deprecated (not supported when validating)
-    def read_quotedTriple
-      if @options[:rdfstar] && !match(TT_START) && match(QT_START) && !validate?
-        warn "[DEPRECATION] RDF-star quoted triples are deprecated and will be removed in a future version.\n" +
-             "Called from #{Gem.location_of_caller.join(':')}"
-        subject   = read_uriref || read_node || read_quotedTriple || fail_subject
-        predicate = read_uriref(intern: true) || fail_predicate
-        object    = read_uriref || read_node || read_literal || read_quotedTriple || fail_object
-        if !match(QT_END)
-          log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
-        end
-        RDF::Statement.new(subject, predicate, object, quoted: true)
       end
     end
 

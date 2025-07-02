@@ -265,12 +265,6 @@ A separate [SPARQL][SPARQL doc] gem builds on basic BGP support to provide full 
     foaf[:name]   #=> RDF::URI("http://xmlns.com/foaf/0.1/name")
     foaf['mbox']  #=> RDF::URI("http://xmlns.com/foaf/0.1/mbox")
 
-## RDF-star CG
-
-[RDF.rb][] includes provisional support for [RDF-star][] with an N-Triples/N-Quads syntax for quoted triples in the _subject_ or _object_ position.
-
-Support for RDF-star quoted triples is now deprecated, use RDF 1.2 triple terms instead.
-
 ## RDF 1.2
 
 [RDF.rb][] includes provisional support for [RDF 1.2][] with an N-Triples/N-Quads syntax for triple terms in the _object_ position.
