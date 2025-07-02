@@ -168,8 +168,8 @@ module RDF
           symbol: :validate,
           datatype: TrueClass,
           control: :checkbox,
-          on: ["--validate"],
-          description: "Validate input file."),
+          on: ["--[no-]validate"],
+          description: "Validate on input and output."),
         RDF::CLI::Option.new(
           symbol: :verifySSL,
           datatype: TrueClass,
@@ -181,7 +181,7 @@ module RDF
           symbol: :version,
           control: :select,
           datatype: RDF::Format::VERSIONS, # 1.1, 1.2, or 1.2-basic
-          on: ["--version"],
+          on: ["--version VERSION"],
           description: "RDF Version."),
       ]
     end
@@ -290,7 +290,7 @@ module RDF
     #   any additional options
     # @param [Boolean]  validate     (false)
     #   whether to validate the parsed statements and values
-    # @option options [String] :version ("1.2")
+    # @option options [String] :version
     #   Parse a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
     # @yield  [reader] `self`
     # @yieldparam  [RDF::Reader] reader
@@ -319,6 +319,10 @@ module RDF
 
       # The rdfstar option implies version 1.2, but can be overridden
       @options[:version] ||= "1.2" if @options[:rdfstar]
+
+      unless self.version.nil? || RDF::Format::VERSIONS.include?(self.version)
+        log_error("Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{self.version}")
+      end
 
       @input = case input
         when String then StringIO.new(input)
@@ -406,10 +410,10 @@ module RDF
     # Returns the RDF version determined by this reader.
     #
     # @example
-    #   reader.version  #=> RDF::URI('http://purl.org/dc/terms/')
+    #   reader.version  #=> "1.2"
     #
     # @return [String]
-    # @since  3.3.2
+    # @since  3.3.4
     def version
       @options[:version]
     end
