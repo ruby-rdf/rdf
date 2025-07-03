@@ -444,7 +444,7 @@ module RDF
         begin
           loop do
             st = read_statement
-            block.call(st)
+            block.call(st) unless st.nil?
           end
         rescue EOFError
           rewind rescue nil
@@ -481,7 +481,7 @@ module RDF
         begin
           loop do
             triple = read_triple
-            block.call(*triple)
+            block.call(*triple) unless triple.nil?
           end
         rescue EOFError
           rewind rescue nil

@@ -230,7 +230,9 @@ module RDF::NTriples
             if validate? && !read_eos
               log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
             end
-            return [subject, predicate, object]
+            spo = [subject, predicate, object]
+            # Only return valid triples if validating
+            return spo if !validate? || spo.all?(&:valid?)
           end
         rescue RDF::ReaderError => e
           @line = line  # this allows #read_value to work
