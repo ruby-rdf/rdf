@@ -569,6 +569,18 @@ describe RDF::NTriples::Reader do
               end
             end
           end
+
+          {
+            "language with ill-formted tag" => '<http://subj> <http://pred> "Hello"@--ltr',
+            "direction without language" => '<http://subj> <http://pred> "Hello"@e',
+            "bad direction" => '<http://subj> <http://pred> "Hello"@en--RTL'
+          }.each_pair do |name, triple|
+            it name do
+              expect do
+                reader.new(triple, rdfstar: true, validate: true).first
+              end.to raise_error(RDF::ReaderError)
+            end
+          end
         end
 
         it "warns if version is not 1.2 or 1.2-basic" do
