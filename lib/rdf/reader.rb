@@ -540,7 +540,7 @@ module RDF
     def valid?
       super && !log_statistics[:error]
     rescue ArgumentError, RDF::ReaderError => e
-      log_error(e.message)
+      log_error(e.message + " at #{e.backtrace.first}")
       false
     end
 

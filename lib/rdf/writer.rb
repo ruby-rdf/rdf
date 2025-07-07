@@ -509,7 +509,7 @@ module RDF
       end
       self
     rescue ArgumentError => e
-      log_error e.message
+      log_error e.message + " at #{e.backtrace.first}"
     end
     alias_method :insert_statement, :write_statement # support the RDF::Writable interface
 
