@@ -72,6 +72,10 @@ module RDF::NTriples
               buffer << case u.ord
               when (0x00..0x7F)
                 escape_ascii(u, encoding)
+              when (0xFFFE..0xFFFF)
+                # NOT A CHARACTER
+                # @see https://corp.unicode.org/~asmus/proposed_faq/private_use.html#history1
+                escape_uchar(u)
               else
                 u
               end
@@ -100,12 +104,10 @@ module RDF::NTriples
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
     def self.escape_unicode(u, encoding)
       case (u = u.ord)
-        when (0x00..0x7F)        # ASCII 7-bit
+        when (0x00..0x7F)        # ECHAR
           escape_ascii(u, encoding)
-        when (0x80..0xFFFF)      # Unicode BMP
-          escape_utf16(u)
-        when (0x10000..0x10FFFF) # Unicode
-          escape_utf32(u)
+        when (0x80...0x10FFFF)   # UCHAR
+          escape_uchar(u)
         else
           raise ArgumentError.new("expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x#{u.to_s(16)}")
       end
@@ -132,8 +134,8 @@ module RDF::NTriples
       when (0x0D)       then "\\r"
       when (0x22)       then "\\\""
       when (0x5C)       then "\\\\"
-      when (0x00..0x1F) then escape_utf16(u)
-      when (0x7F)       then escape_utf16(u)
+      when (0x00..0x1F) then escape_uchar(u)
+      when (0x7F)       then escape_uchar(u)  # DEL
       when (0x20..0x7E) then u.chr
       else
         raise ArgumentError.new("expected an ASCII character in (0x00..0x7F), but got 0x#{u.to_s(16)}")
@@ -143,7 +145,23 @@ module RDF::NTriples
     ##
     # @param  [Integer, #ord] u
     # @return [String]
+    # @see    https://www.w3.org/TR/rdf12-concepts/#rdf-stringshttps://www.w3.org/TR/rdf12-concepts/#rdf-strings
+    # @since 3.4.4
+    def self.escape_uchar(u)
+      #require 'byebug'; byebug
+      case u.ord
+      when (0x00..0xFFFF)
+        sprintf("\\u%04X", u.ord)
+      else
+        sprintf("\\U%08X", u.ord)
+      end
+    end
+
+    ##
+    # @param  [Integer, #ord] u
+    # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    # @deprecated use escape_uchar, this name is non-intuitive
     def self.escape_utf16(u)
       sprintf("\\u%04X", u.ord)
     end
@@ -152,6 +170,7 @@ module RDF::NTriples
     # @param  [Integer, #ord] u
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_strings
+    # @deprecated use escape_uchar, this name is non-intuitive
     def self.escape_utf32(u)
       sprintf("\\U%08X", u.ord)
     end
@@ -283,9 +302,9 @@ module RDF::NTriples
             buffer.set_encoding(encoding)
             string.each_char do |u|
               buffer << case u.ord
-                when (0x00..0x20) then self.class.escape_utf16(u)
+                when (0x00..0x20) then self.class.escape_uchar(u)
                 when 0x22, 0x3c, 0x3e, 0x5c, 0x5e, 0x60, 0x7b, 0x7c, 0x7d # "<>\^`{|}
-                  self.class.escape_utf16(u)
+                  self.class.escape_uchar(u)
                 else u
               end
             end
@@ -297,11 +316,10 @@ module RDF::NTriples
             buffer.set_encoding(Encoding::ASCII)
             string.each_byte do |u|
               buffer << case u
-                when (0x00..0x20) then self.class.escape_utf16(u)
+                when (0x00..0x20) then self.class.escape_uchar(u)
                 when 0x22, 0x3c, 0x3e, 0x5c, 0x5e, 0x60, 0x7b, 0x7c, 0x7d # "<>\^`{|}
-                  self.class.escape_utf16(u)
-                when (0x80..0xFFFF)                then self.class.escape_utf16(u)
-                when (0x10000..0x10FFFF)           then self.class.escape_utf32(u)
+                  self.class.escape_uchar(u)
+                when (0x80..0x10FFFF) then self.class.escape_uchar(u)
                 else u
               end
             end

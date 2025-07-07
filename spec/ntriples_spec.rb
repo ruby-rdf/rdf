@@ -1273,27 +1273,22 @@ describe RDF::NTriples::Writer do
   context "c14n" do
     shared_examples "c14n" do |statement, result|
       context "given #{statement}" do
-        subject {RDF::NTriples::Writer.buffer(validate: false, canonicalize: true, logger: logger) {|w| w << statement}}
-        if result
-          specify {expect(subject).to eq "#{result}\n"}
-        else
-          specify {expect {subject}.to raise_error(RDF::WriterError)}
+        it "produces #{result}" do
+          g = parse(statement, canonicalize: true)
+          expect(g.count).to eq 1
+          c14n = RDF::NTriples::Writer.buffer(validate: false, canonicalize: true, logger: logger) {|w| w << g}
+          expect(c14n).to eq "#{result}\n"
         end
       end
-    end
+  end
 
     {
-      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
-      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")) =>
-        RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::Literal("literal")),
-      RDF::Statement(RDF::URI('file:///path/to/file with spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) =>
-        RDF::Statement(RDF::URI('file:///path/to/file%20with%20spaces.txt'), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")),
-      RDF::Statement(nil, RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), nil, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::URI("http://purl.org/dc/terms/creator").dup, nil) => nil,
-      RDF::Statement(RDF::Literal("literal"), RDF::URI("http://purl.org/dc/terms/creator").dup, RDF::URI("http://ar.to/#self")) => nil,
-      RDF::Statement(RDF::URI("https://rubygems.org/gems/rdf"), RDF::Literal("literal"), RDF::URI("http://ar.to/#self")) => nil,
+      %(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .) =>
+        %(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self> .),
+      %(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> "literal" .) =>
+        %(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> "literal" .),
+      %(<http://a.example/s> <http://a.example/p> "\\U00000000\\U00000001\\U00000002\\U00000003\\U00000004\\U00000005\\U00000006\\U00000007\\U0000000B\\U0000000E\\U0000000F\\U00000010\\U00000011\\U00000012\\U00000013\\U00000014\\U00000015\\U00000016\\U00000017\\U00000018\\U00000019\\U0000001A\\U0000001B\\U0000001C\\U0000001D\\U0000001E\\U0000001F\\U0000007F\\U0000FFFE\\U0000FFFF" .) =>
+        %(<http://a.example/s> <http://a.example/p> "\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u000B\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F\\u007F\\uFFFE\\uFFFF" .),
     }.each do |st, result|
       include_examples "c14n", st, result
     end
