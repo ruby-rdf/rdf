@@ -272,9 +272,8 @@ module RDF::NTriples
     def read_uriref(intern: false, **options)
       if uri_str = match(URIREF)
         uri_str = self.class.unescape(uri_str)
-        uri = RDF::URI.send(intern? && intern ? :intern : :new, uri_str)
+        uri = RDF::URI.send(intern? && intern ? :intern : :new, uri_str, canonicalize: canonicalize?)
         uri.validate!     if validate?
-        uri.canonicalize! if canonicalize?
         uri
       end
     rescue ArgumentError
