@@ -104,8 +104,7 @@ module RDF
     # @private
     # @see RDF::Enumerable#supports?
     def supports?(feature)
-      # FIXME: quoted triples are now deprecated
-      return true if %i(graph_name quoted_triples rdf_full).include?(feature)
+      return true if %i(graph_name rdf_full).include?(feature)
       super
     end
 

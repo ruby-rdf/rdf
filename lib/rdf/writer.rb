@@ -152,6 +152,12 @@ module RDF
           control: :checkbox,
           on: ["--unique-bnodes"],
           description: "Use unique Node identifiers.") {true},
+        RDF::CLI::Option.new(
+          symbol: :version,
+          control: :select,
+          datatype: RDF::Format::VERSIONS, # 1.1, 1.2, or 1.2-basic
+          on: ["--version VERSION"],
+          description: "RDF Version."),
       ]
     end
 
@@ -281,12 +287,21 @@ module RDF
     #   Use unique {Node} identifiers, defaults to using the identifier which the node was originall initialized with (if any). Implementations should ensure that Nodes are serialized using a unique representation independent of any identifier used when creating the node. See {NTriples::Writer#format_node}
     # @option options [Hash{Symbol => String}] :accept_params
     #   Parameters from ACCEPT header entry for the media-range matching this writer.
+    # @option options [String] :version
+    #   Parse a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
     def initialize(output = $stdout, **options, &block)
       @output, @options = output, options.dup
       @nodes, @node_id, @node_id_map  = {}, 0, {}
+
+      # The rdfstar option implies version 1.2, but can be overridden
+      @options[:version] ||= "1.2" if @options[:rdfstar]
+
+      unless self.version.nil? || RDF::Format::VERSIONS.include?(self.version)
+        log_warn("Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{self.version}")
+      end
 
       if block_given?
         write_prologue
@@ -413,6 +428,18 @@ module RDF
     alias_method :flush!, :flush
 
     ##
+    # Returns the RDF version determined by this reader.
+    #
+    # @example
+    #   writer.version  #=> "1.2"
+    #
+    # @return [String]
+    # @since  3.3.4
+    def version
+      @options[:version]
+    end
+
+    ##
     # @return [self]
     # @abstract
     def write_prologue
@@ -482,7 +509,7 @@ module RDF
       end
       self
     rescue ArgumentError => e
-      log_error e.message
+      log_error e.message + " at #{e.backtrace.first}"
     end
     alias_method :insert_statement, :write_statement # support the RDF::Writable interface
 
@@ -518,8 +545,7 @@ module RDF
         when RDF::Literal   then format_literal(term, **options)
         when RDF::URI       then format_uri(term, **options)
         when RDF::Node      then format_node(term, **options)
-        # FIXME: quoted triples are now deprecated
-        when RDF::Statement then term.tripleTerm? ? format_tripleTerm(term, **options) : format_quotedTriple(term, **options)
+        when RDF::Statement then format_tripleTerm(term, **options)
         else nil
       end
     end
@@ -579,22 +605,6 @@ module RDF
     # @abstract
     def format_tripleTerm(value, **options)
       raise NotImplementedError.new("#{self.class}#format_tripleTerm") # override in subclasses
-    end
-
-    ##
-    # Formats a referenced quoted triple.
-    #
-    # @example
-    #     <<<s> <p> <o>>> <p> <o> .
-    #
-    # @param  [RDF::Statement] value
-    # @param  [Hash{Symbol => Object}] options = ({})
-    # @return [String]
-    # @raise  [NotImplementedError] unless implemented in subclass
-    # @abstract
-    # @deprecated Quoted Triples are now deprecated in favor of Triple Terms
-    def format_quotedTriple(value, **options)
-      raise NotImplementedError.new("#{self.class}#format_quotedTriple") # override in subclasses
     end
 
   protected

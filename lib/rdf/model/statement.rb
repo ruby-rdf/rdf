@@ -72,7 +72,6 @@ module RDF
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
     #   @option options [Boolean] :tripleTerm used as a marker to record that this statement appears as the object of another RDF::Statement.
-    #   @option options [Boolean] :quoted used as a marker to record that this statement quoted and appears as the subject or object of another RDF::Statement (deprecated).
     #   @return [RDF::Statement]
     #
     # @overload initialize(subject, predicate, object, **options)
@@ -86,7 +85,6 @@ module RDF
     #     Note, in RDF 1.1, a graph name MUST be an {Resource}.
     #   @option options [Boolean] :inferred used as a marker to record that this statement was inferred based on semantic relationships (T-Box).
     #   @option options [Boolean] :tripleTerm used as a marker to record that this statement appears as the object of another RDF::Statement.
-    #   @option options [Boolean] :quoted used as a marker to record that this statement quoted and appears as the subject or object of another RDF::Statement (deprecated).
     #   @return [RDF::Statement]
     def initialize(subject = nil, predicate = nil, object = nil, options = {})
       if subject.is_a?(Hash)
@@ -187,7 +185,7 @@ module RDF
     # Note: Nomenclature is evolving, alternatives could include `#complex?` and `#nested?`
     # @return [Boolean]
     def embedded?
-      subject && subject.statement? || object && object.statement?
+      object && object.statement?
     end
 
     ##
@@ -208,20 +206,13 @@ module RDF
     ##
     # @return [Boolean]
     def asserted?
-      !quoted?
+      !embedded?
     end
 
     ##
     # @return [Boolean]
     def tripleTerm?
       !!@options[:tripleTerm]
-    end
-
-    ##
-    # @return [Boolean]
-    # @deprecated Quoted triples are now deprecated
-    def quoted?
-      !!@options[:quoted]
     end
 
     ##

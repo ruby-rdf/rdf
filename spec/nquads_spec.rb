@@ -47,14 +47,6 @@ describe RDF::NQuads::Format do
     end
   end
 
-  describe "#to_sym" do
-    specify {expect(subject.to_sym).to eq :nquads}
-  end
-
-  describe "#name" do
-    specify {expect(subject.name).to eq "N-Quads"}
-  end
-
   describe ".detect" do
     {
       nquads: "<a> <b> <c> <d> . ",
@@ -81,6 +73,14 @@ describe RDF::NQuads::Format do
         expect(subject.detect(str)).to be_falsey
       end
     end
+  end
+
+  describe "#to_sym" do
+    specify {expect(subject.to_sym).to eq :nquads}
+  end
+
+  describe "#name" do
+    specify {expect(subject.name).to eq "N-Quads"}
   end
 end
 
@@ -123,6 +123,10 @@ describe RDF::NQuads::Reader do
     it "should accept strings" do
       expect { described_class.new('') }.to_not raise_error
     end
+
+    it "sets version from reader option" do
+      expect(described_class.new('', version: '1.2').version).to eql '1.2'
+    end
   end
 
   context "#initialize" do
@@ -143,104 +147,106 @@ describe RDF::NQuads::Reader do
     end
   end
 
-  context "with simple triples" do
-    [
-      ['<a> <b> <c> .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
-      ['<a> <b> _:c .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
-      ['<a> <b> "c" .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
-      ['_:a <b> <c> .', RDF::Statement(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
-    ].each do |(str, statement)|
-      it "parses #{str.inspect}" do
-        graph = RDF::Graph.new << described_class.new(str)
-        expect(graph.size).to eq 1
-        expect(graph.statements.first).to eq statement
-      end
-    end
-  end
-
-  context "with simple quads" do
-    [
-      ['<a> <b> <c> <d> .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::URI("d"))],
-      ['<a> <b> <c> _:d .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Node.new("d"))],
-      ['<a> <b> <c> "d" .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Literal("d"))],
-    ].each do |(str, statement)|
-      it "parses #{str.inspect}" do
-        graph = RDF::Graph.new << described_class.new(str)
-        expect(graph.size).to eq 1
-        expect(graph.statements.first).to eq statement
-      end
-
-      it "serializes #{statement.inspect}" do
-        expect(RDF::NQuads.serialize(statement).chomp).to eq str
-      end
-
-      it "unserializes #{str.inspect}" do
-        expect(RDF::NQuads.unserialize(str)).to eq statement
-      end
-    end
-  end
-
-  context "triple terms" do
-    ill_statements = {
-      "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
-      "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
-      "subject-iil": '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> <http://example/g> .',
-      "subject-bii": '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
-      "subject-bib": '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
-      "subject-bil": '<<_:s1 <http://example/p1> "o">> <http://example/p> <http://example/o> <http://example/g> .',
-      "subject-ws":  '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/p> <http://example/o> <http://example/g> .',
-      "recursive-subject": '<<(<<(<http://example/s2> <http://example/p2> <http://example/o2>)>> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> <http://example/g> .',
-    }
-
-    statements = {
-      "object-iii":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> <http://example/g> .',
-      "object-iib":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> _:o1)>> <http://example/g> .',
-      "object-iil":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> "o1")>> <http://example/g> .',
-      "object-ws":   '<http://example/s> <http://example/p> <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> <http://example/g> .',
-    }
-
-    context "without rdfstar option" do
-      it "Raises an error" do
-        expect do
-          expect {RDF::Repository.new << RDF::NQuads::Reader.new(statements.values.first)}.to raise_error(RDF::ReaderError)
-        end.to write(:something).to(:error)
-      end
-    end
-
-    context "with rdfstar option" do
-      ill_statements.each do |name, st|
-        context name do
-          it "Raises an error" do
-            expect do
-              expect {RDF::Repository.new << RDF::NQuads::Reader.new(statements.values.first)}.to raise_error(RDF::ReaderError)
-            end.to write(:something).to(:error)
-          end
-        end
-      end
-
-      statements.each do |name, st|
-        context name do
-          let(:graph) do
-            RDF::Repository.new {|r| r << RDF::NQuads::Reader.new(st, rdfstar: true)}
-          end
-
-          it "creates a statement" do
-            expect(graph.count).to eql(1)
-          end
-
-          it "statements which are object of another statement are triple terms" do
-            referencing = graph.statements.first
-            expect(referencing).to be_a_statement
-            expect(referencing.object).to be_a_statement
-            expect(referencing.object).to be_tripleTerm
-          end
+  describe "Grammar" do
+    context "with simple triples" do
+      [
+        ['<a> <b> <c> .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"))],
+        ['<a> <b> _:c .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::Node.new("c"))],
+        ['<a> <b> "c" .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::Literal("c"))],
+        ['_:a <b> <c> .', RDF::Statement(RDF::Node.new("a"), RDF::URI("b"), RDF::URI("c"))],
+      ].each do |(str, statement)|
+        it "parses #{str.inspect}" do
+          graph = RDF::Graph.new << described_class.new(str)
+          expect(graph.size).to eq 1
+          expect(graph.statements.first).to eq statement
         end
       end
     end
-  end
 
-  it "should parse W3C's test data" do
-    expect(described_class.new(File.open(testfile)).to_a.size).to eq 19
+    context "with simple quads" do
+      [
+        ['<a> <b> <c> <d> .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::URI("d"))],
+        ['<a> <b> <c> _:d .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Node.new("d"))],
+        ['<a> <b> <c> "d" .', RDF::Statement(RDF::URI("a"), RDF::URI("b"), RDF::URI("c"), graph_name: RDF::Literal("d"))],
+      ].each do |(str, statement)|
+        it "parses #{str.inspect}" do
+          graph = RDF::Graph.new << described_class.new(str)
+          expect(graph.size).to eq 1
+          expect(graph.statements.first).to eq statement
+        end
+
+        it "serializes #{statement.inspect}" do
+          expect(RDF::NQuads.serialize(statement).chomp).to eq str
+        end
+
+        it "unserializes #{str.inspect}" do
+          expect(RDF::NQuads.unserialize(str)).to eq statement
+        end
+      end
+    end
+
+    context "triple terms" do
+      ill_statements = {
+        "subject-iii": '<<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
+        "subject-iib": '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
+        "subject-iil": '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> <http://example/g> .',
+        "subject-bii": '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> <http://example/g> .',
+        "subject-bib": '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> <http://example/g> .',
+        "subject-bil": '<<_:s1 <http://example/p1> "o">> <http://example/p> <http://example/o> <http://example/g> .',
+        "subject-ws":  '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/p> <http://example/o> <http://example/g> .',
+        "recursive-subject": '<<(<<(<http://example/s2> <http://example/p2> <http://example/o2>)>> <http://example/p1> <http://example/o1>)>> <http://example/p> <http://example/o> <http://example/g> .',
+      }
+
+      statements = {
+        "object-iii":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> <http://example/g> .',
+        "object-iib":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> _:o1)>> <http://example/g> .',
+        "object-iil":  '<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> "o1")>> <http://example/g> .',
+        "object-ws":   '<http://example/s> <http://example/p> <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> <http://example/g> .',
+      }
+
+      context "without rdfstar option" do
+        it "Raises an error" do
+          expect do
+            expect {RDF::Repository.new << RDF::NQuads::Reader.new(statements.values.first)}.to raise_error(RDF::ReaderError)
+          end.to write(:something).to(:error)
+        end
+      end
+
+      context "with rdfstar option" do
+        ill_statements.each do |name, st|
+          context name do
+            it "Raises an error" do
+              expect do
+                expect {RDF::Repository.new << RDF::NQuads::Reader.new(statements.values.first)}.to raise_error(RDF::ReaderError)
+              end.to write(:something).to(:error)
+            end
+          end
+        end
+
+        statements.each do |name, st|
+          context name do
+            let(:graph) do
+              RDF::Repository.new {|r| r << RDF::NQuads::Reader.new(st, rdfstar: true)}
+            end
+
+            it "creates a statement" do
+              expect(graph.count).to eql(1)
+            end
+
+            it "statements which are object of another statement are triple terms" do
+              referencing = graph.statements.first
+              expect(referencing).to be_a_statement
+              expect(referencing.object).to be_a_statement
+              expect(referencing.object).to be_tripleTerm
+            end
+          end
+        end
+      end
+    end
+
+    it "should parse W3C's test data" do
+      expect(described_class.new(File.open(testfile)).to_a.size).to eq 19
+    end
   end
 end
 
@@ -306,6 +312,30 @@ describe RDF::NQuads::Writer do
       expect { described_class.new.insert(graph) }
         .to write_each("<http://example/s> <http://example/p> <http://example/o1> .\n",
                        "<http://example/s> <http://example/p> <http://example/o2> .\n")
+    end
+
+    it "writes version with :version option" do
+      expect do
+        described_class.new($stdout, version: "1.2") do |w|
+          w.insert(graph)
+        end
+      end.to write(%(VERSION "1.2"))
+    end
+
+    it "does not write version with :version and :canonicalize options" do
+      expect do
+        described_class.new($stdout, version: "1.2", canonicalize: true) do |w|
+          w.insert(graph)
+        end
+      end.not_to write(%(VERSION "1.2"))
+    end
+
+    it "writes version with :rdfstar option" do
+      expect do
+        described_class.new($stdout, rdfstar: true) do |w|
+          w.insert(graph)
+        end
+      end.to write(%(VERSION "1.2"))
     end
   end
 

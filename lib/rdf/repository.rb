@@ -183,8 +183,6 @@ module RDF
       when :literal_equality then true
       when :atomic_write     then false
       when :rdf_full         then false
-      # FIXME: quoted triples are now deprecated
-      when :quoted_triples   then false
       when :base_direction   then false
       when :snapshots        then false
       else false
@@ -273,7 +271,6 @@ module RDF
         when :literal_equality then true
         when :atomic_write     then true
         when :rdf_full         then true
-        when :quoted_triples   then true  # DEPRECATED
         when :base_direction   then true
         when :snapshots        then true
         else false

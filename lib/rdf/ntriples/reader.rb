@@ -92,6 +92,7 @@ module RDF::NTriples
 
     # LANGTAG is deprecated
     LANGTAG               = LANG_DIR
+    RDF_VERSION          = /VERSION/.freeze
 
     ##
     # Reconstructs an RDF value from its serialized N-Triples
@@ -154,7 +155,8 @@ module RDF::NTriples
     def self.parse_literal(input, **options)
       case input
         when LITERAL_WITH_LANGUAGE
-          RDF::Literal.new(unescape($1), language: $4)
+          language, direction = $4.split('--')
+          RDF::Literal.new(unescape($1), language: language, direction: direction)
         when LITERAL_WITH_DATATYPE
           RDF::Literal.new(unescape($1), datatype: $4)
         when LITERAL_PLAIN
@@ -201,7 +203,7 @@ module RDF::NTriples
       begin
         read_statement
       rescue RDF::ReaderError
-        value = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple
+        value = read_uriref || read_node || read_literal || read_tripleTerm
         log_recover
         value
       end
@@ -216,15 +218,21 @@ module RDF::NTriples
         line = @line    # for backtracking input in case of parse error
 
         begin
-          unless blank? || read_comment
-            subject   = read_uriref || read_node || read_quotedTriple || fail_subject
+          if blank? || read_comment
+            # No-op
+          elsif version = read_version
+            @options[:version] = version
+          else
+            subject   = read_uriref || read_node || fail_subject
             predicate = read_uriref(intern: true) || fail_predicate
-            object    = read_uriref || read_node || read_literal || read_tripleTerm || read_quotedTriple || fail_object
+            object    = read_uriref || read_node || read_literal || read_tripleTerm || fail_object
 
             if validate? && !read_eos
               log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
             end
-            return [subject, predicate, object]
+            spo = [subject, predicate, object]
+            # Only return valid triples if validating
+            return spo if !validate? || spo.all?(&:valid?)
           end
         rescue RDF::ReaderError => e
           @line = line  # this allows #read_value to work
@@ -237,6 +245,9 @@ module RDF::NTriples
     # @return [RDF::Statement]
     def read_tripleTerm
       if @options[:rdfstar] && match(TT_START)
+        if version && version != "1.2"
+          log_warn("Triple term used with version #{version}")
+        end
         subject   = read_uriref || read_node || fail_subject
         predicate = read_uriref(intern: true) || fail_predicate
         object    = read_uriref || read_node || read_literal || read_tripleTerm || fail_object
@@ -244,23 +255,6 @@ module RDF::NTriples
           log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
         end
         RDF::Statement.new(subject, predicate, object, tripleTerm: true)
-      end
-    end
-
-    ##
-    # @return [RDF::Statement]
-    # @deprecated Quoted triples are now deprecated (not supported when validating)
-    def read_quotedTriple
-      if @options[:rdfstar] && !match(TT_START) && match(QT_START) && !validate?
-        warn "[DEPRECATION] RDF-star quoted triples are deprecated and will be removed in a future version.\n" +
-             "Called from #{Gem.location_of_caller.join(':')}"
-        subject   = read_uriref || read_node || read_quotedTriple || fail_subject
-        predicate = read_uriref(intern: true) || fail_predicate
-        object    = read_uriref || read_node || read_literal || read_quotedTriple || fail_object
-        if !match(QT_END)
-          log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
-        end
-        RDF::Statement.new(subject, predicate, object, quoted: true)
       end
     end
 
@@ -278,9 +272,8 @@ module RDF::NTriples
     def read_uriref(intern: false, **options)
       if uri_str = match(URIREF)
         uri_str = self.class.unescape(uri_str)
-        uri = RDF::URI.send(intern? && intern ? :intern : :new, uri_str)
+        uri = RDF::URI.send(intern? && intern ? :intern : :new, uri_str, canonicalize: canonicalize?)
         uri.validate!     if validate?
-        uri.canonicalize! if canonicalize?
         uri
       end
     rescue ArgumentError
@@ -307,6 +300,7 @@ module RDF::NTriples
           when lang_dir = match(LANG_DIR)
             language, direction = lang_dir.split('--')
             raise ArgumentError if direction && !@options[:rdfstar]
+            log_warn("Literal base direction used with version #{version}") if version && version == "1.1"
             RDF::Literal.new(literal_str, language: language, direction: direction)
           when datatype = match(/^(\^\^)/) # FIXME
             RDF::Literal.new(literal_str, datatype: read_uriref || fail_object)
@@ -320,7 +314,19 @@ module RDF::NTriples
     rescue ArgumentError
       v = literal_str
       v += "@#{lang_dir}" if lang_dir
-      log_error("Invalid Literal (found: \"#{v}\")", lineno: lineno, token: "#v", exception: RDF::ReaderError)
+      log_error("Invalid Literal (found: \"#{v}\")", lineno: lineno, token: v, exception: RDF::ReaderError)
+    end
+
+    ##
+    # @return [String]
+    def read_version
+      if match(RDF_VERSION)
+        ver_tok = match(LITERAL_PLAIN)
+        unless RDF::Format::VERSIONS.include?(ver_tok)
+          log_warn("Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{ver_tok}")
+        end
+        ver_tok
+      end
     end
 
     ##

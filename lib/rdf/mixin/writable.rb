@@ -127,9 +127,8 @@ module RDF
     def insert_statements(statements)
       each = statements.respond_to?(:each_statement) ? :each_statement : :each
       statements.__send__(each) do |statement|
-        # FIXME: quoted triples are now deprecated
-        if statement.embedded? && respond_to?(:supports?) && !(supports?(:quoted_triples) || supports?(:rdf_full))
-          raise ArgumentError, "Writable does not support quoted triples"
+        if statement.embedded? && respond_to?(:supports?) && !supports?(:rdf_full)
+          raise ArgumentError, "Writable does not support triple terms"
         end
         if statement.object && statement.object.literal? && statement.object.direction? && respond_to?(:supports?) && !supports?(:base_direction)
           raise ArgumentError, "Writable does not support directional languaged-tagged strings"

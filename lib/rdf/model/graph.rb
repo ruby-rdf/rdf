@@ -335,8 +335,7 @@ module RDF
     # @private
     # @see RDF::Mutable#insert
     def insert_statement(statement)
-      # FIXME: quoted triples are now deprecated
-      if statement.embedded? && !(@data.supports?(:quoted_triples) || @data.supports?(:rdf_full))
+      if statement.embedded? && !@data.supports?(:rdf_full)
         raise ArgumentError, "Graph does not support the RDF Full profile"
       end
       if statement.object && statement.object.literal? && statement.object.direction? &&  !@data.supports?(:base_direction)

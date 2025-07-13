@@ -168,15 +168,21 @@ module RDF
           symbol: :validate,
           datatype: TrueClass,
           control: :checkbox,
-          on: ["--validate"],
-          description: "Validate input file."),
+          on: ["--[no-]validate"],
+          description: "Validate on input and output."),
         RDF::CLI::Option.new(
           symbol: :verifySSL,
           datatype: TrueClass,
           default: true,
           control: :checkbox,
           on: ["--[no-]verifySSL"],
-          description: "Verify SSL results on HTTP GET")
+          description: "Verify SSL results on HTTP GET"),
+        RDF::CLI::Option.new(
+          symbol: :version,
+          control: :select,
+          datatype: RDF::Format::VERSIONS, # 1.1, 1.2, or 1.2-basic
+          on: ["--version VERSION"],
+          description: "RDF Version."),
       ]
     end
 
@@ -284,6 +290,8 @@ module RDF
     #   any additional options
     # @param [Boolean]  validate     (false)
     #   whether to validate the parsed statements and values
+    # @option options [String] :version
+    #   Parse a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
     # @yield  [reader] `self`
     # @yieldparam  [RDF::Reader] reader
     # @yieldreturn [void] ignored
@@ -308,6 +316,13 @@ module RDF
         rdfstar:        rdfstar,
         validate:       validate
       })
+
+      # The rdfstar option implies version 1.2, but can be overridden
+      @options[:version] ||= "1.2" if @options[:rdfstar]
+
+      unless self.version.nil? || RDF::Format::VERSIONS.include?(self.version)
+        log_error("Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{self.version}")
+      end
 
       @input = case input
         when String then StringIO.new(input)
@@ -392,6 +407,18 @@ module RDF
     alias_method :prefix!, :prefix
 
     ##
+    # Returns the RDF version determined by this reader.
+    #
+    # @example
+    #   reader.version  #=> "1.2"
+    #
+    # @return [String]
+    # @since  3.3.4
+    def version
+      @options[:version]
+    end
+
+    ##
     # Iterates the given block for each RDF statement.
     #
     # If no block was given, returns an enumerator.
@@ -417,7 +444,7 @@ module RDF
         begin
           loop do
             st = read_statement
-            block.call(st)
+            block.call(st) unless st.nil?
           end
         rescue EOFError
           rewind rescue nil
@@ -454,7 +481,7 @@ module RDF
         begin
           loop do
             triple = read_triple
-            block.call(*triple)
+            block.call(*triple) unless triple.nil?
           end
         rescue EOFError
           rewind rescue nil
@@ -513,7 +540,7 @@ module RDF
     def valid?
       super && !log_statistics[:error]
     rescue ArgumentError, RDF::ReaderError => e
-      log_error(e.message)
+      log_error(e.message + " at #{e.backtrace.first}")
       false
     end
 
