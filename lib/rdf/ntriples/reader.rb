@@ -314,7 +314,7 @@ module RDF::NTriples
     rescue ArgumentError
       v = literal_str
       v += "@#{lang_dir}" if lang_dir
-      log_error("Invalid Literal (found: \"#{v}\")", lineno: lineno, token: "#v", exception: RDF::ReaderError)
+      log_error("Invalid Literal (found: \"#{v}\")", lineno: lineno, token: v, exception: RDF::ReaderError)
     end
 
     ##
