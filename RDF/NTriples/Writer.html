@@ -295,6 +295,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#escape_uchar-class_method" title="escape_uchar (class method)">.<strong>escape_uchar</strong>(u)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#escape_unicode-class_method" title="escape_unicode (class method)">.<strong>escape_unicode</strong>(u, encoding)  &#x21d2; String </a>
     
 
@@ -316,7 +338,7 @@
 </li>
 
       
-        <li class="public ">
+        <li class="public deprecated">
   <span class="summary_signature">
     
       <a href="#escape_utf16-class_method" title="escape_utf16 (class method)">.<strong>escape_utf16</strong>(u)  &#x21d2; String </a>
@@ -329,16 +351,18 @@
   
   
   
-  
+  <span class="deprecated note title">deprecated</span>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
+<p>use escape_uchar, this name is non-intuitive</p>
+</div></span>
   
 </li>
 
       
-        <li class="public ">
+        <li class="public deprecated">
   <span class="summary_signature">
     
       <a href="#escape_utf32-class_method" title="escape_utf32 (class method)">.<strong>escape_utf32</strong>(u)  &#x21d2; String </a>
@@ -351,11 +375,13 @@
   
   
   
-  
+  <span class="deprecated note title">deprecated</span>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
+<p>use escape_uchar, this name is non-intuitive</p>
+</div></span>
   
 </li>
 
@@ -436,30 +462,6 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Returns the N-Triples representation of a blank node.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public deprecated">
-  <span class="summary_signature">
-    
-      <a href="#format_quotedTriple-instance_method" title="#format_quotedTriple (instance method)">#<strong>format_quotedTriple</strong>(statement, **options)  &#x21d2; String </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  <span class="deprecated note title">deprecated</span>
-  
-
-  
-    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
-<p>Quoted triples are now deprecated</p>
 </div></span>
   
 </li>
@@ -614,6 +616,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#write_prologue-instance_method" title="#write_prologue (instance method)">#<strong>write_prologue</strong>  &#x21d2; self </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  <span class="abstract note title">abstract</span>
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Output VERSION directive, if specified and not canonicalizing.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#write_triple-instance_method" title="#write_triple (instance method)">#<strong>write_triple</strong>(subject, predicate, object)  </a>
     
 
@@ -659,7 +685,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../Writer.html" title="RDF::Writer (class)">Writer</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../Writer.html#accept%3F-class_method" title="RDF::Writer.accept? (method)">accept?</a></span>, <span class='object_link'><a href="../Writer.html#base_uri-instance_method" title="RDF::Writer#base_uri (method)">#base_uri</a></span>, <span class='object_link'><a href="../Writer.html#buffer-class_method" title="RDF::Writer.buffer (method)">buffer</a></span>, <span class='object_link'><a href="../Writer.html#canonicalize%3F-instance_method" title="RDF::Writer#canonicalize? (method)">#canonicalize?</a></span>, <span class='object_link'><a href="../Writer.html#dump-class_method" title="RDF::Writer.dump (method)">dump</a></span>, <span class='object_link'><a href="../Writer.html#each-class_method" title="RDF::Writer.each (method)">each</a></span>, <span class='object_link'><a href="../Writer.html#encoding-instance_method" title="RDF::Writer#encoding (method)">#encoding</a></span>, <span class='object_link'><a href="../Writer.html#flush-instance_method" title="RDF::Writer#flush (method)">#flush</a></span>, <span class='object_link'><a href="../Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span>, <span class='object_link'><a href="../Writer.html#format-class_method" title="RDF::Writer.format (method)">format</a></span>, <span class='object_link'><a href="../Writer.html#format_list-instance_method" title="RDF::Writer#format_list (method)">#format_list</a></span>, <span class='object_link'><a href="../Writer.html#format_term-instance_method" title="RDF::Writer#format_term (method)">#format_term</a></span>, <span class='object_link'><a href="../Writer.html#node_id-instance_method" title="RDF::Writer#node_id (method)">#node_id</a></span>, <span class='object_link'><a href="../Writer.html#open-class_method" title="RDF::Writer.open (method)">open</a></span>, <span class='object_link'><a href="../Writer.html#options-class_method" title="RDF::Writer.options (method)">options</a></span>, <span class='object_link'><a href="../Writer.html#prefix-instance_method" title="RDF::Writer#prefix (method)">#prefix</a></span>, <span class='object_link'><a href="../Writer.html#prefixes-instance_method" title="RDF::Writer#prefixes (method)">#prefixes</a></span>, <span class='object_link'><a href="../Writer.html#prefixes=-instance_method" title="RDF::Writer#prefixes= (method)">#prefixes=</a></span>, <span class='object_link'><a href="../Writer.html#puts-instance_method" title="RDF::Writer#puts (method)">#puts</a></span>, <span class='object_link'><a href="../Writer.html#quoted-instance_method" title="RDF::Writer#quoted (method)">#quoted</a></span>, <span class='object_link'><a href="../Writer.html#to_sym-class_method" title="RDF::Writer.to_sym (method)">to_sym</a></span>, <span class='object_link'><a href="../Writer.html#to_sym-instance_method" title="RDF::Writer#to_sym (method)">#to_sym</a></span>, <span class='object_link'><a href="../Writer.html#uri_for-instance_method" title="RDF::Writer#uri_for (method)">#uri_for</a></span>, <span class='object_link'><a href="../Writer.html#validate%3F-instance_method" title="RDF::Writer#validate? (method)">#validate?</a></span>, <span class='object_link'><a href="../Writer.html#write_epilogue-instance_method" title="RDF::Writer#write_epilogue (method)">#write_epilogue</a></span>, <span class='object_link'><a href="../Writer.html#write_prologue-instance_method" title="RDF::Writer#write_prologue (method)">#write_prologue</a></span>, <span class='object_link'><a href="../Writer.html#write_statement-instance_method" title="RDF::Writer#write_statement (method)">#write_statement</a></span>, <span class='object_link'><a href="../Writer.html#write_triples-instance_method" title="RDF::Writer#write_triples (method)">#write_triples</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="../Writer.html#accept%3F-class_method" title="RDF::Writer.accept? (method)">accept?</a></span>, <span class='object_link'><a href="../Writer.html#base_uri-instance_method" title="RDF::Writer#base_uri (method)">#base_uri</a></span>, <span class='object_link'><a href="../Writer.html#buffer-class_method" title="RDF::Writer.buffer (method)">buffer</a></span>, <span class='object_link'><a href="../Writer.html#canonicalize%3F-instance_method" title="RDF::Writer#canonicalize? (method)">#canonicalize?</a></span>, <span class='object_link'><a href="../Writer.html#dump-class_method" title="RDF::Writer.dump (method)">dump</a></span>, <span class='object_link'><a href="../Writer.html#each-class_method" title="RDF::Writer.each (method)">each</a></span>, <span class='object_link'><a href="../Writer.html#encoding-instance_method" title="RDF::Writer#encoding (method)">#encoding</a></span>, <span class='object_link'><a href="../Writer.html#flush-instance_method" title="RDF::Writer#flush (method)">#flush</a></span>, <span class='object_link'><a href="../Writer.html#for-class_method" title="RDF::Writer.for (method)">for</a></span>, <span class='object_link'><a href="../Writer.html#format-class_method" title="RDF::Writer.format (method)">format</a></span>, <span class='object_link'><a href="../Writer.html#format_list-instance_method" title="RDF::Writer#format_list (method)">#format_list</a></span>, <span class='object_link'><a href="../Writer.html#format_term-instance_method" title="RDF::Writer#format_term (method)">#format_term</a></span>, <span class='object_link'><a href="../Writer.html#node_id-instance_method" title="RDF::Writer#node_id (method)">#node_id</a></span>, <span class='object_link'><a href="../Writer.html#open-class_method" title="RDF::Writer.open (method)">open</a></span>, <span class='object_link'><a href="../Writer.html#options-class_method" title="RDF::Writer.options (method)">options</a></span>, <span class='object_link'><a href="../Writer.html#prefix-instance_method" title="RDF::Writer#prefix (method)">#prefix</a></span>, <span class='object_link'><a href="../Writer.html#prefixes-instance_method" title="RDF::Writer#prefixes (method)">#prefixes</a></span>, <span class='object_link'><a href="../Writer.html#prefixes=-instance_method" title="RDF::Writer#prefixes= (method)">#prefixes=</a></span>, <span class='object_link'><a href="../Writer.html#puts-instance_method" title="RDF::Writer#puts (method)">#puts</a></span>, <span class='object_link'><a href="../Writer.html#quoted-instance_method" title="RDF::Writer#quoted (method)">#quoted</a></span>, <span class='object_link'><a href="../Writer.html#to_sym-class_method" title="RDF::Writer.to_sym (method)">to_sym</a></span>, <span class='object_link'><a href="../Writer.html#to_sym-instance_method" title="RDF::Writer#to_sym (method)">#to_sym</a></span>, <span class='object_link'><a href="../Writer.html#uri_for-instance_method" title="RDF::Writer#uri_for (method)">#uri_for</a></span>, <span class='object_link'><a href="../Writer.html#validate%3F-instance_method" title="RDF::Writer#validate? (method)">#validate?</a></span>, <span class='object_link'><a href="../Writer.html#version-instance_method" title="RDF::Writer#version (method)">#version</a></span>, <span class='object_link'><a href="../Writer.html#write_epilogue-instance_method" title="RDF::Writer#write_epilogue (method)">#write_epilogue</a></span>, <span class='object_link'><a href="../Writer.html#write_statement-instance_method" title="RDF::Writer#write_statement (method)">#write_statement</a></span>, <span class='object_link'><a href="../Writer.html#write_triples-instance_method" title="RDF::Writer#write_triples (method)">#write_triples</a></span></p>
 
   
   
@@ -825,12 +851,12 @@
       <pre class="lines">
 
 
-192
-193
-194</pre>
+211
+212
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 192</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 211</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='gvar'>$stdout</span><span class='comma'>,</span> <span class='label'>validate:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>super</span>
@@ -954,7 +980,11 @@
 87
 88
 89
-90</pre>
+90
+91
+92
+93
+94</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 57</span>
@@ -977,6 +1007,10 @@
           <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>&lt;&lt;</span> <span class='kw'>case</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span>
           <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x7F</span><span class='rparen'>)</span>
             <span class='id identifier rubyid_escape_ascii'>escape_ascii</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span>
+          <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0xFFFE</span><span class='op'>..</span><span class='int'>0xFFFF</span><span class='rparen'>)</span>
+            <span class='comment'># NOT A CHARACTER
+</span>            <span class='comment'># @see https://corp.unicode.org/~asmus/proposed_faq/private_use.html#history1
+</span>            <span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
           <span class='kw'>else</span>
             <span class='id identifier rubyid_u'>u</span>
           <span class='kw'>end</span>
@@ -1081,8 +1115,6 @@
       <pre class="lines">
 
 
-126
-127
 128
 129
 130
@@ -1096,10 +1128,12 @@
 138
 139
 140
-141</pre>
+141
+142
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 126</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_escape_ascii'>escape_ascii</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span> <span class='op'>=</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span><span class='rparen'>)</span>
@@ -1110,11 +1144,113 @@
   <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x0D</span><span class='rparen'>)</span>       <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\r</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x22</span><span class='rparen'>)</span>       <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\\&quot;</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x5C</span><span class='rparen'>)</span>       <span class='kw'>then</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\\\</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x1F</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
-  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x7F</span><span class='rparen'>)</span>       <span class='kw'>then</span> <span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
-  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x20</span><span class='op'>..</span><span class='int'>0x7E</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_chr'>chr</span>
+  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x1F</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x7F</span><span class='rparen'>)</span>       <span class='kw'>then</span> <span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>  <span class='comment'># DEL
+</span>  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x20</span><span class='op'>..</span><span class='int'>0x7E</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_chr'>chr</span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>expected an ASCII character in (0x00..0x7F), but got 0x</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='int'>16</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="escape_uchar-class_method">
+  
+    .<strong>escape_uchar</strong>(u)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>u</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>, <tt>#ord</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://www.w3.org/TR/rdf12-concepts/#rdf-stringshttps://www.w3.org/TR/rdf12-concepts/#rdf-strings" target="_parent" title="https://www.w3.org/TR/rdf12-concepts/#rdf-stringshttps://www.w3.org/TR/rdf12-concepts/#rdf-strings">https://www.w3.org/TR/rdf12-concepts/#rdf-stringshttps://www.w3.org/TR/rdf12-concepts/#rdf-strings</a></li>
+    
+  </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>3.4.4</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+150
+151
+152
+153
+154
+155
+156
+157
+158</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 150</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+  <span class='comment'>#require &#39;byebug&#39;; byebug
+</span>  <span class='kw'>case</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span>
+  <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0xFFFF</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\u%04X</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\U%08X</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1212,10 +1348,6 @@
       <pre class="lines">
 
 
-101
-102
-103
-104
 105
 106
 107
@@ -1223,19 +1355,19 @@
 109
 110
 111
-112</pre>
+112
+113
+114</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 105</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_escape_unicode'>escape_unicode</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span> <span class='op'>=</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span><span class='rparen'>)</span>
-    <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x7F</span><span class='rparen'>)</span>        <span class='comment'># ASCII 7-bit
+    <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x7F</span><span class='rparen'>)</span>        <span class='comment'># ECHAR
 </span>      <span class='id identifier rubyid_escape_ascii'>escape_ascii</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span>
-    <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x80</span><span class='op'>..</span><span class='int'>0xFFFF</span><span class='rparen'>)</span>      <span class='comment'># Unicode BMP
-</span>      <span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
-    <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x10000</span><span class='op'>..</span><span class='int'>0x10FFFF</span><span class='rparen'>)</span> <span class='comment'># Unicode
-</span>      <span class='id identifier rubyid_escape_utf32'>escape_utf32</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+    <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x80</span><span class='op'>...</span><span class='int'>0x10FFFF</span><span class='rparen'>)</span>   <span class='comment'># UCHAR
+</span>      <span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
     <span class='kw'>else</span>
       <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>expected a Unicode codepoint in (0x00..0x10FFFF), but got 0x</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='int'>16</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
@@ -1256,7 +1388,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+<p>use escape_uchar, this name is non-intuitive</p>
+</div></div>
+
 
   </div>
 </div>
@@ -1304,12 +1439,12 @@
       <pre class="lines">
 
 
-147
-148
-149</pre>
+165
+166
+167</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\u%04X</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span><span class='rparen'>)</span>
@@ -1330,7 +1465,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+<p>use escape_uchar, this name is non-intuitive</p>
+</div></div>
+
 
   </div>
 </div>
@@ -1378,12 +1516,12 @@
       <pre class="lines">
 
 
-155
-156
-157</pre>
+174
+175
+176</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 155</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 174</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf32'>escape_utf32</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\U%08X</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span><span class='rparen'>)</span>
@@ -1465,22 +1603,22 @@
       <pre class="lines">
 
 
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178</pre>
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 166</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 185</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_serialize'>serialize</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_writer'>writer</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='ivar'>@serialize_writer_memo</span> <span class='op'>||=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
@@ -1576,22 +1714,22 @@
       <pre class="lines">
 
 
-322
-323
-324
-325
-326
-327
-328
-329
-330
-331
-332
-333
-334</pre>
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 322</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 338</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_literal'>format_literal</span><span class='lparen'>(</span><span class='id identifier rubyid_literal'>literal</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_literal'>literal</span>
@@ -1699,105 +1837,15 @@
       <pre class="lines">
 
 
-268
-269
-270</pre>
+285
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 268</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 285</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_node'>format_node</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='comma'>,</span> <span class='label'>unique_bnodes:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_unique_bnodes'>unique_bnodes</span> <span class='op'>?</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_to_unique_base'>to_unique_base</span> <span class='op'>:</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="format_quotedTriple-instance_method">
-  
-    #<strong>format_quotedTriple</strong>(statement, **options)  &#x21d2; <tt>String</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
-<p>Quoted triples are now deprecated</p>
-</div></div>
-
-<p>Returns the N-Triples representation of an RDF-star quoted triple.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>statement</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="../Statement.html" title="RDF::Statement (class)">RDF::Statement</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>options</span>
-      
-      
-        <span class='type'>(<tt>Hash{Symbol =&gt; Object}</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>({})</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-243
-244
-245
-246</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 243</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='comment'># FIXME: quoted triples are now deprecated
-</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&lt;%s %s %s&gt;&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1874,12 +1922,12 @@
       <pre class="lines">
 
 
-222
-223
-224</pre>
+251
+252
+253</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 222</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 251</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_statement'>format_statement</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_format_triple'>format_triple</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_triple'>to_triple</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -1981,12 +2029,12 @@
       <pre class="lines">
 
 
-256
-257
-258</pre>
+273
+274
+275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 256</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 273</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_triple'>format_triple</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%s %s %s .</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -2066,12 +2114,12 @@
       <pre class="lines">
 
 
-232
-233
-234</pre>
+261
+262
+263</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 232</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 261</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_tripleTerm'>format_tripleTerm</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&lt;( %s %s %s )&gt;&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_format_term'>format_term</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -2151,23 +2199,6 @@
       <pre class="lines">
 
 
-278
-279
-280
-281
-282
-283
-284
-285
-286
-287
-288
-289
-290
-291
-292
-293
-294
 295
 296
 297
@@ -2187,10 +2218,26 @@
 311
 312
 313
-314</pre>
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 278</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 295</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_string'>string</span> <span class='op'>=</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -2202,9 +2249,9 @@
         <span class='id identifier rubyid_buffer'>buffer</span><span class='period'>.</span><span class='id identifier rubyid_set_encoding'>set_encoding</span><span class='lparen'>(</span><span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span>
         <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_each_char'>each_char</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_u'>u</span><span class='op'>|</span>
           <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>&lt;&lt;</span> <span class='kw'>case</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_ord'>ord</span>
-            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x20</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x20</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
             <span class='kw'>when</span> <span class='int'>0x22</span><span class='comma'>,</span> <span class='int'>0x3c</span><span class='comma'>,</span> <span class='int'>0x3e</span><span class='comma'>,</span> <span class='int'>0x5c</span><span class='comma'>,</span> <span class='int'>0x5e</span><span class='comma'>,</span> <span class='int'>0x60</span><span class='comma'>,</span> <span class='int'>0x7b</span><span class='comma'>,</span> <span class='int'>0x7c</span><span class='comma'>,</span> <span class='int'>0x7d</span> <span class='comment'># &quot;&lt;&gt;\^`{|}
-</span>              <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+</span>              <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
             <span class='kw'>else</span> <span class='id identifier rubyid_u'>u</span>
           <span class='kw'>end</span>
         <span class='kw'>end</span>
@@ -2216,11 +2263,10 @@
         <span class='id identifier rubyid_buffer'>buffer</span><span class='period'>.</span><span class='id identifier rubyid_set_encoding'>set_encoding</span><span class='lparen'>(</span><span class='const'>Encoding</span><span class='op'>::</span><span class='const'>ASCII</span><span class='rparen'>)</span>
         <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_each_byte'>each_byte</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_u'>u</span><span class='op'>|</span>
           <span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>&lt;&lt;</span> <span class='kw'>case</span> <span class='id identifier rubyid_u'>u</span>
-            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x20</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x00</span><span class='op'>..</span><span class='int'>0x20</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
             <span class='kw'>when</span> <span class='int'>0x22</span><span class='comma'>,</span> <span class='int'>0x3c</span><span class='comma'>,</span> <span class='int'>0x3e</span><span class='comma'>,</span> <span class='int'>0x5c</span><span class='comma'>,</span> <span class='int'>0x5e</span><span class='comma'>,</span> <span class='int'>0x60</span><span class='comma'>,</span> <span class='int'>0x7b</span><span class='comma'>,</span> <span class='int'>0x7c</span><span class='comma'>,</span> <span class='int'>0x7d</span> <span class='comment'># &quot;&lt;&gt;\^`{|}
-</span>              <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
-            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x80</span><span class='op'>..</span><span class='int'>0xFFFF</span><span class='rparen'>)</span>                <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf16'>escape_utf16</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
-            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x10000</span><span class='op'>..</span><span class='int'>0x10FFFF</span><span class='rparen'>)</span>           <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_utf32'>escape_utf32</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+</span>              <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
+            <span class='kw'>when</span> <span class='lparen'>(</span><span class='int'>0x80</span><span class='op'>..</span><span class='int'>0x10FFFF</span><span class='rparen'>)</span> <span class='kw'>then</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_escape_uchar'>escape_uchar</span><span class='lparen'>(</span><span class='id identifier rubyid_u'>u</span><span class='rparen'>)</span>
             <span class='kw'>else</span> <span class='id identifier rubyid_u'>u</span>
           <span class='kw'>end</span>
         <span class='kw'>end</span>
@@ -2275,16 +2321,78 @@
       <pre class="lines">
 
 
-201
-202
-203</pre>
+230
+231
+232</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 201</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 230</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_comment'>write_comment</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'># </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='comment'># TODO: correctly output multi-line comments
 </span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="write_prologue-instance_method">
+  
+    #<strong>write_prologue</strong>  &#x21d2; <tt>self</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <div class="note abstract">
+  <strong>This method is abstract.</strong>
+  <div class='inline'></div>
+</div>
+
+<p>Output VERSION directive, if specified and not canonicalizing</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+219
+220
+221
+222
+223</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 219</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_write_prologue'>write_prologue</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>VERSION </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_version'>version</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>)</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_version'>version</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_canonicalize?'>canonicalize?</span>
+  <span class='ivar'>@logged_errors_at_prolog</span> <span class='op'>=</span> <span class='id identifier rubyid_log_statistics'>log_statistics</span><span class='lbracket'>[</span><span class='symbol'>:error</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='kw'>super</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -2353,12 +2461,12 @@
       <pre class="lines">
 
 
-212
-213
-214</pre>
+241
+242
+243</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 212</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/ntriples/writer.rb', line 241</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_triple'>write_triple</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_format_triple'>format_triple</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='op'>**</span><span class='ivar'>@options</span><span class='rparen'>)</span>
@@ -2373,7 +2481,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Jun 25 01:31:45 2025 by
+  Generated on Sun Jul 13 22:59:38 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.1.7).
 </div>

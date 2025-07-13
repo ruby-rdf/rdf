@@ -210,6 +210,33 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
   <p class="children"><span class='object_link'><a href="NQuads/Format.html" title="RDF::NQuads::Format (class)">NQuads::Format</a></span>, <span class='object_link'><a href="NTriples/Format.html" title="RDF::NTriples::Format (class)">NTriples::Format</a></span>, <span class='object_link'><a href="Vocabulary/Format.html" title="RDF::Vocabulary::Format (class)">Vocabulary::Format</a></span></p>
 </div>
 
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="VERSIONS-constant" class="">VERSIONS =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>RDF defines specific version strings, but does not define normative behavior</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='qwords_beg'>%w{</span><span class='tstring_content'>1.1</span><span class='words_sep'> </span><span class='tstring_content'>1.2-basic</span><span class='words_sep'> </span><span class='tstring_content'>1.2</span><span class='tstring_end'>}</span></span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+    </dl>
+  
+
 
 
 
@@ -831,12 +858,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-535
-536
-537</pre>
+539
+540
+541</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 535</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 539</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_accept_type'>accept_type</span>
   <span class='cvar'>@@accept_types</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='comma'>,</span> <span class='id identifier rubyid_formats'>formats</span><span class='op'>|</span> <span class='id identifier rubyid_t'>t</span> <span class='kw'>if</span> <span class='id identifier rubyid_formats'>formats</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
@@ -895,12 +922,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-275
-276
-277</pre>
+279
+280
+281</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 275</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 279</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_accept_types'>accept_types</span>
   <span class='id identifier rubyid_reader_symbols'>reader_symbols</span><span class='period'>.</span><span class='id identifier rubyid_flat_map'>flat_map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_accept_type'>accept_type</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
@@ -949,12 +976,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-434
-435
-436</pre>
+438
+439
+440</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 434</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 438</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_cli_commands'>cli_commands</span>
   <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -1009,13 +1036,13 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-584
-585
-586
-587</pre>
+588
+589
+590
+591</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 584</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 588</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_content_encoding'>content_encoding</span><span class='lparen'>(</span><span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='cvar'>@@content_encoding</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_encoding'>encoding</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span> <span class='kw'>if</span> <span class='id identifier rubyid_encoding'>encoding</span>
@@ -1216,10 +1243,6 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-493
-494
-495
-496
 497
 498
 499
@@ -1251,10 +1274,14 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 525
 526
 527
-528</pre>
+528
+529
+530
+531
+532</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 493</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 497</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_content_type'>content_type</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -1349,12 +1376,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-211
-212
-213</pre>
+215
+216
+217</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 211</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 215</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_content_types'>content_types</span>
   <span class='cvar'>@@content_types</span>
@@ -1433,12 +1460,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-451
-452
-453</pre>
+455
+456
+457</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 451</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 455</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_detect'>detect</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
   <span class='kw'>false</span>
@@ -1660,10 +1687,6 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-75
-76
-77
-78
 79
 80
 81
@@ -1718,10 +1741,14 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 130
 131
 132
-133</pre>
+133
+134
+135
+136
+137</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 75</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='label'>file_name:</span> <span class='kw'>nil</span><span class='comma'>,</span>
               <span class='label'>file_extension:</span> <span class='kw'>nil</span><span class='comma'>,</span>
@@ -1828,12 +1855,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-546
-547
-548</pre>
+550
+551
+552</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 546</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 550</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_file_extension'>file_extension</span>
   <span class='cvar'>@@file_extensions</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_ext'>ext</span><span class='comma'>,</span> <span class='id identifier rubyid_formats'>formats</span><span class='op'>|</span> <span class='id identifier rubyid_ext'>ext</span> <span class='kw'>if</span> <span class='id identifier rubyid_formats'>formats</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
@@ -1895,12 +1922,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-223
-224
-225</pre>
+227
+228
+229</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 223</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 227</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_file_extensions'>file_extensions</span>
   <span class='cvar'>@@file_extensions</span>
@@ -2213,10 +2240,6 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-169
-170
-171
-172
 173
 174
 175
@@ -2245,10 +2268,14 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 198
 199
 200
-201</pre>
+201
+202
+203
+204
+205</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 169</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 173</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='kw'>for</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_arg'>arg</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_arg'>arg</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -2336,15 +2363,15 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-338
-339
-340
-341
 342
-343</pre>
+343
+344
+345
+346
+347</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 338</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 342</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_elements'>elements</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>::</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -2512,10 +2539,6 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-375
-376
-377
-378
 379
 380
 381
@@ -2523,10 +2546,14 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 383
 384
 385
-386</pre>
+386
+387
+388
+389
+390</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 375</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 379</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_reader'>reader</span><span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>case</span>
@@ -2594,12 +2621,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-249
-250
-251</pre>
+253
+254
+255</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 249</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 253</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_reader_symbols'>reader_symbols</span>
   <span class='cvar'>@@readers</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:symbols</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
@@ -2658,12 +2685,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-262
-263
-264</pre>
+266
+267
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 262</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_reader_types'>reader_types</span>
   <span class='id identifier rubyid_reader_symbols'>reader_symbols</span><span class='period'>.</span><span class='id identifier rubyid_flat_map'>flat_map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_content_type'>content_type</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
@@ -2716,12 +2743,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-572
-573
-574</pre>
+576
+577
+578</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 572</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 576</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_require'>require</span><span class='lparen'>(</span><span class='id identifier rubyid_library'>library</span><span class='rparen'>)</span>
   <span class='lparen'>(</span><span class='cvar'>@@requires</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_library'>library</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -2801,12 +2828,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-324
-325
-326</pre>
+328
+329
+330</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 324</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 328</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_symbols'>symbols</span>
   <span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span>
@@ -2863,15 +2890,15 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-310
-311
-312
-313
 314
-315</pre>
+315
+316
+317
+318
+319</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 310</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 314</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
   <span class='id identifier rubyid_elements'>elements</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>::</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -2927,12 +2954,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-554
-555
-556</pre>
+558
+559
+560</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 554</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 558</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_uri'>uri</span>
   <span class='cvar'>@@uris</span><span class='period'>.</span><span class='id identifier rubyid_invert'>invert</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='rbracket'>]</span>
@@ -3001,12 +3028,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-236
-237
-238</pre>
+240
+241
+242</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 236</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 240</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_uris'>uris</span>
   <span class='cvar'>@@uris</span>
@@ -3171,10 +3198,6 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-418
-419
-420
-421
 422
 423
 424
@@ -3182,10 +3205,14 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 426
 427
 428
-429</pre>
+429
+430
+431
+432
+433</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 418</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 422</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_writer'>writer</span><span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>case</span>
@@ -3253,12 +3280,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-288
-289
-290</pre>
+292
+293
+294</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 288</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 292</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_writer_symbols'>writer_symbols</span>
   <span class='cvar'>@@writers</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:symbols</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
@@ -3317,12 +3344,12 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
       <pre class="lines">
 
 
-301
-302
-303</pre>
+305
+306
+307</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 301</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/format.rb', line 305</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_writer_types'>writer_types</span>
   <span class='id identifier rubyid_writer_symbols'>writer_symbols</span><span class='period'>.</span><span class='id identifier rubyid_flat_map'>flat_map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RDF::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_for'><span class='object_link'><a href="#for-class_method" title="RDF::Format.for (method)">for</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_content_type'>content_type</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
@@ -3337,7 +3364,7 @@ RDF::Writer.for(:ntriples).new($stdout) { |writer| ... }</code></pre>
 </div>
 
       <div id="footer">
-  Generated on Wed Jun 25 01:31:35 2025 by
+  Generated on Sun Jul 13 22:59:28 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.1.7).
 </div>
