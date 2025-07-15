@@ -931,9 +931,9 @@ describe RDF::NTriples::Writer do
       end.to write(%(VERSION "1.2"))
     end
 
-    it "does not write version with :version and :canonicalize options" do
+    it "does not write version with unless specified" do
       expect do
-        writer.new($stdout, version: "1.2", canonicalize: true) do |w|
+        writer.new($stdout, version: nil) do |w|
           w.insert(graph)
         end
       end.not_to write(%(VERSION "1.2"))

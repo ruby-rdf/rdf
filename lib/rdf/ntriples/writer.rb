@@ -217,7 +217,7 @@ module RDF::NTriples
     # @return [self]
     # @abstract
     def write_prologue
-      puts %(VERSION #{version.inspect}) if version && !canonicalize?
+      puts %(VERSION #{version.inspect}) if version
       @logged_errors_at_prolog = log_statistics[:error].to_i
       super
     end
