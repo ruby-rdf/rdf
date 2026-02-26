@@ -92,7 +92,7 @@ module RDF::NTriples
 
     # LANGTAG is deprecated
     LANGTAG               = LANG_DIR
-    RDF_VERSION          = /VERSION/.freeze
+    RDF_VERSION          = /\A\s*VERSION/.freeze
 
     ##
     # Reconstructs an RDF value from its serialized N-Triples
