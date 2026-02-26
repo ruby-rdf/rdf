@@ -373,6 +373,37 @@ describe RDF::NTriples::Reader do
       tt = reader.parse_literal("<<(<https://rubygems.org/gems/rdf> <http://purl.org/dc/terms/creator> <http://ar.to/#self>)>>")
       expect(tt).to be_nil
     end
+	  context 'should parse values containing VERSION' do
+      let(:predicate) { "https://www.ica.org/standards/RiC/ontology#textualValue" }
+      let(:subject_uri) { "https://repository2-onsitedemo.docuteam.ch/fcrepo/rest/mandant1/rr_test#id" }
+
+      it "successfully parses a literal containing the word 'VERSION'" do
+        triple_line = "<#{subject_uri}> <#{predicate}> \"test_VERSION_test\" .\n"
+        statements = []
+        reader = RDF::NTriples::Reader.new(triple_line)
+
+        expect {
+          reader.each_statement { |s| statements << s }
+        }.not_to raise_error
+
+        expect(statements.size).to eq(1)
+        expect(statements.first.object.to_s).to eq("test_VERSION_test")
+      end
+      
+      it "successfully parses a URI containing the word 'VERSION'" do
+        uri_with_version = "https://example.org/VERSION_check"
+        triple_line = "<#{uri_with_version}> <#{predicate}> \"plain_value\" .\n"
+
+        statements = []
+        reader = RDF::NTriples::Reader.new(triple_line)
+
+        expect {
+          reader.each_statement { |s| statements << s }
+        }.not_to raise_error
+
+        expect(statements.first.subject.to_s).to eq(uri_with_version)
+      end
+    end
 
     describe "literal encodings" do
       {
