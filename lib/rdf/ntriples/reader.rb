@@ -178,6 +178,8 @@ module RDF::NTriples
     ESCAPE_CHARS_ESCAPED_REGEXP = Regexp.union(
       ESCAPE_CHARS_ESCAPED.keys
     ).freeze
+    # Combined pattern for a single-pass unescape (UCHAR first, then escape chars)
+    UNESCAPE_COMBINED = Regexp.union(UCHAR, ESCAPE_CHARS_ESCAPED_REGEXP).freeze
 
     ##
     # @param  [String] string
@@ -190,11 +192,13 @@ module RDF::NTriples
       # greatly reduces the number of allocations and the processing time.
       string = string.dup.force_encoding(Encoding::UTF_8) unless string.encoding == Encoding::UTF_8
 
-      string
-        .gsub(UCHAR) do
-          [($1 || $2).hex].pack('U*')
-        end
-        .gsub(ESCAPE_CHARS_ESCAPED_REGEXP, ESCAPE_CHARS_ESCAPED)
+      # Early return when nothing to unescape: avoids string allocation entirely.
+      return string unless string.match?(UNESCAPE_COMBINED)
+
+      # Single pass handles both \uXXXX/\UXXXXXXXX and backslash escape chars.
+      string.gsub(UNESCAPE_COMBINED) do |match|
+        ($1 || $2) ? [($1 || $2).hex].pack('U*') : ESCAPE_CHARS_ESCAPED[match]
+      end
     end
 
     ##
